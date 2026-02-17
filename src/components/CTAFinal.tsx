@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'motion/react';
+import { useNavigate } from 'react-router';
 import { Button } from './ui/button';
 import sparkPointLogo from 'figma:asset/16ed15b2e7cab4039cf2d9fb007333306f37886c.png';
 
@@ -9,6 +10,8 @@ interface CTAFinalProps {
 }
 
 export function CTAFinal({ backgroundImage }: CTAFinalProps) {
+  const navigate = useNavigate();
+
   return (
     <section id="cta" className="relative py-32 px-6 overflow-hidden">
       {/* Background */}
@@ -105,7 +108,7 @@ export function CTAFinal({ backgroundImage }: CTAFinalProps) {
               e.currentTarget.style.color = '#E03694';
             }}
             onClick={() => {
-              window.location.href = '/intake?intent=volunteer';
+              navigate('/intake?intent=volunteer');
             }}
           >
             Volunteer or Partner

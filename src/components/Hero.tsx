@@ -12,15 +12,12 @@ import { Button } from './ui/button';
 import { useState, useEffect, useRef } from 'react';
 import { useAccessibility } from '../context/AccessibilityContext';
 import sparkPointLogo from 'figma:asset/35bb889d1f4d0b05ae6753439b58199640858447.png';
-import mountainBackground from 'figma:asset/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.png';
+import mountainPng from '../assets/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.png';
+import mountainAvif from '../assets/compd/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.avif';
+import mountainWebp from '../assets/compd/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.webp';
 
 interface HeroProps {
   heroImage: string;
-}
-
-// Swap file extension on a Vite-served asset URL (keeps the same hashed filename)
-function withExt(url: string, ext: 'avif' | 'webp' | 'png') {
-  return url.replace(/\.(png|jpg|jpeg|webp|avif)(\?.*)?$/i, `.${ext}$2`);
 }
 
 export function Hero({ heroImage }: HeroProps) {
@@ -98,9 +95,9 @@ export function Hero({ heroImage }: HeroProps) {
           style={{
             // Prefer AVIF/WebP when available, fall back to PNG
             backgroundImage: `image-set(
-              url("${withExt(mountainBackground, 'avif')}") type("image/avif"),
-              url("${withExt(mountainBackground, 'webp')}") type("image/webp"),
-              url("${withExt(mountainBackground, 'png')}") type("image/png")
+              url("${mountainAvif}") type("image/avif"),
+              url("${mountainWebp}") type("image/webp"),
+              url("${mountainPng}") type("image/png")
             )`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',

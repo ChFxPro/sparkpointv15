@@ -131,6 +131,16 @@ function ListenLearnLeadDiagram() {
   const { motionPreference } = useAccessibility();
   const prefersReducedMotion = systemReducedMotion || motionPreference === 'reduce';
 
+  useEffect(() => {
+    if (import.meta.env.DEV) {
+      const svg = document.querySelector('svg[viewBox="0 0 900 900"]') as SVGElement | null;
+      const wrapper = document.querySelector('[data-engine-wrapper]') as HTMLElement | null;
+      const svgRect = svg?.getBoundingClientRect();
+      const wrapperRect = wrapper?.getBoundingClientRect();
+      console.log('ListenLearnLeadDiagram mounted', { svgRect, wrapperRect });
+    }
+  }, []);
+
   // Configuration for the 3 Arcs
   const arcs = [
     {
@@ -139,7 +149,7 @@ function ListenLearnLeadDiagram() {
       color: '#FDB515', // Gold
       startAngle: -145,
       endAngle: -35,
-      centerAngle: -90,
+      centerAngle: -105,
       nodes: [
         { icon: BarChart3, label: 'Community Research', angle: -125 },
         { icon: MessageCircle, label: 'Story Collection', angle: -55 },
@@ -182,6 +192,30 @@ function ListenLearnLeadDiagram() {
     ].join(" ");
   };
 
+  // Helper to calculate a subtle curved connector path (quadratic Bezier)
+  const createConnectorPath = (
+    startAngle: number,
+    startRadius: number,
+    endRadius: number,
+    curvature: number
+  ) => {
+    const start = polarToCartesian(center, center, startRadius, startAngle);
+    const end = polarToCartesian(center, center, endRadius, startAngle);
+
+    // Perpendicular unit vector (approx) to create a gentle curve
+    const angleRad = (startAngle - 90) * Math.PI / 180.0;
+    const perpX = -Math.sin(angleRad);
+    const perpY = Math.cos(angleRad);
+
+    const midX = (start.x + end.x) / 2;
+    const midY = (start.y + end.y) / 2;
+
+    const ctrlX = midX + perpX * curvature;
+    const ctrlY = midY + perpY * curvature;
+
+    return `M ${start.x} ${start.y} Q ${ctrlX} ${ctrlY} ${end.x} ${end.y}`;
+  };
+
   const polarToCartesian = (centerX: number, centerY: number, radius: number, angleInDegrees: number) => {
     const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
     return {
@@ -191,17 +225,96 @@ function ListenLearnLeadDiagram() {
   };
 
   // Diagram dimensions
-  const size = 800;
+  const size = 900;
   const center = size / 2;
-  const arcRadius = 180;
-  const nodeRadius = 320;
+  const arcRadius = 210;
+  // Pull nodes in so icons + labels stay inside the rounded container and never overlap the cards below.
+  // (This is the main fix for the bottom cropping / overlap you’re seeing.)
+  const nodeRadius = 290;
+
+  // Small global correction for the HTML node layer (icons + labels) to match the SVG endpoints.
+  const nodeLayerNudge = { x: -10, y: 0 };
+
+  // Per-node ICON nudges (in px) to fine-tune icon placement relative to connector endpoints.
+  // Negative dx = left, negative dy = up.
+  const NODE_ICON_OVERRIDES: Record<string, { dx: number; dy: number }> = {
+    // Yellow + Orange nodes were still landing a touch down/right from the connector endpoint.
+    // Nudge slightly further up/left so the icon circle center sits right on the connector end.
+    'Story Collection': { dx: -14, dy: -12 },
+    'Collaborative Initiatives': { dx: -10, dy: -10 },
+  };
+
+  // Keep node centers mathematically derived from the same polar coordinates as the SVG,
+  // then apply a small global nudge + optional per-node override.
+  const getNodeNudgePx = (label: string) => {
+    const o = NODE_ICON_OVERRIDES[label];
+    return {
+      x: nodeLayerNudge.x + (o?.dx ?? 0),
+      y: nodeLayerNudge.y + (o?.dy ?? 0),
+    };
+  };
+
+  // Deterministic label offsets per node (prevents endless micro-misalignment iterations)
+  // Values are relative to the ICON center (the node circle). Tweak here, not by changing radii.
+  const NODE_LABEL_OVERRIDES: Record<string, { dx: number; dy: number; width?: number; textAlign?: React.CSSProperties['textAlign'] }> = {
+    'Community Research': { dx: -92, dy: 44, width: 210, textAlign: 'right' },
+    'Story Collection': { dx: -78, dy: -40, width: 190, textAlign: 'right' },
+    'Collaborative Initiatives': { dx: 0, dy: -40, width: 260, textAlign: 'center' },
+    'Community Resilience Projects': { dx: 150, dy: -40, width: 300, textAlign: 'left' },
+    'Community Education & Training': { dx: 92, dy: 40, width: 240, textAlign: 'left' },
+    // Bottom label needs to stay inside the rounded frame and above the cards below
+    'Leadership & Well-Being Programs': { dx: 0, dy: 56, width: 260, textAlign: 'center' },
+  };
+
+  // Fallback placement (used if we ever add nodes without overrides)
+  const getNodeLabelPlacement = (label: string, angle: number) => {
+    const override = NODE_LABEL_OVERRIDES[label];
+    if (override) {
+      return {
+        dx: override.dx,
+        dy: override.dy,
+        textAlign: override.textAlign ?? 'center',
+        width: override.width ?? 220,
+      };
+    }
+
+    // Default: push label outward along the radial direction with safe bottom bias
+    const rad = (angle - 90) * Math.PI / 180.0;
+    const ux = Math.cos(rad);
+    const uy = Math.sin(rad);
+
+    const dist = 52;
+    let dx = ux * dist;
+    let dy = uy * dist;
+
+    const isRight = ux > 0.25;
+    const isLeft = ux < -0.25;
+    const isBottom = uy > 0.55;
+
+    const textAlign: React.CSSProperties['textAlign'] = isRight ? 'left' : isLeft ? 'right' : 'center';
+
+    if (isBottom) dy -= 34;
+
+    return { dx, dy, textAlign, width: 220 };
+  };
+
+  const getLabelNudgePx = (arcId: string) => {
+    // LISTEN pill reads optically right-heavy; nudge left more than the others
+    if (arcId === 'listen') return { x: -18, y: 0 };
+    return { x: 0, y: 0 };
+  };
 
   return (
-    <div className="relative w-full aspect-square md:aspect-auto md:h-[600px] max-w-[800px] mx-auto flex flex-col md:block items-center justify-center">
+    <div className="relative w-full h-full mx-auto flex flex-col md:block items-center justify-center">
       
       {/* --- Desktop/Tablet SVG Diagram --- */}
-      <div className="hidden md:block absolute inset-0">
-        <svg viewBox={`0 0 ${size} ${size}`} className="w-full h-full overflow-visible">
+      <div className="hidden md:block relative w-full h-full">
+        <div className="absolute inset-0">
+        <svg
+          viewBox={`0 0 ${size} ${size}`}
+          preserveAspectRatio="xMidYMid meet"
+          className="absolute inset-0 w-full h-full block overflow-hidden"
+        >
           <defs>
             {arcs.map(arc => (
               <radialGradient key={arc.id} id={`grad-${arc.id}`} cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
@@ -223,74 +336,192 @@ function ListenLearnLeadDiagram() {
                 <feMergeNode in="SourceGraphic"/>
               </feMerge>
             </filter>
+
+            {/* Institutional Outer Ring Gradient */}
+            <linearGradient id="outer-ring-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#E03694" stopOpacity="0.25" />
+              <stop offset="50%" stopColor="#9E509F" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#FDB515" stopOpacity="0.25" />
+            </linearGradient>
           </defs>
 
-          {arcs.map((arc) => {
-            const isHovered = hoveredArc === arc.id;
-            const isDimmed = hoveredArc && hoveredArc !== arc.id;
-            
-            return (
-              <g key={arc.id} 
-                 onMouseEnter={() => setHoveredArc(arc.id)}
-                 onMouseLeave={() => setHoveredArc(null)}
-                 className="cursor-pointer transition-opacity duration-500"
-                 style={{ opacity: isDimmed ? 0.3 : 1 }}
-              >
-                {/* Connector Lines to Nodes */}
-                {arc.nodes.map((node, i) => {
-                  const startPos = polarToCartesian(center, center, arcRadius + 20, node.angle);
-                  const endPos = polarToCartesian(center, center, nodeRadius - 40, node.angle);
-                  return (
-                    <motion.line 
-                      key={i}
-                      x1={startPos.x} y1={startPos.y}
-                      x2={endPos.x} y2={endPos.y}
-                      stroke={arc.color}
-                      strokeWidth={isHovered ? 2 : 1}
-                      strokeDasharray="4 4"
-                      initial={{ pathLength: prefersReducedMotion ? 1 : 0, opacity: prefersReducedMotion ? 0.4 : 0 }}
-                      whileInView={{ pathLength: 1, opacity: 0.4 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, delay: 0.5 }}
-                    />
-                  );
-                })}
+          {/* Institutional Outer Ring */}
+          <motion.circle
+            cx={center}
+            cy={center}
+            r={arcRadius + 60}
+            fill="none"
+            stroke="url(#outer-ring-grad)"
+            strokeWidth="2"
+            opacity="0.4"
+            animate={
+              prefersReducedMotion
+                ? {}
+                : { opacity: [0.35, 0.5, 0.35] }
+            }
+            transition={
+              prefersReducedMotion
+                ? {}
+                : { duration: 8, repeat: Infinity, ease: "easeInOut" }
+            }
+          />
 
-                {/* Arc Segment */}
-                <motion.path
-                  d={createArcPath(arc.startAngle, arc.endAngle, arcRadius, center, center)}
-                  fill="none"
-                  stroke={arc.color}
-                  strokeWidth="36"
-                  strokeLinecap="round"
-                  initial={{ pathLength: prefersReducedMotion ? 1 : 0, opacity: prefersReducedMotion ? 1 : 0 }}
-                  whileInView={{ pathLength: 1, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1.2, ease: "easeOut" }}
-                  style={{ filter: isHovered ? "url(#glow-strong)" : "none" }}
-                  className="transition-all duration-300"
-                />
-              </g>
-            );
-          })}
+          {/* Arc Group */}
+          <g>
+            {arcs.map((arc) => {
+              const isHovered = hoveredArc === arc.id;
+              const isDimmed = hoveredArc && hoveredArc !== arc.id;
+              
+              return (
+                <g key={arc.id} 
+                   onMouseEnter={() => setHoveredArc(arc.id)}
+                   onMouseLeave={() => setHoveredArc(null)}
+                   className="cursor-pointer transition-opacity duration-500"
+                   style={{ opacity: isDimmed ? 0.3 : 1 }}
+                >
+                  {/* Connector Lines to Nodes */}
+                  {arc.nodes.map((node, i) => {
+                    // End the connector at the same radial position as the HTML node icon center
+                    const endRadius = nodeRadius;
+                    const startPos = polarToCartesian(center, center, arcRadius + 18, node.angle);
+                    const endPos = polarToCartesian(center, center, endRadius, node.angle);
+                    const connectorD = createConnectorPath(
+                      node.angle,
+                      arcRadius + 18,
+                      endRadius,
+                      isHovered ? 24 : 14
+                    );
+
+                    return (
+                      <>
+                        {/* Curved connector with subtle pulse on hover */}
+                        <motion.path
+                          key={i}
+                          d={connectorD}
+                          fill="none"
+                          stroke={arc.color}
+                          strokeWidth={isHovered ? 2.25 : 1.25}
+                          strokeLinecap="round"
+                          initial={false}
+                          strokeDasharray={isHovered ? "6 10" : "1 0"}
+                          animate={
+                            prefersReducedMotion
+                              ? { opacity: isHovered ? 0.9 : 0.45 }
+                              : {
+                                  opacity: isHovered ? 0.92 : 0.45,
+                                  strokeDashoffset: isHovered ? [0, -32] : 0
+                                }
+                          }
+                          transition={
+                            prefersReducedMotion
+                              ? { duration: 0 }
+                              : isHovered
+                                ? { duration: 1.6, repeat: Infinity, ease: "linear" }
+                                : { duration: 0.35, ease: "easeOut" }
+                          }
+                          style={{
+                            filter: isHovered ? "url(#glow-soft)" : "none"
+                          }}
+                        />
+
+                        {/* Node endpoint dot */}
+                        <motion.circle
+                          cx={endPos.x}
+                          cy={endPos.y}
+                          r={isHovered ? 4 : 3}
+                          fill={arc.color}
+                          initial={false}
+                          animate={{
+                            opacity: isHovered ? 1 : 0.6,
+                            scale: isHovered ? 1.18 : 1
+                          }}
+                          transition={{
+                            duration: prefersReducedMotion ? 0 : 0.25
+                          }}
+                          style={{
+                            filter: isHovered ? "url(#glow-soft)" : "none"
+                          }}
+                        />
+                      </>
+                    );
+                  })}
+
+                  {/* Arc Segment */}
+                  <motion.path
+                    d={createArcPath(arc.startAngle, arc.endAngle, arcRadius, center, center)}
+                    fill="none"
+                    stroke={arc.color}
+                    strokeWidth="42"
+                    strokeLinecap="round"
+                    strokeDasharray="600"
+                    initial={false}
+                    animate={{
+                      pathLength: 1,
+                      opacity: 1,
+                      scale: isHovered ? 1.03 : 1
+                    }}
+                    transition={{
+                      duration: prefersReducedMotion ? 0 : 1.2,
+                      ease: "easeOut"
+                    }}
+                    style={{
+                      filter: isHovered ? "url(#glow-strong)" : "none",
+                      transformOrigin: `${center}px ${center}px`
+                    }}
+                    className="transition-all duration-300"
+                  />
+                  <motion.path
+                    d={createArcPath(arc.startAngle, arc.endAngle, arcRadius, center, center)}
+                    fill="none"
+                    stroke="rgba(255,255,255,0.16)"
+                    strokeWidth="18"
+                    strokeLinecap="round"
+                    initial={false}
+                    animate={{
+                      opacity: isHovered ? 0.22 : 0.12
+                    }}
+                    transition={{
+                      duration: prefersReducedMotion ? 0 : 0.35,
+                      ease: "easeOut"
+                    }}
+                    style={{
+                      filter: isHovered ? "url(#glow-soft)" : "none"
+                    }}
+                    pointerEvents="none"
+                  />
+                </g>
+              );
+            })}
+          </g>
         </svg>
-
         {/* HTML Layer for Interactivity & Labels */}
         <div className="absolute inset-0 pointer-events-none">
           {/* Center Hub */}
           <motion.div 
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center z-20 pointer-events-auto"
-            initial={{ scale: 0, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            initial={false}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{
+              duration: prefersReducedMotion ? 0 : 0.8,
+              delay: prefersReducedMotion ? 0 : 0.2
+            }}
           >
             <div className="relative w-32 h-32 rounded-full bg-[#1A1A1A] border-2 border-[#E03694] flex items-center justify-center shadow-[0_0_40px_rgba(224,54,148,0.4)]">
               {/* Inner Spark */}
               <motion.div 
                 className="absolute inset-0 rounded-full"
-                animate={{ boxShadow: ["0 0 20px rgba(224,54,148,0.2)", "0 0 40px rgba(224,54,148,0.5)", "0 0 20px rgba(224,54,148,0.2)"] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                animate={{
+                  boxShadow: [
+                    "0 0 15px rgba(224,54,148,0.15)",
+                    "0 0 35px rgba(224,54,148,0.35)",
+                    "0 0 15px rgba(224,54,148,0.15)"
+                  ]
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
               />
               <div className="text-center z-10">
                 <img 
@@ -311,8 +542,10 @@ function ListenLearnLeadDiagram() {
 
           {/* Arc Labels & Nodes */}
           {arcs.map((arc) => {
-            // Calculate label position (mid-arc)
-            const labelPos = polarToCartesian(50, 50, 22.5, arc.centerAngle); 
+            // Position labels using the same SVG geometry, then convert to % so they stay locked to the ring
+            const labelR = arcRadius - 2; // sit on the ring; slight inward nudge avoids clipping
+            const labelPosPx = polarToCartesian(center, center, labelR, arc.centerAngle);
+            const labelPos = { x: (labelPosPx.x / size) * 100, y: (labelPosPx.y / size) * 100 };
             const isHovered = hoveredArc === arc.id;
             const isDimmed = hoveredArc && hoveredArc !== arc.id;
 
@@ -320,16 +553,28 @@ function ListenLearnLeadDiagram() {
               <div key={arc.id} className={`transition-opacity duration-500 ${isDimmed ? 'opacity-30' : 'opacity-100'}`}>
                 {/* Arc Label */}
                 <div 
-                  className="absolute transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto cursor-pointer"
-                  style={{ left: `${labelPos.x}%`, top: `${labelPos.y}%` }}
+                  className="absolute pointer-events-auto cursor-pointer"
+                  style={{
+                    left: `${labelPos.x}%`,
+                    top: `${labelPos.y}%`,
+                    transform: `translate(-50%, -50%) translate(${getLabelNudgePx(arc.id).x}px, ${getLabelNudgePx(arc.id).y}px)`
+                  }}
                   onMouseEnter={() => setHoveredArc(arc.id)}
                   onMouseLeave={() => setHoveredArc(null)}
                 >
-                  <span 
-                    className="text-white font-bold text-lg uppercase tracking-widest px-3 py-1 rounded-full"
-                    style={{ 
-                      textShadow: `0 2px 10px ${arc.color}`,
-                      backgroundColor: 'rgba(0,0,0,0.4)' 
+                  <span
+                    className="text-white font-bold text-xl uppercase tracking-widest px-4 py-1.5 rounded-full border"
+                    style={{
+                      textShadow: `0 2px 12px rgba(0,0,0,0.55)`,
+                      background: isHovered
+                        ? `linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.36) 100%)`
+                        : `linear-gradient(180deg, rgba(0,0,0,0.48) 0%, rgba(0,0,0,0.30) 100%)`,
+                      borderColor: isHovered ? `${arc.color}66` : `rgba(255,255,255,0.10)`,
+                      boxShadow: isHovered
+                        ? `0 0 26px ${arc.color}55, inset 0 0 0 1px rgba(255,255,255,0.06)`
+                        : `inset 0 0 0 1px rgba(255,255,255,0.05)`,
+                      backdropFilter: 'blur(10px)',
+                      WebkitBackdropFilter: 'blur(10px)'
                     }}
                   >
                     {arc.label}
@@ -338,37 +583,85 @@ function ListenLearnLeadDiagram() {
 
                 {/* Nodes */}
                 {arc.nodes.map((node, i) => {
-                  const nodePos = polarToCartesian(50, 50, 40, node.angle);
+                  // Compute node position in the same coordinate space as the SVG, then convert to %.
+                  // This keeps the HTML node centers locked to the SVG connector endpoint dots.
+                  const nodePosPx = polarToCartesian(center, center, nodeRadius, node.angle);
+                  const nodePos = {
+                    x: (nodePosPx.x / size) * 100,
+                    y: (nodePosPx.y / size) * 100
+                  };
                   const NodeIcon = node.icon;
-                  
+
                   return (
                     <motion.div
                       key={i}
-                      className="absolute transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center w-40 text-center pointer-events-auto"
-                      style={{ left: `${nodePos.x}%`, top: `${nodePos.y}%` }}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: 0.6 + i * 0.1 }}
+                      className="absolute pointer-events-auto -translate-x-1/2 -translate-y-1/2"
+                      style={{
+                        left: `${nodePos.x}%`,
+                        top: `${nodePos.y}%`
+                      }}
+                      initial={false}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{
+                        duration: prefersReducedMotion ? 0 : 0.5,
+                        delay: prefersReducedMotion ? 0 : 0.6 + i * 0.1
+                      }}
                       onMouseEnter={() => setHoveredArc(arc.id)}
                       onMouseLeave={() => setHoveredArc(null)}
                     >
-                      <motion.div 
-                        className="w-12 h-12 rounded-full bg-[#1A1A1A] border flex items-center justify-center mb-2 shadow-lg relative z-10"
-                        style={{ borderColor: arc.color }}
-                        whileHover={{ scale: 1.15, boxShadow: `0 0 20px ${arc.color}60`, backgroundColor: '#2a2a2a' }}
+                      {/* Nudge wrapper: keeps icon centers aligned to connector endpoints */}
+                      <div
+                        className="relative w-12 h-12"
+                        style={{
+                          transform: `translate(${getNodeNudgePx(node.label).x}px, ${getNodeNudgePx(node.label).y}px)`
+                        }}
                       >
-                        <NodeIcon size={20} style={{ color: arc.color }} />
-                      </motion.div>
-                      <span className="text-white/80 text-xs font-medium leading-tight">
-                        {node.label}
-                      </span>
+                        {/* Anchor point is the icon circle center (matches SVG endpoint dot) */}
+                        <motion.div
+                          className="absolute inset-0 rounded-full bg-[#1A1A1A] border flex items-center justify-center shadow-lg"
+                          style={{ borderColor: arc.color }}
+                          whileHover={{
+                            scale: 1.15,
+                            y: -4,
+                            boxShadow: `0 0 25px ${arc.color}80`,
+                            backgroundColor: '#2a2a2a'
+                          }}
+                        >
+                          <NodeIcon size={20} style={{ color: arc.color }} />
+                        </motion.div>
+
+                        {/* Label is positioned OUTWARD along the radial direction to avoid overlaps */}
+                        {(() => {
+                          const place = getNodeLabelPlacement(node.label, node.angle);
+                          return (
+                            <div
+                              className="absolute"
+                              style={{
+                                left: '50%',
+                                top: '50%',
+                                transform: `translate(-50%, -50%) translate(${place.dx}px, ${place.dy}px)`,
+                                width: place.width,
+                                pointerEvents: 'none',
+                                textAlign: place.textAlign
+                              }}
+                            >
+                              <span
+                                className="block text-white/80 text-sm font-medium leading-tight"
+                                style={{ textShadow: '0 2px 10px rgba(0,0,0,0.55)' }}
+                              >
+                                {node.label}
+                              </span>
+                            </div>
+                          );
+                        })()}
+                      </div>
                     </motion.div>
                   );
                 })}
               </div>
             );
           })}
+        </div>
         </div>
       </div>
 
@@ -489,6 +782,13 @@ export function MissionPage() {
   const navigate = useNavigate();
   const [selectedSector, setSelectedSector] = useState<Sector | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [engineDebug, setEngineDebug] = useState<{
+    width: number;
+    isMd: boolean;
+    display: string;
+    wrapperRect?: DOMRect;
+    svgRect?: DOMRect;
+  } | null>(null);
   const systemReducedMotion = useReducedMotion();
   const { motionPreference } = useAccessibility();
   const prefersReducedMotion = systemReducedMotion || motionPreference === 'reduce';
@@ -505,8 +805,31 @@ export function MissionPage() {
     }
   };
 
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    const svg = document.querySelector('svg[viewBox="0 0 900 900"]') as SVGElement | null;
+    const wrapper = document.querySelector('[data-engine-wrapper]') as HTMLElement | null;
+    const display = wrapper ? window.getComputedStyle(wrapper).display : 'n/a';
+    setEngineDebug({
+      width: window.innerWidth,
+      isMd: window.matchMedia('(min-width: 768px)').matches,
+      display,
+      wrapperRect: wrapper?.getBoundingClientRect(),
+      svgRect: svg?.getBoundingClientRect()
+    });
+  }, []);
+
   return (
-    <div className="min-h-screen relative" ref={containerRef}>
+    <div className="min-h-screen relative overflow-x-hidden" ref={containerRef}>
+      {import.meta.env.DEV && engineDebug && (
+        <div className="fixed bottom-4 right-4 z-[9999] rounded-lg bg-black/80 text-white text-xs px-3 py-2 font-mono shadow-lg">
+          <div>width: {engineDebug.width}</div>
+          <div>md: {engineDebug.isMd ? 'true' : 'false'}</div>
+          <div>display: {engineDebug.display}</div>
+          <div>wrapper: {Math.round(engineDebug.wrapperRect?.width || 0)}×{Math.round(engineDebug.wrapperRect?.height || 0)}</div>
+          <div>svg: {Math.round(engineDebug.svgRect?.width || 0)}×{Math.round(engineDebug.svgRect?.height || 0)}</div>
+        </div>
+      )}
       <Helmet>
         <title>Our Mission | SparkPoint</title>
         <meta name="description" content="SparkPoint fosters community well-being rooted in connection." />
@@ -542,14 +865,107 @@ export function MissionPage() {
           {/* Stacked Animated Anchor */}
           <StackedAnchor />
           
-          <div className="max-w-2xl mx-auto space-y-8 mb-12">
-            <h1 className="text-xl md:text-2xl text-white font-medium leading-relaxed">
-              SparkPoint fosters community well-being rooted in connection.
-            </h1>
+          <div className="max-w-2xl mx-auto mb-12">
+            {/* Option C (refined): Mission Statement label + readable glass scrim */}
+            <div
+              className="relative mx-auto rounded-2xl px-6 py-6 md:px-8 md:py-7 border border-white/10 shadow-xl"
+              style={{
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.52) 0%, rgba(0,0,0,0.42) 55%, rgba(0,0,0,0.58) 100%)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                boxShadow: '0 18px 50px rgba(0,0,0,0.45)'
+              }}
+            >
+              {/* subtle highlight ring */}
+              <div
+                className="pointer-events-none absolute inset-0 rounded-2xl"
+                style={{
+                  boxShadow: 'inset 0 0 0 1px rgba(224,54,148,0.14), inset 0 0 40px rgba(224,54,148,0.08)'
+                }}
+              />
 
-            <p className="text-lg md:text-xl text-white/80 font-serif italic leading-relaxed font-light">
-              We strengthen Transylvania County by aligning people and organizations around community voice—so resources are shared openly, trust grows, and our region becomes more resilient over time.
-            </p>
+              <div className="relative">
+                <div className="flex items-center justify-center mb-5">
+                  {/* Engraved label (etched text + hairline rules) */}
+                  <div className="relative inline-flex items-center justify-center px-2">
+                    <span
+                      aria-hidden="true"
+                      className="hidden sm:block w-16 md:w-20 h-px"
+                      style={{
+                        background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.28) 45%, rgba(255,255,255,0.06) 100%)'
+                      }}
+                    />
+
+                    <span
+                      className="mx-3 md:mx-4 text-[0.95rem] md:text-[1.02rem] font-semibold uppercase"
+                      style={{
+                        letterSpacing: '0.26em',
+                        color: 'rgba(255,255,255,0.62)',
+                        textShadow: '0 1px 0 rgba(0,0,0,0.55), 0 -1px 0 rgba(255,255,255,0.08)'
+                      }}
+                    >
+                      Mission Statement
+                    </span>
+
+                    <span
+                      aria-hidden="true"
+                      className="hidden sm:block w-16 md:w-20 h-px"
+                      style={{
+                        background: 'linear-gradient(90deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.28) 55%, rgba(255,255,255,0) 100%)'
+                      }}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <h1
+                    className="text-xl md:text-2xl text-white font-semibold leading-relaxed"
+                    style={{ textShadow: '0 8px 28px rgba(0,0,0,0.55)' }}
+                  >
+                    SparkPoint fosters community well-being rooted in connection.
+                  </h1>
+                  {/* Elegant divider */}
+                  <div className="flex items-center justify-center py-2" aria-hidden="true">
+                    <svg
+                      width="320"
+                      height="14"
+                      viewBox="0 0 320 14"
+                      className="w-[240px] md:w-[320px] h-[14px]"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6 7H142"
+                        stroke="rgba(255,255,255,0.22)"
+                        strokeWidth="1"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M178 7H314"
+                        stroke="rgba(255,255,255,0.22)"
+                        strokeWidth="1"
+                        strokeLinecap="round"
+                      />
+                      <path
+                        d="M160 1L166 7L160 13L154 7L160 1Z"
+                        fill="rgba(255,255,255,0.14)"
+                        stroke="rgba(255,255,255,0.22)"
+                        strokeWidth="1"
+                      />
+                    </svg>
+                  </div>
+                  <p
+                    className="text-lg md:text-xl font-serif italic leading-relaxed"
+                    style={{
+                      color: 'rgba(255,255,255,0.86)',
+                      textShadow: '0 10px 28px rgba(0,0,0,0.60)'
+                    }}
+                  >
+                    We strengthen Transylvania County by aligning people and organizations around community voice—so resources are shared openly, trust grows, and our region becomes more resilient over time.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Micro-Nav Buttons */}
@@ -595,15 +1011,24 @@ export function MissionPage() {
 
            {/* Diagram */}
            <motion.div 
-             className="relative rounded-[32px] md:rounded-[40px] bg-[#000000]/40 border border-white/10 shadow-2xl overflow-hidden p-6 md:p-10 mb-10 md:mb-16"
+             className="relative rounded-[32px] md:rounded-[40px] bg-[#000000]/40 border border-white/10 shadow-2xl overflow-hidden p-8 md:p-12 pt-8 md:pt-10 pb-16 md:pb-20 mb-12 md:mb-20"
              initial={{ opacity: 0, scale: 0.98 }}
              whileInView={{ opacity: 1, scale: 1 }}
              viewport={{ once: true }}
              transition={{ duration: 0.8 }}
              style={{ boxShadow: '0 25px 60px rgba(0,0,0,0.5)' }}
            >
-              <div className="hidden md:block">
-                <ListenLearnLeadDiagram />
+              <div className="hidden md:flex w-full items-center justify-center" data-engine-wrapper>
+                {/* Responsive square: cannot exceed container width, capped by viewport height */}
+                <div
+                  className="relative flex items-center justify-center w-full"
+                  style={{ maxWidth: 900, aspectRatio: '1 / 1', maxHeight: '78vh' }}
+                >
+                  {/* Optical nudge up so the diagram sits centered inside the rounded frame */}
+                  <div className="relative w-full h-full" style={{ transform: 'translateY(-10px)' }}>
+                    <ListenLearnLeadDiagram />
+                  </div>
+                </div>
               </div>
 
               {/* Mobile-Specific Guided Sequence */}
@@ -914,7 +1339,7 @@ export function MissionPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedSector(null)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm z-0"
             />
             
             <motion.div
@@ -922,12 +1347,12 @@ export function MissionPage() {
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col"
+              className="relative z-10 w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col"
             >
               <div className="p-8 pb-6 relative overflow-hidden" style={{ backgroundColor: `${selectedSector.color}10` }}>
                 <button 
                   onClick={() => setSelectedSector(null)}
-                  className="absolute top-4 right-4 p-2 bg-white/50 hover:bg-white rounded-full transition-colors"
+                  className="absolute top-4 right-4 p-2 bg-white/50 hover:bg-white rounded-full transition-colors z-20 pointer-events-auto"
                 >
                   <X size={20} className="text-gray-500" />
                 </button>

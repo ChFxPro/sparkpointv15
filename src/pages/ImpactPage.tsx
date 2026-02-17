@@ -14,8 +14,9 @@ const impactMetrics = [
   {
     icon: Users,
     value: 12500,
-    label: 'Community Members Served',
-    description: 'Direct services and support provided to individuals and families',
+    label: 'Community Touchpoints in 2025',
+    shortLabel: 'Touchpoints',
+    description: 'Cumulative participation across programs, youth engagement, events, and partner collaborations throughout the year.',
     color: '#E03694',
     gradient: 'linear-gradient(135deg, #E03694 0%, #F15F48 100%)'
   },
@@ -23,6 +24,7 @@ const impactMetrics = [
     icon: Heart,
     value: 850,
     label: 'Volunteer Hours',
+    shortLabel: 'Volunteer Hours',
     description: 'Dedicated community volunteers making a difference',
     color: '#9E509F',
     gradient: 'linear-gradient(135deg, #9E509F 0%, #E03694 100%)'
@@ -31,6 +33,7 @@ const impactMetrics = [
     icon: TrendingUp,
     value: 45,
     label: 'Partner Organizations',
+    shortLabel: 'Partners',
     description: 'Collaborative partnerships strengthening our network',
     color: '#FDB515',
     gradient: 'linear-gradient(135deg, #FDB515 0%, #F15F48 100%)'
@@ -269,7 +272,7 @@ export function ImpactPage() {
                     <Counter target={metric.value} />+
                   </span>
                   <span style={{ color: '#666666', fontSize: '0.875rem' }}>
-                    {metric.label.split(' ')[0]}
+                    {'shortLabel' in metric && metric.shortLabel ? metric.shortLabel : metric.label}
                   </span>
                 </div>
               ))}

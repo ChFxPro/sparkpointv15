@@ -5,7 +5,6 @@ import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { useState, useEffect } from 'react';
 import heroImage from 'figma:asset/0c7f5d615ddb7365345eec2cd86bf98d3be9ca22.png';
 import teamHeroImage from 'figma:asset/c88e8fd418fa5de2d8271a01eff7835b8bc45301.png';
-import jennyHeadshot from 'figma:asset/ba6e37fd64adba4fcc3b0218dcd2bb192cb23802.png';
 import blueZonesImage from 'figma:asset/006b84f90bae2616433d7bda85278d8264e4e33c.png';
 import sparkPointLaunchImage from 'figma:asset/ce8cfb7a67e4c9db354c1d7021333b647621f8d5.png';
 import launchSocialImage from 'figma:asset/08d6097996fec1db647eccd1343a8e7ebf420b7b.png';
@@ -20,6 +19,57 @@ import seniorGatheringImage from 'figma:asset/2f54cc163c056ac592d9e429a8920f74d0
 import interviewFilmingImage from 'figma:asset/183c96a680c45035b0835db81082bdb93af69f97.png';
 import sparkPointCommonsImage from 'figma:asset/63f606372ec6e500e9a7547d300fb9f0d31dae7e.png';
 import mediaStudioImage from 'figma:asset/7c67e828e47be75e27ecc6de02db283be5ae7589.png';
+
+import sarahHeadshotWebp from '../assets/staff_pics/webp/sp_port26__0004_sarah.webp';
+import sarahHeadshotJpg from '../assets/staff_pics/sp_port26__0004_sarah.jpg';
+
+import charlotteHeadshotWebp from '../assets/staff_pics/webp/sp_port26__0003_charlotte.webp';
+import charlotteHeadshotJpg from '../assets/staff_pics/sp_port26__0003_charlotte.jpg';
+
+import jeffHeadshotWebp from '../assets/staff_pics/webp/sp_port26__0002_jeff.webp';
+import jeffHeadshotJpg from '../assets/staff_pics/sp_port26__0002_jeff.jpg';
+
+import maggieHeadshotWebp from '../assets/staff_pics/webp/sp_port26__0001_maggie.webp';
+import maggieHeadshotJpg from '../assets/staff_pics/sp_port26__0001_maggie.jpg';
+
+import jennyHeadshotWebp from '../assets/staff_pics/webp/sp_port26__0000_jenny.webp';
+import jennyHeadshotJpg from '../assets/staff_pics/sp_port26__0000_jenny.jpg';
+
+import joshHeadshotWebp from '../assets/staff_pics/webp/sp_port26__0005_josh.webp';
+import joshHeadshotJpg from '../assets/staff_pics/sp_port26__0005_josh.jpg';
+
+import sophiaHeadshotWebp from '../assets/staff_pics/webp/sp_port26__0006_sophia.webp';
+import sophiaHeadshotJpg from '../assets/staff_pics/sp_port26__0006_sophia.jpg';
+
+import danielBoardWebp from '../assets/board_pics/webp/sp_port26_0000_daniel.webp';
+import danielBoardJpg from '../assets/board_pics/sp_port26_0000_daniel.jpg';
+
+import marshaBoardWebp from '../assets/board_pics/webp/sp_port26_0001_marsha.webp';
+import marshaBoardJpg from '../assets/board_pics/sp_port26_0001_marsha.jpg';
+
+import oraBoardWebp from '../assets/board_pics/webp/sp_port26_0002_ora.webp';
+import oraBoardJpg from '../assets/board_pics/sp_port26_0002_ora.jpg';
+
+import jeffreyBoardWebp from '../assets/board_pics/webp/sp_port26_0003_jeffrey.webp';
+import jeffreyBoardJpg from '../assets/board_pics/sp_port26_0003_jeffrey.jpg';
+
+import carolynBoardWebp from '../assets/board_pics/webp/sp_port26_0004_carolyn.webp';
+import carolynBoardJpg from '../assets/board_pics/sp_port26_0004_carolyn.jpg';
+
+import saundraBoardWebp from '../assets/board_pics/webp/sp_port26_0005_saundra.webp';
+import saundraBoardJpg from '../assets/board_pics/sp_port26_0005_saundra.jpg';
+
+import gailBoardWebp from '../assets/board_pics/webp/sp_port26_0006_gail.webp';
+import gailBoardJpg from '../assets/board_pics/sp_port26_0006_gail.jpg';
+
+import maureenBoardWebp from '../assets/board_pics/webp/sp_port26_0007_maureen.webp';
+import maureenBoardJpg from '../assets/board_pics/sp_port26_0007_maureen.jpg';
+
+import shannonBoardWebp from '../assets/board_pics/webp/sp_port26_0008_shannon.webp';
+import shannonBoardJpg from '../assets/board_pics/sp_port26_0008_shannon.jpg';
+
+import gloriaBoardWebp from '../assets/board_pics/webp/sp_port26_0009_gloria.webp';
+import gloriaBoardJpg from '../assets/board_pics/sp_port26_0009_gloria.jpg';
 import { Button } from '../components/ui/button';
 import { TimelinePhotoStack } from '../components/TimelinePhotoStack';
 import {
@@ -100,38 +150,66 @@ const timeline = [
   }
 ];
 
-const staff = [
+type StaffMember = {
+  name: string;
+  role: string;
+  bio: string;
+  initials?: string;
+  // Legacy remote image support (still used for Olivia for now)
+  headshot?: string;
+  // Local portrait support (preferred): WebP + JPG fallback
+  headshotWebp?: string;
+  headshotJpg?: string;
+  // Optional per-person crop/zoom overrides when needed
+  imageClassName?: string;
+};
+
+const staff: StaffMember[] = [
   {
     name: 'Sarah Hankey',
     role: 'Founder / Executive Director',
-    headshot: 'https://images.squarespace-cdn.com/content/v1/5e13af05d72fc96230cefbd1/1683137861973-A5A3928M7R6VONTEXI9S/Board-%26-Staff-Headshots_0010_Layer-1.png?format=2500w',
+    headshotWebp: sarahHeadshotWebp,
+    headshotJpg: sarahHeadshotJpg,
     bio: `Sarah's experience in leading Brevard through the Blue Zones Certification, coupled with her background in integrative health and education, fuels her passion for driving a sustainable program that advances community well-being. She strongly believes that good health is a fundamental right that should be within reach of everyone.\n\nAs the Director of SparkPoint, Sarah places great importance on building connections, promoting resilience, and leading with empathy. She is profoundly honored and proud to be spearheading another impactful initiative throughout Transylvania County and the broader Western North Carolina region.\n\nIn addition to her role with SparkPoint, Sarah serves on the boards of the Mary C. Jenkins Community and Cultural Center, Pisgah Forest Rotary Club, and the Transylvania County Family and Consumer Science Advisory Board. Sarah was honored to be awarded the 2023 Duke Energy Citizenship & Service Award presented by the Transylvania Chamber of Commerce.`
   },
   {
     name: 'Charlotte Shackleford, EdD',
     role: 'Co-Founder / Program Manager',
-    headshot: 'https://images.squarespace-cdn.com/content/v1/5e13af05d72fc96230cefbd1/1683137862456-Y8S4IV15TVHPI1RMTY00/Board-%26-Staff-Headshots_0009_Layer-2.png?format=2500w',
+    headshotWebp: charlotteHeadshotWebp,
+    headshotJpg: charlotteHeadshotJpg,
     bio: `Charlotte is a longtime educator and community builder with more than 20 years of experience helping people grow and thrive. She recently completed her Doctorate in Educational Leadership from Western Carolina University, building on her background in psychology, sociology, and elementary education.\n\nCharlotte believes that strong communities are rooted in meaningful relationships. She’s passionate about promoting wellness in all areas of life — emotional, mental, and physical — and works to integrate those values into everything she does.\n\nAt SparkPoint, Charlotte brings her heart for people and her love of learning to support community well-being across Transylvania County.\n\nWhen she’s not working, you can find her outside exploring nature, spending time with friends and family, or enjoying the quiet beauty of western North Carolina.`
   },
   {
     name: 'Jeff Bannister',
     role: 'Marketing Manager',
-    headshot: 'https://images.squarespace-cdn.com/content/v1/5e13af05d72fc96230cefbd1/1683137683793-B12P6RLTPAZLWDBFEQ5J/Board-%26-Staff-Headshots_0007_Layer-0.png?format=2500w',
+    headshotWebp: jeffHeadshotWebp,
+    headshotJpg: jeffHeadshotJpg,
     bio: `Jeff Bannister, formerly Vice President of the Board of Directors at SparkPoint, now brings his extensive experience in community engagement and leadership to his role overseeing Marketing and Operations. His commitment to inclusivity and cultural competence, developed during his tenure on the Board, is now pivotal in enhancing SparkPoint's outreach and operational effectiveness.\n\nJeff's unique ability to connect with diverse groups and his passion for community empowerment are key assets in driving the organization's mission forward, ensuring a significant and positive impact in the communities served.`
   },
   {
     name: 'Maggie Grimm',
     role: 'Outreach Coordinator',
-    headshot: 'https://images.squarespace-cdn.com/content/v1/5e13af05d72fc96230cefbd1/acd36e55-224e-404f-8b72-5b7e0e8bcd5c/IMG_0983.jpg?format=2500w',
+    headshotWebp: maggieHeadshotWebp,
+    headshotJpg: maggieHeadshotJpg,
     bio: `As Outreach Coordinator, Maggie helps strengthen SparkPoint’s connections across the community by building partnerships, coordinating volunteers, and ensuring residents know about available programs and resources.\n\nWith a passion for community engagement and a heart for service, Maggie brings energy and creativity to the team. From planning outreach events to supporting communications and collaborations with local organizations, they play a key role in helping SparkPoint continue to grow its impact and reach.\n\nWhen Maggie isn’t at work, you can find her exploring nature with her husband and two young kids.`
   },
   {
     name: 'Jenny Carlberg',
     role: 'Development Manager',
-    headshot: jennyHeadshot, 
+    headshotWebp: jennyHeadshotWebp,
+    headshotJpg: jennyHeadshotJpg,
     initials: 'JC',
     bio: `Jenny Carlberg serves as SparkPoint’s Development Manager, where she leads fundraising strategy and donor engagement to support the organization’s long-term sustainability. She joined SparkPoint in November 2025 and brings more than a decade of nonprofit experience, with a focus on fundraising and grant development.\n\nJenny holds a Master of Public Administration with a concentration in nonprofit management from the University of North Carolina at Chapel Hill. Throughout her career, he has helped organizations raise millions of dollars in support of programs that strengthen community well-being and resilience.\n\nShe is especially drawn to SparkPoint’s mission of fostering community wellness through connection and is grateful to serve the Western North Carolina community she now calls home.\n\nOutside of work, Jenny enjoys hiking, camping, and traveling with her family, practicing yoga, reading, writing, and baking for friends and neighbors. She is a mom to two young daughters and a nine-year-old dog adopted from Uganda, and after living in several countries across three continents, she is deeply happy to be putting down roots in the North Carolina mountains.`,
-    imageClassName: 'scale-[1.5] origin-[35%_5%] group-hover:scale-[1.6]',
+  },
+  {
+    name: 'Josh Nelson',
+    role: 'CPA / Financial Advisor',
+    headshotWebp: joshHeadshotWebp,
+    headshotJpg: joshHeadshotJpg,
+    initials: 'JN',
+    bio: `Josh Nelson serves as SparkPoint’s CPA and financial advisor, providing oversight and strategic guidance to ensure the organization’s financial health and long-term sustainability. With more than a decade of experience in public accounting and corporate financial reporting — including leadership roles at a top 15 U.S. public accounting firm and a Fortune Global 500 company — Josh brings deep expertise in compliance, reporting, and financial strategy.
+
+Based in Western North Carolina, Josh partners closely with SparkPoint’s leadership to strengthen financial transparency, support responsible growth, and help steward community resources with care. He is also an active member of the Brevard/Transylvania Chamber of Commerce and the Rotary Club of Pisgah Forest.`
   },
   {
     name: 'Olivia Hankey',
@@ -142,60 +220,116 @@ const staff = [
   {
     name: 'Sophia DePasquale',
     role: 'Intern',
-    headshot: '',
+    headshotWebp: sophiaHeadshotWebp,
+    headshotJpg: sophiaHeadshotJpg,
     initials: 'SD',
     bio: `Sophia joins the SparkPoint team as an intern, supporting our community programs and initiatives. Full bio coming soon.`
   }
 ];
 
-const boardMembers = [
+type BoardMember = {
+  name: string;
+  role: string;
+  bio: string;
+  initials?: string;
+  headshotWebp?: string;
+  headshotJpg?: string;
+  // legacy (not preferred)
+  headshot?: string;
+};
+
+const boardMembers: BoardMember[] = [
   {
     name: 'Dr. Ora Wells',
     role: 'Board President',
-    headshot: 'https://images.squarespace-cdn.com/content/v1/5e13af05d72fc96230cefbd1/1683137865474-WN2HWBQ0ZIVNFP7T8KI1/Board-%26-Staff-Headshots_0008_Layer-4.png?format=2500w',
-    bio: `As a newly retired pediatrician, Dr. Ora Wells continues his lifetime passion for wellness. He served Hendersonville Pediatrics for over 30 years, specializing in ADHD, allergies, and asthma management. Dr. Wells began his medical career at the University of North Carolina at Chapel Hill and earned his medical degree from the Medical College of Georgia. He taught pediatrics as an assistant clinical professor at Charlotte Memorial Hospital, where he also completed his residency.\n\nAfter teaching, Dr. Wells joined Hendersonville Pediatrics, where he practiced for decades. He regularly volunteers on medical trips to Haiti through Consider Haiti and is an avid supporter of Young Life. He enjoys traveling with his wife to visit their children and grandchildren, playing the bagpipes, and riding his motorcycle — and may be spotted around Brevard in his 1954 Chevy pickup.`
+    headshotWebp: oraBoardWebp,
+    headshotJpg: oraBoardJpg,
+    initials: 'OW',
+    bio: `As a newly retired pediatrician, Dr. Ora Wells continues his lifetime passion for wellness. He served Hendersonville Pediatrics for over 30 years, specializing in ADHD, allergies, and asthma management. Dr. Wells began his medical career at the University of North Carolina at Chapel Hill and earned his medical degree from the Medical College of Georgia. He taught pediatrics as an assistant clinical professor at Charlotte Memorial Hospital, where he also completed his residency.
+
+After teaching, Dr. Wells joined Hendersonville Pediatrics, where he practiced for decades. He regularly volunteers on medical trips to Haiti through Consider Haiti and is an avid supporter of Young Life. He enjoys traveling with his wife to visit their children and grandchildren, playing the bagpipes, and riding his motorcycle — and may be spotted around Brevard in his 1954 Chevy pickup.`
+  },
+  {
+    name: 'Daniel Mehdi',
+    role: 'Vice President',
+    headshotWebp: danielBoardWebp,
+    headshotJpg: danielBoardJpg,
+    initials: 'DM',
+    bio: `Daniel serves as Vice President of SparkPoint’s Board of Directors. Full bio coming soon.`
+  },
+  {
+    name: 'Saundra Lemaster',
+    role: 'Treasurer',
+    headshotWebp: saundraBoardWebp,
+    headshotJpg: saundraBoardJpg,
+    initials: 'SL',
+    bio: `Saundra Lemaster began her career in media sales after earning a degree in communications from the University of Kentucky. She has worked across newspaper, television, and radio in both sales and leadership roles.
+
+She has supported numerous nonprofit initiatives, including pediatric cancer fundraising through Duke University and substance abuse recovery programs in Western North Carolina. Growing up in rural Kentucky shaped her compassion for underserved communities, a value she brings to her work with SparkPoint.`
   },
   {
     name: 'Mayor Maureen Copelof',
     role: 'Board Member',
-    headshot: 'https://images.squarespace-cdn.com/content/v1/5e13af05d72fc96230cefbd1/1683137871267-IMP43TETWH19G6OPFXRI/Board-%26-Staff-Headshots_0005_Layer-8.png?format=2500w',
-    bio: `Maureen Copelof is a retired U.S. Navy Captain with 30 years of active-duty service. After retiring, she returned to Brevard and was elected to Brevard City Council in 2017. In November 2021, she was elected Mayor of the City of Brevard.\n\nShe holds master’s degrees in both Business Administration and Political Science. An avid gardener, Maureen is deeply committed to supporting the community’s built environment and its connection to overall well-being. She served on the Brevard Blue Zones Project Steering Committee and is proud to continue that work through SparkPoint.`
-  },
-  {
-    name: 'Dr. Morris Jenkins',
-    role: 'Board Member',
-    headshot: 'https://images.squarespace-cdn.com/content/v1/5e13af05d72fc96230cefbd1/1683137871937-GQL44NF4PU74CDV3MNJ4/Board-%26-Staff-Headshots_0004_Layer-7.png?format=2500w',
-    bio: `Dr. Morris Jenkins earned his medical degree from Emory University and completed his residency at the Medical University of South Carolina. He practiced family medicine and hospice medicine for 41 years in Georgia, New Zealand, and Brevard, North Carolina.\n\nHe served on the medical staff of Transylvania Regional Hospital from 2009 to 2023 and retired from hospice and palliative medicine with Care Partners Transylvania in 2021. Morris and his wife Molly have lived in Brevard since 2009 and enjoy time with their two children and five grandchildren. His interests include bicycling, hiking, music (upright bass), and duplicate bridge.`
-  },
-  {
-    name: 'Marsha Farrell',
-    role: 'Board Member',
-    headshot: 'https://images.squarespace-cdn.com/content/v1/5e13af05d72fc96230cefbd1/1683137690559-PK42JA6MCAPS1J0ZF3G0/Board-%26-Staff-Headshots_0003_Layer-9.png?format=2500w',
-    bio: `Marsha Farrell is a retired nurse with a 44-year career, including two decades in hospice and palliative care. Her work taught her the importance of presence, purpose, and quality of life.\n\nAfter moving to Brevard in 2021, Marsha became active with the Blue Zones Project as a Purpose Workshop facilitator and Potluck Moai speaker. She is passionate about helping people advocate for their quality of life and discover what matters most. Marsha and her husband Jay are deeply involved in volunteer work throughout the community.`
-  },
-  {
-    name: 'Saundra Lemaster',
-    role: 'Board Treasurer',
-    headshot: 'https://images.squarespace-cdn.com/content/v1/5e13af05d72fc96230cefbd1/1683137539381-ZH1FUEAIWBGP01Y22K72/Board-%26-Staff-Headshots_0006_Layer-6.png?format=2500w',
-    bio: `Saundra Lemaster began her career in media sales after earning a degree in communications from the University of Kentucky. She has worked across newspaper, television, and radio in both sales and leadership roles.\n\nShe has supported numerous nonprofit initiatives, including pediatric cancer fundraising through Duke University and substance abuse recovery programs in Western North Carolina. Growing up in rural Kentucky shaped her compassion for underserved communities, a value she brings to her work with SparkPoint.`
-  },
-  {
-    name: 'Carolyn Foster',
-    role: 'Board Member',
-    headshot: 'https://images.squarespace-cdn.com/content/v1/5e13af05d72fc96230cefbd1/1683137880538-JFXZXOR0UNEATVIFGR1P/Board-%26-Staff-Headshots_0000_Carolyn_to_Fix.png?format=2500w',
-    bio: `Carolyn Foster was born, raised, and educated in New Brunswick, Canada, and began her nursing career there before becoming a traveling nurse in the United States. She settled in Brevard in 1992 and worked at Transylvania Regional Hospital for nearly 29 years.\n\nAfter retiring in 2021, Carolyn has focused on civic involvement and community wellbeing. She enjoys hiking, kayaking, traveling, and spending time with family.`
-  },
-  {
-    name: 'Dan Mehdi',
-    role: 'Board Member',
-    headshot: 'https://images.squarespace-cdn.com/content/v1/5e13af05d72fc96230cefbd1/3d8e7db0-fe8e-406f-96a3-f41f3405dcfc/20240311_115122.jpg?format=2500w',
-    bio: `Dan Mehdi retired from the Drug Enforcement Administration after a 21-year career, including leadership roles in national training and mentorship. A former Marine Infantry Officer, Dan carries a lifelong commitment to service and resilience.\n\nHe leads Post-Traumatic Growth workshops, serves as a peer trauma counselor, and speaks nationally and internationally about trauma recovery and leadership. SparkPoint aligns closely with his personal purpose of helping others thrive.`
+    headshotWebp: maureenBoardWebp,
+    headshotJpg: maureenBoardJpg,
+    initials: 'MC',
+    bio: `Maureen Copelof is a retired U.S. Navy Captain with 30 years of active-duty service. After retiring, she returned to Brevard and was elected to Brevard City Council in 2017. In November 2021, she was elected Mayor of the City of Brevard.
+
+She holds master’s degrees in both Business Administration and Political Science. An avid gardener, Maureen is deeply committed to supporting the community’s built environment and its connection to overall well-being. She served on the Brevard Blue Zones Project Steering Committee and is proud to continue that work through SparkPoint.`
   },
   {
     name: 'Shannon Meadows Allison',
     role: 'Board Member',
-    headshot: 'https://images.squarespace-cdn.com/content/v1/5e13af05d72fc96230cefbd1/3ffbd890-f8a9-4f82-9fea-4ce17024fc33/image0.jpeg?format=1500w',
-    bio: `Shannon Meadows Allison lives on her familys multi-generational cattle farm in Transylvania County. Her lived experience with Ehlers-Danlos syndrome inspired her to pursue nursing and community health work.\n\nShe is a registered nurse, a Women’s Health Nurse Practitioner student at Duke University, and the founder of Meadows Collaborative Health & Consulting. Shannon is passionate about advancing health literacy, resilience, and healthcare access in rural communities.`
+    headshotWebp: shannonBoardWebp,
+    headshotJpg: shannonBoardJpg,
+    initials: 'SA',
+    bio: `Shannon lives on her family’s multi-generational cattle farm in Transylvania County. Her lived experience with Ehlers-Danlos syndrome inspired her to pursue nursing and community health work.
+
+She is a registered nurse, a Women’s Health Nurse Practitioner student at Duke University, and the founder of Meadows Collaborative Health & Consulting. Shannon is passionate about advancing health literacy, resilience, and healthcare access in rural communities.`
+  },
+  {
+    name: 'Jeffrey Ambrose',
+    role: 'Board Member',
+    headshotWebp: jeffreyBoardWebp,
+    headshotJpg: jeffreyBoardJpg,
+    initials: 'JA',
+    bio: `Jeffrey serves on SparkPoint’s Board of Directors. Full bio coming soon.`
+  },
+  {
+    name: 'Carolyn Foster',
+    role: 'Board Member',
+    headshotWebp: carolynBoardWebp,
+    headshotJpg: carolynBoardJpg,
+    initials: 'CF',
+    bio: `Carolyn Foster was born, raised, and educated in New Brunswick, Canada, and began her nursing career there before becoming a traveling nurse in the United States. She settled in Brevard in 1992 and worked at Transylvania Regional Hospital for nearly 29 years.
+
+After retiring in 2021, Carolyn has focused on civic involvement and community wellbeing. She enjoys hiking, kayaking, traveling, and spending time with family.`
+  },
+  {
+    name: 'Marsha C. Farrell',
+    role: 'Board Member',
+    headshotWebp: marshaBoardWebp,
+    headshotJpg: marshaBoardJpg,
+    initials: 'MF',
+    bio: `Marsha Farrell is a retired nurse with a 44-year career, including two decades in hospice and palliative care. Her work taught her the importance of presence, purpose, and quality of life.
+
+After moving to Brevard in 2021, Marsha became active with the Blue Zones Project as a Purpose Workshop facilitator and Potluck Moai speaker. She is passionate about helping people advocate for their quality of life and discover what matters most. Marsha and her husband Jay are deeply involved in volunteer work throughout the community.`
+  },
+  {
+    name: 'Gail Masterson',
+    role: 'Board Member',
+    headshotWebp: gailBoardWebp,
+    headshotJpg: gailBoardJpg,
+    initials: 'GM',
+    bio: `Gail serves on SparkPoint’s Board of Directors. Full bio coming soon.`
+  },
+  {
+    name: 'Gloria Clouse',
+    role: 'Board Member',
+    headshotWebp: gloriaBoardWebp,
+    headshotJpg: gloriaBoardJpg,
+    initials: 'GC',
+    bio: `Gloria serves on SparkPoint’s Board of Directors. Full bio coming soon.`
   }
 ];
 
@@ -363,7 +497,7 @@ export function AboutPage() {
             {/* Transition: Context */}
             <div className="flex items-center gap-4 mb-16 opacity-50">
                 <div className="h-px w-12 bg-white"></div>
-                <span className="text-xs font-bold uppercase tracking-widest text-white">Community Origins</span>
+                <span className="text-xs font-bold uppercase tracking-widest text-white">Organization History</span>
             </div>
 
             <div className="prose prose-lg prose-invert max-w-none text-gray-300 font-serif">
@@ -528,7 +662,7 @@ export function AboutPage() {
                    <div className="col-span-1 md:col-span-5 flex justify-center md:justify-end">
                       <TimelinePhotoStack 
                          images={[{ src: blueZonesImage, caption: 'Blue Zones Project Brevard' }]} 
-                         label="Community Origins"
+                         label="Organization History"
                          milestoneYear="2019–2022"
                       />
                    </div>
@@ -632,7 +766,16 @@ export function AboutPage() {
                     className="group cursor-pointer"
                   >
                     <div className="relative aspect-[4/5] mb-6 overflow-hidden rounded-xl bg-gray-800">
-                      {member.headshot ? (
+                      {member.headshotWebp && member.headshotJpg ? (
+                        <picture>
+                          <source srcSet={member.headshotWebp} type="image/webp" />
+                          <img
+                            src={member.headshotJpg}
+                            alt={member.name}
+                            className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0 ${member.imageClassName || ''}`}
+                          />
+                        </picture>
+                      ) : member.headshot ? (
                         <img
                           src={member.headshot}
                           alt={member.name}
@@ -643,7 +786,6 @@ export function AboutPage() {
                           {member.initials}
                         </div>
                       )}
-                      
                       {/* Name Overlay on Hover */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
                       <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform">
@@ -653,28 +795,37 @@ export function AboutPage() {
                     </div>
                   </motion.div>
                 </DialogTrigger>
-                <DialogContent className="bg-[#1a1a1a] border-white/10 text-white max-w-2xl max-h-[85vh] overflow-y-auto">
-                  <DialogHeader>
-                    <div className="flex flex-col md:flex-row gap-8 items-start mb-6">
-                      <div className="w-32 h-32 md:w-48 md:h-48 rounded-lg overflow-hidden flex-shrink-0 bg-gray-800">
-                         {member.headshot ? (
-                           <img src={member.headshot} alt={member.name} className={`w-full h-full object-cover ${member.imageClassName || ''}`} />
-                         ) : (
-                           <div className="w-full h-full flex items-center justify-center text-white/20 text-2xl font-bold">{member.initials}</div>
-                         )}
-                      </div>
-                      <div>
-                        <DialogTitle className="text-3xl font-bold mb-2">{member.name}</DialogTitle>
-                        <DialogDescription className="text-[#E03694] font-medium uppercase tracking-wide text-sm mb-6">
-                          {member.role}
-                        </DialogDescription>
-                        <div className="prose prose-invert prose-sm text-gray-300 leading-relaxed whitespace-pre-wrap">
-                          {member.bio}
+                  <DialogContent className="bg-[#1a1a1a] border-white/10 text-white max-w-2xl max-h-[85vh] overflow-y-auto">
+                    <DialogHeader>
+                      <div className="flex flex-col md:flex-row gap-8 items-start mb-6">
+                        <div className="w-32 h-32 md:w-48 md:h-48 rounded-lg overflow-hidden flex-shrink-0 bg-gray-800">
+                          {member.headshotWebp && member.headshotJpg ? (
+                            <picture>
+                              <source srcSet={member.headshotWebp} type="image/webp" />
+                              <img
+                                src={member.headshotJpg}
+                                alt={member.name}
+                                className={`w-full h-full object-cover ${member.imageClassName || ''}`}
+                              />
+                            </picture>
+                          ) : member.headshot ? (
+                            <img src={member.headshot} alt={member.name} className={`w-full h-full object-cover ${member.imageClassName || ''}`} />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-white/20 text-2xl font-bold">{member.initials}</div>
+                          )}
+                        </div>
+                        <div>
+                          <DialogTitle className="text-3xl font-bold mb-2">{member.name}</DialogTitle>
+                          <DialogDescription className="text-[#E03694] font-medium uppercase tracking-wide text-sm mb-6">
+                            {member.role}
+                          </DialogDescription>
+                          <div className="prose prose-invert prose-sm text-gray-300 leading-relaxed whitespace-pre-wrap">
+                            {member.bio}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </DialogHeader>
-                </DialogContent>
+                    </DialogHeader>
+                  </DialogContent>
               </Dialog>
             ))}
           </div>
@@ -687,21 +838,61 @@ export function AboutPage() {
                 <Dialog key={member.name}>
                   <DialogTrigger asChild>
                     <motion.div
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: index * 0.05 }}
-                      className="p-6 bg-white/5 hover:bg-white/10 rounded-lg transition-colors cursor-pointer group border border-white/5"
+                      className="group cursor-pointer"
                     >
-                      <h4 className="font-bold text-white mb-1 group-hover:text-[#E03694] transition-colors">{member.name}</h4>
-                      <p className="text-sm text-gray-500">{member.role}</p>
+                      <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-gray-800 border border-white/5">
+                        {member.headshotWebp && member.headshotJpg ? (
+                          <picture>
+                            <source srcSet={member.headshotWebp} type="image/webp" />
+                            <img
+                              src={member.headshotJpg}
+                              alt={member.name}
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0"
+                            />
+                          </picture>
+                        ) : member.headshot ? (
+                          <img
+                            src={member.headshot}
+                            alt={member.name}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-[#1a1a1a] text-white/20 text-3xl font-bold">
+                            {member.initials}
+                          </div>
+                        )}
+
+                        {/* Readability overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+
+                        {/* Name + Role */}
+                        <div className="absolute bottom-0 left-0 right-0 p-5 translate-y-1 group-hover:translate-y-0 transition-transform">
+                          <h4 className="text-lg font-bold text-white leading-snug mb-1">{member.name}</h4>
+                          <p className="text-[#E03694] text-xs font-medium tracking-wide uppercase">{member.role}</p>
+                        </div>
+                      </div>
                     </motion.div>
                   </DialogTrigger>
                   <DialogContent className="bg-[#1a1a1a] border-white/10 text-white max-w-xl">
                     <DialogHeader>
                        <div className="flex gap-6 items-start">
                          <div className="w-24 h-24 rounded-full overflow-hidden flex-shrink-0 bg-gray-800">
-                           <img src={member.headshot} alt={member.name} className="w-full h-full object-cover" />
+                           {member.headshotWebp && member.headshotJpg ? (
+                             <picture>
+                               <source srcSet={member.headshotWebp} type="image/webp" />
+                               <img src={member.headshotJpg} alt={member.name} className="w-full h-full object-cover" />
+                             </picture>
+                           ) : member.headshot ? (
+                             <img src={member.headshot} alt={member.name} className="w-full h-full object-cover" />
+                           ) : (
+                             <div className="w-full h-full flex items-center justify-center text-white/20 text-xl font-bold">
+                               {member.initials}
+                             </div>
+                           )}
                          </div>
                          <div>
                            <DialogTitle className="text-xl font-bold mb-1">{member.name}</DialogTitle>

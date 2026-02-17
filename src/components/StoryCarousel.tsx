@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import { Button } from './ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext';
@@ -20,6 +21,7 @@ export function StoryCarousel({ stories }: StoryCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const systemReducedMotion = useReducedMotion();
   const { motionPreference } = useAccessibility();
+  const navigate = useNavigate();
   
   // Combine system preference with manual override
   const prefersReducedMotion = systemReducedMotion || motionPreference === 'reduce';
@@ -185,6 +187,7 @@ export function StoryCarousel({ stories }: StoryCarouselProps) {
               minHeight: '44px',
               transform: 'translateZ(0)',
             }}
+            onClick={() => navigate('/stories')}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = '#FDB515';
             }}

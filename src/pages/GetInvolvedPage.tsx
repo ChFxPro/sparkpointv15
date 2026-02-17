@@ -13,12 +13,12 @@ const engagementCards = [
   {
     icon: HandHeart,
     title: 'Volunteer',
-    description: 'Join our community of dedicated volunteers making a real difference. From event support to ongoing programs, there\'s a place for everyone.',
+    description: 'Volunteer with SparkPoint in ways that fit your schedule and strengths — from events and outreach to behind-the-scenes support. We’ll match you with opportunities that help strengthen connection across our community.',
     benefits: [
-      'Flexible scheduling options',
-      'Training and support provided',
-      'Connect with like-minded people',
-      'Make measurable impact'
+      'Event support (check-in, set-up, hospitality)',
+      'Community outreach & ambassador roles',
+      'Program support (wellness, connection, food access)',
+      'Behind-the-scenes help (admin, prep, organizing)'
     ],
     cta: 'Explore Opportunities',
     color: '#E03694',
@@ -159,7 +159,7 @@ export function GetInvolvedPage() {
                         <Icon size={24} style={{ color: card.color }} />
                       </div>
                     </div>
-                    <div className="p-6">
+                    <div className="p-6 flex flex-col h-full">
                       <h3
                         className="mb-3"
                         style={{ color: '#1A1A1A', fontSize: '1.75rem' }}
@@ -168,11 +168,11 @@ export function GetInvolvedPage() {
                       </h3>
                       <p
                         className="mb-6"
-                        style={{ color: '#666666', fontSize: '1rem', lineHeight: '1.6' }}
+                        style={{ color: '#666666', fontSize: '1rem', lineHeight: '1.6', minHeight: '5.2em' }}
                       >
                         {card.description}
                       </p>
-                      <div className="space-y-2 mb-6">
+                      <div className="space-y-2 mb-6 flex-1">
                         {card.benefits.map((benefit) => (
                           <div key={benefit} className="flex items-start gap-2">
                             <CheckCircle size={18} style={{ color: card.color, flexShrink: 0, marginTop: 2 }} />
@@ -183,7 +183,7 @@ export function GetInvolvedPage() {
                         ))}
                       </div>
                       <Button
-                        className="w-full transition-all hover:brightness-110 hover:scale-105"
+                        className="w-full mt-auto transition-all hover:brightness-110 hover:scale-105"
                         style={{
                           background: `linear-gradient(135deg, ${card.color}, ${card.color}CC)`,
                           color: 'white',

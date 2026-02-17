@@ -90,7 +90,7 @@ export default function App() {
   return (
     <HelmetProvider>
       <AccessibilityProvider>
-        <Router>
+        <Router basename={import.meta.env.BASE_URL}>
           <AppContent />
         </Router>
       </AccessibilityProvider>
