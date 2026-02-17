@@ -6255,3 +6255,20 @@ html.reduce-motion *, html.reduce-motion :before, html.reduce-motion :after {
   .lg\:justify-center { justify-content: center; }
   .lg\:justify-between { justify-content: space-between; }
 }
+
+/* SparkPoint type scale (minimal, targeted) */
+:root {
+  --sp-text-xs: 0.825rem;
+  --sp-text-sm: 0.95rem;
+  --sp-text-base: 1rem;
+  --sp-text-lg: 1.125rem;
+  --sp-text-xl: 1.25rem;
+}
+
+@layer utilities {
+  .sp-text-xs { font-size: var(--sp-text-xs); line-height: 1.35; }
+  .sp-text-sm { font-size: var(--sp-text-sm); line-height: 1.45; }
+  .sp-text-base { font-size: var(--sp-text-base); line-height: 1.55; }
+  .sp-text-lg { font-size: var(--sp-text-lg); line-height: 1.6; }
+  .sp-text-xl { font-size: var(--sp-text-xl); line-height: 1.55; }
+}

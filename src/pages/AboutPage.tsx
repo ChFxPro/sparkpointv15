@@ -591,7 +591,7 @@ export function AboutPage() {
           >
             <span className="text-[#E03694] font-bold tracking-wider text-sm uppercase mb-3 block">Our Journey</span>
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Milestones of Impact</h2>
-            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+            <p className="text-gray-400 max-w-2xl mx-auto sp-text-lg">
               From the foundational Blue Zones work to our current regional role, every step has been guided by community need.
             </p>
           </motion.div>
@@ -630,7 +630,7 @@ export function AboutPage() {
                          <h3 className="text-2xl md:text-4xl font-bold text-white mb-4">
                             {blueZonesPhase.title}
                          </h3>
-                         <p className="text-lg text-gray-300 mb-6 leading-relaxed">
+                         <p className="sp-text-lg text-gray-300 mb-6 leading-relaxed">
                             {blueZonesPhase.subtitle}
                          </p>
                          <ul className="space-y-2 mb-8 inline-block text-left">
@@ -696,7 +696,7 @@ export function AboutPage() {
                                <h3 className="text-2xl md:text-4xl font-bold text-white mb-4">
                                   {item.milestone}
                                </h3>
-                               <p className="text-lg text-gray-400 leading-relaxed mb-6">
+                               <p className="sp-text-lg text-gray-400 leading-relaxed mb-6">
                                   {item.description}
                                </p>
                                <div className={`flex flex-wrap gap-2 ${isPhotoLeft ? 'md:justify-end justify-center' : 'md:justify-start justify-center'}`}>
@@ -896,8 +896,8 @@ export function AboutPage() {
                          </div>
                          <div>
                            <DialogTitle className="text-xl font-bold mb-1">{member.name}</DialogTitle>
-                           <p className="text-[#E03694] text-sm font-medium mb-4">{member.role}</p>
-                           <DialogDescription className="text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">
+                           <p className="text-[#E03694] sp-text-sm font-medium mb-4">{member.role}</p>
+                           <DialogDescription className="text-gray-300 sp-text-base leading-relaxed whitespace-pre-wrap">
                              {member.bio}
                            </DialogDescription>
                          </div>
