@@ -142,7 +142,7 @@ export function CTAFinal({ backgroundImage }: CTAFinalProps) {
             className="text-white"
             style={{ fontSize: 'clamp(1.25rem, 3.5vw, 2rem)', fontWeight: '600', letterSpacing: '0.05em' }}
           >
-            TOGETHER, WE BUILD.
+            TOGETHER, WE BELONG.
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 12 }}
