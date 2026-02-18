@@ -271,7 +271,7 @@ export function ImpactPage() {
                   <span style={{ color: '#1A1A1A', fontSize: '1.125rem', fontWeight: '600' }}>
                     <Counter target={metric.value} />+
                   </span>
-                  <span style={{ color: '#666666', fontSize: '0.875rem' }}>
+                  <span style={{ color: '#666666', fontSize: '0.95rem' }}>
                     {'shortLabel' in metric && metric.shortLabel ? metric.shortLabel : metric.label}
                   </span>
                 </div>
@@ -306,15 +306,15 @@ export function ImpactPage() {
               <div className="flex flex-col sm:flex-row gap-8 md:gap-16 border-t border-slate-100 pt-8 mb-8">
                   <div>
                       <div className="text-3xl font-bold text-slate-900">77+</div>
-                      <div className="text-sm text-slate-500">Total Events & Sessions</div>
+                      <div className="sp-text-sm text-slate-500">Total Events & Sessions</div>
                   </div>
                   <div>
                       <div className="text-3xl font-bold text-slate-900">12 Months</div>
-                      <div className="text-sm text-slate-500">Active Programming</div>
+                      <div className="sp-text-sm text-slate-500">Active Programming</div>
                   </div>
                   <div>
                       <div className="text-3xl font-bold text-slate-900">4,187</div>
-                      <div className="text-sm text-slate-500">Verified Attendance Moments</div>
+                      <div className="sp-text-sm text-slate-500">Verified Attendance Moments</div>
                   </div>
               </div>
 
@@ -323,7 +323,7 @@ export function ImpactPage() {
                   <p className="text-slate-700 font-medium mb-3">
                       December included community-wide holiday events and public gatherings that reinforced year-long trust and visibility:
                   </p>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-600">
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 sp-text-sm text-slate-600">
                       <li className="flex items-center gap-2">
                           <Sparkles className="text-[#E03694]" size={16} />
                           <span>Holiday Gala (~90 attendees)</span>
@@ -343,7 +343,7 @@ export function ImpactPage() {
                     className="w-full h-auto object-cover"
                   />
                   <div className="p-4 bg-gray-50 text-center">
-                    <p className="text-sm text-gray-500 font-medium uppercase tracking-wider">Community Moments: 2025 Highlights</p>
+                    <p className="sp-text-sm text-gray-500 font-medium uppercase tracking-wider">Community Moments: 2025 Highlights</p>
                   </div>
               </div>
           </motion.div>
@@ -356,7 +356,7 @@ export function ImpactPage() {
             transition={{ duration: 0.8 }}
             className="mb-20 md:mb-32 relative pl-6 md:pl-8 border-l-4 border-slate-200"
           >
-              <div className="mb-4 text-sm font-bold tracking-widest text-slate-400 uppercase">Engagement Density</div>
+              <div className="mb-4 sp-text-sm font-bold tracking-widest text-slate-400 uppercase">Engagement Density</div>
               <div className="text-4xl md:text-7xl font-bold text-[#9E509F] mb-4">
                   4,187
               </div>
@@ -388,18 +388,18 @@ export function ImpactPage() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
                       <div>
                           <div className="text-4xl font-bold text-slate-900 mb-1">~2,100</div>
-                          <div className="text-sm text-slate-500 font-medium">Youth Attendance Moments</div>
+                          <div className="sp-text-sm text-slate-500 font-medium">Youth Attendance Moments</div>
                       </div>
                       <div>
                           <div className="text-4xl font-bold text-slate-900 mb-1">34+</div>
-                          <div className="text-sm text-slate-500 font-medium">Youth-Focused Sessions</div>
+                          <div className="sp-text-sm text-slate-500 font-medium">Youth-Focused Sessions</div>
                       </div>
                       <div>
                           <div className="text-4xl font-bold text-slate-900 mb-1">6</div>
-                          <div className="text-sm text-slate-500 font-medium">Campuses Served</div>
+                          <div className="sp-text-sm text-slate-500 font-medium">Campuses Served</div>
                       </div>
                   </div>
-                  <div className="mt-8 pt-8 border-t border-slate-200/60 text-sm text-slate-500 relative z-10">
+                  <div className="mt-8 pt-8 border-t border-slate-200/60 sp-text-sm text-slate-500 relative z-10">
                       <span className="font-semibold">Primary Partners:</span> TC Strong, CARE
                   </div>
               </div>
@@ -414,7 +414,7 @@ export function ImpactPage() {
             className="mb-20 md:mb-32 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center"
           >
               <div>
-                  <div className="mb-4 text-sm font-bold tracking-widest text-[#F15F48] uppercase">Connector Work</div>
+                  <div className="mb-4 sp-text-sm font-bold tracking-widest text-[#F15F48] uppercase">Connector Work</div>
                   <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">
                       Supporting the backbone of community.
                   </h3>
@@ -457,7 +457,7 @@ export function ImpactPage() {
                   <p className="text-lg text-slate-600 mb-6 max-w-3xl">
                       We treat stories as data. Across <span className="font-bold text-[#E03694]">10 collection stops</span> and <span className="font-bold text-[#E03694]">120+ interviews</span>, resident voices directly inform our priorities, advocacy, and response.
                   </p>
-                  <div className="inline-block px-4 py-1.5 rounded-full bg-white border border-[#E03694]/20 text-[#E03694] text-sm font-medium">
+                  <div className="inline-block px-4 py-1.5 rounded-full bg-white border border-[#E03694]/20 text-[#E03694] sp-text-sm font-medium">
                       Listening is an active metric.
                   </div>
               </div>
@@ -507,7 +507,7 @@ export function ImpactPage() {
               >
                   <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-slate-900 text-white shadow-lg">
                       <span className="font-bold text-2xl">700</span>
-                      <span className="text-sm text-slate-300 border-l border-slate-700 pl-3">Largest Single-Event Attendance</span>
+                      <span className="sp-text-sm text-slate-300 border-l border-slate-700 pl-3">Largest Single-Event Attendance</span>
                   </div>
               </motion.div>
           </div>
@@ -523,12 +523,12 @@ export function ImpactPage() {
               <div className="flex flex-col md:flex-row justify-center items-center gap-12">
                   <div>
                       <div className="text-5xl font-bold text-[#FDB515] mb-2">565</div>
-                      <div className="text-white/60 text-sm uppercase tracking-wider">November Attendance Moments</div>
+                      <div className="text-white/60 sp-text-sm uppercase tracking-wider">November Attendance Moments</div>
                   </div>
                   <div className="hidden md:block w-px h-16 bg-white/10"></div>
                   <div>
                       <div className="text-5xl font-bold text-[#FDB515] mb-2">~13.5%</div>
-                      <div className="text-white/60 text-sm uppercase tracking-wider">of Annual Reach in Nov</div>
+                      <div className="text-white/60 sp-text-sm uppercase tracking-wider">of Annual Reach in Nov</div>
                   </div>
               </div>
           </motion.div>

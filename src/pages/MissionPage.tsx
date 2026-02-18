@@ -563,7 +563,7 @@ function ListenLearnLeadDiagram() {
                   onMouseLeave={() => setHoveredArc(null)}
                 >
                   <span
-                    className="text-white font-bold text-xl uppercase tracking-widest px-4 py-1.5 rounded-full border"
+                    className="text-white font-bold sp-text-xl uppercase tracking-widest px-4 py-1.5 rounded-full border"
                     style={{
                       textShadow: `0 2px 12px rgba(0,0,0,0.55)`,
                       background: isHovered
@@ -646,7 +646,7 @@ function ListenLearnLeadDiagram() {
                               }}
                             >
                               <span
-                                className="block text-white/80 text-sm font-medium leading-tight"
+                                className="block text-white/90 sp-text-base font-medium"
                                 style={{ textShadow: '0 2px 10px rgba(0,0,0,0.55)' }}
                               >
                                 {node.label}

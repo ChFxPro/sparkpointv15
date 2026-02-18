@@ -1,64 +1,128 @@
 'use client';
 
-import { motion, useInView } from 'motion/react';
+import { motion, AnimatePresence, useInView, useReducedMotion } from 'motion/react';
 import { useRef, useEffect, useState } from 'react';
 import { Activity, Users, TrendingUp, Target, ChevronLeft, ChevronRight, GraduationCap, Mic, Heart, Sparkles } from 'lucide-react';
-import Slider from "react-slick";
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 
+// Shared glass card styles (keeps Impact section cohesive)
+const GLASS_CARD = {
+  background: 'linear-gradient(135deg, rgba(25, 25, 35, 0.65), rgba(15, 15, 25, 0.55))',
+  backdropFilter: 'blur(20px)',
+  WebkitBackdropFilter: 'blur(20px)',
+  border: '1px solid rgba(255, 255, 255, 0.28)',
+  boxShadow: '0 20px 70px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255,255,255,0.25)',
+} as const;
+
+const GLASS_CARD_STRONG = {
+  ...GLASS_CARD,
+  background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.78), rgba(20, 20, 20, 0.68))',
+  border: '1px solid rgba(255, 255, 255, 0.32)',
+} as const;
+
 // Testimonials Data
-const testimonials = [
+type TestimonialPhase = 'listen' | 'learn' | 'lead';
+
+type Testimonial = {
+  quote: string;
+  author: string;
+  affiliation: string;
+  phase: TestimonialPhase;
+};
+const testimonials: Testimonial[] = [
   {
-    quote: "Your presence on campus today was wonderful and really made a lot of students and staff smile, so we all thank you so much for your time. You made a great impact on campus.",
+    quote:
+      "Your presence on campus today was wonderful and really made a lot of students and staff smile, so we all thank you so much for your time. You made a great impact on campus.",
     author: "Marion Hawsey",
-    affiliation: "BRCC Student"
+    affiliation: "BRCC Student",
+    phase: "lead",
   },
   {
     quote: "You made the group feel comfortable.",
     author: "GH",
-    affiliation: "SparkPurpose Participant"
+    affiliation: "SparkPurpose Participant",
+    phase: "listen",
   },
   {
     quote: "The session exceeded our expectations!",
     author: "Alison C.",
-    affiliation: "Gaia Herbs"
+    affiliation: "Gaia Herbs",
+    phase: "lead",
   },
   {
     quote: "Grounds me to remember my why so I can stay true to myself.",
     author: "GH",
-    affiliation: "SparkPurpose Participant"
+    affiliation: "SparkPurpose Participant",
+    phase: "learn",
   },
   {
     quote: "This session got our juices flowing and opened the conversation for dialogue.",
     author: "GH",
-    affiliation: "SparkPurpose Participant"
+    affiliation: "SparkPurpose Participant",
+    phase: "learn",
   },
   {
-    quote: "Growth through understanding more about each other so that we can make informed decisions.",
+    quote:
+      "Growth through understanding more about each other so that we can make informed decisions.",
     author: "GH",
-    affiliation: "SparkPurpose Participant"
+    affiliation: "SparkPurpose Participant",
+    phase: "learn",
   },
   {
-    quote: "We are a stronger team because we are better aligned, all moving in the same direction.",
+    quote:
+      "We are a stronger team because we are better aligned, all moving in the same direction.",
     author: "GH",
-    affiliation: "SparkPurpose Participant"
+    affiliation: "SparkPurpose Participant",
+    phase: "lead",
   },
   {
-    quote: "This workshop was a reminder of how human we are… while we connect, laugh & give grace to each other.",
+    quote:
+      "This workshop was a reminder of how human we are… while we connect, laugh & give grace to each other.",
     author: "GH",
-    affiliation: "SparkPurpose Participant"
+    affiliation: "SparkPurpose Participant",
+    phase: "listen",
   },
   {
-    quote: "This group (SparkPoint) is one of our favorites. They put feet in motion to back up their words, all with the hope of building our community up.",
+    quote:
+      "This group (SparkPoint) is one of our favorites. They put feet in motion to back up their words, all with the hope of building our community up.",
     author: "Dan Courtine",
-    affiliation: "Jameson’s Joy Founder"
+    affiliation: "Jameson’s Joy Founder",
+    phase: "lead",
   },
   {
-    quote: "Your dedication to enlivening community spaces for social wellness in Brevard is truly commendable and inspiring.",
+    quote:
+      "Your dedication to enlivening community spaces for social wellness in Brevard is truly commendable and inspiring.",
     author: "Grace Champion",
-    affiliation: "UNC Asheville"
-  }
+    affiliation: "UNC Asheville",
+    phase: "lead",
+  },
+  // The following testimonial is long-form, moved out of the carousel for later reuse:
+  // {
+  //   quote:
+  //     "I walked into this workshop hoping to find a sense of direction that has been lacking recently. I came away with clarity, a feeling of connection, and an affirmation of my purpose. This was two hours very well spent in an environment that encouraged honesty, transparency, and vulnerability without judgment. I would recommend this workshop for anyone who needs to find or reaffirm their own purpose.",
+  //   author: "Karen Tilson Pearce",
+  //   affiliation: "SparkPurpose Participant",
+  //   phase: "learn",
+  // },
+  {
+    quote: "It was absolutely wonderful! I can’t recommend it highly enough.",
+    author: "Vickie Baker",
+    affiliation: "SparkPurpose Participant",
+    phase: "lead",
+  },
 ];
+
+const longFormTestimonials: Testimonial[] = [
+  {
+    quote:
+      "I walked into this workshop hoping to find a sense of direction that has been lacking recently. I came away with clarity, a feeling of connection, and an affirmation of my purpose. This was two hours very well spent in an environment that encouraged honesty, transparency, and vulnerability without judgment. I would recommend this workshop for anyone who needs to find or reaffirm their own purpose.",
+    author: "Karen Tilson Pearce",
+    affiliation: "SparkPurpose Participant",
+    phase: "learn",
+  },
+];
+
+const carouselTestimonials: Testimonial[] = testimonials;
 
 function CountUp({ end, duration = 2, suffix = '' }: { end: number; duration?: number; suffix?: string }) {
   const [count, setCount] = useState(0);
@@ -86,29 +150,283 @@ function CountUp({ end, duration = 2, suffix = '' }: { end: number; duration?: n
   return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
 }
 
-// Custom Arrow Components
-function CustomPrevArrow(props: any) {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={`${className} custom-slick-arrow custom-prev`}
-      style={{ ...style }}
-      onClick={onClick}
-    >
-      <ChevronLeft className="w-10 h-10 text-white/60 hover:text-white transition-colors cursor-pointer" />
-    </div>
-  );
-}
 
-function CustomNextArrow(props: any) {
-  const { className, style, onClick } = props;
+function TestimonialCarousel({
+  items,
+  intervalMs = 7000,
+}: {
+  items: Testimonial[];
+  intervalMs?: number;
+}) {
+  const [index, setIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
+
+  const total = items.length;
+  const safeIndex = ((index % total) + total) % total;
+
+  const goTo = (next: number) => setIndex(((next % total) + total) % total);
+  const next = () => goTo(safeIndex + 1);
+  const prev = () => goTo(safeIndex - 1);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    if (isPaused) return;
+    if (total <= 1) return;
+
+    const id = window.setInterval(() => {
+      setIndex((i) => (i + 1) % total);
+    }, intervalMs);
+
+    return () => window.clearInterval(id);
+  }, [intervalMs, isPaused, prefersReducedMotion, total]);
+
+  const current = items[safeIndex];
+  const phaseMeta = {
+    listen: {
+      label: 'Listen',
+      icon: Heart,
+      gold: 'rgba(253,181,21,0.92)',
+    },
+    learn: {
+      label: 'Learn',
+      icon: Sparkles,
+      gold: 'rgba(253,181,21,0.92)',
+    },
+    lead: {
+      label: 'Lead',
+      icon: Mic,
+      gold: 'rgba(253,181,21,0.92)',
+    },
+  } as const;
+  const phaseLabel = phaseMeta[current.phase].label;
+  const seconds = Math.round(intervalMs / 1000);
+  const carouselHelp = prefersReducedMotion
+    ? 'Carousel. Use Previous and Next to navigate.'
+    : `Carousel. Advances every ${seconds} seconds. Hover or focus to pause.`;
+
+  const pointerStartX = useRef<number | null>(null);
+
+  const onPointerDown: React.PointerEventHandler<HTMLDivElement> = (e) => {
+    pointerStartX.current = e.clientX;
+  };
+
+  const onPointerUp: React.PointerEventHandler<HTMLDivElement> = (e) => {
+    const start = pointerStartX.current;
+    pointerStartX.current = null;
+    if (start == null) return;
+
+    const delta = e.clientX - start;
+    // Ignore tiny moves
+    if (Math.abs(delta) < 40) return;
+    if (delta < 0) next();
+    else prev();
+  };
+
   return (
     <div
-      className={`${className} custom-slick-arrow custom-next`}
-      style={{ ...style }}
-      onClick={onClick}
+      className="relative max-w-5xl mx-auto"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocusCapture={() => setIsPaused(true)}
+      onBlurCapture={() => setIsPaused(false)}
+      onPointerDown={onPointerDown}
+      onPointerUp={onPointerUp}
+      style={{ touchAction: 'pan-y' }}
+      aria-roledescription="carousel"
+      aria-label="Testimonials"
+      aria-describedby="testimonial-carousel-help"
     >
-      <ChevronRight className="w-10 h-10 text-white/60 hover:text-white transition-colors cursor-pointer" />
+      <p id="testimonial-carousel-help" className="sr-only">
+        {carouselHelp}
+      </p>
+      <div
+        className="relative rounded-2xl p-7 md:p-10 overflow-hidden"
+        style={GLASS_CARD}
+      >
+        {/* Progress line (quiet, calm) */}
+        {!prefersReducedMotion && total > 1 && (
+          <div className="absolute left-0 right-0 top-0 h-[3px] bg-white/10">
+            <motion.div
+              key={safeIndex}
+              initial={{ width: '0%' }}
+              animate={{ width: '100%' }}
+              transition={{ duration: intervalMs / 1000, ease: 'linear' }}
+              className="h-full"
+              style={{ background: 'rgba(255, 255, 255, 0.45)' }}
+            />
+          </div>
+        )}
+
+        {/* Subtle gold grazing light (adds depth without noise) */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(800px 280px at 20% 22%, rgba(253,181,21,0.12), rgba(253,181,21,0) 62%), radial-gradient(900px 340px at 80% 72%, rgba(224,54,148,0.10), rgba(224,54,148,0) 64%)',
+          }}
+        />
+
+        {/* Watermark overlay (wordmark + glints) */}
+        <div
+          className="pointer-events-none absolute inset-0 overflow-hidden"
+          aria-hidden="true"
+        >
+          {/* Big phase word watermark (consistent scale + legibility) */}
+          <div
+            className="absolute select-none"
+            style={{
+              right: '-6%',
+              bottom: '-22%',
+              transform: 'rotate(-12deg)',
+              fontSize: 'clamp(140px, 18vw, 230px)',
+              fontWeight: 900,
+              letterSpacing: '0.12em',
+              lineHeight: 0.9,
+              color: 'rgba(255,255,255,0.10)',
+              textTransform: 'uppercase',
+              textShadow:
+                'inset 0 1px 0 rgba(255,255,255,0.10), 0 18px 48px rgba(0,0,0,0.35)',
+              WebkitMaskImage:
+                'radial-gradient(circle at 60% 60%, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 52%, rgba(0,0,0,0) 78%)',
+              maskImage:
+                'radial-gradient(circle at 60% 60%, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 52%, rgba(0,0,0,0) 78%)',
+              opacity: 0.9,
+            }}
+          >
+            {phaseLabel}
+          </div>
+
+          {/* Subtle inner edge */}
+          <div
+            className="absolute inset-0 rounded-2xl"
+            style={{
+              border: '1px solid rgba(255,255,255,0.12)',
+              boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05)',
+            }}
+          />
+
+          {/* Gold corner glints (quiet, premium) */}
+          <div
+            className="absolute -top-10 -left-10 h-40 w-40 rounded-full"
+            style={{
+              background:
+                'radial-gradient(circle at 30% 30%, rgba(253,181,21,0.16), rgba(253,181,21,0) 65%)',
+              filter: 'blur(14px)',
+              opacity: 0.85,
+            }}
+          />
+          <div
+            className="absolute -bottom-12 -right-12 h-44 w-44 rounded-full"
+            style={{
+              background:
+                'radial-gradient(circle at 70% 70%, rgba(253,181,21,0.12), rgba(253,181,21,0) 68%)',
+              filter: 'blur(16px)',
+              opacity: 0.8,
+            }}
+          />
+        </div>
+
+        <div className="relative flex flex-col" style={{ minHeight: 'clamp(220px, 22vw, 280px)' }}>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.figure
+              key={safeIndex}
+              initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 10 }}
+              animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+              exit={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: -8 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="text-left"
+            >
+              <blockquote
+                className="text-white/95"
+                style={{
+                  fontSize: 'clamp(1.1rem, 2.0vw, 1.55rem)',
+                  lineHeight: 1.65,
+                  fontWeight: 520 as any,
+                  maxWidth: '60ch',
+                  marginTop: '0.25rem',
+                  textShadow: '0 2px 12px rgba(0, 0, 0, 0.38)',
+                }}
+              >
+                <span className="sr-only">Quote: </span>
+                “{current.quote}”
+              </blockquote>
+
+              <figcaption className="mt-6 flex flex-col sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-3">
+                <span
+                  style={{
+                    fontSize: '1.16rem',
+                    fontWeight: 820 as any,
+                    color: 'rgba(255,255,255,0.98)',
+                    letterSpacing: '-0.01em',
+                    lineHeight: 1.15,
+                  }}
+                >
+                  {current.author}
+                </span>
+
+                <span className="hidden sm:inline" style={{ color: 'rgba(255,255,255,0.28)' }}>
+                  •
+                </span>
+
+                <span
+                  style={{
+                    fontSize: '0.98rem',
+                    fontWeight: 420 as any,
+                    letterSpacing: '0.08em',
+                    color: 'rgba(255,255,255,0.62)',
+                    lineHeight: 1.25,
+                  }}
+                >
+                  {current.affiliation}
+                </span>
+              </figcaption>
+            </motion.figure>
+          </AnimatePresence>
+
+          {/* Controls */}
+          <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" style={{ marginTop: 'auto' }}>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={prev}
+                className="inline-flex items-center justify-center rounded-full px-3.5 py-2 text-sm text-white/80 hover:text-white transition-colors"
+                style={{ border: '1px solid rgba(255,255,255,0.22)', background: 'rgba(0,0,0,0.10)' }}
+                aria-label="Previous testimonial"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={next}
+                className="inline-flex items-center justify-center rounded-full px-3.5 py-2 text-sm text-white/80 hover:text-white transition-colors"
+                style={{ border: '1px solid rgba(255,255,255,0.22)', background: 'rgba(0,0,0,0.10)' }}
+                aria-label="Next testimonial"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="flex items-center justify-center sm:justify-end gap-4" aria-label="Testimonial progress">
+              <div className="text-white/85" style={{ fontSize: '0.95rem', letterSpacing: '0.06em' }}>
+                {safeIndex + 1} <span className="text-white/35">/</span> {total}
+              </div>
+              <div className="h-[2px] w-40 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.14)' }}>
+                <div
+                  className="h-full"
+                  style={{
+                    width: `${((safeIndex + 1) / total) * 100}%`,
+                    background:
+                      'linear-gradient(90deg, rgba(253,181,21,0), rgba(253,181,21,0.85), rgba(253,181,21,0))',
+                    boxShadow: '0 0 14px rgba(253,181,21,0.22)',
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -119,28 +437,6 @@ export function ImpactSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
-  // Slick Carousel Settings
-  const sliderSettings = {
-    dots: true,
-    infinite: true,
-    speed: 800,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 6000,
-    pauseOnHover: true,
-    arrows: true, 
-    nextArrow: <CustomNextArrow />,
-    prevArrow: <CustomPrevArrow />,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          arrows: false,
-        }
-      }
-    ]
-  };
 
   // WRC Partner Network - 8 verified partners organized by focus area
   const partners = [
@@ -251,18 +547,13 @@ export function ImpactSection() {
           </motion.h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.2, duration: 1.2 }}
-              className="p-8 rounded-xl"
-              style={{
-                background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.92), rgba(20, 20, 20, 0.88))',
-                backdropFilter: 'blur(12px)',
-                border: '2px solid rgba(255, 255, 255, 0.7)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
-              }}
-            >
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.2, duration: 1.2 }}
+            className="p-8 rounded-xl"
+            style={GLASS_CARD_STRONG}
+          >
               <div className="text-white mb-2" style={{ fontSize: '4rem', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
                 <CountUp end={7700} duration={1.5} suffix="+" />
               </div>
@@ -271,18 +562,13 @@ export function ImpactSection() {
               </p>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.35, duration: 1.2 }}
-              className="p-8 rounded-xl"
-              style={{
-                background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.92), rgba(20, 20, 20, 0.88))',
-                backdropFilter: 'blur(12px)',
-                border: '2px solid rgba(255, 255, 255, 0.7)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
-              }}
-            >
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.35, duration: 1.2 }}
+            className="p-8 rounded-xl"
+            style={GLASS_CARD_STRONG}
+          >
               <div className="text-white mb-2" style={{ fontSize: '4rem', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
                 <CountUp end={45} duration={1.5} suffix="+" />
               </div>
@@ -291,18 +577,13 @@ export function ImpactSection() {
               </p>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.5, duration: 1.2 }}
-              className="p-8 rounded-xl"
-              style={{
-                background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.92), rgba(20, 20, 20, 0.88))',
-                backdropFilter: 'blur(12px)',
-                border: '2px solid rgba(255, 255, 255, 0.7)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
-              }}
-            >
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.5, duration: 1.2 }}
+            className="p-8 rounded-xl"
+            style={GLASS_CARD_STRONG}
+          >
               <div className="text-white mb-2" style={{ fontSize: '4rem', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
                 100%
               </div>
@@ -313,114 +594,7 @@ export function ImpactSection() {
           </div>
 
           {/* Testimonial Carousel */}
-          <div className="relative max-w-4xl mx-auto testimonial-slider-container">
-            <style>{`
-              .slick-slider{position:relative;display:block;box-sizing:border-box;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-touch-callout:none;-khtml-user-select:none;-ms-touch-action:pan-y;touch-action:pan-y;-webkit-tap-highlight-color:transparent}
-              .slick-list{position:relative;display:block;overflow:hidden;margin:0;padding:0}
-              .slick-list:focus{outline:none}
-              .slick-list.dragging{cursor:pointer;cursor:hand}
-              .slick-slider .slick-track,.slick-slider .slick-list{-webkit-transform:translate3d(0,0,0);-moz-transform:translate3d(0,0,0);-ms-transform:translate3d(0,0,0);-o-transform:translate3d(0,0,0);transform:translate3d(0,0,0)}
-              .slick-track{position:relative;top:0;left:0;display:block;margin-left:auto;margin-right:auto}
-              .slick-track:before,.slick-track:after{display:table;content:''}
-              .slick-track:after{clear:both}
-              .slick-loading .slick-track{visibility:hidden}
-              .slick-slide{display:none;float:left;height:100%;min-height:1px}
-              [dir='rtl'] .slick-slide{float:right}
-              .slick-slide img{display:block}
-              .slick-slide.slick-loading img{display:none}
-              .slick-slide.dragging img{pointer-events:none}
-              .slick-initialized .slick-slide{display:block}
-              .slick-loading .slick-slide{visibility:hidden}
-              .slick-vertical .slick-slide{display:block;height:auto;border:1px solid transparent}
-              .slick-arrow.slick-hidden{display:none}
-              
-              /* Custom Styles */
-              .testimonial-slider-container .slick-dots {
-                display: flex !important;
-                justify-content: center;
-                margin: 0;
-                padding: 1rem 0;
-                list-style-type: none;
-              }
-              .testimonial-slider-container .slick-dots li {
-                margin: 0 0.25rem;
-              }
-              .testimonial-slider-container .slick-dots li button {
-                display: block;
-                width: 10px;
-                height: 10px;
-                padding: 0;
-                border: none;
-                border-radius: 100%;
-                background-color: rgba(255, 255, 255, 0.25);
-                text-indent: -9999px;
-                cursor: pointer;
-                transition: all 0.2s ease;
-              }
-              .testimonial-slider-container .slick-dots li.slick-active button {
-                background-color: #fff;
-                transform: scale(1.2);
-              }
-
-              .custom-slick-arrow {
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                z-index: 10;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-              }
-              .custom-prev { left: -60px; }
-              .custom-next { right: -60px; }
-            `}</style>
-            
-            <Slider {...sliderSettings}>
-              {testimonials.map((t, i) => (
-                <div key={i} className="px-16 pb-20 pt-12">
-                  <div
-                    className="p-12 rounded-xl relative flex flex-col items-center justify-center text-center h-full min-h-[300px]"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.94), rgba(20, 20, 20, 0.90))',
-                      backdropFilter: 'blur(16px)',
-                      border: '2px solid rgba(255, 255, 255, 0.6)',
-                      boxShadow: '0 12px 48px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
-                    }}
-                  >
-                    <div 
-                      className="absolute top-6 left-6"
-                      style={{
-                        fontSize: '8rem',
-                        lineHeight: '1',
-                        color: 'white',
-                        opacity: 0.2,
-                        fontFamily: 'Georgia, serif',
-                        fontStyle: 'italic',
-                      }}
-                    >
-                      "
-                    </div>
-                    <blockquote
-                      className="relative text-white mb-6 z-10"
-                      style={{
-                        fontSize: '1.75rem',
-                        lineHeight: '1.5',
-                        fontStyle: 'italic',
-                        textShadow: '0 3px 8px rgba(0, 0, 0, 0.7)'
-                      }}
-                    >
-                      {t.quote}
-                    </blockquote>
-                    <p className="relative text-white z-10" style={{ fontSize: '1.125rem', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
-                      <span className="font-bold">{t.author}</span>
-                      <span className="opacity-75 mx-2">|</span>
-                      <span className="opacity-90">{t.affiliation}</span>
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </Slider>
-          </div>
+          <TestimonialCarousel items={carouselTestimonials} />
         </div>
 
         {/* B. Impact Overview (REPLACED SECTION) */}
@@ -490,12 +664,7 @@ export function ImpactSection() {
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="p-8 rounded-xl flex flex-col justify-between"
-      style={{
-        background: "linear-gradient(135deg, rgba(10, 10, 10, 0.85), rgba(30, 30, 30, 0.8))",
-        backdropFilter: "blur(12px)",
-        border: "1px solid rgba(255, 255, 255, 0.15)",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
-      }}
+      style={GLASS_CARD}
     >
       <div className="mb-4">
         <div
@@ -531,9 +700,8 @@ export function ImpactSection() {
                 transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
                 className="p-8 rounded-xl h-full"
                 style={{
-                  background: 'rgba(10, 10, 10, 0.6)',
+                  ...GLASS_CARD,
                   borderTop: `4px solid ${group.color}`,
-                  backdropFilter: 'blur(8px)',
                 }}
               >
                 <div className="flex items-center gap-4 mb-6">
@@ -568,8 +736,8 @@ export function ImpactSection() {
             transition={{ duration: 0.6 }}
             className="p-10 rounded-2xl mb-8 relative overflow-hidden"
             style={{
-              background: 'linear-gradient(135deg, rgba(224, 54, 148, 0.15), rgba(253, 181, 21, 0.05))',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
+              ...GLASS_CARD,
+              background: 'linear-gradient(135deg, rgba(224, 54, 148, 0.14), rgba(253, 181, 21, 0.06))',
             }}
           >
             <div className="relative z-10 flex flex-col lg:flex-row gap-10 lg:gap-16 items-start lg:items-center justify-between">
@@ -645,9 +813,10 @@ export function ImpactSection() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="p-8 rounded-xl"
               style={{
-                background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.90), rgba(224, 54, 148, 0.35), rgba(158, 80, 159, 0.35))',
-                border: '2px solid rgba(224, 54, 148, 0.6)',
-                boxShadow: '0 6px 24px rgba(224, 54, 148, 0.3)',
+                ...GLASS_CARD_STRONG,
+                background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.78), rgba(224, 54, 148, 0.22), rgba(158, 80, 159, 0.18))',
+                border: '1px solid rgba(224, 54, 148, 0.42)',
+                boxShadow: '0 18px 60px rgba(0, 0, 0, 0.55), 0 10px 26px rgba(224, 54, 148, 0.18), inset 0 1px 0 rgba(255,255,255,0.18)',
               }}
             >
               <div style={{ fontSize: '4rem', fontWeight: '700', color: 'white', textShadow: '0 3px 8px rgba(0, 0, 0, 0.7)' }}>51%</div>
@@ -663,9 +832,10 @@ export function ImpactSection() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="p-8 rounded-xl"
               style={{
-                background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.90), rgba(253, 181, 21, 0.35), rgba(241, 95, 72, 0.35))',
-                border: '2px solid rgba(253, 181, 21, 0.6)',
-                boxShadow: '0 6px 24px rgba(253, 181, 21, 0.3)',
+                ...GLASS_CARD_STRONG,
+                background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.78), rgba(253, 181, 21, 0.18), rgba(241, 95, 72, 0.16))',
+                border: '1px solid rgba(253, 181, 21, 0.42)',
+                boxShadow: '0 18px 60px rgba(0, 0, 0, 0.55), 0 10px 26px rgba(253, 181, 21, 0.16), inset 0 1px 0 rgba(255,255,255,0.18)',
               }}
             >
               <div style={{ fontSize: '4rem', fontWeight: '700', color: 'white', textShadow: '0 3px 8px rgba(0, 0, 0, 0.7)' }}>37%</div>
