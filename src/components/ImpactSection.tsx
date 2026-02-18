@@ -187,19 +187,25 @@ function TestimonialCarousel({
       label: 'Listen',
       icon: Heart,
       gold: 'rgba(253,181,21,0.92)',
+      tint: 'rgba(224,54,148,0.92)',
     },
     learn: {
       label: 'Learn',
       icon: Sparkles,
       gold: 'rgba(253,181,21,0.92)',
+      tint: 'rgba(158,80,159,0.92)',
     },
     lead: {
       label: 'Lead',
       icon: Mic,
       gold: 'rgba(253,181,21,0.92)',
+      tint: 'rgba(253,181,21,0.95)',
     },
   } as const;
   const phaseLabel = phaseMeta[current.phase].label;
+  const PhaseIcon = phaseMeta[current.phase].icon;
+  const phaseTint = phaseMeta[current.phase].tint;
+
   const seconds = Math.round(intervalMs / 1000);
   const carouselHelp = prefersReducedMotion
     ? 'Carousel. Use Previous and Next to navigate.'
@@ -242,8 +248,47 @@ function TestimonialCarousel({
       </p>
       <div
         className="relative rounded-2xl p-7 md:p-10 overflow-hidden"
-        style={GLASS_CARD}
+        style={GLASS_CARD_STRONG}
       >
+        {/* Phase badge (consistent anchor) */}
+        <div className="absolute left-5 top-5 z-20">
+          <div
+            className="inline-flex items-center gap-2 rounded-full px-3 py-1.5"
+            style={{
+              background: 'rgba(0,0,0,0.18)',
+              border: '1px solid rgba(255,255,255,0.18)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.25)',
+            }}
+          >
+            <span
+              className="inline-flex items-center justify-center rounded-full"
+              style={{
+                width: 30,
+                height: 30,
+                background: 'rgba(253,181,21,0.16)',
+                border: `1px solid ${phaseTint}`,
+                boxShadow: '0 0 18px rgba(253,181,21,0.18)',
+                color: phaseTint,
+              }}
+              aria-hidden="true"
+            >
+              <PhaseIcon className="w-4 h-4" />
+            </span>
+            <span
+              style={{
+                fontSize: '0.78rem',
+                fontWeight: 800 as any,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.80)',
+              }}
+            >
+              {phaseLabel}
+            </span>
+          </div>
+        </div>
         {/* Progress line (quiet, calm) */}
         {!prefersReducedMotion && total > 1 && (
           <div className="absolute left-0 right-0 top-0 h-[3px] bg-white/10">
@@ -267,37 +312,29 @@ function TestimonialCarousel({
           }}
         />
 
-        {/* Watermark overlay (wordmark + glints) */}
-        <div
-          className="pointer-events-none absolute inset-0 overflow-hidden"
-          aria-hidden="true"
-        >
-          {/* Big phase word watermark (consistent scale + legibility) */}
+        {/* Watermark + subtle structure (consistent placement) */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+          {/* Watermark word (consistent anchor + mostly readable) */}
           <div
             className="absolute select-none"
             style={{
-              right: '-6%',
-              bottom: '-22%',
+              right: '-2%',
+              bottom: '-8%',
               transform: 'rotate(-12deg)',
-              fontSize: 'clamp(140px, 18vw, 230px)',
+              fontSize: 'clamp(130px, 16vw, 230px)',
               fontWeight: 900,
-              letterSpacing: '0.12em',
+              letterSpacing: '0.10em',
               lineHeight: 0.9,
-              color: 'rgba(255,255,255,0.10)',
+              whiteSpace: 'nowrap',
               textTransform: 'uppercase',
-              textShadow:
-                'inset 0 1px 0 rgba(255,255,255,0.10), 0 18px 48px rgba(0,0,0,0.35)',
-              WebkitMaskImage:
-                'radial-gradient(circle at 60% 60%, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 52%, rgba(0,0,0,0) 78%)',
-              maskImage:
-                'radial-gradient(circle at 60% 60%, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 52%, rgba(0,0,0,0) 78%)',
-              opacity: 0.9,
+              color: 'rgba(255,255,255,0.12)',
+              textShadow: '0 18px 48px rgba(0,0,0,0.35)',
             }}
           >
             {phaseLabel}
           </div>
 
-          {/* Subtle inner edge */}
+          {/* Inner edge */}
           <div
             className="absolute inset-0 rounded-2xl"
             style={{
@@ -306,13 +343,13 @@ function TestimonialCarousel({
             }}
           />
 
-          {/* Gold corner glints (quiet, premium) */}
+          {/* Soft corner glints */}
           <div
             className="absolute -top-10 -left-10 h-40 w-40 rounded-full"
             style={{
               background:
-                'radial-gradient(circle at 30% 30%, rgba(253,181,21,0.16), rgba(253,181,21,0) 65%)',
-              filter: 'blur(14px)',
+                'radial-gradient(circle at 30% 30%, rgba(253,181,21,0.14), rgba(253,181,21,0) 66%)',
+              filter: 'blur(16px)',
               opacity: 0.85,
             }}
           />
@@ -320,14 +357,14 @@ function TestimonialCarousel({
             className="absolute -bottom-12 -right-12 h-44 w-44 rounded-full"
             style={{
               background:
-                'radial-gradient(circle at 70% 70%, rgba(253,181,21,0.12), rgba(253,181,21,0) 68%)',
-              filter: 'blur(16px)',
+                'radial-gradient(circle at 70% 70%, rgba(224,54,148,0.12), rgba(224,54,148,0) 68%)',
+              filter: 'blur(18px)',
               opacity: 0.8,
             }}
           />
         </div>
 
-        <div className="relative flex flex-col" style={{ minHeight: 'clamp(220px, 22vw, 280px)' }}>
+        <div className="relative flex flex-col" style={{ minHeight: 'clamp(190px, 18vw, 240px)' }}>
           <AnimatePresence mode="wait" initial={false}>
             <motion.figure
               key={safeIndex}
@@ -344,7 +381,7 @@ function TestimonialCarousel({
                   lineHeight: 1.65,
                   fontWeight: 520 as any,
                   maxWidth: '60ch',
-                  marginTop: '0.25rem',
+                  paddingTop: '56px',
                   textShadow: '0 2px 12px rgba(0, 0, 0, 0.38)',
                 }}
               >
@@ -352,34 +389,49 @@ function TestimonialCarousel({
                 “{current.quote}”
               </blockquote>
 
-              <figcaption className="mt-6 flex flex-col sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-3">
-                <span
+              <figcaption className="mt-6">
+                {/* Name + affiliation lockup (baseline-aligned, all-caps, thick/thin) */}
+                <div
+                  className="inline-flex flex-wrap"
                   style={{
-                    fontSize: '1.16rem',
-                    fontWeight: 820 as any,
-                    color: 'rgba(255,255,255,0.98)',
-                    letterSpacing: '-0.01em',
-                    lineHeight: 1.15,
+                    alignItems: 'center',
+                    gap: '0.55rem',
+                    rowGap: '0.35rem',
                   }}
                 >
-                  {current.author}
-                </span>
+                  <span
+                    style={{
+                      fontSize: '1.16rem',
+                      fontWeight: 860 as any,
+                      color: 'rgba(255,255,255,0.98)',
+                      letterSpacing: '0.02em',
+                      lineHeight: 1.05,
+                      textShadow: '0 2px 10px rgba(0,0,0,0.35)',
+                      whiteSpace: 'nowrap',
+                      display: 'inline-block',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {current.author.toUpperCase()}
+                  </span>
 
-                <span className="hidden sm:inline" style={{ color: 'rgba(255,255,255,0.28)' }}>
-                  •
-                </span>
-
-                <span
-                  style={{
-                    fontSize: '0.98rem',
-                    fontWeight: 420 as any,
-                    letterSpacing: '0.08em',
-                    color: 'rgba(255,255,255,0.62)',
-                    lineHeight: 1.25,
-                  }}
-                >
-                  {current.affiliation}
-                </span>
+                  <span
+                    style={{
+                      fontSize: '1.16rem',
+                      fontWeight: 360 as any,
+                      letterSpacing: '0.30em',
+                      textTransform: 'uppercase',
+                      color: 'rgba(255,255,255,0.62)',
+                      lineHeight: 1.05,
+                      display: 'inline-block',
+                      whiteSpace: 'nowrap',
+                      // tiny optical nudge for consistent cap-height alignment across weights
+                      transform: 'translateY(0.02em)',
+                    }}
+                  >
+                    {current.affiliation.toUpperCase()}
+                  </span>
+                </div>
               </figcaption>
             </motion.figure>
           </AnimatePresence>
@@ -750,47 +802,83 @@ export function ImpactSection() {
                 </div>
                 
                 <div className="bg-black/20 rounded-xl p-6 border border-white/10 backdrop-blur-sm">
-                  <p className="text-[#FDB515] font-bold text-sm uppercase tracking-wider mb-3">
-                    3 Major Anchor Events
-                  </p>
-                  <ul className="flex flex-col sm:flex-row sm:flex-wrap gap-y-2 gap-x-6">
-                    {['Juneteenth Festival', 'Helene: One Year of Healing', 'TCS Convocation'].map((event, i) => (
-                      <li key={i} className="text-white text-lg font-medium flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#FDB515]" />
-                        {event}
-                      </li>
-                    ))}
+                  <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 mb-4">
+                    <p className="text-[#FDB515] font-bold text-sm uppercase tracking-wider">
+                      3 Anchor Program Highlights
+                    </p>
+                    <p className="text-white/60 text-xs uppercase tracking-wider">
+                      2025 total attendance
+                    </p>
+                  </div>
+
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
+                    <li className="text-white text-lg font-semibold flex items-start gap-3">
+                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#FDB515] flex-shrink-0" />
+                      <div className="flex flex-col">
+                        <span className="leading-snug">Helene: One Year of Healing</span>
+                        <span className="mt-1 inline-flex items-center gap-2 text-white/70 text-xs uppercase tracking-[0.18em]">
+                          <span className="inline-flex items-center justify-center rounded-full px-2 py-0.5"
+                            style={{ background: 'rgba(253,181,21,0.14)', border: '1px solid rgba(253,181,21,0.28)' }}
+                          >
+                            Attendance
+                          </span>
+                          <span className="text-white/90" style={{ letterSpacing: '0.06em' }}>700</span>
+                        </span>
+                      </div>
+                    </li>
+
+                    <li className="text-white text-lg font-semibold flex items-start gap-3">
+                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#FDB515] flex-shrink-0" />
+                      <div className="flex flex-col">
+                        <span className="leading-snug">Dr. Ora Brain Health Talks</span>
+                        <span className="mt-1 inline-flex items-center gap-2 text-white/70 text-xs uppercase tracking-[0.18em]">
+                          <span className="inline-flex items-center justify-center rounded-full px-2 py-0.5"
+                            style={{ background: 'rgba(253,181,21,0.14)', border: '1px solid rgba(253,181,21,0.28)' }}
+                          >
+                            Attendance
+                          </span>
+                          <span className="text-white/90" style={{ letterSpacing: '0.06em' }}>700</span>
+                        </span>
+                      </div>
+                    </li>
+
+                    <li className="text-white text-lg font-semibold flex items-start gap-3 sm:col-span-2">
+                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#FDB515] flex-shrink-0" />
+                      <div className="flex flex-col">
+                        <span className="leading-snug">VOS Events & Programming</span>
+                        <span className="mt-1 inline-flex items-center gap-2 text-white/70 text-xs uppercase tracking-[0.18em]">
+                          <span className="inline-flex items-center justify-center rounded-full px-2 py-0.5"
+                            style={{ background: 'rgba(253,181,21,0.14)', border: '1px solid rgba(253,181,21,0.28)' }}
+                          >
+                            Attendance
+                          </span>
+                          <span className="text-white/90" style={{ letterSpacing: '0.06em' }}>1,760</span>
+                        </span>
+                      </div>
+                    </li>
                   </ul>
                 </div>
               </div>
 
-              <div className="flex flex-row gap-8 sm:gap-12 w-full lg:w-auto mt-4 lg:mt-0 pl-0 lg:pl-10 lg:border-l border-white/10">
-                <div className="flex-1 sm:flex-none min-w-[140px]">
-                  <div className="text-5xl font-bold text-white mb-2 tracking-tight" style={{ textShadow: '0 4px 16px rgba(0,0,0,0.4)' }}>
-                    700
+              <div className="w-full lg:w-auto mt-4 lg:mt-0 pl-0 lg:pl-10 lg:border-l border-white/10">
+                <div className="rounded-xl p-6 bg-black/10 border border-white/10 backdrop-blur-sm">
+                  <div
+                    className="text-white tracking-tight"
+                    style={{ fontSize: 'clamp(3.2rem, 6vw, 4.6rem)', fontWeight: 800, lineHeight: 1, textShadow: '0 6px 22px rgba(0,0,0,0.45)' }}
+                  >
+                    3,160
                   </div>
-                  <div className="text-white/70 font-medium text-sm uppercase tracking-wide leading-snug">
-                    Largest Event<br/>Attendance
+                  <div className="mt-3 text-white/80 font-semibold text-sm uppercase tracking-[0.16em] leading-snug">
+                    Total Anchor Attendance
                   </div>
-                </div>
-                <div className="flex-1 sm:flex-none min-w-[140px]">
-                  <div className="text-5xl font-bold text-white mb-2 tracking-tight" style={{ textShadow: '0 4px 16px rgba(0,0,0,0.4)' }}>
-                    ~13.5%
-                  </div>
-                  <div className="text-white/70 font-medium text-sm uppercase tracking-wide leading-snug">
-                    Nov. Share of<br/>Annual Reach
+                  <div className="mt-1 text-white/55 text-xs uppercase tracking-[0.18em]">
+                    2025 combined programs
                   </div>
                 </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Footer Note */}
-          <div className="text-center">
-            <p className="text-white/50 text-sm">
-              Data shown reflects verified totals through November 2025. December 2025 activity will be added as final reporting is completed.
-            </p>
-          </div>
         </motion.div>
 
         {/* F. "Why It Matters" Panel (Retained) */}

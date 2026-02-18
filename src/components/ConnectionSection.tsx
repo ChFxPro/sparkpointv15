@@ -1,65 +1,154 @@
 'use client';
 
 import { motion } from 'motion/react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+
+// Local program imagery (WebP + JPG fallback)
+import sparkpurposeWebp from '../assets/connection_happens/sparkpurpose1.webp';
+import sparkpurposeJpg from '../assets/connection_happens/sparkpurpose1.jpg';
+import storyWebp from '../assets/connection_happens/story1.webp';
+import storyJpg from '../assets/connection_happens/story1.jpg';
+import vosWebp from '../assets/connection_happens/vos1.webp';
+import vosJpg from '../assets/connection_happens/vos1.jpg';
 
 export function ConnectionSection() {
   return (
-    <section className="relative py-20 px-6 overflow-hidden" style={{ backgroundColor: '#FFF' }}>
+    <section className="relative py-24 px-6 overflow-hidden bg-white">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Left Column - Text */}
+        {/* Section Header */}
+        <div className="max-w-3xl mb-16">
+          <h2 className="text-[#1A1A1A] text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-6">
+            Three Ways Connection Happens Here.
+          </h2>
+          <p className="text-[#666666] text-lg md:text-xl leading-relaxed">
+            SparkPoint turns connection into momentum through three core programs — purpose,
+            story, and youth voice. Each one creates space for belonging, reflection, and
+            shared growth across Transylvania County.
+          </p>
+        </div>
+
+        {/* Program Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          
+          {/* SparkPurpose */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.8, ease: [0.45, 0, 0.55, 1] }}
+            transition={{ duration: 0.7 }}
+            className="group relative rounded-2xl overflow-hidden shadow-xl bg-white"
           >
-            <h2
-              className="mb-6"
-              style={{
-                color: '#1A1A1A',
-                fontSize: '2.5rem',
-                lineHeight: '1.2',
-                letterSpacing: '-1px'
-              }}
-            >
-              Connection in Action.
-            </h2>
-            <p
-              style={{
-                color: '#666666',
-                fontSize: '1.125rem',
-                lineHeight: '1.5'
-              }}
-            >
-              Every day, SparkPoint creates opportunities for meaningful connection — 
-              bringing together neighbors, partners, and resources to build a stronger, 
-              more resilient community. Through intentional design and collaborative action, 
-              we transform individual moments into collective impact.
-            </p>
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <picture>
+                <source srcSet={sparkpurposeWebp} type="image/webp" />
+                <img
+                  src={sparkpurposeJpg}
+                  alt="SparkPurpose workshop"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  loading="lazy"
+                />
+              </picture>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+            </div>
+            <div className="p-6">
+              <p className="text-sm uppercase tracking-widest text-[#FDB515] font-semibold mb-2">
+                SparkPurpose
+              </p>
+              <h3 className="text-2xl font-bold text-[#1A1A1A] mb-3">
+                Purpose Workshops
+              </h3>
+              <p className="text-[#555] leading-relaxed mb-6">
+                Guided sessions that help individuals and teams clarify values,
+                reflect deeply, and move forward with alignment and intention.
+              </p>
+              <a
+                href="#programs"
+                className="inline-block text-sm font-semibold uppercase tracking-wide text-[#FDB515] hover:underline"
+              >
+                Learn More →
+              </a>
+            </div>
           </motion.div>
 
-          {/* Right Column - Image */}
+          {/* Story Collection */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.8, ease: [0.45, 0, 0.55, 1] }}
-            className="relative"
-            style={{
-              borderRadius: '12px',
-              overflow: 'hidden',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
-            }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="group relative rounded-2xl overflow-hidden shadow-xl bg-white"
           >
-            <ImageWithFallback
-              src="https://images.unsplash.com/photo-1760783320455-f7092d00fade?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21tdW5pdHklMjBkaW5pbmclMjBwZW9wbGUlMjBnYXRoZXJpbmd8ZW58MXx8fHwxNzYxMDk3MDY2fDA&ixlib=rb-4.1.0&q=80&w=1080"
-              alt="Community connection"
-              className="w-full h-full object-cover"
-              style={{ aspectRatio: '16/10' }}
-            />
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <picture>
+                <source srcSet={storyWebp} type="image/webp" />
+                <img
+                  src={storyJpg}
+                  alt="Story collection interview"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  loading="lazy"
+                />
+              </picture>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+            </div>
+            <div className="p-6">
+              <p className="text-sm uppercase tracking-widest text-[#FDB515] font-semibold mb-2">
+                Story Collection
+              </p>
+              <h3 className="text-2xl font-bold text-[#1A1A1A] mb-3">
+                Story & Voice Infrastructure
+              </h3>
+              <p className="text-[#555] leading-relaxed mb-6">
+                We collect lived experience across the county so decisions,
+                partnerships, and programming reflect real community voices.
+              </p>
+              <a
+                href="#programs"
+                className="inline-block text-sm font-semibold uppercase tracking-wide text-[#FDB515] hover:underline"
+              >
+                Explore Stories →
+              </a>
+            </div>
           </motion.div>
+
+          {/* Voices of the Students */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="group relative rounded-2xl overflow-hidden shadow-xl bg-white"
+          >
+            <div className="relative aspect-[4/3] overflow-hidden">
+              <picture>
+                <source srcSet={vosWebp} type="image/webp" />
+                <img
+                  src={vosJpg}
+                  alt="Youth program engagement"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  loading="lazy"
+                />
+              </picture>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+            </div>
+            <div className="p-6">
+              <p className="text-sm uppercase tracking-widest text-[#FDB515] font-semibold mb-2">
+                Voices of the Students
+              </p>
+              <h3 className="text-2xl font-bold text-[#1A1A1A] mb-3">
+                Youth Voice & Belonging
+              </h3>
+              <p className="text-[#555] leading-relaxed mb-6">
+                Student-led programming that builds confidence, connection,
+                and civic participation across middle and high school campuses.
+              </p>
+              <a
+                href="#programs"
+                className="inline-block text-sm font-semibold uppercase tracking-wide text-[#FDB515] hover:underline"
+              >
+                See Youth Programs →
+              </a>
+            </div>
+          </motion.div>
+
         </div>
       </div>
     </section>
