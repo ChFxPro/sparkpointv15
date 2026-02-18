@@ -10,6 +10,20 @@ import { useAccessibility } from '../context/AccessibilityContext';
 import communityMomentImg from 'figma:asset/c468599141a487a1168ff53b1f6de665f3b4be9d.png';
 import heleneIcon from 'figma:asset/3c1537cde524e7172c827aa2411c2c759ae68ece.png';
 
+import helene1Webp from '../assets/moments_impact/helene1.webp';
+import helene1Jpg from '../assets/moments_impact/helene1.jpg';
+import helene2Webp from '../assets/moments_impact/helene2.webp';
+import helene2Jpg from '../assets/moments_impact/helene2.jpg';
+import helene3Webp from '../assets/moments_impact/helene3.webp';
+import helene3Jpg from '../assets/moments_impact/helene3.jpg';
+
+import ora1Webp from '../assets/moments_impact/ora1.webp';
+import ora1Jpg from '../assets/moments_impact/ora1.jpg';
+import ora2Webp from '../assets/moments_impact/ora2.webp';
+import ora2Jpg from '../assets/moments_impact/ora2.jpg';
+import ora3Webp from '../assets/moments_impact/ora3.webp';
+import ora3Jpg from '../assets/moments_impact/ora3.jpg';
+
 const impactMetrics = [
   {
     icon: Users,
@@ -103,6 +117,97 @@ function Counter({ target, duration = 2000 }: { target: number; duration?: numbe
   return <span ref={ref}>{count.toLocaleString()}</span>;
 }
 
+type PhotoStackImage = {
+  webp: string;
+  jpg: string;
+  alt: string;
+};
+
+function PhotoStack({
+  images,
+  label,
+  prefersReducedMotion,
+}: {
+  images: PhotoStackImage[];
+  label: string;
+  prefersReducedMotion: boolean;
+}) {
+  const [order, setOrder] = useState(() => images.map((_, i) => i));
+
+  const rotate = () => {
+    setOrder((prev) => (prev.length <= 1 ? prev : [...prev.slice(1), prev[0]]));
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      rotate();
+    }
+  };
+
+  // The stack is intentionally calm: subtle depth, small rotation, no flash.
+  const stackPositions = [
+    { y: 0, scale: 1, rotate: 0, shadow: 'shadow-md' },
+    { y: 12, scale: 0.975, rotate: -1.5, shadow: 'shadow-sm' },
+    { y: 22, scale: 0.95, rotate: 1.5, shadow: 'shadow-sm' },
+  ];
+
+  return (
+    <div className="mt-4">
+      <button
+        type="button"
+        onClick={rotate}
+        onKeyDown={onKeyDown}
+        aria-label={label}
+        className="group relative w-full max-w-2xl rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[#E03694]/40"
+      >
+        <div className="relative w-full overflow-hidden rounded-2xl border border-slate-100 bg-slate-50">
+          <div className="relative w-full aspect-[4/3]">
+            {order.slice(0, 3).map((imgIndex, position) => {
+              const img = images[imgIndex];
+              const pos = stackPositions[position] ?? stackPositions[0];
+
+              return (
+                <motion.div
+                  key={imgIndex}
+                  className={`absolute inset-0 ${pos.shadow} rounded-2xl border border-slate-100 bg-white p-2 ring-1 ring-slate-200/70`}
+                  style={{ zIndex: 10 - position }}
+                  animate={
+                    prefersReducedMotion
+                      ? { y: pos.y, scale: pos.scale, rotate: pos.rotate }
+                      : { y: pos.y, scale: pos.scale, rotate: pos.rotate }
+                  }
+                  transition={
+                    prefersReducedMotion
+                      ? { duration: 0 }
+                      : { type: 'spring', stiffness: 260, damping: 24 }
+                  }
+                >
+                  <picture className="block w-full h-full rounded-xl overflow-hidden bg-white">
+                    <source type="image/webp" srcSet={img.webp} />
+                    <img
+                      src={img.jpg}
+                      alt={img.alt}
+                      className="w-full h-full object-contain brightness-[0.92] contrast-[1.04]"
+                      loading="lazy"
+                      draggable={false}
+                    />
+                  </picture>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          <div className="flex items-center justify-between px-4 py-3 bg-white/70 backdrop-blur-sm">
+            <span className="sp-text-sm text-slate-500">Click to shuffle photos</span>
+            <span className="sp-text-sm text-slate-400">{images.length} images</span>
+          </div>
+        </div>
+      </button>
+    </div>
+  );
+}
+
 export function ImpactPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
@@ -112,6 +217,42 @@ export function ImpactPage() {
   
   const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
   const heroScale = useTransform(scrollY, [0, 400], [1, 0.95]);
+
+  const heleneImages: PhotoStackImage[] = [
+    {
+      webp: helene1Webp,
+      jpg: helene1Jpg,
+      alt: 'Helene: One Year of Healing community moment 1',
+    },
+    {
+      webp: helene2Webp,
+      jpg: helene2Jpg,
+      alt: 'Helene: One Year of Healing community moment 2',
+    },
+    {
+      webp: helene3Webp,
+      jpg: helene3Jpg,
+      alt: 'Helene: One Year of Healing community moment 3',
+    },
+  ];
+
+  const oraImages: PhotoStackImage[] = [
+    {
+      webp: ora1Webp,
+      jpg: ora1Jpg,
+      alt: 'Dr. Ora Brain Health Series community moment 1',
+    },
+    {
+      webp: ora2Webp,
+      jpg: ora2Jpg,
+      alt: 'Dr. Ora Brain Health Series community moment 2',
+    },
+    {
+      webp: ora3Webp,
+      jpg: ora3Jpg,
+      alt: 'Dr. Ora Brain Health Series community moment 3',
+    },
+  ];
 
   return (
     <div className="min-h-screen relative">
@@ -347,102 +488,112 @@ export function ImpactPage() {
                   </div>
               </div>
           </motion.div>
+          <div className="my-12 md:my-16 border-t border-slate-100" />
 
           {/* 2. Density / Attendance */}
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-20 md:mb-32 relative pl-6 md:pl-8 border-l-4 border-slate-200"
-          >
-              <div className="mb-4 sp-text-sm font-bold tracking-widest text-slate-400 uppercase">Engagement Density</div>
-              <div className="text-4xl md:text-7xl font-bold text-[#9E509F] mb-4">
-                  4,187
-              </div>
-              <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-4">Verified Attendance Moments</h3>
-              <p className="text-base md:text-lg text-slate-600 max-w-2xl">
-                  This number doesn't just represent reach—it represents <span className="font-semibold text-[#9E509F]">return</span>. 
-                  It reflects repeated engagement, meaning people didn’t just come once—they came back.
-              </p>
-          </motion.div>
+          <div className="bg-slate-50/70 rounded-3xl p-6 md:p-10 border border-slate-100">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="relative pl-6 md:pl-8 border-l-4 border-slate-200"
+            >
+                <div className="mb-4 sp-text-sm font-bold tracking-widest text-slate-400 uppercase">Engagement Density</div>
+                <div className="text-4xl md:text-7xl font-bold text-[#9E509F] mb-4">
+                    4,187
+                </div>
+                <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-4">Verified Attendance Moments</h3>
+                <p className="text-base md:text-lg text-slate-600 max-w-2xl">
+                    This number doesn't just represent reach—it represents <span className="font-semibold text-[#9E509F]">return</span>. 
+                    It reflects repeated engagement, meaning people didn’t just come once—they came back.
+                </p>
+            </motion.div>
+          </div>
+          <div className="my-12 md:my-16 border-t border-slate-100" />
 
           {/* 3. Youth Presence (Pillar) */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-20 md:mb-32"
-          >
-              <div className="bg-slate-50 rounded-3xl p-6 md:p-16 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-[#FDB515] opacity-10 blur-3xl rounded-full pointer-events-none"></div>
-                  
-                  <h3 className="text-3xl font-bold text-slate-900 mb-6 relative z-10">
-                      Youth engagement is our <span className="text-[#FDB515]">foundation</span>.
-                  </h3>
-                  <p className="text-lg text-slate-600 mb-10 max-w-2xl relative z-10">
-                      It’s not a sidebar—it represents nearly half of SparkPoint’s entire participation footprint.
-                  </p>
+          <div className="bg-white rounded-3xl">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.98 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className=""
+            >
+                <div className="bg-slate-50 rounded-3xl p-6 md:p-16 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#FDB515] opacity-10 blur-3xl rounded-full pointer-events-none"></div>
+                    
+                    <h3 className="text-3xl font-bold text-slate-900 mb-6 relative z-10">
+                        Youth engagement is our <span className="text-[#FDB515]">foundation</span>.
+                    </h3>
+                    <p className="text-lg text-slate-600 mb-10 max-w-2xl relative z-10">
+                        It’s not a sidebar—it represents nearly half of SparkPoint’s entire participation footprint.
+                    </p>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-                      <div>
-                          <div className="text-4xl font-bold text-slate-900 mb-1">~2,100</div>
-                          <div className="sp-text-sm text-slate-500 font-medium">Youth Attendance Moments</div>
-                      </div>
-                      <div>
-                          <div className="text-4xl font-bold text-slate-900 mb-1">34+</div>
-                          <div className="sp-text-sm text-slate-500 font-medium">Youth-Focused Sessions</div>
-                      </div>
-                      <div>
-                          <div className="text-4xl font-bold text-slate-900 mb-1">6</div>
-                          <div className="sp-text-sm text-slate-500 font-medium">Campuses Served</div>
-                      </div>
-                  </div>
-                  <div className="mt-8 pt-8 border-t border-slate-200/60 sp-text-sm text-slate-500 relative z-10">
-                      <span className="font-semibold">Primary Partners:</span> TC Strong, CARE
-                  </div>
-              </div>
-          </motion.div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
+                        <div>
+                            <div className="text-4xl font-bold text-slate-900 mb-1">~2,100</div>
+                            <div className="sp-text-sm text-slate-500 font-medium">Youth Attendance Moments</div>
+                        </div>
+                        <div>
+                            <div className="text-4xl font-bold text-slate-900 mb-1">34+</div>
+                            <div className="sp-text-sm text-slate-500 font-medium">Youth-Focused Sessions</div>
+                        </div>
+                        <div>
+                            <div className="text-4xl font-bold text-slate-900 mb-1">6</div>
+                            <div className="sp-text-sm text-slate-500 font-medium">Campuses Served</div>
+                        </div>
+                    </div>
+                    <div className="mt-8 pt-8 border-t border-slate-200/60 sp-text-sm text-slate-500 relative z-10">
+                        <span className="font-semibold">Primary Partners:</span> TC Strong, CARE
+                    </div>
+                </div>
+            </motion.div>
+          </div>
+          <div className="my-12 md:my-16 border-t border-slate-100" />
 
           {/* 4. Community as Connector */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-20 md:mb-32 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center"
-          >
-              <div>
-                  <div className="mb-4 sp-text-sm font-bold tracking-widest text-[#F15F48] uppercase">Connector Work</div>
-                  <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">
-                      Supporting the backbone of community.
-                  </h3>
-                  <p className="text-base md:text-lg text-slate-600 mb-6">
-                      For our 43+ adult and community events, SparkPoint often steps back—serving as the connector and facilitator so our partners can lead.
-                  </p>
-                  <ul className="space-y-3 text-slate-600">
-                      <li className="flex items-center gap-3">
-                          <span className="w-1.5 h-1.5 bg-[#F15F48] rounded-full"></span>
-                          Community Conversations
-                      </li>
-                      <li className="flex items-center gap-3">
-                          <span className="w-1.5 h-1.5 bg-[#F15F48] rounded-full"></span>
-                          Leadership Talks
-                      </li>
-                      <li className="flex items-center gap-3">
-                          <span className="w-1.5 h-1.5 bg-[#F15F48] rounded-full"></span>
-                          Recovery-Aligned Sessions
-                      </li>
-                  </ul>
-              </div>
-              <div className="bg-[#FFF5F2] rounded-3xl p-6 md:p-10 flex items-center justify-center min-h-[200px] md:min-h-[240px]">
-                   <div className="text-center">
-                      <div className="text-5xl md:text-6xl font-bold text-[#F15F48] mb-2">43+</div>
-                      <div className="text-slate-600 font-medium">Community Events</div>
-                   </div>
-              </div>
-          </motion.div>
+          <div className="bg-slate-50/70 rounded-3xl p-6 md:p-10 border border-slate-100">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center"
+            >
+                <div>
+                    <div className="mb-4 sp-text-sm font-bold tracking-widest text-[#F15F48] uppercase">Connector Work</div>
+                    <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">
+                        Supporting the backbone of community.
+                    </h3>
+                    <p className="text-base md:text-lg text-slate-600 mb-6">
+                        For our 43+ adult and community events, SparkPoint often steps back—serving as the connector and facilitator so our partners can lead.
+                    </p>
+                    <ul className="space-y-3 text-slate-600">
+                        <li className="flex items-center gap-3">
+                            <span className="w-1.5 h-1.5 bg-[#F15F48] rounded-full"></span>
+                            Community Conversations
+                        </li>
+                        <li className="flex items-center gap-3">
+                            <span className="w-1.5 h-1.5 bg-[#F15F48] rounded-full"></span>
+                            Leadership Talks
+                        </li>
+                        <li className="flex items-center gap-3">
+                            <span className="w-1.5 h-1.5 bg-[#F15F48] rounded-full"></span>
+                            Recovery-Aligned Sessions
+                        </li>
+                    </ul>
+                </div>
+                <div className="bg-[#FFF5F2] rounded-3xl p-6 md:p-10 flex items-center justify-center min-h-[200px] md:min-h-[240px]">
+                     <div className="text-center">
+                        <div className="text-5xl md:text-6xl font-bold text-[#F15F48] mb-2">43+</div>
+                        <div className="text-slate-600 font-medium">Community Events</div>
+                     </div>
+                </div>
+            </motion.div>
+          </div>
+          <div className="my-12 md:my-16 border-t border-slate-100" />
 
           {/* 5. Story Collection */}
           <motion.div 
@@ -450,7 +601,7 @@ export function ImpactPage() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="mb-32"
+            className=""
           >
               <div className="border-l-4 border-[#E03694] pl-8 py-4 bg-gradient-to-r from-pink-50/50 to-transparent rounded-r-2xl">
                   <h3 className="text-2xl font-bold text-slate-900 mb-2">Story Collection as Intelligence</h3>
@@ -462,62 +613,70 @@ export function ImpactPage() {
                   </div>
               </div>
           </motion.div>
+          <div className="my-12 md:my-16 border-t border-slate-100" />
 
           {/* 6. Anchor Moments */}
-          <div className="mb-32">
-              <motion.h3 
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                className="text-3xl font-bold text-slate-900 mb-12 text-center"
+          <div className="bg-slate-50/70 rounded-3xl p-6 md:p-10 border border-slate-100">
+            <h3 className="text-3xl font-bold text-slate-900 mb-4 text-center" style={{ opacity: 1 }}>
+              Moments that consolidate trust.
+            </h3>
+
+            <p className="mx-auto mb-12 max-w-2xl text-center text-slate-500" style={{ opacity: 1, transform: 'none' }}>
+              Trust becomes visible when communities return, institutions invite us back, and partnerships deepen over time.
+            </p>
+
+            <div className="space-y-6">
+              {/* Helene: One Year of Healing (keep the event badge icon as-is) */}
+              <div
+                className="flex items-start gap-6 p-6 rounded-2xl bg-white shadow-sm border border-slate-100 transition-transform hover:scale-[1.01]"
+                style={{ opacity: 1, transform: 'none' }}
               >
-                Moments that consolidate trust.
-              </motion.h3>
-              
-              <div className="space-y-6">
-                  {[
-                    { title: "Juneteenth Festival", desc: "A celebration of shared history and community joy.", icon: <span className="text-2xl">🎉</span> },
-                    { title: "Helene: One Year of Healing", desc: "Marking resilience and recovery together.", icon: <img src={heleneIcon} alt="Helene Badge" className="w-10 h-10 object-contain" /> },
-                    { title: "TCS Convocation", desc: "Aligning with educators for the year ahead.", icon: <span className="text-2xl">🎓</span> }
-                  ].map((event, i) => (
-                    <motion.div 
-                      key={i}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.1 }}
-                      className="flex items-center gap-6 p-6 rounded-2xl bg-white shadow-sm border border-slate-100 transition-transform hover:scale-[1.01]"
-                    >
-                        <div className="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 flex-shrink-0">
-                          {event.icon}
-                        </div>
-                        <div>
-                            <h4 className="text-xl font-bold text-slate-900">{event.title}</h4>
-                            <p className="text-slate-500">{event.desc}</p>
-                        </div>
-                    </motion.div>
-                  ))}
+                <div className="w-20 h-20 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 flex-shrink-0 mt-1">
+                  <img src={heleneIcon} alt="Helene Badge" className="w-12 h-12 object-contain" />
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold text-slate-900">Helene: One Year of Healing</h4>
+                  <p className="text-slate-500">
+                    One year after the storm, SparkPoint convened partners and residents to mark resilience together — creating space for collective processing and renewed collaboration.
+                  </p>
+              <PhotoStack
+                images={heleneImages}
+                label="Helene: One Year of Healing photo stack"
+                prefersReducedMotion={prefersReducedMotion}
+              />
+                </div>
               </div>
 
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                className="mt-8 text-center"
+              {/* Dr. Ora Brain Health Series */}
+              <div
+                className="flex items-start gap-6 p-6 rounded-2xl bg-white shadow-sm border border-slate-100 transition-transform hover:scale-[1.01]"
+                style={{ opacity: 1, transform: 'none' }}
               >
-                  <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-slate-900 text-white shadow-lg">
-                      <span className="font-bold text-2xl">700</span>
-                      <span className="sp-text-sm text-slate-300 border-l border-slate-700 pl-3">Largest Single-Event Attendance</span>
-                  </div>
-              </motion.div>
+                <div className="w-20 h-20 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 flex-shrink-0 mt-1">
+                  <span className="text-3xl">🧠</span>
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold text-slate-900">Dr. Ora Brain Health Series</h4>
+                  <p className="text-slate-500">
+                    Hosted across Brevard College, Rotary, Cedar Mountain, and Saluda, this series traveled through the county through repeated invitations from trusted partners.
+                  </p>
+              <PhotoStack
+                images={oraImages}
+                label="Dr. Ora Brain Health Series photo stack"
+                prefersReducedMotion={prefersReducedMotion}
+              />
+                </div>
+              </div>
+            </div>
           </div>
+          <div className="my-12 md:my-16 border-t border-slate-100" />
 
           {/* 7. Momentum */}
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mb-24 bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-10 md:p-16 text-white text-center shadow-2xl"
+            className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-10 md:p-16 text-white text-center shadow-2xl"
           >
               <h3 className="text-2xl md:text-3xl font-bold mb-8">Momentum increased toward the end of the year.</h3>
               <div className="flex flex-col md:flex-row justify-center items-center gap-12">
@@ -532,6 +691,7 @@ export function ImpactPage() {
                   </div>
               </div>
           </motion.div>
+          <div className="my-12 md:my-16" />
 
           {/* Closing */}
           <motion.div 
