@@ -1,34 +1,116 @@
-import { useState } from "react";
-import { Link } from "react-router";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router";
 import { ProgramsHero } from "./ProgramsHero";
+import { EngineSection } from "./EngineSection";
 import { EcosystemSection } from "./EcosystemSection";
 import { AllProgramsSection } from "./AllProgramsSection";
 import { PathwayModal } from "./PathwayModal";
-import type { Pathway, Program } from "./programsData";
+import { getProgramBySlug, pathways, type Pathway, type Program } from "./programsData";
 import "./programs.css";
 
+type AudienceSegment = "community" | "volunteer" | "funder";
+
+const audienceSegmentConfig: Record<
+  AudienceSegment,
+  { label: string; audiences: string[]; ctaLabel: string; ctaHref: string }
+> = {
+  community: {
+    label: "Community",
+    audiences: ["Community", "Residents", "Youth", "Volunteers"],
+    ctaLabel: "Connect With Us",
+    ctaHref: "/intake?intent=contact",
+  },
+  volunteer: {
+    label: "Volunteer",
+    audiences: ["Volunteers", "Community", "Residents", "Partners"],
+    ctaLabel: "Volunteer With Us",
+    ctaHref: "/intake?intent=volunteer",
+  },
+  funder: {
+    label: "Funder",
+    audiences: ["Partners", "Organizations", "Leaders", "Nonprofits", "Schools"],
+    ctaLabel: "Partner In Impact",
+    ctaHref: "/get-involved",
+  },
+};
+
 export default function ProgramsPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [activePathway, setActivePathway] = useState<Pathway | null>(null);
   const [activeProgram, setActiveProgram] = useState<Program | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [audienceSegment, setAudienceSegment] = useState<AudienceSegment>("community");
 
-  const handleOpenPathway = (pathway: Pathway) => {
+  const segmentConfig = useMemo(() => audienceSegmentConfig[audienceSegment], [audienceSegment]);
+
+  const setProgramParam = useCallback((slug: string | null) => {
+    setSearchParams((prev) => {
+      const currentSlug = prev.get("program");
+      if ((currentSlug ?? null) === slug) {
+        return prev;
+      }
+
+      const next = new URLSearchParams(prev);
+      if (slug) {
+        next.set("program", slug);
+      } else {
+        next.delete("program");
+      }
+      return next;
+    }, { replace: true });
+  }, [setSearchParams]);
+
+  const handleOpenPathway = useCallback((pathway: Pathway) => {
     setActiveProgram(null);
     setActivePathway(pathway);
-  };
+    setModalOpen(true);
+    setProgramParam(null);
+  }, [setProgramParam]);
 
-  const handleOpenProgram = (pathway: Pathway, program: Program) => {
+  const handleOpenProgram = useCallback((pathway: Pathway, program: Program) => {
     setActiveProgram(program);
     setActivePathway(pathway);
-  };
+    setModalOpen(true);
+    setProgramParam(program.slug);
+  }, [setProgramParam]);
 
-  const handleCloseModal = () => {
+  const handleProgramChange = useCallback((program: Program | null) => {
+    setActiveProgram(program);
+    setProgramParam(program?.slug ?? null);
+  }, [setProgramParam]);
+
+  const handleCloseModal = useCallback(() => {
+    setModalOpen(false);
     setActiveProgram(null);
     setActivePathway(null);
-  };
+    setProgramParam(null);
+  }, [setProgramParam]);
+
+  useEffect(() => {
+    const programSlug = searchParams.get("program");
+    if (!programSlug) return;
+
+    const matchedProgram = getProgramBySlug(programSlug);
+    if (!matchedProgram) return;
+
+    const matchedPathway = pathways.find((pathway) => pathway.id === matchedProgram.pathway);
+    if (!matchedPathway) return;
+
+    setActivePathway(matchedPathway);
+    setActiveProgram(matchedProgram);
+    setModalOpen(true);
+  }, [searchParams]);
 
   return (
     <div className="sp-programs">
-      <ProgramsHero />
+      <ProgramsHero
+        audienceSegment={audienceSegment}
+        onAudienceSegmentChange={setAudienceSegment}
+        secondaryCtaHref={segmentConfig.ctaHref}
+        secondaryCtaLabel={segmentConfig.ctaLabel}
+      />
+
+      <EngineSection />
 
       <section id="ecosystem" className="sp-scroll-offset">
         <EcosystemSection
@@ -38,7 +120,11 @@ export default function ProgramsPage() {
       </section>
 
       <section id="view-all" className="sp-scroll-offset">
-        <AllProgramsSection onOpenProgram={handleOpenProgram} />
+        <AllProgramsSection
+          onOpenProgram={handleOpenProgram}
+          recommendedAudiences={segmentConfig.audiences}
+          recommendationLabel={segmentConfig.label}
+        />
       </section>
 
       <section id="cta" className="sp-scroll-offset sp-prog-cta">
@@ -67,8 +153,9 @@ export default function ProgramsPage() {
       </section>
 
       <PathwayModal
-        pathway={activePathway}
+        pathway={modalOpen ? activePathway : null}
         initialProgram={activeProgram}
+        onProgramChange={handleProgramChange}
         onClose={handleCloseModal}
       />
     </div>

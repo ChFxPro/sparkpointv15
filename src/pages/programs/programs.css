@@ -70,6 +70,67 @@
   line-height: 1.65;
 }
 
+.sp-programs .sp-prog-loop-strip {
+  margin-top: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+}
+
+.sp-programs .sp-prog-segment-wrap {
+  margin-top: 1rem;
+}
+
+.sp-programs .sp-prog-segment-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background-color: rgba(255, 255, 255, 0.04);
+  border-radius: 999px;
+  padding: 0.25rem;
+}
+
+.sp-programs .sp-prog-segment-button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sp-programs .sp-prog-segment-button:hover {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sp-programs .sp-prog-segment-button:focus-visible {
+  outline: 2px solid rgba(224, 54, 148, 0.55);
+  outline-offset: 2px;
+}
+
+.sp-programs .sp-prog-segment-button-active {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.16);
+}
+
+.sp-programs .sp-prog-segment-hint {
+  margin-top: 0.55rem;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.8125rem;
+}
+
 .sp-programs .sp-prog-hero-actions {
   margin-top: 2.25rem;
 }
@@ -152,6 +213,66 @@
   font-size: 1rem;
   line-height: 1.65;
   color: #6b7280;
+}
+
+.sp-programs .sp-prog-engine {
+  padding: 3.25rem 0;
+  background-color: #f7f7f4;
+  border-top: 1px solid rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.sp-programs .sp-prog-engine-copy {
+  margin: 0.85rem auto 0;
+  max-width: 44rem;
+  text-align: center;
+}
+
+.sp-programs .sp-prog-engine-rail {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.sp-programs .sp-prog-engine-step {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background-color: #fff;
+}
+
+.sp-programs .sp-prog-engine-index {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+  background-color: rgba(0, 0, 0, 0.05);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sp-programs .sp-prog-engine-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.sp-programs .sp-prog-engine-arrow {
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+.sp-programs .sp-prog-recommendation-note {
+  margin-bottom: 1rem;
+  color: #6b7280;
+  font-size: 0.8125rem;
 }
 
 .sp-programs .sp-prog-muted {
@@ -309,6 +430,7 @@
   font: inherit;
   color: inherit;
   cursor: pointer;
+  user-select: text;
 }
 
 .sp-programs .sp-prog-card:hover {
@@ -337,6 +459,79 @@
 
 .sp-programs .sp-prog-card:hover .sp-prog-card-arrow {
   transform: translateX(2px);
+}
+
+.sp-programs .sp-prog-card-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.sp-programs .sp-prog-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.625rem;
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.sp-programs .sp-prog-badge-format {
+  color: #374151;
+  background-color: rgba(0, 0, 0, 0.045);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.sp-programs .sp-prog-badge-community {
+  color: #166534;
+  background-color: rgba(22, 101, 52, 0.08);
+  border-color: rgba(22, 101, 52, 0.18);
+}
+
+.sp-programs .sp-prog-badge-partner {
+  color: #1d4ed8;
+  background-color: rgba(29, 78, 216, 0.08);
+  border-color: rgba(29, 78, 216, 0.18);
+}
+
+.sp-programs .sp-prog-badge-fee-based {
+  color: #7c2d12;
+  background-color: rgba(124, 45, 18, 0.08);
+  border-color: rgba(124, 45, 18, 0.18);
+}
+
+.sp-programs .sp-prog-detail-tagline {
+  margin-bottom: 0.75rem;
+  color: #374151;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  font-weight: 500;
+}
+
+.sp-programs .sp-prog-detail-text {
+  color: #6b7280;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.sp-programs .sp-prog-detail-why {
+  margin-top: 0.75rem;
+  color: #4b5563;
+  font-size: 0.875rem;
+  line-height: 1.65;
+}
+
+.sp-programs .sp-prog-detail-list {
+  margin: 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0.45rem;
+  color: #4b5563;
+  font-size: 0.875rem;
+  line-height: 1.6;
 }
 
 /* Compatibility shims for utilities missing from the canonical precompiled CSS */
@@ -381,6 +576,24 @@
 
   .sp-programs .sp-prog-hero-inner {
     padding: 7rem 2rem 7.5rem;
+  }
+
+  .sp-programs .sp-prog-engine {
+    padding: 4rem 0;
+  }
+
+  .sp-programs .sp-prog-engine-rail {
+    margin-top: 1.75rem;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .sp-programs .sp-prog-engine-step {
+    grid-template-columns: auto 1fr;
+    min-height: 4.5rem;
+  }
+
+  .sp-programs .sp-prog-engine-arrow {
+    display: none;
   }
 
   .sp-programs .sp-prog-hero-card {
@@ -460,6 +673,12 @@
   }
 
   .sp-programs .sp-prog-pathway-list {
+    margin-right: 0;
+  }
+
+  .sp-programs .sp-prog-loop-strip,
+  .sp-programs .sp-prog-segment-control {
+    margin-left: 0;
     margin-right: 0;
   }
 }

@@ -1,16 +1,20 @@
-import { useRef, useState, useMemo } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { useMemo, useRef, useState } from "react";
+import { motion, useInView } from "motion/react";
 import { Search } from "lucide-react";
 import {
   allPrograms,
   pathways,
   audienceFilters,
+  getFormatLabel,
+  getOfferingTypeLabel,
   type Program,
   type Pathway,
 } from "./programsData";
 
 interface AllProgramsSectionProps {
   onOpenProgram: (pathway: Pathway, program: Program) => void;
+  recommendedAudiences?: string[];
+  recommendationLabel?: string;
 }
 
 const pathwayColorMap: Record<string, string> = {
@@ -33,7 +37,11 @@ function MiniCard({
   return (
     <button
       type="button"
-      onClick={onSelect}
+      onClick={() => {
+        const selection = window.getSelection()?.toString();
+        if (selection && selection.trim().length > 0) return;
+        onSelect();
+      }}
       aria-label={`View details for ${program.title}`}
       className="sp-prog-card sp-prog-card-button group"
       style={{ borderColor: "rgba(0,0,0,0.06)" }}
@@ -51,16 +59,24 @@ function MiniCard({
           {program.pathway}
         </span>
       </div>
-      <h4 className="text-[0.875rem] text-gray-900 mb-1" style={{ fontWeight: 500 }}>
+      <h4 className="text-[0.875rem] text-gray-900 mb-1" style={{ fontWeight: 600 }}>
         {program.title}
       </h4>
       <p className="text-[0.8125rem] text-gray-500 leading-relaxed mb-2.5 line-clamp-2">
-        {program.summary}
+        {program.tagline}
       </p>
+
+      <div className="sp-prog-card-badge-row mb-2.5">
+        <span className="sp-prog-badge sp-prog-badge-format">{getFormatLabel(program.format)}</span>
+        <span className={`sp-prog-badge sp-prog-badge-${program.offeringType}`}>
+          {getOfferingTypeLabel(program.offeringType)}
+        </span>
+      </div>
+
       <div className="flex flex-wrap gap-1">
-        {program.audiences.map((tag) => (
+        {program.tags.slice(0, 3).map((tag) => (
           <span
-            key={tag}
+            key={`${program.id}-${tag}`}
             className="text-[0.625rem] px-2 py-0.5 rounded-full text-gray-400"
             style={{ backgroundColor: "rgba(0,0,0,0.025)" }}
           >
@@ -84,30 +100,44 @@ function MiniCard({
   );
 }
 
-export function AllProgramsSection({ onOpenProgram }: AllProgramsSectionProps) {
+export function AllProgramsSection({
+  onOpenProgram,
+  recommendedAudiences = [],
+  recommendationLabel = "Community",
+}: AllProgramsSectionProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.08 });
-  const prefersReduced = useReducedMotion();
   const [searchQuery, setSearchQuery] = useState("");
   const [activePathway, setActivePathway] = useState<string | null>(null);
   const [activeAudience, setActiveAudience] = useState<string | null>(null);
 
+  const hasManualFilters = Boolean(activePathway || activeAudience || searchQuery.trim());
+
   const filtered = useMemo(() => {
     let progs = allPrograms;
+    if (!hasManualFilters && recommendedAudiences.length) {
+      const recommended = progs.filter((program) =>
+        program.tags.some((audience) => recommendedAudiences.includes(audience))
+      );
+      if (recommended.length > 0) {
+        progs = recommended;
+      }
+    }
     if (activePathway) progs = progs.filter((p) => p.pathway === activePathway);
-    if (activeAudience) progs = progs.filter((p) => p.audiences.includes(activeAudience));
+    if (activeAudience) progs = progs.filter((p) => p.tags.includes(activeAudience));
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       progs = progs.filter(
         (p) =>
           p.title.toLowerCase().includes(q) ||
-          p.summary.toLowerCase().includes(q)
+          p.tagline.toLowerCase().includes(q) ||
+          p.overview.toLowerCase().includes(q)
       );
     }
     return progs;
-  }, [activePathway, activeAudience, searchQuery]);
+  }, [activePathway, activeAudience, searchQuery, hasManualFilters, recommendedAudiences]);
 
-  const hasFilters = activePathway || activeAudience || searchQuery.trim();
+  const hasFilters = hasManualFilters;
 
   return (
     <section id="all-programs" ref={ref} className="sp-scroll-offset py-16 sm:py-20 bg-white">
@@ -117,24 +147,18 @@ export function AllProgramsSection({ onOpenProgram }: AllProgramsSectionProps) {
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
           transition={{ duration: 0.5, ease }}
         >
-          {/* Header row */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
-              <h2
-                className="sp-prog-section-title-sm"
-              >
-                All Programs
-              </h2>
+              <h2 className="sp-prog-section-title-sm">All Programs</h2>
               <p className="sp-prog-muted mt-1">
                 {allPrograms.length} programs across {pathways.length} pathways
               </p>
             </div>
-            {/* Search */}
             <div className="relative">
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search…"
+                placeholder="Search by title, topic, or focus…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="sp-prog-search-input"
@@ -146,9 +170,7 @@ export function AllProgramsSection({ onOpenProgram }: AllProgramsSectionProps) {
             </div>
           </div>
 
-          {/* Filter chips */}
           <div className="flex flex-wrap items-center gap-2 mb-8">
-            {/* Pathway filters */}
             {pathways.map((pw) => (
               <button
                 key={pw.id}
@@ -169,18 +191,18 @@ export function AllProgramsSection({ onOpenProgram }: AllProgramsSectionProps) {
               className="w-px h-5 mx-1"
               style={{ backgroundColor: "rgba(0,0,0,0.08)" }}
             />
-            {audienceFilters.map((f) => (
+            {audienceFilters.map((filter) => (
               <button
-                key={f}
-                onClick={() => setActiveAudience(activeAudience === f ? null : f)}
+                key={filter}
+                onClick={() => setActiveAudience(activeAudience === filter ? null : filter)}
                 className={`px-3.5 py-1.5 rounded-full text-[0.75rem] border transition-all duration-200 cursor-pointer ${
-                  activeAudience === f
+                  activeAudience === filter
                     ? "bg-gray-900 text-white border-gray-900"
                     : "bg-white text-gray-500 border-gray-200 hover:border-gray-300"
                 }`}
                 style={{ fontWeight: 500 }}
               >
-                {f}
+                {filter}
               </button>
             ))}
             {hasFilters && (
@@ -198,14 +220,19 @@ export function AllProgramsSection({ onOpenProgram }: AllProgramsSectionProps) {
             )}
           </div>
 
-          {/* Grid */}
+          {!hasManualFilters && recommendedAudiences.length > 0 && (
+            <p className="sp-prog-recommendation-note">
+              Showing recommended programs for {recommendationLabel}.
+            </p>
+          )}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filtered.map((program) => {
               const pathway = pathways.find((pw) => pw.id === program.pathway);
               if (!pathway) return null;
               return (
                 <MiniCard
-                  key={program.title}
+                  key={program.id}
                   program={program}
                   onSelect={() => onOpenProgram(pathway, program)}
                 />

@@ -1,17 +1,73 @@
-import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "react-router";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { X, ArrowRight, ArrowLeft, Search, Users, Sparkles, Handshake, MessageCircle } from "lucide-react";
-import type { Pathway, Program } from "./programsData";
+import {
+  X,
+  ArrowRight,
+  ArrowLeft,
+  Search,
+  Users,
+  Sparkles,
+  Target,
+  Handshake,
+  MessageCircle,
+} from "lucide-react";
+import {
+  getFormatLabel,
+  getOfferingTypeLabel,
+  type Pathway,
+  type Program,
+} from "./programsData";
 
 interface PathwayModalProps {
   pathway: Pathway | null;
   initialProgram?: Program | null;
+  onProgramChange?: (program: Program | null) => void;
   onClose: () => void;
 }
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-/* ─── Program Detail Drawer ─── */
+function DetailBlock({
+  icon,
+  label,
+  color,
+  children,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  color: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className="rounded-xl border p-5"
+      style={{ borderColor: "rgba(0,0,0,0.05)", backgroundColor: "white" }}
+    >
+      <div className="flex items-center gap-2 mb-2">
+        <span style={{ color }}>{icon}</span>
+        <span
+          className="text-[0.75rem] uppercase tracking-[0.12em] text-gray-500"
+          style={{ fontWeight: 600 }}
+        >
+          {label}
+        </span>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function BulletList({ items }: { items: string[] }) {
+  return (
+    <ul className="sp-prog-detail-list">
+      {items.map((item) => (
+        <li key={item}>{item}</li>
+      ))}
+    </ul>
+  );
+}
+
 function ProgramDetail({
   program,
   color,
@@ -45,7 +101,6 @@ function ProgramDetail({
       </div>
 
       <div className="flex-1 overflow-y-auto px-7 sm:px-10 pb-8">
-        {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-3">
             <div className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
@@ -54,61 +109,53 @@ function ProgramDetail({
             </span>
           </div>
           <h3
-            className="text-[1.5rem] sm:text-[1.75rem] text-gray-900 tracking-tight mb-3"
+            className="text-[1.5rem] sm:text-[1.75rem] text-gray-900 tracking-tight mb-2"
             style={{ fontFamily: "Manrope, sans-serif", fontWeight: 700 }}
           >
             {program.title}
           </h3>
-          <p className="text-[0.9375rem] text-gray-500 leading-[1.7]">
-            {program.summary}
-          </p>
+          <p className="sp-prog-detail-tagline">{program.tagline}</p>
+          <p className="sp-prog-detail-text">{program.overview}</p>
+          {program.whyItExists && <p className="sp-prog-detail-why">{program.whyItExists}</p>}
+
+          <div className="sp-prog-card-badge-row mt-4">
+            <span className="sp-prog-badge sp-prog-badge-format">{getFormatLabel(program.format)}</span>
+            <span className={`sp-prog-badge sp-prog-badge-${program.offeringType}`}>
+              {getOfferingTypeLabel(program.offeringType)}
+            </span>
+          </div>
         </div>
 
-        {/* Detail cards */}
         <div className="space-y-5">
-          <DetailBlock
-            icon={<Users size={16} />}
-            label="Who it's for"
-            color={color}
-          >
+          <DetailBlock icon={<Users size={16} />} label="Who it's for" color={color}>
             <div className="flex flex-wrap gap-2 mt-1">
-              {program.audiences.map((a) => (
+              {program.whoItsFor.map((audience) => (
                 <span
-                  key={a}
+                  key={audience}
                   className="px-3 py-1 rounded-full text-[0.8125rem] text-gray-600"
                   style={{ backgroundColor: `${color}08`, border: `1px solid ${color}15` }}
                 >
-                  {a}
+                  {audience}
                 </span>
               ))}
             </div>
           </DetailBlock>
 
-          <DetailBlock
-            icon={<Sparkles size={16} />}
-            label="What you'll experience"
-            color={color}
-          >
-            <p className="text-[0.875rem] text-gray-500 leading-[1.7] mt-1">
-              A facilitated experience designed to deepen understanding, build
-              practical skills, and strengthen community connection through the{" "}
-              {program.pathway} pathway.
-            </p>
+          <DetailBlock icon={<Sparkles size={16} />} label="What you'll experience" color={color}>
+            <BulletList items={program.whatYoullExperience} />
           </DetailBlock>
 
-          <DetailBlock
-            icon={<Handshake size={16} />}
-            label="Ideal partners"
-            color={color}
-          >
-            <p className="text-[0.875rem] text-gray-500 leading-[1.7] mt-1">
-              {program.audiences.join(", ")}, and organizations seeking
-              connection-centered approaches to community resilience.
-            </p>
+          <DetailBlock icon={<Target size={16} />} label="Outcomes" color={color}>
+            <BulletList items={program.outcomes} />
           </DetailBlock>
+
+          {program.idealPartners.length > 0 && (
+            <DetailBlock icon={<Handshake size={16} />} label="Ideal partners" color={color}>
+              <BulletList items={program.idealPartners} />
+            </DetailBlock>
+          )}
         </div>
 
-        {/* CTA */}
         <div
           className="mt-10 rounded-xl p-6 text-center"
           style={{ backgroundColor: `${color}06`, border: `1px solid ${color}10` }}
@@ -119,55 +166,25 @@ function ProgramDetail({
               className="text-[0.875rem] text-gray-700"
               style={{ fontWeight: 500 }}
             >
-              Interested in this program?
+              Ready to explore this program?
             </span>
           </div>
           <p className="text-[0.8125rem] text-gray-500 mb-4 max-w-xs mx-auto">
-            We'd love to hear how it might fit your needs.
+            We can walk through fit, timeline, and what partnership could look like.
           </p>
-          <button
-            className="px-6 py-2.5 rounded-xl text-[0.875rem] text-white transition-all duration-200 hover:brightness-110 cursor-pointer"
-            style={{ backgroundColor: color, fontWeight: 500 }}
+          <Link
+            to={program.contactCTA.href}
+            className="sp-prog-cta-button sp-prog-cta-button-primary"
+            style={{ fontWeight: 500 }}
           >
-            Talk With Us About This Program
-          </button>
+            {program.contactCTA.label}
+          </Link>
         </div>
       </div>
     </motion.div>
   );
 }
 
-function DetailBlock({
-  icon,
-  label,
-  color,
-  children,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  color: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div
-      className="rounded-xl border p-5"
-      style={{ borderColor: "rgba(0,0,0,0.05)", backgroundColor: "white" }}
-    >
-      <div className="flex items-center gap-2 mb-1">
-        <span style={{ color }}>{icon}</span>
-        <span
-          className="text-[0.75rem] uppercase tracking-[0.12em] text-gray-500"
-          style={{ fontWeight: 600 }}
-        >
-          {label}
-        </span>
-      </div>
-      {children}
-    </div>
-  );
-}
-
-/* ─── Program Card ─── */
 function ProgramCard({
   program,
   color,
@@ -180,6 +197,7 @@ function ProgramCard({
   onSelect: () => void;
 }) {
   const prefersReduced = useReducedMotion();
+
   return (
     <motion.button
       type="button"
@@ -191,7 +209,11 @@ function ProgramCard({
         delay: prefersReduced ? 0 : 0.15 + index * 0.04,
         ease,
       }}
-      onClick={onSelect}
+      onClick={() => {
+        const selection = window.getSelection()?.toString();
+        if (selection && selection.trim().length > 0) return;
+        onSelect();
+      }}
       className="sp-prog-card sp-prog-card-button group w-full"
       style={{ borderColor: "rgba(0,0,0,0.06)", backgroundColor: "#FEFEFE" }}
     >
@@ -200,17 +222,24 @@ function ProgramCard({
         style={{ backgroundColor: color, opacity: 0.5 }}
       />
 
-      <h4 className="text-[0.875rem] text-gray-900 mb-1.5" style={{ fontWeight: 500 }}>
+      <h4 className="text-[0.875rem] text-gray-900 mb-1.5" style={{ fontWeight: 600 }}>
         {program.title}
       </h4>
       <p className="text-[0.8125rem] text-gray-500 leading-[1.65] mb-3">
-        {program.summary}
+        {program.tagline}
       </p>
 
+      <div className="sp-prog-card-badge-row mb-3">
+        <span className="sp-prog-badge sp-prog-badge-format">{getFormatLabel(program.format)}</span>
+        <span className={`sp-prog-badge sp-prog-badge-${program.offeringType}`}>
+          {getOfferingTypeLabel(program.offeringType)}
+        </span>
+      </div>
+
       <div className="flex flex-wrap gap-1.5 mb-3">
-        {program.audiences.map((tag) => (
+        {program.tags.slice(0, 2).map((tag) => (
           <span
-            key={tag}
+            key={`${program.id}-${tag}`}
             className="text-[0.625rem] px-2 py-0.5 rounded-full text-gray-400"
             style={{ backgroundColor: "rgba(0,0,0,0.025)", border: "1px solid rgba(0,0,0,0.05)" }}
           >
@@ -236,37 +265,50 @@ function ProgramCard({
   );
 }
 
-/* ─── Main Modal ─── */
-export function PathwayModal({ pathway, initialProgram = null, onClose }: PathwayModalProps) {
+export function PathwayModal({
+  pathway,
+  initialProgram = null,
+  onProgramChange,
+  onClose,
+}: PathwayModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
+  const onProgramChangeRef = useRef(onProgramChange);
   const prefersReduced = useReducedMotion();
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [activeAudience, setActiveAudience] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Reset / preselect state when pathway context changes
   useEffect(() => {
-    setSelectedProgram(initialProgram);
+    onProgramChangeRef.current = onProgramChange;
+  }, [onProgramChange]);
+
+  const setDetailProgram = useCallback((program: Program | null) => {
+    setSelectedProgram(program);
+    onProgramChangeRef.current?.(program);
+  }, []);
+
+  useEffect(() => {
+    setDetailProgram(initialProgram);
     setActiveAudience(null);
     setSearchQuery("");
-  }, [pathway?.id, initialProgram]);
+  }, [pathway?.id, initialProgram, setDetailProgram]);
 
-  // Lock body scroll
   useEffect(() => {
     if (pathway) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [pathway]);
 
-  // Close on Escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         if (selectedProgram) {
-          setSelectedProgram(null);
+          setDetailProgram(null);
         } else {
           onClose();
         }
@@ -274,52 +316,76 @@ export function PathwayModal({ pathway, initialProgram = null, onClose }: Pathwa
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [onClose, selectedProgram]);
+  }, [onClose, selectedProgram, setDetailProgram]);
 
-  // Focus trap
   useEffect(() => {
     if (!pathway) return;
     const el = modalRef.current;
     if (!el) return;
-    const focusable = el.querySelectorAll<HTMLElement>(
-      'button, [href], input, [tabindex]:not([tabindex="-1"])'
-    );
+
+    const getFocusable = () =>
+      Array.from(
+        el.querySelectorAll<HTMLElement>(
+          'button, [href], input, [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((node) => !node.hasAttribute("disabled"));
+
+    const focusable = getFocusable();
     if (focusable.length) focusable[0].focus();
+
+    const trapFocus = (event: KeyboardEvent) => {
+      if (event.key !== "Tab") return;
+      const nodes = getFocusable();
+      if (nodes.length === 0) {
+        event.preventDefault();
+        return;
+      }
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    el.addEventListener("keydown", trapFocus);
+    return () => el.removeEventListener("keydown", trapFocus);
   }, [pathway, selectedProgram]);
 
-  // Audience tags for filter chips
   const audienceTags = useMemo(() => {
     if (!pathway) return [];
     const tags = new Set<string>();
-    pathway.programs.forEach((p) => p.audiences.forEach((a) => tags.add(a)));
+    pathway.programs.forEach((program) => program.tags.forEach((tag) => tags.add(tag)));
     return Array.from(tags).sort();
   }, [pathway]);
 
-  // Filtered programs
   const filteredPrograms = useMemo(() => {
     if (!pathway) return [];
-    let progs = pathway.programs;
+    let programs = pathway.programs;
     if (activeAudience) {
-      progs = progs.filter((p) => p.audiences.includes(activeAudience));
+      programs = programs.filter((program) => program.tags.includes(activeAudience));
     }
     if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      progs = progs.filter(
-        (p) =>
-          p.title.toLowerCase().includes(q) ||
-          p.summary.toLowerCase().includes(q)
+      const query = searchQuery.toLowerCase();
+      programs = programs.filter(
+        (program) =>
+          program.title.toLowerCase().includes(query) ||
+          program.tagline.toLowerCase().includes(query) ||
+          program.overview.toLowerCase().includes(query)
       );
     }
-    return progs;
+    return programs;
   }, [pathway, activeAudience, searchQuery]);
 
-  const handleBack = useCallback(() => setSelectedProgram(null), []);
+  const handleBack = useCallback(() => setDetailProgram(null), [setDetailProgram]);
 
   return (
     <AnimatePresence>
       {pathway && (
         <div className="sp-prog-modal-overlay">
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -333,14 +399,13 @@ export function PathwayModal({ pathway, initialProgram = null, onClose }: Pathwa
             }}
             onClick={() => {
               if (selectedProgram) {
-                setSelectedProgram(null);
+                setDetailProgram(null);
               } else {
                 onClose();
               }
             }}
           />
 
-          {/* Modal shell */}
           <motion.div
             ref={modalRef}
             initial={{ opacity: 0, y: prefersReduced ? 0 : 24 }}
@@ -356,11 +421,9 @@ export function PathwayModal({ pathway, initialProgram = null, onClose }: Pathwa
             aria-modal="true"
             aria-label={`${pathway.label} programs`}
           >
-            {/* Main list panel */}
             <div
               className={`sp-prog-modal-main${selectedProgram ? " sp-prog-modal-main--with-detail" : ""}`}
             >
-              {/* Header */}
               <div className="relative px-7 sm:px-8 pt-8 pb-5 flex-shrink-0">
                 <div
                   className="absolute inset-0 pointer-events-none"
@@ -401,10 +464,8 @@ export function PathwayModal({ pathway, initialProgram = null, onClose }: Pathwa
                 />
               </div>
 
-              {/* Filter row */}
               <div className="px-7 sm:px-8 pb-4 flex-shrink-0">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                  {/* Search */}
                   <div className="relative flex-shrink-0 w-full sm:w-auto">
                     <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
@@ -419,7 +480,6 @@ export function PathwayModal({ pathway, initialProgram = null, onClose }: Pathwa
                       }}
                     />
                   </div>
-                  {/* Audience chips */}
                   <div className="flex flex-wrap gap-1.5">
                     {audienceTags.map((tag) => (
                       <button
@@ -445,7 +505,6 @@ export function PathwayModal({ pathway, initialProgram = null, onClose }: Pathwa
                 </div>
               </div>
 
-              {/* Program grid / list */}
               <div className="flex-1 overflow-y-auto px-7 sm:px-8 pb-6">
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -460,11 +519,11 @@ export function PathwayModal({ pathway, initialProgram = null, onClose }: Pathwa
                   >
                     {filteredPrograms.map((program, idx) => (
                       <ProgramCard
-                        key={program.title}
+                        key={program.id}
                         program={program}
                         color={pathway.color}
                         index={idx}
-                        onSelect={() => setSelectedProgram(program)}
+                        onSelect={() => setDetailProgram(program)}
                       />
                     ))}
                   </motion.div>
@@ -489,7 +548,6 @@ export function PathwayModal({ pathway, initialProgram = null, onClose }: Pathwa
                 )}
               </div>
 
-              {/* Footer */}
               <div
                 className="px-7 sm:px-8 py-4 flex items-center justify-between flex-shrink-0"
                 style={{
@@ -510,11 +568,10 @@ export function PathwayModal({ pathway, initialProgram = null, onClose }: Pathwa
               </div>
             </div>
 
-            {/* Detail drawer — right panel desktop, full-screen mobile */}
             <AnimatePresence>
               {selectedProgram && (
                 <motion.div
-                  key={selectedProgram.title}
+                  key={selectedProgram.id}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}

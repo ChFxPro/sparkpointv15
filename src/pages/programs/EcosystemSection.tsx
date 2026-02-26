@@ -1,7 +1,13 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useInView, useReducedMotion } from "motion/react";
 import { ArrowRight } from "lucide-react";
-import { pathways, type Pathway, type Program } from "./programsData";
+import {
+  pathways,
+  getFormatLabel,
+  getOfferingTypeLabel,
+  type Pathway,
+  type Program,
+} from "./programsData";
 
 interface EcosystemSectionProps {
   onOpenPathway: (pathway: Pathway) => void;
@@ -11,9 +17,9 @@ interface EcosystemSectionProps {
 const ease = [0.22, 1, 0.36, 1] as const;
 
 const microcopy: Record<string, string> = {
-  listen: "Amplify lived experience",
-  learn: "Build practical resilience",
-  lead: "Guide collaborative action",
+  listen: "Community insight infrastructure",
+  learn: "Relational capacity building",
+  lead: "Cross-sector coordination",
 };
 
 export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSectionProps) {
@@ -26,7 +32,6 @@ export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSect
 
   const activePw = pathways.find((p) => p.id === activeId) ?? null;
 
-  // Sticky mini-nav observer
   useEffect(() => {
     const el = stickyRef.current;
     if (!el) return;
@@ -54,7 +59,6 @@ export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSect
 
   return (
     <>
-      {/* Sticky mini-nav */}
       <AnimatePresence>
         {isSticky && (
           <motion.div
@@ -114,28 +118,21 @@ export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSect
         style={{ backgroundColor: "#FAFAF8" }}
       >
         <div className="max-w-5xl mx-auto px-5 sm:px-8">
-          {/* Section header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, ease }}
             className="text-center mb-14"
           >
-            <h2
-              className="sp-prog-section-title"
-            >
-              Choose a Pathway
-            </h2>
+            <h2 className="sp-prog-section-title">Choose a Pathway</h2>
             <p className="sp-prog-section-subhead mt-3 max-w-lg mx-auto">
-              Each pathway represents how we partner with communities.
-              Select one to preview programs, or view all below.
+              Each pathway plays a distinct role in the feedback loop. Select one to preview
+              programs, or explore the full catalog below.
             </p>
           </motion.div>
 
-          {/* Intersection sentinel for sticky */}
           <div ref={stickyRef} className="h-0" aria-hidden />
 
-          {/* Pathway selector nodes */}
           <div className="flex items-stretch justify-center gap-3 sm:gap-4" role="tablist">
             {pathways.map((pw, i) => {
               const isActive = activeId === pw.id;
@@ -161,7 +158,6 @@ export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSect
                     outlineColor: pw.color,
                   }}
                 >
-                  {/* Glow */}
                   <div
                     className="absolute -inset-2 rounded-3xl pointer-events-none transition-opacity duration-500"
                     style={{
@@ -169,7 +165,6 @@ export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSect
                       opacity: isActive ? 1 : 0,
                     }}
                   />
-                  {/* Node dot */}
                   <div
                     className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center border-2 transition-all duration-300 bg-white"
                     style={{
@@ -199,7 +194,6 @@ export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSect
             })}
           </div>
 
-          {/* Preview panel */}
           <AnimatePresence mode="wait">
             {activePw && (
               <motion.div
@@ -213,7 +207,6 @@ export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSect
                 className="overflow-hidden"
               >
                 <div className="pt-8 sm:pt-10">
-                  {/* Pathway description bar */}
                   <div
                     className="rounded-2xl border p-6 sm:p-8 mb-5"
                     style={{
@@ -250,11 +243,10 @@ export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSect
                     </div>
                   </div>
 
-                  {/* Featured programs (first 3) */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {activePw.programs.slice(0, 3).map((program, idx) => (
                       <motion.button
-                        key={program.title}
+                        key={program.id}
                         type="button"
                         aria-label={`View details for ${program.title}`}
                         initial={{ opacity: 0, y: prefersReduced ? 0 : 10 }}
@@ -264,28 +256,33 @@ export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSect
                         style={{ borderColor: "rgba(0,0,0,0.06)" }}
                         onClick={() => onOpenProgram(activePw, program)}
                       >
-                        {/* Accent stripe */}
                         <div
                           className="sp-prog-accent-stripe"
                           style={{ backgroundColor: activePw.color, opacity: 0.5 }}
                         />
                         <h4
                           className="text-[0.875rem] text-gray-900 mb-1.5"
-                          style={{ fontWeight: 500 }}
+                          style={{ fontWeight: 600 }}
                         >
                           {program.title}
                         </h4>
                         <p className="text-[0.8125rem] text-gray-500 leading-relaxed mb-3 line-clamp-2">
-                          {program.summary}
+                          {program.tagline}
                         </p>
+                        <div className="sp-prog-card-badge-row mb-2.5">
+                          <span className="sp-prog-badge sp-prog-badge-format">{getFormatLabel(program.format)}</span>
+                          <span className={`sp-prog-badge sp-prog-badge-${program.offeringType}`}>
+                            {getOfferingTypeLabel(program.offeringType)}
+                          </span>
+                        </div>
                         <div className="flex flex-wrap gap-1">
-                          {program.audiences.map((t) => (
+                          {program.tags.slice(0, 2).map((tag) => (
                             <span
-                              key={t}
+                              key={`${program.id}-${tag}`}
                               className="text-[0.625rem] px-2 py-0.5 rounded-full text-gray-400"
                               style={{ backgroundColor: "rgba(0,0,0,0.03)" }}
                             >
-                              {t}
+                              {tag}
                             </span>
                           ))}
                         </div>
@@ -297,7 +294,6 @@ export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSect
             )}
           </AnimatePresence>
 
-          {/* Hint when no pathway selected */}
           {!activePw && (
             <motion.p
               initial={{ opacity: 0 }}
