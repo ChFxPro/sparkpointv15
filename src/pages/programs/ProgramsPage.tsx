@@ -4,46 +4,61 @@ import { ProgramsHero } from "./ProgramsHero";
 import { EcosystemSection } from "./EcosystemSection";
 import { AllProgramsSection } from "./AllProgramsSection";
 import { PathwayModal } from "./PathwayModal";
-import type { Pathway } from "./programsData";
+import type { Pathway, Program } from "./programsData";
+import "./programs.css";
 
 export default function ProgramsPage() {
   const [activePathway, setActivePathway] = useState<Pathway | null>(null);
+  const [activeProgram, setActiveProgram] = useState<Program | null>(null);
+
+  const handleOpenPathway = (pathway: Pathway) => {
+    setActiveProgram(null);
+    setActivePathway(pathway);
+  };
+
+  const handleOpenProgram = (pathway: Pathway, program: Program) => {
+    setActiveProgram(program);
+    setActivePathway(pathway);
+  };
+
+  const handleCloseModal = () => {
+    setActiveProgram(null);
+    setActivePathway(null);
+  };
 
   return (
-    <div className="pt-20 lg:pt-24">
+    <div className="sp-programs">
       <ProgramsHero />
 
-      <section id="ecosystem" className="scroll-mt-24">
-        <EcosystemSection onOpenModal={setActivePathway} />
+      <section id="ecosystem" className="sp-scroll-offset">
+        <EcosystemSection
+          onOpenPathway={handleOpenPathway}
+          onOpenProgram={handleOpenProgram}
+        />
       </section>
 
-      <section id="view-all" className="scroll-mt-24">
-        <AllProgramsSection onOpenModal={setActivePathway} />
+      <section id="view-all" className="sp-scroll-offset">
+        <AllProgramsSection onOpenProgram={handleOpenProgram} />
       </section>
 
-      <section id="cta" className="scroll-mt-24 py-16 sm:py-20" style={{ backgroundColor: "#0f1b2d" }}>
+      <section id="cta" className="sp-scroll-offset sp-prog-cta">
         <div className="max-w-5xl mx-auto px-5 sm:px-8 text-center">
-          <h2
-            className="text-[1.75rem] sm:text-[2.25rem] text-white tracking-tight"
-            style={{ fontFamily: "Manrope, sans-serif", fontWeight: 700 }}
-          >
+          <h2 className="sp-prog-cta-title">
             Ready to Build With Us?
           </h2>
-          <p className="mt-4 text-[1rem] leading-relaxed max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.75)" }}>
+          <p className="sp-prog-cta-body">
             Tell us what you are working on, what support you need, and how SparkPoint programs can align.
           </p>
-          <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-3">
+          <div className="sp-prog-cta-actions">
             <Link
               to="/intake?intent=contact"
-              className="px-7 py-3 rounded-xl text-[0.9375rem] text-white transition-all duration-200 hover:brightness-110"
-              style={{ backgroundColor: "#E03694", fontWeight: 500 }}
+              className="sp-prog-cta-button sp-prog-cta-button-primary"
             >
               Talk With Us
             </Link>
             <Link
               to="/get-involved"
-              className="px-7 py-3 rounded-xl text-[0.9375rem] text-white/90 transition-all duration-200 hover:bg-white/10"
-              style={{ border: "1px solid rgba(255,255,255,0.2)", fontWeight: 500 }}
+              className="sp-prog-cta-button sp-prog-cta-button-secondary"
             >
               Get Involved
             </Link>
@@ -51,7 +66,11 @@ export default function ProgramsPage() {
         </div>
       </section>
 
-      <PathwayModal pathway={activePathway} onClose={() => setActivePathway(null)} />
+      <PathwayModal
+        pathway={activePathway}
+        initialProgram={activeProgram}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 }

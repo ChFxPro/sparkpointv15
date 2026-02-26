@@ -1,6 +1,6 @@
 import { useRef, useState, useMemo } from "react";
 import { motion, useInView, useReducedMotion } from "motion/react";
-import { Search, ArrowRight } from "lucide-react";
+import { Search } from "lucide-react";
 import {
   allPrograms,
   pathways,
@@ -10,7 +10,7 @@ import {
 } from "./programsData";
 
 interface AllProgramsSectionProps {
-  onOpenModal: (pathway: Pathway) => void;
+  onOpenProgram: (pathway: Pathway, program: Program) => void;
 }
 
 const pathwayColorMap: Record<string, string> = {
@@ -21,13 +21,25 @@ const pathwayColorMap: Record<string, string> = {
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-function MiniCard({ program }: { program: Program }) {
+function MiniCard({
+  program,
+  onSelect,
+}: {
+  program: Program;
+  onSelect: () => void;
+}) {
   const color = pathwayColorMap[program.pathway];
 
   return (
-    <div className="group bg-white rounded-xl border p-5 transition-all duration-200 hover:shadow-[0_3px_16px_rgba(0,0,0,0.05)] hover:-translate-y-0.5 cursor-pointer relative overflow-hidden" style={{ borderColor: "rgba(0,0,0,0.06)" }}>
+    <button
+      type="button"
+      onClick={onSelect}
+      aria-label={`View details for ${program.title}`}
+      className="sp-prog-card sp-prog-card-button group"
+      style={{ borderColor: "rgba(0,0,0,0.06)" }}
+    >
       <div
-        className="absolute top-0 left-0 right-0 h-[2px]"
+        className="sp-prog-accent-stripe"
         style={{ backgroundColor: color, opacity: 0.4 }}
       />
       <div className="flex items-center gap-1.5 mb-2 mt-0.5">
@@ -56,11 +68,23 @@ function MiniCard({ program }: { program: Program }) {
           </span>
         ))}
       </div>
-    </div>
+      <span
+        className="inline-flex items-center gap-1 text-[0.8125rem] mt-3 transition-colors"
+        style={{ color, fontWeight: 500 }}
+      >
+        <span className="relative">
+          Details
+          <span
+            className="sp-prog-card-underline absolute left-0 w-0 group-hover:w-full transition-all duration-300"
+            style={{ backgroundColor: color }}
+          />
+        </span>
+      </span>
+    </button>
   );
 }
 
-export function AllProgramsSection({ onOpenModal }: AllProgramsSectionProps) {
+export function AllProgramsSection({ onOpenProgram }: AllProgramsSectionProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.08 });
   const prefersReduced = useReducedMotion();
@@ -86,7 +110,7 @@ export function AllProgramsSection({ onOpenModal }: AllProgramsSectionProps) {
   const hasFilters = activePathway || activeAudience || searchQuery.trim();
 
   return (
-    <section id="all-programs" ref={ref} className="py-16 sm:py-20 bg-white">
+    <section id="all-programs" ref={ref} className="sp-scroll-offset py-16 sm:py-20 bg-white">
       <div className="max-w-6xl mx-auto px-5 sm:px-8">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -97,12 +121,11 @@ export function AllProgramsSection({ onOpenModal }: AllProgramsSectionProps) {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
               <h2
-                className="text-[1.375rem] sm:text-[1.5rem] text-gray-900 tracking-tight"
-                style={{ fontFamily: "Manrope, sans-serif", fontWeight: 600 }}
+                className="sp-prog-section-title-sm"
               >
                 All Programs
               </h2>
-              <p className="mt-1 text-[0.875rem] text-gray-500">
+              <p className="sp-prog-muted mt-1">
                 {allPrograms.length} programs across {pathways.length} pathways
               </p>
             </div>
@@ -114,7 +137,7 @@ export function AllProgramsSection({ onOpenModal }: AllProgramsSectionProps) {
                 placeholder="Search…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full sm:w-56 pl-8 pr-3 py-2 rounded-lg text-[0.8125rem] text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300"
+                className="sp-prog-search-input"
                 style={{
                   backgroundColor: "rgba(0,0,0,0.03)",
                   border: "1px solid rgba(0,0,0,0.06)",
@@ -177,9 +200,17 @@ export function AllProgramsSection({ onOpenModal }: AllProgramsSectionProps) {
 
           {/* Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {filtered.map((program) => (
-              <MiniCard key={program.title} program={program} />
-            ))}
+            {filtered.map((program) => {
+              const pathway = pathways.find((pw) => pw.id === program.pathway);
+              if (!pathway) return null;
+              return (
+                <MiniCard
+                  key={program.title}
+                  program={program}
+                  onSelect={() => onOpenProgram(pathway, program)}
+                />
+              );
+            })}
           </div>
 
           {filtered.length === 0 && (

@@ -5,6 +5,7 @@ import type { Pathway, Program } from "./programsData";
 
 interface PathwayModalProps {
   pathway: Pathway | null;
+  initialProgram?: Program | null;
   onClose: () => void;
 }
 
@@ -181,6 +182,8 @@ function ProgramCard({
   const prefersReduced = useReducedMotion();
   return (
     <motion.button
+      type="button"
+      aria-label={`View details for ${program.title}`}
       initial={{ opacity: 0, y: prefersReduced ? 0 : 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
@@ -189,11 +192,11 @@ function ProgramCard({
         ease,
       }}
       onClick={onSelect}
-      className="group text-left rounded-xl border p-5 transition-all duration-200 hover:shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 cursor-pointer relative overflow-hidden w-full"
+      className="sp-prog-card sp-prog-card-button group w-full"
       style={{ borderColor: "rgba(0,0,0,0.06)", backgroundColor: "#FEFEFE" }}
     >
       <div
-        className="absolute top-0 left-0 right-0 h-[2px]"
+        className="sp-prog-accent-stripe"
         style={{ backgroundColor: color, opacity: 0.5 }}
       />
 
@@ -223,30 +226,30 @@ function ProgramCard({
         <span className="relative">
           Details
           <span
-            className="absolute left-0 bottom-[-1px] h-[1px] w-0 group-hover:w-full transition-all duration-300"
+            className="sp-prog-card-underline absolute left-0 w-0 group-hover:w-full transition-all duration-300"
             style={{ backgroundColor: color }}
           />
         </span>
-        <ArrowRight size={12} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+        <ArrowRight size={12} className="sp-prog-card-arrow transition-transform duration-200" />
       </span>
     </motion.button>
   );
 }
 
 /* ─── Main Modal ─── */
-export function PathwayModal({ pathway, onClose }: PathwayModalProps) {
+export function PathwayModal({ pathway, initialProgram = null, onClose }: PathwayModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const prefersReduced = useReducedMotion();
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [activeAudience, setActiveAudience] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Reset state when pathway changes
+  // Reset / preselect state when pathway context changes
   useEffect(() => {
-    setSelectedProgram(null);
+    setSelectedProgram(initialProgram);
     setActiveAudience(null);
     setSearchQuery("");
-  }, [pathway?.id]);
+  }, [pathway?.id, initialProgram]);
 
   // Lock body scroll
   useEffect(() => {
@@ -315,7 +318,7 @@ export function PathwayModal({ pathway, onClose }: PathwayModalProps) {
   return (
     <AnimatePresence>
       {pathway && (
-        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center sm:p-6">
+        <div className="sp-prog-modal-overlay">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -344,7 +347,7 @@ export function PathwayModal({ pathway, onClose }: PathwayModalProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: prefersReduced ? 0 : 24 }}
             transition={{ duration: 0.38, ease }}
-            className="relative w-full sm:w-[85vw] sm:max-w-[1400px] max-h-[94vh] sm:max-h-[85vh] overflow-hidden flex rounded-t-[22px] sm:rounded-[22px]"
+            className="sp-prog-modal"
             style={{
               backgroundColor: "#FAFAF8",
               boxShadow: "0 24px 80px rgba(0,0,0,0.12), 0 8px 32px rgba(0,0,0,0.06)",
@@ -355,11 +358,7 @@ export function PathwayModal({ pathway, onClose }: PathwayModalProps) {
           >
             {/* Main list panel */}
             <div
-              className={`flex flex-col transition-all duration-300 overflow-hidden ${
-                selectedProgram
-                  ? "hidden sm:flex sm:w-[45%] sm:min-w-[340px]"
-                  : "w-full"
-              }`}
+              className={`sp-prog-modal-main${selectedProgram ? " sp-prog-modal-main--with-detail" : ""}`}
             >
               {/* Header */}
               <div className="relative px-7 sm:px-8 pt-8 pb-5 flex-shrink-0">
@@ -390,15 +389,15 @@ export function PathwayModal({ pathway, onClose }: PathwayModalProps) {
                   </div>
                   <button
                     onClick={onClose}
-                    className="p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100/80 transition-all cursor-pointer flex-shrink-0"
+                    className="p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-all cursor-pointer flex-shrink-0"
                     aria-label="Close modal"
                   >
                     <X size={20} />
                   </button>
                 </div>
                 <div
-                  className="mt-5 h-[1px] rounded-full"
-                  style={{ background: `linear-gradient(90deg, ${pathway.color}25, transparent)` }}
+                  className="mt-5 rounded-full"
+                  style={{ height: 1, background: `linear-gradient(90deg, ${pathway.color}25, transparent)` }}
                 />
               </div>
 
@@ -413,12 +412,10 @@ export function PathwayModal({ pathway, onClose }: PathwayModalProps) {
                       placeholder="Search programs…"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full sm:w-52 pl-8 pr-3 py-2 rounded-lg text-[0.8125rem] text-gray-700 placeholder-gray-400 transition-all duration-200 focus:outline-none focus:ring-2"
+                      className="sp-prog-search-input"
                       style={{
                         backgroundColor: "rgba(0,0,0,0.03)",
                         border: "1px solid rgba(0,0,0,0.06)",
-                        // @ts-ignore
-                        "--tw-ring-color": `${pathway.color}40`,
                       }}
                     />
                   </div>
@@ -522,7 +519,7 @@ export function PathwayModal({ pathway, onClose }: PathwayModalProps) {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: prefersReduced ? 0.15 : 0.3, ease }}
-                  className="w-full sm:w-[55%] sm:border-l overflow-hidden flex-shrink-0 h-full"
+                  className="sp-prog-modal-detail"
                   style={{
                     borderColor: "rgba(0,0,0,0.05)",
                     backgroundColor: "#FAFAF8",

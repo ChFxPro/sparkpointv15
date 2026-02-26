@@ -1,10 +1,11 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence, useInView, useReducedMotion } from "motion/react";
 import { ArrowRight } from "lucide-react";
-import { pathways, type Pathway } from "./programsData";
+import { pathways, type Pathway, type Program } from "./programsData";
 
 interface EcosystemSectionProps {
-  onOpenModal: (pathway: Pathway) => void;
+  onOpenPathway: (pathway: Pathway) => void;
+  onOpenProgram: (pathway: Pathway, program: Program) => void;
 }
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -15,7 +16,7 @@ const microcopy: Record<string, string> = {
   lead: "Guide collaborative action",
 };
 
-export function EcosystemSection({ onOpenModal }: EcosystemSectionProps) {
+export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.15 });
   const prefersReduced = useReducedMotion();
@@ -61,7 +62,7 @@ export function EcosystemSection({ onOpenModal }: EcosystemSectionProps) {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -48, opacity: 0 }}
             transition={{ duration: prefersReduced ? 0.1 : 0.3, ease }}
-            className="fixed top-[64px] sm:top-[80px] left-0 right-0 z-40 hidden md:block"
+            className="sp-prog-sticky-nav fixed left-0 right-0 z-40 hidden md:block"
             style={{
               backgroundColor: "rgba(255,255,255,0.92)",
               backdropFilter: "blur(12px)",
@@ -109,7 +110,7 @@ export function EcosystemSection({ onOpenModal }: EcosystemSectionProps) {
       <section
         id="pathway-hub"
         ref={sectionRef}
-        className="py-20 sm:py-24"
+        className="sp-scroll-offset py-20 sm:py-24"
         style={{ backgroundColor: "#FAFAF8" }}
       >
         <div className="max-w-5xl mx-auto px-5 sm:px-8">
@@ -121,12 +122,11 @@ export function EcosystemSection({ onOpenModal }: EcosystemSectionProps) {
             className="text-center mb-14"
           >
             <h2
-              className="text-[1.625rem] sm:text-[2rem] text-gray-900 tracking-tight"
-              style={{ fontFamily: "Manrope, sans-serif", fontWeight: 600 }}
+              className="sp-prog-section-title"
             >
               Choose a Pathway
             </h2>
-            <p className="mt-3 text-[0.9375rem] sm:text-[1rem] text-gray-500 leading-relaxed max-w-lg mx-auto">
+            <p className="sp-prog-section-subhead mt-3 max-w-lg mx-auto">
               Each pathway represents how we partner with communities.
               Select one to preview programs, or view all below.
             </p>
@@ -151,7 +151,7 @@ export function EcosystemSection({ onOpenModal }: EcosystemSectionProps) {
                   transition={{ duration: 0.45, delay: 0.15 + i * 0.1, ease }}
                   onClick={() => handleSelect(pw.id)}
                   onKeyDown={(e) => handleKeyDown(e, pw.id)}
-                  className="group flex-1 max-w-[220px] flex flex-col items-center p-5 sm:p-6 rounded-2xl border-2 transition-all duration-300 cursor-pointer relative focus-visible:outline-2 focus-visible:outline-offset-2"
+                  className="sp-prog-node group flex-1 flex flex-col items-center p-5 sm:p-6 rounded-2xl border-2 transition-all duration-300 cursor-pointer relative"
                   style={{
                     borderColor: isActive ? pw.color : "rgba(0,0,0,0.06)",
                     backgroundColor: isActive ? `${pw.color}06` : "white",
@@ -240,7 +240,7 @@ export function EcosystemSection({ onOpenModal }: EcosystemSectionProps) {
                         </p>
                       </div>
                       <button
-                        onClick={() => onOpenModal(activePw)}
+                        onClick={() => onOpenPathway(activePw)}
                         className="self-start sm:self-center px-5 py-2.5 rounded-xl text-[0.8125rem] text-white transition-all duration-200 hover:brightness-110 cursor-pointer flex items-center gap-2 flex-shrink-0"
                         style={{ backgroundColor: activePw.color, fontWeight: 500 }}
                       >
@@ -253,18 +253,20 @@ export function EcosystemSection({ onOpenModal }: EcosystemSectionProps) {
                   {/* Featured programs (first 3) */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     {activePw.programs.slice(0, 3).map((program, idx) => (
-                      <motion.div
+                      <motion.button
                         key={program.title}
+                        type="button"
+                        aria-label={`View details for ${program.title}`}
                         initial={{ opacity: 0, y: prefersReduced ? 0 : 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: prefersReduced ? 0 : 0.08 + idx * 0.06, ease }}
-                        className="group bg-white rounded-xl border p-5 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 cursor-pointer relative overflow-hidden"
+                        className="sp-prog-card sp-prog-card-button group"
                         style={{ borderColor: "rgba(0,0,0,0.06)" }}
-                        onClick={() => onOpenModal(activePw)}
+                        onClick={() => onOpenProgram(activePw, program)}
                       >
                         {/* Accent stripe */}
                         <div
-                          className="absolute top-0 left-0 right-0 h-[2px]"
+                          className="sp-prog-accent-stripe"
                           style={{ backgroundColor: activePw.color, opacity: 0.5 }}
                         />
                         <h4
@@ -287,7 +289,7 @@ export function EcosystemSection({ onOpenModal }: EcosystemSectionProps) {
                             </span>
                           ))}
                         </div>
-                      </motion.div>
+                      </motion.button>
                     ))}
                   </div>
                 </div>
@@ -301,7 +303,7 @@ export function EcosystemSection({ onOpenModal }: EcosystemSectionProps) {
               initial={{ opacity: 0 }}
               animate={isInView ? { opacity: 1 } : { opacity: 0 }}
               transition={{ duration: 0.5, delay: 0.7 }}
-              className="mt-10 text-center text-[0.8125rem] text-gray-400"
+              className="sp-prog-muted mt-10 text-center"
             >
               Select a pathway above to preview programs
             </motion.p>
