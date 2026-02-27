@@ -8,19 +8,17 @@ import { Card } from '../components/ui/card';
 import { useNavigate } from 'react-router';
 import { STORIES_DATA } from '../data/stories';
 import heroImage from 'figma:asset/b7ea59b58a471ceacde60e41e5e3cd69fe78c66f.png';
-import imgPoster from "figma:asset/e3f8a2b021eb0d337580338dd10e709a1762494c.png";
 import { BehindTheStories } from '../components/BehindTheStories';
-import { Tabs, TabsList, TabsTrigger } from '../components/ui/tabs';
 
 export function StoriesPage() {
   const navigate = useNavigate();
 
-  // Sort data to ensure Echoes is first for mobile order and grid spanning
-  const sortedCategories = [...STORIES_DATA].sort((a, b) => {
-    if (a.id === 'community-voice') return -1;
-    if (b.id === 'community-voice') return 1;
-    return 0;
-  });
+  const echoesCategory = STORIES_DATA.find((category) => category.id === 'community-voice');
+  const heleneCategory = STORIES_DATA.find((category) => category.id === 'disaster-recovery');
+  const heleneFeaturedArticle = heleneCategory?.articles.find((article) => article.slug === 'helene-one-year') ?? heleneCategory?.articles[0];
+  const sortedCategories = STORIES_DATA.filter(
+    (category) => !['community-voice', 'disaster-recovery'].includes(category.id)
+  );
 
   return (
     <div className="min-h-screen bg-[#FDFDFD]">
@@ -76,21 +74,99 @@ export function StoriesPage() {
         </div>
       </section>
 
-      {/* Top Tabs */}
-      <section className="px-6 pb-8">
-        <div className="max-w-3xl mx-auto flex justify-center">
-          <Tabs
-            value="stories"
-            onValueChange={(value) => {
-              if (value === 'programs') navigate('/programs');
-            }}
-            className="w-full max-w-sm"
-          >
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="stories">Stories</TabsTrigger>
-              <TabsTrigger value="programs">Programs</TabsTrigger>
-            </TabsList>
-          </Tabs>
+      {/* Featured Stories */}
+      <section className="px-6 pb-12 md:pb-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-6 text-center">
+            <p className="inline-flex items-center px-3 py-1 rounded-full bg-[#E03694]/10 text-[#E03694] text-xs font-bold uppercase tracking-[0.2em]">
+              Featured Stories
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+            <Card
+              className="h-full overflow-hidden border-0 shadow-md bg-white cursor-pointer transition-all duration-500 hover:shadow-xl hover:translate-y-[-2px]"
+              onClick={() => navigate('/stories/community-voice')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  navigate('/stories/community-voice');
+                }
+              }}
+            >
+              <div className="relative h-72 md:h-80 overflow-hidden">
+                <img
+                  src={echoesCategory?.image ?? heroImage}
+                  alt={echoesCategory?.title ?? 'Echoes from the Community'}
+                  className="w-full h-full object-cover transition-transform duration-1000 ease-out hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black/5 hover:bg-transparent transition-colors duration-500" />
+              </div>
+
+              <div className="p-6 md:p-8">
+                <p className="text-[#E03694] font-medium mb-3 text-sm tracking-wide uppercase">
+                  Featured Series
+                </p>
+                <h2 className="mb-4 font-bold text-gray-900 text-3xl leading-tight">
+                  {echoesCategory?.title ?? 'Echoes from the Community'}
+                </h2>
+                <p className="text-gray-600 text-lg leading-relaxed mb-8">
+                  {echoesCategory?.description}
+                </p>
+                <div className="pt-4 border-t border-gray-100">
+                  <span className="flex items-center text-[#E03694] text-sm font-bold tracking-wide">
+                    View Series <ArrowRight size={16} className="ml-2" />
+                  </span>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="h-full border-0 shadow-md bg-white flex flex-col p-6 md:p-8">
+              <p className="text-[#E03694] font-medium mb-3 text-sm tracking-wide uppercase">
+                Featured Film
+              </p>
+              <h2 className="mb-4 font-bold text-gray-900 text-3xl leading-tight">
+                Helene: One Year of Healing
+              </h2>
+              <p className="text-gray-600 text-lg leading-relaxed mb-6">
+                {heleneFeaturedArticle?.subhead}
+              </p>
+
+              <div className="mt-auto">
+                {heleneFeaturedArticle?.videoUrl ? (
+                  <div className="rounded-xl overflow-hidden border border-gray-100 shadow-sm mb-6">
+                    <iframe
+                      src={heleneFeaturedArticle.videoUrl}
+                      title="Helene: One Year of Healing tribute video"
+                      aria-label="Helene: One Year of Healing tribute video"
+                      className="w-full aspect-video"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      allowFullScreen
+                    />
+                  </div>
+                ) : (
+                  <div className="rounded-xl overflow-hidden border border-gray-100 shadow-sm mb-6">
+                    <img
+                      src={heleneCategory?.image ?? heroImage}
+                      alt="Helene: One Year of Healing"
+                      className="w-full aspect-video object-cover"
+                    />
+                  </div>
+                )}
+
+                <Button
+                  variant="outline"
+                  className="w-full md:w-auto"
+                  onClick={() => navigate('/stories/disaster-recovery/helene-one-year')}
+                >
+                  Open Tribute Story
+                </Button>
+              </div>
+            </Card>
+          </div>
         </div>
       </section>
 
@@ -117,69 +193,42 @@ export function StoriesPage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             {sortedCategories.map((category, index) => {
-              const isEchoes = category.id === 'community-voice';
-              
-              // Override for Volunteer Impact to feature Helene Story
-              let title = category.title;
-              let description = category.description;
-              let image = category.image;
-              
-              if (category.id === 'volunteer-impact') {
-                title = "Helene: One Year of Healing";
-                description = "A community tribute film created from more than 140 voices across Transylvania County.";
-                image = imgPoster;
-              }
-
               return (
                 <motion.div
                   key={category.id}
-                  className={`${isEchoes ? 'md:col-span-2' : ''} h-full`}
+                  className="h-full"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-50px' }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
                   <Card 
-                    className={`h-full overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-xl hover:translate-y-[-2px] flex flex-col border-0 shadow-md ${isEchoes ? 'bg-white' : 'bg-white'}`}
+                    className="h-full overflow-hidden cursor-pointer transition-all duration-500 hover:shadow-xl hover:translate-y-[-2px] flex flex-col border-0 shadow-md bg-white"
                     onClick={() => navigate(`/stories/${category.id}`)}
                   >
-                    <div className={`relative ${isEchoes ? '' : 'h-64'} overflow-hidden`}>
+                    <div className="relative h-64 overflow-hidden">
                       <img
-                        src={image}
-                        alt={title}
-                        className={`w-full ${isEchoes ? 'h-auto' : 'h-full object-cover'} transition-transform duration-1000 ease-out hover:scale-105`}
+                        src={category.image}
+                        alt={category.title}
+                        className="w-full h-full object-cover transition-transform duration-1000 ease-out hover:scale-105"
                       />
                       {/* Optional overlay for text readability if needed, but keeping it clean for now */}
                       <div className="absolute inset-0 bg-black/5 hover:bg-transparent transition-colors duration-500" />
-                      
-                      {isEchoes && (
-                         <div className="absolute top-6 left-6 md:top-8 md:left-8">
-                            <span className="inline-block px-3 py-1 bg-white/95 backdrop-blur text-[#E03694] text-xs font-bold uppercase tracking-widest rounded-md shadow-sm">
-                              Featured Series
-                            </span>
-                         </div>
-                      )}
                     </div>
                     
-                    <div className={`${isEchoes ? 'p-6 md:p-12' : 'p-6 md:p-8'} flex flex-col flex-grow`}>
-                      {isEchoes && (
-                        <p className="text-[#E03694] font-medium mb-3 text-sm tracking-wide uppercase">
-                          A living weekly series from across the county
-                        </p>
-                      )}
-                      
+                    <div className="p-6 md:p-8 flex flex-col flex-grow">
                       <h3
                         className="mb-4 font-bold text-gray-900"
-                        style={{ fontSize: isEchoes ? 'clamp(1.5rem, 4vw, 2rem)' : '1.5rem', lineHeight: '1.2' }}
+                        style={{ fontSize: '1.5rem', lineHeight: '1.2' }}
                       >
-                        {title}
+                        {category.title}
                       </h3>
                       
                       <p
                         className="flex-grow mb-8 text-gray-600"
-                        style={{ fontSize: isEchoes ? '1.125rem' : '1rem', lineHeight: '1.6' }}
+                        style={{ fontSize: '1rem', lineHeight: '1.6' }}
                       >
-                        {description}
+                        {category.description}
                       </p>
                       
                       <div className="mt-auto pt-4 border-t border-gray-100">

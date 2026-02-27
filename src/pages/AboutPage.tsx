@@ -82,24 +82,24 @@ import {
 } from "../components/ui/dialog";
 
 const blueZonesPhase = {
-  phaseLabel: 'Foundational Phase',
+  phaseLabel: 'Groundwork Phase',
   years: '2019–2022',
   title: 'Blue Zones Project – Brevard',
-  subtitle: 'Foundational community health initiative',
+  subtitle: '2019 groundwork that informed SparkPoint’s countywide launch',
   achievements: [
     'Community listening and engagement',
     'Cross-sector partnerships formed',
     'Brevard certified as a Blue Zones Community'
   ],
-  legalStatus: '501(c)(3) status established (2020)'
+  legalStatus: 'SparkPoint established as a 501(c)(3) in 2020'
 };
 
 const timeline = [
   { 
-    year: '2023', 
-    milestone: 'SparkPoint Founded', 
-    description: 'A countywide nonprofit built to support connection and collaboration',
-    achievements: ['Founding board assembled', 'Initial partnerships formed', 'Organizational launch'],
+    year: '2020', 
+    milestone: 'SparkPoint Established', 
+    description: 'Building on 2019 Blue Zones groundwork, SparkPoint was established in 2020 to strengthen connection and collaboration countywide.',
+    achievements: ['501(c)(3) status established', 'Founding board assembled', 'Countywide launch planning'],
     gallery: [
       { src: sparkPointLaunchImage, caption: 'Launch celebration', rotation: -3 },
       { src: launchSocialImage, caption: 'Community gathering', rotation: 2 },
@@ -484,7 +484,7 @@ export function AboutPage() {
               <div className="space-y-8 pl-0 md:pl-0 max-w-3xl">
                 <p className="text-lg md:text-xl text-gray-300 leading-loose font-light">
                   Across Transylvania County and Western North Carolina, people and organizations are doing meaningful work every day. 
-                  What’s often missing is not care or effort, but the <span className="text-white font-medium">connective structure</span> that allows community voice to surface, 
+                  What’s often missing is not care or effort, but a <span className="text-white font-medium">deeper sense of belonging</span> that allows community voice to surface, 
                   resources to be shared openly, and collaboration to happen across sectors and geography.
                 </p>
                 <p className="text-lg md:text-xl text-gray-300 font-light leading-loose">
@@ -507,19 +507,42 @@ export function AboutPage() {
                 <p className="leading-loose text-gray-300/90">
                   SparkPoint grew out of a powerful insight surfaced during the Blue Zones Project in Brevard. 
                   That initiative brought residents and leaders together to understand what supports long-term health. 
-                  While the process successfully certified Brevard as a Blue Zones Community, its most lasting impact wasn’t the designation itself.
+                  While the process successfully certified Brevard as a Blue Zones Community, its most lasting impact was how it brought people together around shared well-being.
                 </p>
 
                 <p className="leading-loose text-gray-300/90">
-                  It was the realization that well-being requires more than temporary programs. 
-                  The work revealed a deep desire for connection that extended far beyond city limits — and a clear need for a way to sustain that connection over time.
+                  Groundwork began in 2019 through Blue Zones activity, and SparkPoint was established in 2020 to carry that momentum forward countywide. 
+                  The heart was always present; what many residents still needed was a deeper sense of belonging that could be sustained over time.
                 </p>
+
+                <div className="rounded-2xl border border-[#0057B8]/30 bg-[#0057B8]/10 p-6 md:p-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-[160px_1fr] gap-6 items-center">
+                    <div className="w-full max-w-[180px] aspect-square rounded-xl overflow-hidden border border-white/15 shadow-lg">
+                      <img
+                        src={blueZonesImage}
+                        alt="Blue Zones Project Community certification seal displayed during Brevard recognition"
+                        className="w-full h-full object-cover object-[50%_84%]"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-200 mb-2">
+                        Blue Zones Certification
+                      </p>
+                      <p className="text-white text-lg leading-relaxed mb-2">
+                        Brevard’s Blue Zones Community certification is a nationally recognized designation for long-term community well-being.
+                      </p>
+                      <p className="text-blue-100/80 text-sm">
+                        SparkPoint’s early direction was shaped through this work and carried forward after establishment in 2020.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Part 4: The Insight (Structural Gap) */}
               <div className="my-24 py-4">
                 <p className="text-2xl md:text-4xl text-white font-medium leading-tight max-w-3xl">
-                  What was missing wasn’t effort or care — it was <span className="italic">shared structure</span>.
+                  What was missing wasn’t effort or care — it was a deeper sense of belonging.
                 </p>
               </div>
               
@@ -528,11 +551,11 @@ export function AboutPage() {
                  <div className="space-y-8 mb-16 max-w-2xl">
                     <p className="leading-loose text-gray-300/90">
                       Listening sessions across the county confirmed a consistent pattern. 
-                      Nonprofits, healthcare providers, schools, and neighbors were all working hard, but often in isolation. 
-                      Without a shared backbone to coordinate efforts, collaboration relied on goodwill rather than reliable infrastructure.
+                      Nonprofits, healthcare providers, schools, and neighbors were all working hard, but many residents still felt on the edges of support and decision-making. 
+                      Collaboration often depended on goodwill rather than dependable, shared coordination.
                     </p>
                     <p className="leading-loose text-gray-300/90">
-                      SparkPoint was built to fill that gap. We were shaped by community partners who wanted a durable way to work together — not just for a project, but for the long haul.
+                      SparkPoint was built to close that gap. We were shaped by community partners who wanted both durable coordination and a stronger sense of belonging — not just for a project, but for the long haul.
                     </p>
                  </div>
 
@@ -592,7 +615,7 @@ export function AboutPage() {
             <span className="text-[#E03694] font-bold tracking-wider text-sm uppercase mb-3 block">Our Journey</span>
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Milestones of Impact</h2>
             <p className="text-gray-400 max-w-2xl mx-auto sp-text-lg">
-              From the foundational Blue Zones work to our current regional role, every step has been guided by community need.
+              From 2019 Blue Zones groundwork to SparkPoint’s establishment in 2020 and today’s regional role, every step has been guided by community need.
             </p>
           </motion.div>
 
@@ -627,6 +650,9 @@ export function AboutPage() {
                          <div className="inline-block px-3 py-1 bg-[#0057B8]/20 border border-[#0057B8]/30 rounded-full text-xs font-bold text-blue-200 mb-4 tracking-wide">
                             {blueZonesPhase.phaseLabel}
                          </div>
+                         <p className="text-blue-200/80 text-sm font-medium tracking-wide mb-3">
+                            {blueZonesPhase.years}
+                         </p>
                          <h3 className="text-2xl md:text-4xl font-bold text-white mb-4">
                             {blueZonesPhase.title}
                          </h3>
