@@ -114,8 +114,8 @@ function ProgramDetail({
           >
             {program.title}
           </h3>
-          <p className="sp-prog-detail-tagline">{program.tagline}</p>
-          <p className="sp-prog-detail-text">{program.overview}</p>
+          <p className="sp-prog-detail-tagline">{program.shortDescription}</p>
+          <p className="sp-prog-detail-text">{program.longDescription}</p>
           {program.whyItExists && <p className="sp-prog-detail-why">{program.whyItExists}</p>}
 
           <div className="sp-prog-card-badge-row mt-4">
@@ -226,7 +226,7 @@ function ProgramCard({
         {program.title}
       </h4>
       <p className="text-[0.8125rem] text-gray-500 leading-[1.65] mb-3">
-        {program.tagline}
+        {program.shortDescription}
       </p>
 
       <div className="sp-prog-card-badge-row mb-3">
@@ -373,8 +373,8 @@ export function PathwayModal({
       programs = programs.filter(
         (program) =>
           program.title.toLowerCase().includes(query) ||
-          program.tagline.toLowerCase().includes(query) ||
-          program.overview.toLowerCase().includes(query)
+          program.shortDescription.toLowerCase().includes(query) ||
+          program.longDescription.toLowerCase().includes(query)
       );
     }
     return programs;

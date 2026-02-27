@@ -4,10 +4,8 @@ import { pathways } from "./programsData";
 import { ArrowDown, ChevronRight } from "lucide-react";
 
 const ease = [0.22, 1, 0.36, 1] as const;
-const DONATE_URL = "https://www.yoursparkpoint.org/donations";
-const PARTNER_ROUTE = "/intake?intent=partner";
 
-type AudienceSegment = "community" | "volunteer" | "supporter";
+type AudienceSegment = "community" | "volunteer" | "partner";
 
 interface ProgramsHeroProps {
   audienceSegment: AudienceSegment;
@@ -20,17 +18,17 @@ const segmentOptions: Array<{ id: AudienceSegment; label: string; hint: string }
   {
     id: "community",
     label: "Community",
-    hint: "Find connection, support, and trusted pathways.",
+    hint: "Find programs built with neighbors - for connection, resilience, and shared well-being.",
   },
   {
     id: "volunteer",
     label: "Volunteer",
-    hint: "Show up where your care can make a direct difference.",
+    hint: "Join the work. Help create belonging, strengthen networks, and support community resilience.",
   },
   {
-    id: "supporter",
-    label: "Supporter",
-    hint: "Support local resilience through giving and shared advocacy.",
+    id: "partner",
+    label: "Partner",
+    hint: "Representing a school, nonprofit, or agency? Build a shared initiative with us.",
   },
 ];
 
@@ -75,7 +73,7 @@ export function ProgramsHero({
               className="sp-prog-subhead"
             >
               One community feedback loop: neighbors find support and voice,
-              volunteers turn care into action, and supporters sustain
+              volunteers turn care into action, and partners help scale
               resilience that keeps compounding.
             </motion.p>
 
@@ -125,43 +123,19 @@ export function ProgramsHero({
               transition={{ duration: 0.5, ease, delay: 0.5 }}
               className="sp-prog-hero-actions flex flex-col sm:flex-row items-center lg:items-start gap-3"
             >
-              {audienceSegment === "supporter" ? (
-                <a
-                  href={DONATE_URL}
-                  className="sp-prog-cta-button sp-prog-cta-button-primary"
-                  style={{ backgroundColor: "#E03694", fontWeight: 500 }}
-                >
-                  Donate Now
-                </a>
-              ) : (
-                <button
-                  onClick={scrollToExplore}
-                  className="sp-prog-cta-button sp-prog-cta-button-primary"
-                  style={{ backgroundColor: "#E03694", fontWeight: 500 }}
-                >
-                  Explore Programs
-                </button>
-              )}
+              <button
+                onClick={scrollToExplore}
+                className="sp-prog-cta-button sp-prog-cta-button-primary"
+                style={{ backgroundColor: "#E03694", fontWeight: 500 }}
+              >
+                Explore Programs
+              </button>
               <Link
                 to={secondaryCtaHref}
                 className="sp-prog-cta-button sp-prog-cta-button-secondary"
                 style={{ fontWeight: 500 }}
               >
                 {secondaryCtaLabel}
-              </Link>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease, delay: 0.58 }}
-              className="sp-prog-partner-cta"
-            >
-              <p className="sp-prog-partner-copy">
-                Representing a school, nonprofit, or agency? Build a shared initiative with us.
-              </p>
-              <Link to={PARTNER_ROUTE} className="sp-prog-cta-button sp-prog-cta-button-secondary sp-prog-partner-button">
-                Partner With Us
               </Link>
             </motion.div>
 
@@ -174,7 +148,7 @@ export function ProgramsHero({
               className="sp-prog-hero-micro inline-flex items-center gap-1.5 cursor-pointer group"
               style={{ fontWeight: 400 }}
             >
-              Community member, volunteer, or supporter?
+              Community member, volunteer, or partner?
               <span className="inline-flex items-center gap-0.5" style={{ color: "#E03694", fontWeight: 500 }}>
                 Start where you are
                 <ChevronRight size={13} className="sp-prog-chevron transition-transform" />

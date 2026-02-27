@@ -63,7 +63,7 @@ function MiniCard({
         {program.title}
       </h4>
       <p className="text-[0.8125rem] text-gray-500 leading-relaxed mb-2.5 line-clamp-2">
-        {program.tagline}
+        {program.shortDescription}
       </p>
 
       <div className="sp-prog-card-badge-row mb-2.5">
@@ -130,8 +130,8 @@ export function AllProgramsSection({
       progs = progs.filter(
         (p) =>
           p.title.toLowerCase().includes(q) ||
-          p.tagline.toLowerCase().includes(q) ||
-          p.overview.toLowerCase().includes(q)
+          p.shortDescription.toLowerCase().includes(q) ||
+          p.longDescription.toLowerCase().includes(q)
       );
     }
     return progs;

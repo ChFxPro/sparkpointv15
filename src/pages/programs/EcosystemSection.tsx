@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { motion, AnimatePresence, useInView, useReducedMotion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import {
@@ -27,21 +27,8 @@ export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSect
   const isInView = useInView(sectionRef, { once: true, amount: 0.15 });
   const prefersReduced = useReducedMotion();
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [isSticky, setIsSticky] = useState(false);
-  const stickyRef = useRef<HTMLDivElement>(null);
 
   const activePw = pathways.find((p) => p.id === activeId) ?? null;
-
-  useEffect(() => {
-    const el = stickyRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsSticky(!entry.isIntersecting),
-      { threshold: 0, rootMargin: "-72px 0px 0px 0px" }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
 
   const handleSelect = useCallback((id: string) => {
     setActiveId((prev) => (prev === id ? null : id));
@@ -59,58 +46,6 @@ export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSect
 
   return (
     <>
-      <AnimatePresence>
-        {isSticky && (
-          <motion.div
-            initial={{ y: -48, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -48, opacity: 0 }}
-            transition={{ duration: prefersReduced ? 0.1 : 0.3, ease }}
-            className="sp-prog-sticky-nav fixed left-0 right-0 z-40 hidden md:block"
-            style={{
-              backgroundColor: "rgba(255,255,255,0.92)",
-              backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
-              borderBottom: "1px solid rgba(0,0,0,0.05)",
-            }}
-          >
-            <div className="max-w-6xl mx-auto px-8 flex items-center justify-center gap-1 h-12">
-              {pathways.map((pw) => (
-                <button
-                  key={pw.id}
-                  onClick={() => handleSelect(pw.id)}
-                  className={`px-4 py-1.5 rounded-lg text-[0.8125rem] transition-all duration-200 cursor-pointer ${
-                    activeId === pw.id ? "text-gray-900" : "text-gray-500 hover:text-gray-700"
-                  }`}
-                  style={{
-                    fontWeight: activeId === pw.id ? 600 : 500,
-                    backgroundColor: activeId === pw.id ? `${pw.color}10` : "transparent",
-                  }}
-                >
-                  <span className="flex items-center gap-1.5">
-                    <span
-                      className="w-2 h-2 rounded-full"
-                      style={{ backgroundColor: pw.color }}
-                    />
-                    {pw.label}
-                  </span>
-                </button>
-              ))}
-              <span className="w-px h-5 mx-2" style={{ backgroundColor: "rgba(0,0,0,0.08)" }} />
-              <button
-                onClick={() => {
-                  document.getElementById("all-programs")?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="px-3 py-1.5 rounded-lg text-[0.8125rem] text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
-                style={{ fontWeight: 500 }}
-              >
-                View All
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       <section
         id="pathway-hub"
         ref={sectionRef}
@@ -130,8 +65,6 @@ export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSect
               programs, or explore the full catalog below.
             </p>
           </motion.div>
-
-          <div ref={stickyRef} className="h-0" aria-hidden />
 
           <div className="flex items-stretch justify-center gap-3 sm:gap-4" role="tablist">
             {pathways.map((pw, i) => {
@@ -267,7 +200,7 @@ export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSect
                           {program.title}
                         </h4>
                         <p className="text-[0.8125rem] text-gray-500 leading-relaxed mb-3 line-clamp-2">
-                          {program.tagline}
+                          {program.shortDescription}
                         </p>
                         <div className="sp-prog-card-badge-row mb-2.5">
                           <span className="sp-prog-badge sp-prog-badge-format">{getFormatLabel(program.format)}</span>

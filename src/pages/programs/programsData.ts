@@ -21,16 +21,15 @@ export interface Program {
   slug: string;
   title: string;
   pathway: PathwayId;
-  tagline: string;
-  overview: string;
-  whyItExists?: string;
+  shortDescription: string;
+  longDescription: string;
+  tags: string[];
   whoItsFor: string[];
   whatYoullExperience: string[];
   outcomes: string[];
   idealPartners: string[];
   format: ProgramFormat;
   offeringType: OfferingType;
-  tags: string[];
   contactCTA: {
     label: string;
     href: string;
@@ -63,132 +62,117 @@ const listenPrograms: Program[] = [
     id: "echoes-from-the-community",
     title: "Echoes from the Community",
     pathway: "listen",
-    tagline: "Bi-weekly storytelling column amplifying local voices and shared insight.",
-    overview:
-      "A recurring column in print and online that shares themes emerging from community conversations, youth storytelling, and listening projects. Each release translates local voice into clear public insight.",
-    whyItExists:
-      "Communities need their lived experience reflected back in ways that reduce stigma and surface shared patterns.",
-    whoItsFor: ["Community members", "Partners", "Educators", "Residents"],
+    shortDescription:
+      "A bi-weekly column sharing what SparkPoint is hearing across community conversations and story projects.",
+    longDescription:
+      "Echoes from the Community runs in print and online, lifting local voices and connecting relationships, community conditions, and health. It translates ongoing story collection into practical insight people can use.",
+    tags: ["Community", "Individuals", "Educators"],
+    whoItsFor: ["Community members", "Individuals", "Educators"],
     whatYoullExperience: [
-      "Story highlights grounded in local experience",
-      "Thematic summaries that connect patterns across voices",
-      "Public reflection prompts that invite continued conversation",
+      "Local stories from residents and partners",
+      "Practical insights tied to real community conditions",
+      "Reflections that inform individual and collective action",
     ],
     outcomes: [
-      "Increased awareness of local needs and strengths",
-      "Reduced stigma around emotional and social health",
-      "Shared understanding that informs next-step action",
+      "Shared understanding of local realities",
+      "More informed community dialogue",
+      "Stronger connection between lived experience and action",
     ],
-    idealPartners: [
-      "Local media outlets",
-      "Schools and youth storytelling groups",
-      "Community organizations gathering resident insight",
-    ],
+    idealPartners: ["Local media", "Storytellers", "Schools", "Community organizations"],
     format: {
       type: "ongoing",
-      cadence: "Bi-weekly column",
+      cadence: "Bi-weekly",
     },
     offeringType: "community",
-    tags: ["Community", "Residents", "Educators", "Partners"],
     contactCTA: defaultContactCTA,
   }),
   createProgram({
     id: "story-collection-projects",
     title: "Story Collection Projects",
     pathway: "listen",
-    tagline: "Community listening projects that guide real decisions.",
-    overview:
-      "Targeted listening initiatives gather stories around issues shaping local well-being, including youth mental health, food access, and recovery. Findings are synthesized into practical guidance for program and funding decisions.",
-    whyItExists:
-      "Programs and funding should be guided by lived experience, not assumptions.",
-    whoItsFor: ["Community residents", "Youth", "Program teams", "Funders"],
+    shortDescription:
+      "Targeted story gathering around topics shaping community well-being and recovery.",
+    longDescription:
+      "These projects gather stories through interviews, written prompts, and youth-led activities on issues like youth mental health, food access, and recovery after Helene. SparkPoint synthesizes themes to guide programs and partnerships.",
+    tags: ["Community", "Individuals", "Partners", "Youth"],
+    whoItsFor: ["Community members", "Individuals", "Partners", "Youth"],
     whatYoullExperience: [
-      "One-on-one interviews with community members",
-      "Facilitated group conversations",
-      "Youth-led story prompts and documentation",
+      "Story prompts and interviews",
+      "Community listening sessions",
+      "Theme synthesis and insight sharing",
     ],
     outcomes: [
-      "Clear summary reports",
-      "Strengths and needs mapping",
-      "Actionable recommendations for partners and funders",
+      "Clearer understanding of needs and strengths",
+      "Data-informed program adaptation",
+      "Stronger partner alignment around community priorities",
     ],
     idealPartners: [
-      "Public agencies",
-      "Schools and youth-serving organizations",
-      "Foundations and community collaboratives",
+      "Schools",
+      "Nonprofits",
+      "Neighborhood groups",
+      "Funders supporting learning and resilience",
     ],
     format: {
       type: "project",
-      cadence: "Topic-based project cycles",
+      cadence: "Topic-based cycles",
     },
     offeringType: "partner",
-    tags: ["Community", "Youth", "Organizations", "Partners"],
     contactCTA: defaultContactCTA,
   }),
   createProgram({
     id: "story-lab-studios",
     title: "Story Lab Studios (Media Navigator Mentorships)",
     pathway: "listen",
-    tagline: "Ethical storytelling studio for youth and community.",
-    overview:
-      "A hands-on media mentorship studio where participants learn interviewing practice, story ethics, and production skills. The studio supports youth and community members in sharing stories with care and accuracy.",
-    whyItExists:
-      "Communities need storytelling spaces that protect dignity while developing local media leadership.",
-    whoItsFor: ["Youth storytellers", "Community creatives", "Emerging peer leaders"],
+    shortDescription:
+      "A story studio that mentors youth and community members in ethical media and narrative practice.",
+    longDescription:
+      "Story Lab Studios provides guided mentorship for youth, nonprofits, and community members to strengthen storytelling craft and confidence. Participants build media and narrative skills that support civic voice and local impact.",
+    tags: ["Youth", "Community", "Organizations"],
+    whoItsFor: ["Youth", "Community members", "Organizations"],
     whatYoullExperience: [
-      "Interview skill building and listening practice",
-      "Story editing and ethical review",
-      "Public sharing opportunities with guided facilitation",
+      "Mentorship and coaching",
+      "Media and storytelling skill-building",
+      "Narrative development for community impact",
     ],
     outcomes: [
-      "Youth leadership growth",
-      "Amplified local voices",
-      "Stronger belonging through shared narrative",
+      "Increased storytelling confidence",
+      "Stronger youth leadership expression",
+      "Better communication capacity across partner groups",
     ],
-    idealPartners: [
-      "Schools and after-school programs",
-      "Community media partners",
-      "Youth development organizations",
-    ],
+    idealPartners: ["Schools", "Youth programs", "Nonprofits", "Local creatives"],
     format: {
       type: "cohort",
-      cadence: "Seasonal studio cohorts",
+      cadence: "Seasonal studio cycles",
     },
     offeringType: "partner",
-    tags: ["Youth", "Community", "Educators", "Partners"],
     contactCTA: defaultContactCTA,
   }),
   createProgram({
     id: "thrive-at-5",
     title: "Thrive @ 5",
     pathway: "listen",
-    tagline: "Monthly gatherings that connect neighbors.",
-    overview:
-      "Community meetups across the county create space for relationship-building and shared reflection. Each gathering captures real-time community insight while strengthening neighborhood ties.",
-    whyItExists:
-      "Regular, low-barrier gathering spaces are essential for trust, connection, and shared problem solving.",
-    whoItsFor: ["Residents", "Community members", "Neighbors", "Local volunteers"],
+    shortDescription:
+      "Monthly community gatherings that create low-barrier connection across the county.",
+    longDescription:
+      "Thrive @ 5 hosts monthly meetups in Cedar Mountain, Brevard, and Rosman (Headwaters). The gatherings are designed for relationship-building, local conversation, and everyday belonging.",
+    tags: ["Individuals", "Community"],
+    whoItsFor: ["Individuals", "Community members"],
     whatYoullExperience: [
-      "Facilitated conversation circles",
-      "Informal connection across neighborhoods",
-      "Lightweight insight capture for future programming",
+      "Low-barrier social connection",
+      "Facilitated and informal conversation",
+      "Local belonging in shared community space",
     ],
     outcomes: [
       "Stronger neighborhood relationships",
-      "Shared themes surfaced across communities",
-      "Clearer understanding of local priorities",
+      "Increased social connectedness",
+      "Greater sense of belonging",
     ],
-    idealPartners: [
-      "Libraries and community centers",
-      "Faith and civic groups",
-      "Neighborhood associations",
-    ],
+    idealPartners: ["Community hosts", "Local organizations", "Neighborhood connectors"],
     format: {
       type: "event",
       cadence: "Monthly",
     },
     offeringType: "community",
-    tags: ["Community", "Residents", "Volunteers"],
     contactCTA: defaultContactCTA,
   }),
 ];
@@ -198,290 +182,308 @@ const learnPrograms: Program[] = [
     id: "social-health-101",
     title: "Social Health 101: The Science of Connection",
     pathway: "learn",
-    tagline: "Foundational workshop on how relationships shape health and healing.",
-    overview:
-      "A practical introductory workshop that connects social relationships to physical and mental health outcomes. Participants leave with concrete tools for building supportive networks.",
-    whyItExists:
-      "Connection is a core health factor, but many people have never been taught the science behind it.",
-    whoItsFor: ["Community members", "Caregivers", "Educators", "Workplace teams"],
+    shortDescription:
+      "A foundational workshop on why relationships and belonging are central to health.",
+    longDescription:
+      "Social Health 101 explains how connection affects physical and mental well-being, then translates that science into habits people can use at home, work, and in community life.",
+    tags: ["Community", "Individuals", "Teams"],
+    whoItsFor: ["Community members", "Individuals", "Teams"],
     whatYoullExperience: [
-      "Accessible neuroscience of social connection",
-      "Hands-on tools for strengthening support systems",
-      "Guided reflection on everyday relational habits",
+      "Simple science of connection and belonging",
+      "Practical reflection on current support patterns",
+      "Tools for building and sustaining supportive networks",
     ],
     outcomes: [
-      "Increased relational awareness",
-      "Practical support-building tools",
-      "Improved confidence in helping others stay connected",
+      "Greater relational awareness",
+      "Usable connection practices",
+      "Stronger day-to-day social support",
     ],
-    idealPartners: ["Schools", "Community hubs", "Employer wellness teams"],
+    idealPartners: ["Community groups", "Workplaces", "Schools"],
     format: {
       type: "workshop",
-      cadence: "Single-session offering",
+      cadence: "Single session",
     },
     offeringType: "community",
-    tags: ["Community", "Educators", "Organizations", "Leaders"],
     contactCTA: defaultContactCTA,
   }),
   createProgram({
     id: "integrative-well-being-food-mood-movement",
     title: "Integrative Well-Being: Food, Mood & Movement",
     pathway: "learn",
-    tagline: "Interactive learning on the daily foundations of emotional well-being.",
-    overview:
-      "This workshop links nutrition, movement, rest, and emotional health through practical exercises. Participants test low-lift practices they can use immediately in home, school, or workplace settings.",
-    whyItExists:
-      "Well-being improves when people understand how daily habits interact instead of treating health in silos.",
-    whoItsFor: ["Individuals", "Families", "Community groups", "Staff teams"],
+    shortDescription:
+      "Interactive learning on how daily rhythms shape mood, focus, and energy.",
+    longDescription:
+      "This workshop connects nutrition, movement, rest, and emotional health through practical examples. Depending on context, it may include shared meals, gentle movement, and mindfulness practices.",
+    tags: ["Individuals", "Community"],
+    whoItsFor: ["Individuals", "Community members"],
     whatYoullExperience: [
-      "Shared activities and guided practice",
-      "Reflection on current routines",
-      "Take-home tools for sustainable habit shifts",
+      "Practical well-being practices",
+      "An integrative mind-body lens",
+      "Gentle activities and reflection",
     ],
     outcomes: [
-      "Energy and regulation tools",
-      "Holistic awareness of mind-body connection",
-      "Clear next steps for personal and group well-being",
+      "Improved self-regulation habits",
+      "Better awareness of daily energy patterns",
+      "Clear next steps for sustainable well-being",
     ],
-    idealPartners: ["Community centers", "Schools", "Workplace wellness programs"],
+    idealPartners: ["Wellness organizations", "Food access organizations", "Community groups"],
     format: {
       type: "workshop",
-      cadence: "Single-session or paired sessions",
+      cadence: "Single session or short series",
     },
     offeringType: "community",
-    tags: ["Community", "Individuals", "Youth", "Organizations"],
     contactCTA: defaultContactCTA,
   }),
   createProgram({
     id: "brain-stress-resilience",
     title: "Brain, Stress & Resilience",
     pathway: "learn",
-    tagline: "Science-based stress education with practical regulation tools.",
-    overview:
-      "A workshop that explains stress response systems and how connection buffers overload. Participants practice breathing, reframing, and regulation techniques they can use in high-pressure moments.",
-    whyItExists:
-      "People need clear, evidence-informed ways to understand stress and build resilience in real time.",
-    whoItsFor: ["Community members", "Educators", "Leaders", "Care teams"],
+    shortDescription:
+      "A practical workshop on stress response and relationship-based resilience.",
+    longDescription:
+      "Participants learn what stress does in the brain and body, and how connection buffers its impact. The workshop includes breathing, reframing, and trusted-connection practices.",
+    tags: ["Individuals", "Community", "Educators"],
+    whoItsFor: ["Individuals", "Community members", "Educators"],
     whatYoullExperience: [
-      "Stress physiology explained in plain language",
-      "Guided breathing and grounding tools",
-      "Cognitive reframing practice for stressful scenarios",
+      "Clear stress-response education",
+      "Breathing and grounding practices",
+      "Tools for supporting yourself and others",
     ],
     outcomes: [
-      "Improved regulation skills",
-      "Increased resilience under pressure",
-      "Greater confidence supporting others during stress",
+      "Improved stress navigation",
+      "Greater resilience capacity",
+      "More confidence in offering support to others",
     ],
-    idealPartners: ["Schools", "Nonprofits", "Public service teams"],
+    idealPartners: ["Schools", "Health organizations", "Community groups"],
     format: {
       type: "workshop",
-      cadence: "Single-session offering",
+      cadence: "Single session",
     },
-    offeringType: "partner",
-    tags: ["Community", "Educators", "Leaders", "Organizations"],
+    offeringType: "community",
     contactCTA: defaultContactCTA,
   }),
   createProgram({
     id: "positive-culture-belonging",
     title: "Positive Culture & Belonging",
     pathway: "learn",
-    tagline: "Experiential workshop for trust, play, and relational culture.",
-    overview:
-      "An interactive session using play-based and reflective practices to build trust and belonging in groups. Designed for teams that want stronger everyday connection, not just one-time inspiration.",
-    whyItExists:
-      "Belonging and team culture are built through shared experience, not policy language alone.",
-    whoItsFor: ["Educators", "Leaders", "Staff teams", "Community facilitators"],
+    shortDescription:
+      "A workshop on belonging through everyday interactions, play, and trust.",
+    longDescription:
+      "This offering shows how low-stakes interaction and shared laughter build trust, creativity, and connection. Participants practice culture-building behaviors that strengthen relationships over time.",
+    tags: ["Community", "Teams", "Educators"],
+    whoItsFor: ["Community members", "Teams", "Educators"],
     whatYoullExperience: [
-      "Structured interaction and play",
-      "Relational trust-building exercises",
-      "Facilitated debrief for culture translation",
+      "Playful and relational exercises",
+      "Belonging-building culture practices",
+      "Reflection on daily interaction patterns",
     ],
     outcomes: [
-      "Increased interpersonal connection",
-      "Strengthened team culture",
-      "Shared language for belonging practices",
+      "Improved team trust",
+      "Stronger belonging culture",
+      "More human-centered group dynamics",
     ],
-    idealPartners: ["Schools", "Employer teams", "Community coalitions"],
+    idealPartners: ["Schools", "Workplaces", "Community organizations"],
     format: {
       type: "workshop",
-      cadence: "Single-session or mini-series",
+      cadence: "Single session or mini-series",
     },
     offeringType: "partner",
-    tags: ["Educators", "Leaders", "Organizations", "Community"],
     contactCTA: defaultContactCTA,
   }),
   createProgram({
     id: "learn-connect-nights",
-    title: "Learn & Connect Nights",
+    title: "Learn & Connect Nights (Community & Personal Growth Nights)",
     pathway: "learn",
-    tagline: "Evening gatherings that blend practical learning with community reflection.",
-    overview:
-      "Recurring evening sessions combine short learning modules with facilitated dialogue. The format supports cross-community learning while keeping relationship-building at the center.",
-    whyItExists:
-      "People need learning spaces that are relational, accessible, and rooted in local context.",
-    whoItsFor: ["Residents", "Families", "Volunteers", "Community partners"],
+    shortDescription:
+      "Evening gatherings where people learn, reflect, and build meaningful connection.",
+    longDescription:
+      "Learn & Connect Nights bring people across ages and backgrounds together around topics like resilience, boundaries, joy, and purpose. Each evening blends activity or guest input with conversation and relationship-building.",
+    tags: ["Community", "Individuals"],
+    whoItsFor: ["Community members", "Individuals"],
     whatYoullExperience: [
-      "Short practical learning segments",
-      "Facilitated community reflection",
-      "Connection activities across diverse participants",
+      "Guest speaker or guided activity",
+      "Facilitated group reflection",
+      "Connection-focused conversation",
     ],
     outcomes: [
-      "Shared local learning culture",
-      "Increased peer support",
-      "Clear ideas for community-led next steps",
+      "Increased community learning",
+      "Expanded social connection",
+      "More shared language around well-being",
     ],
-    idealPartners: ["Libraries", "Civic groups", "Neighborhood hosts"],
+    idealPartners: ["Libraries", "Community centers", "Local speakers"],
     format: {
       type: "event",
-      cadence: "Evening series",
+      cadence: "Recurring evening gatherings",
     },
     offeringType: "community",
-    tags: ["Community", "Residents", "Volunteers", "Partners"],
     contactCTA: defaultContactCTA,
   }),
   createProgram({
-    id: "supported",
-    title: "SupportEd",
+    id: "supported-connected-classrooms",
+    title: "SupportEd: Connected Classrooms & Educator Well-Being",
     pathway: "learn",
-    tagline: "Professional learning and wellness support for educators.",
-    overview:
-      "SupportEd provides educator-centered learning focused on emotional health, relational practice, and sustainable classroom leadership. Sessions are designed for real school conditions and implementation.",
-    whyItExists:
-      "Educator burnout and isolation directly affect both staff well-being and student experience.",
-    whoItsFor: ["Teachers", "School staff", "Administrators", "Instructional teams"],
+    shortDescription:
+      "Professional learning and wellness support for educators and school teams.",
+    longDescription:
+      "SupportEd combines relationship-centered teaching strategies with practical educator well-being tools, including boundaries, peer support, play, and culture practices that help classrooms thrive.",
+    tags: ["Educators", "Schools"],
+    whoItsFor: ["Educators", "Schools"],
     whatYoullExperience: [
-      "Professional learning tailored to school settings",
-      "Wellness practices for daily classroom pressure",
-      "Team reflection on culture and support systems",
+      "Applied educator training",
+      "Supportive well-being practices",
+      "Classroom and school culture tools",
     ],
     outcomes: [
-      "Reduced burnout risk",
-      "Stronger classroom and staff culture",
-      "More consistent relational practices in schools",
+      "Stronger educator support capacity",
+      "Healthier school culture",
+      "More connected classrooms",
     ],
-    idealPartners: ["School districts", "School leadership teams", "Education nonprofits"],
+    idealPartners: ["School districts", "Colleges", "Educator support organizations"],
     format: {
       type: "series",
       cadence: "Professional learning series",
     },
     offeringType: "partner",
-    tags: ["Educators", "Schools", "Leaders"],
     contactCTA: defaultContactCTA,
   }),
   createProgram({
     id: "purpose-workshops",
     title: "Purpose Workshops",
     pathway: "learn",
-    tagline: "Purpose alignment workshops for teams, schools, and community leaders.",
-    overview:
-      "Facilitated workshops help participants align mission, role clarity, and lived values. The process translates purpose language into practical choices and team behavior.",
-    whyItExists:
-      "Groups operate with more coherence when purpose is explicit, shared, and actionable.",
-    whoItsFor: ["Leaders", "School teams", "Business teams", "Community organizations"],
+    shortDescription:
+      "Guided workshops helping people and teams align strengths, goals, and purpose.",
+    longDescription:
+      "Purpose Workshops are adapted for businesses, schools, and community settings. Participants clarify strengths and aspirations, then connect that insight to practical decisions and shared direction.",
+    tags: ["Organizations", "Schools", "Community", "Individuals"],
+    whoItsFor: ["Organizations", "Schools", "Community members", "Individuals"],
     whatYoullExperience: [
-      "Purpose mapping exercises",
-      "Facilitated alignment dialogue",
-      "Action planning tied to day-to-day decisions",
+      "Guided reflection and discovery",
+      "Practical purpose alignment exercises",
+      "Planning next steps for individual or team context",
     ],
     outcomes: [
-      "Clearer role and mission alignment",
-      "Stronger team cohesion",
-      "Improved decision consistency",
+      "Clearer purpose alignment",
+      "Stronger motivation and cohesion",
+      "More intentional decision-making",
     ],
-    idealPartners: ["Businesses", "Schools", "Nonprofit leadership teams"],
+    idealPartners: ["Employers", "Schools", "Community organizations"],
     format: {
       type: "workshop",
-      cadence: "Single session or retreat format",
+      cadence: "Single session or multi-session",
     },
     offeringType: "fee-based",
-    tags: ["Leaders", "Organizations", "Schools", "Partners"],
     contactCTA: defaultContactCTA,
   }),
   createProgram({
     id: "leadership-well-being",
     title: "Leadership Well-Being",
     pathway: "learn",
-    tagline: "Resilience and boundary-setting series for sustained leadership.",
-    overview:
-      "A leadership-focused series that strengthens personal sustainability, relational practice, and boundary clarity. Designed for leaders navigating long-term stress and high responsibility.",
-    whyItExists:
-      "Leadership effectiveness declines when leaders lack structures for well-being and recovery.",
-    whoItsFor: ["Executive leaders", "Managers", "School and nonprofit leaders"],
+    shortDescription:
+      "Sustainable leadership practices focused on self-awareness, boundaries, and connection.",
+    longDescription:
+      "Designed for leaders in schools, nonprofits, and community organizations, this program helps leaders build healthier environments where people feel respected, connected, and supported.",
+    tags: ["Leaders", "Organizations", "Educators"],
+    whoItsFor: ["Leaders", "Organizations", "Educators"],
     whatYoullExperience: [
-      "Resilience routines for sustained leadership",
-      "Boundary-setting frameworks",
-      "Peer dialogue on leadership load and support",
+      "Practices for sustainable leadership",
+      "Boundary and self-awareness tools",
+      "Relational leadership reflection",
     ],
     outcomes: [
       "Improved leadership sustainability",
-      "Healthier workload boundaries",
-      "Better relational climate within teams",
+      "Healthier team norms",
+      "Reduced burnout pressure",
     ],
-    idealPartners: ["Leadership teams", "Boards", "Supervisory cohorts"],
+    idealPartners: ["Nonprofits", "Schools", "Partner organizations"],
     format: {
       type: "series",
-      cadence: "Multi-session leadership series",
+      cadence: "Leadership development series",
     },
-    offeringType: "fee-based",
-    tags: ["Leaders", "Organizations", "Educators"],
+    offeringType: "partner",
     contactCTA: defaultContactCTA,
   }),
   createProgram({
     id: "emotional-intelligence-connective-leadership",
     title: "Emotional Intelligence for Connective Leadership",
     pathway: "learn",
-    tagline: "Team-based emotional intelligence and communication training.",
-    overview:
-      "This training builds practical emotional intelligence habits for leaders and teams. Sessions focus on communication, feedback, conflict navigation, and trust repair.",
-    whyItExists:
-      "Teams need emotional fluency to communicate clearly and maintain healthy collaboration under stress.",
-    whoItsFor: ["Leadership teams", "Supervisors", "Cross-functional staff groups"],
+    shortDescription:
+      "Practical EI and communication tools for trust-based leadership under stress.",
+    longDescription:
+      "Participants strengthen empathy, regulation, feedback, and repair skills to improve communication and trust. The program focuses on habits leaders can use immediately in real team dynamics.",
+    tags: ["Leaders", "Teams", "Organizations"],
+    whoItsFor: ["Leaders", "Teams", "Organizations"],
     whatYoullExperience: [
-      "EI skill practice in real workplace scenarios",
-      "Communication and feedback drills",
-      "Facilitated conflict navigation frameworks",
+      "Applied emotional intelligence tools",
+      "Communication and feedback habits",
+      "Repair and trust-building practices",
     ],
     outcomes: [
-      "Stronger team communication",
-      "Improved trust and accountability",
-      "Reduced escalation in team conflict",
+      "Improved team communication",
+      "Higher trust during pressure",
+      "Stronger conflict recovery capacity",
     ],
-    idealPartners: ["Businesses", "Nonprofits", "Public sector teams"],
+    idealPartners: ["Workplaces", "Nonprofits", "Schools"],
     format: {
       type: "workshop",
-      cadence: "Single session or workshop series",
+      cadence: "Single workshop or series",
     },
     offeringType: "fee-based",
-    tags: ["Leaders", "Organizations", "Partners"],
+    contactCTA: defaultContactCTA,
+  }),
+  createProgram({
+    id: "workplace-well-being-positive-culture",
+    title: "Workplace Well-Being & Positive Culture",
+    pathway: "learn",
+    shortDescription:
+      "Team workshops on communication, recognition, trust, and belonging.",
+    longDescription:
+      "This offering helps teams strengthen morale and everyday relationships through practical culture tools. Sessions are built to be actionable and relevant to daily workplace realities.",
+    tags: ["Teams", "Organizations"],
+    whoItsFor: ["Teams", "Organizations"],
+    whatYoullExperience: [
+      "Team exercises and dialogue",
+      "Simple, repeatable culture tools",
+      "Recognition and trust-building practices",
+    ],
+    outcomes: [
+      "Better team morale",
+      "Improved workplace relationships",
+      "Stronger day-to-day culture habits",
+    ],
+    idealPartners: ["Employers", "Nonprofits", "Partner agencies"],
+    format: {
+      type: "workshop",
+      cadence: "Single session or short series",
+    },
+    offeringType: "fee-based",
     contactCTA: defaultContactCTA,
   }),
   createProgram({
     id: "connected-leadership-culture",
     title: "Connected Leadership & Culture",
     pathway: "learn",
-    tagline: "Culture audit and leadership development for long-term change.",
-    overview:
-      "A deeper engagement that combines culture sensing, leadership development, and implementation support. The program helps teams move from assessment to sustained behavior change.",
-    whyItExists:
-      "Culture work is most effective when data, leadership practice, and follow-through are integrated.",
-    whoItsFor: ["Executive teams", "School leaders", "Nonprofit leadership"],
+    shortDescription:
+      "A deeper multi-session program for culture change through a well-being lens.",
+    longDescription:
+      "Connected Leadership & Culture is a customizable engagement that analyzes team culture and develops a practical roadmap. It weaves emotional intelligence, leadership habits, and team strategies to support retention and belonging.",
+    tags: ["Organizations", "Leaders", "Teams"],
+    whoItsFor: ["Organizations", "Leaders", "Teams"],
     whatYoullExperience: [
-      "Culture signal gathering and analysis",
-      "Leadership development sessions",
-      "Implementation support for priority culture shifts",
+      "Culture analysis and diagnosis",
+      "Leadership and team strategy work",
+      "A practical multi-session roadmap",
     ],
     outcomes: [
-      "Clear culture priorities",
-      "Aligned leadership behavior",
-      "Measurable progress on team culture goals",
+      "More connected workplace culture",
+      "Improved retention conditions",
+      "Clearer leadership alignment",
     ],
-    idealPartners: ["Schools", "Nonprofits", "Mission-driven companies"],
+    idealPartners: ["Employers", "Nonprofits", "Agencies"],
     format: {
-      type: "collaborative",
-      cadence: "Multi-phase engagement",
+      type: "series",
+      cadence: "Multi-session engagement",
     },
     offeringType: "partner",
-    tags: ["Leaders", "Organizations", "Schools", "Nonprofits"],
     contactCTA: defaultContactCTA,
   }),
 ];
@@ -491,174 +493,145 @@ const leadPrograms: Program[] = [
     id: "wellness-rooted-in-connection-collaborative-trcn",
     title: "Wellness Rooted in Connection Collaborative (TRCN)",
     pathway: "lead",
-    tagline: "Cross-sector resilience initiative linking systems around shared outcomes.",
-    overview:
-      "A collaborative initiative connecting health, youth, education, and food systems to improve community resilience. Partners align strategy, share data themes, and coordinate action across sectors.",
-    whyItExists:
-      "Complex community challenges require coordinated infrastructure, not isolated programming.",
-    whoItsFor: ["Cross-sector partners", "Community coalitions", "Public-serving organizations"],
+    shortDescription:
+      "A cross-sector collaborative strengthening mental wellness, social connection, and resilience.",
+    longDescription:
+      "SparkPoint convenes as part of TRCN to align residents and partners across education, health, youth, and food access. The collaborative co-creates shared strategies for county-wide resilience in Transylvania.",
+    tags: ["Partners", "Organizations", "Community"],
+    whoItsFor: ["Partners", "Organizations", "Community"],
     whatYoullExperience: [
-      "Shared priority setting across sectors",
-      "Coordination sessions and action alignment",
-      "Collaborative learning around resilience practices",
+      "Cross-sector convening",
+      "Coordination and shared strategy design",
+      "Collaborative action planning",
     ],
     outcomes: [
-      "Stronger system coordination",
-      "Improved partner alignment",
-      "More coherent community-facing initiatives",
+      "Stronger system alignment",
+      "Improved coordination around wellness priorities",
+      "More durable community resilience infrastructure",
     ],
-    idealPartners: ["Health systems", "Schools", "Food access leaders", "Youth-serving organizations"],
+    idealPartners: ["Cross-sector organizations", "Coalitions", "Public agencies"],
     format: {
       type: "collaborative",
-      cadence: "Ongoing cross-sector initiative",
+      cadence: "Ongoing",
     },
     offeringType: "partner",
-    tags: ["Partners", "Organizations", "Community", "Nonprofits"],
     contactCTA: defaultContactCTA,
   }),
   createProgram({
     id: "education-coalition-connected-communities-roundtable",
     title: "Education Coalition / Connected Communities Roundtable",
     pathway: "lead",
-    tagline: "Recurring coordination forum for education and community partners.",
-    overview:
-      "A standing roundtable where education partners coordinate around belonging, student support, and community resilience. Meetings convert shared insight into aligned action commitments.",
-    whyItExists:
-      "Education systems are more effective when schools and community partners coordinate consistently.",
-    whoItsFor: ["School leaders", "Educators", "Youth organizations", "Community partners"],
+    shortDescription:
+      "Recurring roundtable for coordinated support of students, families, and schools.",
+    longDescription:
+      "This recurring gathering builds shared understanding and joint planning among organizations that support youth and families. It helps partners coordinate actions instead of working in isolation.",
+    tags: ["Partners", "Educators", "Organizations"],
+    whoItsFor: ["Partners", "Educators", "Organizations"],
     whatYoullExperience: [
-      "Structured partner convenings",
-      "Cross-site problem solving",
-      "Shared accountability check-ins",
+      "Roundtable collaboration",
+      "Joint planning and coordination",
+      "Shared problem-solving around youth support",
     ],
     outcomes: [
-      "Better cross-partner coordination",
-      "Reduced duplicated effort",
-      "Clearer pathways of support for students and families",
+      "More aligned youth-serving systems",
+      "Reduced duplication across organizations",
+      "Clearer partner accountability",
     ],
-    idealPartners: ["School districts", "Youth nonprofits", "Family-serving agencies"],
+    idealPartners: ["Schools", "Youth organizations", "Family support organizations"],
     format: {
       type: "collaborative",
-      cadence: "Recurring roundtable",
+      cadence: "Recurring",
     },
     offeringType: "partner",
-    tags: ["Schools", "Educators", "Leaders", "Partners"],
     contactCTA: defaultContactCTA,
   }),
   createProgram({
-    id: "nonprofit-partner-network",
-    title: "Nonprofit Partner Network",
+    id: "nonprofit-partner-network-convening-space",
+    title: "Nonprofit Partner Network & Convening Space",
     pathway: "lead",
-    tagline: "Convening and backbone support for nonprofit alignment.",
-    overview:
-      "A network structure that convenes nonprofit and coalition leaders for shared planning, coordination, and support. SparkPoint provides backbone facilitation to keep collaboration moving.",
-    whyItExists:
-      "Nonprofits can increase impact when they align strategy, timing, and resources instead of operating in parallel.",
-    whoItsFor: ["Nonprofit leaders", "Coalition members", "Community-serving organizations"],
+    shortDescription:
+      "Facilitated convening space for nonprofits and coalitions building shared solutions.",
+    longDescription:
+      "SparkPoint offers facilitation and collaborative space where nonprofits and coalitions can connect, coordinate, and strengthen joint responses to community needs.",
+    tags: ["Organizations", "Partners"],
+    whoItsFor: ["Organizations", "Partners"],
     whatYoullExperience: [
-      "Convenings for strategic alignment",
-      "Backbone facilitation and follow-through support",
-      "Shared planning around community priorities",
+      "Convening and relationship-building",
+      "Facilitated collaboration",
+      "Shared solution development",
     ],
     outcomes: [
-      "Improved coalition cohesion",
-      "Faster partner coordination",
-      "Higher collective effectiveness",
+      "Stronger partner network cohesion",
+      "Higher collaboration capacity",
+      "More coordinated community response",
     ],
-    idealPartners: ["Nonprofit coalitions", "Regional collaboratives", "Community foundations"],
+    idealPartners: ["Nonprofits", "Coalitions", "Community initiatives"],
     format: {
       type: "collaborative",
-      cadence: "Quarterly convening with between-session support",
+      cadence: "Ongoing convening",
     },
     offeringType: "partner",
-    tags: ["Nonprofits", "Organizations", "Partners", "Leaders"],
     contactCTA: defaultContactCTA,
   }),
   createProgram({
     id: "voice-of-the-students-youth-leadership",
     title: "Voice of the Students (VOS) & Youth Leadership",
     pathway: "lead",
-    tagline: "Student-led initiatives advancing belonging and school culture.",
-    overview:
-      "A youth leadership effort that equips students to surface school culture insights and guide action. The model centers student voice in practical decisions affecting belonging and climate.",
-    whyItExists:
-      "Students are essential co-designers of school culture and should have meaningful leadership roles.",
-    whoItsFor: ["Students", "Youth leaders", "Educators", "School partners"],
+    shortDescription:
+      "Student-led projects focused on belonging, school culture, and mental health support.",
+    longDescription:
+      "Youth participants design inclusive initiatives, strengthen leadership skills, and shape school culture through student-led action. The model centers youth voice in meaningful decision-making.",
+    tags: ["Youth", "Schools"],
+    whoItsFor: ["Youth", "Schools"],
     whatYoullExperience: [
-      "Student leadership development",
-      "Facilitated culture and belonging projects",
-      "Youth-adult partnership practices",
+      "Youth-led design and planning",
+      "Leadership skill development",
+      "Belonging-focused school culture work",
     ],
     outcomes: [
-      "Stronger youth voice in decision making",
-      "Improved school belonging climate",
-      "Increased student leadership confidence",
+      "Increased youth leadership confidence",
+      "Stronger school belonging practices",
+      "More student-informed school initiatives",
     ],
-    idealPartners: ["Schools", "Youth organizations", "Student support teams"],
+    idealPartners: ["Schools", "Youth organizations", "Mental health partners"],
     format: {
       type: "cohort",
-      cadence: "School-year youth leadership cycles",
+      cadence: "School-year cycles",
     },
     offeringType: "partner",
-    tags: ["Youth", "Schools", "Educators", "Community"],
     contactCTA: defaultContactCTA,
   }),
   createProgram({
     id: "ready-together-community-preparedness-resilience",
     title: "Ready Together: Community Preparedness & Resilience",
     pathway: "lead",
-    tagline: "Preparedness workshops combining logistics and emotional readiness.",
-    overview:
-      "Preparedness sessions integrate practical planning with relational and emotional readiness strategies. Participants build plans that strengthen both response capacity and community trust.",
-    whyItExists:
-      "Preparedness is strongest when technical planning and people-centered resilience are developed together.",
-    whoItsFor: ["Residents", "Community volunteers", "Local teams", "Neighborhood leaders"],
+    shortDescription:
+      "Preparedness workshops and neighborhood projects that combine logistics with emotional readiness.",
+    longDescription:
+      "Ready Together helps communities prepare before, during, and after crises through practical planning and neighbor-to-neighbor support practices. It integrates communication, coordination, and care-centered resilience.",
+    tags: ["Community", "Partners", "Organizations"],
+    whoItsFor: ["Community members", "Partners", "Organizations"],
     whatYoullExperience: [
-      "Preparedness logistics planning",
-      "Emotional readiness and regulation tools",
-      "Scenario-based team practice",
+      "Practical preparedness planning",
+      "Connection-based readiness practices",
+      "Coordination tools for local response",
     ],
     outcomes: [
-      "Improved community readiness",
-      "Clearer response coordination",
-      "Stronger resilience under disruption",
+      "Improved neighborhood readiness",
+      "Stronger local response coordination",
+      "Greater emotional and practical resilience",
     ],
-    idealPartners: ["Emergency response partners", "Neighborhood organizations", "Volunteer groups"],
+    idealPartners: [
+      "Emergency management",
+      "Neighborhood groups",
+      "Local agencies",
+      "Nonprofits",
+    ],
     format: {
       type: "series",
-      cadence: "Preparedness workshop series",
-    },
-    offeringType: "community",
-    tags: ["Community", "Residents", "Volunteers", "Organizations"],
-    contactCTA: defaultContactCTA,
-  }),
-  createProgram({
-    id: "community-connectors-program",
-    title: "Community Connectors Program",
-    pathway: "lead",
-    tagline: "Volunteer readiness training in partnership with the Red Cross.",
-    overview:
-      "A connector training program that prepares trusted local volunteers to bridge residents, resources, and support systems. Delivered with partner agencies to strengthen local response capacity.",
-    whyItExists:
-      "Communities recover and adapt faster when trusted connectors are equipped before moments of crisis.",
-    whoItsFor: ["Volunteers", "Community members", "Neighborhood leaders", "Partner agencies"],
-    whatYoullExperience: [
-      "Readiness and referral training",
-      "Relational support and communication tools",
-      "Partner-coordinated field practice",
-    ],
-    outcomes: [
-      "Prepared volunteer connector network",
-      "Improved access to local resources",
-      "Stronger coordination between residents and services",
-    ],
-    idealPartners: ["Red Cross and emergency partners", "Civic groups", "Faith and neighborhood organizations"],
-    format: {
-      type: "cohort",
-      cadence: "Volunteer training cohorts",
+      cadence: "Workshop series + neighborhood projects",
     },
     offeringType: "partner",
-    tags: ["Volunteers", "Community", "Organizations", "Partners"],
     contactCTA: defaultContactCTA,
   }),
 ];
@@ -670,7 +643,7 @@ export const pathways: Pathway[] = [
     color: "#9E509F",
     colorLight: "rgba(158, 80, 159, 0.08)",
     description:
-      "Community insight infrastructure that captures lived experience, identifies patterns, and informs shared direction.",
+      "Community insight infrastructure that captures lived experience and turns it into shared direction.",
     programs: listenPrograms,
   },
   {
@@ -679,7 +652,7 @@ export const pathways: Pathway[] = [
     color: "#FDB515",
     colorLight: "rgba(253, 181, 21, 0.08)",
     description:
-      "Relational capacity building through practical workshops, team learning, and leadership development.",
+      "Relational capacity building through practical education, reflection, and leadership growth.",
     programs: learnPrograms,
   },
   {
@@ -688,7 +661,7 @@ export const pathways: Pathway[] = [
     color: "#E03694",
     colorLight: "rgba(224, 54, 148, 0.08)",
     description:
-      "Cross-sector coordination that aligns partners, mobilizes action, and strengthens community resilience.",
+      "Cross-sector coordination that helps partners align strategy, action, and long-term resilience.",
     programs: leadPrograms,
   },
 ];
@@ -726,8 +699,4 @@ export function getFormatLabel(format: ProgramFormat): string {
 
 export function getProgramBySlug(slug: string): Program | undefined {
   return allPrograms.find((program) => program.slug === slug || program.id === slug);
-}
-
-export function getProgramById(id: string): Program | undefined {
-  return allPrograms.find((program) => program.id === id);
 }

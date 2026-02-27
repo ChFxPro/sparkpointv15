@@ -1,0 +1,1418 @@
+{
+  "generated_at": "2026-02-27T02:08:08.898Z",
+  "repo_branch": "codex/chore/programs-elevate-content",
+  "items": [
+    {
+      "id": "auto-001",
+      "claim_text": "Community Touchpoints in 2025",
+      "claim_number_values": [
+        12500,
+        2025
+      ],
+      "units": "other",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L30-L31",
+      "component_or_section": "impactMetrics",
+      "context_snippet": "L29: icon: Users, | L30: value: 12500,",
+      "risk_level": "high",
+      "notes": "Topline annual rollup used in hero quick stats."
+    },
+    {
+      "id": "auto-002",
+      "claim_text": "Volunteer Hours",
+      "claim_number_values": [
+        850
+      ],
+      "units": "other",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L39-L40",
+      "component_or_section": "impactMetrics",
+      "context_snippet": "L38: icon: Heart, | L39: value: 850,",
+      "risk_level": "high",
+      "notes": "Topline volunteer-hours claim in hero metrics."
+    },
+    {
+      "id": "auto-003",
+      "claim_text": "Partner Organizations",
+      "claim_number_values": [
+        45
+      ],
+      "units": "partners",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L48-L49",
+      "component_or_section": "impactMetrics",
+      "context_snippet": "L47: icon: TrendingUp, | L48: value: 45,",
+      "risk_level": "high",
+      "notes": "Topline partnership count claim."
+    },
+    {
+      "id": "auto-004",
+      "claim_text": "Programs Delivered",
+      "claim_number_values": [
+        98
+      ],
+      "units": "other",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L57-L58",
+      "component_or_section": "impactMetrics",
+      "context_snippet": "L56: icon: Award, | L57: value: 98,",
+      "risk_level": "high",
+      "notes": "Topline delivered-programs claim."
+    },
+    {
+      "id": "auto-005",
+      "claim_text": "2025 Impact Report",
+      "claim_number_values": [
+        2025
+      ],
+      "units": "other",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L368-L368",
+      "component_or_section": "Hero badge",
+      "context_snippet": "L367: > | L368: 2025 Impact Report",
+      "risk_level": "med",
+      "notes": "Sets year scope for metrics on this page."
+    },
+    {
+      "id": "auto-006",
+      "claim_text": "week after week in 2025",
+      "claim_number_values": [
+        2025
+      ],
+      "units": "other",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L440-L440",
+      "component_or_section": "Community Impact narrative",
+      "context_snippet": "L439: SparkPoint was present in the community{\" \"} | L440: <span className=\"text-[#E03694]\">week after week</span> in 2025.",
+      "risk_level": "med",
+      "notes": "Narrative year rollup statement."
+    },
+    {
+      "id": "auto-007",
+      "claim_text": "In a rural county of ~33,000 people",
+      "claim_number_values": [
+        33000
+      ],
+      "units": "residents",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L444-L444",
+      "component_or_section": "Community Impact narrative",
+      "context_snippet": "L443: <p className=\"text-lg md:text-2xl text-slate-600 mb-8 md:mb-12 leading-relaxed max-w-3xl\"> | L444: Trust isn’t built in moments. It’s built in presence. In a rural county of ~33,000 people, sustained connection matters more than volume.",
+      "risk_level": "high",
+      "notes": "Population-scale denominator used to frame impact."
+    },
+    {
+      "id": "auto-008",
+      "claim_text": "77+ Total Events & Sessions",
+      "claim_number_values": [
+        77
+      ],
+      "units": "events",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L449-L450",
+      "component_or_section": "Community Impact stats row",
+      "context_snippet": "L448: <div> | L449: <div className=\"text-3xl font-bold text-slate-900\">77+</div>",
+      "risk_level": "high",
+      "notes": "Key annual event/session count."
+    },
+    {
+      "id": "auto-009",
+      "claim_text": "12 Months Active Programming",
+      "claim_number_values": [
+        12
+      ],
+      "units": "other",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L453-L454",
+      "component_or_section": "Community Impact stats row",
+      "context_snippet": "L452: <div> | L453: <div className=\"text-3xl font-bold text-slate-900\">12 Months</div>",
+      "risk_level": "med",
+      "notes": "Operational duration claim."
+    },
+    {
+      "id": "auto-010",
+      "claim_text": "4,187 Verified Attendance Moments",
+      "claim_number_values": [
+        4187
+      ],
+      "units": "other",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L457-L458",
+      "component_or_section": "Community Impact stats row",
+      "context_snippet": "L456: <div> | L457: <div className=\"text-3xl font-bold text-slate-900\">4,187</div>",
+      "risk_level": "high",
+      "notes": "Core attendance rollup metric."
+    },
+    {
+      "id": "auto-011",
+      "claim_text": "Holiday Gala (~90 attendees)",
+      "claim_number_values": [
+        90
+      ],
+      "units": "events",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L470-L470",
+      "component_or_section": "December highlights",
+      "context_snippet": "L469: <Sparkles className=\"text-[#E03694]\" size={16} /> | L470: <span>Holiday Gala (~90 attendees)</span>",
+      "risk_level": "med",
+      "notes": "Event-specific attendance estimate."
+    },
+    {
+      "id": "auto-012",
+      "claim_text": "Light Up the Night (~200 engaged)",
+      "claim_number_values": [
+        200
+      ],
+      "units": "other",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L474-L474",
+      "component_or_section": "December highlights",
+      "context_snippet": "L473: <Users className=\"text-[#9E509F]\" size={16} /> | L474: <span>Light Up the Night (~200 engaged)</span>",
+      "risk_level": "med",
+      "notes": "Event-specific engagement estimate."
+    },
+    {
+      "id": "auto-013",
+      "claim_text": "4,187 Verified Attendance Moments",
+      "claim_number_values": [
+        4187
+      ],
+      "units": "other",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L504-L506",
+      "component_or_section": "Engagement Density block",
+      "context_snippet": "L503: <div className=\"text-4xl md:text-7xl font-bold text-[#9E509F] mb-4\"> | L504: 4,187",
+      "risk_level": "high",
+      "notes": "Repeated core attendance rollup metric."
+    },
+    {
+      "id": "auto-014",
+      "claim_text": "~2,100 Youth Attendance Moments",
+      "claim_number_values": [
+        2100
+      ],
+      "units": "other",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L536-L537",
+      "component_or_section": "Youth Presence pillar",
+      "context_snippet": "L535: <div> | L536: <div className=\"text-4xl font-bold text-slate-900 mb-1\">~2,100</div>",
+      "risk_level": "high",
+      "notes": "Youth attendance rollup estimate."
+    },
+    {
+      "id": "auto-015",
+      "claim_text": "34+ Youth-Focused Sessions",
+      "claim_number_values": [
+        34
+      ],
+      "units": "events",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L540-L541",
+      "component_or_section": "Youth Presence pillar",
+      "context_snippet": "L539: <div> | L540: <div className=\"text-4xl font-bold text-slate-900 mb-1\">34+</div>",
+      "risk_level": "high",
+      "notes": "Youth session/event count."
+    },
+    {
+      "id": "auto-016",
+      "claim_text": "6 Campuses Served",
+      "claim_number_values": [
+        6
+      ],
+      "units": "other",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L544-L545",
+      "component_or_section": "Youth Presence pillar",
+      "context_snippet": "L543: <div> | L544: <div className=\"text-4xl font-bold text-slate-900 mb-1\">6</div>",
+      "risk_level": "med",
+      "notes": "Institutional reach count."
+    },
+    {
+      "id": "auto-017",
+      "claim_text": "43+ adult and community events",
+      "claim_number_values": [
+        43
+      ],
+      "units": "events",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L571-L571",
+      "component_or_section": "Connector Work narrative",
+      "context_snippet": "L570: <p className=\"text-base md:text-lg text-slate-600 mb-6\"> | L571: For our 43+ adult and community events, SparkPoint often steps back—serving as the connector and facilitator so our partners can lead.",
+      "risk_level": "high",
+      "notes": "Adult/community event count statement."
+    },
+    {
+      "id": "auto-018",
+      "claim_text": "43+ Community Events",
+      "claim_number_values": [
+        43
+      ],
+      "units": "events",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L590-L591",
+      "component_or_section": "Connector Work card",
+      "context_snippet": "L589: <div className=\"text-center\"> | L590: <div className=\"text-5xl md:text-6xl font-bold text-[#F15F48] mb-2\">43+</div>",
+      "risk_level": "high",
+      "notes": "Repeated adult/community event count."
+    },
+    {
+      "id": "auto-019",
+      "claim_text": "10 collection stops and 120+ interviews",
+      "claim_number_values": [
+        10,
+        120
+      ],
+      "units": "stories",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L609-L609",
+      "component_or_section": "Story Collection as Intelligence",
+      "context_snippet": "L608: <p className=\"text-lg text-slate-600 mb-6 max-w-3xl\"> | L609: We treat stories as data. Across <span className=\"font-bold text-[#E03694]\">10 collection stops</span> and <span className=\"font-bold text-[#E03694]\">120+ interviews</span>, resident voices directly inform our priorities, advocacy, and response.",
+      "risk_level": "high",
+      "notes": "Core story-collection throughput claim."
+    },
+    {
+      "id": "auto-020",
+      "claim_text": "565 November Attendance Moments",
+      "claim_number_values": [
+        565
+      ],
+      "units": "other",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L684-L685",
+      "component_or_section": "Momentum section",
+      "context_snippet": "L683: <div> | L684: <div className=\"text-5xl font-bold text-[#FDB515] mb-2\">565</div>",
+      "risk_level": "med",
+      "notes": "Monthly attendance subtotal claim."
+    },
+    {
+      "id": "auto-021",
+      "claim_text": "~13.5% of Annual Reach in Nov",
+      "claim_number_values": [
+        13.5
+      ],
+      "units": "%",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L689-L690",
+      "component_or_section": "Momentum section",
+      "context_snippet": "L688: <div> | L689: <div className=\"text-5xl font-bold text-[#FDB515] mb-2\">~13.5%</div>",
+      "risk_level": "med",
+      "notes": "Monthly share-of-annual-reach claim."
+    },
+    {
+      "id": "auto-022",
+      "claim_text": "Community moments from 2025 events",
+      "claim_number_values": [
+        2025
+      ],
+      "units": "other",
+      "page_route_if_known": "/impact",
+      "file_path": "src/pages/ImpactPage.tsx",
+      "line_range": "L483-L483",
+      "component_or_section": "Community Moments image alt",
+      "context_snippet": "L482: src={communityMomentImg} | L483: alt=\"Community moments from 2025 events\"",
+      "risk_level": "low",
+      "notes": "Year-scoped descriptor in image alt text."
+    },
+    {
+      "id": "auto-023",
+      "claim_text": "8 verified partners organized by focus area",
+      "claim_number_values": [
+        8
+      ],
+      "units": "partners",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L493-L493",
+      "component_or_section": "Partner network setup",
+      "context_snippet": "L493: // WRC Partner Network - 8 verified partners organized by focus area | L494: const partners = [",
+      "risk_level": "low",
+      "notes": "Comment-level partner count; validate against rendered nodes."
+    },
+    {
+      "id": "auto-024",
+      "claim_text": "34+ Youth-Focused Events & Sessions",
+      "claim_number_values": [
+        34
+      ],
+      "units": "events",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L518-L518",
+      "component_or_section": "impactBreakdown",
+      "context_snippet": "L517: stats: [ | L518: \"34+ Youth-Focused Events & Sessions\",",
+      "risk_level": "high",
+      "notes": "Youth events/sessions count."
+    },
+    {
+      "id": "auto-025",
+      "claim_text": "~2,100 youth engagement moments",
+      "claim_number_values": [
+        2100
+      ],
+      "units": "other",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L519-L519",
+      "component_or_section": "impactBreakdown",
+      "context_snippet": "L518: \"34+ Youth-Focused Events & Sessions\", | L519: \"~2,100 youth engagement moments\",",
+      "risk_level": "high",
+      "notes": "Youth engagement rollup estimate."
+    },
+    {
+      "id": "auto-026",
+      "claim_text": "6 school & college campuses served",
+      "claim_number_values": [
+        6
+      ],
+      "units": "other",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L520-L520",
+      "component_or_section": "impactBreakdown",
+      "context_snippet": "L519: \"~2,100 youth engagement moments\", | L520: \"6 school & college campuses served\",",
+      "risk_level": "med",
+      "notes": "Institutional reach count."
+    },
+    {
+      "id": "auto-027",
+      "claim_text": "43+ adult/community events",
+      "claim_number_values": [
+        43
+      ],
+      "units": "events",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L529-L529",
+      "component_or_section": "impactBreakdown",
+      "context_snippet": "L528: stats: [ | L529: \"43+ adult/community events\",",
+      "risk_level": "high",
+      "notes": "Adult/community events count."
+    },
+    {
+      "id": "auto-028",
+      "claim_text": "20+ education & training sessions",
+      "claim_number_values": [
+        20
+      ],
+      "units": "events",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L539-L539",
+      "component_or_section": "impactBreakdown",
+      "context_snippet": "L538: stats: [ | L539: \"20+ education & training sessions\",",
+      "risk_level": "med",
+      "notes": "Training session count."
+    },
+    {
+      "id": "auto-029",
+      "claim_text": "10 story collection stops",
+      "claim_number_values": [
+        10
+      ],
+      "units": "stories",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L549-L549",
+      "component_or_section": "impactBreakdown",
+      "context_snippet": "L548: stats: [ | L549: \"10 story collection stops\",",
+      "risk_level": "high",
+      "notes": "Story collection stops count."
+    },
+    {
+      "id": "auto-030",
+      "claim_text": "120+ verified resident interviews",
+      "claim_number_values": [
+        120
+      ],
+      "units": "stories",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L550-L550",
+      "component_or_section": "impactBreakdown",
+      "context_snippet": "L549: \"10 story collection stops\", | L550: \"120+ verified resident interviews\",",
+      "risk_level": "high",
+      "notes": "Resident interview volume claim."
+    },
+    {
+      "id": "auto-031",
+      "claim_text": "Residents Supported",
+      "claim_number_values": [
+        7700
+      ],
+      "units": "residents",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L610-L613",
+      "component_or_section": "Hero stat cards",
+      "context_snippet": "L609: <div className=\"text-white mb-2\" style={{ fontSize: '4rem', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}> | L610: <CountUp end={7700} duration={1.5} suffix=\"+\" />",
+      "risk_level": "high",
+      "notes": "Topline residents-supported claim (rendered as 7,700+)."
+    },
+    {
+      "id": "auto-032",
+      "claim_text": "Partnerships Formed",
+      "claim_number_values": [
+        45
+      ],
+      "units": "partners",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L625-L628",
+      "component_or_section": "Hero stat cards",
+      "context_snippet": "L624: <div className=\"text-white mb-2\" style={{ fontSize: '4rem', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}> | L625: <CountUp end={45} duration={1.5} suffix=\"+\" />",
+      "risk_level": "high",
+      "notes": "Topline partnerships-formed claim (rendered as 45+)."
+    },
+    {
+      "id": "auto-033",
+      "claim_text": "100% Local Volunteers",
+      "claim_number_values": [
+        100
+      ],
+      "units": "%",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L640-L643",
+      "component_or_section": "Hero stat cards",
+      "context_snippet": "L639: <div className=\"text-white mb-2\" style={{ fontSize: '4rem', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}> | L640: 100%",
+      "risk_level": "high",
+      "notes": "Absolute percentage claim."
+    },
+    {
+      "id": "auto-034",
+      "claim_text": "approximately 33,000 residents",
+      "claim_number_values": [
+        33000
+      ],
+      "units": "residents",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L683-L683",
+      "component_or_section": "County scale intro",
+      "context_snippet": "L682: > | L683: In a rural county of approximately 33,000 residents, SparkPoint focuses on sustained presence, shared infrastructure, and meaningful connection across youth, families, and partners.",
+      "risk_level": "high",
+      "notes": "Population framing statement."
+    },
+    {
+      "id": "auto-035",
+      "claim_text": "Total Events & Sessions (2025)",
+      "claim_number_values": [
+        79,
+        2025
+      ],
+      "units": "events",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L691-L693",
+      "component_or_section": "Impact At-A-Glance",
+      "context_snippet": "L690: { | L691: value: 79,",
+      "risk_level": "high",
+      "notes": "Annual events/sessions rollup."
+    },
+    {
+      "id": "auto-036",
+      "claim_text": "Verified Attendance Moments",
+      "claim_number_values": [
+        4477
+      ],
+      "units": "other",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L696-L698",
+      "component_or_section": "Impact At-A-Glance",
+      "context_snippet": "L695: { | L696: value: 4477,",
+      "risk_level": "high",
+      "notes": "Annual attendance rollup."
+    },
+    {
+      "id": "auto-037",
+      "claim_text": "Youth Attendance (Estimated)",
+      "claim_number_values": [
+        2100
+      ],
+      "units": "other",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L701-L704",
+      "component_or_section": "Impact At-A-Glance",
+      "context_snippet": "L700: { | L701: value: 2100,",
+      "risk_level": "high",
+      "notes": "Annual youth attendance estimate (rendered with + suffix)."
+    },
+    {
+      "id": "auto-038",
+      "claim_text": "Months of Active Programming",
+      "claim_number_values": [
+        12
+      ],
+      "units": "other",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L707-L709",
+      "component_or_section": "Impact At-A-Glance",
+      "context_snippet": "L706: { | L707: value: 12,",
+      "risk_level": "med",
+      "notes": "Operational duration claim."
+    },
+    {
+      "id": "auto-039",
+      "claim_text": "3 Anchor Program Highlights",
+      "claim_number_values": [
+        3
+      ],
+      "units": "other",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L807-L807",
+      "component_or_section": "Anchor Moments & Momentum",
+      "context_snippet": "L806: <p className=\"text-[#FDB515] font-bold text-sm uppercase tracking-wider\"> | L807: 3 Anchor Program Highlights",
+      "risk_level": "med",
+      "notes": "Count of highlighted anchor programs."
+    },
+    {
+      "id": "auto-040",
+      "claim_text": "2025 total attendance",
+      "claim_number_values": [
+        2025
+      ],
+      "units": "other",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L810-L810",
+      "component_or_section": "Anchor Moments & Momentum",
+      "context_snippet": "L809: <p className=\"text-white/60 text-xs uppercase tracking-wider\"> | L810: 2025 total attendance",
+      "risk_level": "med",
+      "notes": "Year context for anchor attendance figures."
+    },
+    {
+      "id": "auto-041",
+      "claim_text": "Attendance 700 (Helene: One Year of Healing)",
+      "claim_number_values": [
+        700
+      ],
+      "units": "other",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L825-L825",
+      "component_or_section": "Anchor Moments & Momentum",
+      "context_snippet": "L824: </span> | L825: <span className=\"text-white/90\" style={{ letterSpacing: '0.06em' }}>700</span>",
+      "risk_level": "med",
+      "notes": "Anchor program attendance value."
+    },
+    {
+      "id": "auto-042",
+      "claim_text": "Attendance 700 (Dr. Ora Brain Health Talks)",
+      "claim_number_values": [
+        700
+      ],
+      "units": "other",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L840-L840",
+      "component_or_section": "Anchor Moments & Momentum",
+      "context_snippet": "L839: </span> | L840: <span className=\"text-white/90\" style={{ letterSpacing: '0.06em' }}>700</span>",
+      "risk_level": "med",
+      "notes": "Anchor program attendance value."
+    },
+    {
+      "id": "auto-043",
+      "claim_text": "Attendance 1,760 (VOS Events & Programming)",
+      "claim_number_values": [
+        1760
+      ],
+      "units": "other",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L855-L855",
+      "component_or_section": "Anchor Moments & Momentum",
+      "context_snippet": "L854: </span> | L855: <span className=\"text-white/90\" style={{ letterSpacing: '0.06em' }}>1,760</span>",
+      "risk_level": "med",
+      "notes": "Anchor program attendance value."
+    },
+    {
+      "id": "auto-044",
+      "claim_text": "3,160 Total Anchor Attendance",
+      "claim_number_values": [
+        3160
+      ],
+      "units": "other",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L869-L873",
+      "component_or_section": "Anchor Moments & Momentum",
+      "context_snippet": "L868: > | L869: 3,160",
+      "risk_level": "high",
+      "notes": "Combined attendance total for anchor highlights."
+    },
+    {
+      "id": "auto-045",
+      "claim_text": "2025 combined programs",
+      "claim_number_values": [
+        2025
+      ],
+      "units": "other",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L875-L875",
+      "component_or_section": "Anchor Moments & Momentum",
+      "context_snippet": "L874: <div className=\"mt-1 text-white/55 text-xs uppercase tracking-[0.18em]\"> | L875: 2025 combined programs",
+      "risk_level": "low",
+      "notes": "Year label for combined-programs total."
+    },
+    {
+      "id": "auto-046",
+      "claim_text": "51% of residents report loneliness",
+      "claim_number_values": [
+        51
+      ],
+      "units": "%",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L910-L913",
+      "component_or_section": "Why It Matters",
+      "context_snippet": "L909: > | L910: <div style={{ fontSize: '4rem', fontWeight: '700', color: 'white', textShadow: '0 3px 8px rgba(0, 0, 0, 0.7)' }}>51%</div>",
+      "risk_level": "high",
+      "notes": "Population mental-health prevalence claim."
+    },
+    {
+      "id": "auto-047",
+      "claim_text": "37% report anxiety or trauma",
+      "claim_number_values": [
+        37
+      ],
+      "units": "%",
+      "page_route_if_known": "/",
+      "file_path": "src/components/ImpactSection.tsx",
+      "line_range": "L929-L932",
+      "component_or_section": "Why It Matters",
+      "context_snippet": "L928: > | L929: <div style={{ fontSize: '4rem', fontWeight: '700', color: 'white', textShadow: '0 3px 8px rgba(0, 0, 0, 0.7)' }}>37%</div>",
+      "risk_level": "high",
+      "notes": "Population mental-health prevalence claim."
+    },
+    {
+      "id": "auto-048",
+      "claim_text": "2019–2022",
+      "claim_number_values": [
+        2019,
+        2022
+      ],
+      "units": "other",
+      "page_route_if_known": "/about",
+      "file_path": "src/pages/AboutPage.tsx",
+      "line_range": "L86-L86",
+      "component_or_section": "Blue Zones phase",
+      "context_snippet": "L85: phaseLabel: 'Foundational Phase', | L86: years: '2019–2022',",
+      "risk_level": "med",
+      "notes": "Foundational phase year range."
+    },
+    {
+      "id": "auto-049",
+      "claim_text": "501(c)(3) status established (2020)",
+      "claim_number_values": [
+        501,
+        3,
+        2020
+      ],
+      "units": "other",
+      "page_route_if_known": "/about",
+      "file_path": "src/pages/AboutPage.tsx",
+      "line_range": "L94-L94",
+      "component_or_section": "Blue Zones phase",
+      "context_snippet": "L93: ], | L94: legalStatus: '501(c)(3) status established (2020)'",
+      "risk_level": "low",
+      "notes": "Legal status/date marker."
+    },
+    {
+      "id": "auto-050",
+      "claim_text": "2023 SparkPoint Founded",
+      "claim_number_values": [
+        2023
+      ],
+      "units": "other",
+      "page_route_if_known": "/about",
+      "file_path": "src/pages/AboutPage.tsx",
+      "line_range": "L99-L100",
+      "component_or_section": "Timeline milestone",
+      "context_snippet": "L98: { | L99: year: '2023',",
+      "risk_level": "med",
+      "notes": "Founding-year marker."
+    },
+    {
+      "id": "auto-051",
+      "claim_text": "2024 Community Response & Coordination / 1,200+ families assisted",
+      "claim_number_values": [
+        2024,
+        1200
+      ],
+      "units": "residents",
+      "page_route_if_known": "/about",
+      "file_path": "src/pages/AboutPage.tsx",
+      "line_range": "L111-L114",
+      "component_or_section": "Timeline milestone",
+      "context_snippet": "L110: { | L111: year: '2024',",
+      "risk_level": "high",
+      "notes": "Response-period family assistance count."
+    },
+    {
+      "id": "auto-052",
+      "claim_text": "2024 Wellness expansion / 6 new wellness programs / 450+ participants",
+      "claim_number_values": [
+        2024,
+        6,
+        450
+      ],
+      "units": "other",
+      "page_route_if_known": "/about",
+      "file_path": "src/pages/AboutPage.tsx",
+      "line_range": "L121-L124",
+      "component_or_section": "Timeline milestone",
+      "context_snippet": "L120: { | L121: year: '2024',",
+      "risk_level": "high",
+      "notes": "Program expansion and participant count claim."
+    },
+    {
+      "id": "auto-053",
+      "claim_text": "2025 Regional collaboration / 3 new counties reached / 15 additional partners",
+      "claim_number_values": [
+        2025,
+        3,
+        15
+      ],
+      "units": "partners",
+      "page_route_if_known": "/about",
+      "file_path": "src/pages/AboutPage.tsx",
+      "line_range": "L131-L134",
+      "component_or_section": "Timeline milestone",
+      "context_snippet": "L130: { | L131: year: '2025',",
+      "risk_level": "high",
+      "notes": "Geographic expansion and partner-growth claim."
+    },
+    {
+      "id": "auto-054",
+      "claim_text": "2026 Looking Ahead",
+      "claim_number_values": [
+        2026
+      ],
+      "units": "other",
+      "page_route_if_known": "/about",
+      "file_path": "src/pages/AboutPage.tsx",
+      "line_range": "L142-L144",
+      "component_or_section": "Timeline milestone",
+      "context_snippet": "L141: { | L142: year: '2026',",
+      "risk_level": "med",
+      "notes": "Forward-looking year marker."
+    },
+    {
+      "id": "auto-055",
+      "claim_text": "milestoneYear=\"2019–2022\"",
+      "claim_number_values": [
+        2019,
+        2022
+      ],
+      "units": "other",
+      "page_route_if_known": "/about",
+      "file_path": "src/pages/AboutPage.tsx",
+      "line_range": "L666-L666",
+      "component_or_section": "TimelinePhotoStack",
+      "context_snippet": "L665: label=\"Organization History\" | L666: milestoneYear=\"2019–2022\"",
+      "risk_level": "low",
+      "notes": "Repeated foundational-year display."
+    },
+    {
+      "id": "auto-056",
+      "claim_text": "500+ attendees at Dr. Ora Wells’ Brain Health keynote at Brevard College",
+      "claim_number_values": [
+        500
+      ],
+      "units": "events",
+      "page_route_if_known": "/mission",
+      "file_path": "src/pages/MissionPage.tsx",
+      "line_range": "L1179-L1179",
+      "component_or_section": "Mission in Practice image alt",
+      "context_snippet": "L1178: image: learningImg, | L1179: alt: '500+ attendees at Dr. Ora Wells’ Brain Health keynote at Brevard College'",
+      "risk_level": "high",
+      "notes": "Large attendance claim in alt text."
+    },
+    {
+      "id": "auto-057",
+      "claim_text": "Education & Youth sector partners (5 listed)",
+      "claim_number_values": [
+        5
+      ],
+      "units": "partners",
+      "page_route_if_known": "/mission",
+      "file_path": "src/pages/MissionPage.tsx",
+      "line_range": "L55-L61",
+      "component_or_section": "SECTORS_DATA",
+      "context_snippet": "L54: icon: GraduationCap, | L55: partners: [",
+      "risk_level": "med",
+      "notes": "Displayed as partner-count chip via partners.length."
+    },
+    {
+      "id": "auto-058",
+      "claim_text": "Nonprofits & Community sector partners (5 listed)",
+      "claim_number_values": [
+        5
+      ],
+      "units": "partners",
+      "page_route_if_known": "/mission",
+      "file_path": "src/pages/MissionPage.tsx",
+      "line_range": "L70-L76",
+      "component_or_section": "SECTORS_DATA",
+      "context_snippet": "L69: icon: HeartHandshake, | L70: partners: [",
+      "risk_level": "med",
+      "notes": "Displayed as partner-count chip via partners.length."
+    },
+    {
+      "id": "auto-059",
+      "claim_text": "Health & Academic sector partners (5 listed)",
+      "claim_number_values": [
+        5
+      ],
+      "units": "partners",
+      "page_route_if_known": "/mission",
+      "file_path": "src/pages/MissionPage.tsx",
+      "line_range": "L85-L91",
+      "component_or_section": "SECTORS_DATA",
+      "context_snippet": "L84: icon: BookOpen, // Using BookOpen to represent the Academic/Research side, or Heart for Health | L85: partners: [",
+      "risk_level": "med",
+      "notes": "Displayed as partner-count chip via partners.length."
+    },
+    {
+      "id": "auto-060",
+      "claim_text": "Civic & Government sector partners (5 listed)",
+      "claim_number_values": [
+        5
+      ],
+      "units": "partners",
+      "page_route_if_known": "/mission",
+      "file_path": "src/pages/MissionPage.tsx",
+      "line_range": "L100-L106",
+      "component_or_section": "SECTORS_DATA",
+      "context_snippet": "L99: icon: Landmark, | L100: partners: [",
+      "risk_level": "med",
+      "notes": "Displayed as partner-count chip via partners.length."
+    },
+    {
+      "id": "auto-061",
+      "claim_text": "Faith & Community sector partners (4 listed)",
+      "claim_number_values": [
+        4
+      ],
+      "units": "partners",
+      "page_route_if_known": "/mission",
+      "file_path": "src/pages/MissionPage.tsx",
+      "line_range": "L115-L120",
+      "component_or_section": "SECTORS_DATA",
+      "context_snippet": "L114: icon: Sun, | L115: partners: [",
+      "risk_level": "med",
+      "notes": "Displayed as partner-count chip via partners.length."
+    },
+    {
+      "id": "auto-062",
+      "claim_text": "Transylvania County Community Centers (22)",
+      "claim_number_values": [
+        22
+      ],
+      "units": "partners",
+      "page_route_if_known": "/",
+      "file_path": "src/components/PartnerNetworkHub.tsx",
+      "line_range": "L109-L109",
+      "component_or_section": "PartnerNetworkHub",
+      "context_snippet": "L108: \"Brevard Rotary\", | L109: \"Transylvania County Community Centers (22)\",",
+      "risk_level": "med",
+      "notes": "Partner label includes explicit count in parentheses."
+    },
+    {
+      "id": "auto-063",
+      "claim_text": "Echoes from the Community weekly series includes Week 1–5 entries",
+      "claim_number_values": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "units": "stories",
+      "page_route_if_known": "/stories/community-voice",
+      "file_path": "src/data/stories.ts",
+      "line_range": "L26-L31",
+      "component_or_section": "ECHOES_ARTICLES",
+      "context_snippet": "L26: const ECHOES_ARTICLES: Article[] = [ | L27: {",
+      "risk_level": "low",
+      "notes": "Week indexing indicates five sequential weekly installments."
+    },
+    {
+      "id": "auto-064",
+      "claim_text": "January 15, 2026",
+      "claim_number_values": [
+        2026,
+        1,
+        15
+      ],
+      "units": "other",
+      "page_route_if_known": "/stories/community-voice",
+      "file_path": "src/data/stories.ts",
+      "line_range": "L31-L31",
+      "component_or_section": "Week 5 date",
+      "context_snippet": "L30: title: 'Echoes from the Community — Week 5', | L31: date: 'January 15, 2026',",
+      "risk_level": "low",
+      "notes": "Published date for Week 5 entry."
+    },
+    {
+      "id": "auto-065",
+      "claim_text": "December 11, 2025",
+      "claim_number_values": [
+        2025,
+        12,
+        11
+      ],
+      "units": "other",
+      "page_route_if_known": "/stories/community-voice",
+      "file_path": "src/data/stories.ts",
+      "line_range": "L54-L54",
+      "component_or_section": "Week 4 date",
+      "context_snippet": "L53: title: 'Echoes from the Community — Week 4', | L54: date: 'December 11, 2025',",
+      "risk_level": "low",
+      "notes": "Published date for Week 4 entry."
+    },
+    {
+      "id": "auto-066",
+      "claim_text": "November 27, 2025",
+      "claim_number_values": [
+        2025,
+        11,
+        27
+      ],
+      "units": "other",
+      "page_route_if_known": "/stories/community-voice",
+      "file_path": "src/data/stories.ts",
+      "line_range": "L75-L75",
+      "component_or_section": "Week 3 date",
+      "context_snippet": "L74: title: 'Echoes from the Community — Week 3', | L75: date: 'November 27, 2025',",
+      "risk_level": "low",
+      "notes": "Published date for Week 3 entry."
+    },
+    {
+      "id": "auto-067",
+      "claim_text": "November 13, 2025",
+      "claim_number_values": [
+        2025,
+        11,
+        13
+      ],
+      "units": "other",
+      "page_route_if_known": "/stories/community-voice",
+      "file_path": "src/data/stories.ts",
+      "line_range": "L92-L92",
+      "component_or_section": "Week 2 date",
+      "context_snippet": "L91: title: 'Echoes from the Community — Week 2', | L92: date: 'November 13, 2025',",
+      "risk_level": "low",
+      "notes": "Published date for Week 2 entry."
+    },
+    {
+      "id": "auto-068",
+      "claim_text": "October 23, 2025",
+      "claim_number_values": [
+        2025,
+        10,
+        23
+      ],
+      "units": "other",
+      "page_route_if_known": "/stories/community-voice",
+      "file_path": "src/data/stories.ts",
+      "line_range": "L112-L112",
+      "component_or_section": "Week 1 date",
+      "context_snippet": "L111: title: 'Echoes from the Community — Week 1', | L112: date: 'October 23, 2025',",
+      "risk_level": "low",
+      "notes": "Published date for Week 1 entry."
+    },
+    {
+      "id": "auto-069",
+      "claim_text": "During 2025, many neighbors ... have shared stories",
+      "claim_number_values": [
+        2025
+      ],
+      "units": "other",
+      "page_route_if_known": "/stories/community-voice",
+      "file_path": "src/data/stories.ts",
+      "line_range": "L38-L38",
+      "component_or_section": "Week 5 body",
+      "context_snippet": "L37: <p>As the new year begins, many of us are thinking about fresh starts. We often set goals, make plans, and look ahead. But before moving forward, it is important to reflect on the year behind us.</p> | L38: <p>During 2025, many neighbors across Transylvania County have shared stories from their lives through Echoes from the Community, offering insight into how connected, or disconnected, they have felt and what has mattered most during moments of challenge and change. If there is one thing we've learned through this, it's that connection changes everything.</p>",
+      "risk_level": "med",
+      "notes": "Year-based rollup statement about collected stories."
+    },
+    {
+      "id": "auto-070",
+      "claim_text": "A community tribute film created from 140+ voices across Transylvania County.",
+      "claim_number_values": [
+        140
+      ],
+      "units": "stories",
+      "page_route_if_known": "/stories/disaster-recovery",
+      "file_path": "src/data/stories.ts",
+      "line_range": "L138-L138",
+      "component_or_section": "Helene story subhead",
+      "context_snippet": "L137: title: 'Helene: One Year of Healing', | L138: subhead: 'A community tribute film created from 140+ voices across Transylvania County.',",
+      "risk_level": "high",
+      "notes": "Primary story-volume claim used across pages."
+    },
+    {
+      "id": "auto-071",
+      "claim_text": "based on interviews with over 140 residents across Transylvania County.",
+      "claim_number_values": [
+        140
+      ],
+      "units": "residents",
+      "page_route_if_known": "/stories/disaster-recovery",
+      "file_path": "src/data/stories.ts",
+      "line_range": "L140-L140",
+      "component_or_section": "Helene story excerpt",
+      "context_snippet": "L139: date: 'September 2024', | L140: excerpt: 'A community-wide tribute film created by SparkPoint, based on interviews with over 140 residents across Transylvania County.',",
+      "risk_level": "high",
+      "notes": "Resident interview-volume claim."
+    },
+    {
+      "id": "auto-072",
+      "claim_text": "our team interviewed more than 140 people across Transylvania County",
+      "claim_number_values": [
+        140
+      ],
+      "units": "residents",
+      "page_route_if_known": "/stories/disaster-recovery",
+      "file_path": "src/data/stories.ts",
+      "line_range": "L144-L144",
+      "component_or_section": "Helene story body",
+      "context_snippet": "L143: <p>In the year following Hurricane Helene, SparkPoint set out to listen.</p> | L144: <p>In the weeks leading up to the Helene: One Year of Healing gathering, our team interviewed more than 140 people across Transylvania County — residents, volunteers, partners, and community leaders — asking a simple question: What has this year been like for you?</p>",
+      "risk_level": "high",
+      "notes": "Long-form interview-volume claim."
+    },
+    {
+      "id": "auto-073",
+      "claim_text": "September 2024",
+      "claim_number_values": [
+        2024
+      ],
+      "units": "other",
+      "page_route_if_known": "/stories/disaster-recovery",
+      "file_path": "src/data/stories.ts",
+      "line_range": "L139-L139",
+      "component_or_section": "Helene story metadata",
+      "context_snippet": "L138: subhead: 'A community tribute film created from 140+ voices across Transylvania County.', | L139: date: 'September 2024',",
+      "risk_level": "high",
+      "notes": "Conflicts with Sept 27, 2025 date in routed article pages."
+    },
+    {
+      "id": "auto-074",
+      "claim_text": "August 2024",
+      "claim_number_values": [
+        2024
+      ],
+      "units": "other",
+      "page_route_if_known": "/stories/volunteer-impact",
+      "file_path": "src/data/stories.ts",
+      "line_range": "L171-L171",
+      "component_or_section": "Community Champions metadata",
+      "context_snippet": "L170: title: 'Community Champions', | L171: date: 'August 2024',",
+      "risk_level": "low",
+      "notes": "Date label for community champions story."
+    },
+    {
+      "id": "auto-075",
+      "claim_text": "A community tribute film created from 140+ voices across Transylvania County.",
+      "claim_number_values": [
+        140
+      ],
+      "units": "stories",
+      "page_route_if_known": "/stories",
+      "file_path": "src/pages/StoriesPage.tsx",
+      "line_range": "L110-L110",
+      "component_or_section": "Volunteer Impact card override",
+      "context_snippet": "L109: title = \"Helene: One Year of Healing\"; | L110: description = \"A community tribute film created from 140+ voices across Transylvania County.\";",
+      "risk_level": "high",
+      "notes": "Repeated headline story-volume claim."
+    },
+    {
+      "id": "auto-076",
+      "claim_text": "Helene: One Year of Healing — September 27, 2025",
+      "claim_number_values": [
+        2025,
+        9,
+        27
+      ],
+      "units": "other",
+      "page_route_if_known": "/stories/:categoryId",
+      "file_path": "src/pages/StoryCategoryPage.tsx",
+      "line_range": "L37-L38",
+      "component_or_section": "Injected heleneArticle",
+      "context_snippet": "L36: title: 'Helene: One Year of Healing', | L37: date: 'September 27, 2025',",
+      "risk_level": "high",
+      "notes": "Injected featured article uses explicit 2025 date."
+    },
+    {
+      "id": "auto-077",
+      "claim_text": "article:published_time 2025-09-27",
+      "claim_number_values": [
+        2025,
+        9,
+        27
+      ],
+      "units": "other",
+      "page_route_if_known": "/stories/community-champions/helene-anniversary",
+      "file_path": "src/pages/HeleneOneYearArticle.tsx",
+      "line_range": "L23-L23",
+      "component_or_section": "SEO metadata",
+      "context_snippet": "L22: <meta name=\"description\" content=\"Honoring the volunteers who showed up for Helene: One Year of Healing.\" /> | L23: <meta property=\"article:published_time\" content=\"2025-09-27\" />",
+      "risk_level": "high",
+      "notes": "Publish-date metadata marker."
+    },
+    {
+      "id": "auto-078",
+      "claim_text": "On September 27, 2025 ... A year had passed since Hurricane Helene ...",
+      "claim_number_values": [
+        2025,
+        9,
+        27,
+        1
+      ],
+      "units": "other",
+      "page_route_if_known": "/stories/community-champions/helene-anniversary",
+      "file_path": "src/pages/HeleneOneYearArticle.tsx",
+      "line_range": "L75-L75",
+      "component_or_section": "Article body",
+      "context_snippet": "L74: <p> | L75: On September 27, 2025, the air at Brevard Music Center felt heavy with memory but light with presence. A year had passed since Hurricane Helene reshaped our landscape, and while the physical scars on the mountains were healing, the human story was still being written.",
+      "risk_level": "high",
+      "notes": "Narrative date anchor with one-year rollup wording."
+    },
+    {
+      "id": "auto-079",
+      "claim_text": "Helene: One Year of Healing · September 27, 2025 · Brevard Music Center",
+      "claim_number_values": [
+        2025,
+        9,
+        27
+      ],
+      "units": "other",
+      "page_route_if_known": "/stories/community-champions/helene-anniversary",
+      "file_path": "src/pages/HeleneOneYearArticle.tsx",
+      "line_range": "L168-L168",
+      "component_or_section": "Article footer",
+      "context_snippet": "L167: <p className=\"text-[#888] text-sm font-medium tracking-wide uppercase opacity-70\"> | L168: Helene: One Year of Healing · September 27, 2025 · Brevard Music Center",
+      "risk_level": "high",
+      "notes": "Footer date anchor."
+    },
+    {
+      "id": "auto-080",
+      "claim_text": "On September 27, 2025 ... A year had passed since Hurricane Helene ...",
+      "claim_number_values": [
+        2025,
+        9,
+        27,
+        1
+      ],
+      "units": "other",
+      "page_route_if_known": "/community-champions/helene-one-year",
+      "file_path": "src/pages/CommunityChampionsArticle.tsx",
+      "line_range": "L74-L74",
+      "component_or_section": "Article body",
+      "context_snippet": "L73: <p> | L74: On September 27, 2025, the air at Brevard Music Center felt heavy with memory but light with presence. A year had passed since Hurricane Helene reshaped our landscape, and while the physical scars on the mountains were healing, the human story was still being written.",
+      "risk_level": "high",
+      "notes": "Alternate route repeats same date anchor and one-year framing."
+    },
+    {
+      "id": "auto-081",
+      "claim_text": "Helene: One Year of Healing · September 27, 2025 · Brevard Music Center",
+      "claim_number_values": [
+        2025,
+        9,
+        27
+      ],
+      "units": "other",
+      "page_route_if_known": "/community-champions/helene-one-year",
+      "file_path": "src/pages/CommunityChampionsArticle.tsx",
+      "line_range": "L162-L162",
+      "component_or_section": "Article footer",
+      "context_snippet": "L161: <p className=\"text-[#888] text-sm font-medium tracking-wide uppercase opacity-70\"> | L162: Helene: One Year of Healing · September 27, 2025 · Brevard Music Center",
+      "risk_level": "high",
+      "notes": "Alternate route repeats same footer date."
+    },
+    {
+      "id": "auto-082",
+      "claim_text": "\"100 volunteers joined us this year\"",
+      "claim_number_values": [
+        100
+      ],
+      "units": "other",
+      "page_route_if_known": "/privacy",
+      "file_path": "src/pages/PrivacyPage.tsx",
+      "line_range": "L74-L74",
+      "component_or_section": "How we use it",
+      "context_snippet": "L73: <li><strong>To Coordinate:</strong> Organizing volunteer schedules or events.</li> | L74: <li><strong>To Report:</strong> We use aggregated (non-identifiable) data to show our impact to funders and the community (e.g., \"100 volunteers joined us this year\").</li>",
+      "risk_level": "med",
+      "notes": "Example impact-reporting statement included in privacy copy."
+    },
+    {
+      "id": "auto-083",
+      "claim_text": "100% goes to programs",
+      "claim_number_values": [
+        100
+      ],
+      "units": "%",
+      "page_route_if_known": "/get-involved",
+      "file_path": "src/pages/GetInvolvedPage.tsx",
+      "line_range": "L35-L35",
+      "component_or_section": "Donate card benefits",
+      "context_snippet": "L34: 'Transparent impact reporting', | L35: '100% goes to programs'",
+      "risk_level": "high",
+      "notes": "Absolute allocation claim; verify legal/financial support."
+    },
+    {
+      "id": "auto-084",
+      "claim_text": "typically respond within 24 hours",
+      "claim_number_values": [
+        24
+      ],
+      "units": "other",
+      "page_route_if_known": "/intake",
+      "file_path": "src/components/GuidedIntakeForm.tsx",
+      "line_range": "L212-L212",
+      "component_or_section": "Intake trust indicator",
+      "context_snippet": "L211: <p className=\"text-slate-500 text-sm\"> | L212: We read every message and typically respond within 24 hours.",
+      "risk_level": "low",
+      "notes": "Service-level response-time expectation."
+    },
+    {
+      "id": "auto-085",
+      "claim_text": "Candid Gold Transparency 2026",
+      "claim_number_values": [
+        2026
+      ],
+      "units": "other",
+      "page_route_if_known": "*",
+      "file_path": "src/components/Footer.tsx",
+      "line_range": "L398-L402",
+      "component_or_section": "Trust badges",
+      "context_snippet": "L397: className=\"group transition-opacity hover:opacity-100 opacity-85 block\" | L398: aria-label=\"Candid Gold Transparency 2026\"",
+      "risk_level": "med",
+      "notes": "Badge year appears in both aria-label and alt text."
+    },
+    {
+      "id": "auto-086",
+      "claim_text": "Sustainable Health for All (est. 2020) is a registered 501(c)(3)",
+      "claim_number_values": [
+        2020,
+        501,
+        3
+      ],
+      "units": "other",
+      "page_route_if_known": "*",
+      "file_path": "src/components/Footer.tsx",
+      "line_range": "L441-L441",
+      "component_or_section": "Charitable disclosure",
+      "context_snippet": "L440: <p className=\"font-bold mb-2\"> | L441: Sustainable Health for All (est. 2020) is a registered 501(c)(3) – DBA: SparkPoint",
+      "risk_level": "low",
+      "notes": "Legal disclosure statement."
+    },
+    {
+      "id": "auto-087",
+      "claim_text": "© 2025 SparkPoint. All rights reserved.",
+      "claim_number_values": [
+        2025
+      ],
+      "units": "other",
+      "page_route_if_known": "*",
+      "file_path": "src/components/Footer.tsx",
+      "line_range": "L472-L472",
+      "component_or_section": "Bottom bar",
+      "context_snippet": "L471: > | L472: © 2025 <span translate=\"no\">SparkPoint</span>. All rights reserved.",
+      "risk_level": "low",
+      "notes": "Copyright year marker."
+    },
+    {
+      "id": "auto-088",
+      "claim_text": "SparkPoint Impact Dashboard API - Updated 2025",
+      "claim_number_values": [
+        2025
+      ],
+      "units": "other",
+      "page_route_if_known": "/api/impact/*",
+      "file_path": "src/supabase/functions/server/index.tsx",
+      "line_range": "L1-L1",
+      "component_or_section": "Server banner comment",
+      "context_snippet": "L1: // SparkPoint Impact Dashboard API - Updated 2025 | L2: import { Hono } from \"npm:hono\";",
+      "risk_level": "low",
+      "notes": "Comment-level year marker for API seed logic."
+    },
+    {
+      "id": "auto-089",
+      "claim_text": "2024 metrics snapshot: community_events 37, workshops 29, youth_events 18, presentations 13, total_events 97, attendance 7000, unique_partners 40, individuals_trained 500, avg_attendance 72.1, ready_groups 8",
+      "claim_number_values": [
+        2024,
+        37,
+        29,
+        18,
+        13,
+        97,
+        7000,
+        40,
+        500,
+        72.1,
+        8
+      ],
+      "units": "other",
+      "page_route_if_known": "/api/impact/*",
+      "file_path": "src/supabase/functions/server/index.tsx",
+      "line_range": "L60-L72",
+      "component_or_section": "metricsData[2024]",
+      "context_snippet": "L59: const metricsData = { | L60: \"2024\": {",
+      "risk_level": "high",
+      "notes": "Backend seed values can diverge from front-end published metrics."
+    },
+    {
+      "id": "auto-090",
+      "claim_text": "2025 metrics snapshot: community_events 45, workshops 33, youth_events 15, presentations 10, total_events 103, attendance 3510, unique_partners 38, individuals_trained 3510, avg_attendance 56.6, ready_groups 10",
+      "claim_number_values": [
+        2025,
+        45,
+        33,
+        15,
+        10,
+        103,
+        3510,
+        38,
+        3510,
+        56.6,
+        10
+      ],
+      "units": "other",
+      "page_route_if_known": "/api/impact/*",
+      "file_path": "src/supabase/functions/server/index.tsx",
+      "line_range": "L74-L86",
+      "component_or_section": "metricsData[2025]",
+      "context_snippet": "L73: }, | L74: \"2025\": {",
+      "risk_level": "high",
+      "notes": "Backend seed values can diverge from front-end published metrics."
+    }
+  ]
+}

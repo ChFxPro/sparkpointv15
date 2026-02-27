@@ -6,6 +6,8 @@ import { useState, useEffect } from 'react';
 import heroImage from 'figma:asset/0c7f5d615ddb7365345eec2cd86bf98d3be9ca22.png';
 import teamHeroImage from 'figma:asset/c88e8fd418fa5de2d8271a01eff7835b8bc45301.png';
 import blueZonesImage from 'figma:asset/006b84f90bae2616433d7bda85278d8264e4e33c.png';
+import bzBrevardDayWebp from '../assets/bz_brevard_day.webp';
+import bzBrevardDayJpg from '../assets/bz_brevard_day.jpg';
 import sparkPointLaunchImage from 'figma:asset/ce8cfb7a67e4c9db354c1d7021333b647621f8d5.png';
 import launchSocialImage from 'figma:asset/08d6097996fec1db647eccd1343a8e7ebf420b7b.png';
 import launchGroupImage from 'figma:asset/bef0024c7f7aa5cba807241e9b1a543393d1afd6.png';
@@ -515,26 +517,29 @@ export function AboutPage() {
                   The heart was always present; what many residents still needed was a deeper sense of belonging that could be sustained over time.
                 </p>
 
-                <div className="rounded-2xl border border-[#0057B8]/30 bg-[#0057B8]/10 p-6 md:p-8">
-                  <div className="grid grid-cols-1 sm:grid-cols-[160px_1fr] gap-6 items-center">
-                    <div className="w-full max-w-[180px] aspect-square rounded-xl overflow-hidden border border-white/15 shadow-lg">
+                <div className="rounded-2xl border border-[#0057B8]/30 bg-[#0057B8]/10 overflow-hidden">
+                  <div className="w-full aspect-[16/9]">
+                    <picture>
+                      <source srcSet={bzBrevardDayWebp} type="image/webp" />
                       <img
-                        src={blueZonesImage}
-                        alt="Blue Zones Project Community certification seal displayed during Brevard recognition"
-                        className="w-full h-full object-cover object-[50%_84%]"
+                        src={bzBrevardDayJpg}
+                        alt="Blue Zones Community 2023 certification seal displayed at a Brevard community gathering"
+                        className="w-full h-full object-cover object-center"
+                        loading="lazy"
+                        decoding="async"
                       />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-200 mb-2">
-                        Blue Zones Certification
-                      </p>
-                      <p className="text-white text-lg leading-relaxed mb-2">
-                        Brevard’s Blue Zones Community certification is a nationally recognized designation for long-term community well-being.
-                      </p>
-                      <p className="text-blue-100/80 text-sm">
-                        SparkPoint’s early direction was shaped through this work and carried forward after establishment in 2020.
-                      </p>
-                    </div>
+                    </picture>
+                  </div>
+                  <div className="p-6 md:p-8">
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-200 mb-2">
+                      Blue Zones Certification
+                    </p>
+                    <p className="text-white text-lg leading-relaxed mb-2">
+                      Brevard’s Blue Zones Community certification is a nationally recognized designation for long-term community well-being.
+                    </p>
+                    <p className="text-blue-100/80 text-sm">
+                      SparkPoint’s early direction was shaped through this work and carried forward after establishment in 2020.
+                    </p>
                   </div>
                 </div>
               </div>

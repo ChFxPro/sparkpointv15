@@ -1,15 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import { ProgramsHero } from "./ProgramsHero";
-import { EngineSection } from "./EngineSection";
 import { EcosystemSection } from "./EcosystemSection";
 import { AllProgramsSection } from "./AllProgramsSection";
 import { PathwayModal } from "./PathwayModal";
 import { getProgramBySlug, pathways, type Pathway, type Program } from "./programsData";
 import "./programs.css";
 
-type AudienceSegment = "community" | "volunteer" | "supporter";
-const SHOW_LLL_EXPLAINER = false;
+type AudienceSegment = "community" | "volunteer" | "partner";
 
 const audienceSegmentConfig: Record<
   AudienceSegment,
@@ -23,15 +21,15 @@ const audienceSegmentConfig: Record<
   },
   volunteer: {
     label: "Volunteer",
-    audiences: ["Volunteers", "Community", "Residents", "Partners"],
-    ctaLabel: "Volunteer With Us",
-    ctaHref: "/intake?intent=volunteer",
-  },
-  supporter: {
-    label: "Supporter",
-    audiences: ["Partners", "Organizations", "Leaders", "Nonprofits", "Schools"],
+    audiences: ["Volunteers", "Community", "Residents", "Teams"],
     ctaLabel: "See Ways To Get Involved",
     ctaHref: "/get-involved",
+  },
+  partner: {
+    label: "Partner",
+    audiences: ["Partners", "Organizations", "Leaders", "Nonprofits", "Schools"],
+    ctaLabel: "Partner With Us",
+    ctaHref: "/intake?intent=partner",
   },
 };
 
@@ -110,8 +108,6 @@ export default function ProgramsPage() {
         secondaryCtaHref={segmentConfig.ctaHref}
         secondaryCtaLabel={segmentConfig.ctaLabel}
       />
-
-      {SHOW_LLL_EXPLAINER && <EngineSection />}
 
       <section id="ecosystem" className="sp-scroll-offset">
         <EcosystemSection
