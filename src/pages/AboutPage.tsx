@@ -38,6 +38,7 @@ import regionalAuditoriumImage from 'figma:asset/ce0a67a45092b4432ec7c00f4a17cb5
 import seniorGatheringImage from 'figma:asset/2f54cc163c056ac592d9e429a8920f74d0a98f56.png';
 import interviewFilmingImage from 'figma:asset/183c96a680c45035b0835db81082bdb93af69f97.png';
 import sparkPointCommonsImage from 'figma:asset/63f606372ec6e500e9a7547d300fb9f0d31dae7e.png';
+import { canonicalUrl } from '../lib/siteOrigin';
 import mediaStudioImage from 'figma:asset/7c67e828e47be75e27ecc6de02db283be5ae7589.png';
 
 import sarahHeadshotWebp from '../assets/staff_pics/webp/sp_port26__0004_sarah.webp';
@@ -465,7 +466,7 @@ export function AboutPage() {
       <Helmet>
         <title>About SparkPoint | Built Through Connection</title>
         <meta name="description" content="SparkPoint’s mission, history, and community-centered approach." />
-        <link rel="canonical" href="https://chfxpro.github.io/sparkpointv15/about" />
+        <link rel="canonical" href={canonicalUrl('/about')} />
       </Helmet>
 
       {/* 1. Hero Section — Documentary Presence with Connection Anchor */}

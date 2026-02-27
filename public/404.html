@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>SparkPoint</title>
+    <script>
+      // GitHub Pages SPA redirect. Keeps one path segment for /sparkpointv15/.
+      (function () {
+        var l = window.location;
+        var repoSegment = '/sparkpointv15';
+        var pathSegmentsToKeep = l.pathname === repoSegment || l.pathname.indexOf(repoSegment + '/') === 0 ? 1 : 0;
+
+        l.replace(
+          l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+          l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+          l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+          (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+          l.hash
+        );
+      }());
+    </script>
+  </head>
+  <body></body>
+</html>

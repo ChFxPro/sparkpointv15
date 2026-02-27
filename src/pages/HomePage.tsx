@@ -8,6 +8,7 @@ import { ConnectionSection } from '../components/ConnectionSection';
 import { CTAFinal } from '../components/CTAFinal';
 import heleneImage from 'figma:asset/0835779aef52124bf5c00840473e8285f8e0f937.png';
 import echoesImage from 'figma:asset/e4e8c9f59f3a2b2ee1533f1f427ca4a4cb3693a5.png';
+import { canonicalUrl } from '../lib/siteOrigin';
 
 const stories = [
   {
@@ -33,7 +34,7 @@ export function HomePage() {
       <Helmet>
         <title>SparkPoint | Connection Is the Foundation of Community Well-Being</title>
         <meta name="description" content="Brief overview of SparkPoint’s role in fostering connection, storytelling, and shared resources in Western North Carolina." />
-        <link rel="canonical" href="https://chfxpro.github.io/sparkpointv15/" />
+        <link rel="canonical" href={canonicalUrl('/')} />
       </Helmet>
 
       <Hero 

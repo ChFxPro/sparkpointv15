@@ -10,6 +10,7 @@ import { Link, useLocation } from 'react-router';
 import candidSeal from 'figma:asset/5a36f7b11c9d0bf970613a37a28b121b31918d77.png';
 import livingWageLogo from 'figma:asset/ec17a6fe91f3b0bf97249c7bd911f4723893563c.png';
 import { useEffect } from 'react';
+import { canonicalUrl } from '../lib/siteOrigin';
 
 export function TrustPage() {
   const { hash } = useLocation();
@@ -38,7 +39,7 @@ export function TrustPage() {
       <Helmet>
         <title>Trust & Accountability | SparkPoint</title>
         <meta name="description" content="Our commitment to transparency, accessibility, and responsible stewardship." />
-        <link rel="canonical" href="https://chfxpro.github.io/sparkpointv15/trust" />
+        <link rel="canonical" href={canonicalUrl('/trust')} />
       </Helmet>
 
       {/* Hero Section */}

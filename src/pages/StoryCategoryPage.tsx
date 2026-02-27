@@ -10,6 +10,7 @@ import { STORIES_DATA } from '../data/stories';
 import { useEffect } from 'react';
 import imgPoster from "figma:asset/e3f8a2b021eb0d337580338dd10e709a1762494c.png";
 import { HELENE_ONE_YEAR_DATE_LABEL } from '../data/impact2025';
+import { canonicalUrl } from '../lib/siteOrigin';
 
 export function StoryCategoryPage() {
   const { categoryId } = useParams();
@@ -62,7 +63,7 @@ export function StoryCategoryPage() {
       <Helmet>
         <title>{`${category.title} | SparkPoint`}</title>
         <meta name="description" content={category.description} />
-        <link rel="canonical" href={`https://chfxpro.github.io/sparkpointv15/stories/${category.id}`} />
+        <link rel="canonical" href={canonicalUrl(`/stories/${category.id}`)} />
       </Helmet>
       {/* Hero Section */}
       <section className="pt-40 pb-20 px-6 relative overflow-hidden bg-white">

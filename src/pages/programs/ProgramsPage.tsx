@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router";
+import { Helmet } from "react-helmet-async";
 import { ProgramsHero } from "./ProgramsHero";
 import { EcosystemSection } from "./EcosystemSection";
 import { AllProgramsSection } from "./AllProgramsSection";
@@ -102,6 +103,10 @@ export default function ProgramsPage() {
 
   return (
     <div className="sp-programs">
+      <Helmet>
+        <title>Programs | SparkPoint</title>
+      </Helmet>
+
       <ProgramsHero
         audienceSegment={audienceSegment}
         onAudienceSegmentChange={setAudienceSegment}

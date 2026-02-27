@@ -2,7 +2,7 @@
 
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'motion/react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 
@@ -14,6 +14,8 @@ const sponsorHighlights = [
 ];
 
 export function SponsorsPage() {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-[#FDFBF8]">
       <Helmet>
@@ -53,9 +55,7 @@ export function SponsorsPage() {
           <Button
             className="px-8"
             style={{ backgroundColor: '#E03694', color: 'white' }}
-            onClick={() => {
-              window.location.href = '/intake?intent=partner';
-            }}
+            onClick={() => navigate('/intake?intent=partner')}
           >
             Become a Sponsor
           </Button>

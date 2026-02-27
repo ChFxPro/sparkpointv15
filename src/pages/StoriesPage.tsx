@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router';
 import { STORIES_DATA } from '../data/stories';
 import heroImage from 'figma:asset/b7ea59b58a471ceacde60e41e5e3cd69fe78c66f.png';
 import { BehindTheStories } from '../components/BehindTheStories';
+import { canonicalUrl } from '../lib/siteOrigin';
 
 export function StoriesPage() {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ export function StoriesPage() {
       <Helmet>
         <title>Community Stories | SparkPoint</title>
         <meta name="description" content="Community voices, lived experience, and participatory storytelling." />
-        <link rel="canonical" href="https://chfxpro.github.io/sparkpointv15/stories" />
+        <link rel="canonical" href={canonicalUrl('/stories')} />
       </Helmet>
 
       {/* Hero Section */}

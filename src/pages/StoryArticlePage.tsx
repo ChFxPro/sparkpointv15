@@ -7,6 +7,7 @@ import { ArrowLeft, Share2, Printer, Calendar, User, ArrowRight } from 'lucide-r
 import { Button } from '../components/ui/button';
 import { STORIES_DATA } from '../data/stories';
 import { useEffect } from 'react';
+import { canonicalUrl } from '../lib/siteOrigin';
 
 export function StoryArticlePage() {
   const { categoryId, slug } = useParams();
@@ -39,7 +40,7 @@ export function StoryArticlePage() {
     <Helmet>
       <title>{`${article.title} | SparkPoint Stories`}</title>
       <meta name="description" content={metaDescription} />
-      <link rel="canonical" href={`https://chfxpro.github.io/sparkpointv15/stories/${category.id}/${article.slug}`} />
+      <link rel="canonical" href={canonicalUrl(`/stories/${category.id}/${article.slug}`)} />
     </Helmet>
   );
 

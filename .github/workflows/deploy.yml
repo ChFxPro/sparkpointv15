@@ -33,6 +33,11 @@ jobs:
         run: npm ci
 
       - name: Build
+        env:
+          PUBLIC_BASE: /sparkpointv15/
+          SITE_ORIGIN: https://chfxpro.github.io/sparkpointv15
+          PUBLIC_ORIGIN: https://chfxpro.github.io/sparkpointv15
+          VITE_SITE_ORIGIN: https://chfxpro.github.io/sparkpointv15
         run: npm run build
 
       - name: Configure Pages

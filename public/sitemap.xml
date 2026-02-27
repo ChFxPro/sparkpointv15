@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://chfxpro.github.io/sparkpointv15/</loc>
+    <loc>__SITE_ORIGIN__/</loc>
   </url>
 
   <url>
-    <loc>https://chfxpro.github.io/sparkpointv15/mission</loc>
+    <loc>__SITE_ORIGIN__/mission</loc>
   </url>
 
   <url>
-    <loc>https://chfxpro.github.io/sparkpointv15/stories</loc>
+    <loc>__SITE_ORIGIN__/stories</loc>
   </url>
 
   <url>
-    <loc>https://chfxpro.github.io/sparkpointv15/impact</loc>
+    <loc>__SITE_ORIGIN__/impact</loc>
   </url>
 
   <url>
-    <loc>https://chfxpro.github.io/sparkpointv15/get-involved</loc>
+    <loc>__SITE_ORIGIN__/get-involved</loc>
   </url>
 
   <url>
-    <loc>https://chfxpro.github.io/sparkpointv15/intake</loc>
+    <loc>__SITE_ORIGIN__/intake</loc>
   </url>
 
   <url>
-    <loc>https://chfxpro.github.io/sparkpointv15/about</loc>
+    <loc>__SITE_ORIGIN__/about</loc>
   </url>
 
   <url>
-    <loc>https://chfxpro.github.io/sparkpointv15/trust</loc>
+    <loc>__SITE_ORIGIN__/trust</loc>
   </url>
 
   <url>
-    <loc>https://chfxpro.github.io/sparkpointv15/privacy</loc>
+    <loc>__SITE_ORIGIN__/privacy</loc>
   </url>
 
   <url>
-    <loc>https://chfxpro.github.io/sparkpointv15/community-champions/helene-one-year</loc>
+    <loc>__SITE_ORIGIN__/community-champions/helene-one-year</loc>
   </url>
 
   <url>
-    <loc>https://chfxpro.github.io/sparkpointv15/stories/community-champions/helene-anniversary</loc>
+    <loc>__SITE_ORIGIN__/stories/community-champions/helene-anniversary</loc>
   </url>
 </urlset>

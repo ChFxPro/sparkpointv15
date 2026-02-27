@@ -32,6 +32,7 @@ import learningImg from 'figma:asset/ce0a67a45092b4432ec7c00f4a17cb5a77e95a50.pn
 import voiceImg from 'figma:asset/90544aa933b2c117f40fb5271f7b12942198041b.png';
 import partnersImg from 'figma:asset/5463509e242f1244d018bbff5b9c9fc1831a9b2f.png';
 import preparednessImg from 'figma:asset/56901f1a91f140dcee14c66f977ed2a0bd9120ed.png';
+import { canonicalUrl } from '../lib/siteOrigin';
 
 // --- DATA: Sectors & Partners ---
 
@@ -875,7 +876,7 @@ export function MissionPage() {
       <Helmet>
         <title>Our Mission | SparkPoint</title>
         <meta name="description" content="SparkPoint fosters community well-being rooted in connection." />
-        <link rel="canonical" href="https://chfxpro.github.io/sparkpointv15/mission" />
+        <link rel="canonical" href={canonicalUrl('/mission')} />
       </Helmet>
       {/* 1. Immersive Sticky Background */}
       <div className="fixed inset-0 z-0 overflow-hidden">
