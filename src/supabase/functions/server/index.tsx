@@ -1,8 +1,8 @@
 // SparkPoint Impact Dashboard API - Updated 2025
 // deno-lint-ignore no-import-prefix
-import { Hono, type Context } from "npm:hono@4.6.8";
+import { Hono, type Context } from "https://deno.land/x/hono@v4.6.8/mod.ts";
 // deno-lint-ignore no-import-prefix
-import { logger } from "npm:hono@4.6.8/logger";
+import { logger } from "https://deno.land/x/hono@v4.6.8/middleware.ts";
 import * as kv from "./kv_store.tsx";
 import { IMPACT_2025 } from "../../../data/impact2025.ts";
 const app = new Hono();
@@ -55,7 +55,7 @@ const getCorsHeaders = (req: Request) => {
 app.use('*', logger(console.log));
 
 // CORS handling for all routes and methods
-app.use("*", async (c, next) => {
+app.use("*", async (c: Context, next: () => Promise<void>) => {
   const corsHeaders = getCorsHeaders(c.req.raw);
 
   if (c.req.method === "OPTIONS") {
@@ -69,7 +69,7 @@ app.use("*", async (c, next) => {
 });
 
 // Debug: Log all incoming requests
-app.use("*", async (c, next) => {
+app.use("*", async (c: Context, next: () => Promise<void>) => {
   console.log(`📥 Incoming request: ${c.req.method} ${c.req.url}`);
   await next();
 });
@@ -82,7 +82,7 @@ app.get("/make-server-535d8907/health", healthHandler);
 app.get("/make-server-393f2b0a/health", healthHandler);
 
 // Initialize Impact Metrics Data
-app.post("/make-server-535d8907/impact/init", async (c) => {
+app.post("/make-server-535d8907/impact/init", async (c: Context) => {
   console.log('✅ Impact init endpoint called');
   try {
     const metricsData = {
@@ -130,7 +130,7 @@ app.post("/make-server-535d8907/impact/init", async (c) => {
 });
 
 // Get Impact Metrics
-app.get("/make-server-535d8907/impact/metrics", async (c) => {
+app.get("/make-server-535d8907/impact/metrics", async (c: Context) => {
   console.log('✅ Impact metrics GET endpoint called');
   try {
     const metrics = await kv.get("sparkpoint_impact_metrics");
@@ -155,7 +155,7 @@ app.get("/make-server-535d8907/impact/metrics", async (c) => {
 });
 
 // Volunteer/Partner Form Submission
-app.post("/make-server-535d8907/volunteer", async (c) => {
+app.post("/make-server-535d8907/volunteer", async (c: Context) => {
   try {
     const body = await c.req.json();
     const { type, name, email, phone, organization, interests, availability, message } = body;
@@ -325,7 +325,7 @@ const intakeHandler = async (c: Context) => {
       let specificDetails = '';
       if (intent === 'volunteer') {
         specificDetails = `
-Interests: ${submissionData.interests.join(', ') || 'None selected'}
+Interests: ${(submissionData.interests ?? []).join(', ') || 'None selected'}
 Availability: ${submissionData.availability || 'Not provided'}
         `;
       } else if (intent === 'partner') {
@@ -391,7 +391,7 @@ app.post("/make-server-535d8907/intake", intakeHandler);
 app.post("/make-server-393f2b0a/intake", intakeHandler);
 
 // Catch-all route for debugging
-app.all("*", (c) => {
+app.all("*", (c: Context) => {
   console.log(`❌ Unmatched route: ${c.req.method} ${c.req.url}`);
   return c.json({ 
     error: "Route not found",
