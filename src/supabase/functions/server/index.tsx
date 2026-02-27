@@ -1,25 +1,51 @@
 // SparkPoint Impact Dashboard API - Updated 2025
-import { Hono } from "npm:hono";
-import { logger } from "npm:hono/logger";
+// deno-lint-ignore no-import-prefix
+import { Hono, type Context } from "npm:hono@4.6.8";
+// deno-lint-ignore no-import-prefix
+import { logger } from "npm:hono@4.6.8/logger";
 import * as kv from "./kv_store.tsx";
 import { IMPACT_2025 } from "../../../data/impact2025.ts";
 const app = new Hono();
 
 const allowedOrigins = new Set([
+  // Production
+  "https://yoursparkpoint.org",
+  "https://www.yoursparkpoint.org",
+
+  // GitHub Pages (origin is host only; no path)
   "https://chfxpro.github.io",
+
+  // Local dev
   "http://localhost:3000",
+  "http://localhost:5173",
+  "http://localhost:4173",
 ]);
 
+const normalizeOrigin = (origin: string | null) => {
+  if (!origin) return null;
+  // Trim + strip trailing slash
+  const trimmed = origin.trim().replace(/\/$/, "");
+  return trimmed.toLowerCase();
+};
+
 const getCorsHeaders = (req: Request) => {
-  const origin = req.headers.get("origin");
-  const allowOrigin = origin && allowedOrigins.has(origin)
+  const rawOrigin = req.headers.get("origin");
+  const origin = normalizeOrigin(rawOrigin);
+
+  // Normalize the allowlist once per call (small set)
+  const allowed = origin
+    ? Array.from(allowedOrigins).some((o) => normalizeOrigin(o) === origin)
+    : false;
+
+  const allowOrigin = allowed && origin
     ? origin
-    : "https://chfxpro.github.io";
+    : "https://www.yoursparkpoint.org";
 
   return {
     "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Methods": "GET,POST,PUT,PATCH,DELETE,OPTIONS",
-    "Access-Control-Allow-Headers": "apikey, authorization, content-type, x-client-info",
+    // Include the actual headers browsers commonly request in preflight
+    "Access-Control-Allow-Headers": "apikey, authorization, content-type, x-client-info, accept, origin, x-requested-with",
     "Access-Control-Max-Age": "86400",
     "Vary": "Origin",
   };
@@ -33,7 +59,7 @@ app.use("*", async (c, next) => {
   const corsHeaders = getCorsHeaders(c.req.raw);
 
   if (c.req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+    return new Response(null, { status: 204, headers: corsHeaders });
   }
 
   await next();
@@ -48,10 +74,12 @@ app.use("*", async (c, next) => {
   await next();
 });
 
-// Health check endpoint
-app.get("/make-server-535d8907/health", (c) => {
+const healthHandler = (c: Context) => {
   return c.json({ status: "ok" });
-});
+};
+
+app.get("/make-server-535d8907/health", healthHandler);
+app.get("/make-server-393f2b0a/health", healthHandler);
 
 // Initialize Impact Metrics Data
 app.post("/make-server-535d8907/impact/init", async (c) => {
@@ -213,8 +241,23 @@ Submitted: ${new Date().toLocaleString()}
   }
 });
 
-// Intake Form Submission - Unified Route
-app.post("/make-server-535d8907/intake", async (c) => {
+type IntakeSubmission = {
+  id: string;
+  intent: "volunteer" | "partner" | "contact";
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  source_path: string;
+  submittedAt: string;
+  status: "new";
+  interests?: string[];
+  availability?: string;
+  organization?: string;
+  partnershipDetails?: string;
+};
+
+const intakeHandler = async (c: Context) => {
   try {
     const body = await c.req.json();
     const { 
@@ -247,7 +290,7 @@ app.post("/make-server-535d8907/intake", async (c) => {
     const submissionId = `intake_${intent}_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
     // Construct data object based on intent to avoid storing irrelevant fields
-    const submissionData = {
+    const submissionData: IntakeSubmission = {
       id: submissionId,
       intent,
       name,
@@ -342,7 +385,10 @@ Submitted: ${new Date().toLocaleString()}
       details: error instanceof Error ? error.message : 'Unknown error'
     }, 500);
   }
-});
+};
+
+app.post("/make-server-535d8907/intake", intakeHandler);
+app.post("/make-server-393f2b0a/intake", intakeHandler);
 
 // Catch-all route for debugging
 app.all("*", (c) => {
@@ -356,7 +402,8 @@ app.all("*", (c) => {
       "POST /make-server-535d8907/impact/init",
       "GET /make-server-535d8907/impact/metrics",
       "POST /make-server-535d8907/volunteer",
-      "POST /make-server-535d8907/intake"
+      "POST /make-server-535d8907/intake",
+      "POST /make-server-393f2b0a/intake"
     ]
   }, 404);
 });

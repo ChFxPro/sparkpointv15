@@ -1,0 +1,13 @@
+{
+  "deno.enable": false,
+  "deno.enablePaths": ["src/supabase/functions"],
+  "deno.lint": true,
+  "deno.unstable": true,
+  "deno.suggest.imports.autoDiscover": true,
+  "deno.suggest.imports.hosts": {
+    "https://deno.land": true,
+    "https://esm.sh": true,
+    "https://cdn.skypack.dev": true,
+    "https://jspm.dev": true
+  }
+}
