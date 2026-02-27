@@ -5,6 +5,7 @@ import imgPoster from "figma:asset/e3f8a2b021eb0d337580338dd10e709a1762494c.png"
 import imgCrowd from "figma:asset/081f67bc0043a989fd3bbe690f2bc36895e2ae29.png";
 import imgJenga from "figma:asset/03643ed23c45475ef78b3e0f363a5b886b5679a9.png";
 import imgConversation from "figma:asset/acc45b75e300283fd839e68a5d16299f663b13b6.png";
+import { HELENE_ONE_YEAR_DATE_LABEL } from '../data/impact2025';
 
 // Image URLs 
 const images = {
@@ -71,7 +72,7 @@ export default function CommunityChampionsArticle() {
           {/* Body Section 1 */}
           <div className="space-y-8 mb-16 text-lg md:text-[19px] leading-[1.75] text-[#D4D4D4]">
             <p>
-              On September 27, 2025, the air at Brevard Music Center felt heavy with memory but light with presence. A year had passed since Hurricane Helene reshaped our landscape, and while the physical scars on the mountains were healing, the human story was still being written.
+              On {HELENE_ONE_YEAR_DATE_LABEL}, the air at Brevard Music Center felt heavy with memory but light with presence. A year had passed since Hurricane Helene reshaped our landscape, and while the physical scars on the mountains were healing, the human story was still being written.
             </p>
             <p>
               We expected a crowd. What we didn’t fully anticipate was the spirit in which they would arrive. From the moment the gates opened, the atmosphere wasn’t one of spectacle, but of reunion. And the first faces they saw weren’t staff or security—they were neighbors.
@@ -159,7 +160,7 @@ export default function CommunityChampionsArticle() {
             </p>
             
             <p className="text-[#888] text-sm font-medium tracking-wide uppercase opacity-70">
-              Helene: One Year of Healing · September 27, 2025 · Brevard Music Center
+              Helene: One Year of Healing · {HELENE_ONE_YEAR_DATE_LABEL} · Brevard Music Center
             </p>
           </footer>
 

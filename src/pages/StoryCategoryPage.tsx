@@ -9,6 +9,7 @@ import { Card } from '../components/ui/card';
 import { STORIES_DATA } from '../data/stories';
 import { useEffect } from 'react';
 import imgPoster from "figma:asset/e3f8a2b021eb0d337580338dd10e709a1762494c.png";
+import { HELENE_ONE_YEAR_DATE_LABEL } from '../data/impact2025';
 
 export function StoryCategoryPage() {
   const { categoryId } = useParams();
@@ -34,7 +35,7 @@ export function StoryCategoryPage() {
       id: 'helene-anniversary',
       slug: 'helene-anniversary',
       title: 'Helene: One Year of Healing',
-      date: 'September 27, 2025',
+      date: HELENE_ONE_YEAR_DATE_LABEL,
       excerpt: 'It started with a question: How do we honor a year of recovery without losing sight of the work that remains? The answer wasn’t in the programming. It was in the people who stood at the gates.',
       image: imgPoster,
       content: '', 

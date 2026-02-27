@@ -49,77 +49,119 @@ const SECTORS_DATA: Sector[] = [
   {
     id: 'edu-youth',
     title: 'Education & Youth',
-    description: 'Empowering the next generation through learning, leadership, and support.',
+    description: 'Learning, youth leadership, and school-connected support.',
     color: '#FDB515', // Gold
     icon: GraduationCap,
     partners: [
-      'Transylvania County Schools',
-      'TC STRONG',
-      'Rise & Shine',
+      'TCS',
+      'Blue Ridge Community College',
+      'Brevard College',
+      'TC Strong',
+      'Boys & Girls Club of Transylvania County',
+      'El Centro',
+      'Brevard Academy',
+      'Mountain Sun Community School',
+      'Rise & Shine Afterschool Program',
+      'Brevard Music Center Institute',
+      'Eagles Nest Camp',
+      'UNC Chapel Hill, Gillings School of Public Health',
       'Mountain Roots',
-      'Cindy Platt Boys & Girls Club'
+      'Smart Start of Transylvania County',
+      'VISION Transylvania',
+      'Transylvania County Education Foundation'
     ],
-    examples: ['Youth leadership summits', 'In-school mental health initiatives']
+    examples: ['School and youth coordination', 'Community leadership development']
   },
   {
-    id: 'nonprofits',
-    title: 'Nonprofits & Community',
-    description: 'Strengthening the safety net through coordinated resource sharing.',
+    id: 'nonprofit-community',
+    title: 'Nonprofit & Community',
+    description: 'Community-serving organizations working together on access and support.',
     color: '#E03694', // Pink
     icon: HeartHandshake,
     partners: [
-      'United Way of Transylvania County',
+      'The Hunger Coalition',
+      'Just Economics of Western North Carolina',
+      'FWRD Transylvania (LTRG)',
+      'Through the Trees',
+      'Housing Assitance',
+      'Camp Bluebird',
+      'Friends of Rosman',
+      'Meals on Wheels',
+      'Bread of Life',
       'The Sharing House',
-      'Sharing House',
       'Pisgah Legal Services',
-      'Smart Start of Transylvania County'
+      'Habitat for Humanity Transylvania County',
+      'Center for Trauma Resilient Communities',
+      'Jameson’s Joy',
+      'Transylvania County Arts Council',
+      'Transylvania County Tourism Development Authority'
     ],
-    examples: ['Resource coordination meetings', 'Shared case management tools']
+    examples: ['Resource sharing and referral', 'Community recovery collaboration']
   },
   {
-    id: 'health-academic',
-    title: 'Health & Academic',
-    description: 'Bridging clinical care, higher education, and community wellness.',
-    color: '#9E509F', // Purple
-    icon: BookOpen, // Using BookOpen to represent the Academic/Research side, or Heart for Health
-    partners: [
-      'Blue Ridge Community College',
-      'UNC Health Pardee',
-      'Transylvania Public Health',
-      'Brevard College',
-      'Western Carolina University'
-    ],
-    examples: ['Community health assessments', 'Student internship pathways']
-  },
-  {
-    id: 'civic-gov',
+    id: 'civic-government',
     title: 'Civic & Government',
-    description: 'Ensuring public safety, infrastructure, and crisis response.',
+    description: 'Public and civic leadership supporting countywide resilience.',
     color: '#F15F48', // Orange/Red
     icon: Landmark,
     partners: [
+      'Transylvania County',
       'City of Brevard',
-      'Transylvania County Government',
-      'Emergency Management Services',
-      'Brevard Police Department',
-      'Transylvania County Sheriff\'s Office'
+      'Town of Rosman',
+      'Transylvania County Sheriff’s Office',
+      'Brevard/Transylvania Chamber of Commerce',
+      'Rotary Club of Pisgah Forest',
+      'AAUW',
+      'Mary C Jenkins Community & Cultural Center',
+      'Looking Glass, CPA'
     ],
-    examples: ['Disaster response planning', 'Civic engagement forums']
+    examples: ['Civic partnerships', 'Local leadership coordination']
   },
   {
-    id: 'faith',
-    title: 'Faith & Community',
-    description: 'Nurturing spirit and connection through trusted local congregations.',
-    color: '#4F46E5', // Indigo/Blue for a distinct calm tone
-    icon: Sun,
+    id: 'health-wellness',
+    title: 'Health & Wellness',
+    description: 'Health systems and wellness partners strengthening community care.',
+    color: '#9E509F', // Purple
+    icon: Heart,
     partners: [
-      'Local Churches & Faith Groups',
-      'Bread of Life',
-      'Interfaith Coalition',
-      'Center for Spiritual Living'
+      'UNC Health Pardee',
+      'Transylvania Regional Hospital',
+      'Transylvania Public Health Department',
+      'TREND 2.0 - Mental Health',
+      'Hendersonville Pediatrics',
+      'CARE Coalition'
     ],
-    examples: ['Food distribution networks', 'Community healing services']
-  }
+    examples: ['Whole-person wellness collaboration', 'Community mental health support']
+  },
+  {
+    id: 'business',
+    title: 'Business',
+    description: 'Business partners supporting workforce and opportunity pathways.',
+    color: '#4F46E5', // Indigo
+    icon: Handshake,
+    partners: [
+      'Alulua (formally TVS)',
+      'Schenck Jobs Corps Civilian Conservation Center'
+    ],
+    examples: ['Workforce and opportunity partnerships', 'Industry collaboration']
+  },
+  {
+    id: 'sponsors-funders',
+    title: 'Sponsors & Funders',
+    description: 'Funders and sponsors helping sustain long-term impact.',
+    color: '#14B8A6', // Teal
+    icon: Sparkles,
+    partners: [
+      'Dogwood Health Trust',
+      'Lake Toxaway Charitites',
+      'WNC Bridge Foundation',
+      'Vaya Health',
+      'The American Red Cross',
+      'St. Phillips Episcopal Church',
+      'Pisgah Health Foundation'
+    ],
+    examples: ['Sustained funding partnerships', 'Strategic investment in resilience']
+  },
 ];
 
 // --- COMPONENTS ---
@@ -1259,7 +1301,7 @@ export function MissionPage() {
           </motion.div>
 
           {/* Sector Hubs Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
             {SECTORS_DATA.map((sector, index) => {
               const Icon = sector.icon;
               return (

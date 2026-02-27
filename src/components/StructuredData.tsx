@@ -12,7 +12,7 @@ export function StructuredData() {
         "logo": "https://yoursparkpoint.org/logo.png",
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": "64 East Main Street",
+          "streetAddress": "159 W. Main St Unit 2452",
           "addressLocality": "Brevard",
           "addressRegion": "NC",
           "postalCode": "28712",

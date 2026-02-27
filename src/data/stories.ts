@@ -1,6 +1,7 @@
 
 import heleneImage from 'figma:asset/0835779aef52124bf5c00840473e8285f8e0f937.png';
 import echoesImage from 'figma:asset/e4e8c9f59f3a2b2ee1533f1f427ca4a4cb3693a5.png';
+import { HELENE_ONE_YEAR_DATE_LABEL } from './impact2025';
 
 export interface Article {
   id: string;
@@ -135,8 +136,8 @@ export const STORIES_DATA: Category[] = [
         id: 'helene-one-year',
         slug: 'helene-one-year',
         title: 'Helene: One Year of Healing',
-        subhead: 'A community tribute film created from 140+ voices across Transylvania County.',
-        date: 'September 2024',
+        subhead: 'A community tribute film created from more than 140 voices across Transylvania County.',
+        date: HELENE_ONE_YEAR_DATE_LABEL,
         excerpt: 'A community-wide tribute film created by SparkPoint, based on interviews with over 140 residents across Transylvania County.',
         content: `
           <h3 class="text-2xl font-bold mb-6">About the Project</h3>

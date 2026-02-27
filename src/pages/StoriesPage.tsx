@@ -107,7 +107,7 @@ export function StoriesPage() {
               
               if (category.id === 'volunteer-impact') {
                 title = "Helene: One Year of Healing";
-                description = "A community tribute film created from 140+ voices across Transylvania County.";
+                description = "A community tribute film created from more than 140 voices across Transylvania County.";
                 image = imgPoster;
               }
 
