@@ -1296,7 +1296,7 @@ export function MissionPage() {
               Working Together Across Sectors
             </h2>
             <p className="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
-              We don't direct the work—we connect the experts. By linking schools, nonprofits, healthcare, and local government, we help our partners move faster and reach further than they could alone.
+              In partnership with our community, we center lived experience and bring neighbors, leaders, and organizations into shared alignment. Through open collaboration and trusted relationships, we help cultivate long-term resilience across Transylvania County.
             </p>
           </motion.div>
 

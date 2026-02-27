@@ -109,11 +109,11 @@ export function GuidedIntakeForm({ initialIntent = 'contact', sourcePath = '/' }
   // Volunteer Interests Options
   const volunteerInterests = [
     'Events & Outreach',
-    'Administrative Support',
-    'Community Research',
-    'Youth Mentorship',
-    'Emergency Response',
-    'Gardening / Physical Labor'
+    'SparkPoint Resource Lobby',
+    'Story-Collection',
+    'Voice of the Students',
+    'Preparedness',
+    'General Volunteer'
   ];
 
   if (submissionStatus === 'success') {

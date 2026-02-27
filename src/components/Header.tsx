@@ -26,6 +26,9 @@ const menuItems: MenuItem[] = [
   { label: 'Stories', href: '/stories' },
   { label: 'Impact', href: '/impact' },
   { label: 'Programs', href: '/programs' },
+  { label: 'Sponsors', href: '/sponsors' },
+  { label: 'Resiliency Hub', href: '/resiliency-hub' },
+  { label: 'News & Media', href: '/news-media' },
   { label: 'Get Involved', href: '/get-involved' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/intake?intent=contact' },
@@ -63,7 +66,7 @@ export function Header() {
 
   // Filter links for Desktop Center Nav (Option A)
   const desktopCenterLinks = menuItems.filter(item => 
-    ['Mission', 'Stories', 'Impact', 'Programs'].includes(item.label)
+    ['Mission', 'Stories', 'Impact', 'Programs', 'Sponsors', 'Resiliency Hub'].includes(item.label)
   );
 
   return (
@@ -150,7 +153,7 @@ export function Header() {
                 size="icon"
                 className="w-9 h-9 text-gray-600 hover:text-[#E03694] hover:bg-[#E03694]/10 rounded-full"
                 onClick={() => {
-                  window.location.href = 'https://www.yoursparkpoint.org/newsletter';
+                  window.location.href = '/news-media';
                 }}
               >
                 <Mail size={18} />
@@ -350,7 +353,7 @@ export function Header() {
                     <Button
                       variant="outline"
                       className="flex-1 border-white border-2 text-white hover:bg-white/10"
-                      onClick={() => window.location.href = 'https://www.yoursparkpoint.org/newsletter'}
+                      onClick={() => window.location.href = '/news-media'}
                     >
                       <Mail size={18} className="mr-2" />
                       Newsletter
@@ -371,7 +374,7 @@ export function Header() {
                  <div>
                    <h3 className="text-white/60 text-xs font-bold uppercase tracking-widest mb-6">Explore</h3>
                    <div className="grid gap-4">
-                     {['Mission', 'Stories', 'Impact', 'Programs'].map(label => {
+                     {['Mission', 'Stories', 'Impact', 'Programs', 'Sponsors', 'Resiliency Hub'].map(label => {
                         const item = menuItems.find(i => i.label === label);
                         return item ? (
                           <Link
@@ -393,7 +396,7 @@ export function Header() {
                    <div className="grid gap-4">
                       <Link to="/get-involved" onClick={handleLinkClick} className="text-white text-2xl font-bold hover:translate-x-2 transition-transform">Get Involved</Link>
                       <a href="https://www.yoursparkpoint.org/donations" className="text-white text-2xl font-bold hover:translate-x-2 transition-transform">Donate</a>
-                      <a href="https://www.yoursparkpoint.org/newsletter" className="text-white text-2xl font-bold hover:translate-x-2 transition-transform">Newsletter</a>
+                      <a href="/news-media" className="text-white text-2xl font-bold hover:translate-x-2 transition-transform">Newsletter</a>
                    </div>
                  </div>
 

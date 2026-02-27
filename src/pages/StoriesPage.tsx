@@ -10,6 +10,7 @@ import { STORIES_DATA } from '../data/stories';
 import heroImage from 'figma:asset/b7ea59b58a471ceacde60e41e5e3cd69fe78c66f.png';
 import imgPoster from "figma:asset/e3f8a2b021eb0d337580338dd10e709a1762494c.png";
 import { BehindTheStories } from '../components/BehindTheStories';
+import { Tabs, TabsList, TabsTrigger } from '../components/ui/tabs';
 
 export function StoriesPage() {
   const navigate = useNavigate();
@@ -72,6 +73,24 @@ export function StoriesPage() {
               These stories come from kitchens, parking lots, church basements, and front porches across Transylvania County.
             </p>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Top Tabs */}
+      <section className="px-6 pb-8">
+        <div className="max-w-3xl mx-auto flex justify-center">
+          <Tabs
+            value="stories"
+            onValueChange={(value) => {
+              if (value === 'programs') navigate('/programs');
+            }}
+            className="w-full max-w-sm"
+          >
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="stories">Stories</TabsTrigger>
+              <TabsTrigger value="programs">Programs</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
       </section>
 

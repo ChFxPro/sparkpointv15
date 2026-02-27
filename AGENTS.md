@@ -1,77 +1,95 @@
 # SparkPoint Agent Guide
+Last updated: 2026-02-27
 
 ## Read First
-- Always read this file before making code changes in this repository.
-- Confirm architecture alignment before editing.
-- Update this file when route structure, schema, or feature composition changes.
+- Read this file before modifying code in this repo.
+- Confirm architecture alignment before implementing UI or data-model changes.
+- Update this document when routes, schema, or feature behavior changes.
 
-## Current Route Map (Web App)
-- `/` home page
+## Current Status
+- Main website is integrated and buildable.
+- Programs feature is integrated at `/programs`.
+- Programs cards open details from all contexts (pathway preview, all-programs grid, modal list).
+- Programs content is actively being refined; ongoing editorial pass is still expected for some entries.
+- Launch recon fixes are in progress on a dedicated launch branch.
+- 2025 impact totals are centralized in `src/data/impact2025.ts` and consumed in impact surfaces.
+- Mission and partner network groupings are aligned to the latest partner update source.
+- Address boilerplate now uses `159 W. Main St Unit 2452` across UI + structured data.
+
+## Routes
+- `/` home
 - `/about`
 - `/mission`
 - `/impact`
 - `/get-involved`
 - `/programs`
-- `/intake` (query intents used: `contact`, `volunteer`, `partner`)
-- `/partner` redirects to `/intake?intent=partner`
-- `/volunteer` redirects to `/intake?intent=volunteer`
-- `/contact` redirects to `/intake?intent=contact`
+- `/sponsors`
+- `/resiliency-hub`
+- `/news-media`
+- `/intake` (`?intent=contact|volunteer|partner`)
+- `/partner` -> redirect to `/intake?intent=partner`
+- `/volunteer` -> redirect to `/intake?intent=volunteer`
+- `/contact` -> redirect to `/intake?intent=contact`
 
-## Programs Feature Location
-- Main feature directory: `src/pages/programs/*`
-- Key files:
-  - `ProgramsPage.tsx`
-  - `ProgramsHero.tsx`
-  - `EcosystemSection.tsx`
-  - `AllProgramsSection.tsx`
-  - `PathwayModal.tsx`
-  - `programsData.ts`
-  - `programs.css`
+## Programs Page
+### Code Location
+- `src/pages/programs/ProgramsPage.tsx`
+- `src/pages/programs/ProgramsHero.tsx`
+- `src/pages/programs/EcosystemSection.tsx`
+- `src/pages/programs/AllProgramsSection.tsx`
+- `src/pages/programs/PathwayModal.tsx`
+- `src/pages/programs/programsData.ts`
+- `src/pages/programs/programs.css`
 
-## Programs Architecture Status
-- `/programs` is integrated into the main site router and builds clean.
-- Programs use a structured data model in `programsData.ts` with pathway-based grouping.
-- Pathways are fixed as:
-  - Listen = Community insight infrastructure
-  - Learn = Relational capacity building
-  - Lead = Cross-sector coordination
-- Program cards are fully clickable and open the same detail flow in:
-  - pathway preview cards
-  - modal list cards
-  - All Programs grid cards
-- The Listen/Learn/Lead explainer section is disabled in `ProgramsPage` via feature flag (`SHOW_LLL_EXPLAINER = false`) to avoid duplication with Mission content.
+### Data Source
+- Canonical program content/model lives in `src/pages/programs/programsData.ts`.
+- Program schema includes `id`, `title`, `pathway`, `shortDescription`, `longDescription`, `tags`, `whatYoullExperience`, `idealPartners`, plus modal-support fields and CTA.
 
-## Programs Data Model (Current)
-Each program entry must remain type-safe and include:
-- `id`
-- `slug`
-- `title`
-- `pathway`
-- `tagline`
-- `overview`
-- `whyItExists?`
-- `whoItsFor[]`
-- `whatYoullExperience[]`
-- `outcomes[]`
-- `idealPartners[]`
-- `format: { type, cadence? }`
-- `offeringType`
-- `tags[]`
-- `contactCTA: { label, href }`
+### UX Behavior
+- Role switcher options in hero: `Community`, `Volunteer`, `Partner`.
+- Hero secondary CTA behavior:
+  - Community -> contact route
+  - Volunteer -> `/get-involved`
+  - Partner -> `/intake?intent=partner`
+- Listen/Learn/Lead explainer section is removed from Programs page composition (Mission page covers this).
+- Program cards are fully clickable and keyboard accessible (`button` semantics).
+- Modal detail renders real content sections (who it is for, experience, outcomes, ideal partners).
+
+## Local Development
+- Install: `npm install`
+- Dev: `npm run dev`
+- Build: `npm run build`
+
+## Known Warnings
+- Vite build warns about large JS chunks (>500kB) after minification.
+- Postbuild image optimizer prints Node warning about module type for `scripts/optimize-hero-images.js`.
+
+## Launch Changes (2026-02-27)
+- Added centralized 2025 metrics constants in `src/data/impact2025.ts`.
+- Updated `/impact` and home impact section metrics to use canonical 2025 totals.
+- Removed/qualified absolute `100%` claims in launch-facing content.
+- Aligned Helene one-year date references to September 27, 2025.
+- Added minimal launch pages for sponsors, resiliency hub, and news/media.
+- Added Stories top tabs with Programs navigation.
+
+## 2025 Impact Metrics Source
+- Canonical file for 2025 website totals: `src/data/impact2025.ts`.
+- If launch metrics change, update constants there first, then verify:
+  - `src/pages/ImpactPage.tsx`
+  - `src/components/ImpactSection.tsx`
+  - `src/supabase/functions/server/index.tsx` (seeded API payload)
+- Do not hardcode new 2025 rollup totals directly in page components.
 
 ## Development Standards
 - Always branch before feature work.
 - Never modify `main` directly.
 - Keep changes scoped and reversible.
-- Preserve TypeScript safety for Programs data and components.
-- Remove placeholder/repetitive copy when touched.
+- Maintain type safety for `src/pages/programs/*`.
+- Avoid placeholder/repetitive copy in program content.
 
-## Runbook
-- Install: `npm install`
-- Dev server: `npm run dev`
-- Production build check: `npm run build`
-
-## Known Issues / Ongoing Work
-- Some program entries still need deeper editorial pass and content enrichment.
-- Placeholder-level copy may still exist in select areas during ongoing content fill cycles.
-- Continue content QA against source planning docs before final publication.
+## Next TODOs
+- Complete editorial QA pass on all program entries for tone consistency.
+- Continue validating pathway copy against latest planning documents.
+- Curate fuller News/Media archival content set (legacy + newest missing items).
+- Confirm sponsor/resiliency page copy/assets for post-launch polish.
+- Revisit chunk-splitting if bundle-size warning becomes a performance concern.
