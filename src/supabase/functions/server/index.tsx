@@ -1,8 +1,8 @@
 // SparkPoint Impact Dashboard API - Updated 2025
 // deno-lint-ignore no-import-prefix
-import { Hono, type Context } from "jsr:@hono/hono@4.6.8";
+import { Hono, type Context } from "https://deno.land/x/hono@v4.6.8/mod.ts";
 // deno-lint-ignore no-import-prefix
-import { logger } from "jsr:@hono/hono@4.6.8/logger";
+import { logger } from "https://deno.land/x/hono@v4.6.8/middleware.ts";
 import * as kv from "./kv_store.tsx";
 import { IMPACT_2025 } from "../../../data/impact2025.ts";
 const app = new Hono();
