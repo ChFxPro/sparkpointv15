@@ -1,86 +1,77 @@
 # SparkPoint Agent Guide
 
-## Project Status Overview (2026 Programs Update)
-- The Programs page is now content-complete for 2026 and uses a structured program data model.
-- Pathways are organized as `Listen`, `Learn`, and `Lead`.
-- Canonical programs data source: `src/pages/programs/programsData.ts`.
-- Program details render inside the split-view `PathwayModal` list -> detail architecture.
-- The page includes an engine explainer section: `How Listen • Learn • Lead Works`.
-- Program cards are fully clickable (keyboard accessible) in grid and modal list contexts.
-- Placeholder boilerplate copy has been removed from program detail views.
+## Read First
+- Always read this file before making code changes in this repository.
+- Confirm architecture alignment before editing.
+- Update this file when route structure, schema, or feature composition changes.
 
-## Programs Architecture
+## Current Route Map (Web App)
+- `/` home page
+- `/about`
+- `/mission`
+- `/impact`
+- `/get-involved`
+- `/programs`
+- `/intake` (query intents used: `contact`, `volunteer`, `partner`)
+- `/partner` redirects to `/intake?intent=partner`
+- `/volunteer` redirects to `/intake?intent=volunteer`
+- `/contact` redirects to `/intake?intent=contact`
 
-### Data Location
-- `src/pages/programs/programsData.ts`
-- Exports program types, pathway metadata, full program catalog, filters, and label helpers.
+## Programs Feature Location
+- Main feature directory: `src/pages/programs/*`
+- Key files:
+  - `ProgramsPage.tsx`
+  - `ProgramsHero.tsx`
+  - `EcosystemSection.tsx`
+  - `AllProgramsSection.tsx`
+  - `PathwayModal.tsx`
+  - `programsData.ts`
+  - `programs.css`
 
-### Pathway Definitions
-- `Listen` = Community insight infrastructure.
-- `Learn` = Relational capacity building.
-- `Lead` = Cross-sector coordination.
+## Programs Architecture Status
+- `/programs` is integrated into the main site router and builds clean.
+- Programs use a structured data model in `programsData.ts` with pathway-based grouping.
+- Pathways are fixed as:
+  - Listen = Community insight infrastructure
+  - Learn = Relational capacity building
+  - Lead = Cross-sector coordination
+- Program cards are fully clickable and open the same detail flow in:
+  - pathway preview cards
+  - modal list cards
+  - All Programs grid cards
+- The Listen/Learn/Lead explainer section is disabled in `ProgramsPage` via feature flag (`SHOW_LLL_EXPLAINER = false`) to avoid duplication with Mission content.
 
-### Program Schema
-Each program must include:
+## Programs Data Model (Current)
+Each program entry must remain type-safe and include:
 - `id`
 - `slug`
 - `title`
-- `pathway: "listen" | "learn" | "lead"`
+- `pathway`
 - `tagline`
 - `overview`
 - `whyItExists?`
-- `whoItsFor: string[]`
-- `whatYoullExperience: string[]`
-- `outcomes: string[]`
-- `idealPartners: string[]`
-- `format: { type: "workshop" | "series" | "cohort" | "event" | "ongoing" | "project" | "collaborative"; cadence?: string }`
-- `offeringType: "community" | "partner" | "fee-based"`
-- `tags: string[]`
-- `contactCTA: { label: string; href: string }`
-
-### Component Map
-- `ProgramsPage` = route-level state, deep-link sync, section composition.
-- `ProgramsHero` = hero framing + audience starter control.
-- `EngineSection` = feedback-loop explainer (`Listen -> Learn -> Lead -> Measure -> Repeat`).
-- `EcosystemSection` = pathway previews and featured cards.
-- `AllProgramsSection` = searchable/filterable grid.
-- `PathwayModal` = list/detail modal and full structured detail rendering.
-
-### Safe Content Editing Workflow
-1. Update structured entries in `programsData.ts` only.
-2. Preserve stable `id`/`slug` values when adjusting copy.
-3. Keep pathway assignment aligned with the three pathway definitions.
-4. Keep CTA routes valid (`/intake` or `/get-involved`).
-5. Run `npm run build` before merging.
-
-### Add a New Program
-1. Add a new `Program` object to the correct pathway list in `programsData.ts`.
-2. Provide every required schema field with specific copy.
-3. Ensure `id` is unique and URL-safe; `slug` should remain stable.
-4. Add meaningful `tags` for grid filters and recommendations.
-5. Verify card rendering, modal detail rendering, and deep-link open behavior.
-
-## Content Governance Rules
-- Do not ship placeholder or repeated boilerplate copy.
-- Every program entry must include the full structured schema.
-- Avoid generic “facilitated experience” language; content must be specific.
-- Keep pathway definitions consistent:
-  - Listen = community insight infrastructure
-  - Learn = resilience + relational capacity
-  - Lead = cross-sector coordination
+- `whoItsFor[]`
+- `whatYoullExperience[]`
+- `outcomes[]`
+- `idealPartners[]`
+- `format: { type, cadence? }`
+- `offeringType`
+- `tags[]`
+- `contactCTA: { label, href }`
 
 ## Development Standards
 - Always branch before feature work.
 - Never modify `main` directly.
-- All Programs updates must pass `npm run build`.
-- `programsData.ts` must remain type-safe.
-- Update `AGENTS.md` whenever architecture/schema/structure changes.
+- Keep changes scoped and reversible.
+- Preserve TypeScript safety for Programs data and components.
+- Remove placeholder/repetitive copy when touched.
 
-## Future Codex Instructions
-When running Codex in this repo:
-- Read `AGENTS.md` first.
-- Confirm architecture alignment before modifying.
-- Update `AGENTS.md` when schema or structure changes.
+## Runbook
+- Install: `npm install`
+- Dev server: `npm run dev`
+- Production build check: `npm run build`
 
-## Related Legacy Documentation
-- Intake + Edge Function operations guide remains in `agents.md`.
+## Known Issues / Ongoing Work
+- Some program entries still need deeper editorial pass and content enrichment.
+- Placeholder-level copy may still exist in select areas during ongoing content fill cycles.
+- Continue content QA against source planning docs before final publication.

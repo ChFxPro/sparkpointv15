@@ -8,7 +8,8 @@ import { PathwayModal } from "./PathwayModal";
 import { getProgramBySlug, pathways, type Pathway, type Program } from "./programsData";
 import "./programs.css";
 
-type AudienceSegment = "community" | "volunteer" | "funder";
+type AudienceSegment = "community" | "volunteer" | "supporter";
+const SHOW_LLL_EXPLAINER = false;
 
 const audienceSegmentConfig: Record<
   AudienceSegment,
@@ -26,10 +27,10 @@ const audienceSegmentConfig: Record<
     ctaLabel: "Volunteer With Us",
     ctaHref: "/intake?intent=volunteer",
   },
-  funder: {
-    label: "Funder",
+  supporter: {
+    label: "Supporter",
     audiences: ["Partners", "Organizations", "Leaders", "Nonprofits", "Schools"],
-    ctaLabel: "Partner In Impact",
+    ctaLabel: "See Ways To Get Involved",
     ctaHref: "/get-involved",
   },
 };
@@ -110,7 +111,7 @@ export default function ProgramsPage() {
         secondaryCtaLabel={segmentConfig.ctaLabel}
       />
 
-      <EngineSection />
+      {SHOW_LLL_EXPLAINER && <EngineSection />}
 
       <section id="ecosystem" className="sp-scroll-offset">
         <EcosystemSection
