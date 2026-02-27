@@ -8,23 +8,37 @@ type TimelineImage =
   | {
       src: string;
       caption?: string;
+      webpSrc?: string;
+      jpgSrc?: string;
+      alt?: string;
     };
 
 interface TimelinePhotoStackProps {
   images: TimelineImage[];
   label?: string;
   milestoneYear?: string;
+  layoutMode?: 'stack' | 'grid';
 }
 
-function TimelinePhotoStack({ images, label, milestoneYear }: TimelinePhotoStackProps) {
+function TimelinePhotoStack({ images, label, milestoneYear, layoutMode = 'stack' }: TimelinePhotoStackProps) {
   const safeImages = (images ?? [])
     .filter(Boolean)
     .map((img) => {
-      if (typeof img === 'string') return { src: img, caption: '' };
-      return { src: img.src, caption: img.caption ?? '' };
+      if (typeof img === 'string') {
+        return { src: img, caption: '', webpSrc: '', jpgSrc: '', alt: '' };
+      }
+      const resolvedSrc = img.src || img.jpgSrc || img.webpSrc || '';
+      return {
+        src: resolvedSrc,
+        caption: img.caption ?? '',
+        webpSrc: img.webpSrc ?? '',
+        jpgSrc: img.jpgSrc ?? '',
+        alt: img.alt ?? '',
+      };
     })
     .filter((img) => Boolean(img.src));
   const hasMany = safeImages.length > 1;
+  const isGridLayout = layoutMode === 'grid';
 
   // which image is currently on top
   const [topIndex, setTopIndex] = useState(0);
@@ -83,6 +97,44 @@ function TimelinePhotoStack({ images, label, milestoneYear }: TimelinePhotoStack
 
   return (
     <div className="flex flex-col items-center group/stack">
+      {isGridLayout ? (
+        <div
+          className="grid grid-cols-2 gap-3"
+          style={{ width: 'clamp(280px, 34vw, 420px)' }}
+        >
+          {safeImages.map((img, index) => (
+            <div
+              key={`${img.src}-${index}`}
+              className="bg-white p-2 rounded-xl shadow-lg border-2 border-white"
+            >
+              <div className="w-full overflow-hidden rounded-lg bg-gray-100 relative aspect-[4/3]">
+                {img.webpSrc ? (
+                  <picture>
+                    <source srcSet={img.webpSrc} type="image/webp" />
+                    <img
+                      src={img.jpgSrc || img.src}
+                      alt={img.alt || img.caption || `${label ?? 'timeline item'} photo`}
+                      className="w-full h-full object-cover"
+                      draggable={false}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
+                ) : (
+                  <img
+                    src={img.src}
+                    alt={img.alt || img.caption || `${label ?? 'timeline item'} photo`}
+                    className="w-full h-full object-cover"
+                    draggable={false}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
       <button
         type="button"
         onClick={handleShuffle}
@@ -128,14 +180,28 @@ function TimelinePhotoStack({ images, label, milestoneYear }: TimelinePhotoStack
                 layout
               >
                 <div className="w-full h-full overflow-hidden rounded-lg bg-gray-100 relative">
-                  <img
-                    src={img.src}
-                    alt={img.caption || `${label ?? 'timeline item'} photo`}
-                    className="w-full h-full object-cover"
-                    draggable={false}
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  {img.webpSrc ? (
+                    <picture>
+                      <source srcSet={img.webpSrc} type="image/webp" />
+                      <img
+                        src={img.jpgSrc || img.src}
+                        alt={img.alt || img.caption || `${label ?? 'timeline item'} photo`}
+                        className="w-full h-full object-cover"
+                        draggable={false}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </picture>
+                  ) : (
+                    <img
+                      src={img.src}
+                      alt={img.alt || img.caption || `${label ?? 'timeline item'} photo`}
+                      className="w-full h-full object-cover"
+                      draggable={false}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  )}
                   {!isTop && <div className="absolute inset-0 bg-black/10" />}
                   {isTop && hasMany && (
                     <div className="absolute inset-0 opacity-0 group-hover/stack:opacity-100 transition-opacity duration-300">
@@ -151,6 +217,7 @@ function TimelinePhotoStack({ images, label, milestoneYear }: TimelinePhotoStack
           })}
         </div>
       </button>
+      )}
 
       {/* Caption & Interaction */}
       <div className="mt-8 flex flex-col items-center gap-2">
@@ -160,12 +227,14 @@ function TimelinePhotoStack({ images, label, milestoneYear }: TimelinePhotoStack
           </span>
         )}
 
-        {hasMany ? (
+        {hasMany && !isGridLayout ? (
           <span className="text-xs text-[#E03694] font-semibold">
             Shuffle photos <span className="w-1 h-1 inline-block rounded-full bg-current mx-2 align-middle" /> {safeImages.length} photos
           </span>
         ) : (
-          <span className="text-xs text-white/30">{safeImages.length ? '1 photo' : 'No photos'}</span>
+          <span className="text-xs text-white/30">
+            {safeImages.length ? `${safeImages.length} photo${safeImages.length > 1 ? 's' : ''}` : 'No photos'}
+          </span>
         )}
 
         {safeImages.length > 0 && ordered[0]?.src && !String(ordered[0].src).startsWith('figma:asset') && (

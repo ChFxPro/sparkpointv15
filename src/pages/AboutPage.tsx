@@ -8,6 +8,18 @@ import teamHeroImage from 'figma:asset/c88e8fd418fa5de2d8271a01eff7835b8bc45301.
 import blueZonesImage from 'figma:asset/006b84f90bae2616433d7bda85278d8264e4e33c.png';
 import bzBrevardDayWebp from '../assets/bz_brevard_day.webp';
 import bzBrevardDayJpg from '../assets/bz_brevard_day.jpg';
+import sus0000PaperWebp from '../assets/sust/sus_0000_paper.webp';
+import sus0000PaperJpg from '../assets/sust/sus_0000_paper.jpg';
+import sus0001GroupWebp from '../assets/sust/sus_0001_group.webp';
+import sus0001GroupJpg from '../assets/sust/sus_0001_group.jpg';
+import sus0002SarahOraWebp from '../assets/sust/sus_0002_sarah_ora.webp';
+import sus0002SarahOraJpg from '../assets/sust/sus_0002_sarah_ora.jpg';
+import sus0003WalkWebp from '../assets/sust/sus_0003_walk.webp';
+import sus0003WalkJpg from '../assets/sust/sus_0003_walk.jpg';
+import sus0004ShirtWebp from '../assets/sust/sus_0004_shirt.webp';
+import sus0004ShirtJpg from '../assets/sust/sus_0004_shirt.jpg';
+import sus0005GordWebp from '../assets/sust/sus_0005_gord.webp';
+import sus0005GordJpg from '../assets/sust/sus_0005_gord.jpg';
 import sparkPointLaunchImage from 'figma:asset/ce8cfb7a67e4c9db354c1d7021333b647621f8d5.png';
 import launchSocialImage from 'figma:asset/08d6097996fec1db647eccd1343a8e7ebf420b7b.png';
 import launchGroupImage from 'figma:asset/bef0024c7f7aa5cba807241e9b1a543393d1afd6.png';
@@ -96,7 +108,88 @@ const blueZonesPhase = {
   legalStatus: 'SparkPoint established as a 501(c)(3) in 2020'
 };
 
-const timeline = [
+type AboutTimelineImage = {
+  src: string;
+  caption: string;
+  rotation: number;
+  webpSrc?: string;
+  jpgSrc?: string;
+  alt?: string;
+};
+
+type AboutTimelineItem = {
+  year: string;
+  milestone: string;
+  description: string;
+  achievements: string[];
+  gallery: AboutTimelineImage[];
+  link?: {
+    label: string;
+    url: string;
+  };
+};
+
+const timeline: AboutTimelineItem[] = [
+  {
+    year: '2019',
+    milestone: '2019 — Walk for Neighbors (Visual Evidence)',
+    description: 'Before SparkPoint, this work lived as Sustainable Health for All. These artifacts capture early community momentum and the thread that led into Blue Zones work and, later, SparkPoint.',
+    achievements: ['Sustainable Health for All era', 'Early community momentum', 'Bridge into 2020 establishment'],
+    gallery: [
+      {
+        src: sus0003WalkJpg,
+        caption: 'Walk for Neighbors event photo',
+        rotation: -3,
+        webpSrc: sus0003WalkWebp,
+        jpgSrc: sus0003WalkJpg,
+        alt: 'Walk for Neighbors event photo',
+      },
+      {
+        src: sus0000PaperJpg,
+        caption: 'Early document/newsprint artifact from Sustainable Health for All era',
+        rotation: 2,
+        webpSrc: sus0000PaperWebp,
+        jpgSrc: sus0000PaperJpg,
+        alt: 'Early document/newsprint artifact from Sustainable Health for All era',
+      },
+      {
+        src: sus0001GroupJpg,
+        caption: 'Group photo from early SparkPoint/Sustainable Health community gathering',
+        rotation: -1.5,
+        webpSrc: sus0001GroupWebp,
+        jpgSrc: sus0001GroupJpg,
+        alt: 'Group photo from early SparkPoint/Sustainable Health community gathering',
+      },
+      {
+        src: sus0002SarahOraJpg,
+        caption: 'Sarah and Dr. Ora photo from early community work',
+        rotation: 3,
+        webpSrc: sus0002SarahOraWebp,
+        jpgSrc: sus0002SarahOraJpg,
+        alt: 'Sarah and Dr. Ora photo from early community work',
+      },
+      {
+        src: sus0004ShirtJpg,
+        caption: 'Walk for Neighbors shirt/signage',
+        rotation: -2,
+        webpSrc: sus0004ShirtWebp,
+        jpgSrc: sus0004ShirtJpg,
+        alt: 'Walk for Neighbors shirt/signage',
+      },
+      {
+        src: sus0005GordJpg,
+        caption: 'Historical photo tied to early Sustainable Health for All activities',
+        rotation: 2.5,
+        webpSrc: sus0005GordWebp,
+        jpgSrc: sus0005GordJpg,
+        alt: 'Historical photo tied to early Sustainable Health for All activities',
+      },
+    ],
+    link: {
+      label: '2019 coverage: Walk for Neighbors',
+      url: 'https://www.transylvaniatimes.com/features/walkers-inspire-to-promote-better-health-brevard-nc/article_efdc7f3d-fd0b-5559-9352-2f0c028dfcdb.html',
+    },
+  },
   { 
     year: '2020', 
     milestone: 'SparkPoint Established', 
@@ -737,6 +830,18 @@ export function AboutPage() {
                                     </span>
                                   ))}
                                </div>
+                               {item.link && (
+                                 <div className={`mt-6 ${isPhotoLeft ? 'md:text-right' : 'md:text-left'} text-center`}>
+                                   <a
+                                     href={item.link.url}
+                                     target="_blank"
+                                     rel="noreferrer noopener"
+                                     className="inline-flex items-center text-[#E03694] text-sm font-semibold hover:text-[#f472b6] transition-colors underline underline-offset-4"
+                                   >
+                                     {item.link.label}
+                                   </a>
+                                 </div>
+                               )}
                             </div>
                          </div>
 
@@ -746,6 +851,7 @@ export function AboutPage() {
                                images={item.gallery} 
                                label={item.year}
                                milestoneYear={item.year}
+                               layoutMode={item.gallery.length > 5 ? 'grid' : 'stack'}
                             />
                          </div>
                       </motion.div>
