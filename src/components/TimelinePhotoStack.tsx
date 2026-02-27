@@ -1,7 +1,9 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+// deno-lint-ignore no-unused-vars
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'motion/react';
+import type { TargetAndTransition } from 'motion/react';
 
 type TimelineImage =
   | string
@@ -62,12 +64,6 @@ function TimelinePhotoStack({ images, label, milestoneYear, layoutMode = 'stack'
   // Fixed rotations for the visual stack to look "curated"
   const rotations = [-1.5, 1.2, -0.8];
 
-  const handleShuffle = () => {
-    if (!hasMany) return;
-    setTopIndex((prev) => (prev + 1) % safeImages.length);
-  };
-
-  // Variants for the cards
   const variants = {
     top: {
       opacity: 1,
@@ -93,6 +89,11 @@ function TimelinePhotoStack({ images, label, milestoneYear, layoutMode = 'stack'
       scale: 0.985,
       transition: { type: 'spring', stiffness: 420, damping: 34, mass: 0.9 },
     },
+  };
+
+  const handleShuffle = () => {
+    if (!hasMany) return;
+    setTopIndex((prev) => (prev + 1) % safeImages.length);
   };
 
   return (
@@ -162,9 +163,10 @@ function TimelinePhotoStack({ images, label, milestoneYear, layoutMode = 'stack'
               transition: { duration: 0.34, ease: 'easeOut' },
             };
 
-            const animateTarget = (index === 0 && topIndex > 0 && pos === 'top')
-              ? (topHop as any)
-              : (variants[pos] as any);
+            const animateTarget =
+              index === 0 && topIndex > 0 && pos === 'top'
+                ? topHop
+                : variants[pos];
 
             const isTop = index === 0;
             const zIndex = 30 - index * 10;
@@ -175,7 +177,7 @@ function TimelinePhotoStack({ images, label, milestoneYear, layoutMode = 'stack'
                 className="absolute inset-0 bg-white p-2 rounded-xl shadow-lg border-2 border-white transition-transform duration-300 ease-out"
                 style={{ zIndex }}
                 initial={false}
-                animate={animateTarget}
+                animate={animateTarget as unknown as TargetAndTransition}
                 whileHover={isTop ? { y: -6 } : {}}
                 layout
               >
@@ -250,7 +252,15 @@ function TimelinePhotoStack({ images, label, milestoneYear, layoutMode = 'stack'
         )}
 
         {milestoneYear && (
-          <span className="text-[10px] text-white/35 uppercase tracking-widest">{milestoneYear}</span>
+          <span
+            className={`uppercase tracking-widest ${
+              milestoneYear.includes('501')
+                ? 'text-lg md:text-xl font-semibold text-white'
+                : 'text-[10px] text-white/35'
+            }`}
+          >
+            {milestoneYear}
+          </span>
         )}
       </div>
     </div>

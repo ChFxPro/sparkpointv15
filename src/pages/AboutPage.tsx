@@ -603,6 +603,27 @@ export function AboutPage() {
                 <span className="text-xs font-bold uppercase tracking-widest text-white">Organization History</span>
             </div>
 
+            <figure className="my-12">
+              <picture>
+                <source srcSet={evolveWebp} type="image/webp" />
+                <img
+                  src={evolvePng}
+                  alt="Evolution from Sustainable Health for All to Blue Zones Project Brevard to SparkPoint"
+                  className="w-full h-auto object-contain"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+              <figcaption className="mt-4 text-center">
+                <p className="text-sm md:text-base text-white/90 leading-relaxed">
+                  Sustainable Health for All → Blue Zones Project Brevard → SparkPoint
+                </p>
+                <p className="text-xs md:text-sm text-gray-300/80 mt-1">
+                  A growing commitment to inclusion, belonging, and wider regional collaboration.
+                </p>
+              </figcaption>
+            </figure>
+
             <div className="prose prose-lg prose-invert max-w-none text-gray-300 font-serif">
               
               {/* Part 3: Roots & Context (Blue Zones as Catalyst) */}
@@ -650,35 +671,12 @@ export function AboutPage() {
                   At that milestone, the organization introduced its next evolution: SparkPoint — the public-facing identity of Sustainable Health for All.
                 </p>
 
-                <div className="rounded-2xl border border-white/10 bg-white/5 overflow-hidden">
-                  <div className="w-full aspect-[16/9]">
-                    <picture>
-                      <source srcSet={evolveWebp} type="image/webp" />
-                      <img
-                        src={evolvePng}
-                        alt="Evolution from Sustainable Health for All to Blue Zones Project Brevard to SparkPoint"
-                        className="w-full h-full object-cover object-center"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </picture>
-                  </div>
-                  <div className="p-6 md:p-8">
-                    <p className="text-white text-base md:text-lg leading-relaxed">
-                      Sustainable Health for All → Blue Zones Project Brevard → SparkPoint
-                    </p>
-                    <p className="text-gray-300/80 text-sm mt-2">
-                      A growing commitment to belonging, inclusion, and regional collaboration.
-                    </p>
-                  </div>
-                </div>
-
                 <p className="leading-loose text-gray-300/90">
                   Built on what the Blue Zones work made clear — that social connection is a powerful driver of health — SparkPoint broadened the mission
                   beyond city boundaries, expanding inclusion across Transylvania County and into Western North Carolina.
                 </p>
 
-                <p className="text-2xl md:text-3xl text-white font-medium leading-tight">
+                <p className="text-xl md:text-2xl text-white font-semibold leading-snug">
                   The work didn’t restart.
                   <br />
                   It evolved.
@@ -687,7 +685,7 @@ export function AboutPage() {
 
               {/* Part 4: The Insight (Structural Gap) */}
               <div className="my-24 py-4">
-                <p className="text-2xl md:text-4xl text-white font-medium leading-tight max-w-3xl">
+                <p className="text-xl md:text-2xl text-white font-semibold leading-snug max-w-3xl">
                   What was missing wasn’t effort or care — it was a deeper sense of belonging.
                 </p>
               </div>
