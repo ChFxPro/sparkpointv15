@@ -402,7 +402,13 @@ export function Header() {
                    <div className="grid gap-4">
                       <Link to="/get-involved" onClick={handleLinkClick} className="text-white text-2xl font-bold hover:translate-x-2 transition-transform">Get Involved</Link>
                       <a href="https://www.yoursparkpoint.org/donations" className="text-white text-2xl font-bold hover:translate-x-2 transition-transform">Donate</a>
-                      <Link to="/news-media" onClick={handleLinkClick} className="text-white text-2xl font-bold hover:translate-x-2 transition-transform">Newsletter</Link>
+                      <a
+                        href="https://cowbell-primrose-tet2.squarespace.com/newsletter"
+                         onClick={handleLinkClick}
+                        className="text-white text-2xl font-bold hover:translate-x-2 transition-transform"
+                      >
+                        Newsletter
+                      </a>
                    </div>
                  </div>
 
