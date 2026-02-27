@@ -1,13 +1,19 @@
-{
-  "deno.enable": false,
-  "deno.enablePaths": ["src/supabase/functions"],
-  "deno.lint": true,
-  "deno.unstable": true,
-  "deno.suggest.imports.autoDiscover": true,
-  "deno.suggest.imports.hosts": {
-    "https://deno.land": true,
-    "https://esm.sh": true,
-    "https://cdn.skypack.dev": true,
-    "https://jspm.dev": true
-  }
-}
+[{
+	"resource": "/Users/jeffbannister/Code/sparkpoint/sparkpointv15/.vscode/settings.json",
+	"owner": "_generated_diagnostic_collection_name_#3",
+	"severity": 4,
+	"message": "Incorrect type. Expected \"array\".",
+	"startLineNumber": 8,
+	"startColumn": 20,
+	"endLineNumber": 8,
+	"endColumn": 24
+},{
+	"resource": "/Users/jeffbannister/Code/sparkpoint/sparkpointv15/.vscode/settings.json",
+	"owner": "_generated_diagnostic_collection_name_#3",
+	"severity": 4,
+	"message": "Incorrect type. Expected \"string\".",
+	"startLineNumber": 15,
+	"startColumn": 21,
+	"endLineNumber": 15,
+	"endColumn": 25
+}]

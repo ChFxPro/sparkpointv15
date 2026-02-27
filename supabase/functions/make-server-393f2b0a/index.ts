@@ -89,20 +89,26 @@ const app = new Hono();
 const FN_PREFIX = "/make-server-393f2b0a";
 
 const allowedOrigins = new Set<string>([
+  "https://yoursparkpoint.org",
+  "https://www.yoursparkpoint.org",
   "https://chfxpro.github.io",
   "http://localhost:3000",
 ]);
 
+function normalizeOrigin(origin: string) {
+  return origin.trim().replace(/\/+$/, "");
+}
+
 function getCorsHeaders(req: Request) {
-  const origin = req.headers.get("origin") ?? "";
-  const allowOrigin = allowedOrigins.has(origin)
-    ? origin
-    : "https://chfxpro.github.io";
+  const origin = (req.headers.get("origin") ?? "").trim();
+  const normalizedOrigin = normalizeOrigin(origin);
+  const allowOrigin = normalizedOrigin && allowedOrigins.has(normalizedOrigin) ? origin : "null";
 
   return {
     "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Methods": "GET,POST,PUT,PATCH,DELETE,OPTIONS",
-    "Access-Control-Allow-Headers": "apikey, authorization, content-type, x-client-info",
+    "Access-Control-Allow-Headers":
+      "apikey, authorization, content-type, x-client-info, accept, origin, x-requested-with",
     "Access-Control-Max-Age": "86400",
     "Vary": "Origin",
   };
