@@ -37,8 +37,6 @@ const quickLinks = [
   { label: 'Stories', href: '/stories' },
   { label: 'Impact', href: '/impact' },
   { label: 'Programs', href: '/programs' },
-  { label: 'Sponsors', href: '/sponsors' },
-  { label: 'Resiliency Hub', href: '/resiliency-hub' },
   { label: 'News & Media', href: '/news-media' },
   { label: 'Get Involved', href: '/get-involved', highlighted: true },
   { label: 'About', href: '/about' },
