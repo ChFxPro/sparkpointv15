@@ -1,13 +1,16 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { motion, useScroll, useMotionValueEvent } from 'motion/react';
 import { ChevronDown, Menu, X, Mail, Accessibility, Shield, Check } from 'lucide-react';
-import { Button } from './ui/button';
-import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from './ui/sheet';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Button } from './ui/button.tsx';
+import { Sheet, SheetContent, SheetTrigger as _SheetTrigger, SheetTitle, SheetDescription } from './ui/sheet.tsx';
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover.tsx';
 import sparkPointLogo from 'figma:asset/35bb889d1f4d0b05ae6753439b58199640858447.png';
+
+// Deno/TS classic JSX compatibility (keeps React in module scope)
+void React;
 
 interface DropdownItem {
   label: string;
@@ -47,15 +50,16 @@ export function Header() {
   });
 
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+    const handleKeyDown = (e: Event) => {
+      const key = (e as unknown as { key?: string }).key;
+      if (key === 'Escape') {
         setMobileOpen(false);
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    globalThis.addEventListener('keydown', handleKeyDown as EventListener);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      globalThis.removeEventListener('keydown', handleKeyDown as EventListener);
     };
   }, []);
 
@@ -138,7 +142,7 @@ export function Header() {
                 fontWeight: '600',
               }}
               onClick={() => {
-                window.location.href = 'https://www.yoursparkpoint.org/donations';
+                globalThis.location.href = 'https://www.yoursparkpoint.org/donations';
               }}
             >
               Donate
@@ -151,7 +155,8 @@ export function Header() {
                 variant="ghost"
                 size="icon"
                 className="w-9 h-9 text-gray-600 hover:text-[#E03694] hover:bg-[#E03694]/10 rounded-full"
-                onClick={() => navigate('/news-media')}
+                onClick={() => navigate('/intake?intent=contact')}
+                aria-label="Contact"
               >
                 <Mail size={18} />
               </Button>
@@ -159,6 +164,7 @@ export function Header() {
               <Popover>
                 <PopoverTrigger asChild>
                   <button
+                    type="button"
                     className="w-9 h-9 flex items-center justify-center rounded-full text-gray-600 hover:text-[#E03694] hover:bg-[#E03694]/10 transition-colors"
                     aria-label="Accessibility"
                   >
@@ -341,7 +347,7 @@ export function Header() {
                       fontSize: '16px',
                       fontWeight: '700',
                     }}
-                    onClick={() => window.location.href = 'https://www.yoursparkpoint.org/donations'}
+                    onClick={() => globalThis.location.href = 'https://www.yoursparkpoint.org/donations'}
                   >
                     Donate
                   </Button>
