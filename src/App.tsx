@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { StructuredData } from './components/StructuredData';
+import { ExternalRedirect } from './components/ExternalRedirect';
 import { HomePage } from './pages/HomePage';
 import { MissionPage } from './pages/MissionPage';
 import { StoriesPage } from './pages/StoriesPage';
@@ -85,6 +86,8 @@ function AppContent() {
             <Route path="/stories/community-champions/helene-anniversary" element={<HeleneOneYearArticle />} />
             <Route path="/trust" element={<TrustPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/donations" element={<ExternalRedirect to="https://cowbell-primrose-tet2.squarespace.com/donations" />} />
+            <Route path="/newsletter" element={<ExternalRedirect to="https://cowbell-primrose-tet2.squarespace.com/newsletter" />} />
             <Route path="*" element={<HomePage />} />
           </Routes>
         </main>
