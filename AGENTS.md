@@ -26,6 +26,8 @@ Last updated: 2026-02-27
 - `/sponsors`
 - `/resiliency-hub`
 - `/news-media`
+- `/newsletter` -> external redirect to Squarespace newsletter
+- `/donations` -> external redirect to Squarespace donations
 - `/intake` (`?intent=contact|volunteer|partner`)
 - `/partner` -> redirect to `/intake?intent=partner`
 - `/volunteer` -> redirect to `/intake?intent=volunteer`
