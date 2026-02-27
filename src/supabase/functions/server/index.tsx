@@ -2,6 +2,7 @@
 import { Hono } from "npm:hono";
 import { logger } from "npm:hono/logger";
 import * as kv from "./kv_store.tsx";
+import { IMPACT_2025 } from "../../../data/impact2025.ts";
 const app = new Hono();
 
 const allowedOrigins = new Set([
@@ -72,18 +73,15 @@ app.post("/make-server-535d8907/impact/init", async (c) => {
         notes: "Foundational year — post-Helene recovery efforts; outreach built through schools, food access, and trauma-informed training."
       },
       "2025": {
-        year: 2025,
-        community_events: 45,
-        workshops: 33,
-        youth_events: 15,
-        presentations: 10,
-        total_events: 103,
-        attendance: 3510,
-        unique_partners: 38,
-        individuals_trained: 3510,
-        avg_attendance: 56.6,
-        ready_groups: 10,
-        notes: "Year of momentum — expansion of Preparedness & Ready Groups, PFA volunteers, and regional partnerships."
+        year: IMPACT_2025.year,
+        events_logged: IMPACT_2025.eventsLogged,
+        events_with_attendance_recorded: IMPACT_2025.eventsWithAttendanceRecorded,
+        events_missing_attendance: IMPACT_2025.eventsMissingAttendance,
+        total_events: IMPACT_2025.eventsLogged,
+        attendance: IMPACT_2025.attendanceTotalRecordedMinimum,
+        unique_partners: IMPACT_2025.uniqueCollaboratingOrganizationCount,
+        months_active_programming: IMPACT_2025.monthsActiveProgramming,
+        notes: "Canonical 2025 totals sourced from SparkPoint impact tracking reference."
       }
     };
 

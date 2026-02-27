@@ -12,6 +12,9 @@ import { StoryArticlePage } from './pages/StoryArticlePage';
 import { ImpactPage } from './pages/ImpactPage';
 import { GetInvolvedPage } from './pages/GetInvolvedPage';
 import ProgramsPage from './pages/programs/ProgramsPage';
+import { SponsorsPage } from './pages/SponsorsPage';
+import { ResiliencyHubPage } from './pages/ResiliencyHubPage';
+import { NewsMediaPage } from './pages/NewsMediaPage';
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage'; // Keeping for reference or fallback? Probably unused now.
 import { VolunteerPage } from './pages/VolunteerPage'; // Unused now.
@@ -69,6 +72,9 @@ function AppContent() {
             <Route path="/stories/:categoryId/:slug" element={<StoryArticlePage />} />
             <Route path="/impact" element={<ImpactPage />} />
             <Route path="/programs" element={<ProgramsPage />} />
+            <Route path="/sponsors" element={<SponsorsPage />} />
+            <Route path="/resiliency-hub" element={<ResiliencyHubPage />} />
+            <Route path="/news-media" element={<NewsMediaPage />} />
             <Route path="/get-involved" element={<GetInvolvedPage />} />
             <Route path="/volunteer" element={<Navigate to="/intake?intent=volunteer" replace />} />
             <Route path="/partner" element={<Navigate to="/intake?intent=partner" replace />} />

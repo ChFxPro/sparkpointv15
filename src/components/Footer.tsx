@@ -37,6 +37,7 @@ const quickLinks = [
   { label: 'Stories', href: '/stories' },
   { label: 'Impact', href: '/impact' },
   { label: 'Programs', href: '/programs' },
+  { label: 'News & Media', href: '/news-media' },
   { label: 'Get Involved', href: '/get-involved', highlighted: true },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/intake?intent=contact' },
@@ -138,7 +139,7 @@ export function Footer() {
               {/* Contact Details */}
               <div className="space-y-3">
                 <a
-                  href="https://maps.google.com/?q=64+East+Main+Street+Brevard+NC+28712"
+                  href="https://maps.google.com/?q=159+W.+Main+St+Unit+2452+Brevard+NC+28712"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-3 group transition-all hover:opacity-80"
@@ -149,7 +150,7 @@ export function Footer() {
                     style={{ color: '#FDB515', filter: 'drop-shadow(0 0 2px rgba(253, 181, 21, 0.5))' }} 
                   />
                   <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.938rem', lineHeight: '1.5' }}>
-                    64 East Main Street, Brevard, NC 28712
+                    159 W. Main St Unit 2452, Brevard, NC 28712
                   </span>
                 </a>
                 <a

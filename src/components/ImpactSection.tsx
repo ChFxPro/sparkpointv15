@@ -3,7 +3,11 @@
 import { motion, AnimatePresence, useInView, useReducedMotion } from 'motion/react';
 import { useRef, useEffect, useState } from 'react';
 import { Activity, Users, TrendingUp, Target, ChevronLeft, ChevronRight, GraduationCap, Mic, Heart, Sparkles } from 'lucide-react';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
+import {
+  IMPACT_2025,
+  IMPACT_2025_ANCHOR_ATTENDANCE_TOTAL,
+  IMPACT_2025_NOVEMBER_SHARE_PERCENT,
+} from '../data/impact2025';
 
 // Shared glass card styles (keeps Impact section cohesive)
 const GLASS_CARD = {
@@ -489,36 +493,15 @@ export function ImpactSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
-
-  // WRC Partner Network - 8 verified partners organized by focus area
-  const partners = [
-    // Top Left Quadrant: Health & Wellness (gold/violet)
-    { name: 'UNC Health Pardee', focus: 'Health', color: '#FDB515', x: 25, y: 20, quadrant: 'Health & Wellness' },
-    { name: 'Pisgah Health Foundation', focus: 'Wellness', color: '#9E509F', x: 15, y: 35, quadrant: 'Health & Wellness' },
-    
-    // Top Right Quadrant: Community Resilience (coral/pink)
-    { name: 'American Red Cross', focus: 'Preparedness', color: '#F15F48', x: 75, y: 20, quadrant: 'Community Resilience' },
-    { name: 'FWRD Transylvania', focus: 'Recovery', color: '#E03694', x: 85, y: 35, quadrant: 'Community Resilience' },
-    
-    // Bottom Left Quadrant: Equity & Access (orange/red)
-    { name: 'El Centro Brevard', focus: 'Equity', color: '#F15F48', x: 15, y: 65, quadrant: 'Equity & Access' },
-    { name: 'Just Economics WNC', focus: 'Economy', color: '#FDB515', x: 25, y: 80, quadrant: 'Equity & Access' },
-    
-    // Bottom Right Quadrant: Youth & Engagement (violet/magenta)
-    { name: 'TC Strong', focus: 'Youth', color: '#9E509F', x: 75, y: 80, quadrant: 'Youth & Engagement' },
-    { name: 'Hunger Coalition of Transylvania County', focus: 'Food Security', color: '#E03694', x: 85, y: 65, quadrant: 'Youth & Engagement' },
-  ];
-
   const impactBreakdown = [
     {
       title: "Youth & Education",
       icon: GraduationCap,
       color: "#9E509F", // Purple
       stats: [
-        "34+ Youth-Focused Events & Sessions",
-        "~2,100 youth engagement moments",
-        "6 school & college campuses served",
-        "Primary partners: TC Strong, CARE"
+        "School and youth-centered sessions throughout 2025",
+        "Story and leadership activities for students countywide",
+        "Partnerships spanning schools, colleges, and youth programs"
       ]
     },
     {
@@ -526,7 +509,7 @@ export function ImpactSection() {
       icon: Users,
       color: "#F15F48", // Coral
       stats: [
-        "43+ adult/community events",
+        "Community conversations and leadership gatherings",
         "Community conversations, leadership talks, recovery events",
         "Coalition and partner-hosted sessions included"
       ]
@@ -536,7 +519,7 @@ export function ImpactSection() {
       icon: Sparkles,
       color: "#FDB515", // Gold
       stats: [
-        "20+ education & training sessions",
+        "Training and facilitation for partner and community groups",
         "LEAD, SupportEd, Y2Y, workforce-aligned trainings",
         "College and community-based formats"
       ]
@@ -546,8 +529,8 @@ export function ImpactSection() {
       icon: Mic,
       color: "#E03694", // Pink
       stats: [
-        "10 story collection stops",
-        "120+ verified resident interviews",
+        "Countywide story collection touchpoints",
+        "Resident interviews captured through story sessions",
         "Countywide, multi-partner locations"
       ]
     }
@@ -607,10 +590,10 @@ export function ImpactSection() {
             style={GLASS_CARD_STRONG}
           >
               <div className="text-white mb-2" style={{ fontSize: '4rem', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
-                <CountUp end={7700} duration={1.5} suffix="+" />
+                <CountUp end={IMPACT_2025.attendanceTotalRecordedMinimum} duration={1.5} suffix="+" />
               </div>
               <p className="text-white" style={{ fontSize: '1.25rem', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
-                Residents Supported
+                Recorded Attendance (2025 minimum)
               </p>
             </motion.div>
 
@@ -622,10 +605,10 @@ export function ImpactSection() {
             style={GLASS_CARD_STRONG}
           >
               <div className="text-white mb-2" style={{ fontSize: '4rem', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
-                <CountUp end={45} duration={1.5} suffix="+" />
+                <CountUp end={IMPACT_2025.uniqueCollaboratingOrganizationCount} duration={1.5} />
               </div>
               <p className="text-white" style={{ fontSize: '1.25rem', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
-                Partnerships Formed
+                Collaborating Organizations (2025)
               </p>
             </motion.div>
 
@@ -637,10 +620,10 @@ export function ImpactSection() {
             style={GLASS_CARD_STRONG}
           >
               <div className="text-white mb-2" style={{ fontSize: '4rem', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
-                100%
+                <CountUp end={IMPACT_2025.monthsActiveProgramming} duration={1.5} />
               </div>
               <p className="text-white" style={{ fontSize: '1.25rem', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
-                Local Volunteers
+                Months Active in 2025
               </p>
             </motion.div>
           </div>
@@ -688,23 +671,22 @@ export function ImpactSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
   {[
     {
-      value: 79,
+      value: IMPACT_2025.eventsLogged,
       label: "Total Events & Sessions (2025)",
-      note: "Includes December community-wide events and public gatherings",
+      note: "Canonical annual total from SparkPoint 2025 impact tracking",
     },
     {
-      value: 4477,
+      value: IMPACT_2025.attendanceTotalRecordedMinimum,
       label: "Verified Attendance Moments",
-      note: "Attendance-based count, consistent methodology (Jan–Dec)",
+      note: "Minimum recorded attendance across events with attendance data",
     },
     {
-      value: 2100,
-      label: "Youth Attendance (Estimated)",
-      note: "School programs, VOS sessions, festivals, convocation",
-      suffix: "+",
+      value: IMPACT_2025.uniqueCollaboratingOrganizationCount,
+      label: "Collaborating Organizations (2025)",
+      note: "Unique collaborating organization tokens in 2025 tracking data",
     },
     {
-      value: 12,
+      value: IMPACT_2025.monthsActiveProgramming,
       label: "Months of Active Programming",
       note: "January–December (full-year reporting)",
     },
@@ -822,7 +804,9 @@ export function ImpactSection() {
                           >
                             Attendance
                           </span>
-                          <span className="text-white/90" style={{ letterSpacing: '0.06em' }}>700</span>
+                          <span className="text-white/90" style={{ letterSpacing: '0.06em' }}>
+                            {IMPACT_2025.anchorProgramAttendance.heleneOneYearOfHealing.toLocaleString()}
+                          </span>
                         </span>
                       </div>
                     </li>
@@ -837,7 +821,9 @@ export function ImpactSection() {
                           >
                             Attendance
                           </span>
-                          <span className="text-white/90" style={{ letterSpacing: '0.06em' }}>700</span>
+                          <span className="text-white/90" style={{ letterSpacing: '0.06em' }}>
+                            {IMPACT_2025.anchorProgramAttendance.drOraBrainHealthSeries.toLocaleString()}
+                          </span>
                         </span>
                       </div>
                     </li>
@@ -852,7 +838,9 @@ export function ImpactSection() {
                           >
                             Attendance
                           </span>
-                          <span className="text-white/90" style={{ letterSpacing: '0.06em' }}>1,760</span>
+                          <span className="text-white/90" style={{ letterSpacing: '0.06em' }}>
+                            {IMPACT_2025.anchorProgramAttendance.vosEventsAndProgramming.toLocaleString()}
+                          </span>
                         </span>
                       </div>
                     </li>
@@ -866,7 +854,7 @@ export function ImpactSection() {
                     className="text-white tracking-tight"
                     style={{ fontSize: 'clamp(3.2rem, 6vw, 4.6rem)', fontWeight: 800, lineHeight: 1, textShadow: '0 6px 22px rgba(0,0,0,0.45)' }}
                   >
-                    3,160
+                    {IMPACT_2025_ANCHOR_ATTENDANCE_TOTAL.toLocaleString()}
                   </div>
                   <div className="mt-3 text-white/80 font-semibold text-sm uppercase tracking-[0.16em] leading-snug">
                     Total Anchor Attendance

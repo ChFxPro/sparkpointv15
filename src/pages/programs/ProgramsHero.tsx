@@ -1,13 +1,47 @@
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
+import { Link } from "react-router";
 import { pathways } from "./programsData";
 import { ArrowDown, ChevronRight } from "lucide-react";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-export function ProgramsHero() {
+type AudienceSegment = "community" | "volunteer" | "partner";
+
+interface ProgramsHeroProps {
+  audienceSegment: AudienceSegment;
+  onAudienceSegmentChange: (segment: AudienceSegment) => void;
+  secondaryCtaHref: string;
+  secondaryCtaLabel: string;
+}
+
+const segmentOptions: Array<{ id: AudienceSegment; label: string; hint: string }> = [
+  {
+    id: "community",
+    label: "Community",
+    hint: "Find programs built with neighbors - for connection, resilience, and shared well-being.",
+  },
+  {
+    id: "volunteer",
+    label: "Volunteer",
+    hint: "Join the work. Help create belonging, strengthen networks, and support community resilience.",
+  },
+  {
+    id: "partner",
+    label: "Partner",
+    hint: "Representing a school, nonprofit, or agency? Build a shared initiative with us.",
+  },
+];
+
+export function ProgramsHero({
+  audienceSegment,
+  onAudienceSegmentChange,
+  secondaryCtaHref,
+  secondaryCtaLabel,
+}: ProgramsHeroProps) {
   const prefersReduced = useReducedMotion();
   const { scrollY } = useScroll();
   const parallaxY = useTransform(scrollY, [0, 600], [0, prefersReduced ? 0 : -40]);
+  const activeSegment = segmentOptions.find((segment) => segment.id === audienceSegment) ?? segmentOptions[0];
 
   const scrollToExplore = () => {
     document.getElementById("pathway-hub")?.scrollIntoView({ behavior: "smooth" });
@@ -39,9 +73,48 @@ export function ProgramsHero() {
               className="sp-prog-subhead"
             >
               One community feedback loop: neighbors find support and voice,
-              volunteers turn care into action, and funders invest in
+              volunteers turn care into action, and partners help scale
               resilience that keeps compounding.
             </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease, delay: 0.4 }}
+              className="sp-prog-loop-strip"
+              aria-label="Listen Learn Lead repeat loop"
+            >
+              <span>Listen</span>
+              <span aria-hidden>→</span>
+              <span>Learn</span>
+              <span aria-hidden>→</span>
+              <span>Lead</span>
+              <span aria-hidden>→</span>
+              <span>Repeat</span>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease, delay: 0.45 }}
+              className="sp-prog-segment-wrap"
+            >
+              <div className="sp-prog-segment-control" role="radiogroup" aria-label="Choose your starting point">
+                {segmentOptions.map((segment) => (
+                  <button
+                    key={segment.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={audienceSegment === segment.id}
+                    className={`sp-prog-segment-button${audienceSegment === segment.id ? " sp-prog-segment-button-active" : ""}`}
+                    onClick={() => onAudienceSegmentChange(segment.id)}
+                  >
+                    {segment.label}
+                  </button>
+                ))}
+              </div>
+              <p className="sp-prog-segment-hint">{activeSegment.hint}</p>
+            </motion.div>
 
             {/* CTAs */}
             <motion.div
@@ -57,17 +130,13 @@ export function ProgramsHero() {
               >
                 Explore Programs
               </button>
-              <a
-                href="#cta"
+              <Link
+                to={secondaryCtaHref}
                 className="sp-prog-cta-button sp-prog-cta-button-secondary"
                 style={{ fontWeight: 500 }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById("cta")?.scrollIntoView({ behavior: "smooth" });
-                }}
               >
-                Talk With Us
-              </a>
+                {secondaryCtaLabel}
+              </Link>
             </motion.div>
 
             {/* Micro CTA */}
@@ -79,7 +148,7 @@ export function ProgramsHero() {
               className="sp-prog-hero-micro inline-flex items-center gap-1.5 cursor-pointer group"
               style={{ fontWeight: 400 }}
             >
-              Community member, volunteer, or funder?
+              Community member, volunteer, or partner?
               <span className="inline-flex items-center gap-0.5" style={{ color: "#E03694", fontWeight: 500 }}>
                 Start where you are
                 <ChevronRight size={13} className="sp-prog-chevron transition-transform" />

@@ -32,7 +32,7 @@ const engagementCards = [
       'Tax-deductible giving',
       'One-time or recurring options',
       'Transparent impact reporting',
-      '100% goes to programs'
+      'Supports SparkPoint programs and essential operations'
     ],
     cta: 'Make a Donation',
     color: '#9E509F',

@@ -23,40 +23,45 @@ import ora2Webp from '../assets/moments_impact/ora2.webp';
 import ora2Jpg from '../assets/moments_impact/ora2.jpg';
 import ora3Webp from '../assets/moments_impact/ora3.webp';
 import ora3Jpg from '../assets/moments_impact/ora3.jpg';
+import {
+  IMPACT_2025,
+  IMPACT_2025_NOVEMBER_SHARE_PERCENT,
+} from '../data/impact2025';
 
 const impactMetrics = [
   {
     icon: Users,
-    value: 12500,
-    label: 'Community Touchpoints in 2025',
-    shortLabel: 'Touchpoints',
-    description: 'Cumulative participation across programs, youth engagement, events, and partner collaborations throughout the year.',
+    value: IMPACT_2025.attendanceTotalRecordedMinimum,
+    displaySuffix: '+',
+    label: 'Recorded Attendance in 2025 (minimum)',
+    shortLabel: 'Attendance',
+    description: 'Minimum recorded attendance across 2025 events with attendance data.',
     color: '#E03694',
     gradient: 'linear-gradient(135deg, #E03694 0%, #F15F48 100%)'
   },
   {
-    icon: Heart,
-    value: 850,
-    label: 'Volunteer Hours',
-    shortLabel: 'Volunteer Hours',
-    description: 'Dedicated community volunteers making a difference',
+    icon: TrendingUp,
+    value: IMPACT_2025.eventsLogged,
+    label: 'Events Logged in 2025',
+    shortLabel: 'Events',
+    description: 'Canonical annual event total from SparkPoint 2025 tracking.',
     color: '#9E509F',
     gradient: 'linear-gradient(135deg, #9E509F 0%, #E03694 100%)'
   },
   {
-    icon: TrendingUp,
-    value: 45,
-    label: 'Partner Organizations',
+    icon: Heart,
+    value: IMPACT_2025.uniqueCollaboratingOrganizationCount,
+    label: 'Collaborating Organizations in 2025',
     shortLabel: 'Partners',
-    description: 'Collaborative partnerships strengthening our network',
+    description: 'Unique collaborating organization tokens in the 2025 tracker.',
     color: '#FDB515',
     gradient: 'linear-gradient(135deg, #FDB515 0%, #F15F48 100%)'
   },
   {
     icon: Award,
-    value: 98,
-    label: 'Programs Delivered',
-    description: 'Wellness, preparedness, and connection initiatives',
+    value: IMPACT_2025.eventsWithAttendanceRecorded,
+    label: 'Events with Attendance Recorded',
+    description: 'Events with attendance data in the 2025 source set.',
     color: '#F15F48',
     gradient: 'linear-gradient(135deg, #F15F48 0%, #E03694 100%)'
   }
@@ -410,7 +415,8 @@ export function ImpactPage() {
                     style={{ background: metric.gradient }}
                   />
                   <span style={{ color: '#1A1A1A', fontSize: '1.125rem', fontWeight: '600' }}>
-                    <Counter target={metric.value} />+
+                    <Counter target={metric.value} />
+                    {'displaySuffix' in metric && metric.displaySuffix ? metric.displaySuffix : ''}
                   </span>
                   <span style={{ color: '#666666', fontSize: '0.95rem' }}>
                     {'shortLabel' in metric && metric.shortLabel ? metric.shortLabel : metric.label}
@@ -446,15 +452,15 @@ export function ImpactPage() {
               
               <div className="flex flex-col sm:flex-row gap-8 md:gap-16 border-t border-slate-100 pt-8 mb-8">
                   <div>
-                      <div className="text-3xl font-bold text-slate-900">77+</div>
+                      <div className="text-3xl font-bold text-slate-900">{IMPACT_2025.eventsLogged.toLocaleString()}</div>
                       <div className="sp-text-sm text-slate-500">Total Events & Sessions</div>
                   </div>
                   <div>
-                      <div className="text-3xl font-bold text-slate-900">12 Months</div>
+                      <div className="text-3xl font-bold text-slate-900">{IMPACT_2025.monthsActiveProgramming} Months</div>
                       <div className="sp-text-sm text-slate-500">Active Programming</div>
                   </div>
                   <div>
-                      <div className="text-3xl font-bold text-slate-900">4,187</div>
+                      <div className="text-3xl font-bold text-slate-900">{IMPACT_2025.attendanceTotalRecordedMinimum.toLocaleString()}+</div>
                       <div className="sp-text-sm text-slate-500">Verified Attendance Moments</div>
                   </div>
               </div>
@@ -501,7 +507,7 @@ export function ImpactPage() {
             >
                 <div className="mb-4 sp-text-sm font-bold tracking-widest text-slate-400 uppercase">Engagement Density</div>
                 <div className="text-4xl md:text-7xl font-bold text-[#9E509F] mb-4">
-                    4,187
+                    {IMPACT_2025.attendanceTotalRecordedMinimum.toLocaleString()}+
                 </div>
                 <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-4">Verified Attendance Moments</h3>
                 <p className="text-base md:text-lg text-slate-600 max-w-2xl">
@@ -533,16 +539,16 @@ export function ImpactPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
                         <div>
-                            <div className="text-4xl font-bold text-slate-900 mb-1">~2,100</div>
-                            <div className="sp-text-sm text-slate-500 font-medium">Youth Attendance Moments</div>
+                            <div className="text-2xl font-bold text-slate-900 mb-1">Youth-Centered Programs</div>
+                            <div className="sp-text-sm text-slate-500 font-medium">Ongoing sessions that prioritize student voice and resilience.</div>
                         </div>
                         <div>
-                            <div className="text-4xl font-bold text-slate-900 mb-1">34+</div>
-                            <div className="sp-text-sm text-slate-500 font-medium">Youth-Focused Sessions</div>
+                            <div className="text-2xl font-bold text-slate-900 mb-1">School + Community Settings</div>
+                            <div className="sp-text-sm text-slate-500 font-medium">Programming runs across campus and neighborhood partner spaces.</div>
                         </div>
                         <div>
-                            <div className="text-4xl font-bold text-slate-900 mb-1">6</div>
-                            <div className="sp-text-sm text-slate-500 font-medium">Campuses Served</div>
+                            <div className="text-2xl font-bold text-slate-900 mb-1">Partner-Led Delivery</div>
+                            <div className="sp-text-sm text-slate-500 font-medium">SparkPoint convenes with educators and youth-focused organizations.</div>
                         </div>
                     </div>
                     <div className="mt-8 pt-8 border-t border-slate-200/60 sp-text-sm text-slate-500 relative z-10">
@@ -568,7 +574,7 @@ export function ImpactPage() {
                         Supporting the backbone of community.
                     </h3>
                     <p className="text-base md:text-lg text-slate-600 mb-6">
-                        For our 43+ adult and community events, SparkPoint often steps back—serving as the connector and facilitator so our partners can lead.
+                        Across adult and community convenings, SparkPoint often steps back—serving as the connector and facilitator so our partners can lead.
                     </p>
                     <ul className="space-y-3 text-slate-600">
                         <li className="flex items-center gap-3">
@@ -587,8 +593,8 @@ export function ImpactPage() {
                 </div>
                 <div className="bg-[#FFF5F2] rounded-3xl p-6 md:p-10 flex items-center justify-center min-h-[200px] md:min-h-[240px]">
                      <div className="text-center">
-                        <div className="text-5xl md:text-6xl font-bold text-[#F15F48] mb-2">43+</div>
-                        <div className="text-slate-600 font-medium">Community Events</div>
+                        <div className="text-3xl md:text-4xl font-bold text-[#F15F48] mb-2">Connector Role</div>
+                        <div className="text-slate-600 font-medium">Community + Partner Convenings</div>
                      </div>
                 </div>
             </motion.div>
@@ -606,7 +612,7 @@ export function ImpactPage() {
               <div className="border-l-4 border-[#E03694] pl-8 py-4 bg-gradient-to-r from-pink-50/50 to-transparent rounded-r-2xl">
                   <h3 className="text-2xl font-bold text-slate-900 mb-2">Story Collection as Intelligence</h3>
                   <p className="text-lg text-slate-600 mb-6 max-w-3xl">
-                      We treat stories as data. Across <span className="font-bold text-[#E03694]">10 collection stops</span> and <span className="font-bold text-[#E03694]">120+ interviews</span>, resident voices directly inform our priorities, advocacy, and response.
+                      We treat stories as data. Through countywide story collection and resident interviews, community voices directly inform our priorities, advocacy, and response.
                   </p>
                   <div className="inline-block px-4 py-1.5 rounded-full bg-white border border-[#E03694]/20 text-[#E03694] sp-text-sm font-medium">
                       Listening is an active metric.
@@ -681,12 +687,12 @@ export function ImpactPage() {
               <h3 className="text-2xl md:text-3xl font-bold mb-8">Momentum increased toward the end of the year.</h3>
               <div className="flex flex-col md:flex-row justify-center items-center gap-12">
                   <div>
-                      <div className="text-5xl font-bold text-[#FDB515] mb-2">565</div>
+                      <div className="text-5xl font-bold text-[#FDB515] mb-2">{IMPACT_2025.novemberAttendanceMoments.toLocaleString()}</div>
                       <div className="text-white/60 sp-text-sm uppercase tracking-wider">November Attendance Moments</div>
                   </div>
                   <div className="hidden md:block w-px h-16 bg-white/10"></div>
                   <div>
-                      <div className="text-5xl font-bold text-[#FDB515] mb-2">~13.5%</div>
+                      <div className="text-5xl font-bold text-[#FDB515] mb-2">{IMPACT_2025_NOVEMBER_SHARE_PERCENT}%</div>
                       <div className="text-white/60 sp-text-sm uppercase tracking-wider">of Annual Reach in Nov</div>
                   </div>
               </div>
