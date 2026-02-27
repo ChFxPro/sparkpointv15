@@ -42,7 +42,9 @@ jobs:
 
       - name: Add CNAME for custom domain
         run: |
-          echo "www.yoursparkpoint.org" > build/CNAME
+          # Use apex as the GitHub Pages custom domain so GitHub provisions the TLS cert for the root domain.
+          # We will keep www as a CNAME to the apex in DNS.
+          echo "yoursparkpoint.org" > build/CNAME
 
       - name: Disable Jekyll
         run: |
