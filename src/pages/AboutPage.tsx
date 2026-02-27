@@ -1,5 +1,9 @@
 'use client';
 
+import * as React from 'react';
+// Deno tooling: ensure the React namespace import is treated as used.
+const _React = React;
+void _React;
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { useState, useEffect } from 'react';
@@ -86,8 +90,7 @@ import shannonBoardJpg from '../assets/board_pics/sp_port26_0008_shannon.jpg';
 
 import gloriaBoardWebp from '../assets/board_pics/webp/sp_port26_0009_gloria.webp';
 import gloriaBoardJpg from '../assets/board_pics/sp_port26_0009_gloria.jpg';
-import { Button } from '../components/ui/button';
-import { TimelinePhotoStack } from '../components/TimelinePhotoStack';
+import { TimelinePhotoStack } from '../components/TimelinePhotoStack.tsx';
 import {
   Dialog,
   DialogContent,
@@ -95,7 +98,7 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogDescription,
-} from "../components/ui/dialog";
+} from "../components/ui/dialog.tsx";
 
 const blueZonesPhase = {
   phaseLabel: 'Groundwork Phase',
@@ -446,8 +449,6 @@ export function AboutPage() {
   const textY = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0.3]);
 
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-
   useEffect(() => {
     // Only cycle if we haven't reached the last word ("Built")
     if (wordIndex < HEADLINE_WORDS.length - 1) {
@@ -603,41 +604,20 @@ export function AboutPage() {
                 <span className="text-xs font-bold uppercase tracking-widest text-white">Organization History</span>
             </div>
 
-            <figure className="my-12">
-              <picture>
-                <source srcSet={evolveWebp} type="image/webp" />
-                <img
-                  src={evolvePng}
-                  alt="Evolution from Sustainable Health for All to Blue Zones Project Brevard to SparkPoint"
-                  className="w-full h-auto object-contain"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
-              <figcaption className="mt-4 text-center">
-                <p className="text-sm md:text-base text-white/90 leading-relaxed">
-                  Sustainable Health for All → Blue Zones Project Brevard → SparkPoint
-                </p>
-                <p className="text-xs md:text-sm text-gray-300/80 mt-1">
-                  A growing commitment to inclusion, belonging, and wider regional collaboration.
-                </p>
-              </figcaption>
-            </figure>
-
-            <div className="prose prose-lg prose-invert max-w-none text-gray-300 font-serif">
+            <div className="max-w-none text-gray-300">
               
               {/* Part 3: Roots & Context (Blue Zones as Catalyst) */}
               <div className="space-y-12 mb-24 max-w-2xl">
-                <p className="leading-loose text-gray-300/90">
+                <p className="text-lg leading-loose text-gray-300/90">
                   Sustainable Health for All began as a community-led effort in 2019 and received 501(c)(3) status in early 2020.
                 </p>
 
-                <p className="leading-loose text-gray-300/90">
+                <p className="text-lg leading-loose text-gray-300/90">
                   Through that nonprofit, Blue Zones Project Brevard was implemented across the City of Brevard from 2020 through 2023,
                   bringing residents, leaders, and partners together around evidence-based strategies for long-term well-being.
                 </p>
 
-                <p className="leading-loose text-gray-300/90">
+                <p className="text-lg leading-loose text-gray-300/90">
                   In spring 2023, Brevard was officially certified as a Blue Zones Community, a nationally recognized designation for community well-being.
                 </p>
 
@@ -667,11 +647,11 @@ export function AboutPage() {
                   </div>
                 </div>
 
-                <p className="leading-loose text-gray-300/90">
+                <p className="text-lg leading-loose text-gray-300/90">
                   At that milestone, the organization introduced its next evolution: SparkPoint — the public-facing identity of Sustainable Health for All.
                 </p>
 
-                <p className="leading-loose text-gray-300/90">
+                <p className="text-lg leading-loose text-gray-300/90">
                   Built on what the Blue Zones work made clear — that social connection is a powerful driver of health — SparkPoint broadened the mission
                   beyond city boundaries, expanding inclusion across Transylvania County and into Western North Carolina.
                 </p>
@@ -681,24 +661,44 @@ export function AboutPage() {
                   <br />
                   It evolved.
                 </p>
+                <figure className="my-16">
+                  <picture>
+                    <source srcSet={evolveWebp} type="image/webp" />
+                    <img
+                      src={evolvePng}
+                      alt="Evolution from Sustainable Health for All to Blue Zones Project Brevard to SparkPoint"
+                      className="w-full max-w-4xl mx-auto h-auto object-contain block"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
+                  <figcaption className="mt-6 text-center">
+                    <p className="text-sm md:text-base text-white/90 leading-relaxed">
+                      Sustainable Health for All → Blue Zones Project Brevard → SparkPoint
+                    </p>
+                    <p className="text-xs md:text-sm text-gray-300/80 mt-2">
+                      A growing commitment to inclusion, belonging, and wider regional collaboration.
+                    </p>
+                  </figcaption>
+                </figure>
               </div>
 
               {/* Part 4: The Insight (Structural Gap) */}
               <div className="my-24 py-4">
                 <p className="text-xl md:text-2xl text-white font-semibold leading-snug max-w-3xl">
-                  What was missing wasn’t effort or care — it was a deeper sense of belonging.
+                  The heart was present. What became clear over time was that some community members were still looking for a deeper sense of belonging within it.
                 </p>
               </div>
               
               {/* Grouped: Gap Explanation + Proof */}
               <div className="mb-32">
                  <div className="space-y-8 mb-16 max-w-2xl">
-                    <p className="leading-loose text-gray-300/90">
+                    <p className="text-lg leading-loose text-gray-300/90">
                       Listening sessions across the county confirmed a consistent pattern. 
                       Nonprofits, healthcare providers, schools, and neighbors were all working hard, but many residents still felt on the edges of support and decision-making. 
                       Collaboration often depended on goodwill rather than dependable, shared coordination.
                     </p>
-                    <p className="leading-loose text-gray-300/90">
+                    <p className="text-lg leading-loose text-gray-300/90">
                       SparkPoint was built to close that gap. We were shaped by community partners who wanted both durable coordination and a stronger sense of belonging — not just for a project, but for the long haul.
                     </p>
                  </div>
