@@ -40,6 +40,14 @@ jobs:
           VITE_SITE_ORIGIN: https://www.yoursparkpoint.org
         run: npm run build
 
+      - name: Add CNAME for custom domain
+        run: |
+          echo "www.yoursparkpoint.org" > build/CNAME
+
+      - name: Disable Jekyll
+        run: |
+          touch build/.nojekyll
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
