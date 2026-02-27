@@ -8,6 +8,7 @@ import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { Input } from '../components/ui/input';
 import { useState } from 'react';
+import { canonicalUrl } from '../lib/siteOrigin';
 
 const engagementCards = [
   {
@@ -74,7 +75,7 @@ export function GetInvolvedPage() {
       <Helmet>
         <title>Get Involved | SparkPoint</title>
         <meta name="description" content="Ways to connect, participate, and collaborate with SparkPoint." />
-        <link rel="canonical" href="https://chfxpro.github.io/sparkpointv15/get-involved" />
+        <link rel="canonical" href={canonicalUrl('/get-involved')} />
       </Helmet>
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-6 overflow-hidden">

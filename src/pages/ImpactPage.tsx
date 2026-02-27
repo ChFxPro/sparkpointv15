@@ -27,6 +27,7 @@ import {
   IMPACT_2025,
   IMPACT_2025_NOVEMBER_SHARE_PERCENT,
 } from '../data/impact2025';
+import { canonicalUrl } from '../lib/siteOrigin';
 
 const impactMetrics = [
   {
@@ -264,7 +265,7 @@ export function ImpactPage() {
       <Helmet>
         <title>Our Impact | SparkPoint</title>
         <meta name="description" content="How SparkPoint supports well-being, resilience, and collaboration." />
-        <link rel="canonical" href="https://chfxpro.github.io/sparkpointv15/impact" />
+        <link rel="canonical" href={canonicalUrl('/impact')} />
       </Helmet>
       {/* Enhanced Hero Section */}
       <section ref={heroRef} className="relative pt-24 pb-12 md:pt-32 md:pb-24 px-6 overflow-hidden">

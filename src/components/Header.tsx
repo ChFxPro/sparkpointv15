@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { motion, useScroll, useMotionValueEvent } from 'motion/react';
 import { ChevronDown, Menu, X, Mail, Accessibility, Shield, Check } from 'lucide-react';
 import { Button } from './ui/button';
@@ -34,6 +34,7 @@ const menuItems: MenuItem[] = [
 
 export function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { scrollY } = useScroll();
@@ -150,9 +151,7 @@ export function Header() {
                 variant="ghost"
                 size="icon"
                 className="w-9 h-9 text-gray-600 hover:text-[#E03694] hover:bg-[#E03694]/10 rounded-full"
-                onClick={() => {
-                  window.location.href = '/news-media';
-                }}
+                onClick={() => navigate('/news-media')}
               >
                 <Mail size={18} />
               </Button>
@@ -351,7 +350,10 @@ export function Header() {
                     <Button
                       variant="outline"
                       className="flex-1 border-white border-2 text-white hover:bg-white/10"
-                      onClick={() => window.location.href = '/news-media'}
+                      onClick={() => {
+                        handleLinkClick();
+                        navigate('/news-media');
+                      }}
                     >
                       <Mail size={18} className="mr-2" />
                       Newsletter
@@ -394,7 +396,7 @@ export function Header() {
                    <div className="grid gap-4">
                       <Link to="/get-involved" onClick={handleLinkClick} className="text-white text-2xl font-bold hover:translate-x-2 transition-transform">Get Involved</Link>
                       <a href="https://www.yoursparkpoint.org/donations" className="text-white text-2xl font-bold hover:translate-x-2 transition-transform">Donate</a>
-                      <a href="/news-media" className="text-white text-2xl font-bold hover:translate-x-2 transition-transform">Newsletter</a>
+                      <Link to="/news-media" onClick={handleLinkClick} className="text-white text-2xl font-bold hover:translate-x-2 transition-transform">Newsletter</Link>
                    </div>
                  </div>
 

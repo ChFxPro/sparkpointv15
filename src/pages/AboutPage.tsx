@@ -1,5 +1,9 @@
 'use client';
 
+import * as React from 'react';
+// Deno tooling: ensure the React namespace import is treated as used.
+const _React = React;
+void _React;
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { useState, useEffect } from 'react';
@@ -8,6 +12,20 @@ import teamHeroImage from 'figma:asset/c88e8fd418fa5de2d8271a01eff7835b8bc45301.
 import blueZonesImage from 'figma:asset/006b84f90bae2616433d7bda85278d8264e4e33c.png';
 import bzBrevardDayWebp from '../assets/bz_brevard_day.webp';
 import bzBrevardDayJpg from '../assets/bz_brevard_day.jpg';
+import evolveWebp from '../assets/icons/np-evolve.webp';
+import evolvePng from '../assets/icons/np-evolve.png';
+import sus0000PaperWebp from '../assets/sust/sus_0000_paper.webp';
+import sus0000PaperJpg from '../assets/sust/sus_0000_paper.jpg';
+import sus0001GroupWebp from '../assets/sust/sus_0001_group.webp';
+import sus0001GroupJpg from '../assets/sust/sus_0001_group.jpg';
+import sus0002SarahOraWebp from '../assets/sust/sus_0002_sarah_ora.webp';
+import sus0002SarahOraJpg from '../assets/sust/sus_0002_sarah_ora.jpg';
+import sus0003WalkWebp from '../assets/sust/sus_0003_walk.webp';
+import sus0003WalkJpg from '../assets/sust/sus_0003_walk.jpg';
+import sus0004ShirtWebp from '../assets/sust/sus_0004_shirt.webp';
+import sus0004ShirtJpg from '../assets/sust/sus_0004_shirt.jpg';
+import sus0005GordWebp from '../assets/sust/sus_0005_gord.webp';
+import sus0005GordJpg from '../assets/sust/sus_0005_gord.jpg';
 import sparkPointLaunchImage from 'figma:asset/ce8cfb7a67e4c9db354c1d7021333b647621f8d5.png';
 import launchSocialImage from 'figma:asset/08d6097996fec1db647eccd1343a8e7ebf420b7b.png';
 import launchGroupImage from 'figma:asset/bef0024c7f7aa5cba807241e9b1a543393d1afd6.png';
@@ -20,6 +38,7 @@ import regionalAuditoriumImage from 'figma:asset/ce0a67a45092b4432ec7c00f4a17cb5
 import seniorGatheringImage from 'figma:asset/2f54cc163c056ac592d9e429a8920f74d0a98f56.png';
 import interviewFilmingImage from 'figma:asset/183c96a680c45035b0835db81082bdb93af69f97.png';
 import sparkPointCommonsImage from 'figma:asset/63f606372ec6e500e9a7547d300fb9f0d31dae7e.png';
+import { canonicalUrl } from '../lib/siteOrigin';
 import mediaStudioImage from 'figma:asset/7c67e828e47be75e27ecc6de02db283be5ae7589.png';
 
 import sarahHeadshotWebp from '../assets/staff_pics/webp/sp_port26__0004_sarah.webp';
@@ -72,8 +91,7 @@ import shannonBoardJpg from '../assets/board_pics/sp_port26_0008_shannon.jpg';
 
 import gloriaBoardWebp from '../assets/board_pics/webp/sp_port26_0009_gloria.webp';
 import gloriaBoardJpg from '../assets/board_pics/sp_port26_0009_gloria.jpg';
-import { Button } from '../components/ui/button';
-import { TimelinePhotoStack } from '../components/TimelinePhotoStack';
+import { TimelinePhotoStack } from '../components/TimelinePhotoStack.tsx';
 import {
   Dialog,
   DialogContent,
@@ -81,7 +99,7 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogDescription,
-} from "../components/ui/dialog";
+} from "../components/ui/dialog.tsx";
 
 const blueZonesPhase = {
   phaseLabel: 'Groundwork Phase',
@@ -96,7 +114,90 @@ const blueZonesPhase = {
   legalStatus: 'SparkPoint established as a 501(c)(3) in 2020'
 };
 
-const timeline = [
+type AboutTimelineImage = {
+  src: string;
+  caption: string;
+  rotation: number;
+  webpSrc?: string;
+  jpgSrc?: string;
+  alt?: string;
+};
+
+type AboutTimelineItem = {
+  year: string;
+  milestone: string;
+  description: string;
+  achievements: string[];
+  gallery: AboutTimelineImage[];
+  accentColor?: string;
+  link?: {
+    label: string;
+    url: string;
+  };
+};
+
+const timeline: AboutTimelineItem[] = [
+  {
+    year: '2019',
+    milestone: '2019 — Walk for Neighbors',
+    description: 'Before SparkPoint, this work lived as Sustainable Health for All. These artifacts capture early community momentum and the thread that led into Blue Zones work and, later, SparkPoint.',
+    achievements: ['Sustainable Health for All era', 'Early community momentum', 'Bridge into 2020 establishment'],
+    accentColor: '#399700',
+    gallery: [
+      {
+        src: sus0003WalkJpg,
+        caption: 'Walk for Neighbors event photo',
+        rotation: -3,
+        webpSrc: sus0003WalkWebp,
+        jpgSrc: sus0003WalkJpg,
+        alt: 'Walk for Neighbors event photo',
+      },
+      {
+        src: sus0000PaperJpg,
+        caption: 'Early document/newsprint artifact from Sustainable Health for All era',
+        rotation: 2,
+        webpSrc: sus0000PaperWebp,
+        jpgSrc: sus0000PaperJpg,
+        alt: 'Early document/newsprint artifact from Sustainable Health for All era',
+      },
+      {
+        src: sus0001GroupJpg,
+        caption: 'Group photo from early SparkPoint/Sustainable Health community gathering',
+        rotation: -1.5,
+        webpSrc: sus0001GroupWebp,
+        jpgSrc: sus0001GroupJpg,
+        alt: 'Group photo from early SparkPoint/Sustainable Health community gathering',
+      },
+      {
+        src: sus0002SarahOraJpg,
+        caption: 'Sarah and Dr. Ora photo from early community work',
+        rotation: 3,
+        webpSrc: sus0002SarahOraWebp,
+        jpgSrc: sus0002SarahOraJpg,
+        alt: 'Sarah and Dr. Ora photo from early community work',
+      },
+      {
+        src: sus0004ShirtJpg,
+        caption: 'Walk for Neighbors shirt/signage',
+        rotation: -2,
+        webpSrc: sus0004ShirtWebp,
+        jpgSrc: sus0004ShirtJpg,
+        alt: 'Walk for Neighbors shirt/signage',
+      },
+      {
+        src: sus0005GordJpg,
+        caption: 'Historical photo tied to early Sustainable Health for All activities',
+        rotation: 2.5,
+        webpSrc: sus0005GordWebp,
+        jpgSrc: sus0005GordJpg,
+        alt: 'Historical photo tied to early Sustainable Health for All activities',
+      },
+    ],
+    link: {
+      label: '2019 coverage: Walk for Neighbors',
+      url: 'https://www.transylvaniatimes.com/features/walkers-inspire-to-promote-better-health-brevard-nc/article_efdc7f3d-fd0b-5559-9352-2f0c028dfcdb.html',
+    },
+  },
   { 
     year: '2020', 
     milestone: 'SparkPoint Established', 
@@ -151,6 +252,10 @@ const timeline = [
     ]
   }
 ];
+
+const sustainableHealthTimeline = timeline[0];
+const sparkPointTimeline = timeline.slice(1);
+const sustainableHealthAccent = sustainableHealthTimeline?.accentColor ?? '#399700';
 
 type StaffMember = {
   name: string;
@@ -345,8 +450,6 @@ export function AboutPage() {
   const textY = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0.3]);
 
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-
   useEffect(() => {
     // Only cycle if we haven't reached the last word ("Built")
     if (wordIndex < HEADLINE_WORDS.length - 1) {
@@ -363,7 +466,7 @@ export function AboutPage() {
       <Helmet>
         <title>About SparkPoint | Built Through Connection</title>
         <meta name="description" content="SparkPoint’s mission, history, and community-centered approach." />
-        <link rel="canonical" href="https://chfxpro.github.io/sparkpointv15/about" />
+        <link rel="canonical" href={canonicalUrl('/about')} />
       </Helmet>
 
       {/* 1. Hero Section — Documentary Presence with Connection Anchor */}
@@ -485,13 +588,13 @@ export function AboutPage() {
               
               <div className="space-y-8 pl-0 md:pl-0 max-w-3xl">
                 <p className="text-lg md:text-xl text-gray-300 leading-loose font-light">
-                  Across Transylvania County and Western North Carolina, people and organizations are doing meaningful work every day. 
-                  What’s often missing is not care or effort, but a <span className="text-white font-medium">deeper sense of belonging</span> that allows community voice to surface, 
-                  resources to be shared openly, and collaboration to happen across sectors and geography.
+                  Across Transylvania County and Western North Carolina, people and organizations are doing meaningful work every day.
+                  What’s often missing isn’t care or effort — it’s a <span className="text-white font-medium">deeper sense of belonging</span>
+                  that helps community voice surface, resources move clearly, and collaboration last over time.
                 </p>
                 <p className="text-lg md:text-xl text-gray-300 font-light leading-loose">
-                  SparkPoint exists to strengthen that connective tissue — fostering community well-being by creating space to 
-                  listen, learn together, and lead collaborative action over time.
+                  SparkPoint exists to strengthen that connective tissue — creating space to listen, learn together,
+                  and lead collaborative action.
                 </p>
               </div>
             </div>
@@ -502,19 +605,21 @@ export function AboutPage() {
                 <span className="text-xs font-bold uppercase tracking-widest text-white">Organization History</span>
             </div>
 
-            <div className="prose prose-lg prose-invert max-w-none text-gray-300 font-serif">
+            <div className="max-w-none text-gray-300">
               
               {/* Part 3: Roots & Context (Blue Zones as Catalyst) */}
               <div className="space-y-12 mb-24 max-w-2xl">
-                <p className="leading-loose text-gray-300/90">
-                  SparkPoint grew out of a powerful insight surfaced during the Blue Zones Project in Brevard. 
-                  That initiative brought residents and leaders together to understand what supports long-term health. 
-                  While the process successfully certified Brevard as a Blue Zones Community, its most lasting impact was how it brought people together around shared well-being.
+                <p className="text-lg leading-loose text-gray-300/90">
+                  Sustainable Health for All began as a community-led effort in 2019 and received 501(c)(3) status in early 2020.
                 </p>
 
-                <p className="leading-loose text-gray-300/90">
-                  Groundwork began in 2019 through Blue Zones activity, and SparkPoint was established in 2020 to carry that momentum forward countywide. 
-                  The heart was always present; what many residents still needed was a deeper sense of belonging that could be sustained over time.
+                <p className="text-lg leading-loose text-gray-300/90">
+                  Through that nonprofit, Blue Zones Project Brevard was implemented across the City of Brevard from 2020 through 2023,
+                  bringing residents, leaders, and partners together around evidence-based strategies for long-term well-being.
+                </p>
+
+                <p className="text-lg leading-loose text-gray-300/90">
+                  In spring 2023, Brevard was officially certified as a Blue Zones Community, a nationally recognized designation for community well-being.
                 </p>
 
                 <div className="rounded-2xl border border-[#0057B8]/30 bg-[#0057B8]/10 overflow-hidden">
@@ -535,31 +640,66 @@ export function AboutPage() {
                       Blue Zones Certification
                     </p>
                     <p className="text-white text-lg leading-relaxed mb-2">
-                      Brevard’s Blue Zones Community certification is a nationally recognized designation for long-term community well-being.
+                      In spring 2023, Brevard earned Blue Zones Community certification, a nationally recognized designation for community well-being.
                     </p>
                     <p className="text-blue-100/80 text-sm">
-                      SparkPoint’s early direction was shaped through this work and carried forward after establishment in 2020.
+                      That milestone validated years of local collaboration and marked a turning point for what came next.
                     </p>
                   </div>
                 </div>
+
+                <p className="text-lg leading-loose text-gray-300/90">
+                  At that milestone, the organization introduced its next evolution: SparkPoint — the public-facing identity of Sustainable Health for All.
+                </p>
+
+                <p className="text-lg leading-loose text-gray-300/90">
+                  Built on what the Blue Zones work made clear — that social connection is a powerful driver of health — SparkPoint broadened the mission
+                  beyond city boundaries, expanding inclusion across Transylvania County and into Western North Carolina.
+                </p>
+
+                <p className="text-xl md:text-2xl text-white font-semibold leading-snug">
+                  The work didn’t restart.
+                  <br />
+                  It evolved.
+                </p>
+                <figure className="my-16">
+                  <picture>
+                    <source srcSet={evolveWebp} type="image/webp" />
+                    <img
+                      src={evolvePng}
+                      alt="Evolution from Sustainable Health for All to Blue Zones Project Brevard to SparkPoint"
+                      className="w-full max-w-4xl mx-auto h-auto object-contain block"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
+                  <figcaption className="mt-6 text-center">
+                    <p className="text-sm md:text-base text-white/90 leading-relaxed">
+                      Sustainable Health for All → Blue Zones Project Brevard → SparkPoint
+                    </p>
+                    <p className="text-xs md:text-sm text-gray-300/80 mt-2">
+                      A growing commitment to inclusion, belonging, and wider regional collaboration.
+                    </p>
+                  </figcaption>
+                </figure>
               </div>
 
               {/* Part 4: The Insight (Structural Gap) */}
               <div className="my-24 py-4">
-                <p className="text-2xl md:text-4xl text-white font-medium leading-tight max-w-3xl">
-                  What was missing wasn’t effort or care — it was a deeper sense of belonging.
+                <p className="text-xl md:text-2xl text-white font-semibold leading-snug max-w-3xl">
+                  The heart was present. What became clear over time was that some community members were still looking for a deeper sense of belonging within it.
                 </p>
               </div>
               
               {/* Grouped: Gap Explanation + Proof */}
               <div className="mb-32">
                  <div className="space-y-8 mb-16 max-w-2xl">
-                    <p className="leading-loose text-gray-300/90">
+                    <p className="text-lg leading-loose text-gray-300/90">
                       Listening sessions across the county confirmed a consistent pattern. 
                       Nonprofits, healthcare providers, schools, and neighbors were all working hard, but many residents still felt on the edges of support and decision-making. 
                       Collaboration often depended on goodwill rather than dependable, shared coordination.
                     </p>
-                    <p className="leading-loose text-gray-300/90">
+                    <p className="text-lg leading-loose text-gray-300/90">
                       SparkPoint was built to close that gap. We were shaped by community partners who wanted both durable coordination and a stronger sense of belonging — not just for a project, but for the long haul.
                     </p>
                  </div>
@@ -630,6 +770,90 @@ export function AboutPage() {
              <div className="absolute left-0 md:left-0 top-0 bottom-0 w-px bg-white/10 hidden md:block z-0" />
 
              <div className="space-y-32 md:space-y-48 pb-20">
+
+                {/* Sustainable Health for All (Pre-Blue Zones) */}
+                {sustainableHealthTimeline && (
+                <motion.div
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.6 }}
+                  className="relative group grid grid-cols-1 md:grid-cols-12 gap-12 items-center"
+                >
+                   {/* Rail Marker */}
+                   <div
+                     className="hidden md:block absolute left-0 top-8 -translate-x-1/2 w-3 h-3 rounded-full border-2 border-[#0a0a0a] z-20"
+                     style={{ backgroundColor: sustainableHealthAccent, boxShadow: '0 0 10px rgba(57, 151, 0, 0.45)' }}
+                   />
+
+                   {/* Text Column */}
+                   <div className="col-span-1 md:col-span-7 relative z-10 text-center md:text-left md:order-last">
+                      {/* Watermark Year */}
+                      <div
+                        className="absolute -top-12 left-0 right-0 md:-top-20 md:right-[-2rem] md:left-auto md:text-right text-[5rem] md:text-[9rem] font-bold select-none pointer-events-none z-0"
+                        style={{ color: 'rgba(57, 151, 0, 0.12)' }}
+                      >
+                         {sustainableHealthTimeline.year}
+                      </div>
+
+                      <div className="relative z-10">
+                         <div
+                           className="inline-block px-3 py-1 rounded-full text-xs font-bold mb-4 tracking-wide"
+                           style={{
+                             backgroundColor: 'rgba(57, 151, 0, 0.16)',
+                             border: '1px solid rgba(57, 151, 0, 0.35)',
+                             color: '#b4e68a',
+                           }}
+                         >
+                           Sustainable Health for All
+                         </div>
+                         <h3 className="text-2xl md:text-4xl font-bold text-white mb-4">
+                            {sustainableHealthTimeline.milestone}
+                         </h3>
+                         <p className="sp-text-lg text-gray-400 leading-relaxed mb-6">
+                            {sustainableHealthTimeline.description}
+                         </p>
+                         <div className="flex flex-wrap gap-2 md:justify-end justify-center">
+                            {sustainableHealthTimeline.achievements.map((ach, i) => (
+                              <span
+                                key={i}
+                                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium"
+                                style={{
+                                  backgroundColor: 'rgba(57, 151, 0, 0.12)',
+                                  border: '1px solid rgba(57, 151, 0, 0.35)',
+                                  color: sustainableHealthAccent,
+                                }}
+                              >
+                                 {ach}
+                              </span>
+                            ))}
+                         </div>
+                         {sustainableHealthTimeline.link && (
+                           <div className="mt-6 md:text-right text-center">
+                             <a
+                               href={sustainableHealthTimeline.link.url}
+                               target="_blank"
+                               rel="noreferrer noopener"
+                               className="inline-flex items-center text-sm font-semibold transition-opacity underline underline-offset-4 hover:opacity-80"
+                               style={{ color: sustainableHealthAccent }}
+                             >
+                               {sustainableHealthTimeline.link.label}
+                             </a>
+                           </div>
+                         )}
+                      </div>
+                   </div>
+
+                   {/* Photo Stack */}
+                   <div className="col-span-1 md:col-span-5 flex justify-center md:order-first md:justify-start md:pl-16">
+                      <TimelinePhotoStack
+                         images={sustainableHealthTimeline.gallery}
+                         label={sustainableHealthTimeline.year}
+                         milestoneYear={sustainableHealthTimeline.year}
+                      />
+                   </div>
+                </motion.div>
+                )}
                 
                 {/* ORIGIN CHAPTER: Blue Zones (2019-2022) - Text Left, Photo Right */}
                 <motion.div 
@@ -700,9 +924,9 @@ export function AboutPage() {
                 </motion.div>
 
                 {/* Timeline Loop */}
-                {timeline.map((item, index) => {
-                   // Alternate layout: Even index = Photo Left (Row 2), Odd index = Text Left (Row 3)
-                   const isPhotoLeft = index % 2 === 0;
+                {sparkPointTimeline.map((item, index) => {
+                   // Alternate layout: even index = images left, odd index = copy left
+                   const isImageLeft = index % 2 === 0;
 
                    return (
                       <motion.div 
@@ -717,9 +941,9 @@ export function AboutPage() {
                          <div className="hidden md:block absolute left-0 top-8 -translate-x-1/2 w-3 h-3 rounded-full bg-[#E03694] border-2 border-[#0a0a0a] z-20" />
                          
                          {/* Text Column */}
-                         <div className={`col-span-1 md:col-span-7 relative z-10 text-center md:text-left ${isPhotoLeft ? 'md:order-last' : 'md:order-first md:pl-16'}`}>
+                         <div className={`col-span-1 md:col-span-7 relative z-10 text-center md:text-left ${isImageLeft ? 'md:order-last' : 'md:order-first md:pl-16'}`}>
                             {/* Watermark Year */}
-                            <div className={`absolute -top-12 left-0 right-0 md:-top-20 text-[5rem] md:text-[9rem] font-bold text-white/5 select-none pointer-events-none z-0 ${isPhotoLeft ? 'md:right-[-2rem] md:left-auto md:text-right' : 'md:left-[-2rem] md:text-left'}`}>
+                            <div className={`absolute -top-12 left-0 right-0 md:-top-20 text-[5rem] md:text-[9rem] font-bold text-white/5 select-none pointer-events-none z-0 ${isImageLeft ? 'md:right-[-2rem] md:left-auto md:text-right' : 'md:left-[-2rem] md:text-left'}`}>
                                {item.year}
                             </div>
                             
@@ -730,18 +954,30 @@ export function AboutPage() {
                                <p className="sp-text-lg text-gray-400 leading-relaxed mb-6">
                                   {item.description}
                                </p>
-                               <div className={`flex flex-wrap gap-2 ${isPhotoLeft ? 'md:justify-end justify-center' : 'md:justify-start justify-center'}`}>
+                               <div className={`flex flex-wrap gap-2 ${isImageLeft ? 'md:justify-end justify-center' : 'md:justify-start justify-center'}`}>
                                   {item.achievements.map((ach, i) => (
                                     <span key={i} className="inline-flex items-center px-3 py-1 rounded-full bg-[#E03694]/10 border border-[#E03694]/20 text-[#E03694] text-xs font-medium">
                                        {ach}
                                     </span>
                                   ))}
                                </div>
+                               {item.link && (
+                                 <div className={`mt-6 ${isImageLeft ? 'md:text-right' : 'md:text-left'} text-center`}>
+                                   <a
+                                     href={item.link.url}
+                                     target="_blank"
+                                     rel="noreferrer noopener"
+                                     className="inline-flex items-center text-[#E03694] text-sm font-semibold hover:text-[#f472b6] transition-colors underline underline-offset-4"
+                                   >
+                                     {item.link.label}
+                                   </a>
+                                 </div>
+                               )}
                             </div>
                          </div>
 
                          {/* Photo Stack */}
-                         <div className={`col-span-1 md:col-span-5 flex justify-center ${isPhotoLeft ? 'md:order-first md:justify-start md:pl-16' : 'md:order-last md:justify-end'}`}>
+                         <div className={`col-span-1 md:col-span-5 flex justify-center ${isImageLeft ? 'md:order-first md:justify-start md:pl-16' : 'md:order-last md:justify-end'}`}>
                             <TimelinePhotoStack 
                                images={item.gallery} 
                                label={item.year}

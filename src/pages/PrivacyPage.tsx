@@ -5,6 +5,7 @@ import { motion } from 'motion/react';
 import { ArrowLeft, Mail, Phone, Shield, Lock, EyeOff } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Link } from 'react-router';
+import { canonicalUrl } from '../lib/siteOrigin';
 
 export function PrivacyPage() {
   return (
@@ -12,7 +13,7 @@ export function PrivacyPage() {
       <Helmet>
         <title>Privacy Policy | SparkPoint</title>
         <meta name="description" content="SparkPoint's commitment to privacy: we do not sell data, we respect your information, and we prioritize community trust." />
-        <link rel="canonical" href="https://chfxpro.github.io/sparkpointv15/privacy" />
+        <link rel="canonical" href={canonicalUrl('/privacy')} />
       </Helmet>
 
       <section className="pt-28 md:pt-40 pb-12 md:pb-20 px-6">

@@ -2,10 +2,15 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 
+const defaultBase = '/sparkpointv15/';
+const defaultSiteOrigin = 'https://chfxpro.github.io/sparkpointv15';
+
+if (!process.env.VITE_SITE_ORIGIN) {
+  process.env.VITE_SITE_ORIGIN = process.env.SITE_ORIGIN ?? process.env.PUBLIC_ORIGIN ?? defaultSiteOrigin;
+}
+
 export default defineConfig({
-  // ✅ REQUIRED for GitHub Pages project sites:
-  // https://<user>.github.io/<repo>/
-  base: '/sparkpointv15/',
+  base: process.env.PUBLIC_BASE ?? defaultBase,
 
   plugins: [react()],
   resolve: {
