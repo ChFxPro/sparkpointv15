@@ -1,0 +1,518 @@
+{
+  "generatedAt": "2026-02-28T14:51:02.273Z",
+  "baseUrl": "http://127.0.0.1:4174/sparkpointv15",
+  "scenarios": [
+    {
+      "viewport": {
+        "name": "iphone13_14_portrait",
+        "width": 390,
+        "height": 844
+      },
+      "screenshot": "iphone13_14_portrait__home-county-scale-after.png",
+      "diag": {
+        "headingFound": true,
+        "gridFound": true,
+        "cardCount": 4,
+        "cards": [
+          {
+            "index": 0,
+            "text": "109Total Events & Sessions (2025)Canonical annual total from SparkPoint 2025 impact tracking",
+            "numericText": "10920252025",
+            "top": 240,
+            "bottom": 424,
+            "height": 184,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 1,
+            "text": "5,866Verified Attendance MomentsMinimum recorded attendance across events with attendance data",
+            "numericText": "5866",
+            "top": 440,
+            "bottom": 624,
+            "height": 184,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 2,
+            "text": "41Collaborating Organizations (2025)Unique collaborating organization tokens in 2025 tracking data",
+            "numericText": "4120252025",
+            "top": 640,
+            "bottom": 824,
+            "height": 184,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 3,
+            "text": "12Months of Active ProgrammingJanuary–December (full-year reporting)",
+            "numericText": "12",
+            "top": 840,
+            "bottom": 1005,
+            "height": 165,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          }
+        ],
+        "hasOverflowX": false
+      }
+    },
+    {
+      "viewport": {
+        "name": "iphone13_14_landscape",
+        "width": 844,
+        "height": 390
+      },
+      "screenshot": "iphone13_14_landscape__home-county-scale-after.png",
+      "diag": {
+        "headingFound": true,
+        "gridFound": true,
+        "cardCount": 4,
+        "cards": [
+          {
+            "index": 0,
+            "text": "109Total Events & Sessions (2025)Canonical annual total from SparkPoint 2025 impact tracking",
+            "numericText": "10920252025",
+            "top": 207,
+            "bottom": 422,
+            "height": 215,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 1,
+            "text": "5,866Verified Attendance MomentsMinimum recorded attendance across events with attendance data",
+            "numericText": "5866",
+            "top": 207,
+            "bottom": 422,
+            "height": 215,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 2,
+            "text": "41Collaborating Organizations (2025)Unique collaborating organization tokens in 2025 tracking data",
+            "numericText": "4120252025",
+            "top": 438,
+            "bottom": 653,
+            "height": 215,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 3,
+            "text": "12Months of Active ProgrammingJanuary–December (full-year reporting)",
+            "numericText": "12",
+            "top": 438,
+            "bottom": 653,
+            "height": 215,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          }
+        ],
+        "hasOverflowX": false
+      }
+    },
+    {
+      "viewport": {
+        "name": "android_small_portrait",
+        "width": 360,
+        "height": 800
+      },
+      "screenshot": "android_small_portrait__home-county-scale-after.png",
+      "diag": {
+        "headingFound": true,
+        "gridFound": true,
+        "cardCount": 4,
+        "cards": [
+          {
+            "index": 0,
+            "text": "109Total Events & Sessions (2025)Canonical annual total from SparkPoint 2025 impact tracking",
+            "numericText": "10920252025",
+            "top": 240,
+            "bottom": 422,
+            "height": 181,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 1,
+            "text": "5,866Verified Attendance MomentsMinimum recorded attendance across events with attendance data",
+            "numericText": "5866",
+            "top": 438,
+            "bottom": 619,
+            "height": 181,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 2,
+            "text": "41Collaborating Organizations (2025)Unique collaborating organization tokens in 2025 tracking data",
+            "numericText": "4120252025",
+            "top": 635,
+            "bottom": 839,
+            "height": 204,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 3,
+            "text": "12Months of Active ProgrammingJanuary–December (full-year reporting)",
+            "numericText": "12",
+            "top": 855,
+            "bottom": 1017,
+            "height": 162,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          }
+        ],
+        "hasOverflowX": false
+      }
+    },
+    {
+      "viewport": {
+        "name": "android_small_landscape",
+        "width": 800,
+        "height": 360
+      },
+      "screenshot": "android_small_landscape__home-county-scale-after.png",
+      "diag": {
+        "headingFound": true,
+        "gridFound": true,
+        "cardCount": 4,
+        "cards": [
+          {
+            "index": 0,
+            "text": "109Total Events & Sessions (2025)Canonical annual total from SparkPoint 2025 impact tracking",
+            "numericText": "10920252025",
+            "top": 207,
+            "bottom": 422,
+            "height": 215,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 1,
+            "text": "5,866Verified Attendance MomentsMinimum recorded attendance across events with attendance data",
+            "numericText": "5866",
+            "top": 207,
+            "bottom": 422,
+            "height": 215,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 2,
+            "text": "41Collaborating Organizations (2025)Unique collaborating organization tokens in 2025 tracking data",
+            "numericText": "4120252025",
+            "top": 438,
+            "bottom": 653,
+            "height": 215,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 3,
+            "text": "12Months of Active ProgrammingJanuary–December (full-year reporting)",
+            "numericText": "12",
+            "top": 438,
+            "bottom": 653,
+            "height": 215,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          }
+        ],
+        "hasOverflowX": false
+      }
+    },
+    {
+      "viewport": {
+        "name": "iphone16promax_portrait",
+        "width": 430,
+        "height": 932
+      },
+      "screenshot": "iphone16promax_portrait__home-county-scale-after.png",
+      "diag": {
+        "headingFound": true,
+        "gridFound": true,
+        "cardCount": 4,
+        "cards": [
+          {
+            "index": 0,
+            "text": "109Total Events & Sessions (2025)Canonical annual total from SparkPoint 2025 impact tracking",
+            "numericText": "10920252025",
+            "top": 218,
+            "bottom": 406,
+            "height": 188,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 1,
+            "text": "5,866Verified Attendance MomentsMinimum recorded attendance across events with attendance data",
+            "numericText": "5866",
+            "top": 422,
+            "bottom": 610,
+            "height": 188,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 2,
+            "text": "41Collaborating Organizations (2025)Unique collaborating organization tokens in 2025 tracking data",
+            "numericText": "4120252025",
+            "top": 626,
+            "bottom": 814,
+            "height": 188,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 3,
+            "text": "12Months of Active ProgrammingJanuary–December (full-year reporting)",
+            "numericText": "12",
+            "top": 830,
+            "bottom": 999,
+            "height": 169,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          }
+        ],
+        "hasOverflowX": false
+      }
+    },
+    {
+      "viewport": {
+        "name": "iphone16promax_landscape",
+        "width": 932,
+        "height": 430
+      },
+      "screenshot": "iphone16promax_landscape__home-county-scale-after.png",
+      "diag": {
+        "headingFound": true,
+        "gridFound": true,
+        "cardCount": 4,
+        "cards": [
+          {
+            "index": 0,
+            "text": "109Total Events & Sessions (2025)Canonical annual total from SparkPoint 2025 impact tracking",
+            "numericText": "10920252025",
+            "top": 175,
+            "bottom": 390,
+            "height": 215,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 1,
+            "text": "5,866Verified Attendance MomentsMinimum recorded attendance across events with attendance data",
+            "numericText": "5866",
+            "top": 175,
+            "bottom": 390,
+            "height": 215,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 2,
+            "text": "41Collaborating Organizations (2025)Unique collaborating organization tokens in 2025 tracking data",
+            "numericText": "4120252025",
+            "top": 406,
+            "bottom": 621,
+            "height": 215,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 3,
+            "text": "12Months of Active ProgrammingJanuary–December (full-year reporting)",
+            "numericText": "12",
+            "top": 406,
+            "bottom": 621,
+            "height": 215,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          }
+        ],
+        "hasOverflowX": false
+      }
+    },
+    {
+      "viewport": {
+        "name": "tablet_portrait",
+        "width": 768,
+        "height": 1024
+      },
+      "screenshot": "tablet_portrait__home-county-scale-after.png",
+      "diag": {
+        "headingFound": true,
+        "gridFound": true,
+        "cardCount": 4,
+        "cards": [
+          {
+            "index": 0,
+            "text": "109Total Events & Sessions (2025)Canonical annual total from SparkPoint 2025 impact tracking",
+            "numericText": "10920252025",
+            "top": 259,
+            "bottom": 474,
+            "height": 215,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 1,
+            "text": "5,866Verified Attendance MomentsMinimum recorded attendance across events with attendance data",
+            "numericText": "5866",
+            "top": 259,
+            "bottom": 474,
+            "height": 215,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 2,
+            "text": "41Collaborating Organizations (2025)Unique collaborating organization tokens in 2025 tracking data",
+            "numericText": "4120252025",
+            "top": 490,
+            "bottom": 705,
+            "height": 215,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 3,
+            "text": "12Months of Active ProgrammingJanuary–December (full-year reporting)",
+            "numericText": "12",
+            "top": 490,
+            "bottom": 705,
+            "height": 215,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          }
+        ],
+        "hasOverflowX": false
+      }
+    },
+    {
+      "viewport": {
+        "name": "desktop_smoke",
+        "width": 1280,
+        "height": 800
+      },
+      "screenshot": "desktop_smoke__home-county-scale-after.png",
+      "diag": {
+        "headingFound": true,
+        "gridFound": true,
+        "cardCount": 4,
+        "cards": [
+          {
+            "index": 0,
+            "text": "109Total Events & Sessions (2025)Canonical annual total from SparkPoint 2025 impact tracking",
+            "numericText": "10920252025",
+            "top": 174,
+            "bottom": 412,
+            "height": 238,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 1,
+            "text": "5,866Verified Attendance MomentsMinimum recorded attendance across events with attendance data",
+            "numericText": "5866",
+            "top": 174,
+            "bottom": 412,
+            "height": 238,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 2,
+            "text": "41Collaborating Organizations (2025)Unique collaborating organization tokens in 2025 tracking data",
+            "numericText": "4120252025",
+            "top": 174,
+            "bottom": 412,
+            "height": 238,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          },
+          {
+            "index": 3,
+            "text": "12Months of Active ProgrammingJanuary–December (full-year reporting)",
+            "numericText": "12",
+            "top": 174,
+            "bottom": 412,
+            "height": 238,
+            "display": "flex",
+            "visibility": "visible",
+            "opacity": "1",
+            "transform": "none"
+          }
+        ],
+        "hasOverflowX": false
+      }
+    }
+  ]
+}

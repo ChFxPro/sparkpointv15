@@ -128,15 +128,26 @@ const longFormTestimonials: Testimonial[] = [
 
 const carouselTestimonials: Testimonial[] = testimonials;
 
-function CountUp({ end, duration = 2, suffix = '' }: { end: number; duration?: number; suffix?: string }) {
+function CountUp({
+  end,
+  duration = 2,
+  suffix = '',
+  start = false,
+}: {
+  end: number;
+  duration?: number;
+  suffix?: string;
+  start?: boolean;
+}) {
   const [count, setCount] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const hasStarted = useRef(false);
 
   useEffect(() => {
-    if (!isInView) return;
+    if (!start || hasStarted.current) return;
+    hasStarted.current = true;
 
     let startTime: number | null = null;
+    let rafId = 0;
     const animate = (currentTime: number) => {
       if (!startTime) startTime = currentTime;
       const progress = Math.min((currentTime - startTime) / (duration * 1000), 1);
@@ -144,14 +155,18 @@ function CountUp({ end, duration = 2, suffix = '' }: { end: number; duration?: n
       setCount(Math.floor(progress * end));
       
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        rafId = requestAnimationFrame(animate);
       }
     };
 
-    requestAnimationFrame(animate);
-  }, [isInView, end, duration]);
+    rafId = requestAnimationFrame(animate);
 
-  return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
+    return () => {
+      cancelAnimationFrame(rafId);
+    };
+  }, [start, end, duration]);
+
+  return <span>{count.toLocaleString()}{suffix}</span>;
 }
 
 
@@ -590,7 +605,7 @@ export function ImpactSection() {
             style={GLASS_CARD_STRONG}
           >
               <div className="text-white mb-2" style={{ fontSize: 'clamp(2.6rem, 11vw, 4rem)', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
-                <CountUp end={IMPACT_2025.attendanceTotalRecordedMinimum} duration={1.5} suffix="+" />
+                <CountUp end={IMPACT_2025.attendanceTotalRecordedMinimum} duration={1.5} suffix="+" start={isInView} />
               </div>
               <p className="text-white" style={{ fontSize: 'clamp(1rem, 3.7vw, 1.25rem)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
                 Recorded Attendance (2025 minimum)
@@ -605,7 +620,7 @@ export function ImpactSection() {
             style={GLASS_CARD_STRONG}
           >
               <div className="text-white mb-2" style={{ fontSize: 'clamp(2.6rem, 11vw, 4rem)', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
-                <CountUp end={IMPACT_2025.uniqueCollaboratingOrganizationCount} duration={1.5} />
+                <CountUp end={IMPACT_2025.uniqueCollaboratingOrganizationCount} duration={1.5} start={isInView} />
               </div>
               <p className="text-white" style={{ fontSize: 'clamp(1rem, 3.7vw, 1.25rem)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
                 Collaborating Organizations (2025)
@@ -620,7 +635,7 @@ export function ImpactSection() {
             style={GLASS_CARD_STRONG}
           >
               <div className="text-white mb-2" style={{ fontSize: 'clamp(2.6rem, 11vw, 4rem)', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
-                <CountUp end={IMPACT_2025.monthsActiveProgramming} duration={1.5} />
+                <CountUp end={IMPACT_2025.monthsActiveProgramming} duration={1.5} start={isInView} />
               </div>
               <p className="text-white" style={{ fontSize: 'clamp(1rem, 3.7vw, 1.25rem)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
                 Months Active in 2025
@@ -694,8 +709,7 @@ export function ImpactSection() {
     <motion.div
       key={metric.label}
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="p-6 md:p-8 rounded-xl flex flex-col justify-between"
       style={GLASS_CARD}
@@ -705,11 +719,7 @@ export function ImpactSection() {
           className="text-white mb-2"
           style={{ fontSize: "clamp(2.4rem, 10.5vw, 3.5rem)", fontWeight: "700", lineHeight: 1 }}
         >
-          <CountUp
-            end={metric.value}
-            duration={1.5}
-            suffix={metric.suffix || ""}
-          />
+          <CountUp end={metric.value} duration={1.5} suffix={metric.suffix || ""} start={isInView} />
         </div>
         <h3 className="text-white/90 font-bold text-lg leading-tight mb-2">
           {metric.label}
