@@ -540,7 +540,7 @@ export function ImpactSection() {
     <section
       id="impact"
       ref={ref}
-      className="relative py-20 px-6 overflow-hidden"
+      className="relative py-12 md:py-20 px-6 overflow-hidden"
     >
       {/* Background with Parallax */}
       <div className="absolute inset-0 z-0">
@@ -564,15 +564,15 @@ export function ImpactSection() {
       
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* A. Hero Section */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-12 md:mb-20">
           <motion.h2
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-white mb-12"
+            className="text-white mb-8 md:mb-12"
             style={{
-              fontSize: '3.5rem',
+              fontSize: 'clamp(2.2rem, 8.5vw, 3.5rem)',
               lineHeight: '1.2',
               letterSpacing: '-1px',
               textShadow: '0px 4px 12px rgba(0, 0, 0, 0.8), 0px 2px 6px rgba(0, 0, 0, 0.6)'
@@ -581,18 +581,18 @@ export function ImpactSection() {
             Trust built through visibility and shared success.
           </motion.h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 md:gap-8 mb-12 md:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.2, duration: 1.2 }}
-            className="p-8 rounded-xl"
+            className="p-6 md:p-8 rounded-xl"
             style={GLASS_CARD_STRONG}
           >
-              <div className="text-white mb-2" style={{ fontSize: '4rem', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
+              <div className="text-white mb-2" style={{ fontSize: 'clamp(2.6rem, 11vw, 4rem)', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
                 <CountUp end={IMPACT_2025.attendanceTotalRecordedMinimum} duration={1.5} suffix="+" />
               </div>
-              <p className="text-white" style={{ fontSize: '1.25rem', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
+              <p className="text-white" style={{ fontSize: 'clamp(1rem, 3.7vw, 1.25rem)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
                 Recorded Attendance (2025 minimum)
               </p>
             </motion.div>
@@ -601,13 +601,13 @@ export function ImpactSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.35, duration: 1.2 }}
-            className="p-8 rounded-xl"
+            className="p-6 md:p-8 rounded-xl"
             style={GLASS_CARD_STRONG}
           >
-              <div className="text-white mb-2" style={{ fontSize: '4rem', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
+              <div className="text-white mb-2" style={{ fontSize: 'clamp(2.6rem, 11vw, 4rem)', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
                 <CountUp end={IMPACT_2025.uniqueCollaboratingOrganizationCount} duration={1.5} />
               </div>
-              <p className="text-white" style={{ fontSize: '1.25rem', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
+              <p className="text-white" style={{ fontSize: 'clamp(1rem, 3.7vw, 1.25rem)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
                 Collaborating Organizations (2025)
               </p>
             </motion.div>
@@ -616,13 +616,13 @@ export function ImpactSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.5, duration: 1.2 }}
-            className="p-8 rounded-xl"
+            className="p-6 md:p-8 rounded-xl"
             style={GLASS_CARD_STRONG}
           >
-              <div className="text-white mb-2" style={{ fontSize: '4rem', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
+              <div className="text-white mb-2" style={{ fontSize: 'clamp(2.6rem, 11vw, 4rem)', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
                 <CountUp end={IMPACT_2025.monthsActiveProgramming} duration={1.5} />
               </div>
-              <p className="text-white" style={{ fontSize: '1.25rem', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
+              <p className="text-white" style={{ fontSize: 'clamp(1rem, 3.7vw, 1.25rem)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
                 Months Active in 2025
               </p>
             </motion.div>
@@ -638,14 +638,14 @@ export function ImpactSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mb-24"
+          className="mb-16 md:mb-24"
         >
           {/* Header */}
-          <div className="text-center mb-16 max-w-4xl mx-auto">
+          <div className="text-center mb-12 md:mb-16 max-w-4xl mx-auto">
             <h2 
               className="text-white mb-6"
               style={{
-                fontSize: '3rem',
+                fontSize: 'clamp(2rem, 7.5vw, 3rem)',
                 lineHeight: '1.1',
                 fontWeight: '700',
                 letterSpacing: '-1px',
@@ -657,7 +657,7 @@ export function ImpactSection() {
             <p 
               className="text-white/90"
               style={{
-                fontSize: '1.25rem',
+                fontSize: 'clamp(1rem, 3.8vw, 1.25rem)',
                 lineHeight: '1.6',
                 fontWeight: '400',
                 textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)'
@@ -668,7 +668,7 @@ export function ImpactSection() {
           </div>
 
           {/* Impact At-A-Glance */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 mb-12 md:mb-16">
   {[
     {
       value: IMPACT_2025.eventsLogged,
@@ -697,13 +697,13 @@ export function ImpactSection() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="p-8 rounded-xl flex flex-col justify-between"
+      className="p-6 md:p-8 rounded-xl flex flex-col justify-between"
       style={GLASS_CARD}
     >
       <div className="mb-4">
         <div
           className="text-white mb-2"
-          style={{ fontSize: "3.5rem", fontWeight: "700", lineHeight: 1 }}
+          style={{ fontSize: "clamp(2.4rem, 10.5vw, 3.5rem)", fontWeight: "700", lineHeight: 1 }}
         >
           <CountUp
             end={metric.value}
@@ -724,7 +724,7 @@ export function ImpactSection() {
 
 
           {/* Impact Breakdown Groups */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 md:gap-8 mb-12 md:mb-16">
             {impactBreakdown.map((group, index) => (
               <motion.div
                 key={group.title}
@@ -732,13 +732,13 @@ export function ImpactSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                className="p-8 rounded-xl h-full"
+                className="p-6 md:p-8 rounded-xl h-full"
                 style={{
                   ...GLASS_CARD,
                   borderTop: `4px solid ${group.color}`,
                 }}
               >
-                <div className="flex items-center gap-4 mb-6">
+                <div className="flex items-center gap-4 mb-4 md:mb-6">
                   <div 
                     className="p-3 rounded-full"
                     style={{ backgroundColor: `${group.color}20`, color: group.color }}
@@ -747,7 +747,7 @@ export function ImpactSection() {
                   </div>
                   <h3 className="text-white text-xl font-bold">{group.title}</h3>
                 </div>
-                <ul className="space-y-4">
+                <ul className="space-y-3 md:space-y-4">
                   {group.stats.map((stat, i) => (
                     <li key={i} className="flex items-start gap-3 text-white/90">
                       <span 
@@ -768,13 +768,13 @@ export function ImpactSection() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="p-10 rounded-2xl mb-8 relative overflow-hidden"
+            className="p-6 md:p-10 rounded-2xl mb-8 relative overflow-hidden"
             style={{
               ...GLASS_CARD,
               background: 'linear-gradient(135deg, rgba(224, 54, 148, 0.14), rgba(253, 181, 21, 0.06))',
             }}
           >
-            <div className="relative z-10 flex flex-col lg:flex-row gap-10 lg:gap-16 items-start lg:items-center justify-between">
+            <div className="relative z-10 flex flex-col lg:flex-row gap-6 sm:gap-8 lg:gap-16 items-start lg:items-center justify-between">
               <div className="flex-1 w-full">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="p-3 rounded-xl bg-[#FDB515]/20 text-[#FDB515] border border-[#FDB515]/30">
@@ -783,7 +783,7 @@ export function ImpactSection() {
                   <h3 className="text-white text-2xl md:text-3xl font-bold">Anchor Moments & Momentum</h3>
                 </div>
                 
-                <div className="bg-black/20 rounded-xl p-6 border border-white/10 backdrop-blur-sm">
+                <div className="bg-black/20 rounded-xl p-5 md:p-6 border border-white/10 backdrop-blur-sm">
                   <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 mb-4">
                     <p className="text-[#FDB515] font-bold text-sm uppercase tracking-wider">
                       3 Anchor Program Highlights
@@ -793,7 +793,7 @@ export function ImpactSection() {
                     </p>
                   </div>
 
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 md:gap-y-4 gap-x-8">
                     <li className="text-white text-lg font-semibold flex items-start gap-3">
                       <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#FDB515] flex-shrink-0" />
                       <div className="flex flex-col">
@@ -849,7 +849,7 @@ export function ImpactSection() {
               </div>
 
               <div className="w-full lg:w-auto mt-4 lg:mt-0 pl-0 lg:pl-10 lg:border-l border-white/10">
-                <div className="rounded-xl p-6 bg-black/10 border border-white/10 backdrop-blur-sm">
+                <div className="rounded-xl p-5 md:p-6 bg-black/10 border border-white/10 backdrop-blur-sm">
                   <div
                     className="text-white tracking-tight"
                     style={{ fontSize: 'clamp(3.2rem, 6vw, 4.6rem)', fontWeight: 800, lineHeight: 1, textShadow: '0 6px 22px rgba(0,0,0,0.45)' }}
@@ -875,19 +875,19 @@ export function ImpactSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mb-20"
+          className="mb-12 md:mb-20"
         >
-          <h3 className="text-white text-center mb-12" style={{ fontSize: '2.5rem', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
+          <h3 className="text-white text-center mb-8 md:mb-12" style={{ fontSize: 'clamp(2rem, 7vw, 2.5rem)', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
             Why It Matters
           </h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="p-8 rounded-xl"
+              className="p-6 md:p-8 rounded-xl"
               style={{
                 ...GLASS_CARD_STRONG,
                 background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.78), rgba(224, 54, 148, 0.22), rgba(158, 80, 159, 0.18))',
@@ -895,7 +895,7 @@ export function ImpactSection() {
                 boxShadow: '0 18px 60px rgba(0, 0, 0, 0.55), 0 10px 26px rgba(224, 54, 148, 0.18), inset 0 1px 0 rgba(255,255,255,0.18)',
               }}
             >
-              <div style={{ fontSize: '4rem', fontWeight: '700', color: 'white', textShadow: '0 3px 8px rgba(0, 0, 0, 0.7)' }}>51%</div>
+              <div style={{ fontSize: 'clamp(2.6rem, 11vw, 4rem)', fontWeight: '700', color: 'white', textShadow: '0 3px 8px rgba(0, 0, 0, 0.7)' }}>51%</div>
               <p style={{ color: 'white', fontSize: '1.25rem', marginTop: '8px', textShadow: '0 2px 4px rgba(0, 0, 0, 0.6)' }}>
                 of residents report loneliness
               </p>
@@ -906,7 +906,7 @@ export function ImpactSection() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="p-8 rounded-xl"
+              className="p-6 md:p-8 rounded-xl"
               style={{
                 ...GLASS_CARD_STRONG,
                 background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.78), rgba(253, 181, 21, 0.18), rgba(241, 95, 72, 0.16))',
@@ -914,7 +914,7 @@ export function ImpactSection() {
                 boxShadow: '0 18px 60px rgba(0, 0, 0, 0.55), 0 10px 26px rgba(253, 181, 21, 0.16), inset 0 1px 0 rgba(255,255,255,0.18)',
               }}
             >
-              <div style={{ fontSize: '4rem', fontWeight: '700', color: 'white', textShadow: '0 3px 8px rgba(0, 0, 0, 0.7)' }}>37%</div>
+              <div style={{ fontSize: 'clamp(2.6rem, 11vw, 4rem)', fontWeight: '700', color: 'white', textShadow: '0 3px 8px rgba(0, 0, 0, 0.7)' }}>37%</div>
               <p style={{ color: 'white', fontSize: '1.25rem', marginTop: '8px', textShadow: '0 2px 4px rgba(0, 0, 0, 0.6)' }}>
                 report anxiety or trauma
               </p>
@@ -926,8 +926,8 @@ export function ImpactSection() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-center mt-8"
-            style={{ color: 'white', fontSize: '1.125rem', lineHeight: '1.7', textShadow: '0 2px 6px rgba(0, 0, 0, 0.7)' }}
+            className="text-center mt-6 md:mt-8"
+            style={{ color: 'white', fontSize: 'clamp(1rem, 3.4vw, 1.125rem)', lineHeight: '1.7', textShadow: '0 2px 6px rgba(0, 0, 0, 0.7)' }}
           >
             These challenges make our work more critical than ever. Through connection, 
             preparedness, and wellness programs, SparkPoint is building a resilient, 
@@ -941,7 +941,7 @@ export function ImpactSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mb-20"
+          className="mb-12 md:mb-20"
         >
           <PartnerNetworkHub />
         </motion.div>
@@ -952,31 +952,30 @@ export function ImpactSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="pb-20"
+          className="pb-12 md:pb-20"
         >
           {/* Headline moved outside container */}
-          <div className="text-center mb-16 px-6">
-            <h3 className="text-white mb-6 leading-tight" style={{ fontSize: '3rem', fontWeight: '700', letterSpacing: '-0.02em', textShadow: '0 4px 12px rgba(0, 0, 0, 0.5)' }}>
+          <div className="text-center mb-12 md:mb-16 px-4 md:px-6">
+            <h3 className="text-white mb-5 md:mb-6 leading-tight" style={{ fontSize: 'clamp(2rem, 7.5vw, 3rem)', fontWeight: '700', letterSpacing: '-0.02em', textShadow: '0 4px 12px rgba(0, 0, 0, 0.5)' }}>
               Community Built in Transylvania County
             </h3>
-            <p className="max-w-2xl mx-auto" style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '1.25rem', lineHeight: '1.6', textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)' }}>
+            <p className="max-w-2xl mx-auto" style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: 'clamp(1rem, 3.8vw, 1.25rem)', lineHeight: '1.6', textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)' }}>
               Shaped through lived experience, sustained partnership, and an ongoing cycle of Listen • Learn • Lead.
             </p>
           </div>
 
-          <div className="relative w-full max-w-5xl mx-auto mb-16 px-6">
+          <div className="relative w-full max-w-5xl mx-auto mb-12 md:mb-16 px-4 md:px-6">
             {/* Diagram Container - Softened & Open */}
-            <div className="relative rounded-[40px] overflow-visible" style={{
+            <div className="relative rounded-[40px] overflow-visible h-[400px] md:h-[560px]" style={{
               background: 'linear-gradient(135deg, rgba(20, 20, 30, 0.92), rgba(40, 20, 35, 0.88))',
               backdropFilter: 'blur(20px)',
               border: '1px solid rgba(255, 255, 255, 0.08)',
               boxShadow: '0 0 120px rgba(224, 54, 148, 0.1)', // Ambient glow instead of hard shadow
-              minHeight: '480px'
             }}>
               
               {/* Diagram Area */}
-              <div className="absolute inset-0 flex items-center justify-center p-8 overflow-hidden rounded-[40px]">
-                <div className="relative w-full h-full max-w-[500px] max-h-[500px] flex items-center justify-center scale-95 md:scale-100">
+	              <div className="absolute inset-0 flex items-center justify-center p-5 md:p-8 overflow-hidden rounded-[40px]">
+	                <div className="relative w-full h-full max-w-[500px] max-h-[500px] flex items-center justify-center scale-95 md:scale-100">
                   
                   {/* 1. Outer Ring: Regional Awareness (Subtle & Open) */}
                   {/* Allowed to feel expansive but contained within the view for clarity */}
