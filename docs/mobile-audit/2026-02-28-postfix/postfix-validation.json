@@ -1,0 +1,935 @@
+{
+  "generatedAt": "2026-02-28T03:08:27.962Z",
+  "baseUrl": "http://127.0.0.1:4174/sparkpointv15",
+  "outputDir": "/Users/jeffbannister/Code/sparkpoint/sparkpointv15/docs/mobile-audit/2026-02-28-postfix",
+  "menu": [
+    {
+      "viewport": "android_small_portrait",
+      "screenshot": "android_small_portrait__menu.png",
+      "focusStates": [
+        {
+          "tag": "A",
+          "label": "Home",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        },
+        {
+          "tag": "A",
+          "label": "Mission",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        },
+        {
+          "tag": "A",
+          "label": "Stories",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        }
+      ],
+      "foundDialog": true,
+      "viewportHeight": 800,
+      "linkCount": 9,
+      "linkMetrics": [
+        {
+          "text": "Home",
+          "top": 40,
+          "bottom": 84,
+          "height": 44
+        },
+        {
+          "text": "Mission",
+          "top": 84,
+          "bottom": 128,
+          "height": 44
+        },
+        {
+          "text": "Stories",
+          "top": 128,
+          "bottom": 172,
+          "height": 44
+        },
+        {
+          "text": "Impact",
+          "top": 172,
+          "bottom": 216,
+          "height": 44
+        },
+        {
+          "text": "Programs",
+          "top": 216,
+          "bottom": 260,
+          "height": 44
+        },
+        {
+          "text": "News & Media",
+          "top": 260,
+          "bottom": 304,
+          "height": 44
+        },
+        {
+          "text": "Get Involved",
+          "top": 304,
+          "bottom": 348,
+          "height": 44
+        },
+        {
+          "text": "About",
+          "top": 348,
+          "bottom": 392,
+          "height": 44
+        },
+        {
+          "text": "Contact",
+          "top": 392,
+          "bottom": 436,
+          "height": 44
+        }
+      ],
+      "hiddenBelowFold": [],
+      "minLinkHeight": 44,
+      "trustLinkRect": {
+        "top": 667,
+        "bottom": 687,
+        "height": 20,
+        "width": 336
+      },
+      "donateButtonRect": {
+        "top": 704,
+        "bottom": 748,
+        "height": 44,
+        "width": 336
+      },
+      "newsletterButtonRect": {
+        "top": 756,
+        "bottom": 800,
+        "height": 44,
+        "width": 336
+      },
+      "newsletterComputed": {
+        "color": "rgb(79, 24, 69)",
+        "backgroundColor": "rgb(255, 244, 251)",
+        "borderColor": "rgba(255, 255, 255, 0.75)"
+      }
+    },
+    {
+      "viewport": "android_small_landscape",
+      "screenshot": "android_small_landscape__menu.png",
+      "focusStates": [
+        {
+          "tag": "A",
+          "label": "Home",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        },
+        {
+          "tag": "A",
+          "label": "Mission",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        },
+        {
+          "tag": "A",
+          "label": "Stories",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        }
+      ],
+      "foundDialog": true,
+      "viewportHeight": 360,
+      "linkCount": 9,
+      "linkMetrics": [
+        {
+          "text": "Home",
+          "top": 40,
+          "bottom": 84,
+          "height": 44
+        },
+        {
+          "text": "Mission",
+          "top": 40,
+          "bottom": 84,
+          "height": 44
+        },
+        {
+          "text": "Stories",
+          "top": 84,
+          "bottom": 128,
+          "height": 44
+        },
+        {
+          "text": "Impact",
+          "top": 84,
+          "bottom": 128,
+          "height": 44
+        },
+        {
+          "text": "Programs",
+          "top": 128,
+          "bottom": 172,
+          "height": 44
+        },
+        {
+          "text": "News & Media",
+          "top": 128,
+          "bottom": 172,
+          "height": 44
+        },
+        {
+          "text": "Get Involved",
+          "top": 172,
+          "bottom": 216,
+          "height": 44
+        },
+        {
+          "text": "About",
+          "top": 172,
+          "bottom": 216,
+          "height": 44
+        },
+        {
+          "text": "Contact",
+          "top": 216,
+          "bottom": 260,
+          "height": 44
+        }
+      ],
+      "hiddenBelowFold": [],
+      "minLinkHeight": 44,
+      "trustLinkRect": {
+        "top": 227,
+        "bottom": 247,
+        "height": 20,
+        "width": 360
+      },
+      "donateButtonRect": {
+        "top": 264,
+        "bottom": 308,
+        "height": 44,
+        "width": 360
+      },
+      "newsletterButtonRect": {
+        "top": 316,
+        "bottom": 360,
+        "height": 44,
+        "width": 360
+      },
+      "newsletterComputed": {
+        "color": "rgb(79, 24, 69)",
+        "backgroundColor": "rgb(255, 244, 251)",
+        "borderColor": "rgba(255, 255, 255, 0.75)"
+      }
+    },
+    {
+      "viewport": "iphone13_14_portrait",
+      "screenshot": "iphone13_14_portrait__menu.png",
+      "focusStates": [
+        {
+          "tag": "A",
+          "label": "Home",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        },
+        {
+          "tag": "A",
+          "label": "Mission",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        },
+        {
+          "tag": "A",
+          "label": "Stories",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        }
+      ],
+      "foundDialog": true,
+      "viewportHeight": 844,
+      "linkCount": 9,
+      "linkMetrics": [
+        {
+          "text": "Home",
+          "top": 40,
+          "bottom": 84,
+          "height": 44
+        },
+        {
+          "text": "Mission",
+          "top": 40,
+          "bottom": 84,
+          "height": 44
+        },
+        {
+          "text": "Stories",
+          "top": 84,
+          "bottom": 128,
+          "height": 44
+        },
+        {
+          "text": "Impact",
+          "top": 84,
+          "bottom": 128,
+          "height": 44
+        },
+        {
+          "text": "Programs",
+          "top": 128,
+          "bottom": 172,
+          "height": 44
+        },
+        {
+          "text": "News & Media",
+          "top": 128,
+          "bottom": 172,
+          "height": 44
+        },
+        {
+          "text": "Get Involved",
+          "top": 172,
+          "bottom": 216,
+          "height": 44
+        },
+        {
+          "text": "About",
+          "top": 172,
+          "bottom": 216,
+          "height": 44
+        },
+        {
+          "text": "Contact",
+          "top": 216,
+          "bottom": 260,
+          "height": 44
+        }
+      ],
+      "hiddenBelowFold": [],
+      "minLinkHeight": 44,
+      "trustLinkRect": {
+        "top": 711,
+        "bottom": 731,
+        "height": 20,
+        "width": 366
+      },
+      "donateButtonRect": {
+        "top": 748,
+        "bottom": 792,
+        "height": 44,
+        "width": 366
+      },
+      "newsletterButtonRect": {
+        "top": 800,
+        "bottom": 844,
+        "height": 44,
+        "width": 366
+      },
+      "newsletterComputed": {
+        "color": "rgb(79, 24, 69)",
+        "backgroundColor": "rgb(255, 244, 251)",
+        "borderColor": "rgba(255, 255, 255, 0.75)"
+      }
+    },
+    {
+      "viewport": "iphone13_14_landscape",
+      "screenshot": "iphone13_14_landscape__menu.png",
+      "focusStates": [
+        {
+          "tag": "A",
+          "label": "Home",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        },
+        {
+          "tag": "A",
+          "label": "Mission",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        },
+        {
+          "tag": "A",
+          "label": "Stories",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        }
+      ],
+      "foundDialog": true,
+      "viewportHeight": 390,
+      "linkCount": 9,
+      "linkMetrics": [
+        {
+          "text": "Home",
+          "top": 40,
+          "bottom": 84,
+          "height": 44
+        },
+        {
+          "text": "Mission",
+          "top": 40,
+          "bottom": 84,
+          "height": 44
+        },
+        {
+          "text": "Stories",
+          "top": 84,
+          "bottom": 128,
+          "height": 44
+        },
+        {
+          "text": "Impact",
+          "top": 84,
+          "bottom": 128,
+          "height": 44
+        },
+        {
+          "text": "Programs",
+          "top": 128,
+          "bottom": 172,
+          "height": 44
+        },
+        {
+          "text": "News & Media",
+          "top": 128,
+          "bottom": 172,
+          "height": 44
+        },
+        {
+          "text": "Get Involved",
+          "top": 172,
+          "bottom": 216,
+          "height": 44
+        },
+        {
+          "text": "About",
+          "top": 172,
+          "bottom": 216,
+          "height": 44
+        },
+        {
+          "text": "Contact",
+          "top": 216,
+          "bottom": 260,
+          "height": 44
+        }
+      ],
+      "hiddenBelowFold": [],
+      "minLinkHeight": 44,
+      "trustLinkRect": {
+        "top": 257,
+        "bottom": 277,
+        "height": 20,
+        "width": 360
+      },
+      "donateButtonRect": {
+        "top": 294,
+        "bottom": 338,
+        "height": 44,
+        "width": 360
+      },
+      "newsletterButtonRect": {
+        "top": 346,
+        "bottom": 390,
+        "height": 44,
+        "width": 360
+      },
+      "newsletterComputed": {
+        "color": "rgb(79, 24, 69)",
+        "backgroundColor": "rgb(255, 244, 251)",
+        "borderColor": "rgba(255, 255, 255, 0.75)"
+      }
+    },
+    {
+      "viewport": "iphone16promax_portrait",
+      "screenshot": "iphone16promax_portrait__menu.png",
+      "focusStates": [
+        {
+          "tag": "A",
+          "label": "Home",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        },
+        {
+          "tag": "A",
+          "label": "Mission",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        },
+        {
+          "tag": "A",
+          "label": "Stories",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        }
+      ],
+      "foundDialog": true,
+      "viewportHeight": 932,
+      "linkCount": 9,
+      "linkMetrics": [
+        {
+          "text": "Home",
+          "top": 40,
+          "bottom": 84,
+          "height": 44
+        },
+        {
+          "text": "Mission",
+          "top": 40,
+          "bottom": 84,
+          "height": 44
+        },
+        {
+          "text": "Stories",
+          "top": 84,
+          "bottom": 128,
+          "height": 44
+        },
+        {
+          "text": "Impact",
+          "top": 84,
+          "bottom": 128,
+          "height": 44
+        },
+        {
+          "text": "Programs",
+          "top": 128,
+          "bottom": 172,
+          "height": 44
+        },
+        {
+          "text": "News & Media",
+          "top": 128,
+          "bottom": 172,
+          "height": 44
+        },
+        {
+          "text": "Get Involved",
+          "top": 172,
+          "bottom": 216,
+          "height": 44
+        },
+        {
+          "text": "About",
+          "top": 172,
+          "bottom": 216,
+          "height": 44
+        },
+        {
+          "text": "Contact",
+          "top": 216,
+          "bottom": 260,
+          "height": 44
+        }
+      ],
+      "hiddenBelowFold": [],
+      "minLinkHeight": 44,
+      "trustLinkRect": {
+        "top": 799,
+        "bottom": 819,
+        "height": 20,
+        "width": 406
+      },
+      "donateButtonRect": {
+        "top": 836,
+        "bottom": 880,
+        "height": 44,
+        "width": 406
+      },
+      "newsletterButtonRect": {
+        "top": 888,
+        "bottom": 932,
+        "height": 44,
+        "width": 406
+      },
+      "newsletterComputed": {
+        "color": "rgb(79, 24, 69)",
+        "backgroundColor": "rgb(255, 244, 251)",
+        "borderColor": "rgba(255, 255, 255, 0.75)"
+      }
+    },
+    {
+      "viewport": "iphone16promax_landscape",
+      "screenshot": "iphone16promax_landscape__menu.png",
+      "focusStates": [
+        {
+          "tag": "A",
+          "label": "Home",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        },
+        {
+          "tag": "A",
+          "label": "Mission",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        },
+        {
+          "tag": "A",
+          "label": "Stories",
+          "focusVisible": true,
+          "outline": "oklab(0.708 0 0 / 0.5) auto 1px",
+          "boxShadow": "none"
+        }
+      ],
+      "foundDialog": true,
+      "viewportHeight": 430,
+      "linkCount": 9,
+      "linkMetrics": [
+        {
+          "text": "Home",
+          "top": 40,
+          "bottom": 84,
+          "height": 44
+        },
+        {
+          "text": "Mission",
+          "top": 40,
+          "bottom": 84,
+          "height": 44
+        },
+        {
+          "text": "Stories",
+          "top": 84,
+          "bottom": 128,
+          "height": 44
+        },
+        {
+          "text": "Impact",
+          "top": 84,
+          "bottom": 128,
+          "height": 44
+        },
+        {
+          "text": "Programs",
+          "top": 128,
+          "bottom": 172,
+          "height": 44
+        },
+        {
+          "text": "News & Media",
+          "top": 128,
+          "bottom": 172,
+          "height": 44
+        },
+        {
+          "text": "Get Involved",
+          "top": 172,
+          "bottom": 216,
+          "height": 44
+        },
+        {
+          "text": "About",
+          "top": 172,
+          "bottom": 216,
+          "height": 44
+        },
+        {
+          "text": "Contact",
+          "top": 216,
+          "bottom": 260,
+          "height": 44
+        }
+      ],
+      "hiddenBelowFold": [],
+      "minLinkHeight": 44,
+      "trustLinkRect": {
+        "top": 297,
+        "bottom": 317,
+        "height": 20,
+        "width": 360
+      },
+      "donateButtonRect": {
+        "top": 334,
+        "bottom": 378,
+        "height": 44,
+        "width": 360
+      },
+      "newsletterButtonRect": {
+        "top": 386,
+        "bottom": 430,
+        "height": 44,
+        "width": 360
+      },
+      "newsletterComputed": {
+        "color": "rgb(79, 24, 69)",
+        "backgroundColor": "rgb(255, 244, 251)",
+        "borderColor": "rgba(255, 255, 255, 0.75)"
+      }
+    }
+  ],
+  "aboutFraming": [
+    {
+      "viewport": "android_small_portrait",
+      "heroScreenshot": "android_small_portrait__about_top.png",
+      "teamScreenshot": "android_small_portrait__about_teamhero.png",
+      "heroRect": {
+        "top": -10221,
+        "bottom": -9709,
+        "height": 512,
+        "width": 360
+      },
+      "teamRect": {
+        "top": 200,
+        "bottom": 600,
+        "height": 400,
+        "width": 360
+      }
+    },
+    {
+      "viewport": "iphone13_14_portrait",
+      "heroScreenshot": "iphone13_14_portrait__about_top.png",
+      "teamScreenshot": "iphone13_14_portrait__about_teamhero.png",
+      "heroRect": {
+        "top": -9702,
+        "bottom": -9190,
+        "height": 512,
+        "width": 390
+      },
+      "teamRect": {
+        "top": 222,
+        "bottom": 622,
+        "height": 400,
+        "width": 390
+      }
+    },
+    {
+      "viewport": "iphone13_14_landscape",
+      "heroScreenshot": "iphone13_14_landscape__about_top.png",
+      "teamScreenshot": "iphone13_14_landscape__about_teamhero.png",
+      "heroRect": {
+        "top": -8477,
+        "bottom": -7965,
+        "height": 512,
+        "width": 844
+      },
+      "teamRect": {
+        "top": -5,
+        "bottom": 395,
+        "height": 400,
+        "width": 844
+      }
+    },
+    {
+      "viewport": "iphone16promax_portrait",
+      "heroScreenshot": "iphone16promax_portrait__about_top.png",
+      "teamScreenshot": "iphone16promax_portrait__about_teamhero.png",
+      "heroRect": {
+        "top": -9327,
+        "bottom": -8815,
+        "height": 512,
+        "width": 430
+      },
+      "teamRect": {
+        "top": 266,
+        "bottom": 666,
+        "height": 400,
+        "width": 430
+      }
+    }
+  ],
+  "impactCounters": [
+    {
+      "viewport": "android_small_landscape",
+      "screenshot": "android_small_landscape__impact_top.png",
+      "metricText": [
+        "4,789+",
+        "4,789",
+        "Attendance",
+        "88",
+        "88",
+        "Events",
+        "33",
+        "33",
+        "Partners"
+      ],
+      "numericValues": [
+        4789,
+        4789,
+        88
+      ],
+      "allZero": false,
+      "overflow": false
+    },
+    {
+      "viewport": "iphone13_14_landscape",
+      "screenshot": "iphone13_14_landscape__impact_top.png",
+      "metricText": [
+        "5,839+",
+        "5,839",
+        "Attendance",
+        "108",
+        "108",
+        "Events",
+        "40",
+        "40",
+        "Partners"
+      ],
+      "numericValues": [
+        5839,
+        5839,
+        108
+      ],
+      "allZero": false,
+      "overflow": false
+    },
+    {
+      "viewport": "iphone16promax_landscape",
+      "screenshot": "iphone16promax_landscape__impact_top.png",
+      "metricText": [
+        "5,865+",
+        "5,865",
+        "Attendance",
+        "108",
+        "108",
+        "Events",
+        "40",
+        "40",
+        "Partners"
+      ],
+      "numericValues": [
+        5865,
+        5865,
+        108
+      ],
+      "allZero": false,
+      "overflow": false
+    }
+  ],
+  "pageLengthRatios": [
+    {
+      "viewport": "android_small_portrait",
+      "route": "/",
+      "scrollHeight": 18856,
+      "viewportHeight": 800,
+      "viewportHeights": 23.57
+    },
+    {
+      "viewport": "android_small_portrait",
+      "route": "/about",
+      "scrollHeight": 21240,
+      "viewportHeight": 800,
+      "viewportHeights": 26.55
+    },
+    {
+      "viewport": "iphone13_14_portrait",
+      "route": "/",
+      "scrollHeight": 18323,
+      "viewportHeight": 844,
+      "viewportHeights": 21.71
+    },
+    {
+      "viewport": "iphone13_14_portrait",
+      "route": "/about",
+      "scrollHeight": 21296,
+      "viewportHeight": 844,
+      "viewportHeights": 25.23
+    },
+    {
+      "viewport": "iphone13_14_landscape",
+      "route": "/about",
+      "scrollHeight": 15705,
+      "viewportHeight": 390,
+      "viewportHeights": 40.27
+    },
+    {
+      "viewport": "iphone16promax_portrait",
+      "route": "/",
+      "scrollHeight": 17996,
+      "viewportHeight": 932,
+      "viewportHeights": 19.31
+    },
+    {
+      "viewport": "iphone16promax_portrait",
+      "route": "/about",
+      "scrollHeight": 21797,
+      "viewportHeight": 932,
+      "viewportHeights": 23.39
+    }
+  ],
+  "overflowChecks": [
+    {
+      "viewport": "android_small_portrait",
+      "route": "/",
+      "scrollWidth": 360,
+      "viewportWidth": 360,
+      "hasOverflow": false
+    },
+    {
+      "viewport": "android_small_portrait",
+      "route": "/about",
+      "scrollWidth": 360,
+      "viewportWidth": 360,
+      "hasOverflow": false
+    },
+    {
+      "viewport": "android_small_landscape",
+      "route": "/",
+      "scrollWidth": 800,
+      "viewportWidth": 800,
+      "hasOverflow": false
+    },
+    {
+      "viewport": "iphone13_14_portrait",
+      "route": "/",
+      "scrollWidth": 390,
+      "viewportWidth": 390,
+      "hasOverflow": false
+    },
+    {
+      "viewport": "iphone13_14_portrait",
+      "route": "/about",
+      "scrollWidth": 390,
+      "viewportWidth": 390,
+      "hasOverflow": false
+    },
+    {
+      "viewport": "iphone13_14_landscape",
+      "route": "/",
+      "scrollWidth": 844,
+      "viewportWidth": 844,
+      "hasOverflow": false
+    },
+    {
+      "viewport": "iphone13_14_landscape",
+      "route": "/about",
+      "scrollWidth": 844,
+      "viewportWidth": 844,
+      "hasOverflow": false
+    },
+    {
+      "viewport": "iphone16promax_portrait",
+      "route": "/",
+      "scrollWidth": 430,
+      "viewportWidth": 430,
+      "hasOverflow": false
+    },
+    {
+      "viewport": "iphone16promax_portrait",
+      "route": "/about",
+      "scrollWidth": 430,
+      "viewportWidth": 430,
+      "hasOverflow": false
+    },
+    {
+      "viewport": "iphone16promax_landscape",
+      "route": "/",
+      "scrollWidth": 932,
+      "viewportWidth": 932,
+      "hasOverflow": false
+    }
+  ],
+  "failures": []
+}
