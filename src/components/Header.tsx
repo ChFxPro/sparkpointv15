@@ -286,11 +286,11 @@ export function Header() {
           </SheetDescription>
           
           <div className="h-full flex flex-col">
-            <div className="p-6 flex justify-end">
+            <div className="p-3 sm:p-4 flex justify-end">
               <Button 
                  variant="ghost" 
                  onClick={() => setMobileOpen(false)}
-                 className="text-white hover:bg-white/20 rounded-full p-2 h-auto"
+                 className="text-white hover:bg-white/20 rounded-full h-11 w-11 p-0 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#B34A9E]"
               >
                  <X size={24} />
                  <span className="sr-only">Close</span>
@@ -299,7 +299,10 @@ export function Header() {
 
             {/* Mobile View (Preserved Layout) */}
             <div className="lg:hidden flex-1 flex flex-col overflow-hidden">
-                <nav className="flex-1 overflow-y-auto px-6 pb-6">
+                <nav
+                  className="flex-1 overflow-y-auto px-3 sm:px-4 pb-1 grid gap-x-2 sm:gap-x-3 gap-y-1 auto-rows-min content-start"
+                  style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))' }}
+                >
                   {menuItems.map((item, index) => (
                     <motion.div
                       key={item.label}
@@ -310,13 +313,13 @@ export function Header() {
                         delay: index * 0.05,
                         ease: [0.45, 0, 0.55, 1],
                       }}
-                      className="mb-6"
+                      className="mb-0"
                     >
                       <Link
                         to={item.href!}
                         onClick={handleLinkClick}
-                        className="block text-white py-4" // Increased tap target area
-                        style={{ fontSize: '20px', fontWeight: '600' }}
+                        className="flex items-center justify-center text-center min-h-[44px] rounded-lg px-2 py-2 text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#B34A9E]"
+                        style={{ fontSize: 'clamp(0.88rem, 2.7vw, 1rem)', fontWeight: '600' }}
                       >
                         {item.label}
                       </Link>
@@ -324,44 +327,47 @@ export function Header() {
                   ))}
                 </nav>
 
-                <div className="border-t border-white/20 p-6 space-y-4">
+                <div className="border-t border-white/20 px-3 sm:px-4 pt-2 pb-2.5 space-y-2">
                   <Link 
                     to="/trust"
-                    className="block group"
+                    className="block group rounded-lg py-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#B34A9E]"
                     onClick={handleLinkClick}
                   >
                      <div className="flex items-center justify-between text-white">
-                        <span className="font-bold text-lg">Trust & Accountability</span>
+                        <span className="font-bold text-[0.9rem] sm:text-[0.95rem] leading-tight">Trust & Accountability</span>
                         <ChevronDown className="rotate-[-90deg] opacity-50" size={16} />
                      </div>
-                     <p className="text-white/60 text-sm mt-1 font-medium">Transparency, privacy, and fair pay</p>
                   </Link>
 
-                  <div className="h-px bg-white/10 w-full my-2" />
+                  <div className="h-px bg-white/15 w-full my-0.5" />
 
-                  <Button
-                    className="w-full transition-all hover:brightness-105"
-                    style={{
-                      backgroundColor: 'white',
-                      color: '#E03694',
-                      fontSize: '16px',
-                      fontWeight: '700',
-                    }}
-                    onClick={() => globalThis.location.href = 'https://www.yoursparkpoint.org/donations'}
-                  >
-                    Donate
-                  </Button>
-
-                  <div className="flex gap-3">
+                  <div className="grid grid-cols-2 gap-2">
                     <Button
-                      variant="outline"
-                      className="flex-1 border-white border-2 text-white hover:bg-white/10"
+                      className="w-full min-h-[44px] transition-all hover:brightness-105 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#B34A9E]"
+                      style={{
+                        backgroundColor: 'white',
+                        color: '#E03694',
+                        fontSize: '16px',
+                        fontWeight: '700',
+                      }}
+                      onClick={() => globalThis.location.href = 'https://www.yoursparkpoint.org/donations'}
+                    >
+                      Donate
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full min-h-[44px] rounded-md border hover:bg-white focus-visible:ring-[#4F1845]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#B34A9E]"
+                      style={{
+                        backgroundColor: '#FFF4FB',
+                        color: '#4F1845',
+                        borderColor: 'rgba(255,255,255,0.75)',
+                      }}
                       onClick={() => {
                         handleLinkClick();
-                        navigate('/news-media');
+                        navigate('/newsletter');
                       }}
                     >
-                      <Mail size={18} className="mr-2" />
+                      <Mail size={16} className="mr-1.5" />
                       Newsletter
                     </Button>
                   </div>

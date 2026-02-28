@@ -83,7 +83,7 @@ function Counter({ target, duration = 2000 }: { target: number; duration?: numbe
           setHasStarted(true);
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.15, rootMargin: '0px 0px 20% 0px' }
     );
 
     if (ref.current) {

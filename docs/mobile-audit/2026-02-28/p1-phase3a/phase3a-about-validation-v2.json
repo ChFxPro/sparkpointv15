@@ -1,0 +1,57 @@
+{
+  "generatedAt": "2026-02-28T02:15:52.378Z",
+  "results": [
+    {
+      "scenario": "android_small_portrait",
+      "viewport": {
+        "width": 360,
+        "height": 800,
+        "isLandscape": false
+      },
+      "topShot": "android_small_portrait__after__tophero-v2.png",
+      "teamShot": "android_small_portrait__after__teamhero-v2.png",
+      "horizontalOverflow": false,
+      "scrollWidth": 360,
+      "innerWidth": 360
+    },
+    {
+      "scenario": "iphone13_14_portrait",
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "isLandscape": false
+      },
+      "topShot": "iphone13_14_portrait__after__tophero-v2.png",
+      "teamShot": "iphone13_14_portrait__after__teamhero-v2.png",
+      "horizontalOverflow": false,
+      "scrollWidth": 390,
+      "innerWidth": 390
+    },
+    {
+      "scenario": "iphone16promax_portrait",
+      "viewport": {
+        "width": 430,
+        "height": 932,
+        "isLandscape": false
+      },
+      "topShot": "iphone16promax_portrait__after__tophero-v2.png",
+      "teamShot": "iphone16promax_portrait__after__teamhero-v2.png",
+      "horizontalOverflow": false,
+      "scrollWidth": 430,
+      "innerWidth": 430
+    },
+    {
+      "scenario": "iphone13_14_landscape",
+      "viewport": {
+        "width": 844,
+        "height": 390,
+        "isLandscape": true
+      },
+      "topShot": "iphone13_14_landscape__after__tophero-v2.png",
+      "teamShot": "iphone13_14_landscape__after__teamhero-v2.png",
+      "horizontalOverflow": false,
+      "scrollWidth": 844,
+      "innerWidth": 844
+    }
+  ]
+}

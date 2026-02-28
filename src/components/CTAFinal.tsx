@@ -13,7 +13,7 @@ export function CTAFinal({ backgroundImage }: CTAFinalProps) {
   const navigate = useNavigate();
 
   return (
-    <section id="cta" className="relative py-32 px-6 overflow-hidden">
+    <section id="cta" className="relative py-20 md:py-32 px-6 overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <div
@@ -41,7 +41,7 @@ export function CTAFinal({ backgroundImage }: CTAFinalProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.3, ease: [0.45, 0, 0.55, 1] }}
-          className="text-white mb-6 px-4"
+          className="text-white mb-5 md:mb-6 px-4"
           style={{
             fontSize: 'clamp(2rem, 5vw, 3.5rem)',
             lineHeight: '1.2',
@@ -57,7 +57,7 @@ export function CTAFinal({ backgroundImage }: CTAFinalProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.3, delay: 0.2, ease: [0.45, 0, 0.55, 1] }}
-          className="text-white/90 mb-6 px-4"
+          className="text-white/90 mb-5 md:mb-6 px-4"
           style={{
             fontSize: 'clamp(1.25rem, 3vw, 1.625rem)',
             lineHeight: '1.59',
@@ -72,7 +72,7 @@ export function CTAFinal({ backgroundImage }: CTAFinalProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.3, delay: 0.35, ease: [0.45, 0, 0.55, 1] }}
-          className="text-white/85 mb-12 max-w-4xl mx-auto px-4"
+          className="text-white/85 mb-10 md:mb-12 max-w-4xl mx-auto px-4"
           style={{
             fontSize: 'clamp(1rem, 2vw, 1.125rem)',
             lineHeight: '1.65',
@@ -90,11 +90,11 @@ export function CTAFinal({ backgroundImage }: CTAFinalProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.4, delay: 0.5, ease: [0.45, 0, 0.55, 1] }}
-          className="flex gap-4 justify-center mb-16 flex-wrap"
+          className="flex gap-3 md:gap-4 justify-center mb-12 md:mb-16 flex-wrap"
         >
           <Button
             size="lg"
-            className="px-8 py-6 text-lg transition-all duration-250"
+            className="px-6 py-4 text-base sm:px-8 sm:py-6 sm:text-lg transition-all duration-250"
             style={{
               backgroundColor: 'white',
               color: '#E03694',
@@ -116,7 +116,7 @@ export function CTAFinal({ backgroundImage }: CTAFinalProps) {
           <Button
             size="lg"
             variant="outline"
-            className="px-8 py-6 text-lg border-2 transition-all duration-250 hover:bg-white/10"
+            className="px-6 py-4 text-base sm:px-8 sm:py-6 sm:text-lg border-2 transition-all duration-250 hover:bg-white/10"
             style={{
               borderColor: 'white',
               color: 'white',
@@ -172,12 +172,12 @@ export function CTAFinal({ backgroundImage }: CTAFinalProps) {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6, delay: 1.65, ease: [0.45, 0, 0.55, 1] }}
-          className="mt-16 flex justify-center"
+          className="mt-12 md:mt-16 flex justify-center"
         >
           <motion.img
             src={sparkPointLogo}
             alt="SparkPoint"
-            className="h-32 w-auto"
+            className="h-24 sm:h-32 w-auto"
             animate={{
               opacity: [1, 0.7, 1],
             }}

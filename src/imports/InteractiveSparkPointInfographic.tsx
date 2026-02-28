@@ -63,9 +63,9 @@ const iconBadgeStyle =
 export default function InteractiveSparkPointInfographic() {
   return (
   // Section Container: Auto height, Min-height 1040px, Padding Top 100px, Bottom 200px, Overflow Visible
-<div className="w-full min-h-[1040px] bg-gradient-radial from-[#FFFDF9] to-[#F5F2EB] font-['Manrope',sans-serif] relative pt-[100px] pb-[200px] overflow-visible">
+<div className="w-full min-h-[720px] lg:min-h-[1040px] bg-gradient-radial from-[#FFFDF9] to-[#F5F2EB] font-['Manrope',sans-serif] relative pt-16 sm:pt-20 lg:pt-[100px] pb-12 sm:pb-24 lg:pb-[200px] overflow-visible">
   {/* Framing Band */}
-  <div className="relative z-10 w-full max-w-[1200px] mx-auto rounded-[20px] bg-[#FFFDF9]/85 py-12 px-8 text-center mb-0 lg:mb-4">
+  <div className="relative z-10 w-full max-w-[1200px] mx-auto rounded-[20px] bg-[#FFFDF9]/85 py-8 sm:py-10 lg:py-12 px-4 sm:px-6 lg:px-8 text-center mb-0 lg:mb-4">
     <h2 className="text-[2.5rem] lg:text-[3rem] font-extrabold text-[#1A1A1A] leading-[1.2] tracking-[-1px] mb-4">
       Where connection takes shape in our work
     </h2>
@@ -210,7 +210,7 @@ export default function InteractiveSparkPointInfographic() {
       </div>
 
       {/* Mobile/Tablet Stacked Layout (Simple Vertical Stack for now) */}
-      <div className="flex flex-col items-center gap-6 lg:hidden w-full px-4 py-12">
+      <div className="flex flex-col items-center gap-5 lg:hidden w-full px-4 py-8 sm:py-10">
         <div className="w-[200px] h-[200px] rounded-full bg-[#FFF0E8] border-[4px] border-white shadow-lg flex flex-col items-center justify-center text-center p-4 overflow-hidden">
           <img
             src={sparkPointLogo}
@@ -225,7 +225,7 @@ export default function InteractiveSparkPointInfographic() {
         {pillars.map((pillar) => (
           <div
             key={pillar.id}
-            className="w-full max-w-[340px] bg-white rounded-[20px] shadow-md p-6 flex flex-col items-center text-center gap-4"
+            className="w-full max-w-[340px] bg-white rounded-[20px] shadow-md p-5 sm:p-6 flex flex-col items-center text-center gap-3 sm:gap-4"
           >
             <div className={cn(iconBadgeStyle, pillar.color)}>
               <pillar.icon className="w-5 h-5" />
