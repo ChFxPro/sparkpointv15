@@ -470,7 +470,7 @@ export function AboutPage() {
       </Helmet>
 
       {/* 1. Hero Section — Documentary Presence with Connection Anchor */}
-      <section className="relative h-screen min-h-[650px] flex items-end justify-center overflow-hidden pb-4 md:pb-8 bg-[#0a0a0a]">
+      <section className="relative h-[560px] md:h-screen md:min-h-[650px] flex items-end justify-center overflow-hidden pb-4 md:pb-8 bg-[#0a0a0a]">
         {/* Full-width image */}
         <div className="absolute inset-x-0 bottom-0 top-12 z-0">
           <img
@@ -543,7 +543,7 @@ export function AboutPage() {
       </section>
 
       {/* 2. Our Story — Narrative First (Dark Theme) */}
-      <section className="py-20 md:py-32 px-6 relative overflow-hidden bg-gradient-to-b from-[#0a0a0a] via-[#111111] to-[#0a0a0a]">
+      <section className="py-12 sm:py-16 md:py-32 px-6 relative overflow-hidden bg-gradient-to-b from-[#0a0a0a] via-[#111111] to-[#0a0a0a]">
         {/* Subtle Texture: Topographic/Organic Lines (Extremely Low Contrast) */}
         <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none select-none">
           <svg className="w-full h-full" viewBox="0 0 1440 1200" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -567,7 +567,7 @@ export function AboutPage() {
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
             {/* Header as Chapter Marker */}
-            <div className="mb-20 text-center md:text-left">
+            <div className="mb-12 md:mb-20 text-center md:text-left">
               <span className="block text-sm font-bold tracking-[0.2em] text-[#E03694] uppercase mb-4 opacity-90">
                 Chapter One
               </span>
@@ -578,15 +578,15 @@ export function AboutPage() {
             </div>
 
             {/* 2. NEW: Narrative Thesis Block */}
-            <div className="mb-32 relative">
+            <div className="mb-20 md:mb-32 relative">
               {/* Featured Visual Accent */}
               <div className="absolute -left-6 top-2 bottom-2 w-1 bg-gradient-to-b from-[#E03694] via-[#E03694]/50 to-transparent hidden md:block opacity-80" />
               
-              <p className="text-3xl md:text-5xl text-white leading-tight font-bold mb-12 tracking-tight max-w-5xl">
+              <p className="text-2xl sm:text-3xl md:text-5xl text-white leading-tight font-bold mb-8 md:mb-12 tracking-tight max-w-5xl">
                 Connection is the foundation of healthy, resilient communities — but it rarely exists by accident.
               </p>
               
-              <div className="space-y-8 pl-0 md:pl-0 max-w-3xl">
+              <div className="space-y-6 md:space-y-8 pl-0 md:pl-0 max-w-3xl">
                 <p className="text-lg md:text-xl text-gray-300 leading-loose font-light">
                   Across Transylvania County and Western North Carolina, people and organizations are doing meaningful work every day.
                   What’s often missing isn’t care or effort — it’s a <span className="text-white font-medium">deeper sense of belonging</span>
@@ -600,7 +600,7 @@ export function AboutPage() {
             </div>
 
             {/* Transition: Context */}
-            <div className="flex items-center gap-4 mb-16 opacity-50">
+            <div className="flex items-center gap-4 mb-12 md:mb-16 opacity-50">
                 <div className="h-px w-12 bg-white"></div>
                 <span className="text-xs font-bold uppercase tracking-widest text-white">Organization History</span>
             </div>
@@ -608,7 +608,7 @@ export function AboutPage() {
             <div className="max-w-none text-gray-300">
               
               {/* Part 3: Roots & Context (Blue Zones as Catalyst) */}
-              <div className="space-y-12 mb-24 max-w-2xl">
+              <div className="space-y-8 md:space-y-12 mb-16 md:mb-24 max-w-2xl">
                 <p className="text-lg leading-loose text-gray-300/90">
                   Sustainable Health for All began as a community-led effort in 2019 and received 501(c)(3) status in early 2020.
                 </p>
@@ -705,7 +705,7 @@ export function AboutPage() {
                  </div>
 
                  {/* Part 6: Hurricane Helene Callout (Proof of Model) */}
-                 <div className="bg-white/5 p-8 md:p-10 rounded-lg border border-white/5 backdrop-blur-sm max-w-3xl">
+                 <div className="bg-white/5 p-6 md:p-10 rounded-lg border border-white/5 backdrop-blur-sm max-w-3xl">
                    <p className="leading-loose text-white/95 text-lg mb-6">
                      When Hurricane Helene tested Transylvania County in 2024, those relationships mattered.
                      SparkPoint became a coordination point — helping information, volunteers, and resources move more clearly
@@ -718,12 +718,12 @@ export function AboutPage() {
               </div>
 
               {/* Part 7: Closing (System) */}
-              <div className="pt-16 border-t border-white/10">
-                <p className="text-xl text-white/90 leading-relaxed font-medium mb-16 max-w-4xl">
+              <div className="pt-12 md:pt-16 border-t border-white/10">
+                <p className="text-lg md:text-xl text-white/90 leading-relaxed font-medium mb-10 md:mb-16 max-w-4xl">
                   Today, SparkPoint serves as that connective infrastructure, operating through a continuous loop:
                 </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 max-w-4xl">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8 mb-10 md:mb-16 max-w-4xl">
                    <div className="relative pl-6 border-l-2 border-[#E03694]">
                       <span className="block text-white font-bold text-2xl tracking-wide mb-2">Listen</span>
                       <span className="text-sm text-gray-400 leading-relaxed block">Identifying needs directly from the community source.</span>
@@ -749,13 +749,13 @@ export function AboutPage() {
       </section>
 
       {/* 3. Timeline / Milestones */}
-      <section className="py-24 px-6 bg-[#0a0a0a] overflow-hidden">
+      <section className="py-12 md:py-24 px-6 bg-[#0a0a0a] overflow-hidden">
         <div className="max-w-7xl mx-auto relative">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-24 relative z-10"
+            className="text-center mb-12 md:mb-24 relative z-10"
           >
             <span className="text-[#E03694] font-bold tracking-wider text-sm uppercase mb-3 block">Our Journey</span>
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Milestones of Impact</h2>
@@ -769,7 +769,7 @@ export function AboutPage() {
              {/* The Rail Line (Desktop Only) */}
              <div className="absolute left-0 md:left-0 top-0 bottom-0 w-px bg-white/10 hidden md:block z-0" />
 
-             <div className="space-y-32 md:space-y-48 pb-20">
+             <div className="space-y-20 md:space-y-48 pb-12 md:pb-20">
 
                 {/* Sustainable Health for All (Pre-Blue Zones) */}
                 {sustainableHealthTimeline && (
@@ -778,7 +778,7 @@ export function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.6 }}
-                  className="relative group grid grid-cols-1 md:grid-cols-12 gap-12 items-center"
+                  className="relative group grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center"
                 >
                    {/* Rail Marker */}
                    <div
@@ -860,13 +860,13 @@ export function AboutPage() {
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="relative group grid grid-cols-1 md:grid-cols-12 gap-12 items-center"
+                  className="relative group grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center"
                 >
                    {/* Rail Marker */}
                    <div className="hidden md:block absolute left-0 top-8 -translate-x-1/2 w-3 h-3 rounded-full bg-[#0057B8] shadow-[0_0_10px_rgba(0,87,184,0.5)] z-20" />
 
                    {/* Background Wash */}
-                   <div className="absolute inset-0 -mx-6 md:-mx-12 py-12 md:py-0 bg-blue-900/5 -z-10 rounded-3xl border border-blue-500/10" />
+                   <div className="absolute inset-0 -mx-6 md:-mx-12 py-8 md:py-0 bg-blue-900/5 -z-10 rounded-3xl border border-blue-500/10" />
 
                    {/* Text Column (Left) */}
                    <div className="col-span-1 md:col-span-7 relative z-10 md:pl-16 text-center md:text-left">
@@ -935,7 +935,7 @@ export function AboutPage() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
                         transition={{ duration: 0.6 }}
-                        className="relative group grid grid-cols-1 md:grid-cols-12 gap-12 items-center"
+                        className="relative group grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center"
                       >
                          {/* Rail Marker */}
                          <div className="hidden md:block absolute left-0 top-8 -translate-x-1/2 w-3 h-3 rounded-full bg-[#E03694] border-2 border-[#0a0a0a] z-20" />
@@ -994,25 +994,26 @@ export function AboutPage() {
       </section>
 
       {/* Team Hero Image */}
-      <section className="relative h-[60vh] overflow-hidden">
+      <section className="relative h-[400px] sm:h-[450px] md:h-[60vh] overflow-hidden">
         <div className="absolute inset-0">
           <img 
             src={teamHeroImage} 
             alt="SparkPoint Team and Community" 
-            className="w-full h-full object-cover object-[50%_25%]"
+            className="w-full h-full object-cover"
+            style={{ objectPosition: '50% 24%' }}
           />
           <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
         </div>
       </section>
 
       {/* 4. Team & Board — Human Scale */}
-      <section className="py-32 px-6 bg-[#0a0a0a]">
+      <section className="py-20 md:py-32 px-6 bg-[#0a0a0a]">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-20"
+            className="text-center mb-12 md:mb-20"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Our Team</h2>
             <p className="text-gray-400 max-w-2xl mx-auto text-lg">
@@ -1021,7 +1022,7 @@ export function AboutPage() {
           </motion.div>
 
           {/* Staff Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-32">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-20 md:mb-32">
             {staff.map((member, index) => (
               <Dialog key={member.name}>
                 <DialogTrigger asChild>
