@@ -27,7 +27,7 @@ Repo: /Users/jeffbannister/Code/sparkpoint/sparkpointv15
   - Focused team-hero screenshots on About page
   - Console warnings/errors, request failures, layout-overflow checks, tap-target heuristics
 
-## Issue Checklist (Status = OPEN)
+## Issue Checklist
 
 | ID | Priority | Issue | Route/Section | Status |
 |---|---|---|---|---|
