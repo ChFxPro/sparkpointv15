@@ -1,0 +1,26 @@
+[
+  {
+    "scenario": "android_small_portrait",
+    "shot": "android_small_portrait__after__teamhero-element.png",
+    "sectionHeight": 480,
+    "sectionWidth": 360
+  },
+  {
+    "scenario": "iphone13_14_portrait",
+    "shot": "iphone13_14_portrait__after__teamhero-element.png",
+    "sectionHeight": 506.390625,
+    "sectionWidth": 390
+  },
+  {
+    "scenario": "iphone16promax_portrait",
+    "shot": "iphone16promax_portrait__after__teamhero-element.png",
+    "sectionHeight": 559.1875,
+    "sectionWidth": 430
+  },
+  {
+    "scenario": "iphone13_14_landscape",
+    "shot": "iphone13_14_landscape__after__teamhero-element.png",
+    "sectionHeight": 234,
+    "sectionWidth": 844
+  }
+]
