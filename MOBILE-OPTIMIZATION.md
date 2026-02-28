@@ -33,6 +33,7 @@ Repo: /Users/jeffbannister/Code/sparkpoint/sparkpointv15
 |---|---|---|---|---|
 | P0-01 | P0 | Mobile menu requires vertical scrolling; key nav items are hidden below fold (especially landscape, small devices). | Header drawer | FIXED |
 | P0-02 | P0 | Bottom menu CTA label is visually unreadable (Newsletter text appears white on white button). | Header drawer footer CTA | FIXED |
+| P0-03 | P0 | Home "Community Impact, at County Scale" first four metric cards fail to reliably populate/render on portrait mobile initial load. | `/` impact section metric stack | FIXED |
 | P1-01 | P1 | About page primary hero group photo is heavily cropped on mobile portrait. | `/about` top hero | FIXED |
 | P1-02 | P1 | About team hero image crops out/partially cuts participants on mobile. | `/about` team hero | FIXED |
 | P1-03 | P1 | Mobile pages feel excessively long, especially Home and About (high scroll-length ratio). | `/`, `/about` | FIXED |
@@ -57,6 +58,13 @@ Repo: /Users/jeffbannister/Code/sparkpoint/sparkpointv15
   - `src/components/ui/button.tsx` (outline variant defaults)
 - Hypothesis:
   - Footer Newsletter button uses `variant="outline"` + `text-white`, while outline variant applies `bg-background` (white), creating white text on white background.
+
+### P0-03 Home county-scale metrics missing/population failure
+- Suspected files/components:
+  - `src/components/ImpactSection.tsx`
+- Hypothesis:
+  - Mixed observer strategy (`whileInView` per card + per-number `useInView`) can fail to trigger consistently in portrait mobile stack, leaving cards at `opacity: 0` and numbers at `0` on initial load.
+  - Section heading renders, but card animation/count observers do not always activate when the stacked layout enters viewport.
 
 ### P1-01 About hero crop
 - Suspected files/components:
@@ -264,12 +272,49 @@ Validation artifacts:
 - P2 items remain open and were intentionally not implemented in this pass.
 - A utility-generation quirk was observed during implementation (some ad-hoc classes are not available in generated CSS); fixes were normalized to supported utility tokens or explicit local styles to avoid runtime drift.
 
+## Phase 3B — Home County-Scale Metrics Render Reliability (P0-03)
+Date: 2026-02-28 (mobile portrait bugfix + validation)  
+Scope: `P0-03` only  
+Validation artifacts:
+- `/Users/jeffbannister/Code/sparkpoint/sparkpointv15/docs/mobile-audit/2026-02-28-home-metrics-fix/home-metrics-before.json`
+- `/Users/jeffbannister/Code/sparkpoint/sparkpointv15/docs/mobile-audit/2026-02-28-home-metrics-fix/home-metrics-after.json`
+- `/Users/jeffbannister/Code/sparkpoint/sparkpointv15/docs/mobile-audit/2026-02-28-home-metrics-fix/*__home-county-scale-before.png`
+- `/Users/jeffbannister/Code/sparkpoint/sparkpointv15/docs/mobile-audit/2026-02-28-home-metrics-fix/*__home-county-scale-after.png`
+
+### P0-03 — Home county-scale metrics fail on portrait initial load (FIXED)
+- Description / repro:
+  - In portrait (`390x844`, `360x800`, `430x932`), Home section heading ("Community Impact, at County Scale") appeared but the first four metric cards were intermittently unpopulated (`0`) or still hidden (`opacity: 0`) until additional scroll/rotation.
+- Root cause:
+  - Metric reveal and count-up relied on multiple nested in-view observers:
+    - card-level `whileInView` for reveal,
+    - per-number `useInView` for count-up.
+  - On portrait mobile, observer triggering was inconsistent for the stacked layout, causing hidden/zero-state persistence.
+- Fix applied:
+  - File: `src/components/ImpactSection.tsx`
+  - Updated `CountUp` to start from a parent-provided trigger (`start={isInView}`) and removed per-number `useInView` dependency.
+  - Switched county-scale metric cards from per-card `whileInView` to section-driven `animate={isInView ? ... : ...}` so all four cards reliably transition once the section enters view.
+  - Preserved desktop/tablet composition and animation intent (staggered transitions maintained).
+- Files changed:
+  - `src/components/ImpactSection.tsx`
+  - `MOBILE-OPTIMIZATION.md`
+- How to test:
+  1. Run dev server and open `/`.
+  2. Check portrait viewports: `390x844`, `360x800`, `430x932`.
+  3. Confirm all four county-scale metric cards render/populate on initial pass (no required rotation/extra interaction).
+  4. Rotate to landscape and confirm cards remain rendered/populated.
+  5. Confirm no horizontal overflow regression.
+- Verification:
+  - Automated before/after diagnostics and screenshots captured in:
+    - `/Users/jeffbannister/Code/sparkpoint/sparkpointv15/docs/mobile-audit/2026-02-28-home-metrics-fix/`
+  - Post-fix check: all tested portrait/landscape mobile viewports reported `cardCount=4`, populated values, and visible cards (`opacityMin=1`).
+
 ## Phase Two Execution Log (Template)
 
 | Issue ID | Fix Applied | Files Changed | Verification | Follow-ups |
 |---|---|---|---|---|
 | P0-01 |  |  |  |  |
 | P0-02 |  |  |  |  |
+| P0-03 |  |  |  |  |
 | P1-01 |  |  |  |  |
 | P1-02 |  |  |  |  |
 | P1-03 |  |  |  |  |
