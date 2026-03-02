@@ -1,13 +1,19 @@
 import fs from 'fs';
 import path from 'path';
 
-const defaultOrigin = 'https://chfxpro.github.io/sparkpointv15';
+const defaultOrigin = 'https://yoursparkpoint.org';
 const siteOrigin = (process.env.SITE_ORIGIN ?? process.env.PUBLIC_ORIGIN ?? process.env.VITE_SITE_ORIGIN ?? defaultOrigin).replace(/\/+$/, '');
 
-const files = [
-  path.join(process.cwd(), 'build', 'robots.txt'),
-  path.join(process.cwd(), 'build', 'sitemap.xml'),
-];
+const outputDirs = Array.from(
+  new Set(
+    [process.env.BUILD_OUT_DIR, process.env.VITE_OUT_DIR, 'build', 'dist'].filter(Boolean)
+  )
+);
+
+const files = outputDirs.flatMap((outDir) => [
+  path.join(process.cwd(), outDir, 'robots.txt'),
+  path.join(process.cwd(), outDir, 'sitemap.xml'),
+]);
 
 for (const filePath of files) {
   if (!fs.existsSync(filePath)) {
