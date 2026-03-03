@@ -80,11 +80,13 @@ export function GuidedIntakeForm({ initialIntent = 'contact', sourcePath = '/' }
       };
 
    const response = await fetch(
-  `https://${projectId}.supabase.co/functions/v1/server/intake`,
+  `https://${projectId}.supabase.co/functions/v1/make-server-393f2b0a/intake`,
   {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'apikey': publicAnonKey,
+      'Authorization': `Bearer ${publicAnonKey}`,
     },
     body: JSON.stringify(payload),
   }
