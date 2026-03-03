@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>__SITE_ORIGIN__/</loc>
+    <loc>https://yoursparkpoint.org/</loc>
   </url>
 
   <url>
-    <loc>__SITE_ORIGIN__/mission</loc>
+    <loc>https://yoursparkpoint.org/mission</loc>
   </url>
 
   <url>
-    <loc>__SITE_ORIGIN__/stories</loc>
+    <loc>https://yoursparkpoint.org/stories</loc>
   </url>
 
   <url>
-    <loc>__SITE_ORIGIN__/impact</loc>
+    <loc>https://yoursparkpoint.org/impact</loc>
   </url>
 
   <url>
-    <loc>__SITE_ORIGIN__/get-involved</loc>
+    <loc>https://yoursparkpoint.org/get-involved</loc>
   </url>
 
   <url>
-    <loc>__SITE_ORIGIN__/intake</loc>
+    <loc>https://yoursparkpoint.org/intake</loc>
   </url>
 
   <url>
-    <loc>__SITE_ORIGIN__/about</loc>
+    <loc>https://yoursparkpoint.org/about</loc>
   </url>
 
   <url>
-    <loc>__SITE_ORIGIN__/trust</loc>
+    <loc>https://yoursparkpoint.org/trust</loc>
   </url>
 
   <url>
-    <loc>__SITE_ORIGIN__/privacy</loc>
+    <loc>https://yoursparkpoint.org/privacy</loc>
   </url>
 
   <url>
-    <loc>__SITE_ORIGIN__/community-champions/helene-one-year</loc>
+    <loc>https://yoursparkpoint.org/community-champions/helene-one-year</loc>
   </url>
 
   <url>
-    <loc>__SITE_ORIGIN__/stories/community-champions/helene-anniversary</loc>
+    <loc>https://yoursparkpoint.org/stories/community-champions/helene-anniversary</loc>
   </url>
 </urlset>
