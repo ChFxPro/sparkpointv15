@@ -88,17 +88,17 @@ const app = new Hono();
 // Your function name (used for the “double route” fix)
 const FN_PREFIX = "/make-server-393f2b0a";
 
-const allowedOrigins = new Set<string>([
+const allowedOrigins = [
   "https://yoursparkpoint.org",
   "https://www.yoursparkpoint.org",
   "https://chfxpro.github.io",
   "http://localhost:5173",
   "http://localhost:4173",
-]);
+] as const;
 
 function getCorsHeaders(req: Request) {
   const origin = (req.headers.get("origin") ?? "").trim();
-  const allowOrigin = origin && allowedOrigins.has(origin) ? origin : "null";
+  const allowOrigin = origin && allowedOrigins.includes(origin) ? origin : "null";
 
   return {
     "Access-Control-Allow-Origin": allowOrigin,

@@ -79,18 +79,18 @@ export function GuidedIntakeForm({ initialIntent = 'contact', sourcePath = '/' }
         partnershipDetails: activeTab === 'partner' ? formData.partnershipDetails : ''
       };
 
-   const response = await fetch(
-  `https://${projectId}.supabase.co/functions/v1/make-server-393f2b0a/intake`,
-  {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'apikey': publicAnonKey,
-      'Authorization': `Bearer ${publicAnonKey}`,
-    },
-    body: JSON.stringify(payload),
-  }
-);
+      const endpoint = `https://${projectId}.supabase.co/functions/v1/make-server-393f2b0a/intake`;
+      const headers = {
+        'Content-Type': 'application/json',
+        'apikey': publicAnonKey,
+        'Authorization': `Bearer ${publicAnonKey}`,
+      };
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(payload),
+      });
 
       const data = await response.json();
 
