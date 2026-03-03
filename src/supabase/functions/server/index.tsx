@@ -59,13 +59,22 @@ app.use("*", async (c: Context, next: () => Promise<void>) => {
   const corsHeaders = getCorsHeaders(c.req.raw);
 
   if (c.req.method === "OPTIONS") {
-    return new Response(null, { status: 204, headers: corsHeaders });
+    return new Response("ok", { status: 204, headers: corsHeaders });
   }
 
   await next();
   Object.entries(corsHeaders).forEach(([key, value]) => {
     c.res.headers.set(key, value);
   });
+});
+
+app.onError((err, c) => {
+  console.error("Unhandled server error:", err);
+  const corsHeaders = getCorsHeaders(c.req.raw);
+  return c.json({
+    error: "Internal server error",
+    details: err instanceof Error ? err.message : "Unknown error",
+  }, 500, corsHeaders);
 });
 
 // Debug: Log all incoming requests
@@ -389,6 +398,7 @@ Submitted: ${new Date().toLocaleString()}
 
 app.post("/make-server-535d8907/intake", intakeHandler);
 app.post("/make-server-393f2b0a/intake", intakeHandler);
+app.post("/intake", intakeHandler);
 
 // Catch-all route for debugging
 app.all("*", (c: Context) => {
@@ -402,6 +412,7 @@ app.all("*", (c: Context) => {
       "POST /make-server-535d8907/impact/init",
       "GET /make-server-535d8907/impact/metrics",
       "POST /make-server-535d8907/volunteer",
+      "POST /intake",
       "POST /make-server-535d8907/intake",
       "POST /make-server-393f2b0a/intake"
     ]

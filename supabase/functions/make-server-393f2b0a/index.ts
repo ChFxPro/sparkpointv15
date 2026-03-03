@@ -93,6 +93,8 @@ const allowedOrigins = new Set<string>([
   "https://www.yoursparkpoint.org",
   "https://chfxpro.github.io",
   "http://localhost:3000",
+  "http://localhost:5173",
+  "http://localhost:4173",
 ]);
 
 function normalizeOrigin(origin: string) {
@@ -120,7 +122,7 @@ app.use("*", async (c, next) => {
   const corsHeaders = getCorsHeaders(c.req.raw);
 
   if (c.req.method === "OPTIONS") {
-    return new Response(null, { status: 204, headers: corsHeaders });
+    return new Response("ok", { status: 204, headers: corsHeaders });
   }
 
   await next();
@@ -128,6 +130,19 @@ app.use("*", async (c, next) => {
   for (const [k, v] of Object.entries(corsHeaders)) {
     c.res.headers.set(k, v);
   }
+});
+
+app.onError((err, c) => {
+  console.error("Unhandled server error:", err);
+  const corsHeaders = getCorsHeaders(c.req.raw);
+  return c.json(
+    {
+      error: "Internal server error",
+      details: err instanceof Error ? err.message : "Unknown error",
+    },
+    500,
+    corsHeaders,
+  );
 });
 
 // ---------------- Supabase client (Service Role) ----------------
