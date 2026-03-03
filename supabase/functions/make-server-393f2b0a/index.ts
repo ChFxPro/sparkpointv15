@@ -92,19 +92,13 @@ const allowedOrigins = new Set<string>([
   "https://yoursparkpoint.org",
   "https://www.yoursparkpoint.org",
   "https://chfxpro.github.io",
-  "http://localhost:3000",
   "http://localhost:5173",
   "http://localhost:4173",
 ]);
 
-function normalizeOrigin(origin: string) {
-  return origin.trim().replace(/\/+$/, "");
-}
-
 function getCorsHeaders(req: Request) {
   const origin = (req.headers.get("origin") ?? "").trim();
-  const normalizedOrigin = normalizeOrigin(origin);
-  const allowOrigin = normalizedOrigin && allowedOrigins.has(normalizedOrigin) ? origin : "null";
+  const allowOrigin = origin && allowedOrigins.has(origin) ? origin : "null";
 
   return {
     "Access-Control-Allow-Origin": allowOrigin,
