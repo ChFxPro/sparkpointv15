@@ -116,7 +116,7 @@ app.use("*", async (c, next) => {
   const corsHeaders = getCorsHeaders(c.req.raw);
 
   if (c.req.method === "OPTIONS") {
-    return new Response("ok", { status: 204, headers: corsHeaders });
+    return new Response(null, { status: 204, headers: corsHeaders });
   }
 
   await next();
