@@ -470,13 +470,14 @@ export function AboutPage() {
       </Helmet>
 
       {/* 1. Hero Section — Documentary Presence with Connection Anchor */}
-      <section className="relative h-[560px] md:h-screen md:min-h-[650px] flex items-end justify-center overflow-hidden pb-4 md:pb-8 bg-[#0a0a0a]">
+      <section className="relative h-[620px] md:h-[720px] lg:h-[780px] xl:h-[840px] flex items-end justify-center overflow-hidden pb-4 md:pb-8 bg-[#0a0a0a]">
         {/* Full-width image */}
         <div className="absolute inset-x-0 bottom-0 top-12 z-0">
           <img
             src={heroImage}
             alt="Community members in conversation"
-            className="w-full h-full object-cover object-top"
+            className="w-full h-full object-cover"
+            style={{ objectPosition: '50% 8%' }}
           />
           {/* Readability Layer: Strong Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/40 to-transparent mix-blend-multiply" />
@@ -994,13 +995,13 @@ export function AboutPage() {
       </section>
 
       {/* Team Hero Image */}
-      <section className="relative h-[400px] sm:h-[450px] md:h-[60vh] overflow-hidden">
+      <section className="relative h-[420px] sm:h-[480px] md:h-[560px] lg:h-[620px] xl:h-[700px] overflow-hidden bg-[#0a0a0a]">
         <div className="absolute inset-0">
           <img 
             src={teamHeroImage} 
             alt="SparkPoint Team and Community" 
             className="w-full h-full object-cover"
-            style={{ objectPosition: '50% 24%' }}
+            style={{ objectPosition: '50% 8%' }}
           />
           <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
         </div>

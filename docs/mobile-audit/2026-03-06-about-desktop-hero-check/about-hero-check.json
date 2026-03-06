@@ -1,0 +1,78 @@
+{
+  "generatedAt": "2026-03-06T17:35:10.562Z",
+  "baseUrl": "http://127.0.0.1:4175/sparkpointv15",
+  "results": [
+    {
+      "viewport": {
+        "name": "desktop_1440x900",
+        "width": 1440,
+        "height": 900
+      },
+      "screenshots": {
+        "top": "desktop_1440x900__about_top.png",
+        "team": "desktop_1440x900__about_team.png"
+      },
+      "diag": {
+        "topHeroHeight": 820,
+        "teamHeroHeight": 620,
+        "topObjectPosition": "50% 0%",
+        "teamObjectPosition": "50% 24%",
+        "hasOverflowX": false
+      }
+    },
+    {
+      "viewport": {
+        "name": "desktop_1280x800",
+        "width": 1280,
+        "height": 800
+      },
+      "screenshots": {
+        "top": "desktop_1280x800__about_top.png",
+        "team": "desktop_1280x800__about_team.png"
+      },
+      "diag": {
+        "topHeroHeight": 732,
+        "teamHeroHeight": 620,
+        "topObjectPosition": "50% 0%",
+        "teamObjectPosition": "50% 24%",
+        "hasOverflowX": false
+      }
+    },
+    {
+      "viewport": {
+        "name": "iphone13_14_portrait",
+        "width": 390,
+        "height": 844
+      },
+      "screenshots": {
+        "top": "iphone13_14_portrait__about_top.png",
+        "team": "iphone13_14_portrait__about_team.png"
+      },
+      "diag": {
+        "topHeroHeight": 560,
+        "teamHeroHeight": 400,
+        "topObjectPosition": "50% 0%",
+        "teamObjectPosition": "50% 24%",
+        "hasOverflowX": false
+      }
+    },
+    {
+      "viewport": {
+        "name": "android_small_portrait",
+        "width": 360,
+        "height": 800
+      },
+      "screenshots": {
+        "top": "android_small_portrait__about_top.png",
+        "team": "android_small_portrait__about_team.png"
+      },
+      "diag": {
+        "topHeroHeight": 560,
+        "teamHeroHeight": 400,
+        "topObjectPosition": "50% 0%",
+        "teamObjectPosition": "50% 24%",
+        "hasOverflowX": false
+      }
+    }
+  ]
+}
