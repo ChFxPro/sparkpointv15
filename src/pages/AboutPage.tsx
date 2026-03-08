@@ -470,20 +470,21 @@ export function AboutPage() {
       </Helmet>
 
       {/* 1. Hero Section — Documentary Presence with Connection Anchor */}
-      <section className="relative h-[560px] md:h-screen md:min-h-[650px] flex items-end justify-center overflow-hidden pb-4 md:pb-8 bg-[#0a0a0a]">
+      <section className="relative h-[560px] md:h-[80vh] md:min-h-[640px] flex items-end justify-center overflow-hidden mb-8 md:mb-12 bg-[#0a0a0a]">
         {/* Full-width image */}
-        <div className="absolute inset-x-0 bottom-0 top-12 z-0">
+        <div className="absolute inset-0 z-0">
           <img
             src={heroImage}
             alt="Community members in conversation"
-            className="w-full h-full object-cover object-top"
+            className="w-full h-full object-cover"
+            style={{ objectPosition: '50% 22%' }}
           />
           {/* Readability Layer: Strong Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/40 to-transparent mix-blend-multiply" />
           <div className="absolute inset-0 bg-black/10" />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto text-center px-6">
+        <div className="relative z-10 max-w-5xl mx-auto text-center px-6 translate-y-6 md:translate-y-14">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -994,13 +995,13 @@ export function AboutPage() {
       </section>
 
       {/* Team Hero Image */}
-      <section className="relative h-[400px] sm:h-[450px] md:h-[60vh] overflow-hidden">
+      <section className="relative h-[400px] md:h-[70vh] md:min-h-[560px] overflow-hidden">
         <div className="absolute inset-0">
-          <img 
-            src={teamHeroImage} 
-            alt="SparkPoint Team and Community" 
+          <img
+            src={teamHeroImage}
+            alt="SparkPoint Team and Community"
             className="w-full h-full object-cover"
-            style={{ objectPosition: '50% 24%' }}
+            style={{ objectPosition: '50% 25%' }}
           />
           <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
         </div>
