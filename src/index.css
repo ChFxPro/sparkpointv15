@@ -6272,3 +6272,21 @@ html.reduce-motion *, html.reduce-motion :before, html.reduce-motion :after {
   .sp-text-lg { font-size: var(--sp-text-lg); line-height: 1.6; }
   .sp-text-xl { font-size: var(--sp-text-xl); line-height: 1.55; }
 }
+
+/* About page hero sections — responsive heights matching source image aspect ratios.
+   These use custom classes because the Tailwind CSS is pre-compiled and arbitrary
+   values like h-[62vw] are not generated at build time. */
+@media (min-width: 768px) {
+  .about-hero-top {
+    height: 62vw;
+  }
+  .about-hero-team {
+    height: 59vw;
+  }
+  /* Pull the headline text up from the section bottom so it's visible
+     on initial page load without scrolling. 10vw ≈ 144px on a 1440px screen,
+     placing the text over the lower body/lap area (below faces). */
+  .about-hero-text {
+    transform: translateY(-10vw);
+  }
+}

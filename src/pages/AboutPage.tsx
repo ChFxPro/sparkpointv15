@@ -470,21 +470,21 @@ export function AboutPage() {
       </Helmet>
 
       {/* 1. Hero Section — Documentary Presence with Connection Anchor */}
-      <section className="relative h-[560px] md:h-[80vh] md:min-h-[640px] flex items-end justify-center overflow-hidden mb-8 md:mb-12 bg-[#0a0a0a]">
+      <section className="about-hero-top relative h-[560px] flex items-end justify-center overflow-hidden mb-8 md:mb-12 bg-[#0a0a0a]">
         {/* Full-width image */}
         <div className="absolute inset-0 z-0">
           <img
             src={heroImage}
             alt="Community members in conversation"
             className="w-full h-full object-cover"
-            style={{ objectPosition: '50% 22%' }}
+            style={{ objectPosition: '50% 20%' }}
           />
           {/* Readability Layer: Strong Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/40 to-transparent mix-blend-multiply" />
           <div className="absolute inset-0 bg-black/10" />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto text-center px-6 translate-y-6 md:translate-y-14">
+        <div className="about-hero-text relative z-10 max-w-5xl mx-auto text-center px-6">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -995,13 +995,13 @@ export function AboutPage() {
       </section>
 
       {/* Team Hero Image */}
-      <section className="relative h-[400px] md:h-[70vh] md:min-h-[560px] overflow-hidden">
+      <section className="about-hero-team relative h-[400px] overflow-hidden">
         <div className="absolute inset-0">
           <img
             src={teamHeroImage}
             alt="SparkPoint Team and Community"
             className="w-full h-full object-cover"
-            style={{ objectPosition: '50% 25%' }}
+            style={{ objectPosition: '50% 20%' }}
           />
           <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
         </div>
