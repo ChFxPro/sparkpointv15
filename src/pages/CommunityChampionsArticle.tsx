@@ -69,10 +69,12 @@ export default function CommunityChampionsArticle() {
         title={`${articleTitle} | SparkPoint`}
         description={articleDescription}
         path={articlePath}
+        canonicalPath="/stories/community-champions/helene-anniversary"
         type="article"
         image={images.scale}
         imageAlt="Community members gathering at Brevard Music Center for Helene: One Year of Healing"
         publishedTime={HELENE_ONE_YEAR_DATE_ISO}
+        noindex
         jsonLd={[articleSchema, eventSchema]}
       />
 
@@ -214,6 +216,17 @@ export default function CommunityChampionsArticle() {
             
             <p className="text-[#888] text-sm font-medium tracking-wide uppercase opacity-70">
               Helene: One Year of Healing · {HELENE_ONE_YEAR_DATE_LABEL} · Brevard Music Center
+            </p>
+            <p className="mt-8 text-sm text-[#BDBDBD]">
+              Continue reading in{' '}
+              <a href="/stories" className="text-[#E03694] hover:underline">
+                SparkPoint Stories
+              </a>{' '}
+              or{' '}
+              <a href="/intake?intent=contact" className="text-[#E03694] hover:underline">
+                connect with our team
+              </a>
+              .
             </p>
           </footer>
 

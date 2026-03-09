@@ -13,6 +13,7 @@ interface SEOHeadProps {
   title: string;
   description: string;
   path: string;
+  canonicalPath?: string;
   type?: PageType;
   image?: string;
   imageAlt?: string;
@@ -68,6 +69,7 @@ export function SEOHead({
   title,
   description,
   path,
+  canonicalPath,
   type = 'website',
   image = DEFAULT_OG_IMAGE_PATH,
   imageAlt = DEFAULT_OG_IMAGE_ALT,
@@ -77,7 +79,7 @@ export function SEOHead({
   modifiedTime,
   jsonLd,
 }: SEOHeadProps) {
-  const canonical = canonicalUrl(path);
+  const canonical = canonicalUrl(canonicalPath ?? path);
   const normalizedDescription = normalizeDescription(description);
   const absoluteImage = toAbsoluteUrl(image);
   const robots = noindex ? 'noindex, nofollow' : 'index, follow';

@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import { Heart, Upload, ArrowRight } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { STORIES_DATA } from '../data/stories';
 import heroImage from 'figma:asset/b7ea59b58a471ceacde60e41e5e3cd69fe78c66f.png';
 import { BehindTheStories } from '../components/BehindTheStories';
@@ -277,15 +277,17 @@ export function StoriesPage() {
               or a story of hope — we'd love to hear from you and share it with our community.
             </p>
             <Button
+              asChild
               className="px-10 py-7 rounded-full text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
               style={{
                 background: 'linear-gradient(135deg, #E03694, #9E509F)',
                 color: 'white',
               }}
-              onClick={() => navigate('/contact')}
             >
-              <Upload className="mr-2" size={20} />
-              Submit Your Story
+              <Link to="/intake?intent=contact">
+                <Upload className="mr-2" size={20} />
+                Submit Your Story
+              </Link>
             </Button>
           </motion.div>
         </div>
