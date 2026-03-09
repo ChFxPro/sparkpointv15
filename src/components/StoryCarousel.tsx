@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router';
 import { Button } from './ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext';
+import storyTextureBg from '../assets/connection_happens/story1.webp';
 
 interface Story {
   title: string;
@@ -49,9 +50,13 @@ export function StoryCarousel({ stories }: StoryCarouselProps) {
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1710438399440-83452997ffd8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMHRleHR1cmUlMjBzdWJ0bGUlMjBwYXR0ZXJufGVufDF8fHx8MTc2MTA4OTQzMnww&ixlib=rb-4.1.0&q=80&w=1080"
+          src={storyTextureBg}
           alt=""
           className="w-full h-full object-cover opacity-10"
+          width={2000}
+          height={1333}
+          loading="lazy"
+          decoding="async"
         />
         <div className="absolute inset-0" style={{ backgroundColor: 'rgba(255, 255, 255, 0.9)' }} />
       </div>

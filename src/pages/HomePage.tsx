@@ -9,6 +9,7 @@ import { CTAFinal } from '../components/CTAFinal';
 import { SEOHead } from '../components/SEOHead';
 import heleneImage from 'figma:asset/0835779aef52124bf5c00840473e8285f8e0f937.png';
 import echoesImage from 'figma:asset/e4e8c9f59f3a2b2ee1533f1f427ca4a4cb3693a5.png';
+import volunteerImpactImage from 'figma:asset/20c2a905251c86d5a4f9333b83199204b6928c7d.png';
 
 const stories = [
   {
@@ -23,7 +24,7 @@ const stories = [
   },
   {
     title: 'Community Champions',
-    image: 'https://images.unsplash.com/photo-1758599668125-e154250f24bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21tdW5pdHklMjB2b2x1bnRlZXJzJTIwaGVscGluZ3xlbnwxfHx8fDE3NjEwNzA2OTl8MA&ixlib=rb-4.1.0&q=80&w=1080',
+    image: volunteerImpactImage,
     caption: 'Celebrating the volunteers and partners who work tirelessly to bring hope, resources, and action to those in need.'
   }
 ];
@@ -44,9 +45,7 @@ export function HomePage() {
         ]}
       />
 
-      <Hero 
-        heroImage="https://images.unsplash.com/photo-1629812205627-222da4a73816?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb3JuaW5nJTIwbGlnaHQlMjBtb3VudGFpbnxlbnwxfHx8fDE3NjEwODkwNzF8MA&ixlib=rb-4.1.0&q=80&w=1080"
-      />
+      <Hero />
       
       <MissionGrid />
       <InteractiveSparkPointInfographic />
@@ -70,9 +69,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <CTAFinal 
-        backgroundImage="https://images.unsplash.com/photo-1694350461777-1519e03ef70a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmb3Jlc3QlMjBuYXR1cmUlMjBwZWFjZWZ1bHxlbnwxfHx8fDE3NjEwOTcyNjF8MA&ixlib=rb-4.1.0&q=80&w=1080"
-      />
+      <CTAFinal />
     </>
   );
 }

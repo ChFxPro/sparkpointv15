@@ -111,7 +111,11 @@ function TimelinePhotoStack({ images, label, milestoneYear, layoutMode = 'stack'
               <div className="w-full overflow-hidden rounded-lg bg-gray-100 relative aspect-[4/3]">
                 {img.webpSrc ? (
                   <picture>
-                    <source srcSet={img.webpSrc} type="image/webp" />
+                    <source
+                      srcSet={img.webpSrc}
+                      type="image/webp"
+                      sizes="(min-width: 1024px) 360px, (min-width: 768px) 34vw, 90vw"
+                    />
                     <img
                       src={img.jpgSrc || img.src}
                       alt={img.alt || img.caption || `${label ?? 'timeline item'} photo`}
@@ -184,7 +188,11 @@ function TimelinePhotoStack({ images, label, milestoneYear, layoutMode = 'stack'
                 <div className="w-full h-full overflow-hidden rounded-lg bg-gray-100 relative">
                   {img.webpSrc ? (
                     <picture>
-                      <source srcSet={img.webpSrc} type="image/webp" />
+                      <source
+                        srcSet={img.webpSrc}
+                        type="image/webp"
+                        sizes="(min-width: 1024px) 360px, (min-width: 768px) 34vw, 90vw"
+                      />
                       <img
                         src={img.jpgSrc || img.src}
                         alt={img.alt || img.caption || `${label ?? 'timeline item'} photo`}

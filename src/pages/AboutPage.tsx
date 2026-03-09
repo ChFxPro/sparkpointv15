@@ -8,6 +8,8 @@ import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { useState, useEffect } from 'react';
 import heroImage from 'figma:asset/0c7f5d615ddb7365345eec2cd86bf98d3be9ca22.png';
 import teamHeroImage from 'figma:asset/c88e8fd418fa5de2d8271a01eff7835b8bc45301.png';
+import heroImageWebp from '../assets/compd/0c7f5d615ddb7365345eec2cd86bf98d3be9ca22.webp';
+import teamHeroImageWebp from '../assets/compd/c88e8fd418fa5de2d8271a01eff7835b8bc45301.webp';
 import blueZonesImage from 'figma:asset/006b84f90bae2616433d7bda85278d8264e4e33c.png';
 import bzBrevardDayWebp from '../assets/bz_brevard_day.webp';
 import bzBrevardDayJpg from '../assets/bz_brevard_day.jpg';
@@ -38,6 +40,8 @@ import seniorGatheringImage from 'figma:asset/2f54cc163c056ac592d9e429a8920f74d0
 import interviewFilmingImage from 'figma:asset/183c96a680c45035b0835db81082bdb93af69f97.png';
 import sparkPointCommonsImage from 'figma:asset/63f606372ec6e500e9a7547d300fb9f0d31dae7e.png';
 import mediaStudioImage from 'figma:asset/7c67e828e47be75e27ecc6de02db283be5ae7589.png';
+import sparkPointCommonsImageWebp from '../assets/compd/63f606372ec6e500e9a7547d300fb9f0d31dae7e.webp';
+import mediaStudioImageWebp from '../assets/compd/7c67e828e47be75e27ecc6de02db283be5ae7589.webp';
 import { SEOHead } from '../components/SEOHead';
 import { KeepExploringLinks } from '../components/KeepExploringLinks';
 
@@ -247,8 +251,20 @@ const timeline: AboutTimelineItem[] = [
     description: 'Deepening impact and sustainable growth',
     achievements: ['Continued regional expansion', 'New strategic initiatives', 'Building long-term resilience'],
     gallery: [
-      { src: sparkPointCommonsImage, caption: 'SparkPoint Commons', rotation: -2 },
-      { src: mediaStudioImage, caption: 'Media Studio', rotation: 2.5 }
+      {
+        src: sparkPointCommonsImage,
+        caption: 'SparkPoint Commons',
+        rotation: -2,
+        webpSrc: sparkPointCommonsImageWebp,
+        jpgSrc: sparkPointCommonsImage,
+      },
+      {
+        src: mediaStudioImage,
+        caption: 'Media Studio',
+        rotation: 2.5,
+        webpSrc: mediaStudioImageWebp,
+        jpgSrc: mediaStudioImage,
+      }
     ]
   }
 ];
@@ -473,12 +489,20 @@ export function AboutPage() {
       <section className="about-hero-top relative h-[560px] flex items-end justify-center overflow-hidden mb-8 md:mb-12 bg-[#0a0a0a]">
         {/* Full-width image */}
         <div className="absolute inset-0 z-0">
-          <img
-            src={heroImage}
-            alt="Community members in conversation"
-            className="w-full h-full object-cover"
-            style={{ objectPosition: '50% 20%' }}
-          />
+          <picture className="block w-full h-full">
+            <source srcSet={heroImageWebp} type="image/webp" sizes="100vw" />
+            <img
+              src={heroImage}
+              alt="Community members in conversation"
+              className="w-full h-full object-cover"
+              style={{ objectPosition: '50% 20%' }}
+              width={2000}
+              height={1241}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+            />
+          </picture>
           {/* Readability Layer: Strong Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/40 to-transparent mix-blend-multiply" />
           <div className="absolute inset-0 bg-black/10" />
@@ -997,12 +1021,19 @@ export function AboutPage() {
       {/* Team Hero Image */}
       <section className="about-hero-team relative h-[400px] overflow-hidden">
         <div className="absolute inset-0">
-          <img
-            src={teamHeroImage}
-            alt="SparkPoint Team and Community"
-            className="w-full h-full object-cover"
-            style={{ objectPosition: '50% 20%' }}
-          />
+          <picture className="block w-full h-full">
+            <source srcSet={teamHeroImageWebp} type="image/webp" sizes="100vw" />
+            <img
+              src={teamHeroImage}
+              alt="SparkPoint Team and Community"
+              className="w-full h-full object-cover"
+              style={{ objectPosition: '50% 20%' }}
+              width={2000}
+              height={1186}
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
           <div className="absolute inset-0 bg-black/40 mix-blend-multiply" />
         </div>
       </section>

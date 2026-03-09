@@ -3,6 +3,7 @@
 import { Heart, Users, Leaf } from 'lucide-react';
 import { MissionCard } from './MissionCard';
 import { motion } from 'motion/react';
+import sparkpurposeBg from '../assets/connection_happens/sparkpurpose1.webp';
 
 export function MissionGrid() {
   return (
@@ -10,9 +11,13 @@ export function MissionGrid() {
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://images.unsplash.com/photo-1593043927112-08289c3f1b64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzb2Z0JTIwcGFwZXIlMjB0ZXh0dXJlJTIwbGlnaHR8ZW58MXx8fHwxNzYxMDg5NDMzfDA&ixlib=rb-4.1.0&q=80&w=1080"
+          src={sparkpurposeBg}
           alt=""
           className="w-full h-full object-cover opacity-30"
+          width={2000}
+          height={1333}
+          loading="lazy"
+          decoding="async"
         />
         <div className="absolute inset-0" style={{ backgroundColor: 'rgba(248, 249, 250, 0.85)' }} />
       </div>
