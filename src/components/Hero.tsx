@@ -15,11 +15,7 @@ import mountainPng from '../assets/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.png'
 import mountainAvif from '../assets/compd/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.avif';
 import mountainWebp from '../assets/compd/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.webp';
 
-interface HeroProps {
-  heroImage: string;
-}
-
-export function Hero({ heroImage }: HeroProps) {
+export function Hero() {
   const navigate = useNavigate();
   const systemReducedMotion = useReducedMotion();
   const { motionPreference } = useAccessibility();
@@ -75,6 +71,7 @@ export function Hero({ heroImage }: HeroProps) {
         <div
           className="absolute inset-0"
           style={{
+            background: `center / cover no-repeat url("${mountainPng}")`,
             // Prefer AVIF/WebP when available, fall back to PNG
             backgroundImage: `image-set(
               url("${mountainAvif}") type("image/avif"),

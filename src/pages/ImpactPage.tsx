@@ -9,6 +9,7 @@ import { SEOHead } from '../components/SEOHead';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { KeepExploringLinks } from '../components/KeepExploringLinks';
 import communityMomentImg from 'figma:asset/c468599141a487a1168ff53b1f6de665f3b4be9d.png';
+import communityMomentImgWebp from '../assets/compd/c468599141a487a1168ff53b1f6de665f3b4be9d.webp';
 import heleneIcon from 'figma:asset/3c1537cde524e7172c827aa2411c2c759ae68ece.png';
 
 import helene1Webp from '../assets/moments_impact/helene1.webp';
@@ -190,7 +191,7 @@ function PhotoStack({
                   }
                 >
                   <picture className="block w-full h-full rounded-xl overflow-hidden bg-white">
-                    <source type="image/webp" srcSet={img.webp} />
+                    <source type="image/webp" srcSet={img.webp} sizes="(min-width: 1280px) 720px, (min-width: 768px) 70vw, 95vw" />
                     <img
                       src={img.jpg}
                       alt={img.alt}
@@ -485,12 +486,18 @@ export function ImpactPage() {
 
               {/* Community Moments Image */}
               <div className="mt-12 rounded-2xl overflow-hidden shadow-lg border border-gray-100">
-                  <img 
-                    src={communityMomentImg} 
-                    alt="SparkPoint community members gathering during 2025 events in Transylvania County" 
-                    className="w-full h-auto object-cover"
-                    loading="lazy"
-                  />
+                  <picture>
+                    <source srcSet={communityMomentImgWebp} type="image/webp" sizes="(min-width: 1280px) 960px, (min-width: 768px) 85vw, 100vw" />
+                    <img 
+                      src={communityMomentImg} 
+                      alt="SparkPoint community members gathering during 2025 events in Transylvania County" 
+                      className="w-full h-auto object-cover"
+                      loading="lazy"
+                      decoding="async"
+                      width={4032}
+                      height={2268}
+                    />
+                  </picture>
                   <div className="p-4 bg-gray-50 text-center">
                     <p className="sp-text-sm text-gray-500 font-medium uppercase tracking-wider">Community Moments: 2025 Highlights</p>
                   </div>

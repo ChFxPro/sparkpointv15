@@ -1,6 +1,7 @@
 
 import heleneImage from 'figma:asset/0835779aef52124bf5c00840473e8285f8e0f937.png';
 import echoesImage from 'figma:asset/e4e8c9f59f3a2b2ee1533f1f427ca4a4cb3693a5.png';
+import volunteerImpactImage from 'figma:asset/20c2a905251c86d5a4f9333b83199204b6928c7d.png';
 import { HELENE_ONE_YEAR_DATE_LABEL } from './impact2025';
 
 export interface Article {
@@ -163,7 +164,7 @@ export const STORIES_DATA: Category[] = [
     id: 'volunteer-impact',
     title: 'Volunteer Impact',
     description: 'Moments where time, skill, and care turned into real change.',
-    image: 'https://images.unsplash.com/photo-1758599668125-e154250f24bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2b2x1bnRlZXJzJTIwaGVscGluZyUyMGNvbW11bml0eXxlbnwxfHx8fDE3NjExMzg3ODN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    image: volunteerImpactImage,
     articles: [
       {
         id: 'community-champions',
@@ -172,7 +173,7 @@ export const STORIES_DATA: Category[] = [
         date: 'August 2024',
         excerpt: 'Celebrating the volunteers and partners who bring hope and action to those in need.',
         content: '<p>Behind every success story at SparkPoint are the champions who show up — the volunteers who give their time, the partners who share resources, the community leaders who open doors. These are the people who transform compassion into action, who turn vision into reality, and who remind us that together, we can achieve anything.</p>',
-        image: 'https://images.unsplash.com/photo-1758599668125-e154250f24bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2b2x1bnRlZXJzJTIwaGVscGluZyUyMGNvbW11bml0eXxlbnwxfHx8fDE3NjExMzg3ODN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
+        image: volunteerImpactImage
       }
     ]
   }

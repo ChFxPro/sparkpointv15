@@ -8,6 +8,7 @@ import {
   IMPACT_2025_ANCHOR_ATTENDANCE_TOTAL,
   IMPACT_2025_NOVEMBER_SHARE_PERCENT,
 } from '../data/impact2025';
+import impactBg from '../assets/connection_happens/vos1.webp';
 
 // Shared glass card styles (keeps Impact section cohesive)
 const GLASS_CARD = {
@@ -560,10 +561,14 @@ export function ImpactSection() {
       {/* Background with Parallax */}
       <div className="absolute inset-0 z-0">
         <motion.img
-          src="https://images.unsplash.com/photo-1632580254134-94c4a73dab76?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjb21tdW5pdHklMjBnYXRoZXJpbmclMjBwZW9wbGV8ZW58MXx8fHwxNzYxMDE5NzQ2fDA&ixlib=rb-4.1.0&q=80&w=1080"
+          src={impactBg}
           alt=""
           className="w-full h-full object-cover opacity-30"
           style={{ willChange: 'transform' }}
+          width={2000}
+          height={1333}
+          loading="lazy"
+          decoding="async"
           initial={{ y: 0 }}
           whileInView={{ y: -20 }}
           viewport={{ once: false }}

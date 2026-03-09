@@ -29,6 +29,7 @@ import { SEOHead } from '../components/SEOHead';
 import { KeepExploringLinks } from '../components/KeepExploringLinks';
 import sparkPointIcon from 'figma:asset/046ca85659860578eeeab6a45f52700c54c519a3.png';
 import stickyBackground from 'figma:asset/c4e1406ca17d5d9941f67714b4ad381639235894.png';
+import stickyBackgroundWebp from '../assets/compd/c4e1406ca17d5d9941f67714b4ad381639235894.webp';
 import learningImg from 'figma:asset/ce0a67a45092b4432ec7c00f4a17cb5a77e95a50.png';
 import voiceImg from 'figma:asset/90544aa933b2c117f40fb5271f7b12942198041b.png';
 import partnersImg from 'figma:asset/5463509e242f1244d018bbff5b9c9fc1831a9b2f.png';
@@ -888,7 +889,11 @@ export function MissionPage() {
           <div 
             className="absolute inset-0 bg-cover bg-center"
             style={{
-              backgroundImage: `url(${stickyBackground})`,
+              background: `center / cover no-repeat url(${stickyBackground})`,
+              backgroundImage: `image-set(
+                url("${stickyBackgroundWebp}") type("image/webp"),
+                url("${stickyBackground}") type("image/png")
+              )`,
             }}
           />
           
