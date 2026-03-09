@@ -259,18 +259,11 @@ export function StoryArticlePage() {
                We believe every voice matters. Your experience helps build a stronger, more connected community.
              </p>
              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-               <Button 
-                 onClick={() => navigate('/contact')} 
-                 className="bg-[#E03694] hover:bg-[#c2257d] text-white px-8 py-6 text-lg"
-               >
-                 Submit Your Story
+               <Button asChild className="bg-[#E03694] hover:bg-[#c2257d] text-white px-8 py-6 text-lg">
+                 <Link to="/intake?intent=contact">Submit Your Story</Link>
                </Button>
-               <Button
-                 variant="outline"
-                 onClick={() => navigate(`/stories/${category.id}`)}
-                 className="px-8 py-6 text-lg border-gray-300 text-gray-700 hover:bg-gray-100"
-               >
-                 Back to {category.title}
+               <Button asChild variant="outline" className="px-8 py-6 text-lg border-gray-300 text-gray-700 hover:bg-gray-100">
+                 <Link to={`/stories/${category.id}`}>Back to {category.title}</Link>
                </Button>
              </div>
            </div>

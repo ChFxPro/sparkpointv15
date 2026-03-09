@@ -220,6 +220,17 @@ export default function HeleneOneYearArticle() {
             <p className="text-[#888] text-sm font-medium tracking-wide uppercase opacity-70">
               Helene: One Year of Healing · {HELENE_ONE_YEAR_DATE_LABEL} · Brevard Music Center
             </p>
+            <p className="mt-8 text-sm text-[#BDBDBD]">
+              Explore more in{' '}
+              <a href="/stories" className="text-[#E03694] hover:underline">
+                SparkPoint Stories
+              </a>{' '}
+              or{' '}
+              <a href="/intake?intent=contact" className="text-[#E03694] hover:underline">
+                reach out to SparkPoint
+              </a>
+              .
+            </p>
           </footer>
 
         </article>

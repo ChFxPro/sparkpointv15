@@ -1,7 +1,9 @@
 'use client';
 
 import { motion } from 'motion/react';
+import { Link } from 'react-router';
 import { Card } from '../components/ui/card';
+import { Button } from '../components/ui/button';
 import { SEOHead } from '../components/SEOHead';
 
 const hubSections = [
@@ -52,6 +54,19 @@ export function ResiliencyHubPage() {
               <p className="text-gray-600 leading-relaxed">{section.body}</p>
             </Card>
           ))}
+        </div>
+        <div className="max-w-4xl mx-auto mt-12 text-center">
+          <p className="text-gray-600 mb-5">
+            Looking for ways to collaborate on preparedness and long-term resilience?
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Button asChild variant="outline">
+              <Link to="/programs">Explore Programs</Link>
+            </Button>
+            <Button asChild style={{ backgroundColor: '#E03694', color: 'white' }}>
+              <Link to="/intake?intent=partner">Partner With SparkPoint</Link>
+            </Button>
+          </div>
         </div>
       </section>
     </div>

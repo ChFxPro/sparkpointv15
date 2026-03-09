@@ -249,7 +249,7 @@ export function TrustPage() {
                 <p className="text-lg font-medium text-[#1A1A1A]">
                     <a href="mailto:info@yoursparkpoint.org" className="hover:text-[#E03694] transition-colors">info@yoursparkpoint.org</a>
                 </p>
-                <Link to="/contact">
+                <Link to="/intake?intent=contact">
                     <Button variant="outline" size="lg" className="mt-2">
                         Go to Contact Page
                     </Button>
