@@ -8,6 +8,7 @@ import { Card } from '../components/ui/card';
 import { Input } from '../components/ui/input';
 import { useState } from 'react';
 import { SEOHead } from '../components/SEOHead';
+import { KeepExploringLinks } from '../components/KeepExploringLinks';
 
 const engagementCards = [
   {
@@ -325,6 +326,28 @@ export function GetInvolvedPage() {
           </motion.div>
         </div>
       </section>
+
+      <KeepExploringLinks
+        title="Keep Exploring"
+        intro="You can also learn how SparkPoint’s connection work is showing up across the county."
+        links={[
+          {
+            to: '/stories',
+            label: 'Read community stories',
+            description: 'See how neighbors, partners, and local leaders are shaping this work.',
+          },
+          {
+            to: '/impact',
+            label: 'View recent impact',
+            description: 'Review 2025 totals and examples of coordinated community action.',
+          },
+          {
+            to: '/about',
+            label: 'Meet SparkPoint',
+            description: 'Learn more about our team, board, and how we stay rooted locally.',
+          },
+        ]}
+      />
     </div>
   );
 }
