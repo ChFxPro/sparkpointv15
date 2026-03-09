@@ -97,13 +97,16 @@ export function Header() {
           >
             <img
               src={sparkPointLogo}
-              alt="SparkPoint"
+              alt="SparkPoint logo"
               className="h-14 w-auto" 
             />
           </Link>
 
           {/* Center: Curated Links */}
-          <nav className="hidden xl:flex items-center gap-10 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <nav
+            aria-label="Primary navigation"
+            className="hidden xl:flex items-center gap-10 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          >
             {desktopCenterLinks.map((item) => (
               <Link
                 key={item.label}
@@ -133,6 +136,7 @@ export function Header() {
           {/* Right: Donate + Utilities + Menu */}
           <div className="flex items-center gap-4">
             <Button
+              asChild
               size="sm"
               className="px-6 rounded-full transition-all hover:brightness-105 hover:scale-105 shadow-md hover:shadow-lg"
               style={{
@@ -141,11 +145,8 @@ export function Header() {
                 fontSize: '14px',
                 fontWeight: '600',
               }}
-              onClick={() => {
-                globalThis.location.href = 'https://www.yoursparkpoint.org/donations';
-              }}
             >
-              Donate
+              <Link to="/donations">Donate</Link>
             </Button>
 
             <div className="h-6 w-px bg-gray-300 mx-1 hidden xl:block" />
@@ -251,7 +252,7 @@ export function Header() {
           >
             <img
               src={sparkPointLogo}
-              alt="SparkPoint"
+              alt="SparkPoint logo"
               className="h-14 w-auto"
             />
           </Link>
@@ -300,6 +301,7 @@ export function Header() {
             {/* Mobile View (Preserved Layout) */}
             <div className="lg:hidden flex-1 flex flex-col overflow-hidden">
                 <nav
+                  aria-label="Mobile navigation"
                   className="flex-1 overflow-y-auto px-3 sm:px-4 pb-1 grid gap-x-2 sm:gap-x-3 gap-y-1 auto-rows-min content-start"
                   style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))' }}
                 >
@@ -343,6 +345,7 @@ export function Header() {
 
                   <div className="grid grid-cols-2 gap-2">
                     <Button
+                      asChild
                       className="w-full min-h-[44px] transition-all hover:brightness-105 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-[#B34A9E]"
                       style={{
                         backgroundColor: 'white',
@@ -350,9 +353,10 @@ export function Header() {
                         fontSize: '16px',
                         fontWeight: '700',
                       }}
-                      onClick={() => globalThis.location.href = 'https://www.yoursparkpoint.org/donations'}
                     >
-                      Donate
+                      <Link to="/donations" onClick={handleLinkClick}>
+                        Donate
+                      </Link>
                     </Button>
                     <Button
                       variant="ghost"
@@ -407,7 +411,7 @@ export function Header() {
                    <h3 className="text-white/60 text-xs font-bold uppercase tracking-widest mb-6">Get Involved</h3>
                    <div className="grid gap-4">
                       <Link to="/get-involved" onClick={handleLinkClick} className="text-white text-2xl font-bold hover:translate-x-2 transition-transform">Get Involved</Link>
-                      <a href="https://www.yoursparkpoint.org/donations" className="text-white text-2xl font-bold hover:translate-x-2 transition-transform">Donate</a>
+                      <Link to="/donations" onClick={handleLinkClick} className="text-white text-2xl font-bold hover:translate-x-2 transition-transform">Donate</Link>
                       <a
                         href="https://cowbell-primrose-tet2.squarespace.com/newsletter"
                          onClick={handleLinkClick}

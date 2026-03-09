@@ -4,7 +4,6 @@ import * as React from 'react';
 // Deno tooling: ensure the React namespace import is treated as used.
 const _React = React;
 void _React;
-import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { useState, useEffect } from 'react';
 import heroImage from 'figma:asset/0c7f5d615ddb7365345eec2cd86bf98d3be9ca22.png';
@@ -38,8 +37,8 @@ import regionalAuditoriumImage from 'figma:asset/ce0a67a45092b4432ec7c00f4a17cb5
 import seniorGatheringImage from 'figma:asset/2f54cc163c056ac592d9e429a8920f74d0a98f56.png';
 import interviewFilmingImage from 'figma:asset/183c96a680c45035b0835db81082bdb93af69f97.png';
 import sparkPointCommonsImage from 'figma:asset/63f606372ec6e500e9a7547d300fb9f0d31dae7e.png';
-import { canonicalUrl } from '../lib/siteOrigin.ts';
 import mediaStudioImage from 'figma:asset/7c67e828e47be75e27ecc6de02db283be5ae7589.png';
+import { SEOHead } from '../components/SEOHead';
 
 import sarahHeadshotWebp from '../assets/staff_pics/webp/sp_port26__0004_sarah.webp';
 import sarahHeadshotJpg from '../assets/staff_pics/sp_port26__0004_sarah.jpg';
@@ -463,11 +462,11 @@ export function AboutPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] relative">
-      <Helmet>
-        <title>About SparkPoint | Built Through Connection</title>
-        <meta name="description" content="SparkPoint’s mission, history, and community-centered approach." />
-        <link rel="canonical" href={canonicalUrl('/about')} />
-      </Helmet>
+      <SEOHead
+        title="About SparkPoint | Built Through Connection"
+        description="Learn SparkPoint’s history, leadership, and community-rooted strategy for connection and resilience across Transylvania County and Western North Carolina."
+        path="/about"
+      />
 
       {/* 1. Hero Section — Documentary Presence with Connection Anchor */}
       <section className="about-hero-top relative h-[560px] flex items-end justify-center overflow-hidden mb-8 md:mb-12 bg-[#0a0a0a]">

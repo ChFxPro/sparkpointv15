@@ -15,6 +15,10 @@ Last updated: 2026-02-27
 - 2025 impact totals are centralized in `src/data/impact2025.ts` and consumed in impact surfaces.
 - Mission and partner network groupings are aligned to the latest partner update source.
 - Address boilerplate now uses `159 W. Main St Unit 2452` across UI + structured data.
+- SEO metadata is standardized through `src/components/SEOHead.tsx` across route pages.
+- Structured data now includes Organization/NGO, WebSite, WebPage, and BreadcrumbList globally, plus page-level Article/Event schema where applicable.
+- Canonical site origin defaults to `https://www.yoursparkpoint.org` (see `src/lib/siteOrigin.ts` and `vite.config.ts`).
+- `public/robots.txt` and `public/sitemap.xml` use `__SITE_ORIGIN__` placeholders replaced during postbuild.
 
 ## Routes
 - `/` home

@@ -17,8 +17,6 @@ import { SponsorsPage } from './pages/SponsorsPage';
 import { ResiliencyHubPage } from './pages/ResiliencyHubPage';
 import { NewsMediaPage } from './pages/NewsMediaPage';
 import { AboutPage } from './pages/AboutPage';
-import { ContactPage } from './pages/ContactPage'; // Keeping for reference or fallback? Probably unused now.
-import { VolunteerPage } from './pages/VolunteerPage'; // Unused now.
 import { IntakePage } from './pages/IntakePage';
 import { TrustPage } from './pages/TrustPage';
 import { PrivacyPage } from './pages/PrivacyPage';

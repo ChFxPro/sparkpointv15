@@ -1,10 +1,10 @@
 'use client';
 
 import { useSearchParams } from 'react-router';
-import { Helmet } from 'react-helmet-async';
 import { GuidedIntakeForm } from '../components/GuidedIntakeForm';
 import { motion } from 'motion/react';
 import { Mail, ArrowRight, UserCheck, MessageSquare } from 'lucide-react';
+import { SEOHead } from '../components/SEOHead';
 
 const ConnectionMotif = () => (
   <svg 
@@ -61,18 +61,22 @@ export function IntakePage() {
 
   const getPageDescription = () => {
     switch (initialIntent) {
-      case 'volunteer': return 'Join our community of volunteers helping to build resilience in WNC.';
-      case 'partner': return 'Collaborate with us to strengthen community infrastructure.';
-      default: return 'Get in touch with SparkPoint for inquiries, support, or to share your story.';
+      case 'volunteer':
+        return 'Connect with SparkPoint volunteer opportunities that strengthen resilience and practical support across Transylvania County and Western North Carolina.';
+      case 'partner':
+        return 'Start a SparkPoint partnership aligning schools, nonprofits, agencies, and businesses around community connection and resilience in Western North Carolina.';
+      default:
+        return 'Contact SparkPoint to ask questions, share your story, or request support as we strengthen connection and community well-being across Transylvania County.';
     }
   };
 
   return (
     <>
-      <Helmet>
-        <title>{getPageTitle()} | SparkPoint</title>
-        <meta name="description" content={getPageDescription()} />
-      </Helmet>
+      <SEOHead
+        title={`${getPageTitle()} | SparkPoint`}
+        description={getPageDescription()}
+        path="/intake"
+      />
       
       <div className="min-h-screen bg-[#FDFBF7] relative overflow-hidden">
         {/* Soft Background Gradient Wash */}

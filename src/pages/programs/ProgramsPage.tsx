@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router";
-import { Helmet } from "react-helmet-async";
 import { ProgramsHero } from "./ProgramsHero";
 import { EcosystemSection } from "./EcosystemSection";
 import { AllProgramsSection } from "./AllProgramsSection";
 import { PathwayModal } from "./PathwayModal";
 import { getProgramBySlug, pathways, type Pathway, type Program } from "./programsData";
+import { SEOHead } from "../../components/SEOHead";
 import "./programs.css";
 
 type AudienceSegment = "community" | "volunteer" | "partner";
@@ -103,9 +103,11 @@ export default function ProgramsPage() {
 
   return (
     <div className="sp-programs">
-      <Helmet>
-        <title>Programs | SparkPoint</title>
-      </Helmet>
+      <SEOHead
+        title="Programs | SparkPoint"
+        description="Explore SparkPoint programs that turn listening into action for volunteers, residents, and partners across Transylvania County and Western North Carolina."
+        path="/programs"
+      />
 
       <ProgramsHero
         audienceSegment={audienceSegment}

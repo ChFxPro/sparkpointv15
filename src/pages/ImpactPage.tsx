@@ -1,11 +1,11 @@
 'use client';
 
-import { Helmet } from 'react-helmet-async';
 import { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react';
 import { TrendingUp, Users, Heart, Award, Calendar, FileText, Sparkles, ArrowRight } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
+import { SEOHead } from '../components/SEOHead';
 import { useAccessibility } from '../context/AccessibilityContext';
 import communityMomentImg from 'figma:asset/c468599141a487a1168ff53b1f6de665f3b4be9d.png';
 import heleneIcon from 'figma:asset/3c1537cde524e7172c827aa2411c2c759ae68ece.png';
@@ -27,7 +27,6 @@ import {
   IMPACT_2025,
   IMPACT_2025_NOVEMBER_SHARE_PERCENT,
 } from '../data/impact2025';
-import { canonicalUrl } from '../lib/siteOrigin';
 
 const impactMetrics = [
   {
@@ -262,11 +261,11 @@ export function ImpactPage() {
 
   return (
     <div className="min-h-screen relative">
-      <Helmet>
-        <title>Our Impact | SparkPoint</title>
-        <meta name="description" content="How SparkPoint supports well-being, resilience, and collaboration." />
-        <link rel="canonical" href={canonicalUrl('/impact')} />
-      </Helmet>
+      <SEOHead
+        title="Our Impact | SparkPoint"
+        description="See SparkPoint’s measurable 2025 impact across attendance, partnerships, and programs advancing community connection and resilience in Transylvania County."
+        path="/impact"
+      />
       {/* Enhanced Hero Section */}
       <section ref={heroRef} className="relative pt-24 pb-12 md:pt-32 md:pb-24 px-6 overflow-hidden">
         {/* Animated Background */}
@@ -487,8 +486,9 @@ export function ImpactPage() {
               <div className="mt-12 rounded-2xl overflow-hidden shadow-lg border border-gray-100">
                   <img 
                     src={communityMomentImg} 
-                    alt="Community moments from 2025 events" 
+                    alt="SparkPoint community members gathering during 2025 events in Transylvania County" 
                     className="w-full h-auto object-cover"
+                    loading="lazy"
                   />
                   <div className="p-4 bg-gray-50 text-center">
                     <p className="sp-text-sm text-gray-500 font-medium uppercase tracking-wider">Community Moments: 2025 Highlights</p>
@@ -639,7 +639,7 @@ export function ImpactPage() {
                 style={{ opacity: 1, transform: 'none' }}
               >
                 <div className="w-20 h-20 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 flex-shrink-0 mt-1">
-                  <img src={heleneIcon} alt="Helene Badge" className="w-12 h-12 object-contain" />
+                  <img src={heleneIcon} alt="Helene: One Year of Healing event badge" className="w-12 h-12 object-contain" />
                 </div>
                 <div>
                   <h4 className="text-xl font-bold text-slate-900">Helene: One Year of Healing</h4>

@@ -1,8 +1,8 @@
 'use client';
 
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'motion/react';
 import { Card } from '../components/ui/card';
+import { SEOHead } from '../components/SEOHead';
 
 const hubSections = [
   {
@@ -22,13 +22,11 @@ const hubSections = [
 export function ResiliencyHubPage() {
   return (
     <div className="min-h-screen bg-white">
-      <Helmet>
-        <title>SparkPoint Resiliency Hub | SparkPoint</title>
-        <meta
-          name="description"
-          content="SparkPoint Resiliency Hub: preparedness, connection, and coordinated community support."
-        />
-      </Helmet>
+      <SEOHead
+        title="SparkPoint Resiliency Hub | SparkPoint"
+        description="Discover SparkPoint’s Resiliency Hub for preparedness resources, coordinated support, and trusted community connection across Transylvania County and WNC."
+        path="/resiliency-hub"
+      />
 
       <section className="pt-32 pb-18 px-6 bg-gradient-to-b from-[#F8F4FA] to-white">
         <div className="max-w-4xl mx-auto text-center">

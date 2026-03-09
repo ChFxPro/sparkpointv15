@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Helmet } from 'react-helmet-async';
 import imgPoster from "figma:asset/e3f8a2b021eb0d337580338dd10e709a1762494c.png";
 import imgCrowd from "figma:asset/081f67bc0043a989fd3bbe690f2bc36895e2ae29.png";
 import imgJenga from "figma:asset/03643ed23c45475ef78b3e0f363a5b886b5679a9.png";
 import imgConversation from "figma:asset/acc45b75e300283fd839e68a5d16299f663b13b6.png";
-import { HELENE_ONE_YEAR_DATE_LABEL } from '../data/impact2025';
+import { SEOHead } from '../components/SEOHead';
+import { HELENE_ONE_YEAR_DATE_ISO, HELENE_ONE_YEAR_DATE_LABEL } from '../data/impact2025';
 
 // Image URLs 
 const images = {
@@ -16,12 +16,65 @@ const images = {
 };
 
 export default function CommunityChampionsArticle() {
+  const articleTitle = 'When a Community Shows Up';
+  const articleDescription =
+    'Honoring volunteers from Helene: One Year of Healing whose service strengthened community resilience across Transylvania County and Western North Carolina.';
+  const articlePath = '/community-champions/helene-one-year';
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: articleTitle,
+    description: articleDescription,
+    image: [images.scale, images.interaction, images.action, images.connection],
+    datePublished: HELENE_ONE_YEAR_DATE_ISO,
+    author: {
+      '@type': 'Organization',
+      name: 'SparkPoint',
+    },
+    publisher: {
+      '@id': 'https://www.yoursparkpoint.org/#organization',
+    },
+    mainEntityOfPage: `https://www.yoursparkpoint.org${articlePath}`,
+    inLanguage: 'en-US',
+  };
+
+  const eventSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: 'Helene: One Year of Healing',
+    description: 'A community tribute gathering honoring one year of recovery and connection after Hurricane Helene.',
+    startDate: HELENE_ONE_YEAR_DATE_ISO,
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    eventStatus: 'https://schema.org/EventCompleted',
+    image: [images.scale, images.action],
+    location: {
+      '@type': 'Place',
+      name: 'Brevard Music Center',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Brevard',
+        addressRegion: 'NC',
+        addressCountry: 'US',
+      },
+    },
+    organizer: {
+      '@id': 'https://www.yoursparkpoint.org/#organization',
+    },
+  };
+
   return (
     <>
-      <Helmet>
-        <title>When a Community Shows Up | SparkPoint</title>
-        <meta name="description" content="Honoring the volunteers who showed up for Helene: One Year of Healing." />
-      </Helmet>
+      <SEOHead
+        title={`${articleTitle} | SparkPoint`}
+        description={articleDescription}
+        path={articlePath}
+        type="article"
+        image={images.scale}
+        imageAlt="Community members gathering at Brevard Music Center for Helene: One Year of Healing"
+        publishedTime={HELENE_ONE_YEAR_DATE_ISO}
+        jsonLd={[articleSchema, eventSchema]}
+      />
 
       <div className="min-h-screen bg-[#0F0F0F] text-[#E5E5E5] pt-32 pb-24 font-serif selection:bg-[#E03694]/30">
         <article className="max-w-[760px] mx-auto px-6">

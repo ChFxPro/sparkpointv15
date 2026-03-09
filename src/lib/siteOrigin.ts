@@ -1,4 +1,4 @@
-const DEFAULT_SITE_ORIGIN = 'https://yoursparkpoint.org';
+const DEFAULT_SITE_ORIGIN = 'https://www.yoursparkpoint.org';
 
 function resolveSiteOrigin() {
   if (import.meta.env.VITE_SITE_ORIGIN) {

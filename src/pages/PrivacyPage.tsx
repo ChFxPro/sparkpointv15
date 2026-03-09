@@ -1,20 +1,19 @@
 'use client';
 
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'motion/react';
 import { ArrowLeft, Mail, Phone, Shield, Lock, EyeOff } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Link } from 'react-router';
-import { canonicalUrl } from '../lib/siteOrigin';
+import { SEOHead } from '../components/SEOHead';
 
 export function PrivacyPage() {
   return (
     <div className="min-h-screen bg-[#FDFDFD]">
-      <Helmet>
-        <title>Privacy Policy | SparkPoint</title>
-        <meta name="description" content="SparkPoint's commitment to privacy: we do not sell data, we respect your information, and we prioritize community trust." />
-        <link rel="canonical" href={canonicalUrl('/privacy')} />
-      </Helmet>
+      <SEOHead
+        title="Privacy Policy | SparkPoint"
+        description="Read SparkPoint’s privacy policy and learn how we collect, use, and protect information to support trusted community connection in Transylvania County and WNC."
+        path="/privacy"
+      />
 
       <section className="pt-28 md:pt-40 pb-12 md:pb-20 px-6">
         <div className="max-w-3xl mx-auto">
