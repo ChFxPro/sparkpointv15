@@ -1,29 +1,56 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router';
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { StructuredData } from './components/StructuredData';
 import { ExternalRedirect } from './components/ExternalRedirect';
 import { HomePage } from './pages/HomePage';
-import { MissionPage } from './pages/MissionPage';
-import { StoriesPage } from './pages/StoriesPage';
-import { StoryCategoryPage } from './pages/StoryCategoryPage';
-import { StoryArticlePage } from './pages/StoryArticlePage';
-import { ImpactPage } from './pages/ImpactPage';
-import { GetInvolvedPage } from './pages/GetInvolvedPage';
-import ProgramsPage from './pages/programs/ProgramsPage';
-import { SponsorsPage } from './pages/SponsorsPage';
-import { ResiliencyHubPage } from './pages/ResiliencyHubPage';
-import { NewsMediaPage } from './pages/NewsMediaPage';
-import { AboutPage } from './pages/AboutPage';
-import { IntakePage } from './pages/IntakePage';
-import { TrustPage } from './pages/TrustPage';
-import { PrivacyPage } from './pages/PrivacyPage';
-import CommunityChampionsArticle from './pages/CommunityChampionsArticle';
-import HeleneOneYearArticle from './pages/HeleneOneYearArticle';
 import { AccessibilityProvider } from './context/AccessibilityContext';
 import { MotionConfig } from 'motion/react';
+
+const MissionPage = lazy(() =>
+  import('./pages/MissionPage').then((module) => ({ default: module.MissionPage }))
+);
+const StoriesPage = lazy(() =>
+  import('./pages/StoriesPage').then((module) => ({ default: module.StoriesPage }))
+);
+const StoryCategoryPage = lazy(() =>
+  import('./pages/StoryCategoryPage').then((module) => ({ default: module.StoryCategoryPage }))
+);
+const StoryArticlePage = lazy(() =>
+  import('./pages/StoryArticlePage').then((module) => ({ default: module.StoryArticlePage }))
+);
+const ImpactPage = lazy(() =>
+  import('./pages/ImpactPage').then((module) => ({ default: module.ImpactPage }))
+);
+const GetInvolvedPage = lazy(() =>
+  import('./pages/GetInvolvedPage').then((module) => ({ default: module.GetInvolvedPage }))
+);
+const ProgramsPage = lazy(() => import('./pages/programs/ProgramsPage'));
+const SponsorsPage = lazy(() =>
+  import('./pages/SponsorsPage').then((module) => ({ default: module.SponsorsPage }))
+);
+const ResiliencyHubPage = lazy(() =>
+  import('./pages/ResiliencyHubPage').then((module) => ({ default: module.ResiliencyHubPage }))
+);
+const NewsMediaPage = lazy(() =>
+  import('./pages/NewsMediaPage').then((module) => ({ default: module.NewsMediaPage }))
+);
+const AboutPage = lazy(() =>
+  import('./pages/AboutPage').then((module) => ({ default: module.AboutPage }))
+);
+const IntakePage = lazy(() =>
+  import('./pages/IntakePage').then((module) => ({ default: module.IntakePage }))
+);
+const TrustPage = lazy(() =>
+  import('./pages/TrustPage').then((module) => ({ default: module.TrustPage }))
+);
+const PrivacyPage = lazy(() =>
+  import('./pages/PrivacyPage').then((module) => ({ default: module.PrivacyPage }))
+);
+const CommunityChampionsArticle = lazy(() => import('./pages/CommunityChampionsArticle'));
+const HeleneOneYearArticle = lazy(() => import('./pages/HeleneOneYearArticle'));
 
 // GitHub Pages SPA redirect handler
 // This restores the original path after the 404.html redirect
@@ -49,6 +76,14 @@ function ScrollToTop() {
   return null;
 }
 
+function RouteLoading() {
+  return (
+    <div className="px-6 py-20 text-center text-slate-500" role="status" aria-live="polite">
+      Loading page...
+    </div>
+  );
+}
+
 function AppContent() {
   return (
     <MotionConfig reducedMotion="user">
@@ -63,31 +98,33 @@ function AppContent() {
         <Header />
         <StructuredData />
         <main id="main-content" className="flex-grow">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/mission" element={<MissionPage />} />
-            <Route path="/stories" element={<StoriesPage />} />
-            <Route path="/stories/:categoryId" element={<StoryCategoryPage />} />
-            <Route path="/stories/:categoryId/:slug" element={<StoryArticlePage />} />
-            <Route path="/impact" element={<ImpactPage />} />
-            <Route path="/programs" element={<ProgramsPage />} />
-            <Route path="/sponsors" element={<SponsorsPage />} />
-            <Route path="/resiliency-hub" element={<ResiliencyHubPage />} />
-            <Route path="/news-media" element={<NewsMediaPage />} />
-            <Route path="/get-involved" element={<GetInvolvedPage />} />
-            <Route path="/volunteer" element={<Navigate to="/intake?intent=volunteer" replace />} />
-            <Route path="/partner" element={<Navigate to="/intake?intent=partner" replace />} />
-            <Route path="/contact" element={<Navigate to="/intake?intent=contact" replace />} />
-            <Route path="/intake" element={<IntakePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/community-champions/helene-one-year" element={<CommunityChampionsArticle />} />
-            <Route path="/stories/community-champions/helene-anniversary" element={<HeleneOneYearArticle />} />
-            <Route path="/trust" element={<TrustPage />} />
-            <Route path="/privacy" element={<PrivacyPage />} />
-            <Route path="/donations" element={<ExternalRedirect to="https://cowbell-primrose-tet2.squarespace.com/donations" />} />
-            <Route path="/newsletter" element={<ExternalRedirect to="https://cowbell-primrose-tet2.squarespace.com/newsletter" />} />
-            <Route path="*" element={<HomePage />} />
-          </Routes>
+          <Suspense fallback={<RouteLoading />}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/mission" element={<MissionPage />} />
+              <Route path="/stories" element={<StoriesPage />} />
+              <Route path="/stories/:categoryId" element={<StoryCategoryPage />} />
+              <Route path="/stories/:categoryId/:slug" element={<StoryArticlePage />} />
+              <Route path="/impact" element={<ImpactPage />} />
+              <Route path="/programs" element={<ProgramsPage />} />
+              <Route path="/sponsors" element={<SponsorsPage />} />
+              <Route path="/resiliency-hub" element={<ResiliencyHubPage />} />
+              <Route path="/news-media" element={<NewsMediaPage />} />
+              <Route path="/get-involved" element={<GetInvolvedPage />} />
+              <Route path="/volunteer" element={<Navigate to="/intake?intent=volunteer" replace />} />
+              <Route path="/partner" element={<Navigate to="/intake?intent=partner" replace />} />
+              <Route path="/contact" element={<Navigate to="/intake?intent=contact" replace />} />
+              <Route path="/intake" element={<IntakePage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/community-champions/helene-one-year" element={<CommunityChampionsArticle />} />
+              <Route path="/stories/community-champions/helene-anniversary" element={<HeleneOneYearArticle />} />
+              <Route path="/trust" element={<TrustPage />} />
+              <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/donations" element={<ExternalRedirect to="https://cowbell-primrose-tet2.squarespace.com/donations" />} />
+              <Route path="/newsletter" element={<ExternalRedirect to="https://cowbell-primrose-tet2.squarespace.com/newsletter" />} />
+              <Route path="*" element={<HomePage />} />
+            </Routes>
+          </Suspense>
         </main>
         <Footer />
       </div>
