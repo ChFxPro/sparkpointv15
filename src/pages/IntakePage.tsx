@@ -5,6 +5,7 @@ import { GuidedIntakeForm } from '../components/GuidedIntakeForm';
 import { motion } from 'motion/react';
 import { Mail, ArrowRight, UserCheck, MessageSquare } from 'lucide-react';
 import { SEOHead } from '../components/SEOHead';
+import { KeepExploringLinks } from '../components/KeepExploringLinks';
 
 const ConnectionMotif = () => (
   <svg 
@@ -170,6 +171,29 @@ export function IntakePage() {
             </motion.div>
           </div>
         </div>
+
+        <KeepExploringLinks
+          className="relative z-10 bg-transparent border-t-0 px-0 pt-12 pb-0"
+          title="Keep Exploring"
+          intro="While you wait for a reply, you can explore more about SparkPoint and the community work underway."
+          links={[
+            {
+              to: '/about',
+              label: 'About SparkPoint',
+              description: 'Meet the team and board behind our countywide connection work.',
+            },
+            {
+              to: '/stories',
+              label: 'Community stories',
+              description: 'Read local stories about collaboration, recovery, and resilience.',
+            },
+            {
+              to: '/',
+              label: 'Return to home',
+              description: 'Start from the main page for a full overview of programs and updates.',
+            },
+          ]}
+        />
       </div>
     </>
   );

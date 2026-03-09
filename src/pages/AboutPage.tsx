@@ -39,6 +39,7 @@ import interviewFilmingImage from 'figma:asset/183c96a680c45035b0835db81082bdb93
 import sparkPointCommonsImage from 'figma:asset/63f606372ec6e500e9a7547d300fb9f0d31dae7e.png';
 import mediaStudioImage from 'figma:asset/7c67e828e47be75e27ecc6de02db283be5ae7589.png';
 import { SEOHead } from '../components/SEOHead';
+import { KeepExploringLinks } from '../components/KeepExploringLinks';
 
 import sarahHeadshotWebp from '../assets/staff_pics/webp/sp_port26__0004_sarah.webp';
 import sarahHeadshotJpg from '../assets/staff_pics/sp_port26__0004_sarah.jpg';
@@ -1178,6 +1179,28 @@ export function AboutPage() {
           </div>
         </div>
       </section>
+
+      <KeepExploringLinks
+        title="Keep Exploring"
+        intro="Want to see where this history connects to current community work?"
+        links={[
+          {
+            to: '/stories',
+            label: 'Read community stories',
+            description: 'See how local voices and partnerships shape SparkPoint’s day-to-day work.',
+          },
+          {
+            to: '/impact',
+            label: 'View current impact',
+            description: 'Explore key 2025 outcomes across attendance, events, and collaboration.',
+          },
+          {
+            to: '/get-involved',
+            label: 'Get involved',
+            description: 'Find ways to volunteer, partner, or support SparkPoint programs.',
+          },
+        ]}
+      />
 
     </div>
   );

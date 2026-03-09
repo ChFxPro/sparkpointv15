@@ -26,6 +26,7 @@ import { Card } from '../components/ui/card';
 import { useState, useRef, useEffect } from 'react';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { SEOHead } from '../components/SEOHead';
+import { KeepExploringLinks } from '../components/KeepExploringLinks';
 import sparkPointIcon from 'figma:asset/046ca85659860578eeeab6a45f52700c54c519a3.png';
 import stickyBackground from 'figma:asset/c4e1406ca17d5d9941f67714b4ad381639235894.png';
 import learningImg from 'figma:asset/ce0a67a45092b4432ec7c00f4a17cb5a77e95a50.png';
@@ -1371,6 +1372,29 @@ export function MissionPage() {
           </motion.div>
         </div>
       </section>
+
+      <KeepExploringLinks
+        className="relative z-10"
+        title="Keep Exploring"
+        intro="If this mission resonates with you, these pages offer clear next steps."
+        links={[
+          {
+            to: '/about',
+            label: 'Meet our team and board',
+            description: 'Learn who helps guide SparkPoint’s community-first approach.',
+          },
+          {
+            to: '/impact',
+            label: 'See community impact',
+            description: 'Review 2025 outcomes and where momentum has grown across the county.',
+          },
+          {
+            to: '/get-involved',
+            label: 'Find ways to get involved',
+            description: 'Volunteer, donate, or partner to support long-term community resilience.',
+          },
+        ]}
+      />
 
       {/* SECTOR MODAL (Pop-up) - Preserved */}
       <AnimatePresence>

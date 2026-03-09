@@ -7,6 +7,7 @@ import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { SEOHead } from '../components/SEOHead';
 import { useAccessibility } from '../context/AccessibilityContext';
+import { KeepExploringLinks } from '../components/KeepExploringLinks';
 import communityMomentImg from 'figma:asset/c468599141a487a1168ff53b1f6de665f3b4be9d.png';
 import heleneIcon from 'figma:asset/3c1537cde524e7172c827aa2411c2c759ae68ece.png';
 
@@ -800,6 +801,28 @@ export function ImpactPage() {
           </motion.div>
         </div>
       </section>
+
+      <KeepExploringLinks
+        title="Keep Exploring"
+        intro="Impact is strongest when it’s connected to stories, participation, and ongoing collaboration."
+        links={[
+          {
+            to: '/stories',
+            label: 'Read the stories behind the numbers',
+            description: 'Explore local stories that provide context for SparkPoint’s impact data.',
+          },
+          {
+            to: '/volunteer',
+            label: 'Volunteer with SparkPoint',
+            description: 'Find ways to support community connection and resilience in practical ways.',
+          },
+          {
+            to: '/contact',
+            label: 'Contact our team',
+            description: 'Reach out to ask questions or start a conversation about local collaboration.',
+          },
+        ]}
+      />
     </div>
   );
 }
