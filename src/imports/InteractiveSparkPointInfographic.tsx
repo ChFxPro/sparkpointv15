@@ -8,7 +8,7 @@ import {
   Compass,
 } from "lucide-react";
 import { cn } from "../components/ui/utils";
-import sparkPointLogo from "figma:asset/35bb889d1f4d0b05ae6753439b58199640858447.png";
+import sparkPointLogo from "../assets/compd/35bb889d1f4d0b05ae6753439b58199640858447.webp";
 
 // Data for the pillars
 const pillars = [
@@ -98,6 +98,8 @@ export default function InteractiveSparkPointInfographic() {
             <img
               src={sparkPointLogo}
               alt="SparkPoint Logo"
+              width={839}
+              height={290}
               className="w-[180px] h-auto object-contain"
             />
             <p className="text-[13px] text-gray-500 font-medium leading-tight mt-1 max-w-[160px] line-clamp-2">
@@ -215,6 +217,8 @@ export default function InteractiveSparkPointInfographic() {
           <img
             src={sparkPointLogo}
             alt="SparkPoint Logo"
+            width={839}
+            height={290}
             className="w-[140px] h-auto object-contain mb-2"
           />
           <p className="text-xs text-gray-500 mt-1 line-clamp-2">

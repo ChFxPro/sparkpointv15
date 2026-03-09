@@ -98,7 +98,13 @@ export function StoryCarousel({ stories }: StoryCarouselProps) {
                 <img
                   src={stories[currentIndex].image}
                   alt={stories[currentIndex].title}
+                  width={1600}
+                  height={900}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  fetchPriority="low"
+                  sizes="(min-width: 1280px) 960px, (min-width: 768px) 85vw, 96vw"
                 />
                 
                 {/* Gradient Overlay with Pulse */}

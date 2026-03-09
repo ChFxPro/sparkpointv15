@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router';
 import { Button } from './ui/button';
 import { useState, useEffect, useRef } from 'react';
 import { useAccessibility } from '../context/AccessibilityContext';
-import sparkPointLogo from 'figma:asset/35bb889d1f4d0b05ae6753439b58199640858447.png';
+import sparkPointLogo from '../assets/compd/35bb889d1f4d0b05ae6753439b58199640858447.webp';
 import mountainPng from '../assets/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.png';
 import mountainWebp from '../assets/compd/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.webp';
 
@@ -147,6 +147,10 @@ export function Hero() {
             <img
               src={sparkPointLogo}
               alt="SparkPoint Logo"
+              width={839}
+              height={290}
+              fetchPriority="high"
+              loading="eager"
               className="h-20 md:h-32 lg:h-40 w-auto"
               style={{
                 filter: 'drop-shadow(0px 4px 20px rgba(0, 0, 0, 0.2))',
@@ -299,15 +303,9 @@ export function Hero() {
                 transform: 'translateZ(0)',
               }}
               onMouseEnter={(e) => {
-                if (window.innerWidth >= 640) {
-                  e.currentTarget.style.width = `${e.currentTarget.offsetWidth + 4}px`;
-                }
                 e.currentTarget.style.backgroundColor = '#FDB515';
               }}
               onMouseLeave={(e) => {
-                if (window.innerWidth >= 640) {
-                  e.currentTarget.style.width = 'auto';
-                }
                 e.currentTarget.style.backgroundColor = '#E03694';
               }}
             >
@@ -325,16 +323,6 @@ export function Hero() {
                 backgroundColor: 'transparent',
                 minHeight: '44px',
                 transform: 'translateZ(0)',
-              }}
-              onMouseEnter={(e) => {
-                if (window.innerWidth >= 640) {
-                  e.currentTarget.style.width = `${e.currentTarget.offsetWidth + 4}px`;
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (window.innerWidth >= 640) {
-                  e.currentTarget.style.width = 'auto';
-                }
               }}
             >
               Learn More

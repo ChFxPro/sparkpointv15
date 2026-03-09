@@ -7,7 +7,7 @@ import { ChevronDown, Menu, X, Mail, Accessibility, Shield, Check } from 'lucide
 import { Button } from './ui/button.tsx';
 import { Sheet, SheetContent, SheetTrigger as _SheetTrigger, SheetTitle, SheetDescription } from './ui/sheet.tsx';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover.tsx';
-import sparkPointLogo from 'figma:asset/35bb889d1f4d0b05ae6753439b58199640858447.png';
+import sparkPointLogo from '../assets/compd/35bb889d1f4d0b05ae6753439b58199640858447.webp';
 
 // Deno/TS classic JSX compatibility (keeps React in module scope)
 void React;
@@ -98,6 +98,8 @@ export function Header() {
             <img
               src={sparkPointLogo}
               alt="SparkPoint logo"
+              width={839}
+              height={290}
               className="h-14 w-auto" 
             />
           </Link>
@@ -253,6 +255,8 @@ export function Header() {
             <img
               src={sparkPointLogo}
               alt="SparkPoint logo"
+              width={839}
+              height={290}
               className="h-14 w-auto"
             />
           </Link>
