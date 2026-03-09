@@ -10,9 +10,9 @@ import { useNavigate } from 'react-router';
 import { Button } from './ui/button';
 import { useState, useEffect, useRef } from 'react';
 import { useAccessibility } from '../context/AccessibilityContext';
-import sparkPointLogo from '../assets/compd/35bb889d1f4d0b05ae6753439b58199640858447.webp';
 import mountainPng from '../assets/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.png';
 import mountainWebp from '../assets/compd/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.webp';
+import mountainWebpMobile from '../assets/compd/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9-1400.webp';
 
 export function Hero() {
   const navigate = useNavigate();
@@ -26,6 +26,9 @@ export function Hero() {
   const [showMission, setShowMission] = useState(false);
   const [showButtons, setShowButtons] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
+  const isMobileViewport = typeof window !== 'undefined' && window.innerWidth < 1024;
+  const enableParallax = !prefersReducedMotion && !isMobileViewport;
+  const heroLogoSrc = `${import.meta.env.BASE_URL}logo-wordmark.webp`;
 
   // Parallax scroll tracking
   const { scrollY } = useScroll();
@@ -56,8 +59,18 @@ export function Hero() {
 
   // Optional: parallax-fixed backgrounds can be expensive on mobile.
   // This keeps your desktop look while avoiding mobile jank.
-  const backgroundAttachment =
-    typeof window !== 'undefined' && window.innerWidth < 768 ? 'scroll' : 'fixed';
+  const backgroundAttachment = isMobileViewport ? 'scroll' : 'fixed';
+  const heroBackgroundWebp = isMobileViewport ? mountainWebpMobile : mountainWebp;
+  const supportsImageSet =
+    typeof window !== 'undefined' &&
+    typeof window.CSS !== 'undefined' &&
+    window.CSS.supports('background-image', `image-set(url("${heroBackgroundWebp}") 1x)`);
+  const heroBackgroundImage = supportsImageSet
+    ? `image-set(
+      url("${heroBackgroundWebp}") type("image/webp"),
+      url("${mountainPng}") type("image/png")
+    )`
+    : `url("${mountainPng}")`;
 
   return (
     <section
@@ -70,12 +83,7 @@ export function Hero() {
         <div
           className="absolute inset-0"
           style={{
-            background: `center / cover no-repeat url("${mountainPng}")`,
-            // Prefer WebP with PNG fallback for predictable delivery size.
-            backgroundImage: `image-set(
-              url("${mountainWebp}") type("image/webp"),
-              url("${mountainPng}") type("image/png")
-            )`,
+            backgroundImage: heroBackgroundImage,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundAttachment,
@@ -104,15 +112,13 @@ export function Hero() {
           className="absolute inset-0 opacity-20"
           style={{
             background: 'radial-gradient(circle at 50% 50%, #FDB515 0%, transparent 60%)',
+            willChange: 'transform, opacity',
           }}
           animate={{
-            x: [-20, 20, -20],
-            y: [-20, 20, -20],
-            background: [
-              'radial-gradient(circle at 50% 50%, #FDB515 0%, transparent 60%)',
-              'radial-gradient(circle at 50% 50%, #E03694 0%, transparent 60%)',
-              'radial-gradient(circle at 50% 50%, #FDB515 0%, transparent 60%)',
-            ],
+            x: [-16, 16, -16],
+            y: [-16, 16, -16],
+            scale: [1, 1.04, 1],
+            opacity: [0.16, 0.22, 0.16],
           }}
           transition={{
             duration: 15,
@@ -134,8 +140,8 @@ export function Hero() {
         {/* SparkPoint Logo */}
         <motion.div
           style={{
-            y: prefersReducedMotion ? 0 : logoY,
-            opacity: prefersReducedMotion ? 1 : contentOpacity,
+            y: enableParallax ? logoY : 0,
+            opacity: enableParallax ? contentOpacity : 1,
           }}
         >
           <motion.div
@@ -145,12 +151,13 @@ export function Hero() {
             className="mb-8 md:mb-12 flex justify-center"
           >
             <img
-              src={sparkPointLogo}
+              src={heroLogoSrc}
               alt="SparkPoint Logo"
               width={839}
               height={290}
               fetchPriority="high"
               loading="eager"
+              sizes="(min-width: 1024px) 320px, (min-width: 768px) 256px, 200px"
               className="h-20 md:h-32 lg:h-40 w-auto"
               style={{
                 filter: 'drop-shadow(0px 4px 20px rgba(0, 0, 0, 0.2))',
@@ -162,8 +169,8 @@ export function Hero() {
         {/* Animated Headline */}
         <motion.div
           style={{
-            y: prefersReducedMotion ? 0 : headlineY,
-            opacity: prefersReducedMotion ? 1 : contentOpacity,
+            y: enableParallax ? headlineY : 0,
+            opacity: enableParallax ? contentOpacity : 1,
           }}
         >
           <motion.h1
@@ -209,7 +216,8 @@ export function Hero() {
 
               <motion.span
                 animate={{
-                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                  x: [-4, 4, -4],
+                  opacity: [0.35, 0.5, 0.35],
                 }}
                 transition={{
                   duration: 10,
@@ -223,13 +231,13 @@ export function Hero() {
                   right: 0,
                   background:
                     'linear-gradient(90deg, rgba(253, 181, 21, 0.5) 0%, rgba(224, 54, 148, 0.5) 50%, rgba(253, 181, 21, 0.5) 100%)',
-                  backgroundSize: '200% 100%',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
                   display: 'inline-block',
                   mixBlendMode: 'overlay',
                   pointerEvents: 'none',
+                  willChange: 'transform, opacity',
                 }}
                 aria-hidden="true"
               >
@@ -252,8 +260,8 @@ export function Hero() {
         {/* Mission Statement */}
         <motion.div
           style={{
-            y: prefersReducedMotion ? 0 : subheadY,
-            opacity: prefersReducedMotion ? 1 : contentOpacity,
+            y: enableParallax ? subheadY : 0,
+            opacity: enableParallax ? contentOpacity : 1,
           }}
         >
           <motion.p
@@ -279,8 +287,8 @@ export function Hero() {
         {/* CTA Buttons */}
         <motion.div
           style={{
-            y: prefersReducedMotion ? 0 : buttonsY,
-            opacity: prefersReducedMotion ? (showButtons ? 1 : 0) : contentOpacity,
+            y: enableParallax ? buttonsY : 0,
+            opacity: prefersReducedMotion ? (showButtons ? 1 : 0) : enableParallax ? contentOpacity : 1,
           }}
         >
           <motion.div

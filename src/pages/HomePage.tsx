@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { Hero } from '../components/Hero';
-import InteractiveSparkPointInfographic from '../imports/InteractiveSparkPointInfographic';
 import { MissionGrid } from '../components/MissionGrid';
 import { StoryCarousel } from '../components/StoryCarousel';
 import { ImpactSection } from '../components/ImpactSection';
@@ -10,6 +10,8 @@ import { SEOHead } from '../components/SEOHead';
 import heleneImage from '../assets/compd/0835779aef52124bf5c00840473e8285f8e0f937.webp';
 import echoesImage from '../assets/compd/e4e8c9f59f3a2b2ee1533f1f427ca4a4cb3693a5.webp';
 import volunteerImpactImage from '../assets/compd/20c2a905251c86d5a4f9333b83199204b6928c7d.webp';
+
+const InteractiveSparkPointInfographic = lazy(() => import('../imports/InteractiveSparkPointInfographic'));
 
 const stories = [
   {
@@ -30,6 +32,16 @@ const stories = [
 ];
 
 export function HomePage() {
+  const [showDeferredInfographic, setShowDeferredInfographic] = useState(false);
+
+  useEffect(() => {
+    const timerId = window.setTimeout(() => {
+      setShowDeferredInfographic(true);
+    }, 650);
+
+    return () => window.clearTimeout(timerId);
+  }, []);
+
   return (
     <>
       <SEOHead
@@ -48,7 +60,15 @@ export function HomePage() {
       <Hero />
       
       <MissionGrid />
-      <InteractiveSparkPointInfographic />
+      {showDeferredInfographic ? (
+        <Suspense
+          fallback={<div className="min-h-[720px] lg:min-h-[1040px] bg-[#FFFDF9]/30" aria-hidden="true" />}
+        >
+          <InteractiveSparkPointInfographic />
+        </Suspense>
+      ) : (
+        <div className="min-h-[720px] lg:min-h-[1040px] bg-[#FFFDF9]/30" aria-hidden="true" />
+      )}
       <StoryCarousel stories={stories} />
       <ImpactSection />
       <ConnectionSection />

@@ -204,6 +204,8 @@ export function ConnectionSection() {
                 <img
                   src={sparkpurposeJpg}
                   alt="SparkPurpose workshop"
+                  width={2000}
+                  height={1333}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   loading="lazy"
                 />
@@ -245,6 +247,8 @@ export function ConnectionSection() {
                 <img
                   src={storyJpg}
                   alt="Story collection interview"
+                  width={2000}
+                  height={1333}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   loading="lazy"
                 />
@@ -286,6 +290,8 @@ export function ConnectionSection() {
                 <img
                   src={vosJpg}
                   alt="Youth program engagement"
+                  width={2000}
+                  height={1333}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   loading="lazy"
                 />
