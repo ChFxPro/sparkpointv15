@@ -12,7 +12,6 @@ import { useState, useEffect, useRef } from 'react';
 import { useAccessibility } from '../context/AccessibilityContext';
 import sparkPointLogo from 'figma:asset/35bb889d1f4d0b05ae6753439b58199640858447.png';
 import mountainPng from '../assets/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.png';
-import mountainAvif from '../assets/compd/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.avif';
 import mountainWebp from '../assets/compd/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.webp';
 
 export function Hero() {
@@ -72,9 +71,8 @@ export function Hero() {
           className="absolute inset-0"
           style={{
             background: `center / cover no-repeat url("${mountainPng}")`,
-            // Prefer AVIF/WebP when available, fall back to PNG
+            // Prefer WebP with PNG fallback for predictable delivery size.
             backgroundImage: `image-set(
-              url("${mountainAvif}") type("image/avif"),
               url("${mountainWebp}") type("image/webp"),
               url("${mountainPng}") type("image/png")
             )`,

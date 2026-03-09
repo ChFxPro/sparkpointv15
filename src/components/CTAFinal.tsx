@@ -5,7 +5,6 @@ import { Link } from 'react-router';
 import { Button } from './ui/button';
 import sparkPointLogo from 'figma:asset/16ed15b2e7cab4039cf2d9fb007333306f37886c.png';
 import mountainPng from '../assets/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.png';
-import mountainAvif from '../assets/compd/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.avif';
 import mountainWebp from '../assets/compd/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.webp';
 
 export function CTAFinal() {
@@ -18,7 +17,6 @@ export function CTAFinal() {
           style={{
             background: `center / cover no-repeat url("${mountainPng}")`,
             backgroundImage: `image-set(
-              url("${mountainAvif}") type("image/avif"),
               url("${mountainWebp}") type("image/webp"),
               url("${mountainPng}") type("image/png")
             )`,
