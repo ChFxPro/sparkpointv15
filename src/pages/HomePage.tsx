@@ -7,9 +7,9 @@ import { ImpactSection } from '../components/ImpactSection';
 import { ConnectionSection } from '../components/ConnectionSection';
 import { CTAFinal } from '../components/CTAFinal';
 import { SEOHead } from '../components/SEOHead';
-import heleneImage from 'figma:asset/0835779aef52124bf5c00840473e8285f8e0f937.png';
-import echoesImage from 'figma:asset/e4e8c9f59f3a2b2ee1533f1f427ca4a4cb3693a5.png';
-import volunteerImpactImage from 'figma:asset/20c2a905251c86d5a4f9333b83199204b6928c7d.png';
+import heleneImage from '../assets/compd/0835779aef52124bf5c00840473e8285f8e0f937.webp';
+import echoesImage from '../assets/compd/e4e8c9f59f3a2b2ee1533f1f427ca4a4cb3693a5.webp';
+import volunteerImpactImage from '../assets/compd/20c2a905251c86d5a4f9333b83199204b6928c7d.webp';
 
 const stories = [
   {

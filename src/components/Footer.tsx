@@ -9,7 +9,7 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
 import sparkMarkLogo from 'figma:asset/16ed15b2e7cab4039cf2d9fb007333306f37886c.png';
-import sparkPointLogo from 'figma:asset/35bb889d1f4d0b05ae6753439b58199640858447.png';
+import sparkPointLogo from '../assets/compd/35bb889d1f4d0b05ae6753439b58199640858447.webp';
 import candidSeal from 'figma:asset/5a36f7b11c9d0bf970613a37a28b121b31918d77.png';
 import livingWageLogo from 'figma:asset/ec17a6fe91f3b0bf97249c7bd911f4723893563c.png';
 
@@ -111,6 +111,8 @@ export function Footer() {
                 <img 
                   src={sparkPointLogo} 
                   alt="SparkPoint logo" 
+                  width={839}
+                  height={290}
                   className="h-14 w-auto mb-6"
                 />
               </div>
