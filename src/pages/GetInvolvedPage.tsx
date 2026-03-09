@@ -1,6 +1,5 @@
 'use client';
 
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router';
 import { HandHeart, DollarSign, Handshake, Mail, CheckCircle } from 'lucide-react';
@@ -8,7 +7,7 @@ import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { Input } from '../components/ui/input';
 import { useState } from 'react';
-import { canonicalUrl } from '../lib/siteOrigin';
+import { SEOHead } from '../components/SEOHead';
 
 const engagementCards = [
   {
@@ -23,7 +22,8 @@ const engagementCards = [
     ],
     cta: 'Explore Opportunities',
     color: '#E03694',
-    image: 'https://images.unsplash.com/photo-1758599668125-e154250f24bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2b2x1bnRlZXJzJTIwaGVscGluZyUyMGNvbW11bml0eXxlbnwxfHx8fDE3NjExMzg3ODN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
+    image: 'https://images.unsplash.com/photo-1758599668125-e154250f24bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2b2x1bnRlZXJzJTIwaGVscGluZyUyMGNvbW11bml0eXxlbnwxfHx8fDE3NjExMzg3ODN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    imageAlt: 'Volunteers working together at a SparkPoint community event in Transylvania County'
   },
   {
     icon: DollarSign,
@@ -37,7 +37,8 @@ const engagementCards = [
     ],
     cta: 'Make a Donation',
     color: '#9E509F',
-    image: 'https://images.unsplash.com/photo-1593113630400-ea4288922497?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkb25hdGlvbiUyMGNoYXJpdHklMjBnaXZpbmd8ZW58MXx8fHwxNzYxMTM4NzgzfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
+    image: 'https://images.unsplash.com/photo-1593113630400-ea4288922497?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkb25hdGlvbiUyMGNoYXJpdHklMjBnaXZpbmd8ZW58MXx8fHwxNzYxMTM4NzgzfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    imageAlt: 'Community giving moment representing donations that sustain SparkPoint programs'
   },
   {
     icon: Handshake,
@@ -51,7 +52,8 @@ const engagementCards = [
     ],
     cta: 'Start a Partnership',
     color: '#FDB515',
-    image: 'https://images.unsplash.com/photo-1758599543157-bc1a94fec33c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMHBhcnRuZXJzaGlwJTIwaGFuZHNoYWtlfGVufDF8fHx8MTc2MTEwMjc2OXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
+    image: 'https://images.unsplash.com/photo-1758599543157-bc1a94fec33c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMHBhcnRuZXJzaGlwJTIwaGFuZHNoYWtlfGVufDF8fHx8MTc2MTEwMjc2OXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    imageAlt: 'Cross-sector partners collaborating through a SparkPoint-style community partnership'
   }
 ];
 
@@ -72,11 +74,11 @@ export function GetInvolvedPage() {
 
   return (
     <div className="min-h-screen relative">
-      <Helmet>
-        <title>Get Involved | SparkPoint</title>
-        <meta name="description" content="Ways to connect, participate, and collaborate with SparkPoint." />
-        <link rel="canonical" href={canonicalUrl('/get-involved')} />
-      </Helmet>
+      <SEOHead
+        title="Get Involved | SparkPoint"
+        description="Volunteer, donate, or partner with SparkPoint to strengthen community connection and resilience across Transylvania County and Western North Carolina."
+        path="/get-involved"
+      />
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-6 overflow-hidden">
         <div className="absolute inset-0 z-0">
@@ -146,8 +148,9 @@ export function GetInvolvedPage() {
                     <div className="relative h-48 overflow-hidden">
                       <img
                         src={card.image}
-                        alt={card.title}
+                        alt={card.imageAlt}
                         className="w-full h-full object-cover"
+                        loading="lazy"
                       />
                       <div 
                         className="absolute inset-0"

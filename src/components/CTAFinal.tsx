@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'motion/react';
-import { useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import { Button } from './ui/button';
 import sparkPointLogo from 'figma:asset/16ed15b2e7cab4039cf2d9fb007333306f37886c.png';
 
@@ -10,8 +10,6 @@ interface CTAFinalProps {
 }
 
 export function CTAFinal({ backgroundImage }: CTAFinalProps) {
-  const navigate = useNavigate();
-
   return (
     <section id="cta" className="relative py-20 md:py-32 px-6 overflow-hidden">
       {/* Background */}
@@ -93,6 +91,7 @@ export function CTAFinal({ backgroundImage }: CTAFinalProps) {
           className="flex gap-3 md:gap-4 justify-center mb-12 md:mb-16 flex-wrap"
         >
           <Button
+            asChild
             size="lg"
             className="px-6 py-4 text-base sm:px-8 sm:py-6 sm:text-lg transition-all duration-250"
             style={{
@@ -101,19 +100,11 @@ export function CTAFinal({ backgroundImage }: CTAFinalProps) {
               minHeight: '44px',
               transform: 'translateZ(0)',
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#FDB515';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = '#E03694';
-            }}
-            onClick={() => {
-              navigate('/intake?intent=volunteer');
-            }}
           >
-            Volunteer or Partner
+            <Link to="/intake?intent=volunteer">Volunteer or Partner</Link>
           </Button>
           <Button
+            asChild
             size="lg"
             variant="outline"
             className="px-6 py-4 text-base sm:px-8 sm:py-6 sm:text-lg border-2 transition-all duration-250 hover:bg-white/10"
@@ -124,11 +115,8 @@ export function CTAFinal({ backgroundImage }: CTAFinalProps) {
               minHeight: '44px',
               transform: 'translateZ(0)',
             }}
-            onClick={() => {
-              window.location.href = 'https://www.yoursparkpoint.org/donations';
-            }}
           >
-            Donate to SparkPoint
+            <Link to="/donations">Donate to SparkPoint</Link>
           </Button>
         </motion.div>
 
@@ -176,7 +164,7 @@ export function CTAFinal({ backgroundImage }: CTAFinalProps) {
         >
           <motion.img
             src={sparkPointLogo}
-            alt="SparkPoint"
+            alt="SparkPoint logo"
             className="h-24 sm:h-32 w-auto"
             animate={{
               opacity: [1, 0.7, 1],

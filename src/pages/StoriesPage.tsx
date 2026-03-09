@@ -1,6 +1,5 @@
 'use client';
 
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'motion/react';
 import { Heart, Upload, ArrowRight } from 'lucide-react';
 import { Button } from '../components/ui/button';
@@ -9,7 +8,7 @@ import { useNavigate } from 'react-router';
 import { STORIES_DATA } from '../data/stories';
 import heroImage from 'figma:asset/b7ea59b58a471ceacde60e41e5e3cd69fe78c66f.png';
 import { BehindTheStories } from '../components/BehindTheStories';
-import { canonicalUrl } from '../lib/siteOrigin';
+import { SEOHead } from '../components/SEOHead';
 
 export function StoriesPage() {
   const navigate = useNavigate();
@@ -23,11 +22,11 @@ export function StoriesPage() {
 
   return (
     <div className="min-h-screen bg-[#FDFDFD]">
-      <Helmet>
-        <title>Community Stories | SparkPoint</title>
-        <meta name="description" content="Community voices, lived experience, and participatory storytelling." />
-        <link rel="canonical" href={canonicalUrl('/stories')} />
-      </Helmet>
+      <SEOHead
+        title="Community Stories | SparkPoint"
+        description="Read SparkPoint stories from Transylvania County, including community voices, volunteer impact, and disaster recovery insights that strengthen local resilience."
+        path="/stories"
+      />
 
       {/* Hero Section */}
       <section className="relative pt-24 pb-12 md:pt-32 md:pb-16 px-6 overflow-hidden">
@@ -36,6 +35,7 @@ export function StoriesPage() {
             src={heroImage}
             alt="Community gathering"
             className="w-full h-full object-cover"
+            loading="eager"
           />
           <div className="absolute inset-0 bg-white/90 backdrop-blur-sm" />
         </div>
@@ -100,7 +100,7 @@ export function StoriesPage() {
               <div className="relative h-72 md:h-80 overflow-hidden">
                 <img
                   src={echoesCategory?.image ?? heroImage}
-                  alt={echoesCategory?.title ?? 'Echoes from the Community'}
+                  alt="Residents sharing stories in SparkPoint's Echoes from the Community series"
                   className="w-full h-full object-cover transition-transform duration-1000 ease-out hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/5 hover:bg-transparent transition-colors duration-500" />
@@ -152,7 +152,7 @@ export function StoriesPage() {
                   <div className="rounded-xl overflow-hidden border border-gray-100 shadow-sm mb-6">
                     <img
                       src={heleneCategory?.image ?? heroImage}
-                      alt="Helene: One Year of Healing"
+                      alt="Helene: One Year of Healing featured visual from SparkPoint"
                       className="w-full aspect-video object-cover"
                     />
                   </div>
@@ -210,8 +210,9 @@ export function StoriesPage() {
                     <div className="relative h-64 overflow-hidden">
                       <img
                         src={category.image}
-                        alt={category.title}
+                        alt={`${category.title} story category cover from SparkPoint`}
                         className="w-full h-full object-cover transition-transform duration-1000 ease-out hover:scale-105"
+                        loading="lazy"
                       />
                       {/* Optional overlay for text readability if needed, but keeping it clean for now */}
                       <div className="absolute inset-0 bg-black/5 hover:bg-transparent transition-colors duration-500" />

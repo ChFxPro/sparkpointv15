@@ -1,16 +1,15 @@
 'use client';
 
-import { Helmet } from 'react-helmet-async';
 import { useParams, useNavigate, Link } from 'react-router';
 import { motion } from 'motion/react';
 import { ArrowLeft, ArrowRight, Calendar, Clock, Play } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
+import { SEOHead } from '../components/SEOHead';
 import { STORIES_DATA } from '../data/stories';
 import { useEffect } from 'react';
 import imgPoster from "figma:asset/e3f8a2b021eb0d337580338dd10e709a1762494c.png";
 import { HELENE_ONE_YEAR_DATE_LABEL } from '../data/impact2025';
-import { canonicalUrl } from '../lib/siteOrigin';
 
 export function StoryCategoryPage() {
   const { categoryId } = useParams();
@@ -49,6 +48,22 @@ export function StoryCategoryPage() {
   const featuredArticle = articles[0]; // Most recent (first in array)
   const previousArticles = articles.slice(1);
   const isFeaturedVideo = featuredArticle && !!featuredArticle.videoUrl;
+  const pageDescription = `${category.description} Read SparkPoint updates and lived experiences from communities across Transylvania County and Western North Carolina.`;
+
+  const collectionSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `https://www.yoursparkpoint.org/stories/${category.id}#collection`,
+    name: `${category.title} | SparkPoint Stories`,
+    description: pageDescription,
+    url: `https://www.yoursparkpoint.org/stories/${category.id}`,
+    isPartOf: {
+      '@id': 'https://www.yoursparkpoint.org/#website',
+    },
+    about: {
+      '@id': 'https://www.yoursparkpoint.org/#organization',
+    },
+  };
 
   const handleArticleClick = (slug: string) => {
     if (slug === 'helene-anniversary') {
@@ -60,11 +75,12 @@ export function StoryCategoryPage() {
 
   return (
     <div className="min-h-screen relative bg-[#FAFAFA]">
-      <Helmet>
-        <title>{`${category.title} | SparkPoint`}</title>
-        <meta name="description" content={category.description} />
-        <link rel="canonical" href={canonicalUrl(`/stories/${category.id}`)} />
-      </Helmet>
+      <SEOHead
+        title={`${category.title} | SparkPoint`}
+        description={pageDescription}
+        path={`/stories/${category.id}`}
+        jsonLd={collectionSchema}
+      />
       {/* Hero Section */}
       <section className="pt-40 pb-20 px-6 relative overflow-hidden bg-white">
         <div className="max-w-4xl mx-auto text-center relative z-10">
@@ -113,7 +129,7 @@ export function StoryCategoryPage() {
                  <div className="h-64 md:h-auto overflow-hidden relative">
                    <img 
                      src={featuredArticle.image || category.image} 
-                     alt={featuredArticle.title}
+                     alt={`${featuredArticle.title} story preview from SparkPoint`}
                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                    />
                    <div 

@@ -110,7 +110,7 @@ export function Footer() {
               <div translate="no">
                 <img 
                   src={sparkPointLogo} 
-                  alt="SparkPoint" 
+                  alt="SparkPoint logo" 
                   className="h-14 w-auto mb-6"
                 />
               </div>
@@ -205,7 +205,7 @@ export function Footer() {
               </h3>
 
               {/* Quick Links */}
-              <nav className="mb-8">
+              <nav aria-label="Footer quick links" className="mb-8">
                 <ul className="space-y-3">
                   {quickLinks.map((link, index) => (
                     <motion.li

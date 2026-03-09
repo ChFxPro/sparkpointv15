@@ -1,6 +1,5 @@
 'use client';
 
-import { Helmet } from 'react-helmet-async';
 import { useParams, Link, useNavigate } from 'react-router';
 import { motion } from 'motion/react';
 import { ArrowLeft, Share2, Printer, Calendar, User, ArrowRight } from 'lucide-react';
@@ -8,6 +7,7 @@ import { Button } from '../components/ui/button';
 import { STORIES_DATA } from '../data/stories';
 import { useEffect } from 'react';
 import { canonicalUrl } from '../lib/siteOrigin';
+import { SEOHead } from '../components/SEOHead';
 
 export function StoryArticlePage() {
   const { categoryId, slug } = useParams();
@@ -34,14 +34,38 @@ export function StoryArticlePage() {
   const isVideoArticle = !!article.videoUrl;
 
   const metaDescription = article.excerpt || article.subhead || `Read the full story of ${article.title} at SparkPoint.`;
+  const articlePath = `/stories/${category.id}/${article.slug}`;
+  const canonical = canonicalUrl(articlePath);
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: article.title,
+    description: metaDescription,
+    image: displayImage ? [displayImage] : ['https://www.yoursparkpoint.org/og/default.jpg'],
+    author: {
+      '@type': 'Person',
+      name: article.author || 'SparkPoint Editorial Team',
+    },
+    publisher: {
+      '@id': 'https://www.yoursparkpoint.org/#organization',
+    },
+    mainEntityOfPage: canonical,
+    articleSection: category.title,
+    datePublished: article.date,
+    inLanguage: 'en-US',
+  };
 
   // Render Helmet for both layouts
   const pageMeta = (
-    <Helmet>
-      <title>{`${article.title} | SparkPoint Stories`}</title>
-      <meta name="description" content={metaDescription} />
-      <link rel="canonical" href={canonicalUrl(`/stories/${category.id}/${article.slug}`)} />
-    </Helmet>
+    <SEOHead
+      title={`${article.title} | SparkPoint Stories`}
+      description={metaDescription}
+      path={articlePath}
+      type="article"
+      image={displayImage}
+      imageAlt={`${article.title} story image from SparkPoint`}
+      jsonLd={articleSchema}
+    />
   );
 
   if (isVideoArticle) {
@@ -204,8 +228,9 @@ export function StoryArticlePage() {
           >
             <img 
               src={displayImage} 
-              alt={article.title} 
+              alt={`${article.title} community story image from SparkPoint`} 
               className="w-full h-auto max-h-[600px] object-cover"
+              loading="lazy"
             />
           </motion.div>
         )}

@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 
 const defaultBase = '/sparkpointv15/';
-const defaultSiteOrigin = 'https://yoursparkpoint.org';
+const defaultSiteOrigin = 'https://www.yoursparkpoint.org';
 
 if (!process.env.VITE_SITE_ORIGIN) {
   process.env.VITE_SITE_ORIGIN = process.env.SITE_ORIGIN ?? process.env.PUBLIC_ORIGIN ?? defaultSiteOrigin;

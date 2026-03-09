@@ -3,7 +3,6 @@
 import {
   motion,
   useReducedMotion,
-  AnimatePresence,
   useScroll,
   useTransform
 } from 'motion/react';
@@ -29,7 +28,6 @@ export function Hero({ heroImage }: HeroProps) {
   const prefersReducedMotion =
     systemReducedMotion || motionPreference === 'reduce';
 
-  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
   const [showMission, setShowMission] = useState(false);
   const [showButtons, setShowButtons] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
@@ -42,29 +40,14 @@ export function Hero({ heroImage }: HeroProps) {
   const buttonsY = useTransform(scrollY, [0, 800], [0, 300]);
   const contentOpacity = useTransform(scrollY, [0, 400, 800], [1, 0.5, 0]);
 
-  const phrases = ['Healing through', 'Growing with', 'Thriving in', 'Living through', 'Rooted in'];
-
   useEffect(() => {
     if (prefersReducedMotion) {
-      setCurrentPhraseIndex(4); // Show final phrase immediately
       setShowMission(true);
       setShowButtons(true);
       return;
     }
 
-    // Show mission immediately with headline
     setShowMission(true);
-
-    const intervalDuration = 1600; // 1.4s display + 0.2s smoother transition
-
-    const interval = setInterval(() => {
-      setCurrentPhraseIndex((prev) => {
-        if (prev < phrases.length - 1) {
-          return prev + 1;
-        }
-        return prev;
-      });
-    }, intervalDuration);
 
     // Show buttons right after subheader
     const buttonsTimer = setTimeout(() => {
@@ -72,7 +55,6 @@ export function Hero({ heroImage }: HeroProps) {
     }, 1000);
 
     return () => {
-      clearInterval(interval);
       clearTimeout(buttonsTimer);
     };
   }, [prefersReducedMotion]);
@@ -199,31 +181,11 @@ export function Hero({ heroImage }: HeroProps) {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: '0.25rem',
+              gap: '0.35rem',
             }}
             className="text-white mb-6 px-4"
           >
-            {/* Animated Prefix */}
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={currentPhraseIndex}
-                initial={{ opacity: 0, y: -12, filter: 'blur(10px)', scale: 1.02 }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)', scale: 1 }}
-                exit={{ opacity: 0, y: 12, filter: 'blur(10px)', scale: 1.02 }}
-                transition={{
-                  duration: 0.5,
-                  ease: [0.4, 0, 0.2, 1],
-                }}
-                style={{
-                  display: 'block',
-                  textAlign: 'center',
-                }}
-              >
-                {phrases[currentPhraseIndex]}
-              </motion.span>
-            </AnimatePresence>
-
-            {/* Static Connection with Gradient Overlay */}
+            <span style={{ display: 'block', textAlign: 'center' }}>Building Connection</span>
             <span
               style={{
                 display: 'block',
@@ -243,7 +205,7 @@ export function Hero({ heroImage }: HeroProps) {
                 }}
                 style={{ display: 'inline-block' }}
               >
-                Connection
+                Across Western North Carolina
               </motion.span>
 
               <motion.span
@@ -272,10 +234,20 @@ export function Hero({ heroImage }: HeroProps) {
                 }}
                 aria-hidden="true"
               >
-                Connection
+                Across Western North Carolina
               </motion.span>
             </span>
           </motion.h1>
+          {showMission ? (
+            <motion.p
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.15, ease: [0.45, 0, 0.55, 1] }}
+              className="text-white/80 text-sm md:text-base font-semibold tracking-[0.18em] uppercase mb-4"
+            >
+              Listen • Learn • Lead
+            </motion.p>
+          ) : null}
         </motion.div>
 
         {/* Mission Statement */}

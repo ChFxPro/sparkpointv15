@@ -1,11 +1,11 @@
 'use client';
 
-import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router';
 import { motion } from 'motion/react';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { STORIES_DATA } from '../data/stories';
+import { SEOHead } from '../components/SEOHead';
 
 const newsletterArchives = [
   {
@@ -27,13 +27,11 @@ export function NewsMediaPage() {
 
   return (
     <div className="min-h-screen bg-[#FCFCFD]">
-      <Helmet>
-        <title>News & Media | SparkPoint</title>
-        <meta
-          name="description"
-          content="Newsletter archives, media highlights, and recent SparkPoint stories."
-        />
-      </Helmet>
+      <SEOHead
+        title="News & Media | SparkPoint"
+        description="Browse SparkPoint news, media updates, and newsletter archives on community resilience, cross-sector collaboration, and local stories from Transylvania County."
+        path="/news-media"
+      />
 
       <section className="pt-32 pb-18 px-6">
         <div className="max-w-4xl mx-auto text-center">

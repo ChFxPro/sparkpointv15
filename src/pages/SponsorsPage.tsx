@@ -1,10 +1,10 @@
 'use client';
 
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'motion/react';
 import { Link, useNavigate } from 'react-router';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
+import { SEOHead } from '../components/SEOHead';
 
 const sponsorHighlights = [
   'Community resilience and preparedness support',
@@ -18,13 +18,11 @@ export function SponsorsPage() {
 
   return (
     <div className="min-h-screen bg-[#FDFBF8]">
-      <Helmet>
-        <title>Sponsors | SparkPoint</title>
-        <meta
-          name="description"
-          content="Support SparkPoint’s community resilience work through sponsorship."
-        />
-      </Helmet>
+      <SEOHead
+        title="Sponsors | SparkPoint"
+        description="Sponsor SparkPoint to fund community resilience, youth leadership, and collaboration programs supporting Transylvania County and Western North Carolina."
+        path="/sponsors"
+      />
 
       <section className="pt-32 pb-20 px-6">
         <div className="max-w-4xl mx-auto text-center">

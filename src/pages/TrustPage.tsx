@@ -1,6 +1,5 @@
 'use client';
 
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'motion/react';
 import { ExternalLink, ChevronDown, Check, ArrowRight, Shield, Lock, Eye, Heart, Accessibility, FileText, MousePointer2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
@@ -10,7 +9,7 @@ import { Link, useLocation } from 'react-router';
 import candidSeal from 'figma:asset/5a36f7b11c9d0bf970613a37a28b121b31918d77.png';
 import livingWageLogo from 'figma:asset/ec17a6fe91f3b0bf97249c7bd911f4723893563c.png';
 import { useEffect } from 'react';
-import { canonicalUrl } from '../lib/siteOrigin';
+import { SEOHead } from '../components/SEOHead';
 
 export function TrustPage() {
   const { hash } = useLocation();
@@ -36,11 +35,11 @@ export function TrustPage() {
 
   return (
     <div className="min-h-screen bg-[#FDFDFD]">
-      <Helmet>
-        <title>Trust & Accountability | SparkPoint</title>
-        <meta name="description" content="Our commitment to transparency, accessibility, and responsible stewardship." />
-        <link rel="canonical" href={canonicalUrl('/trust')} />
-      </Helmet>
+      <SEOHead
+        title="Trust & Accountability | SparkPoint"
+        description="Review SparkPoint’s transparency, accessibility, and data stewardship commitments, including certifications and accountability practices for community trust."
+        path="/trust"
+      />
 
       {/* Hero Section */}
       <section className="pt-28 md:pt-40 pb-12 md:pb-20 px-6">

@@ -1,46 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://yoursparkpoint.org/</loc>
+    <loc>__SITE_ORIGIN__/</loc>
   </url>
-
   <url>
-    <loc>https://yoursparkpoint.org/mission</loc>
+    <loc>__SITE_ORIGIN__/about</loc>
   </url>
-
   <url>
-    <loc>https://yoursparkpoint.org/stories</loc>
+    <loc>__SITE_ORIGIN__/mission</loc>
   </url>
-
   <url>
-    <loc>https://yoursparkpoint.org/impact</loc>
+    <loc>__SITE_ORIGIN__/impact</loc>
   </url>
-
   <url>
-    <loc>https://yoursparkpoint.org/get-involved</loc>
+    <loc>__SITE_ORIGIN__/programs</loc>
   </url>
-
   <url>
-    <loc>https://yoursparkpoint.org/intake</loc>
+    <loc>__SITE_ORIGIN__/get-involved</loc>
   </url>
-
   <url>
-    <loc>https://yoursparkpoint.org/about</loc>
+    <loc>__SITE_ORIGIN__/stories</loc>
   </url>
-
   <url>
-    <loc>https://yoursparkpoint.org/trust</loc>
+    <loc>__SITE_ORIGIN__/stories/disaster-recovery</loc>
   </url>
-
   <url>
-    <loc>https://yoursparkpoint.org/privacy</loc>
+    <loc>__SITE_ORIGIN__/stories/disaster-recovery/helene-one-year</loc>
   </url>
-
   <url>
-    <loc>https://yoursparkpoint.org/community-champions/helene-one-year</loc>
+    <loc>__SITE_ORIGIN__/stories/community-voice</loc>
   </url>
-
   <url>
-    <loc>https://yoursparkpoint.org/stories/community-champions/helene-anniversary</loc>
+    <loc>__SITE_ORIGIN__/stories/community-voice/week-1</loc>
+  </url>
+  <url>
+    <loc>__SITE_ORIGIN__/stories/community-voice/week-2</loc>
+  </url>
+  <url>
+    <loc>__SITE_ORIGIN__/stories/community-voice/week-3</loc>
+  </url>
+  <url>
+    <loc>__SITE_ORIGIN__/stories/community-voice/week-4</loc>
+  </url>
+  <url>
+    <loc>__SITE_ORIGIN__/stories/community-voice/week-5</loc>
+  </url>
+  <url>
+    <loc>__SITE_ORIGIN__/stories/volunteer-impact</loc>
+  </url>
+  <url>
+    <loc>__SITE_ORIGIN__/stories/volunteer-impact/community-champions</loc>
+  </url>
+  <url>
+    <loc>__SITE_ORIGIN__/community-champions/helene-one-year</loc>
+  </url>
+  <url>
+    <loc>__SITE_ORIGIN__/stories/community-champions/helene-anniversary</loc>
+  </url>
+  <url>
+    <loc>__SITE_ORIGIN__/news-media</loc>
+  </url>
+  <url>
+    <loc>__SITE_ORIGIN__/sponsors</loc>
+  </url>
+  <url>
+    <loc>__SITE_ORIGIN__/resiliency-hub</loc>
+  </url>
+  <url>
+    <loc>__SITE_ORIGIN__/intake</loc>
+  </url>
+  <url>
+    <loc>__SITE_ORIGIN__/trust</loc>
+  </url>
+  <url>
+    <loc>__SITE_ORIGIN__/privacy</loc>
   </url>
 </urlset>
