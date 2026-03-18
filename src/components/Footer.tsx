@@ -8,7 +8,6 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
-import sparkMarkLogo from 'figma:asset/16ed15b2e7cab4039cf2d9fb007333306f37886c.png';
 import sparkPointLogo from '../assets/compd/35bb889d1f4d0b05ae6753439b58199640858447.webp';
 import candidSeal from 'figma:asset/5a36f7b11c9d0bf970613a37a28b121b31918d77.png';
 import livingWageLogo from 'figma:asset/ec17a6fe91f3b0bf97249c7bd911f4723893563c.png';
@@ -403,6 +402,8 @@ export function Footer() {
                   <img 
                     src={candidSeal} 
                     alt="Candid Gold Transparency 2026" 
+                    width={600}
+                    height={600}
                     className="h-[48px] w-auto object-contain"
                   />
                 </Link>
@@ -414,6 +415,8 @@ export function Footer() {
                   <img 
                     src={livingWageLogo} 
                     alt="Living Wage Certified" 
+                    width={1200}
+                    height={1200}
                     className="h-[48px] w-auto object-contain"
                   />
                 </Link>

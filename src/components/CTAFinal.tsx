@@ -3,11 +3,25 @@
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
 import { Button } from './ui/button';
-import sparkPointLogo from 'figma:asset/16ed15b2e7cab4039cf2d9fb007333306f37886c.png';
+import sparkPointLogo from '../assets/compd/35bb889d1f4d0b05ae6753439b58199640858447.webp';
 import mountainPng from '../assets/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.png';
 import mountainWebp from '../assets/compd/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9.webp';
+import mountainWebpMobile from '../assets/compd/9cca1db07a8f8f3c2b4fe9b1989f3d9f9738c4c9-1400.webp';
 
 export function CTAFinal() {
+  const isMobileViewport = typeof window !== 'undefined' && window.innerWidth < 1024;
+  const ctaBackgroundWebp = isMobileViewport ? mountainWebpMobile : mountainWebp;
+  const supportsImageSet =
+    typeof window !== 'undefined' &&
+    typeof window.CSS !== 'undefined' &&
+    window.CSS.supports('background-image', `image-set(url("${ctaBackgroundWebp}") 1x)`);
+  const ctaBackgroundImage = supportsImageSet
+    ? `image-set(
+      url("${ctaBackgroundWebp}") type("image/webp"),
+      url("${mountainPng}") type("image/png")
+    )`
+    : `url("${mountainPng}")`;
+
   return (
     <section id="cta" className="relative py-20 md:py-32 px-6 overflow-hidden">
       {/* Background */}
@@ -15,11 +29,7 @@ export function CTAFinal() {
         <div
           className="w-full h-full absolute inset-0"
           style={{
-            background: `center / cover no-repeat url("${mountainPng}")`,
-            backgroundImage: `image-set(
-              url("${mountainWebp}") type("image/webp"),
-              url("${mountainPng}") type("image/png")
-            )`,
+            backgroundImage: ctaBackgroundImage,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             opacity: 0.4,
@@ -167,6 +177,9 @@ export function CTAFinal() {
           <motion.img
             src={sparkPointLogo}
             alt="SparkPoint logo"
+            width={839}
+            height={290}
+            sizes="(min-width: 768px) 256px, 192px"
             className="h-24 sm:h-32 w-auto"
             animate={{
               opacity: [1, 0.7, 1],
