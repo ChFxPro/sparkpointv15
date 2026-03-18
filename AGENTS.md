@@ -19,6 +19,7 @@ Last updated: 2026-02-27
 - Structured data now includes Organization/NGO, WebSite, WebPage, and BreadcrumbList globally, plus page-level Article/Event schema where applicable.
 - Canonical site origin defaults to `https://www.yoursparkpoint.org` (see `src/lib/siteOrigin.ts` and `vite.config.ts`).
 - `public/robots.txt` and `public/sitemap.xml` use `__SITE_ORIGIN__` placeholders replaced during postbuild.
+- Unified menu drawer includes a `Sponsors` link under the `About SparkPoint` group.
 
 ## Routes
 - `/` home
