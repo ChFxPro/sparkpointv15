@@ -32,6 +32,7 @@ const menuItems: MenuItem[] = [
   { label: 'News & Media', href: '/news-media' },
   { label: 'Get Involved', href: '/get-involved' },
   { label: 'About', href: '/about' },
+  { label: 'Resiliency Hub', href: '/resiliency-hub' },
   { label: 'Contact', href: '/intake?intent=contact' },
 ];
 
@@ -432,6 +433,7 @@ export function Header() {
                    <div className="grid gap-4">
                       <Link to="/about" onClick={handleLinkClick} className="text-white text-xl font-semibold hover:text-white/80 transition-colors">About Us</Link>
                       <Link to="/sponsors" onClick={handleLinkClick} className="text-white text-xl font-semibold hover:text-white/80 transition-colors">Partners</Link>
+                      <Link to="/resiliency-hub" onClick={handleLinkClick} className="text-white text-xl font-semibold hover:text-white/80 transition-colors">Resiliency Hub</Link>
                       <Link to="/intake?intent=contact" onClick={handleLinkClick} className="text-white text-xl font-semibold hover:text-white/80 transition-colors">Contact</Link>
                       
                       <Link 
