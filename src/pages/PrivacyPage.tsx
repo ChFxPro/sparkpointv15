@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { ArrowLeft, Mail, Phone, Shield, Lock, EyeOff } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Link } from 'react-router';
+import { CONTACT_INFO } from '../data/contactInfo';
 import { SEOHead } from '../components/SEOHead';
 
 export function PrivacyPage() {
@@ -96,13 +97,13 @@ export function PrivacyPage() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 mt-8 pt-8 border-t border-gray-100">
-              <a href="mailto:info@yoursparkpoint.org" className="flex items-center gap-3 px-6 py-4 bg-[#FDFDFD] border border-gray-200 rounded-xl hover:border-[#E03694] hover:text-[#E03694] transition-all group">
+              <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-3 px-6 py-4 bg-[#FDFDFD] border border-gray-200 rounded-xl hover:border-[#E03694] hover:text-[#E03694] transition-all group">
                 <Mail size={20} className="text-gray-400 group-hover:text-[#E03694] transition-colors" />
-                <span className="font-medium">info@yoursparkpoint.org</span>
+                <span className="font-medium">{CONTACT_INFO.email}</span>
               </a>
-              <a href="tel:8288838050" className="flex items-center gap-3 px-6 py-4 bg-[#FDFDFD] border border-gray-200 rounded-xl hover:border-[#E03694] hover:text-[#E03694] transition-all group">
+              <a href={CONTACT_INFO.phoneHref} className="flex items-center gap-3 px-6 py-4 bg-[#FDFDFD] border border-gray-200 rounded-xl hover:border-[#E03694] hover:text-[#E03694] transition-all group">
                 <Phone size={20} className="text-gray-400 group-hover:text-[#E03694] transition-colors" />
-                <span className="font-medium">(828) 883-8050</span>
+                <span className="font-medium">{CONTACT_INFO.phoneDisplay}</span>
               </a>
             </div>
 

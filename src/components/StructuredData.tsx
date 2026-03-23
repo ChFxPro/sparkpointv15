@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router';
+import { CONTACT_INFO } from '../data/contactInfo';
 import { STORIES_DATA } from '../data/stories';
 import { canonicalUrl } from '../lib/siteOrigin';
 
@@ -148,17 +149,13 @@ export function StructuredData() {
         description:
           'SparkPoint fosters community well-being rooted in connection by strengthening collaboration, shared learning, and resilience in Western North Carolina.',
         slogan: 'SparkPoint fosters community well-being rooted in connection.',
-        email: 'info@yoursparkpoint.org',
-        telephone: '+1-828-883-8050',
+        email: CONTACT_INFO.email,
+        telephone: CONTACT_INFO.phoneSchema,
         foundingDate: '2020',
         nonprofitStatus: 'Nonprofit501c3',
         address: {
           '@type': 'PostalAddress',
-          streetAddress: '159 W. Main St Unit 2452',
-          addressLocality: 'Brevard',
-          addressRegion: 'NC',
-          postalCode: '28712',
-          addressCountry: 'US',
+          ...CONTACT_INFO.postalAddress,
         },
         areaServed: [
           {

@@ -1,5 +1,5 @@
 # SparkPoint Agent Guide
-Last updated: 2026-02-27
+Last updated: 2026-03-22
 
 ## Read First
 - Read this file before modifying code in this repo.
@@ -14,7 +14,7 @@ Last updated: 2026-02-27
 - Launch recon fixes are in progress on a dedicated launch branch.
 - 2025 impact totals are centralized in `src/data/impact2025.ts` and consumed in impact surfaces.
 - Mission and partner network groupings are aligned to the latest partner update source.
-- Address boilerplate now uses `159 W. Main St Unit 2452` across UI + structured data.
+- Mailing address boilerplate now uses `SparkPoint P.O. Box 2452, Brevard, NC 28712` across UI + structured data.
 - SEO metadata is standardized through `src/components/SEOHead.tsx` across route pages.
 - Structured data now includes Organization/NGO, WebSite, WebPage, and BreadcrumbList globally, plus page-level Article/Event schema where applicable.
 - Canonical site origin defaults to `https://www.yoursparkpoint.org` (see `src/lib/siteOrigin.ts` and `vite.config.ts`).
