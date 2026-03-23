@@ -11,6 +11,7 @@ import { Label } from './ui/label';
 import sparkPointLogo from '../assets/compd/35bb889d1f4d0b05ae6753439b58199640858447.webp';
 import candidSeal from 'figma:asset/5a36f7b11c9d0bf970613a37a28b121b31918d77.png';
 import livingWageLogo from 'figma:asset/ec17a6fe91f3b0bf97249c7bd911f4723893563c.png';
+import { CONTACT_INFO } from '../data/contactInfo';
 
 // Custom TikTok Icon to match Lucide style
 const TikTok = ({ size = 24, style }: { size?: number | string; style?: React.CSSProperties }) => (
@@ -139,23 +140,18 @@ export function Footer() {
 
               {/* Contact Details */}
               <div className="space-y-3">
-                <a
-                  href="https://maps.google.com/?q=159+W.+Main+St+Unit+2452+Brevard+NC+28712"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-start gap-3 group transition-all hover:opacity-80"
-                >
+                <div className="flex items-start gap-3">
                   <MapPin 
                     size={20} 
                     className="mt-0.5 flex-shrink-0 transition-all" 
                     style={{ color: '#FDB515', filter: 'drop-shadow(0 0 2px rgba(253, 181, 21, 0.5))' }} 
                   />
                   <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.938rem', lineHeight: '1.5' }}>
-                    159 W. Main St Unit 2452, Brevard, NC 28712
+                    {CONTACT_INFO.mailingAddressDisplay}
                   </span>
-                </a>
+                </div>
                 <a
-                  href="tel:+18288838050"
+                  href={CONTACT_INFO.phoneHref}
                   className="flex items-center gap-3 group transition-all hover:opacity-80"
                 >
                   <Phone 
@@ -164,11 +160,11 @@ export function Footer() {
                     style={{ color: '#FDB515', filter: 'drop-shadow(0 0 2px rgba(253, 181, 21, 0.5))' }} 
                   />
                   <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.938rem', lineHeight: '1.5' }}>
-                    (828) 883-8050
+                    {CONTACT_INFO.phoneDisplay}
                   </span>
                 </a>
                 <a
-                  href="mailto:info@yoursparkpoint.org"
+                  href={`mailto:${CONTACT_INFO.email}`}
                   className="flex items-center gap-3 group transition-all hover:opacity-80"
                 >
                   <Mail 
@@ -177,7 +173,7 @@ export function Footer() {
                     style={{ color: '#FDB515', filter: 'drop-shadow(0 0 2px rgba(253, 181, 21, 0.5))' }} 
                   />
                   <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.938rem', lineHeight: '1.5' }}>
-                    info@yoursparkpoint.org
+                    {CONTACT_INFO.email}
                   </span>
                 </a>
               </div>
@@ -347,8 +343,8 @@ export function Footer() {
                 </div>
                 
                 <div className="mt-6 text-center">
-                    <a href="mailto:info@yoursparkpoint.org" className="text-sm text-white/50 hover:text-white/80 transition-colors">
-                        Or email us at info@yoursparkpoint.org
+                    <a href={`mailto:${CONTACT_INFO.email}`} className="text-sm text-white/50 hover:text-white/80 transition-colors">
+                        Or email us at {CONTACT_INFO.email}
                     </a>
                 </div>
               </div>
