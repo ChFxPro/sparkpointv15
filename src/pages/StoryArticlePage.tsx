@@ -6,6 +6,7 @@ import { ArrowLeft, Share2, Printer, Calendar, User, ArrowRight } from 'lucide-r
 import { Button } from '../components/ui/button';
 import { STORIES_DATA } from '../data/stories';
 import { useEffect } from 'react';
+import { CONTACT_INFO } from '../data/contactInfo';
 import { canonicalUrl } from '../lib/siteOrigin';
 import { SEOHead } from '../components/SEOHead';
 
@@ -47,7 +48,7 @@ export function StoryArticlePage() {
       name: article.author || 'SparkPoint Editorial Team',
     },
     publisher: {
-      '@id': 'https://www.yoursparkpoint.org/#organization',
+      '@id': CONTACT_INFO.organizationSchemaId,
     },
     mainEntityOfPage: canonical,
     articleSection: category.title,

@@ -1,5 +1,7 @@
 export const CONTACT_INFO = {
   organizationName: 'SparkPoint',
+  organizationSchemaId: 'https://www.yoursparkpoint.org/#organization',
+  websiteSchemaId: 'https://www.yoursparkpoint.org/#website',
   email: 'info@yoursparkpoint.org',
   phoneDisplay: '1 828-554-7010',
   phoneHref: 'tel:+18285547010',

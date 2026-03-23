@@ -133,8 +133,8 @@ export function StructuredData() {
   const pageDescription = resolvePageDescription(safePath);
   const breadcrumbs = buildBreadcrumbs(safePath);
 
-  const organizationId = canonicalUrl('/#organization');
-  const websiteId = canonicalUrl('/#website');
+  const organizationId = CONTACT_INFO.organizationSchemaId;
+  const websiteId = CONTACT_INFO.websiteSchemaId;
   const breadcrumbId = `${pageUrl}#breadcrumb`;
 
   const schema = {
@@ -143,7 +143,7 @@ export function StructuredData() {
       {
         '@type': ['Organization', 'NGO'],
         '@id': organizationId,
-        name: SITE_NAME,
+        name: CONTACT_INFO.organizationName,
         url: canonicalUrl('/'),
         logo: canonicalUrl('/logo.png'),
         description:

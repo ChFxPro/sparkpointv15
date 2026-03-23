@@ -5,6 +5,7 @@ import imgCrowd from "figma:asset/081f67bc0043a989fd3bbe690f2bc36895e2ae29.png";
 import imgJenga from "figma:asset/03643ed23c45475ef78b3e0f363a5b886b5679a9.png";
 import imgConversation from "figma:asset/acc45b75e300283fd839e68a5d16299f663b13b6.png";
 import { SEOHead } from '../components/SEOHead';
+import { CONTACT_INFO } from '../data/contactInfo';
 import { HELENE_ONE_YEAR_DATE_ISO, HELENE_ONE_YEAR_DATE_LABEL } from '../data/impact2025';
 
 // Image URLs 
@@ -30,10 +31,10 @@ export default function CommunityChampionsArticle() {
     datePublished: HELENE_ONE_YEAR_DATE_ISO,
     author: {
       '@type': 'Organization',
-      name: 'SparkPoint',
+      name: CONTACT_INFO.organizationName,
     },
     publisher: {
-      '@id': 'https://www.yoursparkpoint.org/#organization',
+      '@id': CONTACT_INFO.organizationSchemaId,
     },
     mainEntityOfPage: `https://www.yoursparkpoint.org${articlePath}`,
     inLanguage: 'en-US',
@@ -59,7 +60,7 @@ export default function CommunityChampionsArticle() {
       },
     },
     organizer: {
-      '@id': 'https://www.yoursparkpoint.org/#organization',
+      '@id': CONTACT_INFO.organizationSchemaId,
     },
   };
 
