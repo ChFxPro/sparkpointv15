@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, Calendar, Clock, Play } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { SEOHead } from '../components/SEOHead';
+import { CONTACT_INFO } from '../data/contactInfo';
 import { STORIES_DATA } from '../data/stories';
 import { useEffect } from 'react';
 import imgPoster from "figma:asset/e3f8a2b021eb0d337580338dd10e709a1762494c.png";
@@ -58,10 +59,10 @@ export function StoryCategoryPage() {
     description: pageDescription,
     url: `https://www.yoursparkpoint.org/stories/${category.id}`,
     isPartOf: {
-      '@id': 'https://www.yoursparkpoint.org/#website',
+      '@id': CONTACT_INFO.websiteSchemaId,
     },
     about: {
-      '@id': 'https://www.yoursparkpoint.org/#organization',
+      '@id': CONTACT_INFO.organizationSchemaId,
     },
   };
 
