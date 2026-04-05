@@ -13,7 +13,7 @@ Branch: `codex/chore/programs-elevate-content`
 - Requested launch edits are **mostly not yet applied**:
   - Address override to `159 W. Main St Unit 2452` is missing in site boilerplate.
   - Mission partner groups/copy and Let’s Connect volunteer list are partially or fully outdated vs request source.
-  - Stories top tabs and new Sponsors/Resiliency Hub nav structures are missing.
+  - Stories top tabs and new Sponsors/Resilience Hub nav structures are missing.
   - News/Media consolidation request is missing.
   - About-page phrasing/year framing is partially aligned but still contains flagged language.
 - Metrics are **not centralized**:
@@ -30,7 +30,7 @@ Branch: `codex/chore/programs-elevate-content`
 | Partner sectors are duplicated in another component (risk of drift) | partially correct | `src/components/PartnerNetworkHub.tsx:46-134`<br>`src/components/PartnerNetworkHub.tsx:231`<br>`src/components/ImpactSection.tsx:958` | If mission/source-of-truth is changed, synchronize `PartnerNetworkHub` sectors too, or refactor both to shared data module. | P0 |
 | Let’s Connect volunteer opportunities list replacement | partially correct | `src/components/GuidedIntakeForm.tsx:109-117`<br>`src/components/GuidedIntakeForm.tsx:338`<br>`src/pages/IntakePage.tsx:94` | Update `volunteerInterests` array; current list includes `Events & Outreach` but not requested items (`SparkPoint Resource Lobby`, `Story-Collection`, `Voice of the Students`, `Preparedness`, `General Volunteer`). | P0 |
 | Stories page “Programs” top tab | missing | `src/pages/StoriesPage.tsx:32-100`<br>`src/components/ui/tabs.tsx` | No top tab system currently in `StoriesPage`; add local tab strip in `StoriesPage` above categories grid (reuse `ui/tabs` if desired). | P1 |
-| Add “Sponsors” + “SparkPoint Resiliency Hub” navigation tabs/entries | missing | `src/components/Header.tsx:23-32`<br>`src/components/Header.tsx:64-67`<br>`src/components/Footer.tsx:34-43`<br>`src/App.tsx:64-83` | Decide global vs local: global requires new header/footer entries + route(s). If page-local tabs, implement in owning page component. Currently absent in both global nav and page tabs. | P1 |
+| Add “Sponsors” + “SparkPoint Resilience Hub” navigation tabs/entries | missing | `src/components/Header.tsx:23-32`<br>`src/components/Header.tsx:64-67`<br>`src/components/Footer.tsx:34-43`<br>`src/App.tsx:64-83` | Decide global vs local: global requires new header/footer entries + route(s). If page-local tabs, implement in owning page component. Currently absent in both global nav and page tabs. | P1 |
 | News/Media consolidation (newsletter archives + media on one page) | missing | `src/components/Header.tsx:153`<br>`src/components/Header.tsx:353-356`<br>`src/components/Header.tsx:396`<br>`src/pages/StoriesPage.tsx` | Header currently points to external newsletter URL only; no in-repo archives/media page route. Add dedicated page + route and repoint nav links. | P1 |
 | About page language + 2019/2020 clarity request | partially correct | `src/pages/AboutPage.tsx:86-94`<br>`src/pages/AboutPage.tsx:508-510`<br>`src/pages/AboutPage.tsx:522`<br>`src/pages/AboutPage.tsx:595` | Keep existing year markers (`2019–2022`, `2020`) but revise flagged phrasing (`shared structure`) and tighten origin narrative blocks in `AboutPage`. | P1 |
 
@@ -38,7 +38,7 @@ Branch: `codex/chore/programs-elevate-content`
 
 - **Global Header/Footer links currently exist** for `Home`, `Mission`, `Stories`, `Impact`, `Programs`, `Get Involved`, `About`, `Contact` (`Header.menuItems`, `Footer.quickLinks`).
 - **Stories page has no top tabs**; it uses category cards (`StoriesPage` grid).
-- Requested `Programs`/`Sponsors`/`Resiliency Hub` “tabs” are therefore currently **missing as local tabs**, and `Sponsors`/`Resiliency Hub` are also **missing globally**.
+- Requested `Programs`/`Sponsors`/`Resilience Hub` “tabs” are therefore currently **missing as local tabs**, and `Sponsors`/`Resilience Hub` are also **missing globally**.
 
 ## 3) Metrics Contradictions Map
 
@@ -58,7 +58,7 @@ Key bible totals (2025): `events_logged=109`, `attendance_total_recorded_minimum
 
 - `100%` claims are high-risk unless documented evidence exists; recommend qualification language if evidence is not immediately available.
 - Helene date is internally inconsistent between `stories` data (`September 2024`) and routed article pages (`September 27, 2025`), which can create visible trust issues at launch.
-- Navigation additions (`Sponsors`, `SparkPoint Resiliency Hub`, possible Stories tabs) likely ripple across:
+- Navigation additions (`Sponsors`, `SparkPoint Resilience Hub`, possible Stories tabs) likely ripple across:
   - `Header` desktop + mobile drawer
   - `Footer` quick links
   - `App.tsx` route table

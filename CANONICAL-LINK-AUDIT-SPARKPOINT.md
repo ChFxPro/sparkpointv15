@@ -31,7 +31,7 @@ Preferred origin: https://www.yoursparkpoint.org
 - `/get-involved` -> `https://www.yoursparkpoint.org/get-involved`
 - `/intake` (including `?intent=*` variants) -> `https://www.yoursparkpoint.org/intake`
 - `/sponsors` -> `https://www.yoursparkpoint.org/sponsors`
-- `/resiliency-hub` -> `https://www.yoursparkpoint.org/resiliency-hub`
+- `/resilience-hub` -> `https://www.yoursparkpoint.org/resilience-hub`
 - `/news-media` -> `https://www.yoursparkpoint.org/news-media`
 - `/trust` -> `https://www.yoursparkpoint.org/trust`
 - `/privacy` -> `https://www.yoursparkpoint.org/privacy`
@@ -77,7 +77,7 @@ Preferred origin: https://www.yoursparkpoint.org
 - Added meaningful internal links to low-link pages:
   - `src/pages/CommunityChampionsArticle.tsx`
   - `src/pages/HeleneOneYearArticle.tsx`
-  - `src/pages/ResiliencyHubPage.tsx`
+  - `src/pages/ResilienceHubPage.tsx`
 - Replaced alias/internal JS CTA targets with canonical internal anchors:
   - `src/pages/StoriesPage.tsx` (`/intake?intent=contact`)
   - `src/pages/StoryArticlePage.tsx` (`/intake?intent=contact` + category link via anchor)

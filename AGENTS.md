@@ -29,7 +29,7 @@ Last updated: 2026-03-22
 - `/get-involved`
 - `/programs`
 - `/sponsors`
-- `/resiliency-hub`
+- `/resilience-hub`
 - `/news-media`
 - `/newsletter` -> external redirect to Squarespace newsletter
 - `/donations` -> external redirect to Squarespace donations
@@ -76,7 +76,7 @@ Last updated: 2026-03-22
 - Updated `/impact` and home impact section metrics to use canonical 2025 totals.
 - Removed/qualified absolute `100%` claims in launch-facing content.
 - Aligned Helene one-year date references to September 27, 2025.
-- Added minimal launch pages for sponsors, resiliency hub, and news/media.
+- Added minimal launch pages for sponsors, resilience hub, and news/media.
 - Added Stories top tabs with Programs navigation.
 
 ## 2025 Impact Metrics Source
@@ -98,5 +98,5 @@ Last updated: 2026-03-22
 - Complete editorial QA pass on all program entries for tone consistency.
 - Continue validating pathway copy against latest planning documents.
 - Curate fuller News/Media archival content set (legacy + newest missing items).
-- Confirm sponsor/resiliency page copy/assets for post-launch polish.
+- Confirm sponsor/resilience hub page copy/assets for post-launch polish.
 - Revisit chunk-splitting if bundle-size warning becomes a performance concern.

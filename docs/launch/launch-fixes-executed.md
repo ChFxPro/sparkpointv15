@@ -36,9 +36,9 @@ Source recon: `docs/recon/launch-recon-map.md`
   - `src/components/GuidedIntakeForm.tsx`
 - Stories page top tabs updated to include `Programs` tab in existing tab pattern.
   - `src/pages/StoriesPage.tsx`
-- Sponsors + Resiliency Hub implemented minimally with routes + nav integration.
+- Sponsors + Resilience Hub implemented minimally with routes + nav integration.
   - `src/pages/SponsorsPage.tsx` (new)
-  - `src/pages/ResiliencyHubPage.tsx` (new)
+  - `src/pages/ResilienceHubPage.tsx` (new)
   - `src/App.tsx`
   - `src/components/Header.tsx`
   - `src/components/Footer.tsx`
@@ -92,7 +92,7 @@ Source recon: `docs/recon/launch-recon-map.md`
 
 1. Create a shared partner data module used by both `MissionPage` and `PartnerNetworkHub` to prevent drift.
 2. Expand `/news-media` with full archive imports and media assets after launch.
-3. Replace placeholder/minimal copy on `/sponsors` and `/resiliency-hub` with finalized editorial content.
+3. Replace placeholder/minimal copy on `/sponsors` and `/resilience-hub` with finalized editorial content.
 4. Keep all future 2025 rollup changes in `src/data/impact2025.ts` only, then verify impacted surfaces.
 
 ## 6) Commit Summary
