@@ -19,7 +19,7 @@ Framework: React + Vite
 - /get-involved
 - /intake
 - /sponsors
-- /resiliency-hub
+- /resilience-hub
 - /news-media
 - /trust
 - /privacy
@@ -86,7 +86,7 @@ Framework: React + Vite
 
 ### Route metadata rollout
 Replaced route-level `Helmet` blocks with `SEOHead` across:
-- `HomePage`, `AboutPage`, `MissionPage`, `ImpactPage`, `StoriesPage`, `StoryCategoryPage`, `StoryArticlePage`, `GetInvolvedPage`, `IntakePage`, `ProgramsPage`, `NewsMediaPage`, `SponsorsPage`, `ResiliencyHubPage`, `TrustPage`, `PrivacyPage`, `CommunityChampionsArticle`, `HeleneOneYearArticle`.
+- `HomePage`, `AboutPage`, `MissionPage`, `ImpactPage`, `StoriesPage`, `StoryCategoryPage`, `StoryArticlePage`, `GetInvolvedPage`, `IntakePage`, `ProgramsPage`, `NewsMediaPage`, `SponsorsPage`, `ResilienceHubPage`, `TrustPage`, `PrivacyPage`, `CommunityChampionsArticle`, `HeleneOneYearArticle`.
 
 ### Structured data expansion
 - Rebuilt `src/components/StructuredData.tsx` to output:
@@ -149,7 +149,7 @@ Replaced route-level `Helmet` blocks with `SEOHead` across:
 - `src/pages/IntakePage.tsx`
 - `src/pages/NewsMediaPage.tsx`
 - `src/pages/SponsorsPage.tsx`
-- `src/pages/ResiliencyHubPage.tsx`
+- `src/pages/ResilienceHubPage.tsx`
 - `src/pages/TrustPage.tsx`
 - `src/pages/PrivacyPage.tsx`
 - `src/pages/CommunityChampionsArticle.tsx`
@@ -193,4 +193,3 @@ Estimated gains are from metadata completeness, canonical consistency, schema co
 - Build status: pass (`npm run build`)
 - `robots.txt` allows indexing: yes (`User-agent: *`, `Allow: /`)
 - Sitemap generated in build output: `https://www.yoursparkpoint.org/sitemap.xml`
-

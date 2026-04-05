@@ -78,31 +78,31 @@ const HUB_HERO_VIEWS: HubHeroView[] = [
     id: 'spring',
     label: 'Spring',
     image: hubSpringImage,
-    description: 'Spring view of the SparkPoint Resiliency Hub exterior in Brevard.',
+    description: 'Spring view of the SparkPoint Resilience Hub exterior in Brevard.',
   },
   {
     id: 'day',
     label: 'Day',
     image: hubDayImage,
-    description: 'Daytime view of the SparkPoint Resiliency Hub exterior in Brevard.',
+    description: 'Daytime view of the SparkPoint Resilience Hub exterior in Brevard.',
   },
   {
     id: 'autumn',
     label: 'Autumn',
     image: hubAutumnImage,
-    description: 'Autumn view of the SparkPoint Resiliency Hub exterior in Brevard.',
+    description: 'Autumn view of the SparkPoint Resilience Hub exterior in Brevard.',
   },
   {
     id: 'winter',
     label: 'Winter',
     image: hubWinterImage,
-    description: 'Winter view of the SparkPoint Resiliency Hub exterior in Brevard.',
+    description: 'Winter view of the SparkPoint Resilience Hub exterior in Brevard.',
   },
   {
     id: 'night',
     label: 'Night',
     image: hubNightImage,
-    description: 'Night view of the SparkPoint Resiliency Hub exterior in Brevard.',
+    description: 'Night view of the SparkPoint Resilience Hub exterior in Brevard.',
   },
 ];
 
@@ -335,7 +335,7 @@ function getDarkAppearance() {
 
 // ─── PAGE ───
 
-export function ResiliencyHubPage() {
+export function ResilienceHubPage() {
   const systemReducedMotion = useReducedMotion();
   const { motionPreference } = useAccessibility();
   const prefersReducedMotion = systemReducedMotion || motionPreference === 'reduce';
@@ -377,9 +377,9 @@ export function ResiliencyHubPage() {
   return (
     <div className="min-h-screen relative overflow-x-hidden">
       <SEOHead
-        title="Resiliency Hub | SparkPoint"
-        description="Explore SparkPoint's Resiliency Hub at 94 S. Caldwell Street in Brevard, NC: a welcoming shared space for connection, learning, resource navigation, and coordinated community support."
-        path="/resiliency-hub"
+        title="Resilience Hub | SparkPoint"
+        description="Explore SparkPoint's Resilience Hub at 94 S. Caldwell Street in Brevard, NC: a welcoming shared space for connection, learning, resource navigation, and coordinated community support."
+        path="/resilience-hub"
       />
 
       {/* ──── FIXED STICKY BACKGROUND ──── */}
@@ -431,7 +431,7 @@ export function ResiliencyHubPage() {
               marginBottom: 16,
             }}
           >
-            Resiliency Hub
+            Resilience Hub
           </p>
           <h1
             className="text-4xl font-bold tracking-tight leading-tight text-white"
@@ -645,7 +645,7 @@ export function ResiliencyHubPage() {
               Connection is the foundation of healthy, resilient communities.
             </h2>
             <p className="text-lg leading-relaxed" style={{ color: '#4B5563' }}>
-              The Resiliency Hub exists because resilience is built through trusted relationships,
+              The Resilience Hub exists because resilience is built through trusted relationships,
               access to resources, shared learning, and practical support that people can return
               to over time.
             </p>
@@ -864,7 +864,7 @@ export function ResiliencyHubPage() {
               A flexible place for practical community work.
             </h2>
             <p className="text-lg leading-relaxed" style={{ color: '#4B5563' }}>
-              The Resiliency Hub supports the kinds of activities that help people stay
+              The Resilience Hub supports the kinds of activities that help people stay
               informed, connected, and better equipped to care for one another over time.
             </p>
           </motion.div>
@@ -957,7 +957,7 @@ export function ResiliencyHubPage() {
               className="text-lg leading-relaxed"
               style={{ color: 'rgba(255,255,255,0.65)' }}
             >
-              The Resiliency Hub includes a dedicated StoryLab Studio &mdash; a space for
+              The Resilience Hub includes a dedicated StoryLab Studio &mdash; a space for
               collecting, stewarding, and learning from community stories ethically. Grounded in
               Participatory Narrative Inquiry, the StoryLab supports a repeatable cycle: listen to
               lived experience, learn what it reveals, lead with what the community needs, and
@@ -1364,7 +1364,7 @@ export function ResiliencyHubPage() {
               className="text-base leading-relaxed"
               style={{ color: 'rgba(255,255,255,0.70)' }}
             >
-              SparkPoint is holding the Resiliency Hub as a flexible community asset. Uses and
+              SparkPoint is holding the Resilience Hub as a flexible community asset. Uses and
               room arrangements can adapt over time depending on workshops, partner coordination,
               youth gatherings, or preparedness-related support. What stays constant is the
               intention: keep the space welcoming, readable, and useful.
