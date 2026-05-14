@@ -28,6 +28,8 @@ const GetInvolvedPage = lazy(() =>
   import('./pages/GetInvolvedPage').then((module) => ({ default: module.GetInvolvedPage }))
 );
 const ProgramsPage = lazy(() => import('./pages/programs/ProgramsPage'));
+const PurposeWorkshopsPage = lazy(() => import('./pages/programs/PurposeWorkshopsPage'));
+const ProgramDetailRoute = lazy(() => import('./pages/programs/ProgramDetailRoute'));
 const SponsorsPage = lazy(() =>
   import('./pages/SponsorsPage').then((module) => ({ default: module.SponsorsPage }))
 );
@@ -84,49 +86,75 @@ function RouteLoading() {
   );
 }
 
+// Flagship program routes that render as immersive, chromeless landing pages.
+// These skip the site-wide <Header /> and wrapping <main> so the program's own
+// hero can occupy the full viewport without colliding with site chrome.
+const CHROMELESS_PATH_PREFIXES = ['/programs/purpose-workshops'];
+
+function isChromelessPath(pathname: string): boolean {
+  return CHROMELESS_PATH_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(prefix + '/')
+  );
+}
+
 function AppContent() {
+  const location = useLocation();
+  const chromeless = isChromelessPath(location.pathname);
+
+  const routes = (
+    <Suspense fallback={<RouteLoading />}>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/mission" element={<MissionPage />} />
+        <Route path="/stories" element={<StoriesPage />} />
+        <Route path="/stories/:categoryId" element={<StoryCategoryPage />} />
+        <Route path="/stories/:categoryId/:slug" element={<StoryArticlePage />} />
+        <Route path="/impact" element={<ImpactPage />} />
+        <Route path="/programs" element={<ProgramsPage />} />
+        <Route path="/programs/purpose-workshops" element={<PurposeWorkshopsPage />} />
+        <Route path="/programs/:slug" element={<ProgramDetailRoute />} />
+        <Route path="/sponsors" element={<SponsorsPage />} />
+        <Route path="/resiliency-hub" element={<Navigate to="/resilience-hub" replace />} />
+        <Route path="/resilience-hub" element={<ResilienceHubPage />} />
+        <Route path="/news-media" element={<NewsMediaPage />} />
+        <Route path="/get-involved" element={<GetInvolvedPage />} />
+        <Route path="/volunteer" element={<Navigate to="/intake?intent=volunteer" replace />} />
+        <Route path="/partner" element={<Navigate to="/intake?intent=partner" replace />} />
+        <Route path="/contact" element={<Navigate to="/intake?intent=contact" replace />} />
+        <Route path="/intake" element={<IntakePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/community-champions/helene-one-year" element={<CommunityChampionsArticle />} />
+        <Route path="/stories/community-champions/helene-anniversary" element={<HeleneOneYearArticle />} />
+        <Route path="/trust" element={<TrustPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/donations" element={<ExternalRedirect to="https://cowbell-primrose-tet2.squarespace.com/donations" />} />
+        <Route path="/newsletter" element={<ExternalRedirect to="https://cowbell-primrose-tet2.squarespace.com/newsletter" />} />
+        <Route path="*" element={<HomePage />} />
+      </Routes>
+    </Suspense>
+  );
+
   return (
     <MotionConfig reducedMotion="user">
       <div className="min-h-screen relative flex flex-col">
         <ScrollToTop />
-        <a 
-          href="#main-content" 
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-[100] px-6 py-3 bg-white text-[#E03694] font-bold rounded-lg shadow-lg border-2 border-[#E03694] transition-all"
-        >
-          Skip to main content
-        </a>
-        <Header />
+        {!chromeless && (
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-[100] px-6 py-3 bg-white text-[#E03694] font-bold rounded-lg shadow-lg border-2 border-[#E03694] transition-all"
+          >
+            Skip to main content
+          </a>
+        )}
+        {!chromeless && <Header />}
         <StructuredData />
-        <main id="main-content" className="flex-grow">
-          <Suspense fallback={<RouteLoading />}>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/mission" element={<MissionPage />} />
-              <Route path="/stories" element={<StoriesPage />} />
-              <Route path="/stories/:categoryId" element={<StoryCategoryPage />} />
-              <Route path="/stories/:categoryId/:slug" element={<StoryArticlePage />} />
-              <Route path="/impact" element={<ImpactPage />} />
-              <Route path="/programs" element={<ProgramsPage />} />
-              <Route path="/sponsors" element={<SponsorsPage />} />
-              <Route path="/resiliency-hub" element={<Navigate to="/resilience-hub" replace />} />
-              <Route path="/resilience-hub" element={<ResilienceHubPage />} />
-              <Route path="/news-media" element={<NewsMediaPage />} />
-              <Route path="/get-involved" element={<GetInvolvedPage />} />
-              <Route path="/volunteer" element={<Navigate to="/intake?intent=volunteer" replace />} />
-              <Route path="/partner" element={<Navigate to="/intake?intent=partner" replace />} />
-              <Route path="/contact" element={<Navigate to="/intake?intent=contact" replace />} />
-              <Route path="/intake" element={<IntakePage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/community-champions/helene-one-year" element={<CommunityChampionsArticle />} />
-              <Route path="/stories/community-champions/helene-anniversary" element={<HeleneOneYearArticle />} />
-              <Route path="/trust" element={<TrustPage />} />
-              <Route path="/privacy" element={<PrivacyPage />} />
-              <Route path="/donations" element={<ExternalRedirect to="https://cowbell-primrose-tet2.squarespace.com/donations" />} />
-              <Route path="/newsletter" element={<ExternalRedirect to="https://cowbell-primrose-tet2.squarespace.com/newsletter" />} />
-              <Route path="*" element={<HomePage />} />
-            </Routes>
-          </Suspense>
-        </main>
+        {chromeless ? (
+          <div className="flex-grow">{routes}</div>
+        ) : (
+          <main id="main-content" className="flex-grow">
+            {routes}
+          </main>
+        )}
         <Footer />
       </div>
     </MotionConfig>

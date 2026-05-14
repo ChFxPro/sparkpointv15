@@ -1,47 +1,17 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import { ProgramsHero } from "./ProgramsHero";
-import { EcosystemSection } from "./EcosystemSection";
-import { AllProgramsSection } from "./AllProgramsSection";
 import { PathwayModal } from "./PathwayModal";
+import { ProgramsGallerySection } from "./gallery";
 import { getProgramBySlug, pathways, type Pathway, type Program } from "./programsData";
 import { SEOHead } from "../../components/SEOHead";
 import "./programs.css";
-
-type AudienceSegment = "community" | "volunteer" | "partner";
-
-const audienceSegmentConfig: Record<
-  AudienceSegment,
-  { label: string; audiences: string[]; ctaLabel: string; ctaHref: string }
-> = {
-  community: {
-    label: "Community",
-    audiences: ["Community", "Residents", "Youth", "Volunteers"],
-    ctaLabel: "Connect With Us",
-    ctaHref: "/intake?intent=contact",
-  },
-  volunteer: {
-    label: "Volunteer",
-    audiences: ["Volunteers", "Community", "Residents", "Teams"],
-    ctaLabel: "See Ways To Get Involved",
-    ctaHref: "/get-involved",
-  },
-  partner: {
-    label: "Partner",
-    audiences: ["Partners", "Organizations", "Leaders", "Nonprofits", "Schools"],
-    ctaLabel: "Partner With Us",
-    ctaHref: "/intake?intent=partner",
-  },
-};
 
 export default function ProgramsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [activePathway, setActivePathway] = useState<Pathway | null>(null);
   const [activeProgram, setActiveProgram] = useState<Program | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [audienceSegment, setAudienceSegment] = useState<AudienceSegment>("community");
-
-  const segmentConfig = useMemo(() => audienceSegmentConfig[audienceSegment], [audienceSegment]);
 
   const setProgramParam = useCallback((slug: string | null) => {
     setSearchParams((prev) => {
@@ -59,13 +29,6 @@ export default function ProgramsPage() {
       return next;
     }, { replace: true });
   }, [setSearchParams]);
-
-  const handleOpenPathway = useCallback((pathway: Pathway) => {
-    setActiveProgram(null);
-    setActivePathway(pathway);
-    setModalOpen(true);
-    setProgramParam(null);
-  }, [setProgramParam]);
 
   const handleOpenProgram = useCallback((pathway: Pathway, program: Program) => {
     setActiveProgram(program);
@@ -109,27 +72,14 @@ export default function ProgramsPage() {
         path="/programs"
       />
 
-      <ProgramsHero
-        audienceSegment={audienceSegment}
-        onAudienceSegmentChange={setAudienceSegment}
-        secondaryCtaHref={segmentConfig.ctaHref}
-        secondaryCtaLabel={segmentConfig.ctaLabel}
+      <ProgramsHero />
+
+      <ProgramsGallerySection
+        onQuickPeek={(program) => {
+          const pathway = pathways.find((p) => p.id === program.pathway)!;
+          handleOpenProgram(pathway, program);
+        }}
       />
-
-      <section id="ecosystem" className="sp-scroll-offset">
-        <EcosystemSection
-          onOpenPathway={handleOpenPathway}
-          onOpenProgram={handleOpenProgram}
-        />
-      </section>
-
-      <section id="view-all" className="sp-scroll-offset">
-        <AllProgramsSection
-          onOpenProgram={handleOpenProgram}
-          recommendedAudiences={segmentConfig.audiences}
-          recommendationLabel={segmentConfig.label}
-        />
-      </section>
 
       <section id="cta" className="sp-scroll-offset sp-prog-cta">
         <div className="max-w-5xl mx-auto px-5 sm:px-8 text-center">

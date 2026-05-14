@@ -108,12 +108,10 @@ function ProgramModal({ open, onClose, badge, title, subtitle, body, highlights 
                 <div className="flex items-center gap-3">
                   {badge === 'SparkPurpose' ? (
                     <a
-                      href="https://wkf.ms/3ZezuqU"
-                      target="_blank"
-                      rel="noreferrer"
+                      href="/programs/purpose-workshops"
                       className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white/85 hover:bg-white/10"
                     >
-                      Join the Next Workshop
+                      View Purpose Workshops
                     </a>
                   ) : null}
                 </div>
