@@ -3,7 +3,7 @@
 import { motion } from 'motion/react';
 import { useState } from 'react';
 import { Link } from 'react-router';
-import { MapPin, Phone, Mail, Facebook, Instagram, Youtube, Check } from 'lucide-react';
+import { MapPin, Mail, Facebook, Instagram, Youtube, Check } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
@@ -150,19 +150,6 @@ export function Footer() {
                     {CONTACT_INFO.mailingAddressDisplay}
                   </span>
                 </div>
-                <a
-                  href={CONTACT_INFO.phoneHref}
-                  className="flex items-center gap-3 group transition-all hover:opacity-80"
-                >
-                  <Phone 
-                    size={20} 
-                    className="flex-shrink-0 transition-all" 
-                    style={{ color: '#FDB515', filter: 'drop-shadow(0 0 2px rgba(253, 181, 21, 0.5))' }} 
-                  />
-                  <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '0.938rem', lineHeight: '1.5' }}>
-                    {CONTACT_INFO.phoneDisplay}
-                  </span>
-                </a>
                 <a
                   href={`mailto:${CONTACT_INFO.email}`}
                   className="flex items-center gap-3 group transition-all hover:opacity-80"

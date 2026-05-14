@@ -150,7 +150,6 @@ export function StructuredData() {
           'SparkPoint fosters community well-being rooted in connection by strengthening collaboration, shared learning, and resilience in Western North Carolina.',
         slogan: 'SparkPoint fosters community well-being rooted in connection.',
         email: CONTACT_INFO.email,
-        telephone: CONTACT_INFO.phoneSchema,
         foundingDate: '2020',
         nonprofitStatus: 'Nonprofit501c3',
         address: {
