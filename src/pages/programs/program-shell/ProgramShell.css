@@ -1,0 +1,45 @@
+/* ─── Program Shell: CSS custom property defaults ─── */
+
+.program-shell {
+  --program-accent: #1a1a1a;
+  --program-accent-soft: rgba(0, 0, 0, 0.08);
+  --program-surface: #fffdf9;
+  --program-ink: #1a1a1a;
+  --program-grid-opacity: 0.06;
+  --program-font-display: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Soft — warm cream, gentle rose undertone (Purpose-adjacent) */
+.program-shell[data-voice="soft"] {
+  --program-surface: #fef9f5;
+  --program-ink: #1a1a1a;
+  --program-grid-opacity: 0.05;
+}
+
+/* Corporate — cool slate, structured, outcome-focused */
+.program-shell[data-voice="corporate"] {
+  --program-surface: #f6f8fb;
+  --program-ink: #1c2230;
+  --program-grid-opacity: 0.07;
+}
+
+/* Coalition — deeper plum-cream, cross-sector warmth */
+.program-shell[data-voice="coalition"] {
+  --program-surface: #faf7fc;
+  --program-ink: #1e1426;
+  --program-grid-opacity: 0.06;
+}
+
+/* Youth — warm yellow/rose energy */
+.program-shell[data-voice="youth"] {
+  --program-surface: #fffbf2;
+  --program-ink: #1a1614;
+  --program-grid-opacity: 0.06;
+}
+
+/* Grounded — stone/olive, calm and practical */
+.program-shell[data-voice="grounded"] {
+  --program-surface: #f7f5f0;
+  --program-ink: #1e1e18;
+  --program-grid-opacity: 0.06;
+}

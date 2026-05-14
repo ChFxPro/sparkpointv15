@@ -1,224 +1,86 @@
-import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { Link } from "react-router";
-import { pathways } from "./programsData";
-import { ArrowDown, ChevronRight } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-type AudienceSegment = "community" | "volunteer" | "partner";
-
-interface ProgramsHeroProps {
-  audienceSegment: AudienceSegment;
-  onAudienceSegmentChange: (segment: AudienceSegment) => void;
-  secondaryCtaHref: string;
-  secondaryCtaLabel: string;
-}
-
-const segmentOptions: Array<{ id: AudienceSegment; label: string; hint: string }> = [
-  {
-    id: "community",
-    label: "Community",
-    hint: "Find programs built with neighbors - for connection, resilience, and shared well-being.",
-  },
-  {
-    id: "volunteer",
-    label: "Volunteer",
-    hint: "Join the work. Help create belonging, strengthen networks, and support community resilience.",
-  },
-  {
-    id: "partner",
-    label: "Partner",
-    hint: "Representing a school, nonprofit, or agency? Build a shared initiative with us.",
-  },
-];
-
-export function ProgramsHero({
-  audienceSegment,
-  onAudienceSegmentChange,
-  secondaryCtaHref,
-  secondaryCtaLabel,
-}: ProgramsHeroProps) {
+export function ProgramsHero() {
   const prefersReduced = useReducedMotion();
   const { scrollY } = useScroll();
   const parallaxY = useTransform(scrollY, [0, 600], [0, prefersReduced ? 0 : -40]);
-  const activeSegment = segmentOptions.find((segment) => segment.id === audienceSegment) ?? segmentOptions[0];
 
-  const scrollToExplore = () => {
-    document.getElementById("pathway-hub")?.scrollIntoView({ behavior: "smooth" });
+  const scrollToSection = (id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <section className="sp-prog-hero">
-      {/* Content grid: left copy + right pathway cards */}
-      <motion.div
-        className="sp-prog-hero-inner"
-        style={{ y: parallaxY }}
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left — Copy */}
-          <div className="sp-prog-hero-copy">
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease, delay: 0.1 }}
-              className="sp-prog-h1"
-            >
-              Listen. Learn. Lead. Repeat.
-            </motion.h1>
+      <motion.div className="sp-prog-hero-inner" style={{ y: parallaxY }}>
+        <div className="mx-auto max-w-4xl text-center">
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, ease }}
+            className="text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-[#FDB515]"
+          >
+            SparkPoint Programs
+          </motion.p>
 
-            <motion.p
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease, delay: 0.3 }}
-              className="sp-prog-subhead"
-            >
-              One community feedback loop: neighbors find support and voice,
-              volunteers turn care into action, and partners help scale
-              resilience that keeps compounding.
-            </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease, delay: 0.08 }}
+            className="sp-prog-h1 mt-5"
+          >
+            Programs that strengthen connection, well-being, and resilience.
+          </motion.h1>
 
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease, delay: 0.4 }}
-              className="sp-prog-loop-strip"
-              aria-label="Listen Learn Lead repeat loop"
-            >
-              <span>Listen</span>
-              <span aria-hidden>→</span>
-              <span>Learn</span>
-              <span aria-hidden>→</span>
-              <span>Lead</span>
-              <span aria-hidden>→</span>
-              <span>Repeat</span>
-            </motion.div>
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease, delay: 0.18 }}
+            className="sp-prog-subhead mt-6 mx-auto max-w-2xl"
+          >
+            Explore SparkPoint's work across Listen, Learn, and Lead, and find the programs that fit your community, school, organization, or next step.
+          </motion.p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease, delay: 0.45 }}
-              className="sp-prog-segment-wrap"
-            >
-              <div className="sp-prog-segment-control" role="radiogroup" aria-label="Choose your starting point">
-                {segmentOptions.map((segment) => (
-                  <button
-                    key={segment.id}
-                    type="button"
-                    role="radio"
-                    aria-checked={audienceSegment === segment.id}
-                    className={`sp-prog-segment-button${audienceSegment === segment.id ? " sp-prog-segment-button-active" : ""}`}
-                    onClick={() => onAudienceSegmentChange(segment.id)}
-                  >
-                    {segment.label}
-                  </button>
-                ))}
-              </div>
-              <p className="sp-prog-segment-hint">{activeSegment.hint}</p>
-            </motion.div>
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease, delay: 0.28 }}
+            className="mt-10 mx-auto max-w-xl text-[0.98rem] italic leading-[1.55] text-white/70"
+          >
+            Pick a pathway. Step inside a program. See what it feels like from the inside.
+          </motion.p>
 
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease, delay: 0.5 }}
-              className="sp-prog-hero-actions flex flex-col sm:flex-row items-center lg:items-start gap-3"
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease, delay: 0.36 }}
+            className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap"
+          >
+            <button
+              type="button"
+              onClick={() => scrollToSection("programs-gallery")}
+              className="sp-prog-cta-button sp-prog-cta-button-primary"
+              style={{ backgroundColor: "#E03694", fontWeight: 500 }}
             >
-              <button
-                onClick={scrollToExplore}
-                className="sp-prog-cta-button sp-prog-cta-button-primary"
-                style={{ backgroundColor: "#E03694", fontWeight: 500 }}
-              >
-                Explore Programs
-              </button>
-              <Link
-                to={secondaryCtaHref}
-                className="sp-prog-cta-button sp-prog-cta-button-secondary"
-                style={{ fontWeight: 500 }}
-              >
-                {secondaryCtaLabel}
-              </Link>
-            </motion.div>
-
-            {/* Micro CTA */}
-            <motion.button
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.8 }}
-              onClick={scrollToExplore}
-              className="sp-prog-hero-micro inline-flex items-center gap-1.5 cursor-pointer group"
-              style={{ fontWeight: 400 }}
+              Explore programs
+            </button>
+            <Link
+              to="/intake?intent=contact"
+              className="inline-flex items-center justify-center rounded-full px-5 py-3 text-[0.9rem] font-semibold text-white/80 transition-colors hover:text-white"
             >
-              Community member, volunteer, or partner?
-              <span className="inline-flex items-center gap-0.5" style={{ color: "#E03694", fontWeight: 500 }}>
-                Start where you are
-                <ChevronRight size={13} className="sp-prog-chevron transition-transform" />
-              </span>
-            </motion.button>
-          </div>
-
-          {/* Right — Floating pathway preview cards */}
-          <div className="sp-prog-pathway-list relative flex flex-col gap-4 sm:gap-5 w-full">
-            {pathways.map((pw, i) => (
-              <motion.button
-                key={pw.id}
-                initial={{ opacity: 0, x: 30, y: 10 }}
-                animate={{ opacity: 1, x: 0, y: 0 }}
-                transition={{
-                  duration: 0.6,
-                  ease,
-                  delay: 0.35 + i * 0.12,
-                }}
-                onClick={scrollToExplore}
-                className="sp-prog-hero-card sp-prog-card group text-left cursor-pointer"
-                style={{
-                  backgroundColor: "rgba(255,255,255,0.05)",
-                  borderColor: "rgba(255,255,255,0.08)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.09)";
-                  e.currentTarget.style.borderColor = `${pw.color}40`;
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.05)";
-                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
-              >
-                <div className="flex items-center gap-3 mb-2">
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ backgroundColor: `${pw.color}20` }}
-                  >
-                    <div
-                      className="w-2.5 h-2.5 rounded-full"
-                      style={{ backgroundColor: pw.color }}
-                    />
-                  </div>
-                  <span
-                    className="sp-prog-hero-card-title"
-                    style={{ fontFamily: "Manrope, sans-serif", fontWeight: 600 }}
-                  >
-                    {pw.label}
-                  </span>
-                  <span className="sp-prog-hero-card-count" style={{ fontWeight: 500 }}>
-                    {pw.programs.length} programs
-                  </span>
-                </div>
-                <p className="sp-prog-hero-card-desc line-clamp-2">
-                  {pw.description}
-                </p>
-              </motion.button>
-            ))}
-          </div>
+              Talk with us
+            </Link>
+          </motion.div>
         </div>
       </motion.div>
 
-      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 0.6 }}
+        transition={{ delay: 1.1, duration: 0.6 }}
         className="sp-prog-hero-scroll flex flex-col items-center gap-2"
       >
         <motion.div
@@ -229,7 +91,6 @@ export function ProgramsHero({
         </motion.div>
       </motion.div>
 
-      {/* Bottom curve divider */}
       <div className="absolute bottom-0 left-0 right-0" style={{ filter: "drop-shadow(0 -1px 4px rgba(0,0,0,0.03))" }}>
         <svg
           viewBox="0 0 1440 60"

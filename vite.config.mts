@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
+import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
 const defaultBase = '/sparkpointv15/';
@@ -12,7 +13,7 @@ if (!process.env.VITE_SITE_ORIGIN) {
 export default defineConfig({
   base: process.env.PUBLIC_BASE ?? defaultBase,
 
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
     alias: {

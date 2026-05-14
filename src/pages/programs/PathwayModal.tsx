@@ -172,13 +172,24 @@ function ProgramDetail({
           <p className="text-[0.8125rem] text-gray-500 mb-4 max-w-xs mx-auto">
             We can walk through fit, timeline, and what partnership could look like.
           </p>
-          <Link
-            to={program.contactCTA.href}
-            className="sp-prog-cta-button sp-prog-cta-button-primary"
-            style={{ fontWeight: 500 }}
-          >
-            {program.contactCTA.label}
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            {program.detailPageHref ? (
+              <Link
+                to={program.detailPageHref}
+                className="sp-prog-cta-button sp-prog-cta-button-secondary"
+                style={{ fontWeight: 500 }}
+              >
+                View full program page
+              </Link>
+            ) : null}
+            <Link
+              to={program.contactCTA.href}
+              className="sp-prog-cta-button sp-prog-cta-button-primary"
+              style={{ fontWeight: 500 }}
+            >
+              {program.contactCTA.label}
+            </Link>
+          </div>
         </div>
       </div>
     </motion.div>

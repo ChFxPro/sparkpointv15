@@ -1,5 +1,6 @@
-import { useCallback, useRef, useState } from "react";
-import { motion, AnimatePresence, useInView, useReducedMotion } from "motion/react";
+import { useRef } from "react";
+import { Link } from "react-router";
+import { motion, useInView, useReducedMotion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import {
   pathways,
@@ -16,229 +17,151 @@ interface EcosystemSectionProps {
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-const microcopy: Record<string, string> = {
-  listen: "Community insight infrastructure",
-  learn: "Relational capacity building",
-  lead: "Cross-sector coordination",
-};
+function PathwayProgramCard({
+  pathway,
+  program,
+  onOpenProgram,
+}: {
+  pathway: Pathway;
+  program: Program;
+  onOpenProgram: (pathway: Pathway, program: Program) => void;
+}) {
+  return (
+    <article
+      className="sp-prog-card relative overflow-hidden rounded-[1.2rem] border border-black/6 bg-white p-5"
+      style={{ borderColor: "rgba(0,0,0,0.06)" }}
+    >
+      <div
+        className="sp-prog-accent-stripe"
+        style={{ backgroundColor: pathway.color, opacity: 0.5 }}
+      />
+      <h4 className="text-[0.98rem] text-gray-900" style={{ fontWeight: 600 }}>
+        {program.title}
+      </h4>
+      <p className="mt-2 text-[0.84rem] leading-6 text-gray-500">
+        {program.shortDescription}
+      </p>
+
+      <div className="sp-prog-card-badge-row mt-4">
+        <span className="sp-prog-badge sp-prog-badge-format">{getFormatLabel(program.format)}</span>
+        <span className={`sp-prog-badge sp-prog-badge-${program.offeringType}`}>
+          {getOfferingTypeLabel(program.offeringType)}
+        </span>
+      </div>
+
+      <div className="mt-4 flex flex-wrap gap-1.5">
+        {program.tags.slice(0, 3).map((tag) => (
+          <span
+            key={`${program.id}-${tag}`}
+            className="rounded-full px-2.5 py-1 text-[0.64rem] font-medium uppercase tracking-[0.08em] text-gray-400"
+            style={{ backgroundColor: "rgba(0,0,0,0.025)" }}
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+        {program.detailPageHref ? (
+          <Link
+            to={program.detailPageHref}
+            className="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-[0.76rem] font-semibold uppercase tracking-[0.08em] text-white transition-all hover:brightness-105"
+            style={{ backgroundColor: pathway.color }}
+          >
+            View program page
+            <ArrowRight size={14} />
+          </Link>
+        ) : null}
+        <button
+          type="button"
+          onClick={() => onOpenProgram(pathway, program)}
+          className="inline-flex items-center justify-center rounded-xl border border-slate-200 px-4 py-2.5 text-[0.76rem] font-semibold uppercase tracking-[0.08em] text-slate-700 transition-all hover:border-slate-300 hover:bg-slate-50"
+        >
+          {program.detailPageHref ? "Quick overview" : "View overview"}
+        </button>
+      </div>
+    </article>
+  );
+}
 
 export function EcosystemSection({ onOpenPathway, onOpenProgram }: EcosystemSectionProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.15 });
+  const isInView = useInView(sectionRef, { once: true, amount: 0.12 });
   const prefersReduced = useReducedMotion();
-  const [activeId, setActiveId] = useState<string | null>(null);
-
-  const activePw = pathways.find((p) => p.id === activeId) ?? null;
-
-  const handleSelect = useCallback((id: string) => {
-    setActiveId((prev) => (prev === id ? null : id));
-  }, []);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent, id: string) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        handleSelect(id);
-      }
-    },
-    [handleSelect]
-  );
 
   return (
-    <>
-      <section
-        id="pathway-hub"
-        ref={sectionRef}
-        className="sp-scroll-offset py-20 sm:py-24"
-        style={{ backgroundColor: "#FAFAF8" }}
-      >
-        <div className="max-w-5xl mx-auto px-5 sm:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, ease }}
-            className="text-center mb-14"
-          >
-            <h2 className="sp-prog-section-title">Choose a Pathway</h2>
-            <p className="sp-prog-section-subhead mt-3 max-w-lg mx-auto">
-              Each pathway plays a distinct role in the feedback loop. Select one to preview
-              programs, or explore the full catalog below.
-            </p>
-          </motion.div>
+    <section
+      id="pathway-hub"
+      ref={sectionRef}
+      className="sp-scroll-offset py-20 sm:py-24"
+      style={{ backgroundColor: "#FAFAF8" }}
+    >
+      <div className="max-w-6xl mx-auto px-5 sm:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, ease }}
+          className="mb-14 max-w-3xl"
+        >
+          <p className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-[#E03694]">
+            Browse by pathway
+          </p>
+          <h2 className="sp-prog-section-title mt-3">Explore SparkPoint's work through Listen, Learn, and Lead.</h2>
+          <p className="sp-prog-section-subhead mt-4">
+            Each pathway gathers programs with a different role in the bigger picture, from listening to community voice to building practical tools to supporting coordinated action.
+          </p>
+        </motion.div>
 
-          <div className="flex items-stretch justify-center gap-3 sm:gap-4" role="tablist">
-            {pathways.map((pw, i) => {
-              const isActive = activeId === pw.id;
-              return (
-                <motion.button
-                  key={pw.id}
-                  role="tab"
-                  aria-selected={isActive}
-                  aria-controls={`panel-${pw.id}`}
-                  tabIndex={0}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-                  transition={{ duration: 0.45, delay: 0.15 + i * 0.1, ease }}
-                  onClick={() => handleSelect(pw.id)}
-                  onKeyDown={(e) => handleKeyDown(e, pw.id)}
-                  className="sp-prog-node group flex-1 flex flex-col items-center p-5 sm:p-6 rounded-2xl border-2 transition-all duration-300 cursor-pointer relative"
-                  style={{
-                    borderColor: isActive ? pw.color : "rgba(0,0,0,0.06)",
-                    backgroundColor: isActive ? `${pw.color}06` : "white",
-                    boxShadow: isActive
-                      ? `0 4px 24px ${pw.color}12, 0 1px 4px rgba(0,0,0,0.04)`
-                      : "0 1px 3px rgba(0,0,0,0.04)",
-                    outlineColor: pw.color,
-                  }}
-                >
-                  <div
-                    className="absolute -inset-2 rounded-3xl pointer-events-none transition-opacity duration-500"
-                    style={{
-                      background: `radial-gradient(circle, ${pw.color}08 0%, transparent 70%)`,
-                      opacity: isActive ? 1 : 0,
-                    }}
-                  />
-                  <div
-                    className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center border-2 transition-all duration-300 bg-white"
-                    style={{
-                      borderColor: pw.color,
-                      transform: isActive ? "scale(1.05)" : undefined,
-                    }}
-                  >
-                    <div
-                      className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full transition-transform duration-300"
-                      style={{
-                        backgroundColor: pw.color,
-                        transform: isActive ? "scale(1.15)" : undefined,
-                      }}
-                    />
-                  </div>
-                  <span
-                    className="relative mt-3 text-[0.9375rem] text-gray-800 transition-colors"
-                    style={{ fontFamily: "Manrope, sans-serif", fontWeight: 600 }}
-                  >
-                    {pw.label}
-                  </span>
-                  <span className="relative mt-0.5 text-[0.6875rem] text-gray-400" style={{ fontWeight: 400 }}>
-                    {microcopy[pw.id]}
-                  </span>
-                </motion.button>
-              );
-            })}
-          </div>
-
-          <AnimatePresence mode="wait">
-            {activePw && (
-              <motion.div
-                key={activePw.id}
-                id={`panel-${activePw.id}`}
-                role="tabpanel"
-                initial={{ opacity: 0, y: prefersReduced ? 0 : 16, height: 0 }}
-                animate={{ opacity: 1, y: 0, height: "auto" }}
-                exit={{ opacity: 0, y: prefersReduced ? 0 : -8, height: 0 }}
-                transition={{ duration: prefersReduced ? 0.15 : 0.4, ease }}
-                className="overflow-hidden"
-              >
-                <div className="pt-8 sm:pt-10">
-                  <div
-                    className="rounded-2xl border p-6 sm:p-8 mb-5"
-                    style={{
-                      borderColor: "rgba(0,0,0,0.05)",
-                      backgroundColor: "white",
-                    }}
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <div
-                            className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: activePw.color }}
-                          />
-                          <span
-                            className="text-[0.6875rem] uppercase tracking-[0.15em]"
-                            style={{ color: activePw.color, fontWeight: 600 }}
-                          >
-                            {activePw.label} Pathway
-                          </span>
-                        </div>
-                        <p className="text-[0.9375rem] text-gray-600 leading-relaxed max-w-lg">
-                          {activePw.description}
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => onOpenPathway(activePw)}
-                        className="self-start sm:self-center px-5 py-2.5 rounded-xl text-[0.8125rem] text-white transition-all duration-200 hover:brightness-110 cursor-pointer flex items-center gap-2 flex-shrink-0"
-                        style={{ backgroundColor: activePw.color, fontWeight: 500 }}
-                      >
-                        View All {activePw.programs.length}
-                        <ArrowRight size={14} />
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {activePw.programs.slice(0, 3).map((program, idx) => (
-                      <motion.button
-                        key={program.id}
-                        type="button"
-                        aria-label={`View details for ${program.title}`}
-                        initial={{ opacity: 0, y: prefersReduced ? 0 : 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: prefersReduced ? 0 : 0.08 + idx * 0.06, ease }}
-                        className="sp-prog-card sp-prog-card-button group"
-                        style={{ borderColor: "rgba(0,0,0,0.06)" }}
-                        onClick={() => onOpenProgram(activePw, program)}
-                      >
-                        <div
-                          className="sp-prog-accent-stripe"
-                          style={{ backgroundColor: activePw.color, opacity: 0.5 }}
-                        />
-                        <h4
-                          className="text-[0.875rem] text-gray-900 mb-1.5"
-                          style={{ fontWeight: 600 }}
-                        >
-                          {program.title}
-                        </h4>
-                        <p className="text-[0.8125rem] text-gray-500 leading-relaxed mb-3 line-clamp-2">
-                          {program.shortDescription}
-                        </p>
-                        <div className="sp-prog-card-badge-row mb-2.5">
-                          <span className="sp-prog-badge sp-prog-badge-format">{getFormatLabel(program.format)}</span>
-                          <span className={`sp-prog-badge sp-prog-badge-${program.offeringType}`}>
-                            {getOfferingTypeLabel(program.offeringType)}
-                          </span>
-                        </div>
-                        <div className="flex flex-wrap gap-1">
-                          {program.tags.slice(0, 2).map((tag) => (
-                            <span
-                              key={`${program.id}-${tag}`}
-                              className="text-[0.625rem] px-2 py-0.5 rounded-full text-gray-400"
-                              style={{ backgroundColor: "rgba(0,0,0,0.03)" }}
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </motion.button>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {!activePw && (
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 0.5, delay: 0.7 }}
-              className="sp-prog-muted mt-10 text-center"
+        <div className="space-y-6">
+          {pathways.map((pathway, index) => (
+            <motion.article
+              key={pathway.id}
+              initial={{ opacity: 0, y: prefersReduced ? 0 : 18 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+              transition={{ duration: 0.45, delay: prefersReduced ? 0 : 0.08 + index * 0.08, ease }}
+              className="overflow-hidden rounded-[2rem] border border-black/5 bg-white p-6 shadow-[0_18px_45px_rgba(15,23,42,0.05)] sm:p-8"
             >
-              Select a pathway above to preview programs
-            </motion.p>
-          )}
+              <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+                <div className="max-w-2xl">
+                  <div className="flex items-center gap-3">
+                    <span className="h-3 w-3 rounded-full" style={{ backgroundColor: pathway.color }} aria-hidden="true" />
+                    <p
+                      className="text-[0.72rem] font-semibold uppercase tracking-[0.18em]"
+                      style={{ color: pathway.color }}
+                    >
+                      {pathway.label}
+                    </p>
+                  </div>
+                  <p className="mt-4 text-[1.05rem] leading-7 text-slate-600">
+                    {pathway.description}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => onOpenPathway(pathway)}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-[0.8rem] font-semibold uppercase tracking-[0.08em] text-white transition-all hover:brightness-105"
+                  style={{ backgroundColor: pathway.color }}
+                >
+                  View all {pathway.programs.length}
+                  <ArrowRight size={14} />
+                </button>
+              </div>
+
+              <div className="mt-8 grid gap-4 lg:grid-cols-3">
+                {pathway.programs.slice(0, 3).map((program) => (
+                  <PathwayProgramCard
+                    key={program.id}
+                    pathway={pathway}
+                    program={program}
+                    onOpenProgram={onOpenProgram}
+                  />
+                ))}
+              </div>
+            </motion.article>
+          ))}
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

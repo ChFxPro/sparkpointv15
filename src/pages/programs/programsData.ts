@@ -11,6 +11,27 @@ export type ProgramFormatType =
 
 export type OfferingType = "community" | "partner" | "fee-based";
 
+export type ProgramVoice = 'soft' | 'corporate' | 'coalition' | 'youth' | 'grounded';
+
+export type ProgramPalette = 'warm' | 'neutral' | 'cool';
+
+export type ProgramTypographicTone = 'balanced' | 'structured' | 'energetic';
+
+export interface ProgramBrand {
+  /** Pathway-relative accent color. If omitted, consumers fall back to pathway.color via getProgramAccent(). */
+  accent?: string;
+  /** Softer accent for gradients / backgrounds. Falls back to pathway.colorLight. */
+  accentSoft?: string;
+  /** Voice label — drives data-voice attribute on ProgramShell */
+  voice: ProgramVoice;
+  /** One-line hover sample shown on program cards */
+  voiceSample: string;
+  /** Palette hint for section backgrounds */
+  palette: ProgramPalette;
+  /** Typographic tone hint — defaults to 'balanced' when omitted */
+  typographicTone?: ProgramTypographicTone;
+}
+
 export interface ProgramFormat {
   type: ProgramFormatType;
   cadence?: string;
@@ -23,6 +44,8 @@ export interface Program {
   pathway: PathwayId;
   shortDescription: string;
   longDescription: string;
+  whyItExists?: string;
+  detailPageHref?: string;
   tags: string[];
   whoItsFor: string[];
   whatYoullExperience: string[];
@@ -34,6 +57,7 @@ export interface Program {
     label: string;
     href: string;
   };
+  brand: ProgramBrand;
 }
 
 export interface Pathway {
@@ -85,6 +109,11 @@ const listenPrograms: Program[] = [
     },
     offeringType: "community",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'grounded',
+      voiceSample: 'A bi-weekly column sharing what SparkPoint is hearing across community conversations and story projects.',
+      palette: 'neutral',
+    },
   }),
   createProgram({
     id: "story-collection-projects",
@@ -118,6 +147,11 @@ const listenPrograms: Program[] = [
     },
     offeringType: "partner",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'grounded',
+      voiceSample: 'Targeted story gathering around topics shaping community well-being and recovery.',
+      palette: 'neutral',
+    },
   }),
   createProgram({
     id: "story-lab-studios",
@@ -146,6 +180,11 @@ const listenPrograms: Program[] = [
     },
     offeringType: "partner",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'grounded',
+      voiceSample: 'A story studio that mentors youth and community members in ethical media and narrative practice.',
+      palette: 'neutral',
+    },
   }),
   createProgram({
     id: "thrive-at-5",
@@ -174,6 +213,11 @@ const listenPrograms: Program[] = [
     },
     offeringType: "community",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'grounded',
+      voiceSample: 'Monthly community gatherings that create low-barrier connection across the county.',
+      palette: 'neutral',
+    },
   }),
 ];
 
@@ -205,6 +249,11 @@ const learnPrograms: Program[] = [
     },
     offeringType: "community",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'grounded',
+      voiceSample: 'A foundational workshop on why relationships and belonging are central to health.',
+      palette: 'neutral',
+    },
   }),
   createProgram({
     id: "integrative-well-being-food-mood-movement",
@@ -233,6 +282,11 @@ const learnPrograms: Program[] = [
     },
     offeringType: "community",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'grounded',
+      voiceSample: 'Interactive learning on how daily rhythms shape mood, focus, and energy.',
+      palette: 'neutral',
+    },
   }),
   createProgram({
     id: "brain-stress-resilience",
@@ -261,6 +315,11 @@ const learnPrograms: Program[] = [
     },
     offeringType: "community",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'grounded',
+      voiceSample: 'A practical workshop on stress response and relationship-based resilience.',
+      palette: 'neutral',
+    },
   }),
   createProgram({
     id: "positive-culture-belonging",
@@ -289,6 +348,11 @@ const learnPrograms: Program[] = [
     },
     offeringType: "partner",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'grounded',
+      voiceSample: 'A workshop on belonging through everyday interactions, play, and trust.',
+      palette: 'neutral',
+    },
   }),
   createProgram({
     id: "learn-connect-nights",
@@ -317,6 +381,11 @@ const learnPrograms: Program[] = [
     },
     offeringType: "community",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'grounded',
+      voiceSample: 'Evening gatherings where people learn, reflect, and build meaningful connection.',
+      palette: 'neutral',
+    },
   }),
   createProgram({
     id: "supported-connected-classrooms",
@@ -345,6 +414,11 @@ const learnPrograms: Program[] = [
     },
     offeringType: "partner",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'grounded',
+      voiceSample: 'Professional learning and wellness support for educators and school teams.',
+      palette: 'neutral',
+    },
   }),
   createProgram({
     id: "purpose-workshops",
@@ -372,7 +446,14 @@ const learnPrograms: Program[] = [
       cadence: "Single session or multi-session",
     },
     offeringType: "fee-based",
+    detailPageHref: "/programs/purpose-workshops",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'soft',
+      voiceSample: 'We\'re more connected than ever. And still searching for what matters.',
+      palette: 'warm',
+      typographicTone: 'balanced',
+    },
   }),
   createProgram({
     id: "leadership-well-being",
@@ -401,6 +482,12 @@ const learnPrograms: Program[] = [
     },
     offeringType: "partner",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'corporate',
+      voiceSample: 'Strong leadership starts with well-regulated attention. We teach both.',
+      palette: 'neutral',
+      typographicTone: 'structured',
+    },
   }),
   createProgram({
     id: "emotional-intelligence-connective-leadership",
@@ -429,6 +516,11 @@ const learnPrograms: Program[] = [
     },
     offeringType: "fee-based",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'grounded',
+      voiceSample: 'Practical EI and communication tools for trust-based leadership under stress.',
+      palette: 'neutral',
+    },
   }),
   createProgram({
     id: "workplace-well-being-positive-culture",
@@ -457,6 +549,11 @@ const learnPrograms: Program[] = [
     },
     offeringType: "fee-based",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'grounded',
+      voiceSample: 'Team workshops on communication, recognition, trust, and belonging.',
+      palette: 'neutral',
+    },
   }),
   createProgram({
     id: "connected-leadership-culture",
@@ -485,6 +582,11 @@ const learnPrograms: Program[] = [
     },
     offeringType: "partner",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'grounded',
+      voiceSample: 'A deeper multi-session program for culture change through a well-being lens.',
+      palette: 'neutral',
+    },
   }),
 ];
 
@@ -516,6 +618,12 @@ const leadPrograms: Program[] = [
     },
     offeringType: "partner",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'coalition',
+      voiceSample: 'When organizations listen together, the community hears itself.',
+      palette: 'cool',
+      typographicTone: 'balanced',
+    },
   }),
   createProgram({
     id: "education-coalition-connected-communities-roundtable",
@@ -544,6 +652,11 @@ const leadPrograms: Program[] = [
     },
     offeringType: "partner",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'grounded',
+      voiceSample: 'Recurring roundtable for coordinated support of students, families, and schools.',
+      palette: 'neutral',
+    },
   }),
   createProgram({
     id: "nonprofit-partner-network-convening-space",
@@ -572,6 +685,11 @@ const leadPrograms: Program[] = [
     },
     offeringType: "partner",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'grounded',
+      voiceSample: 'Facilitated convening space for nonprofits and coalitions building shared solutions.',
+      palette: 'neutral',
+    },
   }),
   createProgram({
     id: "voice-of-the-students-youth-leadership",
@@ -600,6 +718,12 @@ const leadPrograms: Program[] = [
     },
     offeringType: "partner",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'youth',
+      voiceSample: 'Your voice is already data. Here\'s what we do with it.',
+      palette: 'warm',
+      typographicTone: 'energetic',
+    },
   }),
   createProgram({
     id: "ready-together-community-preparedness-resilience",
@@ -633,6 +757,12 @@ const leadPrograms: Program[] = [
     },
     offeringType: "partner",
     contactCTA: defaultContactCTA,
+    brand: {
+      voice: 'grounded',
+      voiceSample: 'Ready isn\'t a feeling. It\'s a set of small, specific habits.',
+      palette: 'neutral',
+      typographicTone: 'structured',
+    },
   }),
 ];
 
@@ -668,6 +798,8 @@ export const pathways: Pathway[] = [
 
 export const allPrograms: Program[] = pathways.flatMap((pathway) => pathway.programs);
 
+export const programsWithDetailPages: Program[] = allPrograms.filter((program) => Boolean(program.detailPageHref));
+
 export const audienceFilters = Array.from(
   new Set(allPrograms.flatMap((program) => program.tags))
 ).sort((a, b) => a.localeCompare(b));
@@ -699,4 +831,16 @@ export function getFormatLabel(format: ProgramFormat): string {
 
 export function getProgramBySlug(slug: string): Program | undefined {
   return allPrograms.find((program) => program.slug === slug || program.id === slug);
+}
+
+export function getProgramAccent(program: Program): string {
+  if (program.brand.accent) return program.brand.accent;
+  const pathway = pathways.find((p) => p.id === program.pathway);
+  return pathway?.color ?? '#1A1A1A';
+}
+
+export function getProgramAccentSoft(program: Program): string {
+  if (program.brand.accentSoft) return program.brand.accentSoft;
+  const pathway = pathways.find((p) => p.id === program.pathway);
+  return pathway?.colorLight ?? 'rgba(0,0,0,0.06)';
 }

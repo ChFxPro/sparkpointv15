@@ -1,0 +1,269 @@
+.pw-shared {
+  --spark-ink: #1a1a1a;
+  --spark-soft: #5f6370;
+  --spark-cream: #fffdf9;
+  --spark-sand: #f4f0ea;
+  --spark-rose: #e03694;
+  --spark-gold: #fdb515;
+  --pw-font-display: 'Manrope', 'SF Pro Display', 'Avenir Next', 'Segoe UI',
+    'Helvetica Neue', Arial, sans-serif;
+  --pw-font-sans: 'Manrope', 'SF Pro Display', 'Avenir Next', 'Segoe UI',
+    'Helvetica Neue', Arial, sans-serif;
+  --pw-font-ui: 'Manrope', 'SF Pro Display', 'Avenir Next', 'Segoe UI',
+    'Helvetica Neue', Arial, sans-serif;
+  position: relative;
+  color: var(--spark-ink);
+  font-family: var(--pw-font-sans);
+  text-rendering: optimizeLegibility;
+  font-feature-settings:
+    'kern' 1,
+    'liga' 1,
+    'clig' 1,
+    'calt' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background:
+    radial-gradient(circle at top, rgba(253, 181, 21, 0.12), transparent 34%),
+    radial-gradient(circle at 82% 18%, rgba(224, 54, 148, 0.08), transparent 24%),
+    linear-gradient(180deg, #fffdf9 0%, #f4f0ea 100%);
+}
+
+/* Fixed grid overlay — scrolls anchored to the viewport, matches standalone body::before */
+.pw-shared::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+  background-size: 128px 128px;
+  mask-image: radial-gradient(circle at center, black, transparent 82%);
+  -webkit-mask-image: radial-gradient(circle at center, black, transparent 82%);
+  opacity: 0.06;
+}
+
+/* Typography — match standalone's text-wrap and body font inheritance */
+.pw-shared h1,
+.pw-shared h2,
+.pw-shared h3,
+.pw-shared h4,
+.pw-shared .font-display {
+  font-family: var(--pw-font-display);
+  text-wrap: balance;
+}
+
+.pw-shared p,
+.pw-shared li,
+.pw-shared dd,
+.pw-shared dt {
+  text-wrap: pretty;
+}
+
+.pw-shared button,
+.pw-shared a {
+  font-family: var(--pw-font-ui);
+}
+
+.pw-shared ::selection {
+  background: rgba(224, 54, 148, 0.2);
+  color: var(--spark-ink);
+}
+
+.pw-shared img {
+  display: block;
+  max-width: 100%;
+}
+
+.pw-shared .bg-spark-cream {
+  background-color: var(--spark-cream);
+}
+
+.pw-shared .bg-spark-ink {
+  background-color: var(--spark-ink);
+}
+
+.pw-shared .bg-spark-rose {
+  background-color: var(--spark-rose);
+}
+
+.pw-shared .text-spark-ink {
+  color: var(--spark-ink);
+}
+
+.pw-shared .text-spark-ink\/82 {
+  color: rgb(26 26 26 / 0.82);
+}
+
+.pw-shared .text-spark-soft {
+  color: var(--spark-soft);
+}
+
+.pw-shared .text-spark-rose {
+  color: var(--spark-rose);
+}
+
+.pw-shared .border-spark-ink\/8 {
+  border-color: rgb(26 26 26 / 0.08);
+}
+
+.pw-shared .border-spark-rose {
+  border-color: var(--spark-rose);
+}
+
+.pw-shared .border-spark-rose\/12 {
+  border-color: rgb(224 54 148 / 0.12);
+}
+
+.pw-shared .border-spark-gold\/70 {
+  border-color: rgb(253 181 21 / 0.7);
+}
+
+.pw-shared .divide-spark-ink\/10 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgb(26 26 26 / 0.1);
+}
+
+.pw-shared .ring-spark-rose\/12 {
+  --tw-ring-color: rgb(224 54 148 / 0.12);
+}
+
+.pw-shared .focus-visible\:outline-spark-rose:focus-visible {
+  outline-color: var(--spark-rose);
+}
+
+.pw-shared .spark-back-link {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 16px 36px rgba(9, 9, 11, 0.14);
+}
+
+.pw-shared .section-shell {
+  position: relative;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.pw-shared .panel {
+  border: 1px solid rgb(255 255 255 / 0.7);
+  background: rgb(255 255 255 / 0.78);
+  box-shadow: 0 18px 50px rgba(26, 26, 26, 0.08);
+  backdrop-filter: blur(14px);
+}
+
+.pw-shared .section-copy {
+  font-size: 1rem;
+  line-height: 1.75rem;
+  color: var(--spark-soft);
+}
+
+.pw-shared .spark-dark-surface {
+  background:
+    radial-gradient(circle at top left, rgba(253, 181, 21, 0.18), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(224, 54, 148, 0.18), transparent 24%),
+    linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  box-shadow:
+    0 30px 90px rgba(17, 17, 17, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.pw-shared .spark-divider {
+  background: linear-gradient(90deg, #e03694 0%, #fdb515 100%);
+}
+
+.pw-shared .spark-glass {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 16px 36px rgba(9, 9, 11, 0.14);
+}
+
+.pw-shared .spark-section-title {
+  font-family: Manrope, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.pw-shared .font-display {
+  font-family: Manrope, sans-serif;
+}
+
+.pw-shared .spark-kicker {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.pw-shared .spark-lead {
+  font-size: 1.02rem;
+  line-height: 1.75rem;
+}
+
+.pw-shared .spark-link-accent {
+  background: linear-gradient(90deg, #e03694 0%, #fdb515 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pw-shared .spark-logo {
+  width: 8.5rem;
+  max-width: 8.5rem;
+  flex: 0 0 auto;
+}
+
+.pw-shared .reveal {
+  opacity: 0;
+  transform: translateY(34px) scale(0.985);
+  transition:
+    opacity 850ms cubic-bezier(0.2, 0.65, 0.2, 1),
+    transform 850ms cubic-bezier(0.2, 0.65, 0.2, 1);
+}
+
+.pw-shared .reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@keyframes drift {
+  0% {
+    transform: scale(1.01) translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: scale(1.06) translate3d(-1%, -1.5%, 0);
+  }
+}
+
+@media (min-width: 640px) {
+  .pw-shared .section-shell {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+
+  .pw-shared .section-copy {
+    font-size: 1.06rem;
+    line-height: 2rem;
+  }
+
+  .pw-shared .spark-lead {
+    font-size: 1.08rem;
+    line-height: 2rem;
+  }
+
+  .pw-shared .spark-logo {
+    width: 9.5rem;
+    max-width: 9.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .pw-shared .section-shell {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
