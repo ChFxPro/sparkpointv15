@@ -28,8 +28,14 @@ const INTEREST_FORM_URL = "https://wkf.ms/4azGJiS";
 const COMMUNITY_CONNECTORS_VIDEO_ID = "xuDCRx2CwOU";
 const COMMUNITY_CONNECTORS_VIDEO_EMBED_URL = `https://www.youtube-nocookie.com/embed/${COMMUNITY_CONNECTORS_VIDEO_ID}`;
 const COMMUNITY_CONNECTORS_VIDEO_THUMBNAIL = `https://img.youtube.com/vi/${COMMUNITY_CONNECTORS_VIDEO_ID}/maxresdefault.jpg`;
+const COMMUNITY_CONNECTORS_CANONICAL_URL = "https://yoursparkpoint.org/community-connectors";
+const COMMUNITY_CONNECTORS_PREVIEW_IMAGE_URL = "https://yoursparkpoint.org/assets/commconn/imgs/comcon_endcard.jpg";
+const COMMUNITY_CONNECTORS_PREVIEW_ALT =
+  "Community Connectors of Transylvania County graphic with SparkPoint, FWRD Transylvania, and American Red Cross logos.";
+const COMMUNITY_CONNECTORS_SOCIAL_DESCRIPTION =
+  "Rooted in connection. Ready for what’s next. Learn about SparkPoint’s Community Connectors initiative in Transylvania County.";
 const META_DESCRIPTION =
-  "Community Connectors is a SparkPoint initiative helping trusted local leaders connect neighbors to information, resources, care, and preparedness across Transylvania County.";
+  "Community Connectors is a SparkPoint initiative supporting trusted local leaders who help neighbors find information, resources, care, and calm when it matters most.";
 
 const connectorActions = [
   {
@@ -120,7 +126,7 @@ export function CommunityConnectorsPage() {
     "@type": "ProgramMembership",
     name: "Community Connectors",
     description: META_DESCRIPTION,
-    url: "https://www.yoursparkpoint.org/community-connectors",
+    url: COMMUNITY_CONNECTORS_CANONICAL_URL,
     hostingOrganization: {
       "@type": "NGO",
       name: "SparkPoint",
@@ -152,6 +158,11 @@ export function CommunityConnectorsPage() {
         title="Community Connectors | SparkPoint"
         description={META_DESCRIPTION}
         path="/community-connectors"
+        canonicalUrlOverride={COMMUNITY_CONNECTORS_CANONICAL_URL}
+        image={COMMUNITY_CONNECTORS_PREVIEW_IMAGE_URL}
+        imageAlt={COMMUNITY_CONNECTORS_PREVIEW_ALT}
+        imageType="image/jpeg"
+        socialDescription={COMMUNITY_CONNECTORS_SOCIAL_DESCRIPTION}
         keywords={[
           "Community Connectors",
           "SparkPoint",

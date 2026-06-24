@@ -15,9 +15,12 @@ interface SEOHeadProps {
   description: string;
   path: string;
   canonicalPath?: string;
+  canonicalUrlOverride?: string;
   type?: PageType;
   image?: string;
   imageAlt?: string;
+  imageType?: string;
+  socialDescription?: string;
   noindex?: boolean;
   keywords?: string[];
   publishedTime?: string;
@@ -71,17 +74,21 @@ export function SEOHead({
   description,
   path,
   canonicalPath,
+  canonicalUrlOverride,
   type = 'website',
   image = DEFAULT_OG_IMAGE_PATH,
   imageAlt = DEFAULT_OG_IMAGE_ALT,
+  imageType,
+  socialDescription,
   noindex = false,
   keywords,
   publishedTime,
   modifiedTime,
   jsonLd,
 }: SEOHeadProps) {
-  const canonical = canonicalUrl(canonicalPath ?? path);
+  const canonical = canonicalUrlOverride ?? canonicalUrl(canonicalPath ?? path);
   const normalizedDescription = normalizeDescription(description);
+  const normalizedSocialDescription = normalizeDescription(socialDescription ?? description);
   const absoluteImage = toAbsoluteUrl(image);
   const robots = noindex ? 'noindex, nofollow' : 'index, follow';
   const ldJsonItems = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
@@ -115,15 +122,19 @@ export function SEOHead({
     setMeta('link[rel="canonical"]', 'href', canonical);
     setMeta('meta[property="og:type"]', 'content', type);
     setMeta('meta[property="og:title"]', 'content', title);
-    setMeta('meta[property="og:description"]', 'content', normalizedDescription);
+    setMeta('meta[property="og:description"]', 'content', normalizedSocialDescription);
     setMeta('meta[property="og:url"]', 'content', canonical);
     setMeta('meta[property="og:image"]', 'content', absoluteImage);
+    setMeta('meta[property="og:image:secure_url"]', 'content', absoluteImage);
+    if (imageType) {
+      setMeta('meta[property="og:image:type"]', 'content', imageType);
+    }
     setMeta('meta[property="og:image:alt"]', 'content', imageAlt);
     setMeta('meta[name="twitter:title"]', 'content', title);
-    setMeta('meta[name="twitter:description"]', 'content', normalizedDescription);
+    setMeta('meta[name="twitter:description"]', 'content', normalizedSocialDescription);
     setMeta('meta[name="twitter:image"]', 'content', absoluteImage);
     setMeta('meta[name="twitter:image:alt"]', 'content', imageAlt);
-  }, [absoluteImage, canonical, imageAlt, normalizedDescription, robots, title, type]);
+  }, [absoluteImage, canonical, imageAlt, imageType, normalizedDescription, normalizedSocialDescription, robots, title, type]);
 
   return (
     <Helmet prioritizeSeoTags>
@@ -140,14 +151,16 @@ export function SEOHead({
       <meta property="og:site_name" content={SITE_NAME} />
       <meta property="og:locale" content="en_US" />
       <meta property="og:title" content={title} />
-      <meta property="og:description" content={normalizedDescription} />
+      <meta property="og:description" content={normalizedSocialDescription} />
       <meta property="og:url" content={canonical} />
       <meta property="og:image" content={absoluteImage} />
+      <meta property="og:image:secure_url" content={absoluteImage} />
+      {imageType ? <meta property="og:image:type" content={imageType} /> : null}
       <meta property="og:image:alt" content={imageAlt} />
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={normalizedDescription} />
+      <meta name="twitter:description" content={normalizedSocialDescription} />
       <meta name="twitter:image" content={absoluteImage} />
       <meta name="twitter:image:alt" content={imageAlt} />
 
