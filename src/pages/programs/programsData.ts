@@ -626,6 +626,60 @@ const leadPrograms: Program[] = [
     },
   }),
   createProgram({
+    id: "community-connectors",
+    title: "Community Connectors",
+    pathway: "lead",
+    shortDescription:
+      "Trusted local people helping neighbors find information, resources, care, and preparedness across Transylvania County.",
+    longDescription:
+      "Community Connectors grew from SparkPoint's post-Helene listening work. The initiative strengthens the trusted people, relationships, and informal networks that already help neighbors navigate uncertainty, find resources, and stay connected before, during, and after hard moments.",
+    whyItExists:
+      "After Hurricane Helene, residents repeatedly named the trusted people who knew who to call, where to go, what was changing, and how to help neighbors take the next step.",
+    tags: ["Community", "Partners", "Preparedness", "Organizations"],
+    whoItsFor: [
+      "Community members others already turn to",
+      "Faith leaders and neighborhood hosts",
+      "Volunteers, business owners, educators, and local organizers",
+      "Partners strengthening disaster preparedness and community resilience",
+    ],
+    whatYoullExperience: [
+      "Connection with trusted people across Transylvania County",
+      "Listening circles and practical small-group conversations",
+      "Preparedness tools and resource-sharing relationships",
+      "Opportunities to identify local Connection Points",
+    ],
+    outcomes: [
+      "Stronger neighbor-to-neighbor support",
+      "Clearer paths to information, services, and community resources",
+      "More prepared and connected local communities",
+    ],
+    idealPartners: [
+      "FWRD Transylvania County",
+      "American Red Cross",
+      "Faith communities",
+      "Neighborhood groups",
+      "Local agencies and nonprofits",
+    ],
+    format: {
+      type: "collaborative",
+      cadence: "Ongoing gatherings and local connection-building",
+    },
+    offeringType: "community",
+    detailPageHref: "/community-connectors",
+    contactCTA: {
+      label: "Fill out the interest form",
+      href: "https://wkf.ms/4azGJiS",
+    },
+    brand: {
+      accent: "#174c36",
+      accentSoft: "rgba(95, 150, 148, 0.12)",
+      voice: 'coalition',
+      voiceSample: "Rooted in connection. Ready for what's next.",
+      palette: 'cool',
+      typographicTone: 'structured',
+    },
+  }),
+  createProgram({
     id: "education-coalition-connected-communities-roundtable",
     title: "Education Coalition / Connected Communities Roundtable",
     pathway: "lead",

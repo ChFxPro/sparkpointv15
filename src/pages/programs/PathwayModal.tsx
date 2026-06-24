@@ -78,6 +78,7 @@ function ProgramDetail({
   onBack: () => void;
 }) {
   const prefersReduced = useReducedMotion();
+  const contactIsExternal = /^https?:\/\//i.test(program.contactCTA.href);
 
   return (
     <motion.div
@@ -182,13 +183,25 @@ function ProgramDetail({
                 View full program page
               </Link>
             ) : null}
-            <Link
-              to={program.contactCTA.href}
-              className="sp-prog-cta-button sp-prog-cta-button-primary"
-              style={{ fontWeight: 500 }}
-            >
-              {program.contactCTA.label}
-            </Link>
+            {contactIsExternal ? (
+              <a
+                href={program.contactCTA.href}
+                className="sp-prog-cta-button sp-prog-cta-button-primary"
+                style={{ fontWeight: 500 }}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {program.contactCTA.label}
+              </a>
+            ) : (
+              <Link
+                to={program.contactCTA.href}
+                className="sp-prog-cta-button sp-prog-cta-button-primary"
+                style={{ fontWeight: 500 }}
+              >
+                {program.contactCTA.label}
+              </Link>
+            )}
           </div>
         </div>
       </div>

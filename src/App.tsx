@@ -30,6 +30,9 @@ const GetInvolvedPage = lazy(() =>
 const ProgramsPage = lazy(() => import('./pages/programs/ProgramsPage'));
 const PurposeWorkshopsPage = lazy(() => import('./pages/programs/PurposeWorkshopsPage'));
 const ProgramDetailRoute = lazy(() => import('./pages/programs/ProgramDetailRoute'));
+const CommunityConnectorsPage = lazy(() =>
+  import('./pages/CommunityConnectorsPage').then((module) => ({ default: module.CommunityConnectorsPage }))
+);
 const SponsorsPage = lazy(() =>
   import('./pages/SponsorsPage').then((module) => ({ default: module.SponsorsPage }))
 );
@@ -113,6 +116,8 @@ function AppContent() {
         <Route path="/programs" element={<ProgramsPage />} />
         <Route path="/programs/purpose-workshops" element={<PurposeWorkshopsPage />} />
         <Route path="/programs/:slug" element={<ProgramDetailRoute />} />
+        <Route path="/community-connectors" element={<CommunityConnectorsPage />} />
+        <Route path="/commconn" element={<Navigate to="/community-connectors" replace />} />
         <Route path="/sponsors" element={<SponsorsPage />} />
         <Route path="/resiliency-hub" element={<Navigate to="/resilience-hub" replace />} />
         <Route path="/resilience-hub" element={<ResilienceHubPage />} />

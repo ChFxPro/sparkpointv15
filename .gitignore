@@ -5,3 +5,6 @@ dist/
 
 # Supabase local temp
 supabase/.temp/
+
+# Large local video source files
+src/assets/commconn/movs/*.mp4

@@ -44,6 +44,7 @@ export function ProgramCard({ program, onQuickPeek }: ProgramCardProps) {
   const accentSoft = getProgramAccentSoft(program);
   const pathway = pathways.find((p) => p.id === program.pathway);
   const formatLabel = formatTypeLabels[program.format.type];
+  const detailHref = program.detailPageHref ?? `/programs/${program.slug}`;
 
   return (
     <motion.article
@@ -161,7 +162,7 @@ export function ProgramCard({ program, onQuickPeek }: ProgramCardProps) {
           </button>
 
           <Link
-            to={`/programs/${program.slug}`}
+            to={detailHref}
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[0.72rem] font-bold uppercase tracking-[0.08em] text-white transition-all hover:brightness-110 active:scale-95"
             style={{ backgroundColor: accent }}
             aria-label={`Enter ${program.title} program`}

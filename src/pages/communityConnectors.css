@@ -1,0 +1,1054 @@
+.commconn-page {
+  --cc-cream: #fbf4e6;
+  --cc-cream-light: #fffaf0;
+  --cc-evergreen: #174c36;
+  --cc-evergreen-dark: #0f3527;
+  --cc-teal: #5f9694;
+  --cc-teal-dark: #356f70;
+  --cc-moss: #8b8d4a;
+  --cc-gold: #e6a72a;
+  --cc-ink: #15231d;
+  --cc-muted: #53635b;
+  --cc-border: rgba(23, 76, 54, 0.16);
+  --cc-shadow: 0 24px 70px rgba(23, 76, 54, 0.16);
+  --cc-tight-shadow: 0 14px 34px rgba(23, 76, 54, 0.12);
+  background: var(--cc-cream);
+  color: var(--cc-ink);
+  font-family: Manrope, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overflow: hidden;
+  padding-top: 5rem;
+}
+
+.commconn-shell {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+.commconn-hero {
+  position: relative;
+  min-height: calc(100vh - 5rem);
+  display: flex;
+  align-items: center;
+  padding: clamp(2rem, 4.8vw, 5rem) 0;
+  background:
+    linear-gradient(90deg, rgba(23, 76, 54, 0.035) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(23, 76, 54, 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 10% 10%, rgba(230, 167, 42, 0.18), transparent 34rem),
+    linear-gradient(180deg, var(--cc-cream-light) 0%, var(--cc-cream) 100%);
+  background-size: 3.25rem 3.25rem, 3.25rem 3.25rem, auto, auto;
+  isolation: isolate;
+}
+
+.commconn-hero::after,
+.commconn-closing::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, transparent 0 44%, rgba(23, 76, 54, 0.06) 44.1% 44.35%, transparent 44.45% 100%),
+    linear-gradient(115deg, transparent 0 55%, rgba(230, 167, 42, 0.14) 55.1% 55.32%, transparent 55.42% 100%);
+  opacity: 0.8;
+}
+
+.commconn-hero-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(20rem, 0.95fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4.5rem);
+}
+
+.commconn-hero-copy {
+  min-width: 0;
+}
+
+.commconn-logo {
+  width: min(22rem, 86vw);
+  height: auto;
+  margin-bottom: clamp(1.2rem, 2.2vw, 1.85rem);
+}
+
+.commconn-hero h1,
+.commconn-section h2,
+.commconn-closing h2 {
+  margin: 0;
+  color: var(--cc-evergreen-dark);
+  font-weight: 850;
+  letter-spacing: 0;
+  line-height: 1.02;
+}
+
+.commconn-hero h1 {
+  max-width: 100%;
+  font-size: clamp(2.75rem, 5vw, 3.95rem);
+}
+
+.commconn-hero-lede {
+  max-width: 42rem;
+  margin: 1rem 0 0;
+  color: var(--cc-muted);
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  line-height: 1.7;
+}
+
+.commconn-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 1.4rem;
+}
+
+.commconn-button {
+  display: inline-flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border-radius: 999px;
+  padding: 0.95rem 1.35rem;
+  border: 1px solid transparent;
+  font-size: 0.83rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.commconn-button:hover {
+  transform: translateY(-1px);
+}
+
+.commconn-button:focus-visible,
+.commconn-back-link:focus-visible {
+  outline: 3px solid rgba(230, 167, 42, 0.75);
+  outline-offset: 4px;
+}
+
+.commconn-button-primary {
+  background: var(--cc-evergreen);
+  color: #fffdf7;
+  box-shadow: 0 14px 34px rgba(23, 76, 54, 0.22);
+}
+
+.commconn-button-primary:hover {
+  background: var(--cc-evergreen-dark);
+  box-shadow: 0 18px 42px rgba(23, 76, 54, 0.28);
+}
+
+.commconn-button-secondary {
+  background: rgba(255, 250, 240, 0.78);
+  border-color: var(--cc-border);
+  color: var(--cc-evergreen-dark);
+}
+
+.commconn-button-secondary:hover {
+  background: #fffdf7;
+}
+
+.commconn-button-gold {
+  background: var(--cc-gold);
+  color: #1b211b;
+  box-shadow: 0 14px 34px rgba(80, 67, 25, 0.18);
+}
+
+.commconn-button-gold:hover {
+  background: #f0b842;
+  box-shadow: 0 18px 42px rgba(80, 67, 25, 0.24);
+}
+
+.commconn-cta-actions p,
+.commconn-closing p {
+  color: var(--cc-muted);
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+
+.commconn-cta-actions p,
+.commconn-closing p {
+  color: var(--cc-teal-dark);
+}
+
+.commconn-hero-photo,
+.commconn-story-photo {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(23, 76, 54, 0.12);
+  background: #fffaf0;
+  box-shadow: var(--cc-shadow);
+}
+
+.commconn-hero-visual {
+  position: relative;
+  min-width: 0;
+}
+
+.commconn-hero-photo {
+  aspect-ratio: 4 / 5;
+  border-radius: 1.4rem;
+  transform: rotate(1deg);
+}
+
+.commconn-hero-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent 52%, rgba(15, 53, 39, 0.18)),
+    radial-gradient(circle at 16% 8%, rgba(255, 250, 240, 0.16), transparent 18rem);
+}
+
+.commconn-signal-panel {
+  position: absolute;
+  right: clamp(-1rem, -2vw, -0.5rem);
+  bottom: clamp(1rem, 3vw, 2rem);
+  display: grid;
+  gap: 0.35rem;
+  width: min(17rem, 82%);
+  border: 1px solid rgba(255, 250, 240, 0.7);
+  border-radius: 0.9rem;
+  padding: 0.75rem;
+  background: rgba(255, 250, 240, 0.86);
+  box-shadow: 0 18px 44px rgba(15, 53, 39, 0.2);
+  backdrop-filter: blur(14px);
+}
+
+.commconn-signal-panel div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  align-items: baseline;
+  border-bottom: 1px solid rgba(23, 76, 54, 0.1);
+  padding: 0.3rem 0.15rem 0.48rem;
+}
+
+.commconn-signal-panel div:last-child {
+  border-bottom: 0;
+  padding-bottom: 0.25rem;
+}
+
+.commconn-signal-panel strong {
+  color: var(--cc-evergreen-dark);
+  font-size: 0.92rem;
+  line-height: 1.1;
+}
+
+.commconn-signal-panel span {
+  color: var(--cc-teal-dark);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.commconn-page-nav {
+  position: sticky;
+  top: 5rem;
+  z-index: 25;
+  border-top: 1px solid rgba(23, 76, 54, 0.08);
+  border-bottom: 1px solid rgba(23, 76, 54, 0.12);
+  background: rgba(255, 250, 240, 0.82);
+  backdrop-filter: blur(18px);
+}
+
+.commconn-page-nav-inner {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+  padding: 0.65rem 0;
+}
+
+.commconn-page-nav a {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 0.52rem 0.85rem;
+  color: var(--cc-evergreen-dark);
+  font-size: 0.75rem;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.commconn-page-nav a:hover,
+.commconn-page-nav a:focus-visible {
+  background: var(--cc-evergreen);
+  color: #fffaf0;
+  outline: 0;
+}
+
+.commconn-story-photo {
+  aspect-ratio: 5 / 4;
+  border-radius: 1rem;
+}
+
+.commconn-hero-photo img,
+.commconn-story-photo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.commconn-section {
+  position: relative;
+  padding: clamp(4rem, 8vw, 7rem) 0;
+}
+
+.commconn-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(1120px, calc(100% - 2rem));
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(23, 76, 54, 0.18), transparent);
+  transform: translateX(-50%);
+}
+
+.commconn-hero + main .commconn-section:first-of-type::before,
+.commconn-vision::before,
+.commconn-closing::before {
+  display: none;
+}
+
+.commconn-section h2,
+.commconn-closing h2 {
+  font-size: clamp(2rem, 4.6vw, 4.2rem);
+}
+
+.commconn-section p {
+  color: var(--cc-muted);
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  line-height: 1.78;
+}
+
+.commconn-two-col,
+.commconn-vision-grid,
+.commconn-cta-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.82fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+
+.commconn-emphasis {
+  color: var(--cc-evergreen-dark) !important;
+  font-size: clamp(1.25rem, 2vw, 1.55rem) !important;
+  font-weight: 800;
+}
+
+.commconn-what {
+  background:
+    linear-gradient(180deg, rgba(255, 250, 240, 0.7), rgba(244, 234, 211, 0.72)),
+    var(--cc-cream);
+}
+
+.commconn-section-heading {
+  max-width: 46rem;
+  margin-bottom: 2rem;
+}
+
+.commconn-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.commconn-card {
+  position: relative;
+  min-height: 16rem;
+  border: 1px solid var(--cc-border);
+  border-radius: 0.5rem;
+  padding: 1.35rem;
+  background: rgba(255, 250, 240, 0.78);
+  box-shadow: 0 10px 30px rgba(23, 76, 54, 0.07);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.commconn-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(53, 111, 112, 0.34);
+  box-shadow: var(--cc-tight-shadow);
+}
+
+.commconn-card-index {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: rgba(23, 76, 54, 0.16);
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.commconn-card-icon {
+  width: 3rem;
+  height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(95, 150, 148, 0.12);
+}
+
+.commconn-card svg {
+  color: var(--cc-teal-dark);
+}
+
+.commconn-card h3 {
+  margin: 1.1rem 0 0.45rem;
+  color: var(--cc-evergreen-dark);
+  font-size: 1.13rem;
+  font-weight: 850;
+  line-height: 1.24;
+}
+
+.commconn-card p {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.62;
+}
+
+.commconn-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  max-width: 52rem;
+  margin-top: 1.25rem;
+  border-left: 5px solid var(--cc-gold);
+  border-radius: 0.5rem;
+  padding: 1.15rem 1.2rem;
+  background: #fffaf0;
+}
+
+.commconn-note svg {
+  flex: 0 0 auto;
+  margin-top: 0.25rem;
+  color: var(--cc-moss);
+}
+
+.commconn-note p {
+  margin: 0;
+  color: var(--cc-evergreen-dark);
+  font-weight: 700;
+}
+
+.commconn-vision {
+  background: var(--cc-evergreen-dark);
+}
+
+.commconn-vision h2,
+.commconn-vision p {
+  color: #fffaf0;
+}
+
+.commconn-vision p {
+  color: rgba(255, 250, 240, 0.78);
+}
+
+.commconn-vision blockquote {
+  margin: 0;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 250, 240, 0.18);
+  padding: clamp(1.5rem, 4vw, 2.4rem);
+  background:
+    linear-gradient(135deg, rgba(95, 150, 148, 0.28), rgba(230, 167, 42, 0.13)),
+    rgba(255, 250, 240, 0.05);
+  color: #fffaf0;
+  font-size: clamp(1.35rem, 2.5vw, 2rem);
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.commconn-partners {
+  background: #fffaf0;
+}
+
+.commconn-video-section {
+  background:
+    linear-gradient(180deg, rgba(255, 250, 240, 0.88), rgba(251, 244, 230, 0.94)),
+    var(--cc-cream);
+}
+
+.commconn-video-intro {
+  max-width: 48rem;
+  margin-bottom: clamp(1.4rem, 3vw, 2rem);
+}
+
+.commconn-video-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.75rem;
+  color: var(--cc-teal-dark) !important;
+  font-size: 0.76rem !important;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  line-height: 1.4 !important;
+  text-transform: uppercase;
+}
+
+.commconn-video-eyebrow::before {
+  content: "";
+  width: 2rem;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--cc-gold);
+}
+
+.commconn-video-intro p:not(.commconn-video-eyebrow) {
+  max-width: 45rem;
+  margin: 1rem 0 0;
+}
+
+.commconn-video-card {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(23, 76, 54, 0.16);
+  border-radius: 1rem;
+  background: var(--cc-evergreen-dark);
+  box-shadow: var(--cc-shadow);
+}
+
+.commconn-video-card iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border: 0;
+  background: var(--cc-evergreen-dark);
+}
+
+.commconn-video-summary {
+  max-width: 52rem;
+  margin: 1rem 0 0;
+  border-left: 4px solid var(--cc-gold);
+  padding-left: 1rem;
+}
+
+.commconn-video-summary p {
+  margin: 0;
+  color: var(--cc-evergreen-dark);
+  font-weight: 750;
+}
+
+.commconn-video-cta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.25rem;
+  align-items: center;
+  margin-top: clamp(1.5rem, 3vw, 2rem);
+  border: 1px solid rgba(23, 76, 54, 0.14);
+  border-radius: 0.75rem;
+  padding: clamp(1.15rem, 3vw, 1.6rem);
+  background: rgba(255, 250, 240, 0.82);
+  box-shadow: 0 12px 30px rgba(23, 76, 54, 0.08);
+}
+
+.commconn-video-cta h3 {
+  margin: 0;
+  color: var(--cc-evergreen-dark);
+  font-size: clamp(1.25rem, 2vw, 1.7rem);
+  font-weight: 850;
+  line-height: 1.2;
+}
+
+.commconn-video-cta p {
+  max-width: 43rem;
+  margin: 0.55rem 0 0;
+  color: var(--cc-muted);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.commconn-video-cta .commconn-button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.commconn-video-url {
+  color: var(--cc-teal-dark) !important;
+  font-size: 0.9rem !important;
+  font-weight: 800;
+}
+
+.commconn-article-section {
+  background:
+    linear-gradient(180deg, rgba(23, 76, 54, 0.05), transparent 8rem),
+    repeating-linear-gradient(90deg, rgba(23, 76, 54, 0.045) 0 1px, transparent 1px 18rem),
+    #f8f0df;
+}
+
+.commconn-newspaper {
+  border-top: 5px double rgba(23, 76, 54, 0.78);
+  border-bottom: 5px double rgba(23, 76, 54, 0.72);
+  padding: clamp(1rem, 4vw, 2.5rem);
+  background:
+    linear-gradient(180deg, rgba(255, 253, 247, 0.96), rgba(255, 250, 240, 0.98)),
+    #fffdf7;
+  box-shadow: 0 30px 80px rgba(23, 76, 54, 0.13);
+}
+
+.commconn-paper-masthead {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  border-top: 1px solid rgba(23, 76, 54, 0.22);
+  border-bottom: 1px solid rgba(23, 76, 54, 0.22);
+  padding: 0.7rem 0;
+  color: var(--cc-evergreen-dark);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.commconn-paper-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(13rem, 0.28fr);
+  gap: clamp(1.2rem, 3vw, 2rem);
+  align-items: end;
+  border-bottom: 1px solid rgba(23, 76, 54, 0.22);
+  padding: clamp(1.25rem, 3vw, 2rem) 0;
+}
+
+.commconn-paper-kicker {
+  margin: 0 0 0.5rem;
+  color: var(--cc-teal-dark) !important;
+  font-size: 0.76rem !important;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  line-height: 1.4 !important;
+  text-transform: uppercase;
+}
+
+.commconn-paper-header h2 {
+  max-width: 12ch;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3.4rem, 8vw, 7rem);
+  font-weight: 800;
+  line-height: 0.86;
+}
+
+.commconn-paper-dek {
+  max-width: 54rem;
+  margin: 1rem 0 0;
+  color: var(--cc-evergreen-dark) !important;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.22rem, 2vw, 1.55rem) !important;
+  font-weight: 700;
+  line-height: 1.42 !important;
+}
+
+.commconn-paper-meta {
+  display: grid;
+  gap: 0.55rem;
+  justify-items: start;
+  border-left: 4px solid var(--cc-gold);
+  padding-left: 1rem;
+}
+
+.commconn-paper-meta span {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: var(--cc-muted);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.commconn-paper-meta svg {
+  color: var(--cc-teal-dark);
+}
+
+.commconn-paper-lead-image,
+.commconn-paper-inline-image {
+  margin: 0;
+}
+
+.commconn-paper-lead-image {
+  padding: clamp(1rem, 3vw, 1.5rem) 0 1rem;
+}
+
+.commconn-paper-lead-image img,
+.commconn-paper-inline-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(23, 76, 54, 0.24);
+  filter: saturate(0.92) contrast(1.04);
+}
+
+.commconn-paper-lead-image img {
+  aspect-ratio: 16 / 8.4;
+  object-fit: cover;
+}
+
+.commconn-paper-lead-image figcaption,
+.commconn-paper-inline-image figcaption {
+  margin-top: 0.45rem;
+  color: var(--cc-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.48;
+}
+
+.commconn-paper-story {
+  columns: 2 18rem;
+  column-gap: clamp(2rem, 4vw, 3rem);
+  padding-top: 0.5rem;
+  color: var(--cc-ink);
+}
+
+.commconn-paper-story p {
+  margin: 0 0 1rem;
+  color: #26352e;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.06rem;
+  line-height: 1.72;
+}
+
+.commconn-paper-story > p:first-child::first-letter {
+  float: left;
+  padding: 0.12rem 0.5rem 0 0;
+  color: var(--cc-evergreen-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 4.9rem;
+  font-weight: 800;
+  line-height: 0.78;
+}
+
+.commconn-paper-inline-image,
+.commconn-paper-pullquote {
+  break-inside: avoid;
+  margin: 0.4rem 0 1.2rem;
+}
+
+.commconn-paper-inline-image img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.commconn-paper-pullquote {
+  border-top: 3px double rgba(23, 76, 54, 0.48);
+  border-bottom: 3px double rgba(23, 76, 54, 0.48);
+  padding: 1rem 0;
+  color: var(--cc-evergreen-dark);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.45rem, 3vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.18;
+}
+
+.commconn-logo-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin-top: 2rem;
+}
+
+.commconn-logo-tile {
+  display: flex;
+  min-height: 9rem;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  border: 1px solid rgba(23, 76, 54, 0.11);
+  border-radius: 0.75rem;
+  padding: 1.35rem;
+  background: var(--cc-cream-light);
+  box-shadow: 0 10px 24px rgba(23, 76, 54, 0.06);
+  text-decoration: none;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.commconn-logo-tile:hover {
+  transform: translateY(-3px);
+  border-color: rgba(53, 111, 112, 0.34);
+  box-shadow: var(--cc-tight-shadow);
+}
+
+.commconn-logo-tile:focus-visible {
+  outline: 3px solid rgba(230, 167, 42, 0.75);
+  outline-offset: 4px;
+  border-color: rgba(53, 111, 112, 0.38);
+}
+
+.commconn-logo-tile img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.commconn-partner-logo-spark {
+  max-height: 4.8rem;
+}
+
+.commconn-partner-logo-fwrd {
+  max-height: 7rem;
+}
+
+.commconn-partner-logo-redcross {
+  max-height: 6.2rem;
+}
+
+.commconn-resource-callout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(1rem, 3vw, 2rem);
+  align-items: center;
+  margin-top: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid rgba(23, 76, 54, 0.14);
+  border-left: 5px solid var(--cc-gold);
+  border-radius: 0.75rem;
+  padding: clamp(1.25rem, 3.4vw, 2rem);
+  background:
+    linear-gradient(135deg, rgba(95, 150, 148, 0.1), rgba(230, 167, 42, 0.08)),
+    var(--cc-cream-light);
+  box-shadow: 0 14px 36px rgba(23, 76, 54, 0.08);
+}
+
+.commconn-resource-callout h3 {
+  margin: 0;
+  color: var(--cc-evergreen-dark);
+  font-size: clamp(1.35rem, 2.35vw, 2rem);
+  font-weight: 850;
+  line-height: 1.16;
+}
+
+.commconn-resource-callout p {
+  max-width: 48rem;
+  margin: 0.7rem 0 0;
+  color: var(--cc-muted);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.commconn-resource-closer {
+  color: var(--cc-teal-dark) !important;
+  font-weight: 750;
+}
+
+.commconn-resource-callout .commconn-button {
+  white-space: nowrap;
+}
+
+.commconn-cta {
+  background:
+    radial-gradient(circle at 88% 12%, rgba(95, 150, 148, 0.18), transparent 20rem),
+    var(--cc-cream);
+}
+
+.commconn-cta-panel {
+  border-radius: 1rem;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  border: 1px solid rgba(255, 250, 240, 0.14);
+  background: var(--cc-evergreen);
+  box-shadow: var(--cc-shadow);
+}
+
+.commconn-cta-panel h2,
+.commconn-cta-panel p {
+  color: #fffaf0;
+}
+
+.commconn-cta-panel p {
+  color: rgba(255, 250, 240, 0.82);
+}
+
+.commconn-cta-actions {
+  display: grid;
+  justify-items: start;
+  gap: 0.9rem;
+}
+
+.commconn-cta-actions p {
+  margin: 0;
+  color: #ffe1a0;
+}
+
+.commconn-closing {
+  position: relative;
+  min-height: 78vh;
+  display: flex;
+  align-items: center;
+  padding: clamp(4rem, 9vw, 7rem) 0;
+  background:
+    linear-gradient(115deg, rgba(23, 76, 54, 0.05) 0 14%, transparent 14.2% 100%),
+    linear-gradient(180deg, #fffaf0 0%, var(--cc-cream) 100%);
+  isolation: isolate;
+}
+
+.commconn-closing-inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.commconn-brandmark {
+  width: clamp(6rem, 16vw, 9rem);
+  height: auto;
+  margin-bottom: 1.3rem;
+}
+
+.commconn-closing h2 {
+  max-width: 12ch;
+}
+
+.commconn-closing .commconn-button {
+  margin-top: 1.65rem;
+}
+
+.commconn-back-link {
+  margin-top: 1rem;
+  color: var(--cc-evergreen-dark);
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 900px) {
+  .commconn-hero-grid,
+  .commconn-two-col,
+  .commconn-vision-grid,
+  .commconn-cta-panel,
+  .commconn-paper-header,
+  .commconn-video-cta,
+  .commconn-resource-callout {
+    grid-template-columns: 1fr;
+  }
+
+  .commconn-hero {
+    align-items: flex-start;
+  }
+
+  .commconn-hero h1 {
+    max-width: 12ch;
+  }
+
+  .commconn-hero-photo {
+    aspect-ratio: 16 / 11;
+    transform: none;
+  }
+
+  .commconn-signal-panel {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    margin-top: -1.25rem;
+  }
+
+  .commconn-paper-header h2 {
+    max-width: 14ch;
+  }
+
+  .commconn-paper-meta {
+    border-left: 0;
+    border-top: 1px solid rgba(23, 76, 54, 0.18);
+    padding: 0.9rem 0 0;
+  }
+
+  .commconn-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .commconn-logo-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .commconn-page {
+    padding-top: 5rem;
+  }
+
+  .commconn-shell {
+    width: min(100% - 1.25rem, 1120px);
+  }
+
+  .commconn-hero {
+    min-height: auto;
+    padding-top: 2.5rem;
+  }
+
+  .commconn-logo {
+    width: min(19rem, 90vw);
+  }
+
+  .commconn-actions,
+  .commconn-cta-actions {
+    align-items: stretch;
+  }
+
+  .commconn-video-cta {
+    align-items: stretch;
+  }
+
+  .commconn-button {
+    width: 100%;
+  }
+
+  .commconn-page-nav {
+    top: 5rem;
+  }
+
+  .commconn-page-nav-inner {
+    justify-content: flex-start;
+  }
+
+  .commconn-signal-panel div {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+
+  .commconn-signal-panel span {
+    text-align: left;
+  }
+
+  .commconn-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .commconn-card {
+    min-height: 0;
+  }
+
+  .commconn-paper-masthead {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .commconn-paper-story {
+    columns: 1;
+  }
+
+  .commconn-logo-tile {
+    min-height: 7rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .commconn-button {
+    transition: none;
+  }
+
+  .commconn-button:hover {
+    transform: none;
+  }
+}
