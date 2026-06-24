@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { useEffect } from 'react';
 import { canonicalUrl } from '../lib/siteOrigin';
 
 const SITE_NAME = 'SparkPoint';
@@ -84,6 +85,45 @@ export function SEOHead({
   const absoluteImage = toAbsoluteUrl(image);
   const robots = noindex ? 'noindex, nofollow' : 'index, follow';
   const ldJsonItems = Array.isArray(jsonLd) ? jsonLd : jsonLd ? [jsonLd] : [];
+
+  useEffect(() => {
+    document.title = title;
+
+    const setMeta = (selector: string, attribute: 'content' | 'href', value: string) => {
+      let element = document.head.querySelector(selector) as HTMLMetaElement | HTMLLinkElement | null;
+
+      if (!element) {
+        if (selector.startsWith('link')) {
+          element = document.createElement('link');
+          element.setAttribute('rel', 'canonical');
+        } else {
+          element = document.createElement('meta');
+          const nameMatch = selector.match(/name="([^"]+)"/);
+          const propertyMatch = selector.match(/property="([^"]+)"/);
+          if (nameMatch) element.setAttribute('name', nameMatch[1]);
+          if (propertyMatch) element.setAttribute('property', propertyMatch[1]);
+        }
+
+        document.head.appendChild(element);
+      }
+
+      element.setAttribute(attribute, value);
+    };
+
+    setMeta('meta[name="description"]', 'content', normalizedDescription);
+    setMeta('meta[name="robots"]', 'content', robots);
+    setMeta('link[rel="canonical"]', 'href', canonical);
+    setMeta('meta[property="og:type"]', 'content', type);
+    setMeta('meta[property="og:title"]', 'content', title);
+    setMeta('meta[property="og:description"]', 'content', normalizedDescription);
+    setMeta('meta[property="og:url"]', 'content', canonical);
+    setMeta('meta[property="og:image"]', 'content', absoluteImage);
+    setMeta('meta[property="og:image:alt"]', 'content', imageAlt);
+    setMeta('meta[name="twitter:title"]', 'content', title);
+    setMeta('meta[name="twitter:description"]', 'content', normalizedDescription);
+    setMeta('meta[name="twitter:image"]', 'content', absoluteImage);
+    setMeta('meta[name="twitter:image:alt"]', 'content', imageAlt);
+  }, [absoluteImage, canonical, imageAlt, normalizedDescription, robots, title, type]);
 
   return (
     <Helmet prioritizeSeoTags>
