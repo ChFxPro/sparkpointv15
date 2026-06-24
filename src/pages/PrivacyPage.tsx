@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'motion/react';
-import { ArrowLeft, Mail, Phone, Shield, Lock, EyeOff } from 'lucide-react';
+import { ArrowLeft, Mail, Shield, Lock, EyeOff } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Link } from 'react-router';
 import { CONTACT_INFO } from '../data/contactInfo';
@@ -100,10 +100,6 @@ export function PrivacyPage() {
               <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-3 px-6 py-4 bg-[#FDFDFD] border border-gray-200 rounded-xl hover:border-[#E03694] hover:text-[#E03694] transition-all group">
                 <Mail size={20} className="text-gray-400 group-hover:text-[#E03694] transition-colors" />
                 <span className="font-medium">{CONTACT_INFO.email}</span>
-              </a>
-              <a href={CONTACT_INFO.phoneHref} className="flex items-center gap-3 px-6 py-4 bg-[#FDFDFD] border border-gray-200 rounded-xl hover:border-[#E03694] hover:text-[#E03694] transition-all group">
-                <Phone size={20} className="text-gray-400 group-hover:text-[#E03694] transition-colors" />
-                <span className="font-medium">{CONTACT_INFO.phoneDisplay}</span>
               </a>
             </div>
 
