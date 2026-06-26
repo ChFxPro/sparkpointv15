@@ -56,6 +56,8 @@ const PrivacyPage = lazy(() =>
 );
 const CommunityChampionsArticle = lazy(() => import('./pages/CommunityChampionsArticle'));
 const HeleneOneYearArticle = lazy(() => import('./pages/HeleneOneYearArticle'));
+const HEALTHCARE_STORY_FORM_URL =
+  'https://sparkconnection.org/wp-content/plugins/narrafirma/webapp/survey.html#project=Rural%20Health&survey=Rural%20Health%20Care%20Access';
 
 // GitHub Pages SPA redirect handler
 // This restores the original path after the 404.html redirect
@@ -132,6 +134,20 @@ function AppContent() {
         <Route path="/stories/community-champions/helene-anniversary" element={<HeleneOneYearArticle />} />
         <Route path="/trust" element={<TrustPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route
+          path="/healthcare-story"
+          element={
+            <ExternalRedirect
+              to={HEALTHCARE_STORY_FORM_URL}
+              title="Healthcare Story Form | SparkPoint"
+              description="Share your healthcare experience through SparkPoint’s Rural Health Care Access story-collection form."
+              path="/healthcare-story"
+              heading="Opening the healthcare story form…"
+              body="You’re being sent to SparkPoint’s secure story-collection form through SparkConnection/NarraFirma."
+              linkText="Continue to the healthcare story form"
+            />
+          }
+        />
         <Route path="/donations" element={<ExternalRedirect to="https://cowbell-primrose-tet2.squarespace.com/donations" />} />
         <Route path="/newsletter" element={<ExternalRedirect to="https://cowbell-primrose-tet2.squarespace.com/newsletter" />} />
         <Route path="*" element={<HomePage />} />
