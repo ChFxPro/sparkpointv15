@@ -60,6 +60,15 @@
   <url>
     <loc>__SITE_ORIGIN__/news-media</loc>
   </url>
+  <!-- PRESS_RELEASE_URLS:START -->
+  <url>
+    <loc>__SITE_ORIGIN__/press</loc>
+  </url>
+  <url>
+    <loc>__SITE_ORIGIN__/press/common-ground-resilience-roast</loc>
+    <lastmod>2026-07-17</lastmod>
+  </url>
+  <!-- PRESS_RELEASE_URLS:END -->
   <url>
     <loc>__SITE_ORIGIN__/sponsors</loc>
   </url>

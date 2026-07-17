@@ -1,0 +1,38 @@
+@media print {
+  body.press-release-view {
+    background: #ffffff !important;
+  }
+
+  body.press-release-view #main-content + footer,
+  body.press-release-view #root > div > div > header,
+  body.press-release-view .press-no-print {
+    display: none !important;
+  }
+
+  body.press-release-view .press-release-page,
+  body.press-release-view .press-release-page article,
+  body.press-release-view .press-release-page section,
+  body.press-release-view .press-release-page header {
+    background: #ffffff !important;
+    color: #111111 !important;
+  }
+
+  body.press-release-view .press-release-page article > header {
+    padding-top: 1.5rem !important;
+  }
+
+  body.press-release-view .press-release-page img {
+    max-height: 4.5in !important;
+  }
+
+  body.press-release-view .press-release-page a {
+    color: #111111 !important;
+    text-decoration: none !important;
+  }
+
+  body.press-release-view .press-release-page blockquote,
+  body.press-release-view .press-release-page figure,
+  body.press-release-view .press-release-page aside {
+    break-inside: avoid;
+  }
+}

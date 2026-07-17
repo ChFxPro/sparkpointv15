@@ -1,0 +1,169 @@
+{
+  "portal": {
+    "title": "Press & Media",
+    "introduction": "Find official SparkPoint press releases, publication-ready media assets, organizational background, and media contact information.",
+    "boilerplate": "SparkPoint is a nonprofit organization serving Transylvania County by strengthening the relationships that help communities thrive. Through storytelling, collaboration, community engagement, and innovative programs, SparkPoint connects people with resources, supports partnerships across sectors, and creates opportunities for neighbors and organizations to work together toward a stronger, more resilient future."
+  },
+  "releases": [
+    {
+      "title": "Third Annual Coffee Collaboration Supports SparkPoint’s New Resilience Hub",
+      "slug": "common-ground-resilience-roast",
+      "subtitle": "Community invited to celebrate the release of Common Ground Resilience Roast on July 31 at Pisgah Coffee Roasters",
+      "summary": "SparkPoint and Pisgah Coffee Roasters will release Common Ground Resilience Roast, a limited-edition collaboration supporting the continued development of SparkPoint’s new Resilience Hub.",
+      "datePublished": "2026-07-17",
+      "location": "BREVARD, N.C.",
+      "category": "Community Partnership",
+      "featured": true,
+      "showOnMediaPage": true,
+      "releaseStatus": "FOR IMMEDIATE RELEASE",
+      "heroImageId": "common-ground-package",
+      "socialImageId": "common-ground-promo",
+      "mediaKitFile": "Common-Ground-Resilience-Roast-Media-Kit.zip",
+      "mediaContact": {
+        "name": "Jeff Bannister",
+        "title": "Marketing & Communications Manager",
+        "organization": "SparkPoint",
+        "email": "info@yoursparkpoint.org"
+      },
+      "body": [
+        {
+          "type": "paragraph",
+          "text": "SparkPoint and Pisgah Coffee Roasters are inviting the community to celebrate the release of Common Ground Resilience Roast, the third annual coffee collaboration between the two organizations. This year’s limited-edition roast will help support the continued development of SparkPoint’s new Resilience Hub, a space designed to strengthen community connections and collaboration across Transylvania County."
+        },
+        {
+          "type": "paragraph",
+          "text": "The community is invited to join SparkPoint and Pisgah Coffee Roasters for the official coffee release on Friday, July 31, from 5:00–7:00 p.m. at Pisgah Coffee Roasters, 6283 Asheville Highway in Pisgah Forest. Guests will have the opportunity to sample the new roast, purchase bags of Common Ground Resilience Roast, learn more about the vision for the Resilience Hub, and connect with neighbors, partners, and supporters."
+        },
+        {
+          "type": "paragraph",
+          "text": "This marks the third annual community-inspired coffee release from SparkPoint and Pisgah Coffee Roasters. The partnership began in 2023 and returned in 2024. After a pause in 2025, when Hurricane Helene response and recovery called both organizations to other priorities, the collaboration returns with a new focus on investing in a shared vision for the future. Previous releases honored local leaders who have made a lasting impact on Transylvania County, including Pipin’ Hot Blend, celebrating Dr. Ora Wells, and The Mayor’s Daily Grind, honoring Brevard Mayor Maureen Copelof."
+        },
+        {
+          "type": "paragraph",
+          "text": "Funds raised through Common Ground Resilience Roast will help complete SparkPoint’s new Resilience Hub—a welcoming community resource center designed to connect people with services, inspire volunteerism, convene organizations around shared challenges, and create opportunities for collaboration and innovation throughout the region."
+        },
+        {
+          "type": "quote",
+          "quoteId": "jeff-bannister"
+        },
+        {
+          "type": "paragraph",
+          "text": "The Resilience Hub represents SparkPoint’s next chapter as a connector and convener for Transylvania County. Building on lessons learned through community storytelling, disaster recovery, and collaborative initiatives, the Hub will provide a permanent home for programs that strengthen the county’s social infrastructure—helping neighbors, nonprofits, healthcare providers, businesses, and local governments work together to address community challenges and seize new opportunities."
+        },
+        {
+          "type": "paragraph",
+          "text": "Common Ground Resilience Roast will be available in limited quantities while supplies last."
+        }
+      ],
+      "quotes": [
+        {
+          "id": "jeff-bannister",
+          "text": "SparkPoint is really in the business of creating opportunities for people to come together. Sometimes that’s around a community issue, sometimes it’s around a story, and sometimes it’s over a cup of coffee. We believe communities become stronger when it’s easier for people to know one another, trust one another, and work together. The Resilience Hub is being designed around that idea—a place where people can find resources, discover ways to get involved, and where organizations can build stronger partnerships together. We’re grateful to Pisgah Coffee Roasters for helping us bring that vision to life through the Common Ground Resilience Roast. It’s a reminder that something as simple as sharing a cup of coffee can help build the relationships that make a community more resilient.",
+          "attribution": "Jeff Bannister",
+          "role": "Marketing & Communications Manager, SparkPoint"
+        }
+      ],
+      "event": {
+        "title": "Community Coffee Release Celebration",
+        "date": "2026-07-31",
+        "dateLabel": "Friday, July 31, 2026",
+        "timeLabel": "5:00–7:00 p.m.",
+        "venue": "Pisgah Coffee Roasters",
+        "streetAddress": "6283 Asheville Highway",
+        "locality": "Pisgah Forest",
+        "region": "NC",
+        "postalCode": "28768",
+        "url": "https://www.facebook.com/share/1BaHvsc1p3/"
+      },
+      "images": [
+        {
+          "id": "common-ground-package",
+          "src": "src/assets/press/pisgah_coffee_release/common_ground_12oz.webp",
+          "title": "Common Ground Resilience Roast",
+          "caption": "Common Ground Resilience Roast is the third annual coffee collaboration between SparkPoint and Pisgah Coffee Roasters. Proceeds from the limited-edition release support the continued development of SparkPoint’s new Resilience Hub.",
+          "alt": "Common Ground Resilience Roast package artwork featuring SparkPoint’s planned Resilience Hub at sunset.",
+          "usageNote": "Provided for editorial coverage of the Common Ground Resilience Roast release.",
+          "fileType": "WebP",
+          "width": 945,
+          "height": 1245
+        },
+        {
+          "id": "common-ground-promo",
+          "src": "src/assets/press/pisgah_coffee_release/PCR_coffee_package_promo.webp",
+          "title": "Common Ground release announcement",
+          "caption": "Promotional announcement for the SparkPoint and Pisgah Coffee Roasters Common Ground Resilience Roast, showing the coffee package and the July 31 release celebration details.",
+          "alt": "Common Ground Resilience Roast promotional graphic with coffee beans, both partner logos, the package, and July 31 release details.",
+          "usageNote": "Partner-created promotional graphic supplied for editorial and social coverage of the release.",
+          "fileType": "WebP",
+          "width": 4648,
+          "height": 3564
+        },
+        {
+          "id": "pipin-hot-blend",
+          "src": "src/assets/press/pisgah_coffee_release/pipin_hot_blend_12oz.webp",
+          "title": "Pipin’ Hot Blend",
+          "caption": "The 2023 Pipin’ Hot Blend honored SparkPoint Board President Dr. Ora Wells as part of the first annual collaboration between SparkPoint and Pisgah Coffee Roasters.",
+          "alt": "Pipin’ Hot Blend package artwork honoring Dr. Ora Wells with colorful mountain and bagpipe imagery.",
+          "usageNote": "Provided for editorial coverage of the SparkPoint and Pisgah Coffee Roasters partnership history.",
+          "fileType": "WebP",
+          "width": 900,
+          "height": 1200
+        },
+        {
+          "id": "mayors-daily-grind",
+          "src": "src/assets/press/pisgah_coffee_release/mayors_daily_grind.webp",
+          "title": "The Mayor’s Daily Grind",
+          "caption": "The 2024 Mayor’s Daily Grind honored Brevard Mayor and SparkPoint board member Maureen Copelof during the second annual SparkPoint and Pisgah Coffee Roasters collaboration.",
+          "alt": "The Mayor’s Daily Grind package artwork featuring multiple images of Brevard Mayor Maureen Copelof in a downtown scene.",
+          "usageNote": "Provided for editorial coverage of the SparkPoint and Pisgah Coffee Roasters partnership history.",
+          "fileType": "WebP",
+          "width": 900,
+          "height": 1200
+        },
+        {
+          "id": "resilience-hub-rendering",
+          "src": "src/assets/press/pisgah_coffee_release/resilince_hub_rendering.webp",
+          "title": "SparkPoint Resilience Hub conceptual rendering",
+          "caption": "Conceptual rendering of SparkPoint’s planned Resilience Hub, a community resource center designed to connect residents with resources, volunteer opportunities, and collaborative community programs.",
+          "alt": "Conceptual evening rendering of a brick SparkPoint Resilience Hub building with illuminated signage and people meeting inside.",
+          "usageNote": "Conceptual rendering shown for illustrative purposes only. Final design, features, and layout are subject to change based on funding availability and project development.",
+          "conceptualRendering": true,
+          "fileType": "WebP",
+          "width": 2000,
+          "height": 1334
+        }
+      ],
+      "partnershipHistory": [
+        {
+          "year": "2023",
+          "title": "Pipin’ Hot Blend",
+          "description": "Honoring Dr. Ora Wells",
+          "imageId": "pipin-hot-blend"
+        },
+        {
+          "year": "2024",
+          "title": "The Mayor’s Daily Grind",
+          "description": "Honoring Mayor Maureen Copelof",
+          "imageId": "mayors-daily-grind"
+        },
+        {
+          "year": "2026",
+          "title": "Common Ground Resilience Roast",
+          "description": "Supporting SparkPoint’s Resilience Hub",
+          "imageId": "common-ground-package"
+        }
+      ],
+      "relatedLinks": [
+        {
+          "title": "Learn about the Resilience Hub",
+          "href": "/resilience-hub",
+          "description": "Explore SparkPoint’s vision for a permanent home for connection, resources, and collaboration."
+        }
+      ],
+      "seo": {
+        "title": "Common Ground Resilience Roast Press Release | SparkPoint",
+        "description": "SparkPoint and Pisgah Coffee Roasters announce Common Ground Resilience Roast, supporting SparkPoint’s new Resilience Hub in Transylvania County."
+      }
+    }
+  ]
+}

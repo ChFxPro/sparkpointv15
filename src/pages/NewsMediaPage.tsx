@@ -2,10 +2,17 @@
 
 import { Link } from 'react-router';
 import { motion } from 'motion/react';
+import { ArrowRight, Calendar } from 'lucide-react';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { STORIES_DATA } from '../data/stories';
 import { SEOHead } from '../components/SEOHead';
+import {
+  MEDIA_PAGE_PRESS_RELEASES,
+  formatPressDate,
+  getPressAsset,
+  getPressAssetUrl,
+} from '../data/pressReleases';
 
 const newsletterArchives = [
   {
@@ -48,6 +55,61 @@ export function NewsMediaPage() {
         </div>
       </section>
 
+      {MEDIA_PAGE_PRESS_RELEASES.length > 0 ? (
+        <section className="pb-14 px-6" aria-labelledby="press-releases-heading">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <h2 id="press-releases-heading" className="text-3xl font-bold text-[#1A1A1A]">Latest press releases</h2>
+                <p className="mt-2 text-gray-600">Official announcements selected for the broader SparkPoint media feed.</p>
+              </div>
+              <Link
+                to="/press"
+                className="inline-flex items-center gap-2 rounded-sm font-bold text-[#E03694] outline-none hover:underline focus-visible:ring-2 focus-visible:ring-[#E03694] focus-visible:ring-offset-4"
+              >
+                Visit the press portal <ArrowRight size={18} aria-hidden="true" />
+              </Link>
+            </div>
+            <div className="grid gap-6 md:grid-cols-2">
+              {MEDIA_PAGE_PRESS_RELEASES.map((release) => {
+                const image = getPressAsset(release, release.heroImageId);
+                return (
+                  <article key={release.slug} className="grid overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm sm:grid-cols-[10rem_1fr]">
+                    {image ? (
+                      <div className="flex items-center justify-center bg-[#F7F4EF] p-4">
+                        <img
+                          src={getPressAssetUrl(image)}
+                          alt={image.alt}
+                          width={image.width}
+                          height={image.height}
+                          loading="lazy"
+                          className="h-48 w-full object-contain sm:h-full"
+                        />
+                      </div>
+                    ) : null}
+                    <div className="p-6">
+                      <p className="flex items-center gap-2 text-sm font-semibold text-gray-500">
+                        <Calendar size={16} aria-hidden="true" />
+                        <time dateTime={release.datePublished}>{formatPressDate(release.datePublished)}</time>
+                      </p>
+                      <h3 className="mt-3 text-xl font-bold leading-snug text-[#1A1A1A]">
+                        <Link
+                          to={`/press/${release.slug}`}
+                          className="rounded-sm outline-none transition-colors hover:text-[#E03694] focus-visible:ring-2 focus-visible:ring-[#E03694] focus-visible:ring-offset-4"
+                        >
+                          {release.title}
+                        </Link>
+                      </h3>
+                      <p className="mt-3 line-clamp-3 text-sm leading-6 text-gray-600">{release.summary}</p>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <section className="pb-10 px-6">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
           <Card className="p-8 border border-gray-100 shadow-sm">
@@ -88,16 +150,16 @@ export function NewsMediaPage() {
 
       <section className="pb-24 px-6">
         <div className="max-w-6xl mx-auto text-center">
-          <Link to="/stories">
-            <Button variant="outline" className="px-8 mr-3">
+          <Button asChild variant="outline" className="px-8 mr-3">
+            <Link to="/stories">
               Browse All Stories
-            </Button>
-          </Link>
-          <Link to="/programs">
-            <Button className="px-8" style={{ backgroundColor: '#E03694', color: 'white' }}>
+            </Link>
+          </Button>
+          <Button asChild className="px-8" style={{ backgroundColor: '#E03694', color: 'white' }}>
+            <Link to="/programs">
               Explore Programs
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
       </section>
     </div>
