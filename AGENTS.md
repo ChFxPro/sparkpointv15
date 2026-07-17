@@ -20,6 +20,8 @@ Last updated: 2026-03-22
 - Canonical site origin defaults to `https://www.yoursparkpoint.org` (see `src/lib/siteOrigin.ts` and `vite.config.ts`).
 - `public/robots.txt` and `public/sitemap.xml` use `__SITE_ORIGIN__` placeholders replaced during postbuild.
 - Unified menu drawer includes a `Sponsors` link under the `About SparkPoint` group.
+- Permanent press portal is available at `/press`, with reusable release pages under `/press/:slug`.
+- Press releases are single-sourced in `src/data/pressReleases.json`, feed `/news-media` via `showOnMediaPage`, and generate downloadable media kits during builds.
 
 ## Routes
 - `/` home
@@ -31,6 +33,8 @@ Last updated: 2026-03-22
 - `/sponsors`
 - `/resilience-hub`
 - `/news-media`
+- `/press`
+- `/press/:slug`
 - `/newsletter` -> external redirect to Squarespace newsletter
 - `/donations` -> external redirect to Squarespace donations
 - `/intake` (`?intent=contact|volunteer|partner`)

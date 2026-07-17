@@ -42,6 +42,12 @@ const ResilienceHubPage = lazy(() =>
 const NewsMediaPage = lazy(() =>
   import('./pages/NewsMediaPage').then((module) => ({ default: module.NewsMediaPage }))
 );
+const PressPortalPage = lazy(() =>
+  import('./pages/press/PressPortalPage').then((module) => ({ default: module.PressPortalPage }))
+);
+const PressReleasePage = lazy(() =>
+  import('./pages/press/PressReleasePage').then((module) => ({ default: module.PressReleasePage }))
+);
 const AboutPage = lazy(() =>
   import('./pages/AboutPage').then((module) => ({ default: module.AboutPage }))
 );
@@ -124,6 +130,8 @@ function AppContent() {
         <Route path="/resiliency-hub" element={<Navigate to="/resilience-hub" replace />} />
         <Route path="/resilience-hub" element={<ResilienceHubPage />} />
         <Route path="/news-media" element={<NewsMediaPage />} />
+        <Route path="/press" element={<PressPortalPage />} />
+        <Route path="/press/:slug" element={<PressReleasePage />} />
         <Route path="/get-involved" element={<GetInvolvedPage />} />
         <Route path="/volunteer" element={<Navigate to="/intake?intent=volunteer" replace />} />
         <Route path="/partner" element={<Navigate to="/intake?intent=partner" replace />} />

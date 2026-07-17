@@ -30,6 +30,7 @@ const menuItems: MenuItem[] = [
   { label: 'Impact', href: '/impact' },
   { label: 'Programs', href: '/programs' },
   { label: 'News & Media', href: '/news-media' },
+  { label: 'Press & Media', href: '/press' },
   { label: 'Get Involved', href: '/get-involved' },
   { label: 'About', href: '/about' },
   { label: 'Resilience Hub', href: '/resilience-hub' },

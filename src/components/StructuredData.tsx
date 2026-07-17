@@ -18,6 +18,7 @@ const ROUTE_LABELS: Record<string, string> = {
   '/sponsors': 'Sponsors',
   '/resilience-hub': 'Resilience Hub',
   '/news-media': 'News & Media',
+  '/press': 'Press & Media',
   '/intake': 'Contact SparkPoint',
   '/trust': 'Trust & Accountability',
   '/privacy': 'Privacy Policy',
@@ -37,6 +38,7 @@ const ROUTE_DESCRIPTIONS: Record<string, string> = {
   '/sponsors': 'Sponsor SparkPoint and support collaborative resilience initiatives across Western North Carolina.',
   '/resilience-hub': 'Preparedness, connection, and coordinated support through the SparkPoint Resilience Hub.',
   '/news-media': 'SparkPoint newsletters, updates, and recent media highlights.',
+  '/press': 'Official SparkPoint press releases, publication-ready media assets, organizational background, and media contact information.',
   '/intake': 'Contact SparkPoint to volunteer, partner, or connect with the team.',
   '/trust': 'Transparency, accessibility, and accountability commitments for SparkPoint.',
   '/privacy': 'SparkPoint privacy policy and responsible information practices.',
@@ -87,6 +89,10 @@ function resolvePageDescription(pathname: string) {
 
   if (pathname.startsWith('/stories/')) {
     return 'Community stories from SparkPoint that document resilience, connection, and collaboration in Western North Carolina.';
+  }
+
+  if (pathname.startsWith('/press/')) {
+    return 'Official SparkPoint press release and publication-ready media resources for Transylvania County coverage.';
   }
 
   return 'SparkPoint fosters community well-being rooted in connection.';
