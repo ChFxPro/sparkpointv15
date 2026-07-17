@@ -17,7 +17,7 @@
       "showOnMediaPage": true,
       "releaseStatus": "FOR IMMEDIATE RELEASE",
       "heroImageId": "common-ground-package",
-      "socialImageId": "common-ground-promo",
+      "socialImageId": "common-ground-package",
       "mediaKitFile": "Common-Ground-Resilience-Roast-Media-Kit.zip",
       "mediaContact": {
         "name": "Jeff Bannister",
@@ -162,7 +162,7 @@
       ],
       "seo": {
         "title": "Common Ground Resilience Roast Press Release | SparkPoint",
-        "description": "Pisgah Coffee Roasters will donate 50% of profits from August Common Ground Resilience Roast sales to support SparkPoint’s new Resilience Hub."
+        "description": "Pisgah Coffee Roasters will donate 50% of profits from August Common Ground Resilience Roast sales to support SparkPoint’s new Resilience Hub project."
       }
     }
   ]
