@@ -112,6 +112,8 @@ export function PressReleasePage() {
         image={social ? getPressAssetUrl(social) : undefined}
         imageAlt={social?.alt}
         imageType="image/webp"
+        imageWidth={social?.width}
+        imageHeight={social?.height}
         publishedTime={release.datePublished}
         modifiedTime={release.dateModified}
         jsonLd={eventSchema ? [articleSchema, eventSchema] : articleSchema}

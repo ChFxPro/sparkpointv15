@@ -20,6 +20,8 @@ interface SEOHeadProps {
   image?: string;
   imageAlt?: string;
   imageType?: string;
+  imageWidth?: number;
+  imageHeight?: number;
   socialDescription?: string;
   noindex?: boolean;
   keywords?: string[];
@@ -79,6 +81,8 @@ export function SEOHead({
   image = DEFAULT_OG_IMAGE_PATH,
   imageAlt = DEFAULT_OG_IMAGE_ALT,
   imageType,
+  imageWidth,
+  imageHeight,
   socialDescription,
   noindex = false,
   keywords,
@@ -129,12 +133,18 @@ export function SEOHead({
     if (imageType) {
       setMeta('meta[property="og:image:type"]', 'content', imageType);
     }
+    if (imageWidth) {
+      setMeta('meta[property="og:image:width"]', 'content', String(imageWidth));
+    }
+    if (imageHeight) {
+      setMeta('meta[property="og:image:height"]', 'content', String(imageHeight));
+    }
     setMeta('meta[property="og:image:alt"]', 'content', imageAlt);
     setMeta('meta[name="twitter:title"]', 'content', title);
     setMeta('meta[name="twitter:description"]', 'content', normalizedSocialDescription);
     setMeta('meta[name="twitter:image"]', 'content', absoluteImage);
     setMeta('meta[name="twitter:image:alt"]', 'content', imageAlt);
-  }, [absoluteImage, canonical, imageAlt, imageType, normalizedDescription, normalizedSocialDescription, robots, title, type]);
+  }, [absoluteImage, canonical, imageAlt, imageHeight, imageType, imageWidth, normalizedDescription, normalizedSocialDescription, robots, title, type]);
 
   return (
     <Helmet prioritizeSeoTags>
@@ -156,6 +166,8 @@ export function SEOHead({
       <meta property="og:image" content={absoluteImage} />
       <meta property="og:image:secure_url" content={absoluteImage} />
       {imageType ? <meta property="og:image:type" content={imageType} /> : null}
+      {imageWidth ? <meta property="og:image:width" content={String(imageWidth)} /> : null}
+      {imageHeight ? <meta property="og:image:height" content={String(imageHeight)} /> : null}
       <meta property="og:image:alt" content={imageAlt} />
 
       <meta name="twitter:card" content="summary_large_image" />
