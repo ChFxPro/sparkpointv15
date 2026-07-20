@@ -51,7 +51,7 @@ export function HeroSection({ data, backToPrograms = false }: HeroSectionProps) 
 
             <div className="hidden sm:flex items-center gap-3">
               <a
-                href="https://www.yoursparkpoint.org"
+                href="/"
                 className="spark-glass rounded-full px-5 py-3 text-[0.76rem] font-semibold uppercase tracking-[0.12em] text-white/84 transition-all duration-200 hover:bg-white/12"
               >
                 Visit SparkPoint

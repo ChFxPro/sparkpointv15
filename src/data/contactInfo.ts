@@ -1,7 +1,7 @@
 export const CONTACT_INFO = {
   organizationName: 'SparkPoint',
-  organizationSchemaId: 'https://www.yoursparkpoint.org/#organization',
-  websiteSchemaId: 'https://www.yoursparkpoint.org/#website',
+  organizationSchemaId: 'https://yoursparkpoint.org/#organization',
+  websiteSchemaId: 'https://yoursparkpoint.org/#website',
   email: 'info@yoursparkpoint.org',
   mailingAddressDisplay: 'SparkPoint P.O. Box 2452, Brevard, NC 28712',
   postalAddress: {

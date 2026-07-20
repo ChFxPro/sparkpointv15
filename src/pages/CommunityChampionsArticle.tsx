@@ -36,7 +36,7 @@ export default function CommunityChampionsArticle() {
     publisher: {
       '@id': CONTACT_INFO.organizationSchemaId,
     },
-    mainEntityOfPage: `https://www.yoursparkpoint.org${articlePath}`,
+    mainEntityOfPage: `https://yoursparkpoint.org${articlePath}`,
     inLanguage: 'en-US',
   };
 

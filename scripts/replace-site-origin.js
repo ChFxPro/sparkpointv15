@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const defaultOrigin = 'https://www.yoursparkpoint.org';
+const defaultOrigin = 'https://yoursparkpoint.org';
 const siteOrigin = (process.env.SITE_ORIGIN ?? process.env.PUBLIC_ORIGIN ?? process.env.VITE_SITE_ORIGIN ?? defaultOrigin).replace(/\/+$/, '');
 const pressContent = JSON.parse(
   fs.readFileSync(path.join(process.cwd(), 'src/data/pressReleases.json'), 'utf8')
