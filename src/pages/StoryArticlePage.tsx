@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { CONTACT_INFO } from '../data/contactInfo';
 import { canonicalUrl } from '../lib/siteOrigin';
 import { SEOHead } from '../components/SEOHead';
+import { BrainHealthResources } from '../components/BrainHealthResources';
 
 export function StoryArticlePage() {
   const { categoryId, slug } = useParams();
@@ -144,6 +145,8 @@ export function StoryArticlePage() {
           >
             <div dangerouslySetInnerHTML={{ __html: article.content }} />
           </motion.div>
+
+          {article.slug === 'dr-ora-brain-health' && <BrainHealthResources />}
 
           {/* Optional Supporting Metadata */}
           <motion.div

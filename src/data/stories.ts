@@ -148,68 +148,6 @@ export const STORIES_DATA: Category[] = [
         content: `
           <p>In March 2025, hundreds of neighbors gathered at Brevard College to hear <strong>Dr. Ora Wells</strong> — SparkPoint Board President and a recently retired pediatrician — share a hopeful, evidence-based message: much of what shapes our long-term brain health is within our influence. Drawing on the latest research in lifestyle medicine and cognitive health, Dr. Wells walked the community through practical, everyday choices that support memory, focus, and resilience as we age.</p>
           <p>The full talk is above. Below is the program guide and resource library Dr. Wells assembled to help you keep learning.</p>
-
-          <div class="my-6 rounded-2xl border border-[#E03694]/20 bg-[#FDF2F8] px-6 py-4">
-            <p class="font-bold text-[#1A1A1A]">Program Guide — follow along with Dr. Wells' presentation (includes homework):</p>
-            <p><a href="https://acrobat.adobe.com/id/urn:aaid:sc:US:2bdfe22d-9666-490f-8b7e-8f9f21fd9afb" target="_blank" rel="noopener noreferrer">Open the PDF (Adobe)</a> &middot; <a href="https://drive.google.com/file/d/1FHXhBnTb4rlmZ7ZhLAALbn3GVnmUbW4X/view" target="_blank" rel="noopener noreferrer">Open in Google Drive</a></p>
-          </div>
-
-          <p class="text-sm italic border-l-4 border-[#E03694] pl-4 my-6">This information is provided for educational and informational purposes only and is not medical advice. Please consult your own healthcare provider before making decisions about your health or care.</p>
-
-          <h3>Recommended Books</h3>
-          <ul>
-            <li><em>Undo It!</em> — Dean &amp; Anne Ornish</li>
-            <li><em>Good Energy</em> — Casey Means, MD</li>
-            <li><em>The End of Alzheimer's</em> — Dale Bredesen, MD</li>
-            <li><em>The Ageless Brain</em> — Dale Bredesen, MD</li>
-            <li><em>Reversing Alzheimer's</em> — Heather Sandison, ND</li>
-            <li><em>Doctored</em> — Sandeep Jauhar, MD</li>
-            <li><em>The Alzheimer's Solution</em> — Dean &amp; Ayesha Sherzai, MD</li>
-          </ul>
-
-          <h3>Talks &amp; Videos Worth Watching</h3>
-          <ul>
-            <li><a href="https://youtu.be/sq4cCQf6ia4" target="_blank" rel="noopener noreferrer">Physicians Committee — Dr. Dean Ornish &amp; Dr. Neal Barnard discuss Alzheimer's research</a></li>
-            <li><a href="https://youtu.be/GZzcAQqyaMY" target="_blank" rel="noopener noreferrer">Rupa Health — Dr. Casey Means: how improving your metabolism changes your life</a></li>
-            <li><a href="https://youtu.be/dKDlviywVos" target="_blank" rel="noopener noreferrer">Apollo Health — how to reverse Alzheimer's &amp; cognitive decline</a></li>
-            <li><a href="https://youtu.be/n4ckEq76L2g" target="_blank" rel="noopener noreferrer">Katherine Ambrose (June 2024) — reversing Alzheimer's with Dr. Heather Sandison</a></li>
-            <li><a href="https://youtu.be/m6emVfRuGSc" target="_blank" rel="noopener noreferrer">Increasing brainspan and reducing Alzheimer's risk (Dr. Richard Isaacson)</a></li>
-            <li><a href="https://youtu.be/50N5giJVASI" target="_blank" rel="noopener noreferrer">Integrative Family Medicine of Asheville (Dr. Brian Asbill)</a></li>
-          </ul>
-
-          <h3>Podcasts</h3>
-          <ul>
-            <li><a href="https://youtu.be/WqBu4O4_ERA" target="_blank" rel="noopener noreferrer">Ep. 283: Dr. Dean Ornish — Hope for Alzheimer's: the power of plant-based nutrition</a></li>
-            <li><a href="https://youtu.be/3C0czhRXKRA" target="_blank" rel="noopener noreferrer">The Metabolic Link Ep. 43 — take control of your metabolic health with Dr. Casey Means</a></li>
-            <li><a href="https://youtu.be/baQSf_9l-uk" target="_blank" rel="noopener noreferrer">Reversing Alzheimer's — new research on cognition &amp; brain health with Dr. Heather Sandison</a></li>
-          </ul>
-
-          <h3>Research &amp; Reports</h3>
-          <ul>
-            <li><a href="https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(24)01296-0/abstract" target="_blank" rel="noopener noreferrer">Dementia prevention, intervention, and care: 2024 report of the Lancet Commission</a></li>
-            <li><a href="https://lifestylemedicine.org/articles/ornish-research/" target="_blank" rel="noopener noreferrer">Ornish study — lifestyle changes improve cognition in early Alzheimer's</a></li>
-            <li><a href="https://proactivwellnesscenters.com/hormone-replacement/northern-virginia-bredesen-protocol-strategies-to-improve-brain-health-and-reverse-cognitive-decline-resulting-from-alzheimers/" target="_blank" rel="noopener noreferrer">Bredesen Protocol — strategies to improve brain health and reverse cognitive decline</a></li>
-            <li><a href="https://pubmed.ncbi.nlm.nih.gov/37355891/" target="_blank" rel="noopener noreferrer">Sandison — observed improvement in cognition during a personalized lifestyle intervention (PubMed)</a></li>
-          </ul>
-
-          <h3>Organizations &amp; Tools</h3>
-          <ul>
-            <li><a href="https://www.alz.org" target="_blank" rel="noopener noreferrer">Alzheimer's Association</a></li>
-            <li><a href="https://www.nia.nih.gov" target="_blank" rel="noopener noreferrer">National Institute on Aging</a></li>
-            <li><a href="https://healthybrains.org" target="_blank" rel="noopener noreferrer">Cleveland Clinic Healthy Brains</a></li>
-            <li><a href="https://www.apollohealthco.com" target="_blank" rel="noopener noreferrer">Apollo Health / Bredesen Protocol</a></li>
-            <li><a href="https://www.virtahealth.com" target="_blank" rel="noopener noreferrer">Virta Health</a> — type 2 diabetes and metabolic health</li>
-            <li><a href="https://drkellyannniotis.com" target="_blank" rel="noopener noreferrer">Dr. Kellyann Niotis</a> — preventive neurology</li>
-            <li><a href="https://www.mybrainguide.org" target="_blank" rel="noopener noreferrer">MyBrainGuide</a> by UsAgainstAlzheimer's</li>
-            <li><a href="https://www.brainhq.com" target="_blank" rel="noopener noreferrer">BrainHQ</a> — brain training</li>
-          </ul>
-
-          <h3>Support Communities</h3>
-          <ul>
-            <li><a href="https://www.caregiveraction.org" target="_blank" rel="noopener noreferrer">Caregiver Action Network</a></li>
-            <li><a href="https://www.alzconnected.org" target="_blank" rel="noopener noreferrer">AlzConnected</a></li>
-            <li><a href="https://www.dementiaallianceinternational.org" target="_blank" rel="noopener noreferrer">Dementia Alliance International</a></li>
-          </ul>
         `
       }
     ]
