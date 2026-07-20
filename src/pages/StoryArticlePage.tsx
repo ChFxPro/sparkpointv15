@@ -35,7 +35,7 @@ export function StoryArticlePage() {
   const displayImage = article.image || category.image;
   const isVideoArticle = !!article.videoUrl;
 
-  const metaDescription = article.excerpt || article.subhead || `Read the full story of ${article.title} at SparkPoint.`;
+  const metaDescription = article.seoDescription || article.excerpt || article.subhead || `Read the full story of ${article.title} at SparkPoint.`;
   const articlePath = `/stories/${category.id}/${article.slug}`;
   const canonical = canonicalUrl(articlePath);
   const articleSchema = {
@@ -53,19 +53,24 @@ export function StoryArticlePage() {
     },
     mainEntityOfPage: canonical,
     articleSection: category.title,
-    datePublished: article.date,
+    datePublished: article.publishedTime || article.date,
     inLanguage: 'en-US',
   };
 
   // Render Helmet for both layouts
   const pageMeta = (
     <SEOHead
-      title={`${article.title} | SparkPoint Stories`}
+      title={article.seoTitle ?? `${article.title} | SparkPoint Stories`}
       description={metaDescription}
       path={articlePath}
       type="article"
       image={displayImage}
-      imageAlt={`${article.title} story image from SparkPoint`}
+      imageAlt={article.imageAlt ?? `${article.title} story image from SparkPoint`}
+      imageType={displayImage.includes('.webp') ? 'image/webp' : undefined}
+      imageWidth={article.imageWidth}
+      imageHeight={article.imageHeight}
+      keywords={article.keywords}
+      publishedTime={article.publishedTime}
       jsonLd={articleSchema}
     />
   );
