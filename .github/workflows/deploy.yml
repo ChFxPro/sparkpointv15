@@ -35,9 +35,9 @@ jobs:
       - name: Build
         env:
           PUBLIC_BASE: /
-          SITE_ORIGIN: https://www.yoursparkpoint.org
-          PUBLIC_ORIGIN: https://www.yoursparkpoint.org
-          VITE_SITE_ORIGIN: https://www.yoursparkpoint.org
+          SITE_ORIGIN: https://yoursparkpoint.org
+          PUBLIC_ORIGIN: https://yoursparkpoint.org
+          VITE_SITE_ORIGIN: https://yoursparkpoint.org
         run: npm run build
 
       - name: Add CNAME for custom domain
