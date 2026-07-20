@@ -39,9 +39,7 @@ const SponsorsPage = lazy(() =>
 const ResilienceHubPage = lazy(() =>
   import('./pages/ResilienceHubPage').then((module) => ({ default: module.ResilienceHubPage }))
 );
-const NewsMediaPage = lazy(() =>
-  import('./pages/NewsMediaPage').then((module) => ({ default: module.NewsMediaPage }))
-);
+// NewsMediaPage retired — /news-media now redirects to /press (the Newsroom).
 const PressPortalPage = lazy(() =>
   import('./pages/press/PressPortalPage').then((module) => ({ default: module.PressPortalPage }))
 );
@@ -129,7 +127,8 @@ function AppContent() {
         <Route path="/sponsors" element={<SponsorsPage />} />
         <Route path="/resiliency-hub" element={<Navigate to="/resilience-hub" replace />} />
         <Route path="/resilience-hub" element={<ResilienceHubPage />} />
-        <Route path="/news-media" element={<NewsMediaPage />} />
+        <Route path="/news-media" element={<Navigate to="/press" replace />} />
+        <Route path="/newsroom" element={<Navigate to="/press" replace />} />
         <Route path="/press" element={<PressPortalPage />} />
         <Route path="/press/:slug" element={<PressReleasePage />} />
         <Route path="/get-involved" element={<GetInvolvedPage />} />

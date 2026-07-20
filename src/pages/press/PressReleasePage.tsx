@@ -40,7 +40,7 @@ export function PressReleasePage() {
         <h1 className="text-4xl font-bold text-[#1A1A1A]">Press release not found</h1>
         <p className="mt-5 text-gray-600">The release may have moved or is no longer available.</p>
         <Button asChild className="mt-8 bg-[#E03694] text-white hover:bg-[#C82C82]">
-          <Link to="/press"><ArrowLeft aria-hidden="true" /> Back to Press & Media</Link>
+          <Link to="/press"><ArrowLeft aria-hidden="true" /> Back to Newsroom</Link>
         </Button>
       </div>
     );
@@ -127,7 +127,7 @@ export function PressReleasePage() {
                 to="/press"
                 className="inline-flex items-center gap-2 rounded-sm font-semibold text-gray-500 outline-none transition-colors hover:text-[#E03694] focus-visible:ring-2 focus-visible:ring-[#E03694] focus-visible:ring-offset-4"
               >
-                <ArrowLeft size={18} aria-hidden="true" /> Press & Media
+                <ArrowLeft size={18} aria-hidden="true" /> Newsroom
               </Link>
             </nav>
 

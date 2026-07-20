@@ -13,6 +13,8 @@ import { SEOHead } from '../components/SEOHead';
 export function StoriesPage() {
   const navigate = useNavigate();
 
+  const talksCategory = STORIES_DATA.find((category) => category.id === 'talks-lectures');
+  const drOraTalk = talksCategory?.articles.find((article) => article.slug === 'dr-ora-brain-health') ?? talksCategory?.articles[0];
   const echoesCategory = STORIES_DATA.find((category) => category.id === 'community-voice');
   const heleneCategory = STORIES_DATA.find((category) => category.id === 'disaster-recovery');
   const heleneFeaturedArticle = heleneCategory?.articles.find((article) => article.slug === 'helene-one-year') ?? heleneCategory?.articles[0];
@@ -74,6 +76,57 @@ export function StoriesPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Featured Talk (chronologically first — March 2025, before the Helene one-year film) */}
+      {drOraTalk && (
+        <section className="px-6 pb-12 md:pb-16">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-6 text-center">
+              <p className="inline-flex items-center px-3 py-1 rounded-full bg-[#E03694]/10 text-[#E03694] text-xs font-bold uppercase tracking-[0.2em]">
+                Featured Talk
+              </p>
+            </div>
+            <Card
+              className="overflow-hidden border-0 shadow-md bg-white cursor-pointer transition-all duration-500 hover:shadow-xl hover:translate-y-[-2px]"
+              onClick={() => navigate('/stories/talks-lectures/dr-ora-brain-health')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  navigate('/stories/talks-lectures/dr-ora-brain-health');
+                }
+              }}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 items-stretch">
+                <div className="relative h-64 md:h-full min-h-[240px] overflow-hidden">
+                  <img
+                    src={talksCategory?.image ?? heroImage}
+                    alt="Dr. Ora Wells delivering SparkPoint's Brain Health keynote"
+                    className="w-full h-full object-cover transition-transform duration-1000 ease-out hover:scale-105"
+                  />
+                </div>
+                <div className="p-6 md:p-10 flex flex-col justify-center">
+                  <p className="text-[#E03694] font-medium mb-3 text-sm tracking-wide uppercase">
+                    Talks &amp; Lectures · March 2025
+                  </p>
+                  <h2 className="mb-4 font-bold text-gray-900 text-3xl leading-tight">
+                    {drOraTalk.title}
+                  </h2>
+                  <p className="text-gray-600 text-lg leading-relaxed mb-8">
+                    {drOraTalk.excerpt}
+                  </p>
+                  <div className="pt-4 border-t border-gray-100">
+                    <span className="flex items-center text-[#E03694] text-sm font-bold tracking-wide">
+                      Watch the Talk <ArrowRight size={16} className="ml-2" />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </section>
+      )}
 
       {/* Featured Stories */}
       <section className="px-6 pb-12 md:pb-16">
