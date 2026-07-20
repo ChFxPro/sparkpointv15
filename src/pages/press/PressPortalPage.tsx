@@ -23,8 +23,8 @@ export function PressPortalPage() {
   return (
     <div className="min-h-screen bg-[#FCFCFD]">
       <SEOHead
-        title="Press & Media | SparkPoint"
-        description="Official SparkPoint press releases, publication-ready media assets, organizational background, and media contact information for Transylvania County coverage."
+        title="Newsroom | SparkPoint"
+        description="The SparkPoint Newsroom — press releases, publication-ready media assets, newsletters, organizational background, and media contact information for Transylvania County coverage."
         path="/press"
       />
 
@@ -170,6 +170,30 @@ export function PressPortalPage() {
               </div>
             </div>
           ) : null}
+        </div>
+      </section>
+
+      <section className="border-t border-gray-100 bg-[#FCFCFD] px-6 py-16" aria-labelledby="more-from-sparkpoint-heading">
+        <div className="mx-auto max-w-6xl">
+          <h2 id="more-from-sparkpoint-heading" className="text-2xl font-bold text-[#1A1A1A]">More from SparkPoint</h2>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <a
+              href="https://www.yoursparkpoint.org/newsletter"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm outline-none transition-colors hover:border-[#E03694]/40 focus-visible:ring-2 focus-visible:ring-[#E03694]"
+            >
+              <h3 className="font-bold text-[#1A1A1A]">Newsletter archive</h3>
+              <p className="mt-2 text-sm leading-6 text-gray-500">Read past SparkPoint newsletters and subscribe for updates.</p>
+            </a>
+            <Link
+              to="/stories"
+              className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm outline-none transition-colors hover:border-[#E03694]/40 focus-visible:ring-2 focus-visible:ring-[#E03694]"
+            >
+              <h3 className="font-bold text-[#1A1A1A]">Community stories</h3>
+              <p className="mt-2 text-sm leading-6 text-gray-500">Explore talks, lectures, and lived experiences from across Transylvania County.</p>
+            </Link>
+          </div>
         </div>
       </section>
     </div>
