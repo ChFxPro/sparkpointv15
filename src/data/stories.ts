@@ -4,7 +4,6 @@ import echoesImage from '../assets/compd/e4e8c9f59f3a2b2ee1533f1f427ca4a4cb3693a
 import volunteerImpactImage from '../assets/compd/20c2a905251c86d5a4f9333b83199204b6928c7d.webp';
 import { HELENE_ONE_YEAR_DATE_LABEL } from './impact2025';
 import drOraTalkThumb from '../assets/moments_impact/ora1.webp';
-import drOraTalkImage from '../assets/moments_impact/ora2.webp';
 
 export interface Article {
   id: string;
@@ -17,6 +16,13 @@ export interface Article {
   content: string; // HTML or Markdown-like string
   image?: string;
   videoUrl?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  keywords?: string[];
+  imageAlt?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  publishedTime?: string;
 }
 
 export interface Category {
@@ -143,8 +149,15 @@ export const STORIES_DATA: Category[] = [
         date: 'March 2025',
         author: 'Dr. Ora Wells',
         excerpt: 'SparkPoint Board President Dr. Ora Wells shares what the latest science says about protecting memory and brain health as we age — plus a curated library of books, videos, studies, and organizations to explore.',
-        image: drOraTalkImage,
+        image: drOraTalkThumb,
         videoUrl: 'https://www.youtube.com/embed/so4sCSxIgHA',
+        seoTitle: "Protecting Cognitive Health — Dr. Ora Wells | SparkPoint",
+        seoDescription: "Watch Dr. Ora Wells' SparkPoint keynote on protecting brain health and reducing cognitive decline, plus a curated library of books, videos, and research.",
+        keywords: ['brain health', 'cognitive health', 'cognitive decline', "Alzheimer's prevention", 'dementia prevention', 'Dr. Ora Wells', 'lifestyle medicine', 'SparkPoint', 'Brevard NC'],
+        imageAlt: "Dr. Ora Wells delivering SparkPoint's Brain Health keynote at Brevard College",
+        imageWidth: 2000,
+        imageHeight: 1333,
+        publishedTime: '2025-03-01',
         content: `
           <p>In March 2025, hundreds of neighbors gathered at Brevard College to hear <strong>Dr. Ora Wells</strong> — SparkPoint Board President and a recently retired pediatrician — share a hopeful, evidence-based message: much of what shapes our long-term brain health is within our influence. Drawing on the latest research in lifestyle medicine and cognitive health, Dr. Wells walked the community through practical, everyday choices that support memory, focus, and resilience as we age.</p>
           <p>The full talk is above. Below is the program guide and resource library Dr. Wells assembled to help you keep learning.</p>
