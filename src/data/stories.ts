@@ -4,6 +4,7 @@ import echoesImage from '../assets/compd/e4e8c9f59f3a2b2ee1533f1f427ca4a4cb3693a
 import volunteerImpactImage from '../assets/compd/20c2a905251c86d5a4f9333b83199204b6928c7d.webp';
 import { HELENE_ONE_YEAR_DATE_LABEL } from './impact2025';
 import drOraTalkThumb from '../assets/moments_impact/ora1.webp';
+import programsImage from '../assets/commconn/imgs/comcon_maggie_yesica.webp';
 
 export interface Article {
   id: string;
@@ -23,6 +24,7 @@ export interface Article {
   imageWidth?: number;
   imageHeight?: number;
   publishedTime?: string;
+  type?: string; // badge label: 'Article' | 'Talk & Film' | 'Film' | 'Field Notes' | 'Column'
 }
 
 export interface Category {
@@ -137,6 +139,52 @@ const ECHOES_ARTICLES: Article[] = [
 
 export const STORIES_DATA: Category[] = [
   {
+    id: 'programs',
+    title: 'Programs',
+    description:
+      "Stories from SparkPoint's programs and partnerships — the initiatives connecting neighbors across the county.",
+    image: programsImage,
+    imagePosition: 'center',
+    articles: [
+      {
+        id: 'when-neighbors-become-leaders',
+        slug: 'when-neighbors-become-leaders',
+        title: 'When neighbors become leaders',
+        subhead:
+          'The first Community Connectors gathering began with a simple premise: before planning a new structure, listen to the trusted people who already know their communities best.',
+        date: 'May 2026',
+        author: 'SparkPoint',
+        excerpt:
+          'Inside the May 26 gathering where SparkPoint, FWRD, and the American Red Cross sat down with residents — and community connectors stepped up to lead the recovery themselves.',
+        image: programsImage,
+        imageAlt:
+          'Community Connectors participants seated around tables during a facilitated listening session.',
+        imageWidth: 1920,
+        imageHeight: 1080,
+        type: 'Field Notes',
+        seoTitle: 'When neighbors become leaders — Community Connectors | SparkPoint',
+        seoDescription:
+          'How SparkPoint, FWRD Transylvania County, and the American Red Cross launched Community Connectors — a neighbor-led recovery initiative built on listening after Hurricane Helene.',
+        keywords: [
+          'Community Connectors', 'SparkPoint', 'Transylvania County',
+          'Hurricane Helene recovery', 'FWRD', 'American Red Cross',
+          'community resilience', 'Western North Carolina',
+        ],
+        publishedTime: '2026-05-26',
+        content: `
+          <p>When Hurricane Helene impacted Western North Carolina, something remarkable happened across Transylvania County: people stepped up. Neighbors checked on neighbors. Churches opened their doors. Businesses shared resources. Community members organized supplies, distributed information, and helped connect people to what they needed.</p>
+          <p>Over the past year, SparkPoint heard many of those stories through the Helene: One Year of Healing initiative. Through that process, our team connected with more than 125 individuals from every corner of the county, listening to residents, volunteers, business owners, educators, faith leaders, nonprofit staff, first responders, and community leaders.</p>
+          <p>As we listened, a pattern emerged. Again and again, people spoke about individuals they trusted: people who shared information, connected resources, answered questions, calmed fears, and helped neighbors navigate uncertainty. Long before any formal response system could reach every corner of the county, these trusted community members were already serving as informal connectors.</p>
+          <p>That realization became the foundation for the Community Connectors initiative. On May 26, SparkPoint, in partnership with the American Red Cross and FWRD Transylvania County, hosted the first Community Connectors gathering. More than 50 invited individuals representing different communities, organizations, geographic areas, and networks throughout the county showed up with purpose and heart.</p>
+          <p>The purpose of the gathering was not to launch a finished program or present a predetermined plan; it was to listen. Through facilitated listening circles and small-group conversations, participants shared what helped during and after the storm, where challenges existed, and how trusted people, relationships, and local networks became some of the community's most valuable resources.</p>
+          <p>Community-led work takes time. It requires listening before planning, relationship-building before structure, and trust before action. While many programs begin with a solution, Community Connectors begins with a conversation.</p>
+          <p>Over the coming months, SparkPoint and partners will review the themes that emerged from the listening circles and work alongside participants to identify natural next steps. The long-term vision is to support local Community Connectors, establish Connection Points throughout the county, and strengthen communication and relationships across communities.</p>
+          <p>Rather than building a new system from scratch, the initiative seeks to strengthen and connect the trusted people and relationships that already exist throughout Transylvania County.</p>
+        `,
+      },
+    ],
+  },
+  {
     id: 'talks-lectures',
     title: 'Talks & Lectures',
     description: 'Keynotes, lectures, and community learning events hosted by SparkPoint.',
@@ -159,6 +207,7 @@ export const STORIES_DATA: Category[] = [
         imageWidth: 2000,
         imageHeight: 1333,
         publishedTime: '2025-03-01',
+        type: 'Talk & Film',
         content: `
           <p>In March 2025, hundreds of neighbors gathered at Brevard College to hear <strong>Dr. Ora Wells</strong> — SparkPoint Board President and a recently retired pediatrician — share a hopeful, evidence-based message: much of what shapes our long-term brain health is within our influence. Drawing on the latest research in lifestyle medicine and cognitive health, Dr. Wells walked the community through practical, everyday choices that support memory, focus, and resilience as we age.</p>
           <p>The full talk is above. Below is the program guide and resource library Dr. Wells assembled to help you keep learning.</p>
@@ -168,7 +217,7 @@ export const STORIES_DATA: Category[] = [
   },
   {
     id: 'disaster-recovery',
-    title: 'Disaster Recovery',
+    title: 'Recovery & Resilience',
     description: 'Stories from the months after Helene — when recovery meant neighbors, generators, and showing up again.',
     image: heleneImage,
     articles: [
@@ -188,7 +237,8 @@ export const STORIES_DATA: Category[] = [
           <p>Helene: One Year of Healing is offered as a tribute to the people of Transylvania County — and as a reminder that healing happens together.</p>
         `,
         image: heleneImage,
-        videoUrl: 'https://www.youtube.com/embed/lHiXHz7N8Qc'
+        videoUrl: 'https://www.youtube.com/embed/lHiXHz7N8Qc',
+        type: 'Film'
       }
     ]
   },
@@ -211,6 +261,7 @@ export const STORIES_DATA: Category[] = [
         slug: 'community-champions',
         title: 'Community Champions',
         date: 'August 2024',
+        type: 'Article',
         excerpt: 'Celebrating the volunteers and partners who bring hope and action to those in need.',
         content: '<p>Behind every success story at SparkPoint are the champions who show up — the volunteers who give their time, the partners who share resources, the community leaders who open doors. These are the people who transform compassion into action, who turn vision into reality, and who remind us that together, we can achieve anything.</p>',
         image: volunteerImpactImage
