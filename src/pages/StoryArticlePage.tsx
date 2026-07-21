@@ -10,6 +10,7 @@ import { CONTACT_INFO } from '../data/contactInfo';
 import { canonicalUrl } from '../lib/siteOrigin';
 import { SEOHead } from '../components/SEOHead';
 import { BrainHealthResources } from '../components/BrainHealthResources';
+import { DrOraEventGallery } from '../components/DrOraEventGallery';
 
 export function StoryArticlePage() {
   const { categoryId, slug } = useParams();
@@ -151,6 +152,7 @@ export function StoryArticlePage() {
             <div dangerouslySetInnerHTML={{ __html: article.content }} />
           </motion.div>
 
+          {article.slug === 'dr-ora-brain-health' && <DrOraEventGallery />}
           {article.slug === 'dr-ora-brain-health' && <BrainHealthResources />}
 
           {/* Optional Supporting Metadata */}
@@ -239,6 +241,7 @@ export function StoryArticlePage() {
               src={displayImage} 
               alt={`${article.title} community story image from SparkPoint`} 
               className="w-full h-auto max-h-[600px] object-cover"
+              style={{ objectPosition: category?.imagePosition || 'center' }}
               loading="lazy"
             />
           </motion.div>

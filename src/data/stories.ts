@@ -30,6 +30,7 @@ export interface Category {
   title: string;
   description: string;
   image: string;
+  imagePosition?: string;
   articles: Article[];
 }
 
@@ -203,6 +204,7 @@ export const STORIES_DATA: Category[] = [
     title: 'Volunteer Impact',
     description: 'Moments where time, skill, and care turned into real change.',
     image: volunteerImpactImage,
+    imagePosition: 'center top',
     articles: [
       {
         id: 'community-champions',
