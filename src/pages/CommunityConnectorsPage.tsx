@@ -130,7 +130,7 @@ export function CommunityConnectorsPage() {
     hostingOrganization: {
       "@type": "NGO",
       name: "SparkPoint",
-      url: "https://www.yoursparkpoint.org",
+      url: "https://yoursparkpoint.org",
     },
     areaServed: {
       "@type": "AdministrativeArea",
@@ -148,7 +148,7 @@ export function CommunityConnectorsPage() {
     publisher: {
       "@type": "NGO",
       name: "SparkPoint",
-      url: "https://www.yoursparkpoint.org",
+      url: "https://yoursparkpoint.org",
     },
   }];
 

@@ -54,10 +54,10 @@ export function StoryCategoryPage() {
   const collectionSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    '@id': `https://www.yoursparkpoint.org/stories/${category.id}#collection`,
+    '@id': `https://yoursparkpoint.org/stories/${category.id}#collection`,
     name: `${category.title} | SparkPoint Stories`,
     description: pageDescription,
-    url: `https://www.yoursparkpoint.org/stories/${category.id}`,
+    url: `https://yoursparkpoint.org/stories/${category.id}`,
     isPartOf: {
       '@id': CONTACT_INFO.websiteSchemaId,
     },

@@ -43,7 +43,7 @@ export function StoryArticlePage() {
     '@type': 'Article',
     headline: article.title,
     description: metaDescription,
-    image: displayImage ? [displayImage] : ['https://www.yoursparkpoint.org/og/default.jpg'],
+    image: displayImage ? [displayImage] : ['https://yoursparkpoint.org/og/default.jpg'],
     author: {
       '@type': 'Person',
       name: article.author || 'SparkPoint Editorial Team',
