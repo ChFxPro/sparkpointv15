@@ -113,9 +113,13 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
         if (!seen.has(r) && !SKIP.has(r) && !REDIRECTS[r]) queue.push(r);
       }
       const html = await page.content();
-      const dir = route === '/' ? OUT : path.join(OUT, route);
-      await mkdir(dir, { recursive: true });
-      await writeFile(path.join(dir, 'index.html'), html);
+      if (route === '/') {
+        await writeFile(path.join(OUT, 'index.html'), html);
+      } else {
+        const file = path.join(OUT, route.replace(/^\//, '') + '.html');
+        await mkdir(path.dirname(file), { recursive: true });
+        await writeFile(file, html);
+      }
       done.push(route);
     } catch (e) { failed.push({ route, error: e.message }); }
     finally { await page.close(); }
@@ -125,10 +129,10 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
   // QR-safe 200 redirect stubs for external redirect routes
   for (const [route, target] of Object.entries(REDIRECTS)) {
-    const dir = path.join(OUT, route);
-    await mkdir(dir, { recursive: true });
+    const file = path.join(OUT, route.replace(/^\//, '') + '.html');
+    await mkdir(path.dirname(file), { recursive: true });
     const stub = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="${target}"><meta http-equiv="refresh" content="0;url=${target}"><title>Redirecting…</title><script>location.replace(${JSON.stringify(target)})</script></head><body><p>Redirecting to <a href="${target}">${target}</a>…</p></body></html>`;
-    await writeFile(path.join(dir, 'index.html'), stub);
+    await writeFile(file, stub);
     done.push(route);
   }
 
