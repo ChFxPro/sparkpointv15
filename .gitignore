@@ -9,3 +9,5 @@ supabase/.temp/
 
 # Large local video source files
 src/assets/commconn/movs/*.mp4
+
+.prerender-preview/
