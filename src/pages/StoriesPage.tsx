@@ -265,6 +265,7 @@ export function StoriesPage() {
                         src={category.image}
                         alt={`${category.title} story category cover from SparkPoint`}
                         className="w-full h-full object-cover transition-transform duration-1000 ease-out hover:scale-105"
+                        style={{ objectPosition: category.imagePosition || 'center' }}
                         loading="lazy"
                       />
                       {/* Optional overlay for text readability if needed, but keeping it clean for now */}
