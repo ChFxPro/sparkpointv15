@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Hero } from '../components/Hero';
 import { MissionGrid } from '../components/MissionGrid';
 import { StoryCarousel } from '../components/StoryCarousel';
@@ -32,14 +32,20 @@ const stories = [
 ];
 
 export function HomePage() {
-  const [showDeferredInfographic, setShowDeferredInfographic] = useState(false);
+  const [showInfographic, setShowInfographic] = useState(false);
+  const infographicRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const timerId = window.setTimeout(() => {
-      setShowDeferredInfographic(true);
-    }, 650);
-
-    return () => window.clearTimeout(timerId);
+    const el = infographicRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        setShowInfographic(true);
+        io.disconnect();
+      }
+    }, { rootMargin: '300px' });
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   return (
@@ -60,15 +66,19 @@ export function HomePage() {
       <Hero />
       
       <MissionGrid />
-      {showDeferredInfographic ? (
-        <Suspense
-          fallback={<div className="min-h-[720px] lg:min-h-[1040px] bg-[#FFFDF9]/30" aria-hidden="true" />}
-        >
-          <InteractiveSparkPointInfographic />
-        </Suspense>
-      ) : (
-        <div className="min-h-[720px] lg:min-h-[1040px] bg-[#FFFDF9]/30" aria-hidden="true" />
-      )}
+      <div
+        ref={infographicRef}
+        className="min-h-[720px] lg:min-h-[1040px] bg-[#FFFDF9]/30"
+        aria-hidden={showInfographic ? undefined : true}
+      >
+        {showInfographic && (
+          <Suspense
+            fallback={<div className="min-h-[720px] lg:min-h-[1040px] bg-[#FFFDF9]/30" aria-hidden="true" />}
+          >
+            <InteractiveSparkPointInfographic />
+          </Suspense>
+        )}
+      </div>
       <StoryCarousel stories={stories} />
       <ImpactSection />
       <ConnectionSection />
