@@ -70,9 +70,9 @@
   },
   "scripts": {
     "generate:press": "node scripts/generate-press-media-kits.js",
-    "predev": "npm run generate:press",
+    "predev": "npm run generate:press && node scripts/behind-story-manifest.mjs",
     "dev": "vite",
-    "prebuild": "npm run generate:press",
+    "prebuild": "npm run generate:press && node scripts/behind-story-manifest.mjs",
     "build": "vite build",
     "postbuild": "node scripts/replace-site-origin.js && node scripts/prerender.mjs"
   }
