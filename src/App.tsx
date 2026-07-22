@@ -5,6 +5,7 @@ import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { StructuredData } from './components/StructuredData';
 import { ExternalRedirect } from './components/ExternalRedirect';
+import { TicketRedirect } from './components/TicketRedirect';
 import { HomePage } from './pages/HomePage';
 import { AccessibilityProvider } from './context/AccessibilityContext';
 import { MotionConfig } from 'motion/react';
@@ -157,6 +158,8 @@ function AppContent() {
         />
         <Route path="/donations" element={<ExternalRedirect to="https://cowbell-primrose-tet2.squarespace.com/donations" />} />
         <Route path="/newsletter" element={<ExternalRedirect to="https://cowbell-primrose-tet2.squarespace.com/newsletter" />} />
+        <Route path="/tickets" element={<TicketRedirect />} />
+        <Route path="/tickets/:slug" element={<TicketRedirect />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
     </Suspense>
