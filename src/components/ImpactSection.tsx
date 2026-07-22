@@ -314,11 +314,11 @@ function TestimonialCarousel({
           <div className="absolute left-0 right-0 top-0 h-[3px] bg-white/10">
             <motion.div
               key={safeIndex}
-              initial={{ width: '0%' }}
-              animate={{ width: '100%' }}
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
               transition={{ duration: intervalMs / 1000, ease: 'linear' }}
-              className="h-full"
-              style={{ background: 'rgba(255, 255, 255, 0.45)' }}
+              className="h-full w-full origin-left transform-gpu"
+              style={{ background: 'rgba(255, 255, 255, 0.45)', willChange: 'transform' }}
             />
           </div>
         )}
@@ -716,8 +716,8 @@ export function ImpactSection() {
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="p-6 md:p-8 rounded-xl flex flex-col justify-between"
-      style={GLASS_CARD}
+      className="p-6 md:p-8 rounded-xl flex flex-col justify-between transform-gpu"
+      style={{ ...GLASS_CARD, willChange: 'transform, opacity' }}
     >
       <div className="mb-4">
         <div
