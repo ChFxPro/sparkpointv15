@@ -21,7 +21,7 @@ const FEED_CONFIG: FeedConfig[] = [
   { catId: 'talks-lectures', badge: 'Talk · Film', kind: 'film', video: true },
   { catId: 'disaster-recovery', badge: 'Film', kind: 'article', video: true },
   { catId: 'volunteer-impact', badge: 'Article', kind: 'article' },
-  { catId: 'community-voice', badge: 'Column · Weekly', kind: 'column', typeLed: true },
+  { catId: 'community-voice', badge: 'Column · Weekly', kind: 'column' },
 ];
 const FEATURED_CAT = 'programs';
 

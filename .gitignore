@@ -11,3 +11,4 @@ supabase/.temp/
 src/assets/commconn/movs/*.mp4
 
 .prerender-preview/
+public/assets/behind_story/manifest.json
