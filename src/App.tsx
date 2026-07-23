@@ -59,6 +59,9 @@ const TrustPage = lazy(() =>
 const PrivacyPage = lazy(() =>
   import('./pages/PrivacyPage').then((module) => ({ default: module.PrivacyPage }))
 );
+const KnowYourNumbersPage = lazy(() =>
+  import('./pages/KnowYourNumbersPage').then((module) => ({ default: module.KnowYourNumbersPage }))
+);
 const CommunityChampionsArticle = lazy(() => import('./pages/CommunityChampionsArticle'));
 const HeleneOneYearArticle = lazy(() => import('./pages/HeleneOneYearArticle'));
 const HEALTHCARE_STORY_FORM_URL =
@@ -142,6 +145,7 @@ function AppContent() {
         <Route path="/stories/community-champions/helene-anniversary" element={<HeleneOneYearArticle />} />
         <Route path="/trust" element={<TrustPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/resources/know-your-numbers" element={<KnowYourNumbersPage />} />
         <Route
           path="/healthcare-story"
           element={
