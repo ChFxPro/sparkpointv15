@@ -35,6 +35,7 @@ Last updated: 2026-03-22
 - `/news-media`
 - `/press`
 - `/press/:slug`
+- `/resources/know-your-numbers`
 - `/newsletter` -> external redirect to Squarespace newsletter
 - `/donations` -> external redirect to Squarespace donations
 - `/intake` (`?intent=contact|volunteer|partner`)

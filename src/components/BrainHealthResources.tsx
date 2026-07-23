@@ -12,6 +12,7 @@ import {
   Download,
   ArrowUpRight,
 } from 'lucide-react';
+import { KnowYourNumbersResourceCard } from './KnowYourNumbersResourceCard';
 
 const PROGRAM_GUIDE = {
   pdf: 'https://acrobat.adobe.com/id/urn:aaid:sc:US:2bdfe22d-9666-490f-8b7e-8f9f21fd9afb',
@@ -140,6 +141,8 @@ export function BrainHealthResources() {
           </a>
         </div>
       </div>
+
+      <KnowYourNumbersResourceCard />
 
       <div className="grid gap-5 sm:grid-cols-2">
         {GROUPS.map((group) => {
