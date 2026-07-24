@@ -32,6 +32,7 @@ import hubDayImage from '../assets/hub/_0003_Resilience Hub Day.jpg';
 import hubSpringImage from '../assets/hub/_0000_Resilience Hub Spring.jpg';
 import hubNightImage from '../assets/hub/_0005_Resilience Hub Night.jpg';
 import { KeepExploringLinks } from '../components/KeepExploringLinks';
+import { RESOURCES, ACTIVE_NEED_CATEGORIES, NEED_CATEGORIES } from '../data/resources';
 import { SEOHead } from '../components/SEOHead';
 import { Button } from '../components/ui/button';
 import { useAccessibility } from '../context/AccessibilityContext';
@@ -609,6 +610,125 @@ export function ResilienceHubPage() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* ──── RESOURCE DIRECTORY — the Hub's 24/7 online companion ──── */}
+      <section
+        className="relative z-10 px-6"
+        style={{
+          backgroundColor: 'rgba(250, 250, 248, 0.92)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderTop: '1px solid rgba(255,255,255,0.50)',
+          paddingTop: 72,
+          paddingBottom: 72,
+        }}
+      >
+        <style>{`@media (prefers-reduced-motion: no-preference){@keyframes rhLivePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}.rh-live-dot{animation:rhLivePulse 2s ease-in-out infinite}}`}</style>
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={reveal}
+            style={{
+              borderRadius: 24,
+              overflow: 'hidden',
+              border: '1px solid rgba(224,54,148,0.18)',
+              boxShadow: '0 12px 44px rgba(17,24,39,0.07)',
+              background: '#fff',
+            }}
+          >
+            <div style={{ height: 6, background: 'linear-gradient(120deg,#E03694,#9E509F)' }} />
+            <div className="grid grid-cols-1 md:grid-cols-[1.35fr_0.65fr]">
+              {/* Left: copy + CTA */}
+              <div style={{ padding: 'clamp(28px, 4vw, 44px)' }}>
+                <span
+                  className="inline-flex items-center gap-2 text-xs font-semibold"
+                  style={{
+                    borderRadius: 9999,
+                    padding: '5px 12px',
+                    background: 'rgba(224,54,148,0.08)',
+                    color: '#B0246F',
+                    marginBottom: 18,
+                  }}
+                >
+                  <span
+                    className="rh-live-dot"
+                    style={{ width: 8, height: 8, borderRadius: 9999, background: '#E03694', display: 'inline-block' }}
+                  />
+                  Living directory &middot; kept current
+                </span>
+                <p
+                  className="text-xs font-bold uppercase"
+                  style={{ letterSpacing: '0.2em', color: '#E03694', marginBottom: 12 }}
+                >
+                  Resilience Hub &middot; online
+                </p>
+                <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#111827', marginBottom: 14 }}>
+                  The Resource Directory &mdash; the Hub&rsquo;s doors, open 24/7
+                </h2>
+                <p className="text-base leading-relaxed" style={{ color: '#4B5563', marginBottom: 18 }}>
+                  Can&rsquo;t make it to 94 S. Caldwell Street? The Resource Directory is the online
+                  companion to the physical Hub &mdash; browse and search local organizations by need
+                  (food, housing, health, mental health, transportation, benefits, legal aid,
+                  disaster recovery) and get a concrete first step you can take today.
+                </p>
+                <div className="flex flex-wrap gap-2" style={{ marginBottom: 24 }}>
+                  {NEED_CATEGORIES.slice(0, 8).map((c) => (
+                    <span
+                      key={c.id}
+                      className="text-xs font-semibold"
+                      style={{ borderRadius: 9999, padding: '4px 10px', background: c.tint, color: c.ink }}
+                    >
+                      {c.label}
+                    </span>
+                  ))}
+                </div>
+                <Link
+                  to="/directory"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                  style={{ background: '#E03694', borderRadius: 9999, padding: '13px 26px' }}
+                >
+                  Browse the Resource Directory
+                  <ArrowRight size={17} />
+                </Link>
+                <p className="text-sm" style={{ color: '#6B7280', marginTop: 14 }}>
+                  Not sure where to start?{' '}
+                  <Link
+                    to="/directory/sparkpoint-resilience-hub-navigation"
+                    className="hover:underline"
+                    style={{ color: '#E03694', fontWeight: 600 }}
+                  >
+                    A SparkPoint navigator can help
+                  </Link>
+                  .
+                </p>
+              </div>
+              {/* Right: living stats */}
+              <div
+                className="flex flex-col justify-center gap-6"
+                style={{ background: '#FAFAF8', padding: 'clamp(28px, 4vw, 44px)' }}
+              >
+                <div>
+                  <div className="text-4xl font-bold" style={{ color: '#E03694', lineHeight: 1 }}>{RESOURCES.length}</div>
+                  <div className="text-sm font-medium" style={{ color: '#6B7280', marginTop: 4 }}>local organizations listed</div>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold" style={{ color: '#9E509F', lineHeight: 1 }}>{ACTIVE_NEED_CATEGORIES.length}</div>
+                  <div className="text-sm font-medium" style={{ color: '#6B7280', marginTop: 4 }}>kinds of need covered</div>
+                </div>
+                <div>
+                  <div className="text-4xl font-bold" style={{ color: '#111827', lineHeight: 1 }}>24/7</div>
+                  <div className="text-sm font-medium" style={{ color: '#6B7280', marginTop: 4 }}>always open online</div>
+                </div>
+                <p className="text-xs leading-relaxed" style={{ color: '#9CA3AF', marginTop: 4 }}>
+                  New organizations and details are added and confirmed on an ongoing basis.
+                </p>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
