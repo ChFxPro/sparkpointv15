@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'motion/react';
 import { Link, useParams } from 'react-router';
 import {
@@ -15,9 +16,15 @@ import {
   CircleDashed,
   AlertTriangle,
   PhoneCall,
+  FileText,
+  ExternalLink,
 } from 'lucide-react';
 import { SEOHead } from '../components/SEOHead';
-import { RESOURCES, NEED_CATEGORY_BY_ID, type ResourceEntry } from '../data/resources';
+import {
+  RESOURCES,
+  NEED_CATEGORY_BY_ID,
+  type ResourceEntry,
+} from '../data/resources';
 import { canonicalUrl } from '../lib/siteOrigin';
 
 function formatAddress(entry: ResourceEntry): string | null {
@@ -25,6 +32,74 @@ function formatAddress(entry: ResourceEntry): string | null {
   if (!a) return null;
   const line = [a.street, a.city, a.state].filter(Boolean).join(', ');
   return [line, a.zip].filter(Boolean).join(' ');
+}
+
+function initials(org: string): string {
+  const words = org
+    .replace(/[—–-].*$/, '')
+    .split(/\s+/)
+    .filter((w) => w && !['the', 'of', 'and', '&', 'for'].includes(w.toLowerCase()));
+  if (words.length === 0) return org.slice(0, 2).toUpperCase();
+  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+  return (words[0][0] + words[1][0]).toUpperCase();
+}
+
+function OrgAvatar({ entry, size = 56 }: { entry: ResourceEntry; size?: number }) {
+  const [broken, setBroken] = useState(false);
+  const cat = NEED_CATEGORY_BY_ID[entry.categories[0]];
+  const style = { width: size, height: size } as const;
+  if (entry.logo && !broken) {
+    return (
+      <img
+        src={entry.logo}
+        alt={`${entry.org} logo`}
+        onError={() => setBroken(true)}
+        className="flex-shrink-0 rounded-2xl object-contain bg-white ring-1 ring-gray-200"
+        style={style}
+      />
+    );
+  }
+  return (
+    <div
+      aria-hidden
+      className="flex-shrink-0 grid place-items-center rounded-2xl font-extrabold ring-1 ring-black/5"
+      style={{ ...style, background: cat.tint, color: cat.ink, fontSize: size * 0.34 }}
+    >
+      {initials(entry.org)}
+    </div>
+  );
+}
+
+/** Render a link with the right element for internal / external / tel / mailto URLs. */
+function SmartLink({
+  url,
+  className,
+  style,
+  children,
+}: {
+  url: string;
+  className?: string;
+  style?: React.CSSProperties;
+  children: React.ReactNode;
+}) {
+  if (url.startsWith('/')) {
+    return (
+      <Link to={url} className={className} style={style}>
+        {children}
+      </Link>
+    );
+  }
+  const isWeb = /^https?:\/\//i.test(url);
+  return (
+    <a
+      href={url}
+      className={className}
+      style={style}
+      {...(isWeb ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+    >
+      {children}
+    </a>
+  );
 }
 
 function VerifiedLine({ entry }: { entry: ResourceEntry }) {
@@ -52,15 +127,17 @@ function VerifiedLine({ entry }: { entry: ResourceEntry }) {
 function DetailRow({
   icon: Icon,
   label,
+  accent,
   children,
 }: {
   icon: typeof MapPin;
   label: string;
+  accent: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="flex gap-3 py-3 border-b border-gray-100 last:border-0">
-      <Icon size={18} className="mt-0.5 flex-shrink-0 text-[#E03694]" />
+      <Icon size={18} className="mt-0.5 flex-shrink-0" style={{ color: accent }} />
       <div>
         <div className="text-xs font-bold uppercase tracking-wide text-gray-400">{label}</div>
         <div className="mt-0.5 text-sm text-gray-700 leading-relaxed">{children}</div>
@@ -96,6 +173,8 @@ export function DirectoryEntryPage() {
     );
   }
 
+  const primary = NEED_CATEGORY_BY_ID[entry.categories[0]];
+  const accent = primary.ink;
   const address = formatAddress(entry);
   const categoryLabels = entry.categories
     .map((cid) => NEED_CATEGORY_BY_ID[cid]?.label)
@@ -123,10 +202,13 @@ export function DirectoryEntryPage() {
         jsonLd={jsonLd}
       />
 
-      <article className="max-w-3xl mx-auto px-6 pt-24 md:pt-32 pb-16">
+      {/* thin category accent across the top of the content */}
+      <div aria-hidden className="h-1.5 w-full" style={{ background: accent }} />
+
+      <article className="max-w-3xl mx-auto px-6 pt-16 md:pt-20 pb-16">
         <Link
           to="/directory"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-[#E03694]"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-gray-800"
         >
           <ArrowLeft size={16} /> All resources
         </Link>
@@ -137,38 +219,54 @@ export function DirectoryEntryPage() {
           transition={{ duration: 0.5 }}
           className="mt-6"
         >
-          <div className="flex flex-wrap gap-2">
-            {entry.categories.map((cid) => (
-              <Link
-                key={cid}
-                to={`/directory?category=${cid}`}
-                className="inline-flex items-center rounded-full bg-[#FBEAF4] px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-[#B0246F] hover:bg-[#f6d7ea]"
-              >
-                {NEED_CATEGORY_BY_ID[cid]?.label ?? cid}
-              </Link>
-            ))}
+          <div className="flex items-start gap-4">
+            <OrgAvatar entry={entry} />
+            <div className="min-w-0">
+              <div className="flex flex-wrap gap-2">
+                {entry.categories.map((cid) => {
+                  const c = NEED_CATEGORY_BY_ID[cid];
+                  return (
+                    <Link
+                      key={cid}
+                      to={`/directory?category=${cid}`}
+                      className="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-wide transition-opacity hover:opacity-80"
+                      style={{ background: c.tint, color: c.ink }}
+                    >
+                      {c.label}
+                    </Link>
+                  );
+                })}
+              </div>
+              <h1 className="mt-3 text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
+                {entry.name}
+              </h1>
+              <p className="mt-1 text-lg font-semibold text-gray-500">{entry.org}</p>
+            </div>
           </div>
-          <h1 className="mt-4 text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
-            {entry.name}
-          </h1>
-          <p className="mt-1 text-lg font-semibold text-gray-500">{entry.org}</p>
+
           <div className="mt-4">
             <VerifiedLine entry={entry} />
           </div>
           <p className="mt-6 text-lg text-gray-700 leading-relaxed">{entry.summary}</p>
         </motion.header>
 
-        {/* Warm next step */}
-        <div className="mt-8 rounded-2xl border border-[#E03694]/25 bg-[#FDF2F8] p-6">
-          <div className="text-xs font-bold uppercase tracking-wide text-[#B0246F]">Your next step</div>
+        {/* Warm next step — colored by the primary category */}
+        <div
+          className="mt-8 rounded-2xl border p-6"
+          style={{ borderColor: `${accent}40`, background: primary.tint }}
+        >
+          <div className="text-xs font-bold uppercase tracking-wide" style={{ color: accent }}>
+            Your next step
+          </div>
           {entry.nextStep.url ? (
-            <a
-              href={entry.nextStep.url}
-              className="mt-3 inline-flex items-center gap-2 rounded-full bg-[#E03694] px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-[#c72d80] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E03694]/50"
+            <SmartLink
+              url={entry.nextStep.url}
+              className="mt-3 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              style={{ background: accent, ['--tw-ring-color' as string]: accent }}
             >
               <PhoneCall size={16} /> {entry.nextStep.label}
               <ArrowRight size={16} />
-            </a>
+            </SmartLink>
           ) : (
             <p className="mt-2 text-base font-bold text-gray-900">{entry.nextStep.label}</p>
           )}
@@ -194,33 +292,30 @@ export function DirectoryEntryPage() {
         {/* Details */}
         <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-6">
           {entry.eligibility ? (
-            <DetailRow icon={Users} label="Who it's for">
+            <DetailRow icon={Users} label="Who it's for" accent={accent}>
               {entry.eligibility}
             </DetailRow>
           ) : null}
           {entry.hours ? (
-            <DetailRow icon={Clock} label="Hours">
+            <DetailRow icon={Clock} label="Hours" accent={accent}>
               {entry.hours}
             </DetailRow>
           ) : null}
-          <DetailRow icon={MapPin} label="Service area">
+          <DetailRow icon={MapPin} label="Service area" accent={accent}>
             {entry.serviceArea.towns?.length
               ? entry.serviceArea.towns.join(', ') + ` (${entry.serviceArea.county} County)`
               : `${entry.serviceArea.county} County`}
             {entry.serviceArea.note ? ` · ${entry.serviceArea.note}` : ''}
           </DetailRow>
           {entry.contact.phone ? (
-            <DetailRow icon={Phone} label="Phone">
-              <a href={`tel:${entry.contact.phone.replace(/[^\d+]/g, '')}`} className="text-[#E03694] hover:underline">
+            <DetailRow icon={Phone} label="Phone" accent={accent}>
+              <a href={`tel:${entry.contact.phone.replace(/[^\d+]/g, '')}`} className="hover:underline" style={{ color: accent }}>
                 {entry.contact.phone}
               </a>
               {entry.contact.tollFree ? (
                 <>
                   {' '}· toll-free{' '}
-                  <a
-                    href={`tel:${entry.contact.tollFree.replace(/[^\d+]/g, '')}`}
-                    className="text-[#E03694] hover:underline"
-                  >
+                  <a href={`tel:${entry.contact.tollFree.replace(/[^\d+]/g, '')}`} className="hover:underline" style={{ color: accent }}>
                     {entry.contact.tollFree}
                   </a>
                 </>
@@ -228,37 +323,72 @@ export function DirectoryEntryPage() {
             </DetailRow>
           ) : null}
           {entry.contact.email ? (
-            <DetailRow icon={Mail} label="Email">
-              <a href={`mailto:${entry.contact.email}`} className="text-[#E03694] hover:underline">
+            <DetailRow icon={Mail} label="Email" accent={accent}>
+              <a href={`mailto:${entry.contact.email}`} className="hover:underline" style={{ color: accent }}>
                 {entry.contact.email}
               </a>
             </DetailRow>
           ) : null}
           {entry.contact.website ? (
-            <DetailRow icon={Globe} label="Website">
+            <DetailRow icon={Globe} label="Website" accent={accent}>
               <a
                 href={entry.contact.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#E03694] hover:underline break-words"
+                className="hover:underline break-words"
+                style={{ color: accent }}
               >
                 {entry.contact.website.replace(/^https?:\/\//, '')}
               </a>
             </DetailRow>
           ) : null}
           {address ? (
-            <DetailRow icon={MapPin} label="Address">
+            <DetailRow icon={MapPin} label="Address" accent={accent}>
               {address}
               {entry.contact.addressNote ? (
                 <span className="block text-xs text-gray-500 mt-1">{entry.contact.addressNote}</span>
               ) : null}
             </DetailRow>
           ) : entry.contact.addressNote ? (
-            <DetailRow icon={MapPin} label="Address">
+            <DetailRow icon={MapPin} label="Address" accent={accent}>
               <span className="text-gray-500">{entry.contact.addressNote}</span>
             </DetailRow>
           ) : null}
         </div>
+
+        {/* Other ways to connect — apply/intake form + program links */}
+        {(entry.contact.applyUrl || (entry.contact.links && entry.contact.links.length)) ? (
+          <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-gray-400">
+              More ways to connect
+            </h2>
+            {entry.contact.applyUrl ? (
+              <SmartLink
+                url={entry.contact.applyUrl}
+                className="mt-4 inline-flex items-center gap-2 rounded-full border-2 px-5 py-2.5 text-sm font-bold transition-opacity hover:opacity-80"
+                style={{ borderColor: accent, color: accent }}
+              >
+                <FileText size={15} /> Apply or request help online
+                <ArrowRight size={15} />
+              </SmartLink>
+            ) : null}
+            {entry.contact.links && entry.contact.links.length ? (
+              <ul className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {entry.contact.links.map((l) => (
+                  <li key={l.url}>
+                    <SmartLink
+                      url={l.url}
+                      className="group inline-flex items-center gap-1.5 text-sm font-semibold hover:underline"
+                    >
+                      <ExternalLink size={13} className="text-gray-400" style={{ color: accent }} />
+                      <span style={{ color: accent }}>{l.label}</span>
+                    </SmartLink>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        ) : null}
 
         {/* Correction / freshness */}
         <p className="mt-6 text-sm text-gray-500">
@@ -278,7 +408,8 @@ export function DirectoryEntryPage() {
         <div className="mt-10 border-t border-gray-100 pt-6">
           <Link
             to="/directory"
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-[#E03694] hover:underline"
+            className="inline-flex items-center gap-1.5 text-sm font-bold hover:underline"
+            style={{ color: accent }}
           >
             <ArrowLeft size={16} /> Back to the Resource Directory
           </Link>

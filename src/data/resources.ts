@@ -1,21 +1,22 @@
 // SparkPoint Resource Directory — data model + seed entries.
 //
-// This is the structured, code-authored source for the Resource Directory (the
-// browsable half of the Resilience Hub "digital twin") and the future Needs
-// Finder. It follows the same convention as src/data/stories.ts: typed
-// interfaces + a plain exported array that pages import directly and that
-// scripts/prerender.mjs derives static /directory/:id routes from.
+// Structured, code-authored source for the Resource Directory (browsable half of
+// the Resilience Hub "digital twin") and the future Needs Finder. Mirrors the
+// src/data/stories.ts convention: typed interfaces + a plain exported array that
+// pages import directly and that scripts/prerender.mjs derives /directory/:id
+// routes from.
 //
 // PROVENANCE: seeded from the RuralHealthSim simulator taxonomy
-// (public/databases/resource_hub_seed.json) and enriched 2026-07-23 with public
-// contact info verified against each org's official website / official county
-// pages. Simulator-only abstractions (journey points, composites, "do not name"
-// entries) and all _internal.* staff fields were dropped. `verified` reflects
-// how well each entry is confirmed for PUBLIC use — never show an unconfirmed
-// entry as if it were confirmed.
+// (public/databases/resource_hub_seed.json), enriched 2026-07-23 with public
+// contact info + intake/apply links verified against each org's official site.
+// Simulator-only abstractions and all _internal.* staff fields were dropped.
+// `verified` reflects how well each entry is confirmed for PUBLIC use.
+//
+// Category colors: each NeedCategory carries a { tint, ink } pair. All 12 pairs
+// pass WCAG AA (>=4.5:1) for small text on both the tint and white. Color always
+// travels with an icon + text label (never color alone).
 //
 // SEC-007: content is code/data-authored with structured plain-text fields.
-// Nothing here is rendered as raw HTML.
 
 export type NeedCategoryId =
   | 'food'
@@ -31,11 +32,6 @@ export type NeedCategoryId =
   | 'language-access'
   | 'navigation';
 
-// How confident we are that this entry is accurate and safe to publish.
-// - confirmed:         verified against the org's official source
-// - partner-input:     provided by the partner org
-// - needs-verification: seeded/enriched but not yet confirmed with the org
-// - estimate:          rough/modeled — do not present as authoritative
 export type VerificationStatus =
   | 'confirmed'
   | 'partner-input'
@@ -46,10 +42,14 @@ export interface NeedCategory {
   id: NeedCategoryId;
   /** Public, plain-language label. */
   label: string;
-  /** One-line description shown on category chips / browse tiles. */
+  /** One-line description shown on category tiles. */
   blurb: string;
   /** lucide-react icon name. */
   icon: string;
+  /** Light background tint for chips/badges (AA-safe with `ink`). */
+  tint: string;
+  /** Accent + text color (AA-safe on `tint` and on white). */
+  ink: string;
   /** Free-text terms the Needs Finder (Phase 2) maps to this category. */
   synonyms: string[];
 }
@@ -61,27 +61,35 @@ export interface ResourceAddress {
   zip: string;
 }
 
+/** A labelled URL: an application/intake form, a program page, a social channel. */
+export interface ResourceLink {
+  label: string;
+  url: string;
+}
+
 export interface ResourceContact {
   phone?: string;
-  /** 24/7 crisis line, where one exists (e.g. behavioral-health crisis). */
+  /** 24/7 crisis line, where one exists. */
   crisisPhone?: string;
   tollFree?: string;
   email?: string;
   website?: string;
+  /** The single best online "apply / request help / intake" form or page. */
+  applyUrl?: string;
+  /** Other useful public links (programs, volunteer, donate, social, portal). */
+  links?: ResourceLink[];
   address?: ResourceAddress;
-  /** e.g. "Mailing address only — no public walk-in address published." */
   addressNote?: string;
 }
 
 /** The warm next action — a concrete first step, never just a bare link. */
 export interface ResourceNextStep {
   label: string;
-  /** https:, tel:, or mailto: */
+  /** https:, tel:, mailto:, or an internal path like "/intake". */
   url?: string;
   note?: string;
 }
 
-/** Structured access frictions carried over from the simulator model. */
 export interface ResourceAccess {
   referralRequired?: boolean;
   appointmentDelayDays?: number;
@@ -91,19 +99,14 @@ export interface ResourceAccess {
 }
 
 export interface ResourceEntry {
-  /** Stable slug → /directory/:id (used for SEO prerender). */
   id: string;
-  /** Service / program name as a resident would recognize it. */
   name: string;
-  /** Parent organization. */
   org: string;
   categories: NeedCategoryId[];
-  /** Plain-text public description. */
   summary: string;
   serviceArea: {
     county: string;
     towns?: string[];
-    /** Is the service inside Transylvania County? */
     inCounty: boolean;
     note?: string;
   };
@@ -112,13 +115,19 @@ export interface ResourceEntry {
   contact: ResourceContact;
   nextStep: ResourceNextStep;
   verified: VerificationStatus;
-  /** ISO date the entry was last reviewed/enriched. */
   lastReviewed?: string;
   featured?: boolean;
   access?: ResourceAccess;
+  /**
+   * Optional org logo, as a path under /assets/directory-logos/ (e.g.
+   * "/assets/directory-logos/the-sharing-house.png"). When absent — or if the
+   * file fails to load — the UI shows a category-colored monogram instead.
+   * Use official logos only (see IP-001); nominative use to identify the org.
+   */
+  logo?: string;
 }
 
-// ─── Need categories (browse taxonomy + Needs Finder synonyms) ───
+// ─── Need categories (browse taxonomy + colors + Needs Finder synonyms) ───
 
 export const NEED_CATEGORIES: NeedCategory[] = [
   {
@@ -126,6 +135,8 @@ export const NEED_CATEGORIES: NeedCategory[] = [
     label: 'Food & meals',
     blurb: 'Food pantries, hot meals, and home-delivered meals.',
     icon: 'Utensils',
+    tint: '#ECFDF5',
+    ink: '#047857',
     synonyms: ['hungry', 'food', 'groceries', 'food pantry', 'meals', 'snap', 'ebt', 'food stamps', 'nutrition', 'wic', 'hot meal', 'baby formula'],
   },
   {
@@ -133,6 +144,8 @@ export const NEED_CATEGORIES: NeedCategory[] = [
     label: 'Housing & shelter',
     blurb: 'Emergency shelter and home repair.',
     icon: 'Home',
+    tint: '#EFF6FF',
+    ink: '#1D4ED8',
     synonyms: ['homeless', 'shelter', 'housing', 'place to stay', 'rent', 'eviction', 'repairs', 'roof', 'home repair', 'nowhere to go'],
   },
   {
@@ -140,6 +153,8 @@ export const NEED_CATEGORIES: NeedCategory[] = [
     label: 'Health care',
     blurb: 'Primary care, pediatrics, and public health.',
     icon: 'Stethoscope',
+    tint: '#ECFEFF',
+    ink: '#0E7490',
     synonyms: ['doctor', 'clinic', 'sick', 'medical', 'primary care', 'pediatrician', 'checkup', 'uninsured', 'prescription', 'health', 'wic', 'immunization', 'vaccine'],
   },
   {
@@ -147,6 +162,8 @@ export const NEED_CATEGORIES: NeedCategory[] = [
     label: 'Mental & behavioral health',
     blurb: 'Counseling, substance-use support, and crisis help.',
     icon: 'HeartPulse',
+    tint: '#F5F3FF',
+    ink: '#6D28D9',
     synonyms: ['counseling', 'therapy', 'depression', 'anxiety', 'substance', 'addiction', 'recovery', 'crisis', 'mental health', 'behavioral health', 'grief', 'stress'],
   },
   {
@@ -154,6 +171,8 @@ export const NEED_CATEGORIES: NeedCategory[] = [
     label: 'Transportation',
     blurb: 'Rides to appointments and around the county.',
     icon: 'Bus',
+    tint: '#FFF7ED',
+    ink: '#C2410C',
     synonyms: ['ride', 'bus', 'transport', 'transportation', 'car', 'get to appointment', 'van', 'no car', "can't drive"],
   },
   {
@@ -161,6 +180,8 @@ export const NEED_CATEGORIES: NeedCategory[] = [
     label: 'Benefits & assistance',
     blurb: 'Medicaid, SNAP, energy and child-care assistance.',
     icon: 'ClipboardList',
+    tint: '#F0F9FF',
+    ink: '#0369A1',
     synonyms: ['medicaid', 'snap', 'benefits', 'energy assistance', 'heating', 'child care', 'apply', 'enroll', 'financial help', 'dss', 'assistance', 'workfirst'],
   },
   {
@@ -168,6 +189,8 @@ export const NEED_CATEGORIES: NeedCategory[] = [
     label: 'Legal aid',
     blurb: 'Free civil legal help and benefits appeals.',
     icon: 'Scale',
+    tint: '#FEFCE8',
+    ink: '#A16207',
     synonyms: ['lawyer', 'legal', 'eviction', 'appeal', 'denied', 'benefits appeal', 'custody', 'immigration', 'court', 'legal aid'],
   },
   {
@@ -175,6 +198,8 @@ export const NEED_CATEGORIES: NeedCategory[] = [
     label: 'Disaster recovery',
     blurb: 'Storm and flood recovery, repairs, and case management.',
     icon: 'CloudRain',
+    tint: '#FEF2F2',
+    ink: '#B91C1C',
     synonyms: ['helene', 'flood', 'storm', 'disaster', 'recovery', 'damage', 'fema', 'hurricane', 'rebuild'],
   },
   {
@@ -182,6 +207,8 @@ export const NEED_CATEGORIES: NeedCategory[] = [
     label: 'Jobs & workforce',
     blurb: 'Job training and workforce development.',
     icon: 'Briefcase',
+    tint: '#EEF2FF',
+    ink: '#4338CA',
     synonyms: ['job', 'work', 'career', 'training', 'employment', 'resume', 'workforce', 'hiring', 'unemployed'],
   },
   {
@@ -189,6 +216,8 @@ export const NEED_CATEGORIES: NeedCategory[] = [
     label: 'Digital access',
     blurb: 'Devices, internet help, and digital skills.',
     icon: 'Laptop',
+    tint: '#FDF4FF',
+    ink: '#A21CAF',
     synonyms: ['computer', 'laptop', 'internet', 'wifi', 'device', 'online', 'digital', 'tablet', 'phone', 'email help'],
   },
   {
@@ -196,6 +225,8 @@ export const NEED_CATEGORIES: NeedCategory[] = [
     label: 'Language & newcomer support',
     blurb: 'Spanish-language help and newcomer navigation.',
     icon: 'Languages',
+    tint: '#FFF1F2',
+    ink: '#BE123C',
     synonyms: ['spanish', 'espanol', 'latino', 'hispanic', 'translation', 'interpreter', 'newcomer', 'immigrant', 'english', 'idioma'],
   },
   {
@@ -203,6 +234,8 @@ export const NEED_CATEGORIES: NeedCategory[] = [
     label: 'Get help navigating',
     blurb: 'Not sure where to start? A person will help you find it.',
     icon: 'Compass',
+    tint: '#FDF2F8',
+    ink: '#B0246F',
     synonyms: ['help', 'where to start', 'connect', 'navigate', "don't know", 'overwhelmed', 'resource', 'someone to talk to', 'guidance'],
   },
 ];
@@ -216,8 +249,7 @@ export const NEED_CATEGORY_BY_ID: Record<NeedCategoryId, NeedCategory> = NEED_CA
 );
 
 // ─── Directory entries ───
-// Contact info verified 2026-07-23 against each org's official website/pages.
-// Entries marked needs-verification still need a direct confirmation with the org.
+// Contact info + apply/intake links verified 2026-07-23 against official sources.
 
 export const RESOURCES: ResourceEntry[] = [
   // ── Get help navigating ──
@@ -234,12 +266,17 @@ export const RESOURCES: ResourceEntry[] = [
     contact: {
       email: 'info@yoursparkpoint.org',
       website: 'https://yoursparkpoint.org',
+      applyUrl: '/intake',
+      links: [
+        { label: 'Contact / intake form', url: '/intake' },
+        { label: 'Get involved', url: '/get-involved' },
+      ],
       address: { street: '94 S. Caldwell Street', city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
-      label: 'Email the Resilience Hub',
-      url: 'mailto:info@yoursparkpoint.org',
-      note: 'Or stop by 94 S. Caldwell Street in Brevard during weekday hours.',
+      label: 'Contact the Resilience Hub',
+      url: '/intake',
+      note: 'Or email info@yoursparkpoint.org, or stop by 94 S. Caldwell Street during weekday hours.',
     },
     verified: 'confirmed',
     lastReviewed: '2026-07-23',
@@ -258,6 +295,9 @@ export const RESOURCES: ResourceEntry[] = [
     contact: {
       phone: '(828) 884-3174',
       website: 'https://www.transylvaniacounty.org/departments/social-services',
+      links: [
+        { label: 'Transylvania County DSS', url: 'https://www.transylvaniacounty.org/departments/social-services' },
+      ],
       address: { street: '106 E. Morgan St.', city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
@@ -279,12 +319,18 @@ export const RESOURCES: ResourceEntry[] = [
     summary:
       'A community food pantry with a short, household-size-based intake. Dietary needs (low-sodium and similar) can be accommodated. The Sharing House also provides clothing and other basic supplies and financial assistance.',
     serviceArea: { county: 'Transylvania', inCounty: true },
-    eligibility: 'Short intake; household-size based. Confirm the current pickup schedule with the pantry.',
+    eligibility: 'Short intake; household-size based. Food help is by monthly appointment — call or visit the "how to get food" page.',
     hours: 'Mon–Fri 9am–12pm & 1–4pm; extended Tuesdays until 6pm',
     contact: {
       phone: '(828) 884-2866',
       email: 'tcm@sharinghouse.org',
       website: 'https://www.sharinghouse.org',
+      applyUrl: 'https://www.sharinghouse.org/food-access',
+      links: [
+        { label: 'How to get food', url: 'https://www.sharinghouse.org/food-access' },
+        { label: 'Donate', url: 'https://www.sharinghouse.org/donate' },
+        { label: 'Facebook', url: 'https://www.facebook.com/SharingHouseBrevard/' },
+      ],
       address: { street: '164 Duckworth Avenue', city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
@@ -304,12 +350,18 @@ export const RESOURCES: ResourceEntry[] = [
     summary:
       'Hot meals and pantry groceries with no documentation and no questions asked — just a name and household size. Emergency food boxes and delivery are available by phone request, and a food truck reaches remote areas of the county.',
     serviceArea: { county: 'Transylvania', inCounty: true },
-    eligibility: 'Name and household size only. No documentation required.',
+    eligibility: 'Name and household size only. No documentation required. Walk-in.',
     hours: 'Mon–Fri 9am–2pm; hot meals & groceries served 12pm–2pm',
     contact: {
       phone: '(828) 877-3577',
       email: 'breadoflifetc@gmail.com',
       website: 'https://www.breadoflifetc.org',
+      applyUrl: 'https://www.breadoflifetc.org/programs',
+      links: [
+        { label: 'Programs (meals & groceries)', url: 'https://www.breadoflifetc.org/programs' },
+        { label: 'Volunteer', url: 'https://www.breadoflifetc.org/volunteer' },
+        { label: 'Facebook', url: 'https://www.facebook.com/breadoflifetc/' },
+      ],
       address: { street: '238 S. Caldwell St.', city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
@@ -326,13 +378,18 @@ export const RESOURCES: ResourceEntry[] = [
     org: 'The Hunger Coalition of Transylvania County',
     categories: ['food'],
     summary:
-      'A rotating pantry at a different location each Thursday, partnering with MANNA FoodBank and the Transylvania Farmers Market to reach neighbors across the county.',
+      'A rotating pantry and mobile markets at a different location each Thursday, partnering with MANNA FoodBank and the Transylvania Farmers Market to reach neighbors across the county.',
     serviceArea: { county: 'Transylvania', inCounty: true, note: 'Location rotates weekly' },
-    eligibility: 'Open to county residents. Pantry location rotates — confirm the current weekly schedule.',
+    eligibility: 'Open to county residents. Attend a weekly mobile market — check the current schedule.',
     hours: 'First through fourth Thursdays — location rotates',
     contact: {
       email: 'hungerctc@gmail.com',
       website: 'https://www.hungerfreetc.org',
+      applyUrl: 'https://www.hungerfreetc.org/programs',
+      links: [
+        { label: 'Mobile markets & pantry schedule', url: 'https://www.hungerfreetc.org/programs' },
+        { label: 'Facebook', url: 'https://www.facebook.com/transylvaniahungercoalition/' },
+      ],
       address: { city: 'Brevard', state: 'NC', zip: '28712' },
       addressNote: 'Mailing address is PO Box 1695, Brevard. Pantry locations rotate weekly — no fixed walk-in address.',
     },
@@ -352,11 +409,17 @@ export const RESOURCES: ResourceEntry[] = [
     summary:
       'Weekday home-delivered meals for homebound residents — often older adults or people with disabilities — who cannot easily shop or prepare food. Sliding-scale suggested donation; someone must be home to receive the meal.',
     serviceArea: { county: 'Transylvania', inCounty: true, towns: ['Brevard'] },
-    eligibility: 'Homebound residents who cannot easily shop or cook. Confirm current capacity and any waitlist.',
+    eligibility: 'Homebound residents who cannot easily shop or cook. Submit a meal request or call.',
     hours: 'Program office Mon–Fri 9am–1pm; meals delivered weekdays ~11am–12pm',
     contact: {
       phone: '(828) 883-3743',
       website: 'https://www.mealsonwheelsbrevard.org',
+      applyUrl: 'https://www.mealsonwheelsbrevard.org/how-to-receive-meals',
+      links: [
+        { label: 'Request meals', url: 'https://www.mealsonwheelsbrevard.org/how-to-receive-meals' },
+        { label: 'Volunteer', url: 'https://www.mealsonwheelsbrevard.org/volunteer' },
+        { label: 'Facebook', url: 'https://www.facebook.com/mealsonwheelsbrevardnc' },
+      ],
       address: { city: 'Brevard', state: 'NC', zip: '28712' },
       addressNote: 'Mailing address is PO Box 485, Brevard. No public walk-in address.',
     },
@@ -384,6 +447,10 @@ export const RESOURCES: ResourceEntry[] = [
       phone: '(828) 877-2040',
       email: 'office@havenoftc.org',
       website: 'https://havenoftc.org',
+      links: [
+        { label: 'Community services list', url: 'https://havenoftc.org/social-services-list/' },
+        { label: 'Donate', url: 'https://havenoftc.org/donate/' },
+      ],
       address: { city: 'Brevard', state: 'NC', zip: '28712' },
       addressNote: 'Contact the office to arrange an intake interview; the shelter address is shared at intake.',
     },
@@ -403,12 +470,17 @@ export const RESOURCES: ResourceEntry[] = [
     summary:
       'Critical home repair and storm/flood recovery repairs for homeowners, including Hurricane Helene disaster recovery work. Scheduling depends on volunteer labor and donated materials, so plan ahead.',
     serviceArea: { county: 'Transylvania', inCounty: true },
-    eligibility: 'Homeowners with repair or storm/flood-damage needs. Apply through the Housing Programs section of the website.',
+    eligibility: 'Homeowners with repair or storm/flood-damage needs. Start with the Critical Home Repair program.',
     hours: 'ReStore: Tue–Fri 9:30am–5pm, Sat 9:30am–4pm. Program inquiries by phone.',
     contact: {
       phone: '(828) 884-3464',
       email: 'info@transylvaniahabitat.org',
       website: 'https://transylvaniahabitat.org',
+      applyUrl: 'https://transylvaniahabitat.org/critical-home-repair/',
+      links: [
+        { label: 'Critical Home Repair program', url: 'https://transylvaniahabitat.org/critical-home-repair/' },
+        { label: 'Volunteer', url: 'https://transylvaniahabitat.org/how-to-help/volunteer/' },
+      ],
       address: { street: '692 Ecusta Road', city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
@@ -435,12 +507,18 @@ export const RESOURCES: ResourceEntry[] = [
       phone: '(828) 883-5550',
       email: 'info@brchs.com',
       website: 'https://www.brchs.com/locations/blue-ridge-health-transylvania',
+      applyUrl: 'https://www.brchs.com/patients/new-patient/',
+      links: [
+        { label: 'New patient info', url: 'https://www.brchs.com/patients/new-patient/' },
+        { label: 'Find a provider', url: 'https://www.brchs.com/patients/find-a-provider/' },
+        { label: 'Patient portal', url: 'https://21884-1.portal.athenahealth.com/' },
+      ],
       address: { street: '29 West French Broad Street, Suite 203', city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
       label: 'Call Blue Ridge Health',
       url: 'tel:+18288835550',
-      note: 'Ask to become a patient or book a visit.',
+      note: 'Appointments are by phone. Ask to become a patient or book a visit.',
     },
     verified: 'needs-verification',
     lastReviewed: '2026-07-23',
@@ -459,12 +537,18 @@ export const RESOURCES: ResourceEntry[] = [
       phone: '(828) 883-5550',
       email: 'info@brchs.com',
       website: 'https://www.brchs.com/locations/blue-ridge-health-transylvania',
+      applyUrl: 'https://www.brchs.com/patients/new-patient/',
+      links: [
+        { label: 'New patient info', url: 'https://www.brchs.com/patients/new-patient/' },
+        { label: 'Find a provider', url: 'https://www.brchs.com/patients/find-a-provider/' },
+        { label: 'Patient portal', url: 'https://21884-1.portal.athenahealth.com/' },
+      ],
       address: { street: '29 West French Broad Street, Suite 203', city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
       label: 'Call Blue Ridge Health',
       url: 'tel:+18288835550',
-      note: 'Ask about pediatric appointments.',
+      note: 'Appointments are by phone. Ask about pediatric care.',
     },
     verified: 'needs-verification',
     lastReviewed: '2026-07-23',
@@ -482,6 +566,11 @@ export const RESOURCES: ResourceEntry[] = [
     contact: {
       phone: '(828) 884-3135',
       website: 'https://transylvaniahealth.org',
+      applyUrl: 'https://transylvaniahealth.org/contact/',
+      links: [
+        { label: 'Personal health services', url: 'https://transylvaniahealth.org/my-health/' },
+        { label: 'WIC program', url: 'https://transylvaniahealth.org/wic-program/' },
+      ],
       address: { street: '106 East Morgan Street', city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
@@ -509,6 +598,10 @@ export const RESOURCES: ResourceEntry[] = [
       crisisPhone: '(800) 849-6127',
       email: 'member.services@vayahealth.com',
       website: 'https://www.vayahealth.com',
+      links: [
+        { label: 'Access to care', url: 'https://www.vayahealth.com/available-services/access-to-care/' },
+        { label: 'Find a provider', url: 'https://www.vayahealth.com/get-help/provider-search/' },
+      ],
     },
     nextStep: {
       label: 'Call the 24/7 crisis line',
@@ -532,6 +625,11 @@ export const RESOURCES: ResourceEntry[] = [
       phone: '(828) 883-2708',
       email: 'info@brchs.com',
       website: 'https://www.brchs.com/locations/meridian-behavioral-health-services-brevard/',
+      applyUrl: 'https://www.brchs.com/services/behavioral-health-counseling/',
+      links: [
+        { label: 'Behavioral health & counseling', url: 'https://www.brchs.com/services/behavioral-health-counseling/' },
+        { label: 'New patient info', url: 'https://www.brchs.com/patients/new-patient/' },
+      ],
       address: { street: '69 North Broad Street', city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
@@ -555,6 +653,9 @@ export const RESOURCES: ResourceEntry[] = [
     contact: {
       phone: '(828) 884-6173',
       website: 'https://www.tcsnc.org',
+      links: [
+        { label: 'Student services', url: 'https://www.tcsnc.org/page/student-services' },
+      ],
       address: { street: '225 Rosenwald Lane', city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
@@ -581,6 +682,9 @@ export const RESOURCES: ResourceEntry[] = [
     contact: {
       phone: '(828) 884-3203',
       website: 'https://www.transylvaniacounty.org/departments/transportation',
+      links: [
+        { label: 'Transportation department', url: 'https://www.transylvaniacounty.org/departments/transportation' },
+      ],
       address: { city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
@@ -600,18 +704,23 @@ export const RESOURCES: ResourceEntry[] = [
     org: 'Transylvania County DSS',
     categories: ['benefits'],
     summary:
-      'The county Department of Social Services administers Medicaid, SNAP (Food and Nutrition Services), WorkFirst, Child Care Subsidy, and Energy Assistance for residents.',
+      'The county Department of Social Services administers Medicaid, SNAP (Food and Nutrition Services), WorkFirst, Child Care Subsidy, and Energy Assistance for residents. Apply online statewide through NC ePASS or in person.',
     serviceArea: { county: 'Transylvania', inCounty: true },
     eligibility: 'County residents. Program eligibility varies — DSS staff can screen and help you apply.',
     contact: {
       phone: '(828) 884-3174',
       website: 'https://www.transylvaniacounty.org/departments/social-services',
+      applyUrl: 'https://epass.nc.gov/',
+      links: [
+        { label: 'Apply online — NC ePASS (Medicaid/SNAP)', url: 'https://epass.nc.gov/' },
+        { label: 'County DSS department', url: 'https://www.transylvaniacounty.org/departments/social-services' },
+      ],
       address: { street: '106 E. Morgan St.', city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
-      label: 'Call Transylvania County DSS',
-      url: 'tel:+18288843174',
-      note: 'Ask which benefits you may qualify for and how to apply.',
+      label: 'Apply online with NC ePASS',
+      url: 'https://epass.nc.gov/',
+      note: 'Or call DSS at (828) 884-3174 to ask which benefits you may qualify for.',
     },
     verified: 'needs-verification',
     lastReviewed: '2026-07-23',
@@ -627,18 +736,23 @@ export const RESOURCES: ResourceEntry[] = [
     summary:
       'Free civil legal assistance for low-income western NC residents — benefits denials and appeals (Medicaid, disability, SNAP), housing and eviction, domestic-violence protection, and more. Serves Transylvania County from a Brevard office and regional clinics.',
     serviceArea: { county: 'Transylvania', inCounty: true, note: 'Regional (western NC)' },
-    eligibility: 'Low-income western NC residents. Apply through the intake line or the "Apply for Help" page.',
+    eligibility: 'Low-income western NC residents. Apply online, by phone, or through the "Apply for Help" page.',
     hours: 'Intake Mon–Fri 8:30am–5pm; Brevard office by appointment',
     contact: {
       phone: '(828) 253-0406',
       tollFree: '(800) 489-6144',
       website: 'https://www.pisgahlegal.org',
+      applyUrl: 'https://plsoi.legalserver.org/modules/matter/extern_intake.php?pid=129&h=daa817&',
+      links: [
+        { label: 'Free legal assistance / Apply', url: 'https://www.pisgahlegal.org/free-legal-assistance/' },
+        { label: 'Hurricane Helene legal help', url: 'https://www.pisgahlegal.org/helene/' },
+      ],
       address: { street: '130 S. Broad St.', city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
       label: 'Call Pisgah Legal Services',
       url: 'tel:+18004896144',
-      note: 'Toll-free intake: (800) 489-6144, or (828) 253-0406.',
+      note: 'Toll-free intake: (800) 489-6144, or (828) 253-0406. You can also apply online.',
     },
     verified: 'needs-verification',
     lastReviewed: '2026-07-23',
@@ -653,17 +767,22 @@ export const RESOURCES: ResourceEntry[] = [
     summary:
       'The county’s long-term recovery group for Hurricane Helene: disaster case management, unmet-needs identification, and cross-agency support across housing, construction, legal advocacy, economic recovery, and emotional support.',
     serviceArea: { county: 'Transylvania', inCounty: true },
-    eligibility: 'Households affected by Hurricane Helene. Request help via the "Get HELP" link or by phone.',
+    eligibility: 'Households affected by Hurricane Helene. Request help via the "Get Help" form or by phone.',
     contact: {
       phone: '(828) 214-5021',
       email: 'info@gofwrd.org',
       website: 'https://gofwrd.org',
+      applyUrl: 'https://gofwrd.org/get-help',
+      links: [
+        { label: 'Get help / request support', url: 'https://gofwrd.org/get-help' },
+        { label: 'Get involved', url: 'https://gofwrd.org/get-involved/' },
+      ],
       address: { street: '153 West Jordan Street', city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
       label: 'Call FWRD Transylvania',
       url: 'tel:+18282145021',
-      note: 'Ask to be connected with a disaster case manager.',
+      note: 'Ask to be connected with a disaster case manager, or use the online Get Help form.',
     },
     verified: 'confirmed',
     lastReviewed: '2026-07-23',
@@ -683,6 +802,10 @@ export const RESOURCES: ResourceEntry[] = [
       phone: '(828) 883-3700',
       email: 'chamber@brevardncchamber.org',
       website: 'https://brevardncchamber.org',
+      links: [
+        { label: 'Jobs & employment', url: 'https://brevardncchamber.org/employment/' },
+        { label: 'NCWorks jobs portal', url: 'https://www.ncworks.gov/' },
+      ],
       address: { street: '175 East Main St.', city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
@@ -703,17 +826,22 @@ export const RESOURCES: ResourceEntry[] = [
     summary:
       'Refurbished device matching (laptops, phones, tablets), digital-literacy training, and help enrolling in internet-cost assistance programs — from a storefront on Main Street in Brevard.',
     serviceArea: { county: 'Transylvania', inCounty: true, towns: ['Brevard'] },
-    eligibility: 'Open door; free device requests and affordable sales.',
+    eligibility: 'Open door; free device requests and affordable sales. Check the qualifications page.',
     hours: 'Wed–Fri 10am–5pm; Sat 12pm–5pm',
     contact: {
       phone: '(828) 209-8872',
       website: 'https://www.throughthetrees.us',
+      applyUrl: 'https://www.throughthetrees.us/device-request',
+      links: [
+        { label: 'Request a device', url: 'https://www.throughthetrees.us/device-request' },
+        { label: 'Who qualifies', url: 'https://www.throughthetrees.us/qualifications' },
+      ],
       address: { street: '120 W Main St', city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
-      label: 'Call Through the Trees',
-      url: 'tel:+18282098872',
-      note: 'Ask about a refurbished device or internet-cost help.',
+      label: 'Request a device online',
+      url: 'https://www.throughthetrees.us/device-request',
+      note: 'Or call (828) 209-8872 to ask about a device or internet-cost help.',
     },
     verified: 'confirmed',
     lastReviewed: '2026-07-23',
@@ -734,6 +862,11 @@ export const RESOURCES: ResourceEntry[] = [
       phone: '(828) 585-7018',
       email: 'info@elcentrobrevard.com',
       website: 'https://elcentrobrevard.com',
+      applyUrl: 'https://elcentrobrevard.com/contact/',
+      links: [
+        { label: 'Programs', url: 'https://elcentrobrevard.com/programs/' },
+        { label: 'Facebook', url: 'https://www.facebook.com/ElCentroBrevard/' },
+      ],
       address: { street: '249 E Main St', city: 'Brevard', state: 'NC', zip: '28712' },
     },
     nextStep: {
