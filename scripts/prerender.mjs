@@ -15,6 +15,7 @@ const DIST = path.resolve(process.env.PRERENDER_DIST || 'build');
 const ORIGIN = (process.env.SITE_ORIGIN || 'https://yoursparkpoint.org').replace(/\/$/, '');
 const PORT = Number(process.env.PRERENDER_PORT || 4747);
 const STORIES_FILE = process.env.STORIES_FILE || 'src/data/stories.ts';
+const STORY_COLLECTIONS_FILE = process.env.STORY_COLLECTIONS_FILE || 'src/data/storyCollections.ts';
 const PROGRAMS_FILE = process.env.PROGRAMS_FILE || 'src/pages/programs/programsData.ts';
 const PRESS_FILE = process.env.PRESS_FILE || 'src/data/pressReleases.json';
 const RESOURCES_FILE = process.env.RESOURCES_FILE || 'src/data/resources.ts';
@@ -53,6 +54,9 @@ async function deriveRoutes() {
     routes.add('/stories/' + c.id);
     for (const a of (c.articles || [])) routes.add('/stories/' + c.id + '/' + a.slug);
   }
+  const { STORY_COLLECTIONS } = await importData(STORY_COLLECTIONS_FILE);
+  routes.add('/stories/collections');
+  for (const c of STORY_COLLECTIONS) routes.add('/stories/collections/' + c.id);
   const prog = await importData(PROGRAMS_FILE);
   const progList = prog.programsWithDetailPages || prog.allPrograms || [];
   for (const p of progList) routes.add('/programs/' + (p.slug || p.id));

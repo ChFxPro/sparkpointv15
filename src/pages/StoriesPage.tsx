@@ -2,12 +2,13 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Heart, Upload, ArrowRight, Search, Play } from 'lucide-react';
+import { Heart, Upload, ArrowRight, Search, Play, Gift } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { Link, useNavigate } from 'react-router';
 import { STORIES_DATA } from '../data/stories';
 import { IMPACT_2025 } from '../data/impact2025';
+import { ACTIVE_STORY_COLLECTIONS } from '../data/storyCollections';
 import heroImage from 'figma:asset/b7ea59b58a471ceacde60e41e5e3cd69fe78c66f.png';
 import { BehindTheStories } from '../components/BehindTheStories';
 import { SEOHead } from '../components/SEOHead';
@@ -123,6 +124,48 @@ export function StoriesPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Story Collections — the portal to active listening drives */}
+      {ACTIVE_STORY_COLLECTIONS.length ? (
+        <section className="px-6 pb-10 md:pb-14">
+          <div className="max-w-6xl mx-auto">
+            <div className="relative overflow-hidden rounded-2xl shadow-lg" style={{ background: 'linear-gradient(135deg, #1A1A1A, #2b1730)' }}>
+              <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#E03694] via-[#FDB515] to-[#F15F48]" />
+              {ACTIVE_STORY_COLLECTIONS.map((collection) => (
+                <div key={collection.id} className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6 md:gap-10 items-center p-8 md:p-12">
+                  <div>
+                    <span className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#FDB515] mb-3">
+                      <span className="w-2 h-2 rounded-full bg-[#25b06a] animate-pulse" /> {collection.statusLabel}
+                    </span>
+                    <h2 className="text-white font-bold text-2xl md:text-3xl mb-3">{collection.title}</h2>
+                    <p className="text-white/70 max-w-xl leading-relaxed">{collection.summary}</p>
+                    {collection.incentive ? (
+                      <p className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white/60">
+                        <Gift size={16} className="text-[#FDB515]" aria-hidden="true" /> {collection.incentive}
+                      </p>
+                    ) : null}
+                  </div>
+                  <div className="flex flex-col sm:flex-row md:flex-col gap-3 shrink-0">
+                    {collection.formPath ? (
+                      <Button asChild className="rounded-full px-6 py-6 shadow-lg hover:shadow-xl" style={{ background: 'linear-gradient(135deg, #E03694, #9E509F)', color: 'white' }}>
+                        <Link to={collection.formPath}>Share your story <ArrowRight size={16} className="ml-1" /></Link>
+                      </Button>
+                    ) : null}
+                    <Button asChild variant="outline" className="rounded-full px-6 py-6 bg-transparent border-white/25 text-white hover:bg-white/10 hover:text-white">
+                      <Link to={`/stories/collections/${collection.id}`}>View media kit</Link>
+                    </Button>
+                  </div>
+                </div>
+              ))}
+              <div className="border-t border-white/10 px-8 py-4 md:px-12">
+                <Link to="/stories/collections" className="text-xs font-bold uppercase tracking-wide text-white/50 hover:text-white/80 transition-colors">
+                  See all story collections, past & present →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {/* Featured */}
       {featured ? (
@@ -293,7 +336,7 @@ export function StoriesPage() {
             <h2 className="mb-6 font-bold text-gray-900" style={{ fontSize: 'clamp(2rem, 5vw, 2.5rem)', lineHeight: '1.2' }}>Share Your Story</h2>
             <p className="mb-10 text-gray-600 text-lg md:text-xl leading-relaxed">Your experience matters. Whether it's a moment of connection, a journey of healing, or a story of hope — we'd love to hear from you and share it with our community.</p>
             <Button asChild className="px-10 py-7 rounded-full text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300" style={{ background: 'linear-gradient(135deg, #E03694, #9E509F)', color: 'white' }}>
-              <Link to="/intake?intent=contact"><Upload className="mr-2" size={20} />Submit Your Story</Link>
+              <Link to="/stories/collections"><Upload className="mr-2" size={20} />Submit Your Story</Link>
             </Button>
           </motion.div>
         </div>
