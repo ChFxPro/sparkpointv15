@@ -19,6 +19,8 @@ const StoriesPage = lazy(() =>
 const StoryCategoryPage = lazy(() =>
   import('./pages/StoryCategoryPage').then((module) => ({ default: module.StoryCategoryPage }))
 );
+const StoryCollectionsPage = lazy(() => import('./pages/StoryCollectionsPage'));
+const StoryCollectionDetailPage = lazy(() => import('./pages/StoryCollectionDetailPage'));
 const StoryArticlePage = lazy(() =>
   import('./pages/StoryArticlePage').then((module) => ({ default: module.StoryArticlePage }))
 );
@@ -126,6 +128,8 @@ function AppContent() {
         <Route path="/" element={<HomePage />} />
         <Route path="/mission" element={<MissionPage />} />
         <Route path="/stories" element={<StoriesPage />} />
+        <Route path="/stories/collections" element={<StoryCollectionsPage />} />
+        <Route path="/stories/collections/:id" element={<StoryCollectionDetailPage />} />
         <Route path="/stories/:categoryId" element={<StoryCategoryPage />} />
         <Route path="/stories/:categoryId/:slug" element={<StoryArticlePage />} />
         <Route path="/impact" element={<ImpactPage />} />

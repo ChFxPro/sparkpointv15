@@ -5,6 +5,7 @@ import { MissionGrid } from '../components/MissionGrid';
 import { StoryCarousel } from '../components/StoryCarousel';
 import { ImpactSection } from '../components/ImpactSection';
 import { ConnectionSection } from '../components/ConnectionSection';
+import { StoryCollectionPromo } from '../components/StoryCollectionPromo';
 import { CTAFinal } from '../components/CTAFinal';
 import { SEOHead } from '../components/SEOHead';
 import heleneImage from '../assets/compd/0835779aef52124bf5c00840473e8285f8e0f937.webp';
@@ -64,7 +65,8 @@ export function HomePage() {
       />
 
       <Hero />
-      
+      <StoryCollectionPromo />
+
       <MissionGrid />
       <div
         ref={infographicRef}
