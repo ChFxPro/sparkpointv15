@@ -1,0 +1,1230 @@
+:root {
+  --kyn-navy: #13253f;
+  --kyn-navy-soft: #203b60;
+  --kyn-violet: #7552a3;
+  --kyn-violet-soft: #eee8f6;
+  --kyn-gold: #d9a62e;
+  --kyn-gold-soft: #f7edcf;
+  --kyn-paper: #fbf8ef;
+  --kyn-ink: #19263a;
+  --kyn-muted: #607086;
+  --kyn-line: #d9d7d0;
+}
+
+.kyn-page {
+  background:
+    radial-gradient(circle at 8% 12%, rgb(217 166 46 / 10%), transparent 24rem),
+    linear-gradient(180deg, #fff 0%, #faf9f7 38%, #f6f3ed 100%);
+  color: var(--kyn-ink);
+  min-height: 100vh;
+  padding: 7.5rem 1.5rem 6rem;
+}
+
+.kyn-page-shell {
+  margin: 0 auto;
+  max-width: 72rem;
+}
+
+.kyn-breadcrumb {
+  align-items: center;
+  color: #718096;
+  display: flex;
+  font-size: 0.85rem;
+  font-weight: 650;
+  gap: 0.65rem;
+  margin: 0 auto 1.5rem;
+  max-width: 64rem;
+}
+
+.kyn-breadcrumb a {
+  align-items: center;
+  color: var(--kyn-violet);
+  display: inline-flex;
+  gap: 0.4rem;
+  text-decoration: none;
+}
+
+.kyn-breadcrumb a:hover {
+  color: var(--kyn-navy);
+}
+
+.kyn-guide,
+.kyn-calculator,
+.kyn-output {
+  margin-inline: auto;
+  max-width: 64rem;
+}
+
+.kyn-guide {
+  background: var(--kyn-paper);
+  border: 1px solid rgb(19 37 63 / 12%);
+  border-radius: 2rem;
+  box-shadow: 0 1.5rem 4rem rgb(19 37 63 / 10%);
+  overflow: hidden;
+}
+
+.kyn-guide-hero {
+  align-items: end;
+  background:
+    radial-gradient(circle at 82% 20%, rgb(217 166 46 / 28%), transparent 14rem),
+    linear-gradient(135deg, var(--kyn-navy), #27385f 62%, #614a87);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  min-height: 17rem;
+  overflow: hidden;
+  padding: clamp(2rem, 6vw, 4.75rem);
+  position: relative;
+}
+
+.kyn-eyebrow {
+  color: var(--kyn-gold);
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.kyn-guide-hero h1 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(3.2rem, 9vw, 6.5rem);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 0.88;
+  margin: 0;
+  max-width: 11ch;
+}
+
+.kyn-guide-subtitle {
+  color: rgb(255 255 255 / 78%);
+  font-size: clamp(1rem, 2.3vw, 1.35rem);
+  margin: 1.35rem 0 0;
+}
+
+.kyn-hero-mark {
+  color: rgb(255 255 255 / 8%);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(8rem, 22vw, 15rem);
+  line-height: 0.7;
+  position: absolute;
+  right: -0.4rem;
+  top: 2.2rem;
+}
+
+.kyn-introduction {
+  color: var(--kyn-muted);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  line-height: 1.65;
+  margin: 0;
+  max-width: 56rem;
+  padding: 2.3rem clamp(1.4rem, 5vw, 4rem) 1.6rem;
+}
+
+.kyn-metric-groups {
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: 1fr 1fr;
+  padding: 0 clamp(1.4rem, 5vw, 4rem) 2rem;
+}
+
+.kyn-metric-group {
+  background: rgb(255 255 255 / 72%);
+  border: 1px solid rgb(19 37 63 / 10%);
+  border-radius: 1.25rem;
+  padding: 1.25rem;
+}
+
+.kyn-metric-group--blood-sugar {
+  grid-column: 1 / -1;
+}
+
+.kyn-metric-group h2 {
+  color: var(--kyn-violet);
+  font-size: 0.75rem;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+  margin: 0 0 0.6rem;
+  text-transform: uppercase;
+}
+
+.kyn-metric {
+  align-items: center;
+  border-top: 1px solid var(--kyn-line);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 2.8rem minmax(0, 1fr) minmax(10rem, auto);
+  min-height: 6rem;
+  padding: 0.9rem 0;
+}
+
+.kyn-metric:first-child {
+  border-top: 0;
+}
+
+.kyn-metric--featured {
+  background: linear-gradient(90deg, rgb(117 82 163 / 9%), transparent);
+  border-radius: 0.9rem;
+  margin-inline: -0.5rem;
+  padding-inline: 0.5rem;
+}
+
+.kyn-metric-number {
+  align-items: center;
+  aspect-ratio: 1;
+  background: var(--kyn-navy);
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.8rem;
+  justify-content: center;
+}
+
+.kyn-metric--featured .kyn-metric-number {
+  background: var(--kyn-violet);
+}
+
+.kyn-metric h3 {
+  color: var(--kyn-ink);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.25rem;
+  line-height: 1.1;
+  margin: 0 0 0.25rem;
+}
+
+.kyn-metric p {
+  color: var(--kyn-muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.kyn-metric-reading {
+  text-align: right;
+}
+
+.kyn-metric-reading strong,
+.kyn-metric-reading span {
+  display: block;
+}
+
+.kyn-metric-reading strong {
+  color: var(--kyn-navy);
+  font-size: 1rem;
+}
+
+.kyn-metric-reading span {
+  color: var(--kyn-violet);
+  font-size: 0.68rem;
+  font-weight: 750;
+  margin-top: 0.2rem;
+}
+
+.kyn-apoe-note {
+  align-items: center;
+  background: var(--kyn-navy);
+  color: #fff;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: auto 1fr auto;
+  margin: 0 clamp(1.4rem, 5vw, 4rem) clamp(1.4rem, 5vw, 4rem);
+  padding: 1.3rem 1.5rem;
+}
+
+.kyn-apoe-icon {
+  align-items: center;
+  background: var(--kyn-gold);
+  border-radius: 50%;
+  color: var(--kyn-navy);
+  display: flex;
+  height: 2.8rem;
+  justify-content: center;
+  width: 2.8rem;
+}
+
+.kyn-apoe-note h2 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.15rem;
+  margin: 0 0 0.2rem;
+}
+
+.kyn-apoe-note p {
+  color: rgb(255 255 255 / 72%);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.kyn-apoe-pulse {
+  color: var(--kyn-gold);
+  opacity: 0.75;
+}
+
+.kyn-calculator {
+  background: #fff;
+  border: 1px solid rgb(19 37 63 / 11%);
+  border-radius: 2rem;
+  box-shadow: 0 1.5rem 4rem rgb(19 37 63 / 8%);
+  margin-top: 2rem;
+  overflow: hidden;
+}
+
+.kyn-calculator-heading {
+  background:
+    radial-gradient(circle at 88% 20%, rgb(217 166 46 / 18%), transparent 15rem),
+    linear-gradient(135deg, #f3eef9, #fff);
+  padding: clamp(2rem, 5vw, 3.5rem);
+}
+
+.kyn-calculator-heading h2 {
+  color: var(--kyn-navy);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin: 0;
+}
+
+.kyn-calculator-heading p {
+  color: var(--kyn-muted);
+  font-size: 1rem;
+  margin: 1rem 0 0;
+  max-width: 42rem;
+}
+
+.kyn-privacy-note {
+  align-items: flex-start;
+  background: rgb(255 255 255 / 72%);
+  border: 1px solid rgb(117 82 163 / 18%);
+  border-radius: 0.9rem;
+  color: var(--kyn-violet);
+  display: flex;
+  gap: 0.7rem;
+  margin-top: 1.25rem;
+  max-width: 44rem;
+  padding: 0.85rem 1rem;
+}
+
+.kyn-privacy-note svg {
+  flex: 0 0 auto;
+  margin-top: 0.08rem;
+}
+
+.kyn-calculator-heading .kyn-privacy-note p {
+  color: var(--kyn-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.kyn-privacy-note strong {
+  color: var(--kyn-navy);
+}
+
+.kyn-steps {
+  padding: 0 clamp(1.4rem, 5vw, 3.5rem) 1rem;
+}
+
+.kyn-step {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 3.5rem 1fr;
+  padding: 2.1rem 0;
+}
+
+.kyn-step + .kyn-step {
+  border-top: 1px solid #e2e4e8;
+}
+
+.kyn-step-number {
+  color: var(--kyn-violet);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.6rem;
+  line-height: 1;
+  padding-top: 0.2rem;
+}
+
+.kyn-step-content h3 {
+  color: var(--kyn-navy);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.65rem;
+  margin: 0;
+}
+
+.kyn-step-content > p {
+  color: var(--kyn-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin: 0.35rem 0 1.2rem;
+}
+
+.kyn-request-checks {
+  border: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+}
+
+.kyn-request-checks label {
+  align-items: center;
+  background: var(--kyn-paper);
+  border: 1px solid #d9d6cd;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.9rem;
+  font-weight: 750;
+  gap: 0.65rem;
+  padding: 0.75rem 1rem;
+}
+
+.kyn-request-checks input {
+  height: 1px;
+  opacity: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.kyn-custom-check {
+  align-items: center;
+  background: #fff;
+  border: 2px solid #a4a9b2;
+  border-radius: 0.3rem;
+  display: flex;
+  height: 1.2rem;
+  justify-content: center;
+  width: 1.2rem;
+}
+
+.kyn-request-checks input:checked + .kyn-custom-check {
+  background: var(--kyn-violet);
+  border-color: var(--kyn-violet);
+}
+
+.kyn-request-checks input:checked + .kyn-custom-check::after {
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  content: '';
+  height: 0.55rem;
+  transform: translateY(-1px) rotate(45deg);
+  width: 0.28rem;
+}
+
+.kyn-request-checks input:focus-visible + .kyn-custom-check {
+  box-shadow: 0 0 0 3px rgb(117 82 163 / 25%);
+  outline: 2px solid var(--kyn-violet);
+  outline-offset: 2px;
+}
+
+.kyn-record-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.kyn-field {
+  display: block;
+}
+
+.kyn-field > span {
+  color: var(--kyn-navy);
+  display: flex;
+  font-size: 0.78rem;
+  font-weight: 800;
+  justify-content: space-between;
+  margin: 0 0 0.35rem;
+}
+
+.kyn-field small {
+  color: var(--kyn-muted);
+  font-size: 0.65rem;
+  font-weight: 650;
+}
+
+.kyn-field input,
+.kyn-notes-label textarea {
+  background: #f8f8f6;
+  border: 1px solid #cfd3d8;
+  border-radius: 0.7rem;
+  color: var(--kyn-ink);
+  font: inherit;
+  min-height: 3rem;
+  padding: 0.7rem 0.8rem;
+  width: 100%;
+}
+
+.kyn-field input:focus-visible,
+.kyn-notes-label textarea:focus-visible {
+  border-color: var(--kyn-violet);
+  box-shadow: 0 0 0 3px rgb(117 82 163 / 18%);
+  outline: 2px solid transparent;
+}
+
+.kyn-field input[aria-invalid='true'] {
+  border-color: #b42318;
+}
+
+.kyn-field-error {
+  color: #9f271e !important;
+  font-size: 0.78rem !important;
+  font-weight: 700;
+  margin-bottom: 0 !important;
+}
+
+.kyn-step--calculation {
+  background: linear-gradient(135deg, rgb(19 37 63 / 4%), rgb(117 82 163 / 8%));
+  margin-inline: calc(clamp(1.4rem, 5vw, 3.5rem) * -1);
+  padding-inline: clamp(1.4rem, 5vw, 3.5rem);
+}
+
+.kyn-equation {
+  align-items: end;
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: minmax(7rem, 1fr) auto minmax(7rem, 1fr) auto auto minmax(9rem, 1.25fr);
+}
+
+.kyn-operator,
+.kyn-division {
+  align-items: center;
+  color: var(--kyn-violet);
+  display: flex;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.8rem;
+  height: 3rem;
+  justify-content: center;
+}
+
+.kyn-division {
+  flex-direction: column;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.kyn-division strong {
+  color: var(--kyn-navy);
+  font-size: 0.8rem;
+  margin-top: 0.15rem;
+}
+
+.kyn-result {
+  background: var(--kyn-navy);
+  border: 3px solid var(--kyn-gold);
+  border-radius: 0.9rem;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  min-height: 5.4rem;
+  padding: 0.75rem 1rem;
+}
+
+.kyn-result span {
+  color: rgb(255 255 255 / 67%);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.kyn-result output {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 2.1rem;
+  line-height: 1;
+  margin-top: 0.35rem;
+}
+
+.kyn-clear {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--kyn-violet);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.78rem;
+  font-weight: 800;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+  padding: 0.4rem 0;
+}
+
+.kyn-clear:focus-visible {
+  outline: 2px solid var(--kyn-violet);
+  outline-offset: 3px;
+}
+
+.kyn-range-guide {
+  background: var(--kyn-paper);
+  border-left: 4px solid var(--kyn-gold);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: auto auto 1fr;
+  padding: 1rem 1.25rem;
+}
+
+.kyn-range-guide div strong,
+.kyn-range-guide div span {
+  display: block;
+}
+
+.kyn-range-guide div strong {
+  color: var(--kyn-navy);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.25rem;
+}
+
+.kyn-range-guide div span,
+.kyn-range-guide p {
+  color: var(--kyn-muted);
+  font-size: 0.7rem;
+}
+
+.kyn-range-guide p {
+  border-left: 1px solid #d8d3c6;
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.kyn-notes-label {
+  display: block;
+  position: relative;
+}
+
+.kyn-notes-label textarea {
+  line-height: 1.6;
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.kyn-notes-label small {
+  bottom: 0.7rem;
+  color: var(--kyn-muted);
+  font-size: 0.68rem;
+  position: absolute;
+  right: 0.8rem;
+}
+
+.kyn-clinician-prompt {
+  background: var(--kyn-navy);
+  border: 0;
+  color: #fff;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.5;
+  margin: 0;
+  padding: 1.8rem clamp(1.4rem, 5vw, 3.5rem);
+}
+
+.kyn-clinician-prompt span {
+  color: var(--kyn-gold);
+  display: block;
+  font-family: Manrope, sans-serif;
+  font-size: 0.65rem;
+  font-weight: 850;
+  letter-spacing: 0.14em;
+  margin-bottom: 0.45rem;
+  text-transform: uppercase;
+}
+
+.kyn-output {
+  align-items: start;
+  background: linear-gradient(135deg, var(--kyn-navy), #293f61);
+  border-radius: 1.5rem;
+  color: #fff;
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: auto 1fr;
+  margin-top: 2rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.kyn-output-icon {
+  align-items: center;
+  background: var(--kyn-gold);
+  border-radius: 1rem;
+  color: var(--kyn-navy);
+  display: flex;
+  height: 3.5rem;
+  justify-content: center;
+  width: 3.5rem;
+}
+
+.kyn-output h2 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.kyn-output p {
+  color: rgb(255 255 255 / 72%);
+  font-size: 0.85rem;
+  margin: 0.45rem 0 1.1rem;
+  max-width: 48rem;
+}
+
+.kyn-output-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.kyn-output-actions button,
+.kyn-output-actions a {
+  align-items: center;
+  background: var(--kyn-gold);
+  border: 1px solid var(--kyn-gold);
+  border-radius: 0.7rem;
+  color: var(--kyn-navy);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.8rem;
+  font-weight: 850;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  text-decoration: none;
+}
+
+.kyn-output-actions .kyn-output-secondary,
+.kyn-output-actions a {
+  background: transparent;
+  border-color: rgb(255 255 255 / 35%);
+  color: #fff;
+}
+
+.kyn-output-actions button:focus-visible,
+.kyn-output-actions a:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+.kyn-output .kyn-print-status {
+  color: var(--kyn-gold);
+  font-weight: 700;
+  margin: 0.8rem 0 0;
+  min-height: 1.2rem;
+}
+
+.kyn-disclaimer {
+  color: #6f7782;
+  font-size: 0.74rem;
+  font-style: italic;
+  line-height: 1.55;
+  margin: 1.2rem auto 0;
+  max-width: 60rem;
+  text-align: center;
+}
+
+.kyn-print-root {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .kyn-page {
+    padding: 6.5rem 0.9rem 4rem;
+  }
+
+  .kyn-guide,
+  .kyn-calculator {
+    border-radius: 1.35rem;
+  }
+
+  .kyn-guide-hero {
+    min-height: 14rem;
+    padding: 2rem 1.4rem;
+  }
+
+  .kyn-metric-groups {
+    grid-template-columns: 1fr;
+  }
+
+  .kyn-metric-group--blood-sugar {
+    grid-column: auto;
+  }
+
+  .kyn-metric {
+    align-items: start;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+  }
+
+  .kyn-metric-reading {
+    grid-column: 2;
+    text-align: left;
+  }
+
+  .kyn-apoe-note {
+    grid-template-columns: auto 1fr;
+  }
+
+  .kyn-apoe-pulse {
+    display: none;
+  }
+
+  .kyn-step {
+    gap: 0.5rem;
+    grid-template-columns: 2.4rem 1fr;
+  }
+
+  .kyn-step-number {
+    font-size: 1.15rem;
+  }
+
+  .kyn-record-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kyn-equation {
+    align-items: stretch;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+
+  .kyn-equation .kyn-division {
+    grid-column: 1 / -1;
+    height: auto;
+    margin: -0.3rem 0;
+  }
+
+  .kyn-equation > .kyn-operator:nth-of-type(3) {
+    display: none;
+  }
+
+  .kyn-result {
+    grid-column: 1 / -1;
+  }
+
+  .kyn-range-guide {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .kyn-range-guide p {
+    border-left: 0;
+    border-top: 1px solid #d8d3c6;
+    grid-column: 1 / -1;
+    padding: 0.75rem 0 0;
+  }
+
+  .kyn-output {
+    grid-template-columns: 1fr;
+  }
+
+  .kyn-output-actions {
+    flex-direction: column;
+  }
+
+  .kyn-output-actions button,
+  .kyn-output-actions a {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kyn-page *,
+  .kyn-page *::before,
+  .kyn-page *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@page {
+  size: 11in 8.5in;
+  margin: 0;
+}
+
+@media print {
+  html,
+  body {
+    background: var(--kyn-paper) !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body.kyn-printing #root {
+    display: none !important;
+  }
+
+  body.kyn-printing > .kyn-print-root {
+    align-items: stretch;
+    display: flex !important;
+    height: 8.5in;
+    overflow: hidden;
+    width: 11in;
+  }
+
+  .kyn-print-page {
+    background: var(--kyn-paper);
+    box-sizing: border-box;
+    color: var(--kyn-ink);
+    display: flex;
+    flex-direction: column;
+    height: 8.5in;
+    overflow: hidden;
+    padding: 0.25in;
+    position: relative;
+    print-color-adjust: exact;
+    width: 5.5in;
+    flex: 0 0 5.5in;
+  }
+
+  .kyn-print-page:first-child {
+    border-right: 0.6pt dashed #aaa79f;
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  .kyn-print-guide-header {
+    background: var(--kyn-navy);
+    color: #fff;
+    padding: 14pt 16pt 13pt;
+    position: relative;
+  }
+
+  .kyn-print-guide-header::after {
+    color: rgb(255 255 255 / 9%);
+    content: '07';
+    font: 54pt/1 Georgia, serif;
+    position: absolute;
+    right: 8pt;
+    top: 2pt;
+  }
+
+  .kyn-print-guide-header span,
+  .kyn-print-worksheet-header > span {
+    color: var(--kyn-gold);
+    font: 700 5.5pt/1.2 Arial, sans-serif;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+  }
+
+  .kyn-print-guide-header h1 {
+    font: 25pt/0.95 Georgia, serif;
+    margin: 5pt 0 3pt;
+  }
+
+  .kyn-print-guide-header p {
+    color: rgb(255 255 255 / 78%);
+    font: 6.2pt/1.3 Arial, sans-serif;
+    margin: 0;
+  }
+
+  .kyn-print-intro {
+    color: var(--kyn-muted);
+    font: 6pt/1.35 Georgia, serif;
+    margin: 8pt 5pt 5pt;
+  }
+
+  .kyn-print-groups {
+    flex: 1;
+  }
+
+  .kyn-print-group h2 {
+    color: var(--kyn-violet);
+    font: 800 5.5pt/1 Arial, sans-serif;
+    letter-spacing: 0.7pt;
+    margin: 6pt 0 1pt;
+    text-transform: uppercase;
+  }
+
+  .kyn-print-metric {
+    align-items: center;
+    border-bottom: 0.5pt solid #d1cfc7;
+    display: grid;
+    gap: 6pt;
+    grid-template-columns: 22pt 1fr 120pt;
+    height: 45pt;
+  }
+
+  .kyn-print-number {
+    align-items: center;
+    background: var(--kyn-navy);
+    border-radius: 50%;
+    color: #fff;
+    display: flex;
+    font: 7pt/1 Georgia, serif;
+    height: 21pt;
+    justify-content: center;
+    width: 21pt;
+  }
+
+  .kyn-print-metric h3 {
+    font: 700 7pt/1.1 Georgia, serif;
+    margin: 0 0 2pt;
+  }
+
+  .kyn-print-metric p {
+    color: var(--kyn-muted);
+    font: 4.7pt/1.25 Arial, sans-serif;
+    margin: 0;
+  }
+
+  .kyn-print-reading {
+    text-align: right;
+  }
+
+  .kyn-print-reading strong,
+  .kyn-print-reading span {
+    display: block;
+  }
+
+  .kyn-print-reading strong {
+    color: var(--kyn-navy);
+    font: 700 6.2pt/1.2 Arial, sans-serif;
+  }
+
+  .kyn-print-reading span {
+    color: var(--kyn-violet);
+    font: 700 4.4pt/1.2 Arial, sans-serif;
+    margin-top: 2pt;
+  }
+
+  .kyn-print-apoe {
+    align-items: center;
+    background: var(--kyn-violet-soft);
+    border-left: 3pt solid var(--kyn-violet);
+    display: grid;
+    gap: 8pt;
+    grid-template-columns: 74pt 1fr;
+    margin-top: 7pt;
+    padding: 6pt 8pt;
+  }
+
+  .kyn-print-apoe strong {
+    color: var(--kyn-navy);
+    font: 700 6pt/1.2 Georgia, serif;
+  }
+
+  .kyn-print-apoe span {
+    color: var(--kyn-muted);
+    font: 4.8pt/1.25 Arial, sans-serif;
+  }
+
+  .kyn-print-footer {
+    align-items: center;
+    border-top: 0.7pt solid var(--kyn-gold);
+    display: flex;
+    justify-content: space-between;
+    margin-top: 7pt;
+    padding-top: 5pt;
+  }
+
+  .kyn-print-footer strong {
+    color: var(--kyn-navy);
+    font: 700 5.3pt/1 Arial, sans-serif;
+  }
+
+  .kyn-print-footer span {
+    color: var(--kyn-muted);
+    font: 4.2pt/1 Arial, sans-serif;
+  }
+
+  .kyn-print-worksheet-header {
+    border-bottom: 2pt solid var(--kyn-gold);
+    padding: 5pt 2pt 9pt;
+  }
+
+  .kyn-print-worksheet-header h1 {
+    color: var(--kyn-navy);
+    font: 19pt/1 Georgia, serif;
+    margin: 5pt 0 3pt;
+  }
+
+  .kyn-print-worksheet-header p {
+    color: var(--kyn-muted);
+    font: 5.4pt/1.3 Arial, sans-serif;
+    margin: 0;
+  }
+
+  .kyn-print-steps {
+    flex: 1;
+  }
+
+  .kyn-print-step {
+    border-bottom: 0.5pt solid #d4d2cb;
+    display: grid;
+    gap: 7pt;
+    grid-template-columns: 23pt 1fr;
+    padding: 7pt 2pt;
+  }
+
+  .kyn-print-step-number {
+    color: var(--kyn-violet);
+    font: 10pt/1 Georgia, serif;
+    padding-top: 1pt;
+  }
+
+  .kyn-print-step h2 {
+    color: var(--kyn-navy);
+    font: 700 8pt/1 Georgia, serif;
+    margin: 0 0 3pt;
+  }
+
+  .kyn-print-step p {
+    color: var(--kyn-muted);
+    font: 4.8pt/1.28 Arial, sans-serif;
+    margin: 0 0 4pt;
+  }
+
+  .kyn-print-checks {
+    display: flex;
+    gap: 20pt;
+  }
+
+  .kyn-print-checks > span {
+    align-items: center;
+    display: flex;
+    font: 5.2pt/1 Arial, sans-serif;
+    gap: 4pt;
+  }
+
+  .kyn-print-check {
+    border: 0.8pt solid var(--kyn-navy);
+    display: inline-block;
+    height: 8pt;
+    position: relative;
+    width: 8pt;
+  }
+
+  .kyn-print-check.is-checked::after {
+    border: solid var(--kyn-violet);
+    border-width: 0 1.5pt 1.5pt 0;
+    content: '';
+    height: 5pt;
+    left: 2.2pt;
+    position: absolute;
+    top: 0.4pt;
+    transform: rotate(45deg);
+    width: 2.5pt;
+  }
+
+  .kyn-print-record-grid {
+    display: grid;
+    gap: 5pt 12pt;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .kyn-print-record-grid label {
+    color: var(--kyn-muted);
+    font: 4.4pt/1.2 Arial, sans-serif;
+  }
+
+  .kyn-print-record-grid label > span {
+    border-bottom: 0.6pt solid var(--kyn-navy);
+    color: var(--kyn-navy);
+    display: block;
+    font: 700 6pt/1.4 Arial, sans-serif;
+    height: 11pt;
+    margin-top: 1pt;
+  }
+
+  .kyn-print-equation {
+    align-items: center;
+    display: grid;
+    gap: 5pt;
+    grid-template-columns: 58pt 9pt 58pt 9pt 38pt 9pt 84pt;
+  }
+
+  .kyn-print-equation > div {
+    border: 0.7pt solid #aaa9a4;
+    min-height: 29pt;
+    padding: 4pt;
+    text-align: center;
+  }
+
+  .kyn-print-equation > div span {
+    color: var(--kyn-muted);
+    display: block;
+    font: 4pt/1 Arial, sans-serif;
+  }
+
+  .kyn-print-equation > div strong {
+    color: var(--kyn-navy);
+    display: block;
+    font: 9pt/1 Georgia, serif;
+    margin-top: 4pt;
+  }
+
+  .kyn-print-equation > b {
+    color: var(--kyn-violet);
+    font: 10pt/1 Georgia, serif;
+    text-align: center;
+  }
+
+  .kyn-print-equation .kyn-print-result {
+    background: var(--kyn-navy);
+    border: 1.4pt solid var(--kyn-gold);
+  }
+
+  .kyn-print-equation .kyn-print-result span {
+    color: rgb(255 255 255 / 68%);
+  }
+
+  .kyn-print-equation .kyn-print-result strong {
+    color: #fff;
+    font-size: 12pt;
+  }
+
+  .kyn-print-ranges {
+    display: flex;
+    gap: 8pt;
+  }
+
+  .kyn-print-ranges span {
+    background: var(--kyn-gold-soft);
+    color: var(--kyn-muted);
+    font: 4.4pt/1.2 Arial, sans-serif;
+    padding: 4pt 6pt;
+  }
+
+  .kyn-print-ranges strong {
+    color: var(--kyn-navy);
+    font-size: 5.5pt;
+    margin-right: 3pt;
+  }
+
+  .kyn-print-notes {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 13pt,
+      #c9c7c0 13.5pt
+    );
+    color: var(--kyn-navy);
+    font: 5.2pt/13.5pt Arial, sans-serif;
+    height: 55pt;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+
+  .kyn-print-prompt {
+    background: var(--kyn-navy);
+    color: #fff;
+    display: grid;
+    gap: 8pt;
+    grid-template-columns: 70pt 1fr;
+    padding: 6pt 8pt;
+  }
+
+  .kyn-print-prompt strong {
+    color: var(--kyn-gold);
+    font: 700 4.6pt/1.25 Arial, sans-serif;
+    letter-spacing: 0.4pt;
+    text-transform: uppercase;
+  }
+
+  .kyn-print-prompt span {
+    font: 5.2pt/1.3 Georgia, serif;
+  }
+
+  .kyn-print-disclaimer {
+    color: var(--kyn-muted);
+    font: italic 4.2pt/1.25 Arial, sans-serif;
+    margin: 5pt 2pt 0;
+  }
+}
