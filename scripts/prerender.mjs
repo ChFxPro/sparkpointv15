@@ -17,6 +17,7 @@ const PORT = Number(process.env.PRERENDER_PORT || 4747);
 const STORIES_FILE = process.env.STORIES_FILE || 'src/data/stories.ts';
 const PROGRAMS_FILE = process.env.PROGRAMS_FILE || 'src/pages/programs/programsData.ts';
 const PRESS_FILE = process.env.PRESS_FILE || 'src/data/pressReleases.json';
+const RESOURCES_FILE = process.env.RESOURCES_FILE || 'src/data/resources.ts';
 const OUT = DRY ? path.resolve(DIST, '..', '.prerender-preview') : DIST;
 
 // Routes that must NOT be SPA-prerendered — external redirects get clean 200 stubs.
@@ -27,7 +28,7 @@ const REDIRECTS = {
 // Client-side redirect aliases: leave to the SPA fallback, don't prerender.
 const SKIP = new Set(['/volunteer', '/partner', '/contact', '/news-media', '/newsroom', '/commconn', '/resiliency-hub', '/healthcare-story']);
 const STATIC = ['/', '/about', '/mission', '/impact', '/programs', '/programs/purpose-workshops',
-  '/get-involved', '/community-connectors', '/sponsors', '/resilience-hub', '/press', '/stories',
+  '/get-involved', '/community-connectors', '/sponsors', '/resilience-hub', '/directory', '/press', '/stories',
   '/trust', '/privacy', '/intake', '/resources/know-your-numbers'];
 
 const norm = (u) => { let x = u.split('#')[0].split('?')[0]; if (x.length > 1) x = x.replace(/\/+$/, ''); return x || '/'; };
@@ -57,6 +58,8 @@ async function deriveRoutes() {
   for (const p of progList) routes.add('/programs/' + (p.slug || p.id));
   const press = JSON.parse(await readFile(PRESS_FILE, 'utf8'));
   for (const rel of (press.releases || [])) routes.add('/press/' + rel.slug);
+  const resData = await importData(RESOURCES_FILE);
+  for (const r of (resData.RESOURCES || [])) routes.add('/directory/' + r.id);
   return [...routes].map(norm).filter((r) => !SKIP.has(r) && !REDIRECTS[r]);
 }
 

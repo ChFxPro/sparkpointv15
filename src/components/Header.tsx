@@ -33,6 +33,7 @@ const menuItems: MenuItem[] = [
   { label: 'Get Involved', href: '/get-involved' },
   { label: 'About', href: '/about' },
   { label: 'Resilience Hub', href: '/resilience-hub' },
+  { label: 'Find Help', href: '/directory' },
   { label: 'Contact', href: '/intake?intent=contact' },
 ];
 
@@ -434,6 +435,7 @@ export function Header() {
                       <Link to="/about" onClick={handleLinkClick} className="text-white text-xl font-semibold hover:text-white/80 transition-colors">About Us</Link>
                       <Link to="/sponsors" onClick={handleLinkClick} className="text-white text-xl font-semibold hover:text-white/80 transition-colors">Partners</Link>
                       <Link to="/resilience-hub" onClick={handleLinkClick} className="text-white text-xl font-semibold hover:text-white/80 transition-colors">Resilience Hub</Link>
+                      <Link to="/directory" onClick={handleLinkClick} className="text-white text-xl font-semibold hover:text-white/80 transition-colors">Find Help</Link>
                       <Link to="/intake?intent=contact" onClick={handleLinkClick} className="text-white text-xl font-semibold hover:text-white/80 transition-colors">Contact</Link>
                       
                       <Link 

@@ -32,6 +32,8 @@ Last updated: 2026-03-22
 - `/programs`
 - `/sponsors`
 - `/resilience-hub`
+- `/directory` (Resource Directory — browsable/filterable local resource & partner-org listings; content in `src/data/resources.ts`, prerendered per entry)
+- `/directory/:id` (individual resource/org detail page)
 - `/news-media`
 - `/press`
 - `/press/:slug`
