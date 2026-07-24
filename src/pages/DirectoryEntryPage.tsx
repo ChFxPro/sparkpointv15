@@ -102,6 +102,13 @@ function SmartLink({
   );
 }
 
+/** Pick the CTA icon to match the next-step action (call / email / online form). */
+function nextStepIcon(url?: string): typeof PhoneCall {
+  if (url?.startsWith('tel:')) return PhoneCall;
+  if (url?.startsWith('mailto:')) return Mail;
+  return FileText;
+}
+
 function VerifiedLine({ entry }: { entry: ResourceEntry }) {
   const verified = entry.verified === 'confirmed' || entry.verified === 'partner-input';
   const reviewed = entry.lastReviewed
@@ -175,6 +182,7 @@ export function DirectoryEntryPage() {
 
   const primary = NEED_CATEGORY_BY_ID[entry.categories[0]];
   const accent = primary.ink;
+  const NextStepIcon = nextStepIcon(entry.nextStep.url);
   const address = formatAddress(entry);
   const categoryLabels = entry.categories
     .map((cid) => NEED_CATEGORY_BY_ID[cid]?.label)
@@ -264,7 +272,7 @@ export function DirectoryEntryPage() {
               className="mt-3 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold text-white transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
               style={{ background: accent, ['--tw-ring-color' as string]: accent }}
             >
-              <PhoneCall size={16} /> {entry.nextStep.label}
+              <NextStepIcon size={16} /> {entry.nextStep.label}
               <ArrowRight size={16} />
             </SmartLink>
           ) : (
