@@ -4,6 +4,115 @@ import { Hono } from "npm:hono";
 import { logger } from "npm:hono/logger";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
+// This endpoint intentionally accepts public contact requests. Keep the payload
+// small and validate it before it can reach privileged database or Monday calls.
+const MAX_INTAKE_REQUEST_BYTES = 16 * 1024;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const CONTROL_CHARACTERS = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/;
+const ALL_CONTROL_CHARACTERS = /[\u0000-\u001F\u007F]/;
+
+class IntakeValidationError extends Error {}
+
+type JsonRecord = Record<string, unknown>;
+
+const isJsonRecord = (value: unknown): value is JsonRecord =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
+const invalidField = (field: string, message: string): never => {
+  throw new IntakeValidationError(`${field} ${message}`);
+};
+
+const optionalText = (value: unknown, field: string, maxLength: number, allowNewlines = true) => {
+  if (value === undefined || value === null || value === "") return "";
+  if (typeof value !== "string") invalidField(field, "must be text");
+
+  const normalized = value.trim();
+  const disallowedCharacters = allowNewlines ? CONTROL_CHARACTERS : ALL_CONTROL_CHARACTERS;
+  if (normalized.length > maxLength) invalidField(field, `must be ${maxLength} characters or fewer`);
+  if (disallowedCharacters.test(normalized)) invalidField(field, "contains unsupported characters");
+
+  return normalized;
+};
+
+const requiredText = (value: unknown, field: string, maxLength: number) => {
+  const normalized = optionalText(value, field, maxLength, false);
+  if (!normalized) invalidField(field, "is required");
+  return normalized;
+};
+
+const requiredEmail = (value: unknown) => {
+  const email = requiredText(value, "Email", 254).toLowerCase();
+  if (!EMAIL_PATTERN.test(email)) invalidField("Email", "must be a valid email address");
+  return email;
+};
+
+const allowedValue = <T extends string>(value: unknown, field: string, allowed: readonly T[]): T => {
+  if (typeof value !== "string" || !allowed.includes(value as T)) invalidField(field, "is invalid");
+  return value as T;
+};
+
+const optionalTextList = (value: unknown, field: string, maxItems: number, itemMaxLength: number) => {
+  if (value === undefined || value === null) return [];
+  if (!Array.isArray(value) || value.length > maxItems) {
+    invalidField(field, `must contain no more than ${maxItems} selections`);
+  }
+  return value.map((item, index) => requiredText(item, `${field} item ${index + 1}`, itemMaxLength));
+};
+
+const readLimitedRequestBody = async (request: Request) => {
+  if (!request.body) return "";
+
+  const reader = request.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      totalBytes += value.byteLength;
+      if (totalBytes > MAX_INTAKE_REQUEST_BYTES) {
+        await reader.cancel();
+        throw new IntakeValidationError("Submission is too large");
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+
+  const bytes = new Uint8Array(totalBytes);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+
+  try {
+    return new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+  } catch {
+    throw new IntakeValidationError("Submission must be valid UTF-8 JSON");
+  }
+};
+
+const readIntakeBody = async (request: Request): Promise<JsonRecord> => {
+  const declaredLength = Number(request.headers.get("content-length"));
+  if (Number.isFinite(declaredLength) && declaredLength > MAX_INTAKE_REQUEST_BYTES) {
+    throw new IntakeValidationError("Submission is too large");
+  }
+
+  const rawBody = await readLimitedRequestBody(request);
+  try {
+    const parsed = JSON.parse(rawBody);
+    if (!isJsonRecord(parsed)) throw new IntakeValidationError("Submission must be a JSON object");
+    return parsed;
+  } catch (error) {
+    if (error instanceof IntakeValidationError) throw error;
+    throw new IntakeValidationError("Submission must be valid JSON");
+  }
+};
+
 function cap(s: string) {
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 }
@@ -163,31 +272,17 @@ const healthHandler = (c: any) =>
 
 const intakeHandler = async (c: any) => {
   try {
-    const body = await c.req.json();
-
-    const {
-      intent,
-      name,
-      email,
-      phone,
-      message,
-      source_path,
-      // volunteer extras
-      interests,
-      availability,
-      // partner extras
-      organization,
-      partnershipDetails,
-    } = body ?? {};
-
-    if (!intent || !name || !email) {
-      return c.json({ error: "intent, name, and email are required" }, 400);
-    }
-
-    const validIntents = ["volunteer", "partner", "contact"];
-    if (!validIntents.includes(intent)) {
-      return c.json({ error: "Invalid intent" }, 400);
-    }
+    const body = await readIntakeBody(c.req.raw);
+    const intent = allowedValue(body.intent, "Intent", ["volunteer", "partner", "contact"] as const);
+    const name = requiredText(body.name, "Name", 100);
+    const email = requiredEmail(body.email);
+    const phone = optionalText(body.phone, "Phone", 50, false);
+    const message = optionalText(body.message, "Message", 5_000);
+    const source_path = optionalText(body.source_path, "Source path", 2_048, false);
+    const interests = optionalTextList(body.interests, "Interests", 12, 100);
+    const availability = optionalText(body.availability, "Availability", 500);
+    const organization = optionalText(body.organization, "Organization", 200, false);
+    const partnershipDetails = optionalText(body.partnershipDetails, "Partnership details", 3_000);
 
     const createdAtISO = new Date().toISOString();
     const submissionId = `intake_${intent}_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
@@ -237,6 +332,9 @@ const intakeHandler = async (c: any) => {
 
     return c.json({ success: true, submissionId });
   } catch (error) {
+    if (error instanceof IntakeValidationError) {
+      return c.json({ error: error.message }, 400);
+    }
     console.error("Error processing /intake:", error);
     return c.json(
       { error: "Failed to process submission", details: error instanceof Error ? error.message : "Unknown error" },
