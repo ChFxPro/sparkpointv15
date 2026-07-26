@@ -172,8 +172,8 @@ function AppContent() {
             />
           }
         />
-        <Route path="/donations" element={<ExternalRedirect to="https://cowbell-primrose-tet2.squarespace.com/donations" />} />
-        <Route path="/newsletter" element={<ExternalRedirect to="https://cowbell-primrose-tet2.squarespace.com/newsletter" />} />
+        <Route path="/donations" element={<ExternalRedirect to="https://secure.yoursparkpoint.org/donations" />} />
+        <Route path="/newsletter" element={<ExternalRedirect to="https://secure.yoursparkpoint.org/newsletter" />} />
         <Route path="/tickets" element={<TicketRedirect />} />
         <Route path="/tickets/:slug" element={<TicketRedirect />} />
         <Route path="*" element={<HomePage />} />
