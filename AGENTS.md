@@ -3,8 +3,10 @@ Last updated: 2026-03-22
 
 ## Read First
 - Read this file before modifying code in this repo.
+- Read `WORKLIST.md` immediately after this file. It is the canonical, living source of truth for priorities, active work, blockers, and completion evidence.
 - Confirm architecture alignment before implementing UI or data-model changes.
-- Update this document when routes, schema, or feature behavior changes.
+- Update `WORKLIST.md` at the start and end of substantive work; use its priority and bundle structure to keep changes focused.
+- Update this document when routes, schema, or feature behavior changes, and add or revise the corresponding worklist item.
 
 ## Current Status
 - Main website is integrated and buildable.
@@ -97,13 +99,12 @@ Last updated: 2026-03-22
 ## Development Standards
 - Always branch before feature work.
 - Never modify `main` directly.
+- Publish website changes through a pull request. Before merging, confirm the production build/deployment checks pass; do not bypass branch protections.
+- Treat any GitHub secret-scanning or push-protection finding as a stop-and-remediate event: do not suppress it without confirming the value is not a credential, and rotate exposed credentials before continuing.
 - Keep changes scoped and reversible.
+- Use `WORKLIST.md` as the master queue: work `P0` before `P1`, bundle related changes, and record verification/PR information when an item is done.
 - Maintain type safety for `src/pages/programs/*`.
 - Avoid placeholder/repetitive copy in program content.
 
-## Next TODOs
-- Complete editorial QA pass on all program entries for tone consistency.
-- Continue validating pathway copy against latest planning documents.
-- Curate fuller News/Media archival content set (legacy + newest missing items).
-- Confirm sponsor/resilience hub page copy/assets for post-launch polish.
-- Revisit chunk-splitting if bundle-size warning becomes a performance concern.
+## Current Work Queue
+- See `WORKLIST.md`. Do not maintain a competing TODO list here.

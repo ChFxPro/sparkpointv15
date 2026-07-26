@@ -3,6 +3,10 @@
 
   This is a code bundle for SparkPoint V15. The original project is available at https://www.figma.com/design/eiECrQAtFNx2YuehI5swOs/SparkPoint-V15.
 
+  ## Project worklist
+
+  [`WORKLIST.md`](WORKLIST.md) is the living master list for priorities, active work, blockers, and completion evidence. Read it with `AGENTS.md` before starting substantive changes.
+
   ## Running the code
 
   Run `npm i` to install the dependencies.
