@@ -1,0 +1,1050 @@
+{
+  "generated": "2026-07-23",
+  "source": "RuralHealthSim simulator — sampleStations.ts + samplePacket.services",
+  "note": "SEED ONLY. Real org names/categories/eligibility/hours are modeled for the Oct 1 sim; many are needs_verification and NONE carry public contact info (phone/website/address) yet. Enrich + verify before public use. _internal.* fields are staff-only — do not publish.",
+  "counts": {
+    "orgs": 31,
+    "resources": 24
+  },
+  "orgs": [
+    {
+      "id": "primary_care",
+      "door_type": "formal_care_door",
+      "display_name": "Primary Care Clinic (Blue Ridge Health)",
+      "neutral_name": "Primary Care Clinic",
+      "real_org": "Blue Ridge Health",
+      "public_description": "The local clinic where a long-standing provider relationship lives — and where many journeys begin with the words \"you'll need a referral.\" A sliding-scale community health center serving the county.",
+      "physical_location_event": "Main hall — table 1",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a Blue Ridge Health provider and front-desk staff — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "pediatrics",
+      "door_type": "formal_care_door",
+      "display_name": "Pediatric Clinic (Blue Ridge Health)",
+      "neutral_name": "Pediatric Clinic",
+      "real_org": "Blue Ridge Health",
+      "public_description": "A trusted pediatric provider — often the first formal door a worried parent knocks on, and the start of many behavioral health waits.",
+      "physical_location_event": "Main hall — table 2",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a Blue Ridge Health pediatric provider — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "school",
+      "door_type": "trusted_first_door",
+      "display_name": "School (Transylvania County Schools)",
+      "neutral_name": "County Schools",
+      "real_org": "Transylvania County Schools",
+      "public_description": "A counselor or teacher a family already trusts. Often the first place a worry is said out loud — and a bridge to formal care when the bridge holds.",
+      "physical_location_event": "Side room A",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a school counselor — could be paired with a Blue Ridge Health school-based health rep if confirmed"
+    },
+    {
+      "id": "community_center",
+      "door_type": "trusted_first_door",
+      "display_name": "Community Center",
+      "neutral_name": null,
+      "real_org": "Community Center",
+      "public_description": "The room where the county actually gathers — potlucks, meetings, quiet conversations by the coffee urn where needs first get spoken.",
+      "physical_location_event": "Main hall — table 3",
+      "verified": "unspecified",
+      "represented_by_note": "Volunteer playing a community center coordinator"
+    },
+    {
+      "id": "faith_community",
+      "door_type": "trusted_first_door",
+      "display_name": "Faith Community",
+      "neutral_name": null,
+      "real_org": "Faith Community",
+      "public_description": "A congregation that has carried casseroles, rides, and quiet checks-ins for generations. Trust lives here before any need is named.",
+      "physical_location_event": "Side room B",
+      "verified": "unspecified",
+      "represented_by_note": "Volunteer playing a pastor or congregation member"
+    },
+    {
+      "id": "food_partner",
+      "door_type": "resource_door",
+      "display_name": "Food Partner (The Sharing House)",
+      "neutral_name": "Food + Crisis Basic Needs",
+      "real_org": "The Sharing House",
+      "public_description": "The monthly, client-choice food pathway — a week's groceries you pick yourself — and the broader safety-net door when food is only part of the crisis: rent and utility assistance, clothing, and basic needs under one roof. Reliable, but it runs on a schedule and a process.",
+      "physical_location_event": "Main hall — table 4",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a Sharing House coordinator — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "emergency_food_support",
+      "door_type": "resource_door",
+      "display_name": "Emergency Food Support (Bread of Life)",
+      "neutral_name": "Emergency Food Support",
+      "real_org": "Bread of Life",
+      "public_description": "A same-day, short-notice food access point — fewer forms, faster shelf. Used when the standard pantry pathway is too slow for tonight's table. Serves hot meals no-questions-asked and reaches remote areas of the county.",
+      "physical_location_event": "Main hall — table 4b",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a Bread of Life volunteer — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "transportation_support",
+      "door_type": "resource_door",
+      "display_name": "Transportation Support (Transylvania County Transportation)",
+      "neutral_name": "Transportation Support",
+      "real_org": "Transylvania County Transportation",
+      "public_description": "The community van, volunteer drivers, and ride coordination — the difference between an appointment made and an appointment reached. A fixed route and dedicated medical transportation, alongside senior transportation services.",
+      "physical_location_event": "Main hall — table 5",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a Transylvania County Transportation ride coordinator — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "referral_desk",
+      "door_type": "friction_point",
+      "display_name": "Referral Desk",
+      "neutral_name": null,
+      "real_org": "Referral Desk",
+      "public_description": "Where referrals get processed, faxed, re-faxed, and tracked — essential and invisible until it stalls. Not a staffed table but a bottleneck the family passes through; the delay is the point. The active navigation service lives at the Community Health Worker door.",
+      "physical_location_event": "Main hall — table 6",
+      "verified": "unspecified",
+      "represented_by_note": "(Unmanned friction point — no org table; the real navigation service is the Community Health Worker door)"
+    },
+    {
+      "id": "henderson_specialist",
+      "door_type": "formal_care_door",
+      "display_name": "Henderson County Specialist",
+      "neutral_name": null,
+      "real_org": "Henderson County Specialist",
+      "public_description": "The out-of-county cardiology practice. Good care, real distance — an hour round trip on a good day, plus whatever the paperwork requires.",
+      "physical_location_event": "Far corner — table 7 (deliberately the farthest walk)",
+      "verified": "unspecified",
+      "represented_by_note": "Volunteer playing specialist office staff"
+    },
+    {
+      "id": "behavioral_health",
+      "door_type": "formal_care_door",
+      "display_name": "Behavioral Health Provider",
+      "neutral_name": null,
+      "real_org": "Behavioral Health Provider",
+      "public_description": "The county's behavioral health capacity: skilled, caring, and carrying a waitlist measured in months. Youth substance-misuse prevention has its own dedicated, grant-funded support — separate from adult treatment or detox, which the county does not currently have.",
+      "physical_location_event": "Side room C",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a behavioral health intake coordinator — CARE Coalition rep could join for the youth-prevention angle specifically"
+    },
+    {
+      "id": "public_health",
+      "door_type": "formal_care_door",
+      "display_name": "Public Health Department (Transylvania Public Health)",
+      "neutral_name": "Public Health Department",
+      "real_org": "Transylvania Public Health",
+      "public_description": "County public health: immunizations, WIC, home visits, and quiet system-holding that most residents never see.",
+      "physical_location_event": "Main hall — table 8",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a Transylvania Public Health nurse — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "digital_paperwork",
+      "door_type": "friction_point",
+      "display_name": "Digital Access & Paperwork",
+      "neutral_name": null,
+      "real_org": "Digital Access & Paperwork",
+      "public_description": "Patient portals, PDF forms, upload buttons, and password resets — the invisible tollbooth between a referral and an appointment.",
+      "physical_location_event": "Main hall — table 9",
+      "verified": "unspecified",
+      "represented_by_note": "Volunteer playing \"the portal\" (a laptop and a stack of forms)"
+    },
+    {
+      "id": "sparkpoint_hub",
+      "door_type": "navigation_door",
+      "display_name": "Resilience Hub (SparkPoint)",
+      "neutral_name": "Resilience Hub",
+      "real_org": "SparkPoint",
+      "public_description": "One door among many in the local network — not a clinic, not a charity counter, a place where your story gets heard once and carried forward.",
+      "physical_location_event": "Center of the hall",
+      "verified": "confirmed",
+      "represented_by_note": "Volunteer playing a Resilience Hub navigator"
+    },
+    {
+      "id": "community_connector",
+      "door_type": "navigation_door",
+      "display_name": "Community Connector",
+      "neutral_name": null,
+      "real_org": "Community Connector",
+      "public_description": "A person, not a place: someone who knows both the family and the system, and makes calls that turn cold intakes into expected arrivals.",
+      "physical_location_event": "Roving — look for the goldenrod sash",
+      "verified": "unspecified",
+      "represented_by_note": "Volunteer playing a community health worker / connector"
+    },
+    {
+      "id": "employer_workplace",
+      "door_type": "life_constraint_point",
+      "display_name": "Employer / Workplace",
+      "neutral_name": null,
+      "real_org": "Employer / Workplace",
+      "public_description": "Where the hours come from — and where every daytime appointment collides with a shift schedule that doesn't bend.",
+      "physical_location_event": "Side room D",
+      "verified": "unspecified",
+      "represented_by_note": "Volunteer playing a shift supervisor"
+    },
+    {
+      "id": "home_gap",
+      "door_type": "delay_point",
+      "display_name": "Home — The Waiting Gap",
+      "neutral_name": null,
+      "real_org": "Home — The Waiting Gap",
+      "public_description": "The kitchen table between appointments. Nothing happens here — which is exactly the problem. Waiting is where momentum, and sometimes health, quietly erodes.",
+      "physical_location_event": "Quiet corner with two chairs",
+      "verified": "unspecified",
+      "represented_by_note": "Unstaffed — a table, two chairs, a phone that does not ring"
+    },
+    {
+      "id": "emergency_department",
+      "door_type": "crisis_care_door",
+      "display_name": "Emergency Department",
+      "neutral_name": null,
+      "real_org": "Emergency Department",
+      "public_description": "The door that is always open — which is why the whole system's gaps eventually arrive here, at the highest cost and the hardest hour.",
+      "physical_location_event": "Far side room — bright lights on",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing ED triage staff — do not brand as a specific real hospital without direct confirmation"
+    },
+    {
+      "id": "mobile_food_access",
+      "door_type": "resource_door",
+      "display_name": "Mobile Food Access (Hunger Coalition)",
+      "neutral_name": "Mobile Food Access",
+      "real_org": "Hunger Coalition",
+      "public_description": "Food that comes to you, on a rotating schedule, because getting to a fixed pantry is itself the barrier. A rotating pantry at a different location each Thursday, with partners providing fresh produce.",
+      "physical_location_event": "Main hall — table 4c",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a Hunger Coalition distribution volunteer — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "home_repair_recovery",
+      "door_type": "resource_door",
+      "display_name": "Home Repair & Recovery (Transylvania Habitat for Humanity)",
+      "neutral_name": "Home Repair & Recovery",
+      "real_org": "Transylvania Habitat for Humanity",
+      "public_description": "Tropical Storm Helene (Sept. 2024) recovery repair support — the door between \"the tarp holds\" and an actual timeline for fixing it. Volunteer labor and materials mean the queue moves in weeks and months, not days.",
+      "physical_location_event": "Main hall — table 10",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a Habitat for Humanity recovery-repair coordinator — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "el_centro",
+      "door_type": "trusted_first_door",
+      "display_name": "El Centro Comunitario Hispano-Americano",
+      "neutral_name": "Language Access Connector",
+      "real_org": "El Centro Comunitario Hispano-Americano",
+      "public_description": "The county's Spanish-language connector, and for many families the only door where the phone is always answered in Spanish. A translator, a vouching voice, and a warm handoff into a system not built with them in mind.",
+      "physical_location_event": "Side room E",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing an El Centro staff member — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "dss_benefits",
+      "door_type": "resource_door",
+      "display_name": "Benefits & Enrollment (Transylvania County DSS)",
+      "neutral_name": "Benefits & Enrollment",
+      "real_org": "Transylvania County DSS",
+      "public_description": "The county's actual front door for Medicaid, food assistance, and emergency energy help — the paperwork that decides what a family can afford before any other door matters.",
+      "physical_location_event": "Main hall — table 11",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a DSS eligibility caseworker — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "housing_crisis_support",
+      "door_type": "crisis_care_door",
+      "display_name": "Housing Crisis Support (The Haven of Transylvania County)",
+      "neutral_name": "Housing Crisis Support",
+      "real_org": "The Haven of Transylvania County",
+      "public_description": "The door for a family with nowhere to sleep tonight — shelter first, a path back to permanent housing second. An overnight shelter offering intake, meals, laundry, and referral toward permanent or transitional housing.",
+      "physical_location_event": "Side room F",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a Haven intake coordinator — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "adult_behavioral_health",
+      "door_type": "formal_care_door",
+      "display_name": "Adult Behavioral Health (Meridian Behavioral Health Services)",
+      "neutral_name": "Adult Behavioral Health",
+      "real_org": "Meridian Behavioral Health Services",
+      "public_description": "Outpatient counseling and substance-use support for adults — real, local, and separate from the county's youth-focused behavioral health capacity. Not a detox or residential program — the county does not currently have one.",
+      "physical_location_event": "Side room G",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a Meridian outpatient counselor — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "digital_access_partner",
+      "door_type": "resource_door",
+      "display_name": "Digital Access Partner (Through the Trees)",
+      "neutral_name": "Digital Access Partner",
+      "real_org": "Through the Trees",
+      "public_description": "The door that fixes the portal problem instead of just naming it — a refurbished device, a broadband subsidy, someone to sit with you through the login.",
+      "physical_location_event": "Main hall — table 12",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a Through the Trees technician — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "workforce_development",
+      "door_type": "resource_door",
+      "display_name": "Workforce Development (Brevard/Transylvania Chamber of Commerce)",
+      "neutral_name": "Workforce Development",
+      "real_org": "Brevard/Transylvania Chamber of Commerce",
+      "public_description": "Training, credentials, and a path to a job that pays enough to make the rest of this easier — not a hiring hall, a bridge into one.",
+      "physical_location_event": "Main hall — table 13",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a Chamber workforce-development liaison — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "long_term_recovery",
+      "door_type": "navigation_door",
+      "display_name": "Long-Term Recovery Group (FWRD Transylvania)",
+      "neutral_name": "Long-Term Recovery Group",
+      "real_org": "FWRD Transylvania",
+      "public_description": "The county's coordinated, cross-agency answer to disaster recovery once the emergency response ends — case management that connects a household to every partner it needs, instead of one at a time.",
+      "physical_location_event": "Main hall — table 14",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing an FWRD disaster case manager — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "meals_on_wheels",
+      "door_type": "resource_door",
+      "display_name": "Home-Delivered Meals (Meals on Wheels of Brevard/Transylvania)",
+      "neutral_name": "Home-Delivered Meals",
+      "real_org": "Meals on Wheels of Brevard/Transylvania",
+      "public_description": "Prepared meals delivered to the homes of neighbors who cannot easily shop or cook — most often homebound older adults — on a sliding-scale basis. The same driver each week means the meal comes with a wellness check.",
+      "physical_location_event": "Main hall — table 12",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a Meals on Wheels coordinator or driver — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "bh_access_crisis",
+      "door_type": "navigation_door",
+      "display_name": "Behavioral Health Access & Crisis Line (Vaya Health)",
+      "neutral_name": "Behavioral Health Access & Crisis Line",
+      "real_org": "Vaya Health",
+      "public_description": "The number you call in a behavioral-health crisis, and the entity that connects a family to counseling and covers it. Not a therapist's office — it runs the 24/7 crisis line and mobile crisis, does same-day walk-in assessment, manages care, and routes people to the adult and youth behavioral-health doors.",
+      "physical_location_event": "Side room H",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a Vaya care manager / crisis-line navigator — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "legal_aid",
+      "door_type": "resource_door",
+      "display_name": "Legal Aid / Benefits Appeals (Pisgah Legal Services)",
+      "neutral_name": "Legal Aid / Benefits Appeals",
+      "real_org": "Pisgah Legal Services",
+      "public_description": "Free civil legal help for the paperwork walls that block care and stability — benefits denials and appeals, Medicaid and disability determinations, housing and eviction, and disaster-recovery claims.",
+      "physical_location_event": "Side room I",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a Pisgah Legal advocate — real-org partner, confirm participation before event day"
+    },
+    {
+      "id": "community_health_worker",
+      "door_type": "navigation_door",
+      "display_name": "Community Health Worker (Transylvania County DSS / CHW program)",
+      "neutral_name": "Community Health Worker",
+      "real_org": "Transylvania County DSS / CHW program",
+      "public_description": "A trained, trusted navigator who meets families where they are — a home visit, a phone call, a walk into an office — and actually closes the loop: helps enroll in benefits, books the ride, tracks the referral the family cannot see, and follows up. The formal, funded version of the connector role.",
+      "physical_location_event": "Main hall — table 6b",
+      "verified": "needs_verification",
+      "represented_by_note": "Volunteer playing a Community Health Worker or DSS navigator — real-org partner, confirm participation before event day"
+    }
+  ],
+  "resources": [
+    {
+      "id": "svc-cardiology-henderson",
+      "name": "Cardiology Practice (Henderson County)",
+      "neutral_name": "Out-of-County Cardiology",
+      "category": "specialty_care",
+      "door_type": "formal_care_door",
+      "org": "Henderson County Specialist",
+      "public_description": "A cardiology practice one county away. Referral required; records must arrive first.",
+      "service_area": {
+        "county": "Henderson",
+        "in_county": "no"
+      },
+      "eligibility": "Accepts Medicare; referral and records must arrive before booking is confirmed.",
+      "hours": "Weekdays 8–5",
+      "access": {
+        "referral_required": "yes",
+        "appointment_delay_days": 10,
+        "transportation_required": true,
+        "digital_access_required": true,
+        "paperwork_required": true
+      },
+      "verified": "partner_input",
+      "last_reviewed": "2026-06-01",
+      "linked_org_station": "henderson_specialist",
+      "_internal": {
+        "partner_notes": "Portal pre-registration strongly encouraged by the practice.",
+        "internal_note": "Composite practice — do not name a real clinic in participant materials."
+      }
+    },
+    {
+      "id": "svc-transport-van",
+      "name": "Transylvania County Transportation",
+      "neutral_name": "County Transportation Service",
+      "category": "transportation",
+      "door_type": "resource_door",
+      "org": "Transylvania County Transportation",
+      "public_description": "The county transportation service runs a fixed weekday route for $1 — but any trip off that route, or out of county, must be booked days ahead and costs more, if it is available at all.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Fixed route through Brevard/Rosman weekdays ~6:30am–4:30pm, $1 exact-cash per boarding (22 Brevard + 5 Rosman stops). Anything OFF the fixed route — a medical trip, an out-of-county specialist, a rural-home pickup — is demand-response/paratransit that must be reserved in advance (typically 24–48 hours) for a higher fee, and same-day or out-of-county trips may not be available at all. Dedicated medical transportation prioritizes ages 60+ and those with no other means.",
+      "hours": "Fixed route weekdays ~6:30am–4:30pm; medical transportation by request, (828) 884-3203 option 2",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 4,
+        "transportation_required": false,
+        "digital_access_required": false,
+        "paperwork_required": false
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-05",
+      "linked_org_station": "transportation_support",
+      "_internal": {
+        "partner_notes": "Branded \"Transylvania in Motion (TIM).\" Ride availability effectively sets the care timeline for carless households — capacity tightened further after Brevard City Cab ceased operations, pushing more demand onto the county system.",
+        "internal_note": "Sourced from transylvaniacounty.org/departments/transportation. Confirm current schedule and eligibility with the department before event day."
+      }
+    },
+    {
+      "id": "svc-behavioral-health",
+      "name": "County Behavioral Health Provider",
+      "neutral_name": null,
+      "category": "behavioral_health",
+      "door_type": "formal_care_door",
+      "org": "Behavioral Health Provider",
+      "public_description": "The county behavioral health office — skilled, caring, and carrying a long waitlist.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "limited"
+      },
+      "eligibility": "Sliding scale available; youth evaluations require guardian intake.",
+      "hours": "Weekdays; waitlist ~10 weeks for new evaluations",
+      "access": {
+        "referral_required": "depends",
+        "appointment_delay_days": 70,
+        "transportation_required": false,
+        "digital_access_required": false,
+        "paperwork_required": true
+      },
+      "verified": "estimate",
+      "last_reviewed": "2026-05-15",
+      "linked_org_station": "behavioral_health",
+      "_internal": {
+        "partner_notes": "Cancellation list and school-based telehealth exist but are under-known.",
+        "internal_note": "Waitlist number is an estimate; verify before public use."
+      }
+    },
+    {
+      "id": "svc-school-counseling",
+      "name": "School Counseling & Skills Groups",
+      "neutral_name": null,
+      "category": "behavioral_health",
+      "door_type": "trusted_first_door",
+      "org": "Transylvania County Schools",
+      "public_description": "Counseling check-ins and skills groups at school, usually available within days.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Enrolled students; parent consent for groups.",
+      "hours": "School days",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 3,
+        "transportation_required": false,
+        "digital_access_required": false,
+        "paperwork_required": false
+      },
+      "verified": "confirmed",
+      "last_reviewed": "2026-06-01",
+      "linked_org_station": "school",
+      "_internal": {
+        "partner_notes": "Fastest available bridge support for school-age kids; not a substitute for clinical evaluation.",
+        "internal_note": ""
+      }
+    },
+    {
+      "id": "svc-food-pantry",
+      "name": "The Sharing House",
+      "neutral_name": "Community Food Pantry",
+      "category": "food_access",
+      "door_type": "resource_door",
+      "org": "The Sharing House",
+      "public_description": "The Sharing House: a central location for food, clothing, and supplies, with a short first-time intake.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Short intake; household-size based. Dietary flags (low-sodium etc.) accommodated. Also provides clothing and other supplies (Transylvania Christian Ministry).",
+      "hours": "Confirm current pickup schedule with the organization before event day",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 5,
+        "transportation_required": true,
+        "digital_access_required": false,
+        "paperwork_required": true
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-08",
+      "linked_org_station": "food_partner",
+      "_internal": {
+        "partner_notes": "Warm referrals cut intake from ~20 minutes to ~2.",
+        "internal_note": "Web-verified 2026-07-08 (sharinghouse.org, findhelp.org, Transylvania Times). Public listings show 164 Duckworth Ave, Brevard; hours Mon–Fri 9am–4pm (closed 12–1); (828) 884-2866; food/clothing/financial assistance and appointment-based food orders — all consistent with the app. Confirm current pickup schedule and intake details with The Sharing House directly before public use."
+      }
+    },
+    {
+      "id": "svc-emergency-food",
+      "name": "Bread of Life",
+      "neutral_name": "Emergency Hot Meals & Food",
+      "category": "food_access",
+      "door_type": "resource_door",
+      "org": "Bread of Life",
+      "public_description": "Bread of Life: same-day food help, hot meals, no questions asked.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Name and household size only. No documentation, no questions asked. Runs a food truck reaching remote areas of the county.",
+      "hours": "Weekdays — hot meals and pantry staples; confirm current hours with the organization",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 0,
+        "transportation_required": true,
+        "digital_access_required": false,
+        "paperwork_required": false
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-08",
+      "linked_org_station": "emergency_food_support",
+      "_internal": {
+        "partner_notes": "Designed as a bridge to the weekly pantry, not a replacement. Since 1996; also serves hot meals daily.",
+        "internal_note": "Web-verified 2026-07-08 (breadoflifetc.org, foodpantries.org, Transylvania Times). Public listings show a FIXED location (238 South Caldwell St, Brevard) with hot meals Mon–Fri 12–2pm and donation intake 8:30–11:30am. The \"no questions asked\" framing is corroborated, but the \"food truck reaching remote areas\" claim in eligibility_notes is NOT supported by any public source found — treat as unverified and remove from any participant copy until Bread of Life confirms it directly. Confirm hours/capacity directly before public use."
+      }
+    },
+    {
+      "id": "svc-hunger-coalition",
+      "name": "Hunger Coalition of Transylvania County",
+      "neutral_name": "Regional Hunger Coalition",
+      "category": "food_access",
+      "door_type": "resource_door",
+      "org": "Hunger Coalition",
+      "public_description": "The Hunger Coalition brings food to a different part of the county each Thursday.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Rotating pantry, a different location each Thursday; partners with MANNA Food Bank and the Transylvania Farmers' Market for fresh produce.",
+      "hours": "First, second, third, and fourth Thursdays — location rotates",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 7,
+        "transportation_required": false,
+        "digital_access_required": false,
+        "paperwork_required": false
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-05",
+      "linked_org_station": "mobile_food_access",
+      "_internal": {
+        "partner_notes": "The rotation model exists specifically to reach households for whom getting to a fixed pantry is the barrier.",
+        "internal_note": "Sourced from hungerfreetc.com. Confirm current rotation schedule with the organization before event day."
+      }
+    },
+    {
+      "id": "svc-sparkpoint-navigation",
+      "name": "Resilience Hub Navigation",
+      "neutral_name": null,
+      "category": "care_navigation",
+      "door_type": "navigation_door",
+      "org": "SparkPoint",
+      "public_description": "Tell your story once. The Hub maps the path and calls ahead so every next door expects you.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Open door. No eligibility screening to talk.",
+      "hours": "Weekdays 9–5, some evenings",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 0,
+        "transportation_required": false,
+        "digital_access_required": false,
+        "paperwork_required": false
+      },
+      "verified": "confirmed",
+      "last_reviewed": "2026-06-15",
+      "linked_org_station": "sparkpoint_hub",
+      "_internal": {
+        "partner_notes": "The Hub listens once and carries the story forward — navigation and warm handoffs, not clinical care.",
+        "internal_note": "The Hub is the visible anchor; the ecosystem is the story. Never describe it as replacing providers."
+      }
+    },
+    {
+      "id": "svc-public-health",
+      "name": "Transylvania Public Health",
+      "neutral_name": "Public Health Department",
+      "category": "public_health",
+      "door_type": "formal_care_door",
+      "org": "Transylvania Public Health",
+      "public_description": "The county health department — immunizations, WIC, and programs many residents don't know they qualify for.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Immunizations, WIC, environmental health, and home-visit programs; open to county residents.",
+      "hours": "Mon–Thu 8:30am–12pm & 1–5pm",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 2,
+        "transportation_required": true,
+        "digital_access_required": false,
+        "paperwork_required": true
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-05",
+      "linked_org_station": "public_health",
+      "_internal": {
+        "partner_notes": "106 E Morgan St, Brevard — administrative and environmental health on floor 1, personal health services and WIC on floor 3.",
+        "internal_note": "Sourced from transylvaniahealth.org. Confirm current programs/hours with the department before public use."
+      }
+    },
+    {
+      "id": "svc-blue-ridge-health-primary-care",
+      "name": "Blue Ridge Health — Family Medicine",
+      "neutral_name": "Community Health Center — Family Medicine",
+      "category": "primary_care",
+      "door_type": "formal_care_door",
+      "org": "Blue Ridge Health",
+      "public_description": "A sliding-scale clinic that sees families regardless of ability to pay.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "FQHC — sliding-scale fees for uninsured/underinsured patients. Also offers nutrition services and medication for opioid use disorder (MOUD).",
+      "hours": "Tue/Thu/Fri 8–5, Mon/Wed 8–8 (per public listing)",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 7,
+        "transportation_required": true,
+        "digital_access_required": true,
+        "paperwork_required": true
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-05",
+      "linked_org_station": "primary_care",
+      "_internal": {
+        "partner_notes": "29 West French Broad St, Suite 203, Brevard. (828) 883-5550.",
+        "internal_note": "Sourced from brchs.com. Confirm participation, hours, and sliding-scale details directly with Blue Ridge Health before public use."
+      }
+    },
+    {
+      "id": "svc-blue-ridge-health-pediatrics",
+      "name": "Blue Ridge Health — Pediatrics",
+      "neutral_name": "Community Health Center — Pediatrics",
+      "category": "primary_care",
+      "door_type": "formal_care_door",
+      "org": "Blue Ridge Health",
+      "public_description": "Blue Ridge Health's pediatric clinic — sliding scale, portal-based scheduling.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "FQHC pediatric care, sliding scale. Same organization runs the county's school-based health centers.",
+      "hours": "Tue/Thu/Fri 8–5, Mon/Wed 8–8 (per public listing)",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 7,
+        "transportation_required": true,
+        "digital_access_required": true,
+        "paperwork_required": true
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-05",
+      "linked_org_station": "pediatrics",
+      "_internal": {
+        "partner_notes": "29 West French Broad St, Suite 203, Brevard. Portal-based scheduling; no confirmed interpreter line as of this writing.",
+        "internal_note": "Sourced from brchs.com. Bilingual/interpreter capacity NOT confirmed — do not claim it publicly until Blue Ridge Health confirms directly."
+      }
+    },
+    {
+      "id": "svc-storm-recovery-assistance",
+      "name": "Storm Recovery Assistance Application",
+      "neutral_name": null,
+      "category": "disaster_recovery",
+      "door_type": "friction_point",
+      "org": "Digital Access & Paperwork",
+      "public_description": "A recovery assistance application — real, but paperwork-heavy, with documentation requirements that are easy to miss.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Documentation-heavy intake; homeowner or renter applicants for storm/flood-related damage.",
+      "hours": "Rolling application window",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 14,
+        "transportation_required": false,
+        "digital_access_required": true,
+        "paperwork_required": true
+      },
+      "verified": "partner_input",
+      "last_reviewed": "2026-07-05",
+      "linked_org_station": "digital_paperwork",
+      "_internal": {
+        "partner_notes": "A second set of eyes on the paperwork measurably reduces \"returned for missing documentation\" cycles.",
+        "internal_note": "Composite process modeled generally on the concept of a disaster-recovery application/intake step. Tropical Storm Helene (Sept. 2024) is now named directly elsewhere in this packet (see env-storm-aftermath and the long_term_recovery station/FWRD Transylvania) — this specific application step remains a composite stand-in, not a named real fund or program."
+      }
+    },
+    {
+      "id": "svc-habitat-recovery-repair",
+      "name": "Transylvania Habitat for Humanity — Recovery Repairs",
+      "neutral_name": "Home Repair & Recovery",
+      "category": "housing_repair",
+      "door_type": "resource_door",
+      "org": "Transylvania Habitat for Humanity",
+      "public_description": "Habitat for Humanity's recovery-repair program — real help, on a volunteer-and-materials timeline, not an instant one.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Homeowners with storm/flood-related repair needs; volunteer-labor and donated-materials dependent, so scheduling runs on a queue rather than a fixed calendar.",
+      "hours": "Confirm current intake process with the organization before event day",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 30,
+        "transportation_required": false,
+        "digital_access_required": false,
+        "paperwork_required": true
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-05",
+      "linked_org_station": "home_repair_recovery",
+      "_internal": {
+        "partner_notes": "A warm handoff with the paperwork already in order moves a household onto the repair queue faster than a cold application.",
+        "internal_note": "Sourced from the Transylvania Nonprofit Sector Analysis (2026), which documents Habitat for Humanity supporting home repairs for storm-impacted homeowners in the county. Tropical Storm Helene (Sept. 2024) is now named directly in participant copy (decision, 2026-07-07 — see env-storm-aftermath and REAL_ORG_OUTREACH_MAP.md). Confirm current program details directly with Habitat before public use."
+      }
+    },
+    {
+      "id": "svc-el-centro",
+      "name": "El Centro Comunitario Hispano-Americano",
+      "neutral_name": "Latino Community Resource Center",
+      "category": "language_access_navigation",
+      "door_type": "trusted_first_door",
+      "org": "El Centro Comunitario Hispano-Americano",
+      "public_description": "El Centro — the county's Hispanic-serving organization. Someone here always answers in Spanish.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Open door; serves the Hispanic community and connects families to broader county resources. Runs a Homework Club and Club Acción for youth.",
+      "hours": "Confirm current hours with the organization before event day",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 0,
+        "transportation_required": false,
+        "digital_access_required": false,
+        "paperwork_required": false
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-08",
+      "linked_org_station": "el_centro",
+      "_internal": {
+        "partner_notes": "A Spanish speaker always answers the phone — the county's only Hispanic-serving organization historically.",
+        "internal_note": "Web-verified 2026-07-08 (elcentrobrevard.com, Idealist, NC Center for Nonprofits). Address 249 E Main St corroborated; phone (828) 585-7018; Latino-led; services include resource referral, homework/ESL/tutoring, translation, and disaster relief — consistent with the app (the specific \"Club Acción\" program name was not independently confirmed). Public hours not listed. Needs direct confirmation from El Centro before naming/staffing them at the convening."
+      }
+    },
+    {
+      "id": "svc-dss-benefits-enrollment",
+      "name": "Transylvania County DSS — Benefits & Enrollment",
+      "neutral_name": "Social Services — Benefits & Enrollment",
+      "category": "benefits_enrollment",
+      "door_type": "resource_door",
+      "org": "Transylvania County DSS",
+      "public_description": "The county benefits office — Medicaid, food assistance, and emergency energy help, with a real processing timeline attached.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Administers Medicaid, SNAP (Food and Nutrition Services), WorkFirst, Child Care Subsidy, and Energy Assistance for county residents.",
+      "hours": "Confirm current hours with the department before event day",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 45,
+        "transportation_required": true,
+        "digital_access_required": false,
+        "paperwork_required": true
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-07",
+      "linked_org_station": "dss_benefits",
+      "_internal": {
+        "partner_notes": "106 E Morgan St, Brevard — same building as Transylvania Public Health. (828) 884-3174. Medicaid applications can take up to 45 days to process.",
+        "internal_note": "Sourced from transylvaniacounty.org/departments/social-services and ncdhhs.gov local DSS directory. Confirm current processing times and program list directly with DSS before public use."
+      }
+    },
+    {
+      "id": "svc-haven-shelter",
+      "name": "The Haven of Transylvania County",
+      "neutral_name": "Housing Crisis Shelter",
+      "category": "housing_crisis",
+      "door_type": "crisis_care_door",
+      "org": "The Haven of Transylvania County",
+      "public_description": "A real shelter with a real intake process — a bed for tonight, and help pointed toward something permanent.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "18-bed overnight shelter for homeless men, women, and children. Intake interviews by appointment Mon–Thu; all applicants complete an intake interview and background check.",
+      "hours": "Intake interviews Monday–Thursday, by appointment",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 0,
+        "transportation_required": false,
+        "digital_access_required": false,
+        "paperwork_required": true
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-08",
+      "linked_org_station": "housing_crisis_support",
+      "_internal": {
+        "partner_notes": "126 Oakdale St, Brevard. (828) 877-2040. Offers evening meal, light breakfast, laundry, showers, mail/phone messaging, and referral toward permanent or transitional housing.",
+        "internal_note": "Web-verified 2026-07-08 (havenoftc.org, homelessshelterdirectory.org, GuideStar). Address 126 Oakdale St, phone (828) 877-2040, and the intake-interview-plus-background-check process (by appointment Mon–Thu) all corroborated. NUANCE: public listings describe the 18-bed \"Thomas House\" as serving single adults; the \"men, women, and children\" phrasing in eligibility_notes likely anticipates the forthcoming \"House of Hope\" family expansion (advertised as coming soon, not yet open). Soften to single adults, or confirm the family-capacity timeline with the Haven, before public use."
+      }
+    },
+    {
+      "id": "svc-meridian-adult-bh",
+      "name": "Meridian Behavioral Health Services — Adult Outpatient",
+      "neutral_name": "Adult Behavioral Health — Outpatient",
+      "category": "adult_behavioral_health",
+      "door_type": "formal_care_door",
+      "org": "Meridian Behavioral Health Services",
+      "public_description": "Outpatient counseling and care coordination for adults — real, local support, though not a detox or residential program.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Outpatient counseling (individual, group, family) and care coordination for adults, including substance-use concerns. Not a detox or residential treatment program.",
+      "hours": "Confirm current hours with the organization before event day",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 14,
+        "transportation_required": true,
+        "digital_access_required": false,
+        "paperwork_required": true
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-08",
+      "linked_org_station": "adult_behavioral_health",
+      "_internal": {
+        "partner_notes": "Part of Blue Ridge Health — Meridian became a Blue Ridge Health subsidiary in the 2021 merger; this is BRH's behavioral-health arm, not an independent org. 69 North Broad Street, Brevard. (828) 883-2708. Tailored Care Management connects Medicaid Tailored Plan/Direct recipients with substance-use or behavioral-health concerns to community resources.",
+        "internal_note": "Web-verified 2026-07-08 (brchs.com, HRSA connector, Transylvania Times). CORRECTION: Meridian Behavioral Health Services merged into Blue Ridge Health in Oct 2021 and is now BRH's behavioral-health arm — NOT an independent org, and the old mbhci.org identity is stale. Address 69 N Broad St and phone (828) 883-2708 corroborated. If named at the convening, coordinate through Blue Ridge Health and frame as \"Meridian Behavioral Health Services, part of Blue Ridge Health.\" County still has no detox/residential program — confirm adult scope before public use."
+      }
+    },
+    {
+      "id": "svc-through-the-trees",
+      "name": "Through the Trees — Digital Access",
+      "neutral_name": "Digital Access Assistance",
+      "category": "digital_access",
+      "door_type": "resource_door",
+      "org": "Through the Trees",
+      "public_description": "A refurbished device, help with the internet bill, and someone to sit with you through the parts that don't make sense.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Refurbished device matching, digital literacy training, and help enrolling in internet-cost assistance programs; also subsidizes broadband expansion/monthly costs for low-income households.",
+      "hours": "Retail storefront on Main Street, Brevard — confirm current hours before event day",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 0,
+        "transportation_required": false,
+        "digital_access_required": false,
+        "paperwork_required": false
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-07",
+      "linked_org_station": "digital_access_partner",
+      "_internal": {
+        "partner_notes": "2025 Brevard/Transylvania Chamber of Commerce Nonprofit of the Year. Over 1,600 devices distributed across Buncombe, Henderson, and Transylvania counties as of last count.",
+        "internal_note": "Sourced from throughthetrees.us, ncruralcenter.org, and ednc.org coverage. Confirm current program details and capacity directly with Through the Trees before public use."
+      }
+    },
+    {
+      "id": "svc-tc-chamber-workforce",
+      "name": "Brevard/Transylvania Chamber of Commerce — Workforce Development",
+      "neutral_name": "Workforce Development",
+      "category": "workforce_development",
+      "door_type": "resource_door",
+      "org": "Brevard/Transylvania Chamber of Commerce",
+      "public_description": "Training pathways and a connection to local employers — a bridge toward a job that pays enough.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "NCWorks Next Gen (youth-focused) and the Customized Training program, delivered with Blue Ridge Community College, connecting residents to training pathways and employers.",
+      "hours": "175 E Main St, Brevard — confirm current hours before event day",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 7,
+        "transportation_required": true,
+        "digital_access_required": false,
+        "paperwork_required": false
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-07",
+      "linked_org_station": "workforce_development",
+      "_internal": {
+        "partner_notes": "Serving the business community since 1923; over 475 members. (828) 883-3700.",
+        "internal_note": "Sourced from brevardncchamber.org and justeconomicswnc.org. Confirm current program list and eligibility directly with the Chamber before public use."
+      }
+    },
+    {
+      "id": "svc-fwrd-long-term-recovery",
+      "name": "FWRD Transylvania — Long-Term Recovery Group",
+      "neutral_name": "Long-Term Recovery Group",
+      "category": "disaster_recovery_coordination",
+      "door_type": "navigation_door",
+      "org": "FWRD Transylvania",
+      "public_description": "A team that coordinates your recovery case across every partner involved, instead of you explaining it fresh at each one.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Coordinates disaster case management, unmet-needs identification, and cross-agency recovery support for households affected by Tropical Storm Helene (Sept. 2024); also runs community preparedness workshops.",
+      "hours": "Confirm current hours/intake process with the organization before event day",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 7,
+        "transportation_required": false,
+        "digital_access_required": false,
+        "paperwork_required": true
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-07",
+      "linked_org_station": "long_term_recovery",
+      "_internal": {
+        "partner_notes": "Formerly the Transylvania County Long-Term Recovery Group; formed with support from the American Red Cross, FEMA, NCVOAD, Dogwood Health Trust, and others. Represents the \"long-term recovery group\" category broadly — FWRD is Transylvania County's specific instance of it.",
+        "internal_note": "Sourced from gofwrd.org. FWRD's public identity is explicitly tied to Helene recovery, which is why storm references elsewhere in this packet (env-storm-aftermath, Linda's route) now name Tropical Storm Helene directly rather than staying generic (decision made 2026-07-07 — see REAL_ORG_OUTREACH_MAP.md). Confirm current scope and capacity directly with FWRD before public use."
+      }
+    },
+    {
+      "id": "svc-meals-on-wheels",
+      "name": "Meals on Wheels of Brevard/Transylvania — Home-Delivered Meals",
+      "neutral_name": "Home-Delivered Meals",
+      "category": "food_access",
+      "door_type": "resource_door",
+      "org": "Meals on Wheels of Brevard/Transylvania",
+      "public_description": "A hot meal brought to your door by the same person each week — who would notice if you did not answer.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "For homebound residents (often older adults or people with disabilities) who cannot easily shop or prepare meals. Sliding-scale/donation-based; a brief eligibility screening applies.",
+      "hours": "Weekday delivery routes; meals prepared at Transylvania Regional Hospital. Confirm current capacity and any waitlist before event day.",
+      "access": {
+        "referral_required": "depends",
+        "appointment_delay_days": 3,
+        "transportation_required": false,
+        "digital_access_required": false,
+        "paperwork_required": true
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-15",
+      "linked_org_station": "meals_on_wheels",
+      "_internal": {
+        "partner_notes": "Delivered by a large volunteer driver corps on consistent weekly routes, so delivery doubles as a wellness check for isolated neighbors.",
+        "internal_note": "Sourced from mealsonwheelsbrevard.org. Confirm eligibility, cost model, and capacity directly with the organization before public use."
+      }
+    },
+    {
+      "id": "svc-vaya-bh-access",
+      "name": "Vaya Health — Behavioral Health Access, Care Management & Crisis",
+      "neutral_name": "Behavioral Health Access & Crisis",
+      "category": "behavioral_health_access",
+      "door_type": "navigation_door",
+      "org": "Vaya Health",
+      "public_description": "The number you call in a crisis, and the people who help you find a counselor and cover the cost.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Public managed care organization (MCO) for behavioral health, mental health, substance use, I/DD, and TBI. Runs a 24/7 crisis line, mobile crisis, and same-day walk-in crisis assessment; manages Medicaid behavioral-health benefits and connects members to providers. Serves anyone in crisis regardless of coverage.",
+      "hours": "24/7 behavioral-health crisis line; member/recipient line weekdays and Saturdays. Confirm local walk-in / mobile crisis details before event day.",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 0,
+        "transportation_required": false,
+        "digital_access_required": false,
+        "paperwork_required": false
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-15",
+      "linked_org_station": "bh_access_crisis",
+      "_internal": {
+        "partner_notes": "Selected as the NC ROOTS rural-health-transformation hub lead for Region 3. Vaya and Partners Health Management are merging effective Oct. 1, 2026 — naming may change.",
+        "internal_note": "Sourced from vayahealth.com. Vaya is an MCO / care-management / crisis entity, NOT a direct therapy provider — keep that distinction. Confirm current crisis-access details and post-merger identity before public use."
+      }
+    },
+    {
+      "id": "svc-pisgah-legal",
+      "name": "Pisgah Legal Services — Free Civil Legal Aid & Benefits Appeals",
+      "neutral_name": "Legal Aid / Benefits Appeals",
+      "category": "legal_aid",
+      "door_type": "resource_door",
+      "org": "Pisgah Legal Services",
+      "public_description": "Free help to appeal a denial and make the system look at your case again.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Free civil legal assistance for low-income WNC residents: benefits denials and appeals (Medicaid, disability, SNAP), housing and eviction, domestic-safety, and disaster-recovery legal issues. Income-based eligibility.",
+      "hours": "Serves Transylvania County from regional offices and clinics; confirm current intake process and any local hours before event day.",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 5,
+        "transportation_required": false,
+        "digital_access_required": false,
+        "paperwork_required": true
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-15",
+      "linked_org_station": "legal_aid",
+      "_internal": {
+        "partner_notes": "Regional legal-aid nonprofit covering multiple WNC counties; a wrongly denied benefit can often be reversed on appeal with advocacy.",
+        "internal_note": "Sourced from pisgahlegal.org (verify current Transylvania County intake and scope directly before public use)."
+      }
+    },
+    {
+      "id": "svc-community-health-worker",
+      "name": "Community Health Worker Navigation (Transylvania County DSS)",
+      "neutral_name": "Community Health Worker Navigation",
+      "category": "navigation",
+      "door_type": "navigation_door",
+      "org": "Transylvania County DSS / CHW program",
+      "public_description": "Someone whose actual job is to hold the thread of your case — the calls, the forms, the follow-up.",
+      "service_area": {
+        "county": "Transylvania",
+        "in_county": "yes"
+      },
+      "eligibility": "Trained community health workers provide active navigation — benefits enrollment help, appointment and transportation coordination, referral follow-up, and home visits. Often housed at or partnered with the county Department of Social Services.",
+      "hours": "Weekday outreach and by referral; confirm current CHW program capacity and intake before event day.",
+      "access": {
+        "referral_required": "no",
+        "appointment_delay_days": 2,
+        "transportation_required": false,
+        "digital_access_required": false,
+        "paperwork_required": false
+      },
+      "verified": "needs_verification",
+      "last_reviewed": "2026-07-15",
+      "linked_org_station": "community_health_worker",
+      "_internal": {
+        "partner_notes": "Community Health Worker is an increasingly funded, Medicaid-recognized role in NC. The value here is loop-closing: the CHW carries the task instead of assigning it.",
+        "internal_note": "Added 2026-07-15 (Jeff) to provide a real navigation SERVICE door distinct from the Referral Desk friction point. Confirm the county's current CHW program and any DSS partnership before public use."
+      }
+    }
+  ]
+}
