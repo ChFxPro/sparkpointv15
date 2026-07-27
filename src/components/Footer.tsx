@@ -35,6 +35,7 @@ const quickLinks = [
   { label: 'Home', href: '/' },
   { label: 'Mission', href: '/mission' },
   { label: 'Stories', href: '/stories' },
+  { label: 'Events', href: '/events' },
   { label: 'Impact', href: '/impact' },
   { label: 'Programs', href: '/programs' },
   { label: 'Newsroom', href: '/press' },
