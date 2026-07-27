@@ -22,6 +22,9 @@
     <loc>__SITE_ORIGIN__/stories</loc>
   </url>
   <url>
+    <loc>__SITE_ORIGIN__/events</loc>
+  </url>
+  <url>
     <loc>__SITE_ORIGIN__/stories/disaster-recovery</loc>
   </url>
   <url>

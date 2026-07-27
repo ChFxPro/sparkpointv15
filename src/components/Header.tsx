@@ -29,6 +29,7 @@ const menuItems: MenuItem[] = [
   { label: 'Stories', href: '/stories' },
   { label: 'Impact', href: '/impact' },
   { label: 'Programs', href: '/programs' },
+  { label: 'Events', href: '/events' },
   { label: 'Newsroom', href: '/press' },
   { label: 'Get Involved', href: '/get-involved' },
   { label: 'About', href: '/about' },
@@ -71,7 +72,7 @@ export function Header() {
 
   // Filter links for Desktop Center Nav (Option A)
   const desktopCenterLinks = menuItems.filter(item => 
-    ['Mission', 'Stories', 'Impact', 'Programs'].includes(item.label)
+    ['Mission', 'Stories', 'Events', 'Impact', 'Programs'].includes(item.label)
   );
 
   return (
@@ -396,7 +397,7 @@ export function Header() {
                  <div>
                    <h3 className="text-white/60 text-xs font-bold uppercase tracking-widest mb-6">Explore</h3>
                    <div className="grid gap-4">
-                     {['Mission', 'Stories', 'Impact', 'Programs', 'Newsroom'].map(label => {
+                     {['Mission', 'Stories', 'Impact', 'Programs', 'Events', 'Newsroom'].map(label => {
                         const item = menuItems.find(i => i.label === label);
                         return item ? (
                           <Link

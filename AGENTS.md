@@ -1,5 +1,5 @@
 # SparkPoint Agent Guide
-Last updated: 2026-03-22
+Last updated: 2026-07-27
 
 ## Read First
 - Read this file before modifying code in this repo.
@@ -24,12 +24,15 @@ Last updated: 2026-03-22
 - Unified menu drawer includes a `Sponsors` link under the `About SparkPoint` group.
 - Permanent press portal is available at `/press`, with reusable release pages under `/press/:slug`.
 - Press releases are single-sourced in `src/data/pressReleases.json`, feed `/news-media` via `showOnMediaPage`, and generate downloadable media kits during builds.
+- Events hub is available at `/events`, with reusable upcoming/past event listings driven by `src/data/events.ts`.
+- Rural Health Convening landing page is available at `/rural-health-convening`, with a priority registration list for the limited 200-seat event, partner/sponsor attribution, and a public introduction to the Rural Health Field Simulator.
 
 ## Routes
 - `/` home
 - `/about`
 - `/mission`
 - `/impact`
+- `/events` (SparkPoint events hub, titled “Where We Gather”)
 - `/get-involved`
 - `/programs`
 - `/sponsors`
@@ -40,6 +43,7 @@ Last updated: 2026-03-22
 - `/press`
 - `/press/:slug`
 - `/resources/know-your-numbers`
+- `/rural-health-convening` (2026 WNC Regional Rural Health Convening event portal and Rural Health Field Simulator introduction)
 - `/newsletter` -> external redirect to Squarespace newsletter
 - `/donations` -> external redirect to Squarespace donations
 - `/intake` (`?intent=contact|volunteer|partner`)

@@ -16,6 +16,7 @@ const MissionPage = lazy(() =>
 const StoriesPage = lazy(() =>
   import('./pages/StoriesPage').then((module) => ({ default: module.StoriesPage }))
 );
+const EventsPage = lazy(() => import('./pages/EventsPage'));
 const StoryCategoryPage = lazy(() =>
   import('./pages/StoryCategoryPage').then((module) => ({ default: module.StoryCategoryPage }))
 );
@@ -70,6 +71,7 @@ const PrivacyPage = lazy(() =>
 const KnowYourNumbersPage = lazy(() =>
   import('./pages/KnowYourNumbersPage').then((module) => ({ default: module.KnowYourNumbersPage }))
 );
+const RuralHealthConveningPage = lazy(() => import('./pages/RuralHealthConveningPage'));
 const CommunityChampionsArticle = lazy(() => import('./pages/CommunityChampionsArticle'));
 const HeleneOneYearArticle = lazy(() => import('./pages/HeleneOneYearArticle'));
 const HEALTHCARE_STORY_FORM_URL =
@@ -110,7 +112,8 @@ function RouteLoading() {
 // Flagship program routes that render as immersive, chromeless landing pages.
 // These skip the site-wide <Header /> and wrapping <main> so the program's own
 // hero can occupy the full viewport without colliding with site chrome.
-const CHROMELESS_PATH_PREFIXES = ['/programs/purpose-workshops'];
+const CHROMELESS_PATH_PREFIXES = ['/programs/purpose-workshops', '/rural-health-convening'];
+const CUSTOM_FOOTER_PATH_PREFIXES = ['/rural-health-convening'];
 
 function isChromelessPath(pathname: string): boolean {
   return CHROMELESS_PATH_PREFIXES.some(
@@ -121,6 +124,9 @@ function isChromelessPath(pathname: string): boolean {
 function AppContent() {
   const location = useLocation();
   const chromeless = isChromelessPath(location.pathname);
+  const customFooter = CUSTOM_FOOTER_PATH_PREFIXES.some(
+    (prefix) => location.pathname === prefix || location.pathname.startsWith(prefix + '/')
+  );
 
   const routes = (
     <Suspense fallback={<RouteLoading />}>
@@ -128,6 +134,7 @@ function AppContent() {
         <Route path="/" element={<HomePage />} />
         <Route path="/mission" element={<MissionPage />} />
         <Route path="/stories" element={<StoriesPage />} />
+        <Route path="/events" element={<EventsPage />} />
         <Route path="/stories/collections" element={<StoryCollectionsPage />} />
         <Route path="/stories/collections/:id" element={<StoryCollectionDetailPage />} />
         <Route path="/stories/:categoryId" element={<StoryCategoryPage />} />
@@ -158,6 +165,7 @@ function AppContent() {
         <Route path="/trust" element={<TrustPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/resources/know-your-numbers" element={<KnowYourNumbersPage />} />
+        <Route path="/rural-health-convening" element={<RuralHealthConveningPage />} />
         <Route
           path="/healthcare-story"
           element={
@@ -202,7 +210,7 @@ function AppContent() {
             {routes}
           </main>
         )}
-        <Footer />
+        {!customFooter && <Footer />}
       </div>
     </MotionConfig>
   );
