@@ -42,8 +42,8 @@
 
 | ID | Status | Work | Bundle / notes |
 | --- | --- | --- | --- |
-| RH-001 | Done | Build the `/rural-health-convening` event portal and Rural Health Field Simulator introduction. | 2026-07-27: completed locally on `codex/rural-health-convening`. Includes event facts, a temporary Monday.com priority-registration list for the limited 200-seat event, partner hierarchy, simulator journey, ongoing-program framing, event JSON-LD, and static prerender registration. The prior public ticket CTA and QR are intentionally withheld until registration opens. Vite production compilation and responsive in-app browser review passed. PR/deployment not yet requested. |
-| EVENT-001 | Done | Add a reusable SparkPoint events hub at `/events` and publish the Rural Health Convening as its featured event. | 2026-07-27: completed locally on `codex/rural-health-convening`. “Where We Gather” is driven by `src/data/events.ts`, automatically separates upcoming/past gatherings, and is integrated into navigation, footer, structured data, and prerender routes. PR/deployment not yet requested. |
+| RH-001 | Done | Build the `/rural-health-convening` event portal and Rural Health Field Simulator introduction. | Merged in PR #85 and verified live 2026-07-27 after GitHub Pages deployment run 30297118711. Includes event facts, a temporary Monday.com priority-registration list for the limited 200-seat event, partner hierarchy, simulator journey, ongoing-program framing, event JSON-LD, and static prerender registration. The prior public ticket CTA and QR are intentionally withheld until registration opens. |
+| EVENT-001 | Done | Add a reusable SparkPoint events hub at `/events` and publish the Rural Health Convening as its featured event. | Merged in PR #85 and verified live 2026-07-27 after GitHub Pages deployment run 30297118711. “Where We Gather” is driven by `src/data/events.ts`, automatically separates upcoming/past gatherings, and is integrated into navigation, footer, structured data, and prerender routes. |
 | EDIT-001 | Next | Complete editorial QA for Programs content. | Group with program-content updates only. |
 | EDIT-002 | Next | Curate fuller News/Media archive. | Group releases, media kits, and News/Media card updates. |
 | UX-001 | Next | Polish sponsor and resilience hub content/assets. | Separate content/design bundle. |
@@ -62,7 +62,7 @@
 
 | Date | Update |
 | --- | --- |
-| 2026-07-27 | RH-001 completed locally: added the simulator-inspired `/rural-health-convening` landing page, event registration portal, partner/sponsor presentation, Field Simulator introduction, event structured data, and prerender route. Verified live ticket facts and responsive rendering; PR/deployment remains the next delivery step. |
+| 2026-07-27 | PR #85 merged and deployed: `/events` and `/rural-health-convening` are live. Production verification confirmed HTTP 200 responses, correct priority-list links and 200-seat language, the Events navigation placement, the simulator section, and no relevant browser console errors. |
 | 2026-07-21 | SEC-002 closed: `Protect main (production)` branch ruleset enabled (required PRs + build check, force-push/deletions blocked). |
 | 2026-07-21 | SEC-003 closed: GitHub secret scanning and push protection enabled. |
 | 2026-07-17 | Created as the canonical worklist; seeded with the security-audit remediation bundles and established project follow-ons. |
