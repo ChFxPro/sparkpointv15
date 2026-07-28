@@ -254,6 +254,7 @@ export function CommunityConnectorsPage() {
                 src={COMMUNITY_CONNECTORS_VIDEO_EMBED_URL}
                 title="Community Connectors intro video"
                 loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
                 allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
                 aria-describedby="commconn-video-summary"
