@@ -162,7 +162,7 @@ export default function ThriveAtFivePage() {
             <div className="taf-split-callout" aria-label="Fundraiser impact">
               <strong>50%</strong>
               <p>
-                of all profits from August sales will be donated by Pisgah Coffee Roasters
+                of all profits from August sales of Common Ground will be donated by Pisgah Coffee Roasters
                 to help complete SparkPoint’s new Resilience Hub.
               </p>
             </div>
