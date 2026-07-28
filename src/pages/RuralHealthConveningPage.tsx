@@ -161,7 +161,7 @@ export function RuralHealthConveningPage() {
     <div className="rh-page">
       <SEOHead
         title="2026 Rural Health Convening | SparkPoint"
-        description="Join rural health leaders in Brevard, NC, on October 1, 2026, for a day of connection, shared learning, and the Rural Health Field Simulator — presented by UNC Health Pardee and Transylvania Regional Hospital, with support from Pisgah Health Foundation."
+        description="Join rural health leaders in Brevard, NC on Oct. 1, 2026, presented by UNC Health Pardee & Transylvania Regional Hospital, with Pisgah Health Foundation."
         path={PAGE_PATH}
         image="/assets/Rural%20Health/rural%20sim%20hero.webp"
         imageAlt="A field-atlas connection map showing the many doors, barriers, and handoffs that shape rural health access."

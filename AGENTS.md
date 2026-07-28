@@ -1,5 +1,5 @@
 # SparkPoint Agent Guide
-Last updated: 2026-07-27
+Last updated: 2026-07-28
 
 ## Read First
 - Read this file before modifying code in this repo.
@@ -25,7 +25,7 @@ Last updated: 2026-07-27
 - Permanent press portal is available at `/press`, with reusable release pages under `/press/:slug`.
 - Press releases are single-sourced in `src/data/pressReleases.json`, feed `/news-media` via `showOnMediaPage`, and generate downloadable media kits during builds.
 - Events hub is available at `/events`, with reusable upcoming/past event listings driven by `src/data/events.ts`.
-- Rural Health Convening landing page is available at `/rural-health-convening`, with a priority registration list for the limited 200-seat event, partner/sponsor attribution, and a public introduction to the Rural Health Field Simulator.
+- Rural Health Convening landing page is available at `/rural-health-convening`, with a priority registration list for the limited 200-seat event, partner/sponsor attribution, and a public introduction to the Rural Health Field Simulator. Sponsor logos link to each org's website; sponsor billing follows two tiers — Summit ($3,500: UNC Health Pardee, Transylvania Regional Hospital, equal size/prominence) and Ridgeline ($2,500: Pisgah Health Foundation, visibly smaller/secondary) — reflected in the hero credit line, the partnership section logo hierarchy, and the SEO description.
 - Thrive @ Five: Common Ground Release Party is available at `/events/thrive-at-five`, with the July 31 event details, August coffee fundraiser, August 1 purchase CTA, performance video, and Resilience Hub story; it is the current featured event on `/events`.
 
 ## Routes
