@@ -26,6 +26,7 @@ Last updated: 2026-07-27
 - Press releases are single-sourced in `src/data/pressReleases.json`, feed `/news-media` via `showOnMediaPage`, and generate downloadable media kits during builds.
 - Events hub is available at `/events`, with reusable upcoming/past event listings driven by `src/data/events.ts`.
 - Rural Health Convening landing page is available at `/rural-health-convening`, with a priority registration list for the limited 200-seat event, partner/sponsor attribution, and a public introduction to the Rural Health Field Simulator.
+- Thrive @ Five: Common Ground Release Party is available at `/events/thrive-at-five`, with the July 31 event details, August coffee fundraiser, August 1 purchase CTA, performance video, and Resilience Hub story; it is the current featured event on `/events`.
 
 ## Routes
 - `/` home
@@ -33,6 +34,7 @@ Last updated: 2026-07-27
 - `/mission`
 - `/impact`
 - `/events` (SparkPoint events hub, titled “Where We Gather”)
+- `/events/thrive-at-five` (2026 Common Ground Resilience Roast release party, August 1 purchase CTA, and Resilience Hub fundraiser)
 - `/get-involved`
 - `/programs`
 - `/sponsors`
