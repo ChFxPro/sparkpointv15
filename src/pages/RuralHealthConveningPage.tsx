@@ -27,20 +27,12 @@ function ruralHealthAsset(filename: string) {
   return `${BASE}assets/Rural%20Health/${encodeURIComponent(filename)}`;
 }
 
-const leadSponsors = [
+const summitSponsors = [
   {
     name: 'UNC Health Pardee',
     href: 'https://www.pardeehospital.org/',
     src: uncHealthPardeeLogo,
     stageClassName: 'rh-logo-stage-unc',
-    width: 1200,
-    height: 560,
-  },
-  {
-    name: 'Pisgah Health Foundation',
-    href: 'https://pisgahhealthfoundation.org/',
-    src: pisgahHealthFoundationLogo,
-    stageClassName: 'rh-logo-stage-pisgah',
     width: 1200,
     height: 560,
   },
@@ -53,6 +45,19 @@ const leadSponsors = [
     height: 429,
   },
 ];
+
+const ridgelineSponsors = [
+  {
+    name: 'Pisgah Health Foundation',
+    href: 'https://pisgahhealthfoundation.org/',
+    src: pisgahHealthFoundationLogo,
+    stageClassName: 'rh-logo-stage-pisgah',
+    width: 1200,
+    height: 560,
+  },
+];
+
+const leadSponsors = [...summitSponsors, ...ridgelineSponsors];
 
 const eventDetails = [
   {
@@ -156,7 +161,7 @@ export function RuralHealthConveningPage() {
     <div className="rh-page">
       <SEOHead
         title="2026 Rural Health Convening | SparkPoint"
-        description="Join rural health leaders in Brevard, NC, on October 1, 2026, for a day of connection, shared learning, and the Rural Health Field Simulator — presented with lead support from UNC Health Pardee, Pisgah Health Foundation, and Transylvania Regional Hospital."
+        description="Join rural health leaders in Brevard, NC, on October 1, 2026, for a day of connection, shared learning, and the Rural Health Field Simulator — presented by UNC Health Pardee and Transylvania Regional Hospital, with support from Pisgah Health Foundation."
         path={PAGE_PATH}
         image="/assets/Rural%20Health/rural%20sim%20hero.webp"
         imageAlt="A field-atlas connection map showing the many doors, barriers, and handoffs that shape rural health access."
@@ -266,12 +271,19 @@ export function RuralHealthConveningPage() {
               </div>
 
               <p className="rh-hero-sponsor-credit">
-                <span className="rh-hero-sponsor-credit-label">
-                  Presented with lead support from
-                </span>{' '}
-                {leadSponsors.map((sponsor, index) => (
+                <span className="rh-hero-sponsor-credit-label">Presented by</span>{' '}
+                {summitSponsors.map((sponsor, index) => (
                   <span key={sponsor.name}>
-                    {index > 0 && (index === leadSponsors.length - 1 ? ' & ' : ', ')}
+                    {index > 0 && ' & '}
+                    <a href={sponsor.href} target="_blank" rel="noopener noreferrer">
+                      {sponsor.name}
+                    </a>
+                  </span>
+                ))}
+                , with support from{' '}
+                {ridgelineSponsors.map((sponsor, index) => (
+                  <span key={sponsor.name}>
+                    {index > 0 && ' & '}
                     <a href={sponsor.href} target="_blank" rel="noopener noreferrer">
                       {sponsor.name}
                     </a>
@@ -531,15 +543,15 @@ export function RuralHealthConveningPage() {
 
             <div className="rh-logo-field">
               <div className="rh-sponsor-field">
-                <p className="rh-logo-label">Presented with lead support from</p>
-                <div className="rh-sponsor-logos">
-                  {leadSponsors.flatMap((sponsor, index) => [
+                <p className="rh-logo-label">Summit sponsors</p>
+                <div className="rh-summit-logos">
+                  {summitSponsors.flatMap((sponsor, index) => [
                     index > 0 ? (
                       <span aria-hidden="true" key={`${sponsor.name}-divider`} />
                     ) : null,
                     <a
                       key={sponsor.name}
-                      className={`rh-logo-stage ${sponsor.stageClassName}`}
+                      className={`rh-logo-stage rh-logo-stage-summit ${sponsor.stageClassName}`}
                       href={sponsor.href}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -555,11 +567,35 @@ export function RuralHealthConveningPage() {
                   ])}
                 </div>
                 <p className="rh-relationship">
-                  UNC Health Pardee, Pisgah Health Foundation, and Transylvania Regional
-                  Hospital are lead sponsors of the 2026 WNC Regional Rural Health Convening,
-                  helping bring rural health leaders together for a day of connection and
-                  shared learning.
+                  UNC Health Pardee and Transylvania Regional Hospital are Summit sponsors of
+                  the 2026 WNC Regional Rural Health Convening, providing lead support for a
+                  day of connection and shared learning.
                 </p>
+
+                <div className="rh-ridgeline-field">
+                  <p className="rh-logo-label rh-logo-label-secondary">
+                    With Ridgeline support from
+                  </p>
+                  <div className="rh-ridgeline-logos">
+                    {ridgelineSponsors.map((sponsor) => (
+                      <a
+                        key={sponsor.name}
+                        className={`rh-logo-stage rh-logo-stage-ridgeline ${sponsor.stageClassName}`}
+                        href={sponsor.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Visit ${sponsor.name}`}
+                      >
+                        <img
+                          src={sponsor.src}
+                          alt={sponsor.name}
+                          width={sponsor.width}
+                          height={sponsor.height}
+                        />
+                      </a>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               <div className="rh-host-field">
