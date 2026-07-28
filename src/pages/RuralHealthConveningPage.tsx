@@ -14,6 +14,7 @@ import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import uncHealthPardeeLogo from '../assets/sponsors/unc_health.png';
 import pisgahHealthFoundationLogo from '../assets/sponsors/phf.png';
+import transylvaniaRegionalHospitalLogo from '../assets/sponsors/trh.webp';
 import './ruralHealthConvening.css';
 
 const PAGE_PATH = '/rural-health-convening';
@@ -115,6 +116,10 @@ const eventJsonLd = {
     {
       '@type': 'Organization',
       name: 'Pisgah Health Foundation',
+    },
+    {
+      '@type': 'Organization',
+      name: 'Transylvania Regional Hospital',
     },
   ],
 };
@@ -517,7 +522,7 @@ export function RuralHealthConveningPage() {
               />
 
               <div className="rh-sponsor-field">
-                <p className="rh-logo-label">With support from</p>
+                <p className="rh-logo-label">Presented with lead support from</p>
                 <div className="rh-sponsor-logos">
                   <div className="rh-logo-stage rh-logo-stage-unc">
                     <img
@@ -534,6 +539,15 @@ export function RuralHealthConveningPage() {
                       alt="Pisgah Health Foundation"
                       width={1200}
                       height={560}
+                    />
+                  </div>
+                  <span aria-hidden="true" />
+                  <div className="rh-logo-stage rh-logo-stage-trh">
+                    <img
+                      src={transylvaniaRegionalHospitalLogo}
+                      alt="Transylvania Regional Hospital"
+                      width={1200}
+                      height={429}
                     />
                   </div>
                 </div>

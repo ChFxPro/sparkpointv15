@@ -890,17 +890,25 @@
 }
 
 .rh-sponsor-logos {
-  grid-template-columns: minmax(150px, 0.8fr) 1px minmax(230px, 1.2fr);
+  grid-template-columns:
+    minmax(140px, 0.8fr) 1px minmax(210px, 1.1fr) 1px minmax(210px, 1.1fr);
+}
+
+.rh-logo-stage-unc img,
+.rh-logo-stage-pisgah img,
+.rh-logo-stage-trh img {
+  height: 92px;
 }
 
 .rh-logo-stage-unc img {
-  width: min(100%, 180px);
-  max-height: 96px;
+  width: 100%;
+  max-width: 180px;
 }
 
-.rh-logo-stage-pisgah img {
-  width: min(100%, 290px);
-  max-height: 90px;
+.rh-logo-stage-pisgah img,
+.rh-logo-stage-trh img {
+  width: 100%;
+  max-width: 260px;
 }
 
 .rh-final-cta {
@@ -1378,7 +1386,11 @@
   }
 
   .rh-logo-stage-pisgah img {
-    width: min(78%, 280px);
+    width: min(72%, 250px);
+  }
+
+  .rh-logo-stage-trh img {
+    width: min(72%, 250px);
   }
 
   .rh-final-cta h2 {
