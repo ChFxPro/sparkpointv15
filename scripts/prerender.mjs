@@ -30,7 +30,8 @@ const REDIRECTS = {
 const SKIP = new Set(['/volunteer', '/partner', '/contact', '/news-media', '/newsroom', '/commconn', '/resiliency-hub', '/healthcare-story']);
 const STATIC = ['/', '/about', '/mission', '/impact', '/programs', '/programs/purpose-workshops',
   '/get-involved', '/community-connectors', '/sponsors', '/resilience-hub', '/directory', '/press', '/stories', '/events',
-  '/trust', '/privacy', '/intake', '/resources/know-your-numbers', '/rural-health-convening'];
+  '/trust', '/privacy', '/intake', '/resources/know-your-numbers', '/rural-health-convening',
+  '/events/thrive-at-five'];
 
 const norm = (u) => { let x = u.split('#')[0].split('?')[0]; if (x.length > 1) x = x.replace(/\/+$/, ''); return x || '/'; };
 

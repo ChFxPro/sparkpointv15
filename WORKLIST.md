@@ -42,6 +42,7 @@
 
 | ID | Status | Work | Bundle / notes |
 | --- | --- | --- | --- |
+| EVENT-002 | Done | Add Thrive @ Five: Common Ground Release Party to `/events` and build its dedicated fundraiser page. | Built locally on `codex/thrive-at-five-coffee-release` 2026-07-27; pending PR/deployment. `/events` now features the July 31 fundraiser and retains the Rural Health Convening as the next upcoming event. `/events/thrive-at-five` includes the supplied product photography and label art, exact 50%-of-August-profits language, an August 1 coffee-purchase CTA linking to Pisgah Coffee Roasters, live music/food/friends details, click-to-play privacy-enhanced YouTube embed, Hub vision, partner branding, map/calendar/Facebook links, Event JSON-LD, sitemap and prerender registration. Desktop/mobile browser checks found no overflow or console errors; the purchase section and video interaction were verified. The exact GitHub Pages production build environment (`PUBLIC_BASE=/`) passed, followed by focused prerender validation: 81 pages prerendered, 0 failed; only the repository’s known chunk-size and Node module-type warnings remain. |
 | RH-001 | Done | Build the `/rural-health-convening` event portal and Rural Health Field Simulator introduction. | Merged in PR #85 and verified live 2026-07-27 after GitHub Pages deployment run 30297118711. Includes event facts, a temporary Monday.com priority-registration list for the limited 200-seat event, partner hierarchy, simulator journey, ongoing-program framing, event JSON-LD, and static prerender registration. The prior public ticket CTA and QR are intentionally withheld until registration opens. |
 | EVENT-001 | Done | Add a reusable SparkPoint events hub at `/events` and publish the Rural Health Convening as its featured event. | Merged in PR #85 and verified live 2026-07-27 after GitHub Pages deployment run 30297118711. “Where We Gather” is driven by `src/data/events.ts`, automatically separates upcoming/past gatherings, and is integrated into navigation, footer, structured data, and prerender routes. |
 | EDIT-001 | Next | Complete editorial QA for Programs content. | Group with program-content updates only. |
@@ -62,6 +63,7 @@
 
 | Date | Update |
 | --- | --- |
+| 2026-07-27 | EVENT-002 built locally on `codex/thrive-at-five-coffee-release`: Thrive @ Five is now the featured gathering on `/events`, with a dedicated Common Ground Resilience Roast fundraiser page at `/events/thrive-at-five`, including an August 1 purchase CTA for the coffee; PR/deployment remain. |
 | 2026-07-27 | PR #85 merged and deployed: `/events` and `/rural-health-convening` are live. Production verification confirmed HTTP 200 responses, correct priority-list links and 200-seat language, the Events navigation placement, the simulator section, and no relevant browser console errors. |
 | 2026-07-21 | SEC-002 closed: `Protect main (production)` branch ruleset enabled (required PRs + build check, force-push/deletions blocked). |
 | 2026-07-21 | SEC-003 closed: GitHub secret scanning and push protection enabled. |
