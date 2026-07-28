@@ -259,6 +259,31 @@
   margin-top: 28px;
 }
 
+.rh-hero-sponsor-credit {
+  margin-top: 22px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--rh-slate);
+}
+
+.rh-hero-sponsor-credit-label {
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--rh-forest);
+}
+
+.rh-hero-sponsor-credit a {
+  color: var(--rh-forest);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: rgba(47, 74, 60, 0.4);
+}
+
+.rh-hero-sponsor-credit a:hover {
+  text-decoration-color: currentColor;
+}
+
 .rh-button {
   min-height: 54px;
   display: inline-flex;
@@ -851,6 +876,23 @@
   justify-content: center;
 }
 
+a.rh-logo-stage {
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+a.rh-logo-stage:hover,
+a.rh-logo-stage:focus-visible {
+  opacity: 0.75;
+  transform: translateY(-2px);
+}
+
+a.rh-logo-stage:focus-visible {
+  outline: 2px solid rgba(47, 74, 60, 0.55);
+  outline-offset: 4px;
+}
+
 .rh-logo-stage img {
   max-width: 100%;
   height: auto;
@@ -883,10 +925,10 @@
   margin: 14px auto 0;
 }
 
-.rh-sponsor-field {
+.rh-host-field {
   margin-top: 32px;
   padding-top: 28px;
-  border-top: 1px solid rgba(167, 127, 35, 0.6);
+  border-top: 1px solid var(--rh-line);
 }
 
 .rh-sponsor-logos {
