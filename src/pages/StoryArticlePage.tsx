@@ -131,6 +131,7 @@ export function StoryArticlePage() {
               height="100%"
               src={article.videoUrl}
               title={article.title}
+              referrerPolicy="strict-origin-when-cross-origin"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="w-full h-full border-0"
