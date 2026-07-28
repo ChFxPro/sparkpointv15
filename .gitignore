@@ -12,3 +12,10 @@ src/assets/commconn/movs/*.mp4
 
 .prerender-preview/
 public/assets/behind_story/manifest.json
+
+# Agent handoff scratch (drafts, prompts, lock junk) — never ship
+.resourcehub/
+.storyhub/
+
+# Generated print/design collateral (PPTX, PDF exports)
+output/
