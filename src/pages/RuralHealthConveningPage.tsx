@@ -27,6 +27,38 @@ function ruralHealthAsset(filename: string) {
   return `${BASE}assets/Rural%20Health/${encodeURIComponent(filename)}`;
 }
 
+const summitSponsors = [
+  {
+    name: 'UNC Health Pardee',
+    href: 'https://www.pardeehospital.org/',
+    src: uncHealthPardeeLogo,
+    stageClassName: 'rh-logo-stage-unc',
+    width: 1200,
+    height: 560,
+  },
+  {
+    name: 'Transylvania Regional Hospital',
+    href: 'https://www.missionhealth.org/locations/transylvania-regional-hospital',
+    src: transylvaniaRegionalHospitalLogo,
+    stageClassName: 'rh-logo-stage-trh',
+    width: 1200,
+    height: 429,
+  },
+];
+
+const ridgelineSponsors = [
+  {
+    name: 'Pisgah Health Foundation',
+    href: 'https://pisgahhealthfoundation.org/',
+    src: pisgahHealthFoundationLogo,
+    stageClassName: 'rh-logo-stage-pisgah',
+    width: 1200,
+    height: 560,
+  },
+];
+
+const leadSponsors = [...summitSponsors, ...ridgelineSponsors];
+
 const eventDetails = [
   {
     icon: CalendarDays,
@@ -129,7 +161,7 @@ export function RuralHealthConveningPage() {
     <div className="rh-page">
       <SEOHead
         title="2026 Rural Health Convening | SparkPoint"
-        description="Join rural health leaders in Brevard, NC, on October 1, 2026, for a day of connection, shared learning, and the Rural Health Field Simulator."
+        description="Join rural health leaders in Brevard, NC on Oct. 1, 2026, presented by UNC Health Pardee & Transylvania Regional Hospital, with Pisgah Health Foundation."
         path={PAGE_PATH}
         image="/assets/Rural%20Health/rural%20sim%20hero.webp"
         imageAlt="A field-atlas connection map showing the many doors, barriers, and handoffs that shape rural health access."
@@ -143,6 +175,9 @@ export function RuralHealthConveningPage() {
           'Rural Health Field Simulator',
           'SparkPoint',
           'NCRHA',
+          'UNC Health Pardee',
+          'Pisgah Health Foundation',
+          'Transylvania Regional Hospital',
         ]}
         jsonLd={eventJsonLd}
       />
@@ -234,6 +269,27 @@ export function RuralHealthConveningPage() {
                   <ArrowRight aria-hidden="true" size={19} />
                 </a>
               </div>
+
+              <p className="rh-hero-sponsor-credit">
+                <span className="rh-hero-sponsor-credit-label">Presented by</span>{' '}
+                {summitSponsors.map((sponsor, index) => (
+                  <span key={sponsor.name}>
+                    {index > 0 && ' & '}
+                    <a href={sponsor.href} target="_blank" rel="noopener noreferrer">
+                      {sponsor.name}
+                    </a>
+                  </span>
+                ))}
+                , with support from{' '}
+                {ridgelineSponsors.map((sponsor, index) => (
+                  <span key={sponsor.name}>
+                    {index > 0 && ' & '}
+                    <a href={sponsor.href} target="_blank" rel="noopener noreferrer">
+                      {sponsor.name}
+                    </a>
+                  </span>
+                ))}
+              </p>
             </div>
 
             <figure className="rh-hero-plate">
@@ -486,71 +542,97 @@ export function RuralHealthConveningPage() {
             </div>
 
             <div className="rh-logo-field">
-              <p className="rh-logo-label">Hosted in partnership by</p>
-              <div className="rh-host-logos">
-                <div className="rh-logo-stage rh-logo-stage-sparkpoint">
-                  <img
-                    className="rh-sparkpoint-logo"
-                    src={SPARKPOINT_LOGO}
-                    alt="SparkPoint"
-                    width={839}
-                    height={290}
-                  />
+              <div className="rh-sponsor-field">
+                <p className="rh-logo-label">Summit sponsors</p>
+                <div className="rh-summit-logos">
+                  {summitSponsors.flatMap((sponsor, index) => [
+                    index > 0 ? (
+                      <span aria-hidden="true" key={`${sponsor.name}-divider`} />
+                    ) : null,
+                    <a
+                      key={sponsor.name}
+                      className={`rh-logo-stage rh-logo-stage-summit ${sponsor.stageClassName}`}
+                      href={sponsor.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Visit ${sponsor.name}`}
+                    >
+                      <img
+                        src={sponsor.src}
+                        alt={sponsor.name}
+                        width={sponsor.width}
+                        height={sponsor.height}
+                      />
+                    </a>,
+                  ])}
                 </div>
-                <span aria-hidden="true" />
-                <div className="rh-logo-stage rh-logo-stage-ncrha">
-                  <img
-                    className="rh-ncrha-logo"
-                    src={ruralHealthAsset('NCRHA-Logo.webp')}
-                    alt="North Carolina Rural Health Association"
-                    width={2064}
-                    height={331}
-                  />
+                <p className="rh-relationship">
+                  UNC Health Pardee and Transylvania Regional Hospital are Summit sponsors of
+                  the 2026 WNC Regional Rural Health Convening, providing lead support for a
+                  day of connection and shared learning.
+                </p>
+
+                <div className="rh-ridgeline-field">
+                  <p className="rh-logo-label rh-logo-label-secondary">
+                    With Ridgeline support from
+                  </p>
+                  <div className="rh-ridgeline-logos">
+                    {ridgelineSponsors.map((sponsor) => (
+                      <a
+                        key={sponsor.name}
+                        className={`rh-logo-stage rh-logo-stage-ridgeline ${sponsor.stageClassName}`}
+                        href={sponsor.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Visit ${sponsor.name}`}
+                      >
+                        <img
+                          src={sponsor.src}
+                          alt={sponsor.name}
+                          width={sponsor.width}
+                          height={sponsor.height}
+                        />
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <p className="rh-relationship">
-                Hosted by SparkPoint in partnership with the North Carolina Rural Health
-                Association, a program of the Foundation for Health Leadership &amp;
-                Innovation.
-              </p>
-              <img
-                className="rh-fhli-logo"
-                src={ruralHealthAsset('FHLI Logo.webp')}
-                alt="Foundation for Health Leadership and Innovation"
-                width={1600}
-                height={438}
-              />
 
-              <div className="rh-sponsor-field">
-                <p className="rh-logo-label">Presented with lead support from</p>
-                <div className="rh-sponsor-logos">
-                  <div className="rh-logo-stage rh-logo-stage-unc">
+              <div className="rh-host-field">
+                <p className="rh-logo-label">Hosted in partnership by</p>
+                <div className="rh-host-logos">
+                  <div className="rh-logo-stage rh-logo-stage-sparkpoint">
                     <img
-                      src={uncHealthPardeeLogo}
-                      alt="UNC Health Pardee"
-                      width={1200}
-                      height={560}
+                      className="rh-sparkpoint-logo"
+                      src={SPARKPOINT_LOGO}
+                      alt="SparkPoint"
+                      width={839}
+                      height={290}
                     />
                   </div>
                   <span aria-hidden="true" />
-                  <div className="rh-logo-stage rh-logo-stage-pisgah">
+                  <div className="rh-logo-stage rh-logo-stage-ncrha">
                     <img
-                      src={pisgahHealthFoundationLogo}
-                      alt="Pisgah Health Foundation"
-                      width={1200}
-                      height={560}
-                    />
-                  </div>
-                  <span aria-hidden="true" />
-                  <div className="rh-logo-stage rh-logo-stage-trh">
-                    <img
-                      src={transylvaniaRegionalHospitalLogo}
-                      alt="Transylvania Regional Hospital"
-                      width={1200}
-                      height={429}
+                      className="rh-ncrha-logo"
+                      src={ruralHealthAsset('NCRHA-Logo.webp')}
+                      alt="North Carolina Rural Health Association"
+                      width={2064}
+                      height={331}
                     />
                   </div>
                 </div>
+                <p className="rh-relationship">
+                  Hosted by SparkPoint in partnership with the North Carolina Rural Health
+                  Association, a program of the Foundation for Health Leadership &amp;
+                  Innovation.
+                </p>
+                <img
+                  className="rh-fhli-logo"
+                  src={ruralHealthAsset('FHLI Logo.webp')}
+                  alt="Foundation for Health Leadership and Innovation"
+                  width={1600}
+                  height={438}
+                />
               </div>
             </div>
           </div>

@@ -259,6 +259,31 @@
   margin-top: 28px;
 }
 
+.rh-hero-sponsor-credit {
+  margin-top: 22px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--rh-slate);
+}
+
+.rh-hero-sponsor-credit-label {
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--rh-forest);
+}
+
+.rh-hero-sponsor-credit a {
+  color: var(--rh-forest);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: rgba(47, 74, 60, 0.4);
+}
+
+.rh-hero-sponsor-credit a:hover {
+  text-decoration-color: currentColor;
+}
+
 .rh-button {
   min-height: 54px;
   display: inline-flex;
@@ -827,8 +852,7 @@
   text-transform: uppercase;
 }
 
-.rh-host-logos,
-.rh-sponsor-logos {
+.rh-host-logos {
   display: grid;
   grid-template-columns: minmax(190px, 0.82fr) 1px minmax(280px, 1.18fr);
   align-items: center;
@@ -836,8 +860,7 @@
   margin: 24px 0 20px;
 }
 
-.rh-host-logos > span,
-.rh-sponsor-logos > span {
+.rh-host-logos > span {
   width: 1px;
   height: 72px;
   background: rgba(47, 74, 60, 0.35);
@@ -849,6 +872,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+a.rh-logo-stage {
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+a.rh-logo-stage:hover,
+a.rh-logo-stage:focus-visible {
+  opacity: 0.75;
+  transform: translateY(-2px);
+}
+
+a.rh-logo-stage:focus-visible {
+  outline: 2px solid rgba(47, 74, 60, 0.55);
+  outline-offset: 4px;
 }
 
 .rh-logo-stage img {
@@ -883,32 +923,66 @@
   margin: 14px auto 0;
 }
 
-.rh-sponsor-field {
+.rh-host-field {
   margin-top: 32px;
   padding-top: 28px;
-  border-top: 1px solid rgba(167, 127, 35, 0.6);
+  border-top: 1px solid var(--rh-line);
 }
 
-.rh-sponsor-logos {
-  grid-template-columns:
-    minmax(140px, 0.8fr) 1px minmax(210px, 1.1fr) 1px minmax(210px, 1.1fr);
+.rh-summit-logos {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.85fr) 1px minmax(300px, 1.3fr);
+  align-items: center;
+  gap: clamp(20px, 2.8vw, 40px);
+  margin: 24px 0 20px;
 }
 
-.rh-logo-stage-unc img,
-.rh-logo-stage-pisgah img,
-.rh-logo-stage-trh img {
-  height: 92px;
+.rh-summit-logos > span {
+  width: 1px;
+  height: 88px;
+  background: rgba(47, 74, 60, 0.35);
+}
+
+.rh-logo-stage-summit {
+  height: 144px;
+}
+
+.rh-logo-stage-summit img {
+  height: 120px;
 }
 
 .rh-logo-stage-unc img {
   width: 100%;
-  max-width: 180px;
+  max-width: 190px;
 }
 
-.rh-logo-stage-pisgah img,
 .rh-logo-stage-trh img {
   width: 100%;
-  max-width: 260px;
+  max-width: 380px;
+}
+
+.rh-ridgeline-field {
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px dashed rgba(47, 74, 60, 0.28);
+}
+
+.rh-logo-label-secondary {
+  font-size: 0.68rem;
+  font-weight: 700;
+  opacity: 0.82;
+}
+
+.rh-ridgeline-logos {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0 0;
+}
+
+.rh-logo-stage-ridgeline img {
+  height: 88px;
+  width: 100%;
+  max-width: 280px;
 }
 
 .rh-final-cta {
@@ -1357,13 +1431,13 @@
   }
 
   .rh-host-logos,
-  .rh-sponsor-logos {
+  .rh-summit-logos {
     grid-template-columns: 1fr;
     gap: 14px;
   }
 
   .rh-host-logos > span,
-  .rh-sponsor-logos > span {
+  .rh-summit-logos > span {
     width: 80px;
     height: 1px;
     justify-self: center;
@@ -1371,6 +1445,18 @@
 
   .rh-logo-stage {
     height: 88px;
+  }
+
+  .rh-logo-stage-summit {
+    height: 112px;
+  }
+
+  .rh-logo-stage-summit img {
+    height: 96px;
+  }
+
+  .rh-logo-stage-ridgeline img {
+    height: 76px;
   }
 
   .rh-sparkpoint-logo {
