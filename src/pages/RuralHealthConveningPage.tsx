@@ -366,6 +366,57 @@ export function RuralHealthConveningPage() {
         </section>
 
         <section
+          id="regional-update"
+          className="rh-regional-update"
+          aria-labelledby="rh-regional-update-title"
+        >
+          <div className="rh-shell rh-regional-update-grid">
+            <div className="rh-regional-update-copy">
+              <p className="rh-regional-update-eyebrow">
+                Featured regional update · October 1 program
+              </p>
+              <h2 id="rh-regional-update-title">
+                Special Regional Update: Shaping the Future of Rural Health Together
+              </h2>
+              <p>
+                As Western North Carolina enters a historic new chapter in rural health,
+                hear from Laurie Stradley, CEO of Impact Health, for an update on the NC
+                Rural Health Transformation Program (NC ROOTS). Learn what’s ahead for
+                Region 1, why community voices matter at this pivotal moment, and how your
+                insights can help shape the future of rural health across our region.
+              </p>
+            </div>
+
+            <aside
+              className="rh-program-preview"
+              aria-label="Program preview for Laurie Stradley’s regional update"
+            >
+              <p className="rh-program-preview-label">Program preview</p>
+              <h3>Laurie Stradley</h3>
+              <p className="rh-program-preview-role">CEO · Impact Health</p>
+              <dl>
+                <div>
+                  <dt>Focus</dt>
+                  <dd>NC ROOTS · Region 1</dd>
+                </div>
+                <div>
+                  <dt>Agenda slot</dt>
+                  <dd>Time to be announced</dd>
+                </div>
+              </dl>
+              <p className="rh-program-preview-context">
+                One featured part of the full SparkPoint Rural Health Convening.
+              </p>
+              <div className="rh-program-preview-more">
+                <p>Also featured</p>
+                <a href="#simulator">Participatory Rural Health Field Simulator</a>
+                <span>Cross-sector connection and shared learning</span>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section
           id="event-details"
           className="rh-event-section"
           aria-labelledby="rh-event-title"
@@ -469,7 +520,7 @@ export function RuralHealthConveningPage() {
               <figure className="rh-sim-shot rh-sim-shot-entry">
                 <div className="rh-sim-shot-frame">
                   <img
-                    src={ruralHealthAsset('Screenshot 2026-07-27 at 2.20.40 PM.webp')}
+                    src={ruralHealthAsset('simulator_screencap.webp')}
                     alt="The Rural Health Field Simulator trailhead screen, where participants can begin a live simulation or enter demo mode."
                     width={1896}
                     height={1642}
@@ -644,6 +695,17 @@ export function RuralHealthConveningPage() {
                       </a>
                     ))}
                   </div>
+                  <p className="rh-visit-invitation">
+                    Make a little more of your time in Transylvania County.{' '}
+                    <a
+                      href="https://www.explorebrevard.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Plan your visit with Explore Brevard
+                      <ArrowRight aria-hidden="true" size={16} />
+                    </a>
+                  </p>
                 </div>
               </div>
 
