@@ -985,6 +985,34 @@ a.rh-logo-stage:focus-visible {
   max-width: 280px;
 }
 
+.rh-highlands-field {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px dotted rgba(47, 74, 60, 0.24);
+}
+
+.rh-logo-label-tertiary {
+  font-size: 0.62rem;
+  font-weight: 700;
+  opacity: 0.72;
+}
+
+.rh-highlands-logos {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0 0;
+}
+
+.rh-logo-stage-highlands {
+  height: 92px;
+}
+
+.rh-logo-stage-highlands img {
+  width: auto;
+  height: 72px;
+  max-width: 108px;
+}
+
 .rh-final-cta {
   position: relative;
   padding: clamp(68px, 7vw, 104px) 0;
@@ -1457,6 +1485,16 @@ a.rh-logo-stage:focus-visible {
 
   .rh-logo-stage-ridgeline img {
     height: 76px;
+  }
+
+  .rh-logo-stage-highlands {
+    height: 76px;
+  }
+
+  .rh-logo-stage-highlands img {
+    width: auto;
+    height: 64px;
+    max-width: 96px;
   }
 
   .rh-sparkpoint-logo {
