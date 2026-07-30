@@ -7,14 +7,16 @@ import {
   GraduationCap,
   HeartHandshake,
   Landmark,
-  Heart,
+  Stethoscope,
   Handshake,
   Sparkles,
   Users,
   ArrowRight,
+  ArrowUpRight,
   X,
   MessageCircle,
   Shield,
+  type LucideIcon,
 } from 'lucide-react';
 import brevardMusicCenterLogo from '../assets/sponsors/brevard_music_center.png';
 import brevardTCDALogo from '../assets/sponsors/brevard_tcda.png';
@@ -30,150 +32,31 @@ import { KeepExploringLinks } from '../components/KeepExploringLinks';
 import { SEOHead } from '../components/SEOHead';
 import { Button } from '../components/ui/button';
 import { useAccessibility } from '../context/AccessibilityContext';
+import { PARTNER_SECTORS, FEATURED_PARTNERS, type PartnerSector } from '../data/partners';
 
-// --- PARTNER ECOSYSTEM DATA (mirrors MissionPage SECTORS_DATA) ---
+// --- PARTNER ECOSYSTEM DATA — shared with the homepage diagram, see src/data/partners.ts ---
 
-type Sector = {
-  id: string;
-  title: string;
-  description: string;
-  color: string;
-  icon: React.ComponentType<{ size?: number; strokeWidth?: number }>;
-  partners: string[];
-  examples?: string[];
+const SECTOR_ICONS: Record<string, LucideIcon> = {
+  GraduationCap,
+  HeartHandshake,
+  Landmark,
+  Stethoscope,
+  Handshake,
+  Sparkles,
 };
 
-const SECTORS: Sector[] = [
-  {
-    id: 'edu-youth',
-    title: 'Education & Youth',
-    description: 'Learning, youth leadership, and school-connected support.',
-    color: '#FDB515',
-    icon: GraduationCap,
-    partners: [
-      'TCS',
-      'Blue Ridge Community College',
-      'Brevard College',
-      'TC Strong',
-      'Boys & Girls Club of Transylvania County',
-      'El Centro',
-      'Brevard Academy',
-      'Mountain Sun Community School',
-      'Rise & Shine Afterschool Program',
-      'Brevard Music Center Institute',
-      'Eagles Nest Camp',
-      'UNC Chapel Hill, Gillings School of Public Health',
-      'Mountain Roots',
-      'Smart Start of Transylvania County',
-      'VISION Transylvania',
-      'Transylvania County Education Foundation',
-    ],
-    examples: ['School and youth coordination', 'Community leadership development'],
-  },
-  {
-    id: 'nonprofit-community',
-    title: 'Nonprofit & Community',
-    description: 'Community-serving organizations working together on access and support.',
-    color: '#E03694',
-    icon: HeartHandshake,
-    partners: [
-      'The Hunger Coalition',
-      'Just Economics of Western North Carolina',
-      'FWRD Transylvania (LTRG)',
-      'Through the Trees',
-      'Housing Assistance',
-      'Camp Bluebird',
-      'Friends of Rosman',
-      'Meals on Wheels',
-      'Bread of Life',
-      'The Sharing House',
-      'Pisgah Legal Services',
-      'Habitat for Humanity Transylvania County',
-      'Center for Trauma Resilient Communities',
-      "Jameson's Joy",
-      'Transylvania County Arts Council',
-      'Transylvania County Tourism Development Authority',
-    ],
-    examples: ['Resource sharing and referral', 'Community recovery collaboration'],
-  },
-  {
-    id: 'civic-government',
-    title: 'Civic & Government',
-    description: 'Public and civic leadership supporting countywide resilience.',
-    color: '#F15F48',
-    icon: Landmark,
-    partners: [
-      'Transylvania County',
-      'City of Brevard',
-      'Town of Rosman',
-      "Transylvania County Sheriff's Office",
-      'Brevard/Transylvania Chamber of Commerce',
-      'Rotary Club of Pisgah Forest',
-      'AAUW',
-      'Mary C Jenkins Community & Cultural Center',
-      'Looking Glass, CPA',
-    ],
-    examples: ['Civic partnerships', 'Local leadership coordination'],
-  },
-  {
-    id: 'health-wellness',
-    title: 'Health & Wellness',
-    description: 'Health systems and wellness partners strengthening community care.',
-    color: '#9E509F',
-    icon: Heart,
-    partners: [
-      'UNC Health Pardee',
-      'Transylvania Regional Hospital',
-      'Transylvania Public Health Department',
-      'TREND 2.0 - Mental Health',
-      'Hendersonville Pediatrics',
-      'CARE Coalition',
-    ],
-    examples: ['Whole-person wellness collaboration', 'Community mental health support'],
-  },
-  {
-    id: 'business',
-    title: 'Business',
-    description: 'Business partners supporting workforce and opportunity pathways.',
-    color: '#4F46E5',
-    icon: Handshake,
-    partners: [
-      'Alulua (formally TVS)',
-      'Schenck Jobs Corps Civilian Conservation Center',
-    ],
-    examples: ['Workforce and opportunity partnerships', 'Industry collaboration'],
-  },
-  {
-    id: 'sponsors-funders',
-    title: 'Sponsors & Funders',
-    description: 'Funders and sponsors helping sustain long-term impact.',
-    color: '#14B8A6',
-    icon: Sparkles,
-    partners: [
-      'Dogwood Health Trust',
-      'Lake Toxaway Charities',
-      'WNC Bridge Foundation',
-      'Vaya Health',
-      'The American Red Cross',
-      'St. Philips Episcopal Church',
-      'Pisgah Health Foundation',
-    ],
-    examples: ['Sustained funding partnerships', 'Strategic investment in resilience'],
-  },
-];
-
-// --- SPONSOR LOGOS ---
-
-const sponsorLogos = [
-  { name: 'Dogwood Health Trust', logo: dogwoodLogo, url: 'https://dogwoodhealthtrust.org' },
-  { name: 'Pisgah Health Foundation', logo: phfLogo, url: 'https://pisgahhealthfoundation.org' },
-  { name: 'UNC Health Pardee', logo: uncHealthLogo, url: 'https://www.pardeehospital.org' },
-  { name: 'American Red Cross', logo: redCrossLogo, url: 'https://www.redcross.org' },
-  { name: 'Brevard Music Center', logo: brevardMusicCenterLogo, url: 'https://www.brevardmusic.org' },
-  { name: 'Brevard Tourism Development Authority', logo: brevardTCDALogo, url: 'https://www.explorebrevard.com' },
-  { name: 'Comporium', logo: comporiumLogo, url: 'https://www.comporium.com' },
-  { name: 'Self-Help Credit Union', logo: selfHelpLogo, url: 'https://www.self-help.org' },
-];
+// Logo images stay bundled here (this page already had proven, working imports of
+// these exact files) — src/data/partners.ts only stores the string `logoKey`.
+const PARTNER_LOGOS: Record<string, string> = {
+  dogwood: dogwoodLogo,
+  phf: phfLogo,
+  'unc-health': uncHealthLogo,
+  'red-cross': redCrossLogo,
+  'brevard-music-center': brevardMusicCenterLogo,
+  'brevard-tcda': brevardTCDALogo,
+  comporium: comporiumLogo,
+  'self-help': selfHelpLogo,
+};
 
 // --- HOW WE PARTNER ---
 
@@ -220,7 +103,7 @@ export function SponsorsPage() {
   const systemReducedMotion = useReducedMotion();
   const { motionPreference } = useAccessibility();
   const prefersReducedMotion = systemReducedMotion || motionPreference === 'reduce';
-  const [selectedSector, setSelectedSector] = useState<Sector | null>(null);
+  const [selectedSector, setSelectedSector] = useState<PartnerSector | null>(null);
   const { scrollY } = useScroll();
   const backgroundY = useTransform(scrollY, [0, 1000], [0, prefersReducedMotion ? 0 : 200]);
 
@@ -229,7 +112,7 @@ export function SponsorsPage() {
       <SEOHead
         title="Partners | SparkPoint"
         description="Explore the partner ecosystem that supports SparkPoint's community-centered work — across education, health, civic leadership, nonprofits, business, and funding in Western North Carolina."
-        path="/sponsors"
+        path="/partners"
       />
 
       {/* ──── FIXED STICKY BACKGROUND (same pattern as MissionPage) ──── */}
@@ -502,8 +385,8 @@ export function SponsorsPage() {
             @media (min-width: 1280px) { .sp-sector-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; } }
           `}</style>
           <div className="sp-sector-grid grid grid-cols-1 gap-6">
-            {SECTORS.map((sector, index) => {
-              const Icon = sector.icon;
+            {PARTNER_SECTORS.map((sector, index) => {
+              const Icon = SECTOR_ICONS[sector.icon] ?? Sparkles;
               return (
                 <motion.div
                   key={sector.id}
@@ -620,7 +503,7 @@ export function SponsorsPage() {
               aria-label="SparkPoint sponsors and funders"
               className="flex flex-wrap items-center justify-center gap-x-6 gap-y-6"
             >
-              {sponsorLogos.map((sponsor) => (
+              {FEATURED_PARTNERS.map((sponsor) => (
                 <li key={sponsor.name}>
                   <a
                     href={sponsor.url}
@@ -636,7 +519,7 @@ export function SponsorsPage() {
                     }}
                   >
                     <img
-                      src={sponsor.logo}
+                      src={PARTNER_LOGOS[sponsor.logoKey]}
                       alt={sponsor.name}
                       className="object-contain transition duration-300 ease-out"
                       style={{
@@ -836,7 +719,10 @@ export function SponsorsPage() {
                       boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
                     }}
                   >
-                    <selectedSector.icon size={32} />
+                    {(() => {
+                      const ModalIcon = SECTOR_ICONS[selectedSector.icon] ?? Sparkles;
+                      return <ModalIcon size={32} />;
+                    })()}
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold" style={{ color: '#111827' }}>
@@ -928,15 +814,29 @@ export function SponsorsPage() {
                 </h4>
                 <style>{`@media (min-width: 640px) { .sp-partner-list { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }`}</style>
                 <div className="sp-partner-list grid grid-cols-1 gap-3">
-                  {selectedSector.partners.map((partner, i) => (
-                    <div
-                      key={i}
-                      className="p-3 border border-gray-100 hover:bg-gray-50 transition-colors text-sm font-medium"
-                      style={{ borderRadius: 10, color: '#374151' }}
-                    >
-                      {partner}
-                    </div>
-                  ))}
+                  {selectedSector.partners.map((partner) =>
+                    partner.url ? (
+                      <a
+                        key={partner.name}
+                        href={partner.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-3 border border-gray-100 hover:bg-gray-50 transition-colors text-sm font-medium flex items-center justify-between gap-2"
+                        style={{ borderRadius: 10, color: '#374151' }}
+                      >
+                        {partner.name}
+                        <ArrowUpRight size={14} style={{ color: selectedSector.color, flexShrink: 0 }} />
+                      </a>
+                    ) : (
+                      <div
+                        key={partner.name}
+                        className="p-3 border border-gray-100 hover:bg-gray-50 transition-colors text-sm font-medium"
+                        style={{ borderRadius: 10, color: '#374151' }}
+                      >
+                        {partner.name}
+                      </div>
+                    )
+                  )}
                 </div>
               </div>
 
