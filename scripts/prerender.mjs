@@ -26,9 +26,12 @@ const REDIRECTS = {
   '/donations': 'https://cowbell-primrose-tet2.squarespace.com/donations',
   '/newsletter': 'https://cowbell-primrose-tet2.squarespace.com/newsletter',
   '/rh_tickets': 'https://secure.yoursparkpoint.org/store/p/2026-rural-health-convening',
+  // Renamed route: emit a real static stub instead of SKIP, so direct requests/crawlers
+  // get a 200 + meta-refresh to /partners instead of falling through to the 404 page.
+  '/sponsors': `${ORIGIN}/partners`,
 };
 // Client-side redirect aliases: leave to the SPA fallback, don't prerender.
-const SKIP = new Set(['/volunteer', '/partner', '/contact', '/news-media', '/newsroom', '/commconn', '/resiliency-hub', '/sponsors', '/healthcare-story']);
+const SKIP = new Set(['/volunteer', '/partner', '/contact', '/news-media', '/newsroom', '/commconn', '/resiliency-hub', '/healthcare-story']);
 const STATIC = ['/', '/about', '/mission', '/impact', '/programs', '/programs/purpose-workshops',
   '/get-involved', '/community-connectors', '/partners', '/resilience-hub', '/directory', '/press', '/stories', '/events',
   '/trust', '/privacy', '/intake', '/resources/know-your-numbers', '/rural-health-convening',
