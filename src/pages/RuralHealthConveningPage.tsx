@@ -15,6 +15,7 @@ import { SEOHead } from '../components/SEOHead';
 import uncHealthPardeeLogo from '../assets/sponsors/unc_health.png';
 import pisgahHealthFoundationLogo from '../assets/sponsors/phf.png';
 import transylvaniaRegionalHospitalLogo from '../assets/sponsors/trh.webp';
+import transylvaniaTdaLogo from '../assets/sponsors/brevard_tda.webp';
 import './ruralHealthConvening.css';
 
 const PAGE_PATH = '/rural-health-convening';
@@ -57,7 +58,17 @@ const ridgelineSponsors = [
   },
 ];
 
-const leadSponsors = [...summitSponsors, ...ridgelineSponsors];
+const highlandsSponsors = [
+  {
+    name: 'Transylvania County Tourism Development Authority',
+    creditName: 'Transylvania TDA',
+    href: 'https://www.explorebrevard.com/',
+    src: transylvaniaTdaLogo,
+    stageClassName: 'rh-logo-stage-tda',
+    width: 768,
+    height: 569,
+  },
+];
 
 const eventDetails = [
   {
@@ -152,6 +163,10 @@ const eventJsonLd = {
     {
       '@type': 'Organization',
       name: 'Transylvania Regional Hospital',
+    },
+    {
+      '@type': 'Organization',
+      name: 'Transylvania County Tourism Development Authority',
     },
   ],
 };
@@ -286,6 +301,15 @@ export function RuralHealthConveningPage() {
                     {index > 0 && ' & '}
                     <a href={sponsor.href} target="_blank" rel="noopener noreferrer">
                       {sponsor.name}
+                    </a>
+                  </span>
+                ))}
+                , and Highlands support from{' '}
+                {highlandsSponsors.map((sponsor, index) => (
+                  <span key={sponsor.name}>
+                    {index > 0 && ' & '}
+                    <a href={sponsor.href} target="_blank" rel="noopener noreferrer">
+                      {sponsor.creditName}
                     </a>
                   </span>
                 ))}
@@ -581,6 +605,31 @@ export function RuralHealthConveningPage() {
                       <a
                         key={sponsor.name}
                         className={`rh-logo-stage rh-logo-stage-ridgeline ${sponsor.stageClassName}`}
+                        href={sponsor.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Visit ${sponsor.name}`}
+                      >
+                        <img
+                          src={sponsor.src}
+                          alt={sponsor.name}
+                          width={sponsor.width}
+                          height={sponsor.height}
+                        />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rh-highlands-field">
+                  <p className="rh-logo-label rh-logo-label-tertiary">
+                    With Highlands support from
+                  </p>
+                  <div className="rh-highlands-logos">
+                    {highlandsSponsors.map((sponsor) => (
+                      <a
+                        key={sponsor.name}
+                        className={`rh-logo-stage rh-logo-stage-highlands ${sponsor.stageClassName}`}
                         href={sponsor.href}
                         target="_blank"
                         rel="noopener noreferrer"
