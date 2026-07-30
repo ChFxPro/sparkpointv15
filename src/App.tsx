@@ -148,7 +148,8 @@ function AppContent() {
         <Route path="/programs/:slug" element={<ProgramDetailRoute />} />
         <Route path="/community-connectors" element={<CommunityConnectorsPage />} />
         <Route path="/commconn" element={<Navigate to="/community-connectors" replace />} />
-        <Route path="/sponsors" element={<SponsorsPage />} />
+        <Route path="/partners" element={<SponsorsPage />} />
+        <Route path="/sponsors" element={<Navigate to="/partners" replace />} />
         <Route path="/resiliency-hub" element={<Navigate to="/resilience-hub" replace />} />
         <Route path="/resilience-hub" element={<ResilienceHubPage />} />
         <Route path="/directory" element={<DirectoryPage />} />

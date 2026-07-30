@@ -503,7 +503,7 @@ function TestimonialCarousel({
   );
 }
 
-import { PartnerNetworkHub } from './PartnerNetworkHub';
+import { CommunityNetworkDiagram } from './CommunityNetworkDiagram';
 
 export function ImpactSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -950,131 +950,8 @@ export function ImpactSection() {
           </motion.p>
         </motion.div>
 
-        {/* E. Partner Network Map (Moved) */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mb-12 md:mb-20"
-        >
-          <PartnerNetworkHub />
-        </motion.div>
-
-        {/* G. Community Built in Transylvania County (Refined) */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="pb-12 md:pb-20"
-        >
-          {/* Headline moved outside container */}
-          <div className="text-center mb-12 md:mb-16 px-4 md:px-6">
-            <h3 className="text-white mb-5 md:mb-6 leading-tight" style={{ fontSize: 'clamp(2rem, 7.5vw, 3rem)', fontWeight: '700', letterSpacing: '-0.02em', textShadow: '0 4px 12px rgba(0, 0, 0, 0.5)' }}>
-              Community Built in Transylvania County
-            </h3>
-            <p className="max-w-2xl mx-auto" style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: 'clamp(1rem, 3.8vw, 1.25rem)', lineHeight: '1.6', textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)' }}>
-              Shaped through lived experience, sustained partnership, and an ongoing cycle of Listen • Learn • Lead.
-            </p>
-          </div>
-
-          <div className="relative w-full max-w-5xl mx-auto mb-12 md:mb-16 px-4 md:px-6">
-            {/* Diagram Container - Softened & Open */}
-            <div className="relative rounded-[40px] overflow-visible h-[400px] md:h-[560px]" style={{
-              background: 'linear-gradient(135deg, rgba(20, 20, 30, 0.92), rgba(40, 20, 35, 0.88))',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
-              boxShadow: '0 0 120px rgba(224, 54, 148, 0.1)', // Ambient glow instead of hard shadow
-            }}>
-              
-              {/* Diagram Area */}
-	              <div className="absolute inset-0 flex items-center justify-center p-5 md:p-8 overflow-hidden rounded-[40px]">
-	                <div className="relative w-full h-full max-w-[500px] max-h-[500px] flex items-center justify-center scale-95 md:scale-100">
-                  
-                  {/* 1. Outer Ring: Regional Awareness (Subtle & Open) */}
-                  {/* Allowed to feel expansive but contained within the view for clarity */}
-                  <svg className="absolute inset-0 w-full h-full pointer-events-none animate-[spin_120s_linear_infinite]" style={{ opacity: 0.15 }}>
-                    <circle cx="50%" cy="50%" r="45%" fill="none" stroke="white" strokeWidth="1.5" strokeDasharray="6 8" strokeLinecap="round" className="origin-center" />
-                  </svg>
-                  
-                  <div className="absolute top-[5%] left-1/2 -translate-x-1/2 text-center w-full px-4">
-                    <div className="text-white/50 text-[10px] tracking-[0.25em] uppercase font-semibold mb-1">Western North Carolina</div>
-                    <div className="text-white/30 text-[9px] tracking-wide">Shared learning & regional interest</div>
-                  </div>
-
-                  {/* 2. Inner Ring: Feedback Loop */}
-                  <div className="absolute inset-0 pointer-events-none">
-                    {/* Ring Gradient */}
-                    <svg className="w-full h-full animate-[spin_60s_linear_infinite]">
-                      <defs>
-                        <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="#FDB515" stopOpacity="0.3" />
-                          <stop offset="50%" stopColor="#E03694" stopOpacity="0.3" />
-                          <stop offset="100%" stopColor="#9E509F" stopOpacity="0.3" />
-                        </linearGradient>
-                      </defs>
-                      <circle cx="50%" cy="50%" r="30%" fill="none" stroke="url(#ringGradient)" strokeWidth="1" />
-                    </svg>
-                    
-                    {/* Nodes: Listen, Learn, Lead - Static relative to container to maintain readability */}
-                    {[
-                      { label: "Listen", angle: -90 },
-                      { label: "Learn", angle: 30 },
-                      { label: "Lead", angle: 150 }
-                    ].map((node) => {
-                      const radius = 30; // percent
-                      const x = 50 + radius * Math.cos(node.angle * Math.PI / 180);
-                      const y = 50 + radius * Math.sin(node.angle * Math.PI / 180);
-                      
-                      return (
-                        <div 
-                          key={node.label}
-                          className="absolute w-24 h-24 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center z-10"
-                          style={{ left: `${x}%`, top: `${y}%` }}
-                        >
-                          <div className="w-2.5 h-2.5 rounded-full bg-[#FDB515] shadow-[0_0_20px_rgba(253,181,21,0.5)] mb-3" />
-                          <span className="text-white font-bold tracking-[0.15em] text-xs uppercase opacity-90">{node.label}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  {/* 3. Central Hub - Grounded & Clear */}
-                  <div 
-                    className="relative z-20 w-44 h-44 rounded-full flex flex-col items-center justify-center text-center px-4 shadow-[0_0_60px_rgba(224,54,148,0.15)]"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(241, 95, 72, 0.9), rgba(224, 54, 148, 0.9))',
-                      border: '1px solid rgba(255,255,255,0.15)',
-                      backdropFilter: 'blur(4px)'
-                    }}
-                  >
-                    <div className="text-white font-bold text-lg leading-tight mb-1.5 drop-shadow-md">
-                      Transylvania<br/>County
-                    </div>
-                    <div className="text-white/80 text-[10px] font-semibold tracking-wider uppercase border-t border-white/20 pt-1.5 mt-0.5">
-                      Our Home Community
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
-            {/* Copy Block - Reflective & Clear */}
-            <div className="max-w-2xl mx-auto text-center px-4">
-              <p className="text-white/80 text-lg leading-[1.8] mb-8 font-light">
-                SparkPoint was built in Transylvania County—by listening deeply, learning alongside our partners, and leading only when the community asked us to.
-              </p>
-              <p className="text-white/80 text-lg leading-[1.8] mb-10 font-light">
-                That feedback loop continues to shape our work today. As neighboring communities express interest, we remain focused on stewardship—sharing what we’ve learned while honoring the relationships and values that made this work possible.
-              </p>
-              <p className="text-white/50 text-base italic tracking-wide">
-                Growth follows trust, not the other way around.
-              </p>
-            </div>
-          </div>
-        </motion.div>
+        {/* E/G merged — Community network diagram (map + Listen/Learn/Lead + partner sectors) */}
+        <CommunityNetworkDiagram />
       </div>
     </section>
   );

@@ -434,7 +434,7 @@ export function Header() {
                    <h3 className="text-white/60 text-xs font-bold uppercase tracking-widest mb-6">About <span translate="no">SparkPoint</span></h3>
                    <div className="grid gap-4">
                       <Link to="/about" onClick={handleLinkClick} className="text-white text-xl font-semibold hover:text-white/80 transition-colors">About Us</Link>
-                      <Link to="/sponsors" onClick={handleLinkClick} className="text-white text-xl font-semibold hover:text-white/80 transition-colors">Partners</Link>
+                      <Link to="/partners" onClick={handleLinkClick} className="text-white text-xl font-semibold hover:text-white/80 transition-colors">Partners</Link>
                       <Link to="/resilience-hub" onClick={handleLinkClick} className="text-white text-xl font-semibold hover:text-white/80 transition-colors">Resilience Hub</Link>
                       <Link to="/directory" onClick={handleLinkClick} className="text-white text-xl font-semibold hover:text-white/80 transition-colors">Find Help</Link>
                       <Link to="/intake?intent=contact" onClick={handleLinkClick} className="text-white text-xl font-semibold hover:text-white/80 transition-colors">Contact</Link>

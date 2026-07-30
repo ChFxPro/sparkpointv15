@@ -21,7 +21,7 @@ Last updated: 2026-07-28
 - Structured data now includes Organization/NGO, WebSite, WebPage, and BreadcrumbList globally, plus page-level Article/Event schema where applicable.
 - Canonical site origin defaults to `https://www.yoursparkpoint.org` (see `src/lib/siteOrigin.ts` and `vite.config.ts`).
 - `public/robots.txt` and `public/sitemap.xml` use `__SITE_ORIGIN__` placeholders replaced during postbuild.
-- Unified menu drawer includes a `Sponsors` link under the `About SparkPoint` group.
+- Unified menu drawer includes a `Partners` link under the `About SparkPoint` group, pointing to `/partners`.
 - Permanent press portal is available at `/press`, with reusable release pages under `/press/:slug`.
 - Press releases are single-sourced in `src/data/pressReleases.json`, feed `/news-media` via `showOnMediaPage`, and generate downloadable media kits during builds.
 - Events hub is available at `/events`, with reusable upcoming/past event listings driven by `src/data/events.ts`.
@@ -37,7 +37,8 @@ Last updated: 2026-07-28
 - `/events/thrive-at-five` (2026 Common Ground Resilience Roast release party, August 1 purchase CTA, and Resilience Hub fundraiser)
 - `/get-involved`
 - `/programs`
-- `/sponsors`
+- `/partners` (Partner Ecosystem — partner & sponsor directory, canonical; shares `src/data/partners.ts` with the homepage `#impact` network diagram)
+- `/sponsors` -> redirect to `/partners` (old URL kept working via a static prerender stub; don't restore or validate this as a live route)
 - `/resilience-hub`
 - `/directory` (Resource Directory — browsable/filterable local resource & partner-org listings; content in `src/data/resources.ts`, prerendered per entry)
 - `/directory/:id` (individual resource/org detail page)
