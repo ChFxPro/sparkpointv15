@@ -27,9 +27,9 @@ const REDIRECTS = {
   '/newsletter': 'https://cowbell-primrose-tet2.squarespace.com/newsletter',
 };
 // Client-side redirect aliases: leave to the SPA fallback, don't prerender.
-const SKIP = new Set(['/volunteer', '/partner', '/contact', '/news-media', '/newsroom', '/commconn', '/resiliency-hub', '/healthcare-story']);
+const SKIP = new Set(['/volunteer', '/partner', '/contact', '/news-media', '/newsroom', '/commconn', '/resiliency-hub', '/sponsors', '/healthcare-story']);
 const STATIC = ['/', '/about', '/mission', '/impact', '/programs', '/programs/purpose-workshops',
-  '/get-involved', '/community-connectors', '/sponsors', '/resilience-hub', '/directory', '/press', '/stories', '/events',
+  '/get-involved', '/community-connectors', '/partners', '/resilience-hub', '/directory', '/press', '/stories', '/events',
   '/trust', '/privacy', '/intake', '/resources/know-your-numbers', '/rural-health-convening',
   '/events/thrive-at-five'];
 
