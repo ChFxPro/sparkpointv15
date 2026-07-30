@@ -25,6 +25,7 @@ const OUT = DRY ? path.resolve(DIST, '..', '.prerender-preview') : DIST;
 const REDIRECTS = {
   '/donations': 'https://cowbell-primrose-tet2.squarespace.com/donations',
   '/newsletter': 'https://cowbell-primrose-tet2.squarespace.com/newsletter',
+  '/rh_tickets': 'https://secure.yoursparkpoint.org/store/p/2026-rural-health-convening',
 };
 // Client-side redirect aliases: leave to the SPA fallback, don't prerender.
 const SKIP = new Set(['/volunteer', '/partner', '/contact', '/news-media', '/newsroom', '/commconn', '/resiliency-hub', '/healthcare-story']);
