@@ -370,7 +370,7 @@ export function RuralHealthConveningPage() {
           className="rh-regional-update"
           aria-labelledby="rh-regional-update-title"
         >
-          <div className="rh-shell rh-regional-update-grid">
+          <div className="rh-shell">
             <div className="rh-regional-update-copy">
               <p className="rh-regional-update-eyebrow">
                 Featured regional update · October 1 program
@@ -386,33 +386,6 @@ export function RuralHealthConveningPage() {
                 insights can help shape the future of rural health across our region.
               </p>
             </div>
-
-            <aside
-              className="rh-program-preview"
-              aria-label="Program preview for Laurie Stradley’s regional update"
-            >
-              <p className="rh-program-preview-label">Program preview</p>
-              <h3>Laurie Stradley</h3>
-              <p className="rh-program-preview-role">CEO · Impact Health</p>
-              <dl>
-                <div>
-                  <dt>Focus</dt>
-                  <dd>NC ROOTS · Region 1</dd>
-                </div>
-                <div>
-                  <dt>Agenda slot</dt>
-                  <dd>Time to be announced</dd>
-                </div>
-              </dl>
-              <p className="rh-program-preview-context">
-                One featured part of the full SparkPoint Rural Health Convening.
-              </p>
-              <div className="rh-program-preview-more">
-                <p>Also featured</p>
-                <a href="#simulator">Participatory Rural Health Field Simulator</a>
-                <span>Cross-sector connection and shared learning</span>
-              </div>
-            </aside>
           </div>
         </section>
 
