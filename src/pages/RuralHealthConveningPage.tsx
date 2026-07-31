@@ -118,6 +118,29 @@ const simulatorSteps = [
   },
 ];
 
+const programLineup = [
+  {
+    number: '1',
+    title: 'Rural Health Briefing',
+    body: 'A short statewide update from Maggie Sauer, NC Department of Health and Human Services, Office of Rural Health.',
+  },
+  {
+    number: '2',
+    title: 'Special Regional Update',
+    body: 'Laurie Stradley, CEO of Impact Health, on the NC Rural Health Transformation Program (NC ROOTS) and what it means for Region 1.',
+  },
+  {
+    number: '3',
+    title: 'Story Collection: Listening to Build Connection',
+    body: 'How SparkPoint uses story collection to understand our community and strengthen the connections between us.',
+  },
+  {
+    number: '4',
+    title: 'Rural Health Field Simulator',
+    body: 'Step into the system rural families navigate every day—see it, walk it, and talk through what you find.',
+  },
+];
+
 const eventJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Event',
@@ -373,19 +396,35 @@ export function RuralHealthConveningPage() {
           <div className="rh-shell">
             <div className="rh-regional-update-copy">
               <p className="rh-regional-update-eyebrow">
-                Featured regional update · October 1 program
+                What to expect · October 1 program
               </p>
               <h2 id="rh-regional-update-title">
-                Special Regional Update: Shaping the Future of Rural Health Together
+                A historic moment for rural health in North Carolina.
               </h2>
               <p>
-                As Western North Carolina enters a historic new chapter in rural health,
-                hear from Laurie Stradley, CEO of Impact Health, for an update on the NC
-                Rural Health Transformation Program (NC ROOTS). Learn what’s ahead for
-                Region 1, why community voices matter at this pivotal moment, and how your
-                insights can help shape the future of rural health across our region.
+                North Carolina’s rural health community is calling this a historic
+                moment—and on October 1, Western North Carolina steps into it together.
+                The day brings a statewide briefing from NCDHHS, a special regional
+                update on NC ROOTS, a first look at how story collection is helping us
+                understand and connect our community, and the participatory Rural
+                Health Field Simulator.
               </p>
             </div>
+
+            <div className="rh-program-list-heading">
+              <p>What you’ll experience</p>
+            </div>
+            <ol className="rh-program-list" aria-label="What you'll experience on October 1">
+              {programLineup.map((item) => (
+                <li key={item.number}>
+                  <span aria-hidden="true">{item.number}</span>
+                  <div>
+                    <h3>{item.title}</h3>
+                    <p>{item.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
         </section>
 
