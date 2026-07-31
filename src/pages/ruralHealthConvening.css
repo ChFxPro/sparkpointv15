@@ -1141,8 +1141,8 @@ a.rh-logo-stage:focus-visible {
 
 .rh-logo-stage-highlands img {
   width: auto;
-  height: 72px;
-  max-width: 108px;
+  height: 40px;
+  max-width: 170px;
 }
 
 .rh-final-cta {
@@ -1663,8 +1663,8 @@ a.rh-logo-stage:focus-visible {
 
   .rh-logo-stage-highlands img {
     width: auto;
-    height: 64px;
-    max-width: 96px;
+    height: 36px;
+    max-width: 150px;
   }
 
   .rh-sparkpoint-logo {
