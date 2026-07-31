@@ -65,8 +65,8 @@ const highlandsSponsors = [
     href: 'https://www.explorebrevard.com/',
     src: transylvaniaTdaLogo,
     stageClassName: 'rh-logo-stage-tda',
-    width: 768,
-    height: 569,
+    width: 422,
+    height: 107,
   },
 ];
 
@@ -308,53 +308,116 @@ export function RuralHealthConveningPage() {
                 </a>
               </div>
 
-              <p className="rh-hero-sponsor-credit">
-                <span className="rh-hero-sponsor-credit-label">Presented by</span>{' '}
-                {summitSponsors.map((sponsor, index) => (
-                  <span key={sponsor.name}>
-                    {index > 0 && ' & '}
-                    <a href={sponsor.href} target="_blank" rel="noopener noreferrer">
-                      {sponsor.name}
-                    </a>
-                  </span>
-                ))}
-                , with support from{' '}
-                {ridgelineSponsors.map((sponsor, index) => (
-                  <span key={sponsor.name}>
-                    {index > 0 && ' & '}
-                    <a href={sponsor.href} target="_blank" rel="noopener noreferrer">
-                      {sponsor.name}
-                    </a>
-                  </span>
-                ))}
-                , and Highlands support from{' '}
-                {highlandsSponsors.map((sponsor, index) => (
-                  <span key={sponsor.name}>
-                    {index > 0 && ' & '}
-                    <a href={sponsor.href} target="_blank" rel="noopener noreferrer">
-                      {sponsor.creditName}
-                    </a>
-                  </span>
-                ))}
-              </p>
             </div>
 
-            <figure className="rh-hero-plate">
-              <div className="rh-plate-label">
-                <span>System map · not to scale</span>
-                <span>Distance here is burden, not miles</span>
+            <div className="rh-hero-plate-wrap">
+              <figure className="rh-hero-plate">
+                <div className="rh-plate-label">
+                  <span>System map · not to scale</span>
+                  <span>Distance here is burden, not miles</span>
+                </div>
+                <img
+                  src={ruralHealthAsset('rural sim hero.webp')}
+                  alt="The Rural Health Field Simulator connection map, showing trusted doors, waiting gaps, warm handoffs, crisis points, and the Resilience Hub connected across a rural health system."
+                  width={1536}
+                  height={1024}
+                />
+                <figcaption>
+                  The Connection Map makes the invisible network visible: every door, every
+                  delay, and the route a family actually travels.
+                </figcaption>
+              </figure>
+
+              <div className="rh-hero-sponsors" aria-label="Event sponsors and partners">
+                <div className="rh-hero-sponsors-group">
+                  <span className="rh-hero-sponsors-label">Presented by</span>
+                  <div className="rh-hero-sponsors-logos">
+                    <div className="rh-hero-logo-tier">
+                      {summitSponsors.map((sponsor) => (
+                        <a
+                          key={sponsor.name}
+                          className="rh-hero-logo-link tier-summit"
+                          href={sponsor.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Visit ${sponsor.name}`}
+                        >
+                          <img src={sponsor.src} alt={sponsor.name} width={sponsor.width} height={sponsor.height} />
+                        </a>
+                      ))}
+                    </div>
+                    <span className="rh-hero-logo-divider" aria-hidden="true" />
+                    <div className="rh-hero-logo-tier">
+                      {ridgelineSponsors.map((sponsor) => (
+                        <a
+                          key={sponsor.name}
+                          className="rh-hero-logo-link tier-ridgeline"
+                          href={sponsor.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Visit ${sponsor.name}`}
+                        >
+                          <img src={sponsor.src} alt={sponsor.name} width={sponsor.width} height={sponsor.height} />
+                        </a>
+                      ))}
+                    </div>
+                    <span className="rh-hero-logo-divider" aria-hidden="true" />
+                    <div className="rh-hero-logo-tier">
+                      {highlandsSponsors.map((sponsor) => (
+                        <a
+                          key={sponsor.name}
+                          className="rh-hero-logo-link tier-highlands"
+                          href={sponsor.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Visit ${sponsor.name}`}
+                        >
+                          <img src={sponsor.src} alt={sponsor.creditName} width={sponsor.width} height={sponsor.height} />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <span className="rh-hero-sponsors-divider" aria-hidden="true" />
+
+                <div className="rh-hero-sponsors-group rh-hero-partners-group">
+                  <span className="rh-hero-sponsors-label">In partnership with</span>
+                  <div className="rh-hero-partner-logos">
+                    <a
+                      className="rh-hero-partner-link"
+                      href="https://www.ruralhealthnc.org"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Visit North Carolina Rural Health Association"
+                    >
+                      <img
+                        className="rh-hero-partner-logo logo-ncrha"
+                        src={ruralHealthAsset('NCRHA-Logo.webp')}
+                        alt="North Carolina Rural Health Association"
+                        width={2064}
+                        height={331}
+                      />
+                    </a>
+                    <a
+                      className="rh-hero-partner-link"
+                      href="https://foundationhli.org"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Visit Foundation for Health Leadership and Innovation"
+                    >
+                      <img
+                        className="rh-hero-partner-logo logo-fhli"
+                        src={ruralHealthAsset('FHLI Logo.webp')}
+                        alt="Foundation for Health Leadership and Innovation"
+                        width={1600}
+                        height={438}
+                      />
+                    </a>
+                  </div>
+                </div>
               </div>
-              <img
-                src={ruralHealthAsset('rural sim hero.webp')}
-                alt="The Rural Health Field Simulator connection map, showing trusted doors, waiting gaps, warm handoffs, crisis points, and the Resilience Hub connected across a rural health system."
-                width={1536}
-                height={1024}
-              />
-              <figcaption>
-                The Connection Map makes the invisible network visible: every door, every
-                delay, and the route a family actually travels.
-              </figcaption>
-            </figure>
+            </div>
           </div>
         </section>
 
@@ -734,7 +797,13 @@ export function RuralHealthConveningPage() {
                     />
                   </div>
                   <span aria-hidden="true" />
-                  <div className="rh-logo-stage rh-logo-stage-ncrha">
+                  <a
+                    className="rh-logo-stage rh-logo-stage-ncrha"
+                    href="https://www.ruralhealthnc.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visit North Carolina Rural Health Association"
+                  >
                     <img
                       className="rh-ncrha-logo"
                       src={ruralHealthAsset('NCRHA-Logo.webp')}
@@ -742,20 +811,28 @@ export function RuralHealthConveningPage() {
                       width={2064}
                       height={331}
                     />
-                  </div>
+                  </a>
                 </div>
                 <p className="rh-relationship">
                   Hosted by SparkPoint in partnership with the North Carolina Rural Health
                   Association, a program of the Foundation for Health Leadership &amp;
                   Innovation.
                 </p>
-                <img
-                  className="rh-fhli-logo"
-                  src={ruralHealthAsset('FHLI Logo.webp')}
-                  alt="Foundation for Health Leadership and Innovation"
-                  width={1600}
-                  height={438}
-                />
+                <a
+                  className="rh-fhli-link"
+                  href="https://foundationhli.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Visit Foundation for Health Leadership and Innovation"
+                >
+                  <img
+                    className="rh-fhli-logo"
+                    src={ruralHealthAsset('FHLI Logo.webp')}
+                    alt="Foundation for Health Leadership and Innovation"
+                    width={1600}
+                    height={438}
+                  />
+                </a>
               </div>
             </div>
           </div>
