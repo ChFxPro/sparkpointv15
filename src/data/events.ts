@@ -5,6 +5,11 @@ export type EventCategory =
   | 'Learning'
   | 'Fundraiser';
 
+// Common Ground Resilience Roast product page — shared by the Thrive @ Five event
+// page and the homepage promo so both stay pointed at the same listing.
+export const COMMON_GROUND_PURCHASE_URL =
+  'https://pisgahroasters.com/collections/limited-edition/products/commonground-premium-microlot-roast';
+
 export interface SparkPointEvent {
   id: string;
   title: string;
