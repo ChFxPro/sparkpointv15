@@ -60,6 +60,28 @@ export const EVENTS: SparkPointEvent[] = [
       'A SparkPoint and Pisgah Coffee Roasters collaboration benefiting the new Resilience Hub.',
   },
   {
+    id: 'dr-ora-brain-healthy-habits-2026',
+    title: 'Building Healthy Brain Habits',
+    shortTitle: 'Brain Healthy Habits',
+    category: 'Workshop',
+    startDate: '2026-08-10T18:00:00-04:00',
+    endDate: '2026-08-10T19:30:00-04:00',
+    dateLabel: 'Monday, August 10, 2026',
+    timeLabel: '6:00–7:30 p.m.',
+    locationName: 'Transylvania County Library',
+    locationLabel: 'Rogow Family Community Room, 212 S Gaston St, Brevard',
+    summary:
+      'Dr. Ora Wells joins the Alzheimer’s Association and NC Cooperative Extension for an interactive workshop on brain health prevention, cognitive reserve strategies, nutrition, and wellness activities for everyone.',
+    detailPath: '/stories/talks-lectures/dr-ora-brain-health',
+    registrationPath:
+      'https://transylvaniacounty.librarycalendar.com/event/building-brain-healthy-habits-158',
+    registrationLabel: 'Register — space is limited',
+    imagePath: 'assets/dr_ora_brain_img/drora_crowd1.webp',
+    imageAlt: 'Dr. Ora Wells speaking to a full room at a past Brain Health talk.',
+    partnerLine:
+      'A community health talk from SparkPoint Board President Dr. Ora Wells, with the Alzheimer’s Association and NC Cooperative Extension.',
+  },
+  {
     id: 'rural-health-convening-2026',
     title: '2026 WNC Regional Rural Health Convening',
     shortTitle: 'Rural Health Convening',
