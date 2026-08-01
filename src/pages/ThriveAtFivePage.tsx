@@ -1,13 +1,12 @@
 import {
   ArrowRight,
-  CalendarDays,
-  Clock3,
+  Award,
   Coffee,
   ExternalLink,
+  Home,
+  Landmark,
   MapPin,
-  Music2,
   Play,
-  UsersRound,
 } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
@@ -23,8 +22,7 @@ const MAP_URL =
   'https://www.google.com/maps/search/?api=1&query=6283+Asheville+Highway+Pisgah+Forest+NC+28768';
 const FACEBOOK_EVENT_URL = 'https://www.facebook.com/share/1BaHvsc1p3/';
 const COFFEE_PURCHASE_URL = COMMON_GROUND_PURCHASE_URL;
-const CALENDAR_URL =
-  'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Thrive+%40+Five%3A+Common+Ground+Release+Party&dates=20260731T210000Z%2F20260731T230000Z&details=Celebrate+the+release+of+Common+Ground+Resilience+Roast+with+SparkPoint+and+Pisgah+Coffee+Roasters.+Live+music%2C+food%2C+drinks%2C+and+friends.&location=Pisgah+Coffee+Roasters%2C+6283+Asheville+Highway%2C+Pisgah+Forest%2C+NC+28768';
+const PISGAH_STORY_URL = 'https://pisgahroasters.com/pages/our-story';
 
 const heroImage = `${ASSET_BASE}Sparkpoint Photos-2.webp`;
 const packageImage = `${ASSET_BASE}SparkPoint - Common Ground.webp`;
@@ -32,41 +30,22 @@ const hubImage = `${ASSET_BASE}ChatGPT Image May 28, 2026 at 03_24_30 PM.webp`;
 const pisgahLogo = `${ASSET_BASE}PisgahCoffeeRoasters.webp`;
 const productDetailImage = `${ASSET_BASE}Sparkpoint Photos-1.webp`;
 
-const eventJsonLd = {
+const productJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'Event',
-  name: 'Thrive @ Five: Common Ground Release Party',
+  '@type': 'Product',
+  name: 'Common Ground Resilience Roast',
   description:
-    'Celebrate the Common Ground Resilience Roast release with SparkPoint and Pisgah Coffee Roasters, featuring live music from Mark and Sally Wingate, food, drinks, and friends.',
-  startDate: '2026-07-31T17:00:00-04:00',
-  endDate: '2026-07-31T19:00:00-04:00',
-  eventStatus: 'https://schema.org/EventScheduled',
-  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-  location: {
-    '@type': 'Place',
-    name: 'Pisgah Coffee Roasters',
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: '6283 Asheville Highway',
-      addressLocality: 'Pisgah Forest',
-      addressRegion: 'NC',
-      postalCode: '28768',
-      addressCountry: 'US',
-    },
-  },
+    'A limited-edition light roast micro-lot created by Pisgah Coffee Roasters and SparkPoint, benefiting the new Resilience Hub in Transylvania County.',
   image: [canonicalUrl('/assets/events/pisgah_coffee_fundraiser/Sparkpoint Photos-2.webp')],
-  organizer: [
-    {
-      '@type': 'Organization',
-      name: 'SparkPoint',
-      url: canonicalUrl('/'),
-    },
-    {
-      '@type': 'Organization',
-      name: 'Pisgah Coffee Roasters',
-      url: 'https://pisgahroasters.com/',
-    },
-  ],
+  brand: {
+    '@type': 'Brand',
+    name: 'Pisgah Coffee Roasters',
+  },
+  manufacturer: {
+    '@type': 'Organization',
+    name: 'Pisgah Coffee Roasters',
+    url: 'https://pisgahroasters.com/',
+  },
   url: canonicalUrl(EVENT_PATH),
 };
 
@@ -76,12 +55,12 @@ export default function ThriveAtFivePage() {
   return (
     <div className="taf-page">
       <SEOHead
-        title="Thrive @ Five: Common Ground Release Party | SparkPoint"
-        description="Join SparkPoint and Pisgah Coffee Roasters July 31 for Common Ground Resilience Roast, live music, food, drinks, and friends in support of the Resilience Hub."
+        title="Common Ground Resilience Roast | SparkPoint × Pisgah Coffee Roasters"
+        description="A limited-edition coffee from Pisgah Coffee Roasters and SparkPoint, supporting the new Resilience Hub. Meet the family behind the roast and get your bag."
         path={EVENT_PATH}
         image="/assets/events/pisgah_coffee_fundraiser/Sparkpoint Photos-2.webp"
         imageAlt="Common Ground Resilience Roast coffee, created by SparkPoint and Pisgah Coffee Roasters."
-        jsonLd={eventJsonLd}
+        jsonLd={productJsonLd}
       />
 
       <section className="taf-hero" aria-labelledby="taf-title">
@@ -92,46 +71,45 @@ export default function ThriveAtFivePage() {
             <Link className="taf-back-link" to="/events">
               <span aria-hidden="true">←</span> All events
             </Link>
-            <p className="taf-eyebrow">SparkPoint + Pisgah Coffee Roasters present</p>
+            <p className="taf-eyebrow">A SparkPoint &times; Pisgah Coffee Roasters collaboration</p>
             <h1 id="taf-title">
-              <span>Thrive @ Five</span>
+              <span>Thrive @ Five &middot; Third annual release</span>
               Common Ground
-              <small>Release Party</small>
+              <small>Resilience Roast</small>
             </h1>
             <p className="taf-hero-lede">
-              Coffee roasted for connection. Join us for the first pour of a limited
-              resilience roast—and an evening built around music, food, drinks, and friends.
+              Coffee roasted for connection. A limited-edition micro-lot from Pisgah Coffee
+              Roasters — a family-owned roastery in the Blue Ridge Mountains — supporting
+              SparkPoint&rsquo;s new Resilience Hub all August long.
             </p>
             <div className="taf-hero-actions">
-              <a className="taf-button taf-button-light" href={MAP_URL} target="_blank" rel="noreferrer">
-                Get directions <ArrowRight aria-hidden="true" />
+              <a className="taf-button taf-button-light" href={COFFEE_PURCHASE_URL} target="_blank" rel="noreferrer">
+                <Coffee aria-hidden="true" /> Buy now
               </a>
-              <a
-                className="taf-button taf-button-ghost"
-                href={CALENDAR_URL}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Add to calendar <CalendarDays aria-hidden="true" />
+              <a className="taf-button taf-button-ghost" href={MAP_URL} target="_blank" rel="noreferrer">
+                Visit Pisgah Coffee Roasters <ArrowRight aria-hidden="true" />
               </a>
             </div>
           </div>
 
-          <aside className="taf-event-ticket" aria-label="Event details">
-            <p>Friday</p>
-            <strong>July 31</strong>
+          <aside className="taf-event-ticket" aria-label="About Pisgah Coffee Roasters">
+            <p>Family-owned since</p>
+            <strong>2010</strong>
             <dl>
-              <div>
-                <Clock3 aria-hidden="true" />
-                <dt className="sr-only">Time</dt>
-                <dd>5:00–7:00 p.m.</dd>
-              </div>
               <div>
                 <MapPin aria-hidden="true" />
                 <dt className="sr-only">Location</dt>
                 <dd>
                   Pisgah Coffee Roasters
                   <span>6283 Asheville Highway, Pisgah Forest</span>
+                </dd>
+              </div>
+              <div>
+                <Coffee aria-hidden="true" />
+                <dt className="sr-only">Roasting philosophy</dt>
+                <dd>
+                  Global Coffee. Local Flavor.
+                  <span>Family-owned &amp; roasted in the Blue Ridge Mountains</span>
                 </dd>
               </div>
             </dl>
@@ -156,16 +134,56 @@ export default function ThriveAtFivePage() {
               celebrate the connections that make our community stronger.
             </p>
             <p>
-              Sample the new roast, pick up a limited-edition bag, hear the vision for
-              SparkPoint’s Resilience Hub, and spend a summer evening with neighbors,
-              partners, and friends.
+              Pick up a limited-edition bag, taste what a season of collaboration tastes
+              like, and help move SparkPoint&rsquo;s Resilience Hub one step closer to open.
             </p>
             <div className="taf-split-callout" aria-label="Fundraiser impact">
               <strong>50%</strong>
               <p>
                 of all profits from August sales of Common Ground will be donated by Pisgah Coffee Roasters
-                to help complete SparkPoint’s new Resilience Hub.
+                to help complete SparkPoint&rsquo;s new Resilience Hub.
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="taf-story" aria-labelledby="taf-story-title">
+        <div className="taf-shell taf-story-grid">
+          <div className="taf-story-copy">
+            <p className="taf-section-kicker">The roasters behind the roast</p>
+            <h2 id="taf-story-title">Coffee runs in the Lipsi family.</h2>
+            <p>
+              Jotham Lipsi grew up on his family&rsquo;s coffee estate in Minas Gerais, Brazil
+              — over 300,000 trees, tended by a lineage that traces back to ancestors who
+              emigrated from Italy to Brazil&rsquo;s coffee country in the late 1800s. His
+              father, Jonathan, an agronomist, ran the farm and supplied wholesale beans long
+              before either of them roasted a cup for the public.
+            </p>
+            <p>
+              In 2004, Jotham came to Brevard College and fell for the mountains. Six years
+              later, father and son opened Pisgah Coffee Roasters in Pisgah Forest — a
+              family-owned roastery built on the same values they&rsquo;d always worked by,
+              just an ocean away. Their beans still come from Brazil&rsquo;s Cerrado region,
+              where familial bonds endure with the land. Their motto says the rest:
+              Global Coffee. Local Flavor.
+            </p>
+            <a className="taf-story-link" href={PISGAH_STORY_URL} target="_blank" rel="noreferrer">
+              Read more from Pisgah Coffee Roasters <ExternalLink aria-hidden="true" />
+            </a>
+          </div>
+          <div className="taf-stat-stack" aria-label="Pisgah Coffee Roasters at a glance">
+            <div className="taf-stat-card">
+              <strong>2010</strong>
+              <span>Founded in Pisgah Forest, NC</span>
+            </div>
+            <div className="taf-stat-card">
+              <strong>300,000+</strong>
+              <span>Coffee trees on the family&rsquo;s estate in Minas Gerais, Brazil</span>
+            </div>
+            <div className="taf-stat-card">
+              <strong>100+ years</strong>
+              <span>Of family coffee-growing heritage</span>
             </div>
           </div>
         </div>
@@ -173,29 +191,35 @@ export default function ThriveAtFivePage() {
 
       <section className="taf-lineup" aria-labelledby="taf-lineup-title">
         <div className="taf-shell">
-          <p className="taf-section-kicker">What’s brewing</p>
+          <p className="taf-section-kicker">Three years, three roasts</p>
           <div className="taf-lineup-heading">
-            <h2 id="taf-lineup-title">A good reason to gather.</h2>
-            <p>No formal program. Just an easy evening with people who care about this place.</p>
+            <h2 id="taf-lineup-title">A collaboration that keeps giving back.</h2>
+            <p>
+              Every August, Pisgah Coffee Roasters and SparkPoint release a limited coffee
+              honoring someone — or something — building Transylvania County&rsquo;s future.
+            </p>
           </div>
           <div className="taf-lineup-grid">
             <article>
-              <Music2 aria-hidden="true" />
-              <p>Live music</p>
-              <h3>Mark &amp; Sally Wingate</h3>
-              <span>A soundtrack for the first pour.</span>
+              <Award aria-hidden="true" />
+              <p>2023</p>
+              <h3>Pipin&rsquo; Hot Blend</h3>
+              <span>Honoring Dr. Ora Wells&rsquo;s impact on Transylvania County.</span>
             </article>
             <article>
-              <Coffee aria-hidden="true" />
-              <p>Taste the roast</p>
-              <h3>Common Ground</h3>
-              <span>Sample it, meet the roasters, take home a bag.</span>
+              <Landmark aria-hidden="true" />
+              <p>2024</p>
+              <h3>The Mayor&rsquo;s Daily Grind</h3>
+              <span>Honoring Brevard Mayor Maureen Copelof.</span>
             </article>
             <article>
-              <UsersRound aria-hidden="true" />
-              <p>Come as you are</p>
-              <h3>Food, drinks &amp; friends</h3>
-              <span>Connect with neighbors and the people behind the project.</span>
+              <Home aria-hidden="true" />
+              <p>2026</p>
+              <h3>Common Ground Resilience Roast</h3>
+              <span>
+                After a 2025 pause for Hurricane Helene recovery, investing in SparkPoint&rsquo;s
+                new Resilience Hub.
+              </span>
             </article>
           </div>
         </div>
@@ -228,46 +252,6 @@ export default function ThriveAtFivePage() {
               Purchase the coffee <ExternalLink aria-hidden="true" />
               <span aria-hidden="true">Available now</span>
             </a>
-          </div>
-        </div>
-      </section>
-
-      <section className="taf-music" aria-labelledby="taf-music-title">
-        <div className="taf-shell taf-music-grid">
-          <div className="taf-music-copy">
-            <p className="taf-section-kicker">Meet the musicians</p>
-            <h2 id="taf-music-title">Mark &amp; Sally Wingate</h2>
-            <p>
-              Get a feel for the evening with Mark and Sally performing alongside acclaimed
-              singer-songwriter Sarah Siskind.
-            </p>
-            <a href="https://youtu.be/DCcg_p2q7_U" target="_blank" rel="noreferrer">
-              Watch on YouTube <ExternalLink aria-hidden="true" />
-            </a>
-          </div>
-          <div className="taf-video-frame">
-            {videoLoaded ? (
-              <iframe
-                src="https://www.youtube-nocookie.com/embed/DCcg_p2q7_U?autoplay=1"
-                title="Mark and Sally Wingate performing with Sarah Siskind"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              />
-            ) : (
-              <button
-                type="button"
-                className="taf-video-poster"
-                onClick={() => setVideoLoaded(true)}
-                aria-label="Play Mark and Sally Wingate performing with Sarah Siskind"
-              >
-                <img src={productDetailImage} alt="" />
-                <span>
-                  <Play aria-hidden="true" fill="currentColor" />
-                </span>
-                <strong>Watch the performance</strong>
-              </button>
-            )}
           </div>
         </div>
       </section>
@@ -305,8 +289,9 @@ export default function ThriveAtFivePage() {
               <p className="taf-section-kicker">Coffee roasted for connection</p>
               <h2 id="taf-partners-title">Two local organizations. One shared table.</h2>
               <p>
-                This limited release brings SparkPoint’s connection-first mission together
-                with the craft and community spirit of a local, family-owned roaster.
+                This limited release brings SparkPoint&rsquo;s connection-first mission
+                together with the craft and community spirit of a family-owned roaster
+                that&rsquo;s called Pisgah Forest home since 2010.
               </p>
             </div>
             <div className="taf-partner-logos" aria-label="Collaboration partners">
@@ -318,12 +303,58 @@ export default function ThriveAtFivePage() {
         </div>
       </section>
 
+      <section className="taf-music" aria-labelledby="taf-music-title">
+        <div className="taf-shell taf-music-grid">
+          <div className="taf-music-copy">
+            <p className="taf-section-kicker">Friday, July 31 &middot; Release recap</p>
+            <h2 id="taf-music-title">Mark &amp; Sally Wingate</h2>
+            <p>
+              The first pour happened on July 31 — Mark and Sally Wingate opened the evening
+              alongside acclaimed singer-songwriter Sarah Siskind.
+            </p>
+            <p className="taf-recap-note">More photos and video from the night are coming soon.</p>
+            <div className="taf-music-links">
+              <a href="https://youtu.be/DCcg_p2q7_U" target="_blank" rel="noreferrer">
+                Watch on YouTube <ExternalLink aria-hidden="true" />
+              </a>
+              <a href={FACEBOOK_EVENT_URL} target="_blank" rel="noreferrer">
+                See the Facebook recap <ExternalLink aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+          <div className="taf-video-frame">
+            {videoLoaded ? (
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/DCcg_p2q7_U?autoplay=1"
+                title="Mark and Sally Wingate performing with Sarah Siskind"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              />
+            ) : (
+              <button
+                type="button"
+                className="taf-video-poster"
+                onClick={() => setVideoLoaded(true)}
+                aria-label="Play Mark and Sally Wingate performing with Sarah Siskind"
+              >
+                <img src={productDetailImage} alt="" />
+                <span>
+                  <Play aria-hidden="true" fill="currentColor" />
+                </span>
+                <strong>Watch the performance</strong>
+              </button>
+            )}
+          </div>
+        </div>
+      </section>
+
       <section className="taf-final" aria-labelledby="taf-final-title">
         <img src={productDetailImage} alt="" loading="lazy" />
         <div className="taf-final-shade" aria-hidden="true" />
         <div className="taf-shell taf-final-inner">
-          <p className="taf-section-kicker">Friday, July 31 · 5–7 p.m.</p>
-          <h2 id="taf-final-title">Meet us at five.</h2>
+          <p className="taf-section-kicker">Pisgah Forest, North Carolina</p>
+          <h2 id="taf-final-title">Stop by the roastery.</h2>
           <p>
             Pisgah Coffee Roasters<br />
             6283 Asheville Highway, Pisgah Forest
@@ -332,13 +363,8 @@ export default function ThriveAtFivePage() {
             <a className="taf-button taf-button-light" href={MAP_URL} target="_blank" rel="noreferrer">
               Get directions <MapPin aria-hidden="true" />
             </a>
-            <a
-              className="taf-button taf-button-ghost"
-              href={FACEBOOK_EVENT_URL}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Facebook event <ExternalLink aria-hidden="true" />
+            <a className="taf-button taf-button-ghost" href={COFFEE_PURCHASE_URL} target="_blank" rel="noreferrer">
+              Buy the roast <ExternalLink aria-hidden="true" />
             </a>
           </div>
         </div>
