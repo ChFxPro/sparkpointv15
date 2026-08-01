@@ -2,35 +2,14 @@ import { Link } from 'react-router';
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Hero } from '../components/Hero';
 import { MissionGrid } from '../components/MissionGrid';
-import { StoryCarousel } from '../components/StoryCarousel';
+import { StoryHighlights } from '../components/StoryHighlights';
 import { ImpactSection } from '../components/ImpactSection';
 import { ConnectionSection } from '../components/ConnectionSection';
 import { HomePromoShowcase } from '../components/HomePromoShowcase';
 import { CTAFinal } from '../components/CTAFinal';
 import { SEOHead } from '../components/SEOHead';
-import heleneImage from '../assets/compd/0835779aef52124bf5c00840473e8285f8e0f937.webp';
-import echoesImage from '../assets/compd/e4e8c9f59f3a2b2ee1533f1f427ca4a4cb3693a5.webp';
-import volunteerImpactImage from '../assets/compd/20c2a905251c86d5a4f9333b83199204b6928c7d.webp';
 
 const InteractiveSparkPointInfographic = lazy(() => import('../imports/InteractiveSparkPointInfographic'));
-
-const stories = [
-  {
-    title: 'Helene: One Year of Healing',
-    image: heleneImage,
-    caption: 'A journey of resilience and community support through the recovery process, demonstrating the power of collective healing.'
-  },
-  {
-    title: 'Echoes from the Community',
-    image: echoesImage,
-    caption: 'Voices sharing experiences of connection and belonging that define our community\'s strength and spirit.'
-  },
-  {
-    title: 'Community Champions',
-    image: volunteerImpactImage,
-    caption: 'Celebrating the volunteers and partners who work tirelessly to bring hope, resources, and action to those in need.'
-  }
-];
 
 export function HomePage() {
   const [showInfographic, setShowInfographic] = useState(false);
@@ -81,7 +60,7 @@ export function HomePage() {
           </Suspense>
         )}
       </div>
-      <StoryCarousel stories={stories} />
+      <StoryHighlights />
       <ImpactSection />
       <ConnectionSection />
       

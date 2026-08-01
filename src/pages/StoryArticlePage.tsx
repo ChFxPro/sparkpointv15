@@ -11,6 +11,7 @@ import { canonicalUrl } from '../lib/siteOrigin';
 import { SEOHead } from '../components/SEOHead';
 import { BrainHealthResources } from '../components/BrainHealthResources';
 import { DrOraEventGallery } from '../components/DrOraEventGallery';
+import { DrOraUpcomingTalk } from '../components/DrOraUpcomingTalk';
 
 export function StoryArticlePage() {
   const { categoryId, slug } = useParams();
@@ -118,6 +119,8 @@ export function StoryArticlePage() {
               </motion.p>
             )}
           </header>
+
+          {article.slug === 'dr-ora-brain-health' && <DrOraUpcomingTalk />}
 
           {/* Embedded Video */}
           <motion.div
