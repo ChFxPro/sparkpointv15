@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { canonicalUrl } from '../lib/siteOrigin';
+import { COMMON_GROUND_PURCHASE_URL } from '../data/events';
 import './thrive-at-five.css';
 
 const BASE = import.meta.env.BASE_URL;
@@ -21,7 +22,7 @@ const EVENT_PATH = '/events/thrive-at-five';
 const MAP_URL =
   'https://www.google.com/maps/search/?api=1&query=6283+Asheville+Highway+Pisgah+Forest+NC+28768';
 const FACEBOOK_EVENT_URL = 'https://www.facebook.com/share/1BaHvsc1p3/';
-const COFFEE_PURCHASE_URL = 'https://pisgahroasters.com/collections/signature-roasts';
+const COFFEE_PURCHASE_URL = COMMON_GROUND_PURCHASE_URL;
 const CALENDAR_URL =
   'https://calendar.google.com/calendar/render?action=TEMPLATE&text=Thrive+%40+Five%3A+Common+Ground+Release+Party&dates=20260731T210000Z%2F20260731T230000Z&details=Celebrate+the+release+of+Common+Ground+Resilience+Roast+with+SparkPoint+and+Pisgah+Coffee+Roasters.+Live+music%2C+food%2C+drinks%2C+and+friends.&location=Pisgah+Coffee+Roasters%2C+6283+Asheville+Highway%2C+Pisgah+Forest%2C+NC+28768';
 
@@ -208,7 +209,7 @@ export default function ThriveAtFivePage() {
               alt="Common Ground Resilience Roast bag art."
               loading="lazy"
             />
-            <span aria-label="Coming August 1">Coming<br />August 1</span>
+            <span aria-label="Available now">Available<br />now</span>
           </div>
           <div className="taf-purchase-copy">
             <p className="taf-section-kicker">Take home the roast</p>
@@ -225,7 +226,7 @@ export default function ThriveAtFivePage() {
               rel="noreferrer"
             >
               Purchase the coffee <ExternalLink aria-hidden="true" />
-              <span aria-hidden="true">Coming August 1</span>
+              <span aria-hidden="true">Available now</span>
             </a>
           </div>
         </div>
