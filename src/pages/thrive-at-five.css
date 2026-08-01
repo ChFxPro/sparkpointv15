@@ -327,6 +327,75 @@
   line-height: 1.55;
 }
 
+.taf-story {
+  padding: clamp(86px, 11vw, 146px) 0;
+  background: var(--taf-paper);
+}
+
+.taf-story-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+  align-items: start;
+  gap: clamp(56px, 9vw, 120px);
+}
+
+.taf-story-copy > p:not(.taf-section-kicker) {
+  margin-top: 22px;
+  color: #5e5a52;
+  font-size: 1.04rem;
+  line-height: 1.8;
+}
+
+.taf-story-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+  padding-bottom: 4px;
+  color: var(--taf-green);
+  font-size: 0.8rem;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--taf-gold);
+}
+
+.taf-stat-stack {
+  display: grid;
+}
+
+.taf-stat-card {
+  padding: 22px 0;
+  border-bottom: 1px solid #cfc7b8;
+}
+
+.taf-stat-card:first-child {
+  padding-top: 0;
+}
+
+.taf-stat-card:last-child {
+  border-bottom: none;
+}
+
+.taf-stat-card strong {
+  display: block;
+  color: var(--taf-pink);
+  font-size: clamp(2.2rem, 4vw, 2.8rem);
+  font-weight: 820;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.taf-stat-card span {
+  display: block;
+  margin-top: 8px;
+  color: #6d6a61;
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
 .taf-lineup {
   padding: clamp(78px, 10vw, 126px) 0;
   color: white;
@@ -523,6 +592,20 @@
   line-height: 1.7;
 }
 
+.taf-recap-note {
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.taf-music-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin-top: 28px;
+}
+
 .taf-music-copy a,
 .taf-text-link {
   display: inline-flex;
@@ -535,6 +618,10 @@
   letter-spacing: 0.08em;
   text-decoration: none;
   text-transform: uppercase;
+}
+
+.taf-music-links a {
+  margin-top: 0;
 }
 
 .taf-video-frame {
@@ -744,8 +831,13 @@
   .taf-lineup-heading,
   .taf-music-grid,
   .taf-purchase-grid,
-  .taf-partners-card {
+  .taf-partners-card,
+  .taf-story-grid {
     grid-template-columns: 1fr;
+  }
+
+  .taf-stat-stack {
+    margin-top: 8px;
   }
 
   .taf-hero {
