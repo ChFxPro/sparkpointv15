@@ -145,6 +145,25 @@ function AppContent() {
         <Route path="/impact" element={<ImpactPage />} />
         <Route path="/programs" element={<ProgramsPage />} />
         <Route path="/programs/purpose-workshops" element={<PurposeWorkshopsPage />} />
+        {/* Legacy Squarespace-era program URLs, retained as redirects for old backlinks/bookmarks. */}
+        <Route path="/sparkpurpose" element={<Navigate to="/programs/purpose-workshops" replace />} />
+        <Route path="/leadership-wellbeing" element={<Navigate to="/programs/leadership-well-being" replace />} />
+        <Route
+          path="/voice-of-the-students"
+          element={<Navigate to="/programs/voice-of-the-students-youth-leadership" replace />}
+        />
+        <Route
+          path="/workforce-wellbeing"
+          element={<Navigate to="/programs/workplace-well-being-positive-culture" replace />}
+        />
+        <Route
+          path="/wellness-rooted-in-connection"
+          element={<Navigate to="/programs/wellness-rooted-in-connection-collaborative-trcn" replace />}
+        />
+        <Route
+          path="/wellnessrootedinconnection"
+          element={<Navigate to="/programs/wellness-rooted-in-connection-collaborative-trcn" replace />}
+        />
         <Route path="/programs/:slug" element={<ProgramDetailRoute />} />
         <Route path="/community-connectors" element={<CommunityConnectorsPage />} />
         <Route path="/commconn" element={<Navigate to="/community-connectors" replace />} />
@@ -156,6 +175,7 @@ function AppContent() {
         <Route path="/directory/:id" element={<DirectoryEntryPage />} />
         <Route path="/news-media" element={<Navigate to="/press" replace />} />
         <Route path="/newsroom" element={<Navigate to="/press" replace />} />
+        <Route path="/media" element={<Navigate to="/press" replace />} />
         <Route path="/press" element={<PressPortalPage />} />
         <Route path="/press/:slug" element={<PressReleasePage />} />
         <Route path="/get-involved" element={<GetInvolvedPage />} />
@@ -164,8 +184,13 @@ function AppContent() {
         <Route path="/contact" element={<Navigate to="/intake?intent=contact" replace />} />
         <Route path="/intake" element={<IntakePage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/about-us" element={<Navigate to="/about" replace />} />
         <Route path="/community-champions/helene-one-year" element={<CommunityChampionsArticle />} />
         <Route path="/stories/community-champions/helene-anniversary" element={<HeleneOneYearArticle />} />
+        <Route
+          path="/helene-one-year-of-healing"
+          element={<Navigate to="/stories/community-champions/helene-anniversary" replace />}
+        />
         <Route path="/trust" element={<TrustPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/resources/know-your-numbers" element={<KnowYourNumbersPage />} />

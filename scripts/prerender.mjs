@@ -22,16 +22,43 @@ const RESOURCES_FILE = process.env.RESOURCES_FILE || 'src/data/resources.ts';
 const OUT = DRY ? path.resolve(DIST, '..', '.prerender-preview') : DIST;
 
 // Routes that must NOT be SPA-prerendered — external redirects get clean 200 stubs.
+// Every alias below used to sit in SKIP (left to the client-side SPA fallback), which
+// meant a direct request or crawler hit GitHub Pages' 404.html first and got a real
+// HTTP 404 before any JS ever ran the redirect — the same bug fixed for /sponsors,
+// generalized to the rest of the retired/alias routes (GSC was reporting a batch of
+// these as "Not found (404)" / "Page with redirect").
 const REDIRECTS = {
-  '/donations': 'https://cowbell-primrose-tet2.squarespace.com/donations',
-  '/newsletter': 'https://cowbell-primrose-tet2.squarespace.com/newsletter',
+  // Repointed to secure.yoursparkpoint.org (App.tsx, commit 2f0b17f) — this map had drifted
+  // to the old raw Squarespace host, which GSC was still crawling as a live 404 target.
+  '/donations': 'https://secure.yoursparkpoint.org/donations',
+  '/newsletter': 'https://secure.yoursparkpoint.org/newsletter',
   '/rh_tickets': 'https://secure.yoursparkpoint.org/store/p/2026-rural-health-convening',
-  // Renamed route: emit a real static stub instead of SKIP, so direct requests/crawlers
-  // get a 200 + meta-refresh to /partners instead of falling through to the 404 page.
   '/sponsors': `${ORIGIN}/partners`,
+  '/news-media': `${ORIGIN}/press`,
+  '/newsroom': `${ORIGIN}/press`,
+  '/media': `${ORIGIN}/press`,
+  '/commconn': `${ORIGIN}/community-connectors`,
+  '/resiliency-hub': `${ORIGIN}/resilience-hub`,
+  '/volunteer': `${ORIGIN}/intake?intent=volunteer`,
+  '/partner': `${ORIGIN}/intake?intent=partner`,
+  '/contact': `${ORIGIN}/intake?intent=contact`,
+  '/healthcare-story':
+    'https://sparkconnection.org/wp-content/plugins/narrafirma/webapp/survey.html#project=Rural%20Health&survey=Rural%20Health%20Care%20Access',
+  // Legacy Squarespace-era program/page URLs still showing up in GSC as 404s — redirect
+  // the ones with a clear modern equivalent to preserve any lingering backlink equity.
+  '/about-us': `${ORIGIN}/about`,
+  '/sparkpurpose': `${ORIGIN}/programs/purpose-workshops`,
+  '/leadership-wellbeing': `${ORIGIN}/programs/leadership-well-being`,
+  '/voice-of-the-students': `${ORIGIN}/programs/voice-of-the-students-youth-leadership`,
+  '/workforce-wellbeing': `${ORIGIN}/programs/workplace-well-being-positive-culture`,
+  '/wellness-rooted-in-connection': `${ORIGIN}/programs/wellness-rooted-in-connection-collaborative-trcn`,
+  '/wellnessrootedinconnection': `${ORIGIN}/programs/wellness-rooted-in-connection-collaborative-trcn`,
+  '/helene-one-year-of-healing': `${ORIGIN}/stories/community-champions/helene-anniversary`,
 };
-// Client-side redirect aliases: leave to the SPA fallback, don't prerender.
-const SKIP = new Set(['/volunteer', '/partner', '/contact', '/news-media', '/newsroom', '/commconn', '/resiliency-hub', '/healthcare-story']);
+// Client-side redirect aliases with no static stub yet: leave to the SPA fallback.
+// (Empty for now — keep as a hook for any future alias that shouldn't get a stub,
+// e.g. a route intentionally left unindexable.)
+const SKIP = new Set();
 const STATIC = ['/', '/about', '/mission', '/impact', '/programs', '/programs/purpose-workshops',
   '/get-involved', '/community-connectors', '/partners', '/resilience-hub', '/directory', '/press', '/stories', '/events',
   '/trust', '/privacy', '/intake', '/resources/know-your-numbers', '/rural-health-convening',
