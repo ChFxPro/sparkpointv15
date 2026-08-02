@@ -204,7 +204,7 @@ export function DirectoryEntryPage() {
   return (
     <div className="min-h-screen bg-[#FDFDFD]">
       <SEOHead
-        title={`${entry.name} — ${entry.org} | SparkPoint Resource Directory`}
+        title={entry.seoTitle ?? `${entry.name} — ${entry.org} | SparkPoint Resource Directory`}
         description={entry.summary}
         path={`/directory/${entry.id}`}
         jsonLd={jsonLd}
