@@ -16,6 +16,7 @@ import uncHealthPardeeLogo from '../assets/sponsors/unc_health.png';
 import pisgahHealthFoundationLogo from '../assets/sponsors/phf.png';
 import transylvaniaRegionalHospitalLogo from '../assets/sponsors/trh.webp';
 import transylvaniaTdaLogo from '../assets/sponsors/brevard_tda.webp';
+import dogwoodHealthTrustLogo from '../assets/sponsors/dogwood.png';
 import './ruralHealthConvening.css';
 
 const PAGE_PATH = '/rural-health-convening';
@@ -67,6 +68,17 @@ const highlandsSponsors = [
     stageClassName: 'rh-logo-stage-tda',
     width: 422,
     height: 107,
+  },
+];
+
+const foothillsSponsors = [
+  {
+    name: 'Dogwood Health Trust',
+    href: 'https://dogwoodhealthtrust.org',
+    src: dogwoodHealthTrustLogo,
+    stageClassName: 'rh-logo-stage-dogwood',
+    width: 454,
+    height: 119,
   },
 ];
 
@@ -190,6 +202,10 @@ const eventJsonLd = {
     {
       '@type': 'Organization',
       name: 'Transylvania County Tourism Development Authority',
+    },
+    {
+      '@type': 'Organization',
+      name: 'Dogwood Health Trust',
     },
   ],
 };
@@ -373,6 +389,21 @@ export function RuralHealthConveningPage() {
                           aria-label={`Visit ${sponsor.name}`}
                         >
                           <img src={sponsor.src} alt={sponsor.creditName} width={sponsor.width} height={sponsor.height} />
+                        </a>
+                      ))}
+                    </div>
+                    <span className="rh-hero-logo-divider" aria-hidden="true" />
+                    <div className="rh-hero-logo-tier">
+                      {foothillsSponsors.map((sponsor) => (
+                        <a
+                          key={sponsor.name}
+                          className="rh-hero-logo-link tier-foothills"
+                          href={sponsor.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Visit ${sponsor.name}`}
+                        >
+                          <img src={sponsor.src} alt={sponsor.name} width={sponsor.width} height={sponsor.height} />
                         </a>
                       ))}
                     </div>
@@ -779,6 +810,31 @@ export function RuralHealthConveningPage() {
                       <ArrowRight aria-hidden="true" size={16} />
                     </a>
                   </p>
+                </div>
+
+                <div className="rh-foothills-field">
+                  <p className="rh-logo-label rh-logo-label-tertiary">
+                    With Foothills support from
+                  </p>
+                  <div className="rh-foothills-logos">
+                    {foothillsSponsors.map((sponsor) => (
+                      <a
+                        key={sponsor.name}
+                        className={`rh-logo-stage rh-logo-stage-foothills ${sponsor.stageClassName}`}
+                        href={sponsor.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Visit ${sponsor.name}`}
+                      >
+                        <img
+                          src={sponsor.src}
+                          alt={sponsor.name}
+                          width={sponsor.width}
+                          height={sponsor.height}
+                        />
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
 
