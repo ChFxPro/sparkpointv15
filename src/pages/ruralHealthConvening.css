@@ -824,6 +824,7 @@
   font-family: var(--rh-display);
   font-size: clamp(4.5rem, 8vw, 7rem);
   line-height: 0.82;
+  margin-top: 20px;
 }
 
 .rh-priority-note span {

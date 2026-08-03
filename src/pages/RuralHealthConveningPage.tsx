@@ -19,8 +19,8 @@ import transylvaniaTdaLogo from '../assets/sponsors/brevard_tda.webp';
 import './ruralHealthConvening.css';
 
 const PAGE_PATH = '/rural-health-convening';
-const PRIORITY_REGISTRATION_URL =
-  'https://forms.monday.com/forms/a206690ce2304f99b5130fbdd2e0825b?r=use1';
+const REGISTRATION_URL =
+  'https://secure.yoursparkpoint.org/store/p/2026-rural-health-convening';
 const BASE = import.meta.env.BASE_URL;
 const SPARKPOINT_LOGO = `${BASE}logo-wordmark.webp`;
 
@@ -90,8 +90,8 @@ const eventDetails = [
   {
     icon: Ticket,
     label: 'Registration',
-    primary: 'Priority list receives the first invitation',
-    secondary: 'Only 200 seats will be available',
+    primary: 'Register now to reserve your seat',
+    secondary: 'Only 200 seats available',
   },
   {
     icon: Utensils,
@@ -295,11 +295,11 @@ export function RuralHealthConveningPage() {
               <div className="rh-actions">
                 <a
                   className="rh-button rh-button-primary"
-                  href={PRIORITY_REGISTRATION_URL}
+                  href={REGISTRATION_URL}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Join the priority registration list
+                  Register now
                   <ArrowRight aria-hidden="true" size={19} />
                 </a>
                 <a className="rh-button rh-button-secondary" href="#simulator">
@@ -528,7 +528,7 @@ export function RuralHealthConveningPage() {
               </dl>
             </div>
 
-            <aside className="rh-ticket-panel" aria-label="Priority registration">
+            <aside className="rh-ticket-panel" aria-label="Registration">
               <img
                 className="rh-ticket-event-mark"
                 src={ruralHealthAsset('NC Rural Health Convening copy.webp')}
@@ -539,15 +539,14 @@ export function RuralHealthConveningPage() {
               <div className="rh-ticket-row">
                 <a
                   className="rh-ticket-stub"
-                  href={PRIORITY_REGISTRATION_URL}
+                  href={REGISTRATION_URL}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <span>Priority registration</span>
-                  <strong>Join the list</strong>
+                  <span>Registration</span>
+                  <strong>Register now</strong>
                   <small>
-                    Be among the first invited to register when the 200 available seats
-                    open.
+                    Reserve your seat—200 total seats available.
                   </small>
                   <ArrowRight aria-hidden="true" size={30} />
                 </a>
@@ -556,8 +555,7 @@ export function RuralHealthConveningPage() {
                   <strong>200</strong>
                   <span>total seats</span>
                   <p>
-                    The priority list will receive the first invitation before
-                    registration opens more broadly.
+                    Register now to save your seat at the 2026 Rural Health Convening.
                   </p>
                 </div>
               </div>
@@ -848,11 +846,11 @@ export function RuralHealthConveningPage() {
             <div className="rh-actions rh-actions-centered">
               <a
                 className="rh-button rh-button-primary"
-                href={PRIORITY_REGISTRATION_URL}
+                href={REGISTRATION_URL}
                 target="_blank"
                 rel="noreferrer"
               >
-                Join the priority registration list
+                Register now
                 <ArrowRight aria-hidden="true" size={19} />
               </a>
               <a className="rh-final-email" href="mailto:info@yoursparkpoint.org">
