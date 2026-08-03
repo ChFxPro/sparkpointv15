@@ -1,5 +1,6 @@
 import '@fontsource-variable/fraunces';
 
+import { useEffect, useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -12,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
+import { projectId, publicAnonKey } from '../utils/supabase/info';
 import uncHealthPardeeLogo from '../assets/sponsors/unc_health.png';
 import pisgahHealthFoundationLogo from '../assets/sponsors/phf.png';
 import transylvaniaRegionalHospitalLogo from '../assets/sponsors/trh.webp';
@@ -22,11 +24,40 @@ import './ruralHealthConvening.css';
 const PAGE_PATH = '/rural-health-convening';
 const REGISTRATION_URL =
   'https://secure.yoursparkpoint.org/store/p/2026-rural-health-convening';
+const TICKET_STOCK_ENDPOINT = `https://${projectId}.supabase.co/functions/v1/rh-ticket-stock`;
+const GENERAL_REGISTRATION_TOTAL = 150;
 const BASE = import.meta.env.BASE_URL;
 const SPARKPOINT_LOGO = `${BASE}logo-wordmark.webp`;
 
 function ruralHealthAsset(filename: string) {
   return `${BASE}assets/Rural%20Health/${encodeURIComponent(filename)}`;
+}
+
+function useRemainingSeats() {
+  const [remaining, setRemaining] = useState<number | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    fetch(TICKET_STOCK_ENDPOINT, {
+      headers: { apikey: publicAnonKey, Authorization: `Bearer ${publicAnonKey}` },
+    })
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
+      .then((data: { remaining?: unknown }) => {
+        if (!cancelled && typeof data.remaining === 'number') {
+          setRemaining(data.remaining);
+        }
+      })
+      .catch(() => {
+        // Live count unavailable — callers fall back to the static total.
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return remaining;
 }
 
 const summitSponsors = [
@@ -103,7 +134,6 @@ const eventDetails = [
     icon: Ticket,
     label: 'Registration',
     primary: 'Register now to reserve your seat',
-    secondary: 'Only 200 seats available',
   },
   {
     icon: Utensils,
@@ -211,6 +241,18 @@ const eventJsonLd = {
 };
 
 export function RuralHealthConveningPage() {
+  const remainingSeats = useRemainingSeats();
+  const seatsAvailableLabel =
+    remainingSeats === null
+      ? `Only ${GENERAL_REGISTRATION_TOTAL} seats available`
+      : remainingSeats > 0
+        ? `Only ${remainingSeats} seat${remainingSeats === 1 ? '' : 's'} left`
+        : 'Registration full — email us about the waitlist';
+  const seatsShortLabel =
+    remainingSeats === null
+      ? `${GENERAL_REGISTRATION_TOTAL} seats available`
+      : `${remainingSeats} seat${remainingSeats === 1 ? '' : 's'} left`;
+
   return (
     <div className="rh-page">
       <SEOHead
@@ -552,7 +594,11 @@ export function RuralHealthConveningPage() {
                     </dt>
                     <dd>
                       <strong>{primary}</strong>
-                      {secondary ? <span>{secondary}</span> : null}
+                      {label === 'Registration' ? (
+                        <span>{seatsAvailableLabel}</span>
+                      ) : secondary ? (
+                        <span>{secondary}</span>
+                      ) : null}
                     </dd>
                   </div>
                 ))}
@@ -576,15 +622,15 @@ export function RuralHealthConveningPage() {
                 >
                   <span>Registration</span>
                   <strong>Register now</strong>
-                  <small>
-                    Reserve your seat—200 total seats available.
-                  </small>
+                  <small>Reserve your seat—{seatsShortLabel}.</small>
                   <ArrowRight aria-hidden="true" size={30} />
                 </a>
 
                 <div className="rh-priority-note">
-                  <strong>200</strong>
-                  <span>total seats</span>
+                  <strong>
+                    {remainingSeats === null ? GENERAL_REGISTRATION_TOTAL : remainingSeats}
+                  </strong>
+                  <span>{remainingSeats === null ? 'seats available' : 'seats left'}</span>
                   <p>
                     Register now to save your seat at the 2026 Rural Health Convening.
                   </p>
