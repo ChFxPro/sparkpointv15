@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    ignore:
+      # react-router 8.x requires React >=19.2.7; this project is on React 18.3.1
+      # and ~30 other dependencies (Radix UI, framer-motion, etc.) are pinned to
+      # React 18 peers. A major-version bump here breaks `npm install` outright
+      # (see PR #82, closed 2026-08-03). Patch/minor updates still come through.
+      - dependency-name: "react-router"
+        update-types: ["version-update:semver-major"]
