@@ -96,8 +96,8 @@ export const EVENTS: SparkPointEvent[] = [
       'A day for rural health leaders across Western North Carolina to connect, collaborate, and experience the Rural Health Field Simulator together.',
     detailPath: '/rural-health-convening',
     registrationPath:
-      'https://forms.monday.com/forms/a206690ce2304f99b5130fbdd2e0825b?r=use1',
-    registrationLabel: 'Join the priority list',
+      'https://secure.yoursparkpoint.org/store/p/2026-rural-health-convening',
+    registrationLabel: 'Register now',
     imagePath: 'assets/Rural Health/rural sim hero.webp',
     imageAlt:
       'The Rural Health Field Simulator connection map showing the paths between trusted doors, care providers, and community resources.',

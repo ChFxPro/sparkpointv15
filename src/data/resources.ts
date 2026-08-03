@@ -104,6 +104,14 @@ export interface ResourceEntry {
   org: string;
   categories: NeedCategoryId[];
   summary: string;
+  /**
+   * Optional SEO-friendly override for the directory entry page's <title>.
+   * Leads with the actual service/need in plain language plus real location
+   * context, while keeping the org's real name for attribution. Falls back to
+   * the generic `name — org | SparkPoint Resource Directory` template when
+   * absent.
+   */
+  seoTitle?: string;
   serviceArea: {
     county: string;
     towns?: string[];
@@ -260,6 +268,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['navigation'],
     summary:
       "Not sure where to start? SparkPoint's Resilience Hub is an open door — talk with someone who will help you figure out what you need and connect you to the right local resource and a concrete first step. No eligibility screening to talk.",
+    seoTitle: 'Not Sure Where to Start? Talk to a Navigator in Transylvania County | SparkPoint Resilience Hub',
     serviceArea: { county: 'Transylvania', inCounty: true, note: 'Countywide' },
     eligibility: 'Open door. No eligibility screening to talk with a navigator.',
     hours: 'Weekdays 9am–5pm, some evenings',
@@ -290,6 +299,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['navigation', 'benefits'],
     summary:
       'Trained community health workers provide hands-on navigation — help enrolling in benefits, coordinating appointments and transportation, and connecting to the right services across the county.',
+    seoTitle: 'Help Enrolling in Benefits & Coordinating Appointments in Transylvania County | Transylvania County DSS',
     serviceArea: { county: 'Transylvania', inCounty: true },
     eligibility: 'Weekday outreach and by referral. Confirm current program capacity and intake with DSS.',
     contact: {
@@ -318,6 +328,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['food', 'benefits'],
     summary:
       'A community food pantry with a short, household-size-based intake. Dietary needs (low-sodium and similar) can be accommodated. The Sharing House also provides clothing and other basic supplies and financial assistance.',
+    seoTitle: 'Food Pantry, Clothing & Financial Assistance in Transylvania County | The Sharing House',
     serviceArea: { county: 'Transylvania', inCounty: true },
     eligibility: 'Short intake; household-size based. Food help is by monthly appointment — call or visit the "how to get food" page.',
     hours: 'Mon–Fri 9am–12pm & 1–4pm; extended Tuesdays until 6pm',
@@ -349,6 +360,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['food'],
     summary:
       'Hot meals and pantry groceries with no documentation and no questions asked — just a name and household size. Emergency food boxes and delivery are available by phone request, and a food truck reaches remote areas of the county.',
+    seoTitle: 'Hot Meals & Food Pantry, No Documentation Needed, in Transylvania County | The Bread of Life',
     serviceArea: { county: 'Transylvania', inCounty: true },
     eligibility: 'Name and household size only. No documentation required. Walk-in.',
     hours: 'Mon–Fri 9am–2pm; hot meals & groceries served 12pm–2pm',
@@ -379,6 +391,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['food'],
     summary:
       'A rotating pantry and mobile markets at a different location each Thursday, partnering with MANNA FoodBank and the Transylvania Farmers Market to reach neighbors across the county.',
+    seoTitle: 'Weekly Mobile Food Markets & Rotating Pantry Across Transylvania County | The Hunger Coalition',
     serviceArea: { county: 'Transylvania', inCounty: true, note: 'Location rotates weekly' },
     eligibility: 'Open to county residents. Attend a weekly mobile market — check the current schedule.',
     hours: 'First through fourth Thursdays — location rotates',
@@ -408,6 +421,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['food'],
     summary:
       'Weekday home-delivered meals for homebound residents — often older adults or people with disabilities — who cannot easily shop or prepare food. Sliding-scale suggested donation; someone must be home to receive the meal.',
+    seoTitle: 'Home-Delivered Meals for Homebound Older Adults & People With Disabilities in Brevard | Meals on Wheels of Brevard',
     serviceArea: { county: 'Transylvania', inCounty: true, towns: ['Brevard'] },
     eligibility: 'Homebound residents who cannot easily shop or cook. Submit a meal request or call.',
     hours: 'Program office Mon–Fri 9am–1pm; meals delivered weekdays ~11am–12pm',
@@ -440,6 +454,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['housing'],
     summary:
       'An overnight shelter for people experiencing homelessness — single adults, women, and children — with intake interviews by appointment and case management toward stable housing. The Haven works with community agencies for referrals.',
+    seoTitle: 'Emergency Overnight Shelter for People Experiencing Homelessness in Transylvania County | The Haven',
     serviceArea: { county: 'Transylvania', inCounty: true },
     eligibility: 'For those who are literally homeless with no other place to go. Intake interviews by appointment, Mon–Thu.',
     hours: 'Intake interviews Monday–Thursday, by appointment',
@@ -469,6 +484,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['housing', 'disaster-recovery'],
     summary:
       'Critical home repair and storm/flood recovery repairs for homeowners, including Hurricane Helene disaster recovery work. Scheduling depends on volunteer labor and donated materials, so plan ahead.',
+    seoTitle: 'Home Repair & Hurricane Helene Recovery Repairs for Homeowners in Transylvania County | Transylvania Habitat for Humanity',
     serviceArea: { county: 'Transylvania', inCounty: true },
     eligibility: 'Homeowners with repair or storm/flood-damage needs. Start with the Critical Home Repair program.',
     hours: 'ReStore: Tue–Fri 9:30am–5pm, Sat 9:30am–4pm. Program inquiries by phone.',
@@ -500,6 +516,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['health'],
     summary:
       'A community health center (FQHC) offering family medicine on a sliding-scale for uninsured and underinsured patients. The same location also provides nutrition services and medication for opioid use disorder treatment.',
+    seoTitle: 'Sliding-Scale Family Medicine for the Uninsured in Transylvania County | Blue Ridge Health — Transylvania',
     serviceArea: { county: 'Transylvania', inCounty: true },
     eligibility: 'Open to all; sliding-scale fees for uninsured/underinsured patients (FQHC).',
     hours: 'Mon & Wed 8am–8pm; Tue, Thu, Fri 8am–5pm',
@@ -530,6 +547,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['health'],
     summary:
       'Sliding-scale pediatric care through the community health center (FQHC). The same organization runs the county’s school-based health centers.',
+    seoTitle: 'Sliding-Scale Pediatric Care for Kids in Transylvania County | Blue Ridge Health — Transylvania',
     serviceArea: { county: 'Transylvania', inCounty: true },
     eligibility: 'Open to all; sliding-scale fees for uninsured/underinsured families (FQHC).',
     hours: 'Mon & Wed 8am–8pm; Tue, Thu, Fri 8am–5pm',
@@ -560,6 +578,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['health'],
     summary:
       'The county health department: immunizations, WIC, environmental health, and home-visiting programs for county residents.',
+    seoTitle: 'Immunizations, WIC & Environmental Health Services in Transylvania County | Transylvania Public Health',
     serviceArea: { county: 'Transylvania', inCounty: true },
     eligibility: 'Open to county residents.',
     hours: 'Mon–Thu 8:30am–12pm & 1–5pm; Fri 8:30am–5pm',
@@ -590,6 +609,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['mental-health'],
     summary:
       'The public managed-care organization for behavioral health, mental health, substance use, intellectual/developmental disabilities, and TBI across western NC. Runs a 24/7 behavioral-health crisis line and connects people to local services and care management.',
+    seoTitle: '24/7 Behavioral Health Crisis Line Serving Transylvania County & Western NC | Vaya Health',
     serviceArea: { county: 'Transylvania', inCounty: true, note: 'Regional (western NC)' },
     eligibility: 'Open access line for anyone needing behavioral-health help; crisis line is available to all, 24/7.',
     hours: 'Member & Recipient Services Mon–Sat 7am–6pm; crisis line 24/7',
@@ -618,6 +638,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['mental-health'],
     summary:
       'Outpatient counseling — individual, group, and family — and care coordination for adults, including substance-use concerns and medication for opioid use disorder treatment. Operated locally under Blue Ridge Health.',
+    seoTitle: 'Outpatient Counseling & Substance-Use Support for Adults in Transylvania County | Meridian Behavioral Health Services',
     serviceArea: { county: 'Transylvania', inCounty: true },
     eligibility: 'Adults seeking outpatient behavioral-health support. Confirm current intake with the office.',
     hours: 'Mon–Fri 8:30am–5pm',
@@ -647,6 +668,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['mental-health'],
     summary:
       'Counseling and skills groups for enrolled students, delivered at individual schools. Reach the district office to be pointed to your school’s counselor.',
+    seoTitle: 'School Counseling & Skills Groups for Students in Transylvania County | Transylvania County Schools',
     serviceArea: { county: 'Transylvania', inCounty: true },
     eligibility: 'Enrolled students; parent consent required for skills groups.',
     hours: 'School days',
@@ -675,6 +697,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['transportation'],
     summary:
       'The county transportation service (Transylvania in Motion) runs a fixed weekday route through Brevard and Rosman for $1 per boarding. Trips off the route or out of county are demand-response rides that must be booked in advance for a higher fee; dedicated medical transportation prioritizes ages 60+ and those with no other way to travel.',
+    seoTitle: '$1 Bus Rides & Medical Transportation in Brevard and Rosman | Transylvania County Transportation',
     serviceArea: { county: 'Transylvania', inCounty: true, towns: ['Brevard', 'Rosman'] },
     eligibility:
       'Fixed route weekdays ~6:30am–4:30pm, $1 exact cash per boarding. Off-route, medical, and out-of-county trips are demand-response and must be reserved ~24–48 hours ahead.',
@@ -705,6 +728,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['benefits'],
     summary:
       'The county Department of Social Services administers Medicaid, SNAP (Food and Nutrition Services), WorkFirst, Child Care Subsidy, and Energy Assistance for residents. Apply online statewide through NC ePASS or in person.',
+    seoTitle: 'Apply for Medicaid, SNAP & Energy Assistance in Transylvania County | Transylvania County DSS',
     serviceArea: { county: 'Transylvania', inCounty: true },
     eligibility: 'County residents. Program eligibility varies — DSS staff can screen and help you apply.',
     contact: {
@@ -735,6 +759,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['legal', 'benefits'],
     summary:
       'Free civil legal assistance for low-income western NC residents — benefits denials and appeals (Medicaid, disability, SNAP), housing and eviction, domestic-violence protection, and more. Serves Transylvania County from a Brevard office and regional clinics.',
+    seoTitle: 'Free Legal Help With Benefits Appeals & Evictions in Transylvania County | Pisgah Legal Services',
     serviceArea: { county: 'Transylvania', inCounty: true, note: 'Regional (western NC)' },
     eligibility: 'Low-income western NC residents. Apply online, by phone, or through the "Apply for Help" page.',
     hours: 'Intake Mon–Fri 8:30am–5pm; Brevard office by appointment',
@@ -766,6 +791,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['disaster-recovery', 'navigation'],
     summary:
       'The county’s long-term recovery group for Hurricane Helene: disaster case management, unmet-needs identification, and cross-agency support across housing, construction, legal advocacy, economic recovery, and emotional support.',
+    seoTitle: 'Hurricane Helene Disaster Case Management & Recovery Help in Transylvania County | FWRD Transylvania',
     serviceArea: { county: 'Transylvania', inCounty: true },
     eligibility: 'Households affected by Hurricane Helene. Request help via the "Get Help" form or by phone.',
     contact: {
@@ -796,6 +822,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['employment'],
     summary:
       'Workforce development connecting job seekers to training and employers, delivered with Blue Ridge Community College — including youth-focused and customized training pathways.',
+    seoTitle: 'Job Training & Workforce Development in Transylvania County | Brevard/Transylvania Chamber of Commerce',
     serviceArea: { county: 'Transylvania', inCounty: true },
     eligibility: 'Contact the Chamber to learn about current workforce programs and eligibility.',
     contact: {
@@ -825,6 +852,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['digital-access'],
     summary:
       'Refurbished device matching (laptops, phones, tablets), digital-literacy training, and help enrolling in internet-cost assistance programs — from a storefront on Main Street in Brevard.',
+    seoTitle: 'Free Device Requests & Digital Skills Help in Brevard | Through the Trees',
     serviceArea: { county: 'Transylvania', inCounty: true, towns: ['Brevard'] },
     eligibility: 'Open door; free device requests and affordable sales. Check the qualifications page.',
     hours: 'Wed–Fri 10am–5pm; Sat 12pm–5pm',
@@ -855,6 +883,7 @@ export const RESOURCES: ResourceEntry[] = [
     categories: ['language-access', 'navigation'],
     summary:
       'An open-door resource center serving the Hispanic community — connecting families to broader county resources and running programs like a Homework Club. Spanish-language help.',
+    seoTitle: 'Spanish-Language Help & Resources for Hispanic Families in Brevard | El Centro Comunitario Hispano-Americano',
     serviceArea: { county: 'Transylvania', inCounty: true, towns: ['Brevard'] },
     eligibility: 'Open door; serves the Hispanic/Latino community and connects families to county resources.',
     hours: 'Mon–Thu 10am–5pm',
@@ -883,3 +912,23 @@ export const RESOURCES: ResourceEntry[] = [
 export const ACTIVE_NEED_CATEGORIES: NeedCategory[] = NEED_CATEGORIES.filter((c) =>
   RESOURCES.some((r) => r.categories.includes(c.id)),
 );
+
+/**
+ * Other directory entries that share at least one need category with `entry`,
+ * ranked by how many categories they share. Used to power the "Related help"
+ * links on a directory entry page — every match is grounded in real shared
+ * category data, so an entry whose category has no other members (e.g. the
+ * sole transportation or employment listing) legitimately returns none.
+ */
+export function getRelatedResources(entry: ResourceEntry, limit = 4): ResourceEntry[] {
+  const scored = RESOURCES.filter((r) => r.id !== entry.id)
+    .map((r) => ({
+      resource: r,
+      sharedCount: r.categories.filter((c) => entry.categories.includes(c)).length,
+    }))
+    .filter((r) => r.sharedCount > 0);
+
+  scored.sort((a, b) => b.sharedCount - a.sharedCount || a.resource.name.localeCompare(b.resource.name));
+
+  return scored.slice(0, limit).map((r) => r.resource);
+}

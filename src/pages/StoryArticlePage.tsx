@@ -13,6 +13,185 @@ import { BrainHealthResources } from '../components/BrainHealthResources';
 import { DrOraEventGallery } from '../components/DrOraEventGallery';
 import { DrOraUpcomingTalk } from '../components/DrOraUpcomingTalk';
 
+interface RelatedLink {
+  to: string;
+  kind: 'Story' | 'Program' | 'Resource';
+  title: string;
+  blurb: string;
+}
+
+// Every entry here traces to a real connection in the site's own data: the
+// same recurring column/category, an explicit reference inside the article
+// text (e.g. Community Connectors naming FWRD, or the Echoes column
+// discussing Hurricane Helene the same weeks the Helene film covers), or a
+// program page that documents the same initiative the story is about. Keyed
+// by `${categoryId}/${slug}` — articles with no genuine match (e.g.
+// "Community Champions") are simply omitted rather than forced.
+const RELATED_LINKS: Record<string, RelatedLink[]> = {
+  'programs/when-neighbors-become-leaders': [
+    {
+      to: '/programs/community-connectors',
+      kind: 'Program',
+      title: 'Community Connectors',
+      blurb: 'The ongoing initiative this story documents — trusted local people helping neighbors find resources and stay prepared.',
+    },
+    {
+      to: '/stories/disaster-recovery/helene-one-year',
+      kind: 'Story',
+      title: 'Helene: One Year of Healing',
+      blurb: 'The listening tour that surfaced the trusted connectors this story is about.',
+    },
+    {
+      to: '/directory/fwrd-long-term-recovery',
+      kind: 'Resource',
+      title: 'FWRD Transylvania — Long-Term Recovery Group',
+      blurb: 'The Community Connectors launch partner named in this story.',
+    },
+  ],
+  'talks-lectures/dr-ora-brain-health': [
+    {
+      to: '/programs/brain-stress-resilience',
+      kind: 'Program',
+      title: 'Brain, Stress & Resilience',
+      blurb: 'A SparkPoint workshop on what stress does in the brain — and how connection helps protect it.',
+    },
+  ],
+  'disaster-recovery/helene-one-year': [
+    {
+      to: '/stories/programs/when-neighbors-become-leaders',
+      kind: 'Story',
+      title: 'When neighbors become leaders',
+      blurb: 'How this listening tour grew into the Community Connectors initiative.',
+    },
+    {
+      to: '/programs/community-connectors',
+      kind: 'Program',
+      title: 'Community Connectors',
+      blurb: 'The ongoing initiative this listening tour helped launch.',
+    },
+    {
+      to: '/directory/fwrd-long-term-recovery',
+      kind: 'Resource',
+      title: 'FWRD Transylvania — Long-Term Recovery Group',
+      blurb: "Transylvania County's long-term Hurricane Helene recovery group.",
+    },
+  ],
+  'community-voice/week-5': [
+    {
+      to: '/stories/community-voice/week-4',
+      kind: 'Story',
+      title: 'Echoes from the Community — Week 4',
+      blurb: 'Another entry from the same weekly column.',
+    },
+    {
+      to: '/stories/community-voice/week-3',
+      kind: 'Story',
+      title: 'Echoes from the Community — Week 3',
+      blurb: 'Another entry from the same weekly column.',
+    },
+  ],
+  'community-voice/week-4': [
+    {
+      to: '/stories/community-voice/week-5',
+      kind: 'Story',
+      title: 'Echoes from the Community — Week 5',
+      blurb: 'The latest entry in the same weekly column.',
+    },
+    {
+      to: '/stories/community-voice/week-3',
+      kind: 'Story',
+      title: 'Echoes from the Community — Week 3',
+      blurb: 'Another entry from the same weekly column.',
+    },
+    {
+      to: '/stories/disaster-recovery/helene-one-year',
+      kind: 'Story',
+      title: 'Helene: One Year of Healing',
+      blurb: 'The tribute film built from the same community listening.',
+    },
+  ],
+  'community-voice/week-3': [
+    {
+      to: '/stories/community-voice/week-4',
+      kind: 'Story',
+      title: 'Echoes from the Community — Week 4',
+      blurb: 'Another entry from the same weekly column.',
+    },
+    {
+      to: '/stories/community-voice/week-2',
+      kind: 'Story',
+      title: 'Echoes from the Community — Week 2',
+      blurb: 'Another entry from the same weekly column.',
+    },
+    {
+      to: '/stories/disaster-recovery/helene-one-year',
+      kind: 'Story',
+      title: 'Helene: One Year of Healing',
+      blurb: 'The tribute film built from the same community listening.',
+    },
+  ],
+  'community-voice/week-2': [
+    {
+      to: '/stories/community-voice/week-3',
+      kind: 'Story',
+      title: 'Echoes from the Community — Week 3',
+      blurb: 'Another entry from the same weekly column.',
+    },
+    {
+      to: '/stories/community-voice/week-1',
+      kind: 'Story',
+      title: 'Echoes from the Community — Week 1',
+      blurb: 'Another entry from the same weekly column.',
+    },
+    {
+      to: '/stories/disaster-recovery/helene-one-year',
+      kind: 'Story',
+      title: 'Helene: One Year of Healing',
+      blurb: 'The tribute film built from the same community listening.',
+    },
+  ],
+  'community-voice/week-1': [
+    {
+      to: '/stories/community-voice/week-2',
+      kind: 'Story',
+      title: 'Echoes from the Community — Week 2',
+      blurb: 'Another entry from the same weekly column.',
+    },
+    {
+      to: '/stories/disaster-recovery/helene-one-year',
+      kind: 'Story',
+      title: 'Helene: One Year of Healing',
+      blurb: 'The tribute film built from the same community listening.',
+    },
+  ],
+};
+
+function RelatedSection({ items }: { items: RelatedLink[] }) {
+  if (items.length === 0) return null;
+  return (
+    <div className="mt-16 pt-10 border-t border-gray-100">
+      <h3 className="text-2xl font-bold text-gray-900 mb-6">Keep exploring</h3>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            className="group block rounded-2xl border border-gray-100 bg-white p-5 transition-colors hover:border-[#E03694]/30 hover:bg-gray-50"
+          >
+            <span className="mb-2 inline-block text-[11px] font-bold uppercase tracking-wide text-[#E03694]">
+              {item.kind}
+            </span>
+            <span className="block font-semibold text-gray-900 transition-colors group-hover:text-[#E03694]">
+              {item.title}
+            </span>
+            <span className="mt-1 block text-sm text-gray-500 leading-relaxed">{item.blurb}</span>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function StoryArticlePage() {
   const { categoryId, slug } = useParams();
   const navigate = useNavigate();
@@ -36,6 +215,7 @@ export function StoryArticlePage() {
   // Use article image or fallback to category image
   const displayImage = article.image || category.image;
   const isVideoArticle = !!article.videoUrl;
+  const relatedLinks = RELATED_LINKS[`${category.id}/${article.slug}`] ?? [];
 
   const metaDescription = article.seoDescription || article.excerpt || article.subhead || `Read the full story of ${article.title} at SparkPoint.`;
   const articlePath = `/stories/${category.id}/${article.slug}`;
@@ -178,6 +358,8 @@ export function StoryArticlePage() {
               <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
             </Link>
           </motion.div>
+
+          <RelatedSection items={relatedLinks} />
         </article>
       </div>
     );
@@ -284,6 +466,8 @@ export function StoryArticlePage() {
              </div>
            </div>
         </div>
+
+        <RelatedSection items={relatedLinks} />
       </article>
     </div>
   );
