@@ -5,3 +5,4 @@ export { ProgramExperience } from "./ProgramExperience";
 export { ProgramAudience } from "./ProgramAudience";
 export { ProgramOutcomes } from "./ProgramOutcomes";
 export { ProgramCTA } from "./ProgramCTA";
+export { RelatedPrograms, type RelatedProgramItem } from "./RelatedPrograms";

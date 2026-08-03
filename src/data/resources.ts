@@ -883,3 +883,23 @@ export const RESOURCES: ResourceEntry[] = [
 export const ACTIVE_NEED_CATEGORIES: NeedCategory[] = NEED_CATEGORIES.filter((c) =>
   RESOURCES.some((r) => r.categories.includes(c.id)),
 );
+
+/**
+ * Other directory entries that share at least one need category with `entry`,
+ * ranked by how many categories they share. Used to power the "Related help"
+ * links on a directory entry page — every match is grounded in real shared
+ * category data, so an entry whose category has no other members (e.g. the
+ * sole transportation or employment listing) legitimately returns none.
+ */
+export function getRelatedResources(entry: ResourceEntry, limit = 4): ResourceEntry[] {
+  const scored = RESOURCES.filter((r) => r.id !== entry.id)
+    .map((r) => ({
+      resource: r,
+      sharedCount: r.categories.filter((c) => entry.categories.includes(c)).length,
+    }))
+    .filter((r) => r.sharedCount > 0);
+
+  scored.sort((a, b) => b.sharedCount - a.sharedCount || a.resource.name.localeCompare(b.resource.name));
+
+  return scored.slice(0, limit).map((r) => r.resource);
+}

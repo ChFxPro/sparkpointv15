@@ -23,9 +23,60 @@ import { SEOHead } from '../components/SEOHead';
 import {
   RESOURCES,
   NEED_CATEGORY_BY_ID,
+  getRelatedResources,
   type ResourceEntry,
 } from '../data/resources';
 import { canonicalUrl } from '../lib/siteOrigin';
+
+interface RelatedItem {
+  to: string;
+  kind: string;
+  title: string;
+  blurb: string;
+  tint?: string;
+  ink?: string;
+}
+
+// FWRD is named explicitly, in this site's own story content, as the
+// Community Connectors launch partner — an unambiguous cross-type link that
+// a shared-category match alone wouldn't surface. Every other entry relies
+// purely on getRelatedResources()'s shared-category matching below.
+const EXPLICIT_RELATED: Record<string, RelatedItem[]> = {
+  'fwrd-long-term-recovery': [
+    {
+      to: '/programs/community-connectors',
+      kind: 'Program',
+      title: 'Community Connectors',
+      blurb: 'The SparkPoint initiative FWRD helped launch after Hurricane Helene.',
+    },
+    {
+      to: '/stories/disaster-recovery/helene-one-year',
+      kind: 'Story',
+      title: 'Helene: One Year of Healing',
+      blurb: 'The community listening project that named FWRD as a recovery partner.',
+    },
+  ],
+};
+
+function buildRelatedItems(entry: ResourceEntry): RelatedItem[] {
+  const explicit = EXPLICIT_RELATED[entry.id] ?? [];
+  const auto: RelatedItem[] = getRelatedResources(entry, 4).map((r) => {
+    const cat = NEED_CATEGORY_BY_ID[r.categories[0]];
+    return {
+      to: `/directory/${r.id}`,
+      kind: cat?.label ?? 'Resource',
+      title: r.name,
+      blurb: r.summary,
+      tint: cat?.tint,
+      ink: cat?.ink,
+    };
+  });
+
+  const seen = new Set<string>();
+  return [...explicit, ...auto]
+    .filter((item) => (seen.has(item.to) ? false : (seen.add(item.to), true)))
+    .slice(0, 4);
+}
 
 function formatAddress(entry: ResourceEntry): string | null {
   const a = entry.contact.address;
@@ -184,6 +235,7 @@ export function DirectoryEntryPage() {
   const accent = primary.ink;
   const NextStepIcon = nextStepIcon(entry.nextStep.url);
   const address = formatAddress(entry);
+  const related = buildRelatedItems(entry);
   const categoryLabels = entry.categories
     .map((cid) => NEED_CATEGORY_BY_ID[cid]?.label)
     .filter(Boolean)
@@ -395,6 +447,37 @@ export function DirectoryEntryPage() {
                 ))}
               </ul>
             ) : null}
+          </div>
+        ) : null}
+
+        {/* Related help — cross-links to other directory entries, programs, and stories */}
+        {related.length > 0 ? (
+          <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6">
+            <h2 className="text-sm font-bold uppercase tracking-wide text-gray-400">
+              Related help
+            </h2>
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {related.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className="group block rounded-xl border border-gray-100 p-4 transition-colors hover:border-gray-200 hover:bg-gray-50"
+                >
+                  <span
+                    className="inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide"
+                    style={{ background: item.tint ?? primary.tint, color: item.ink ?? primary.ink }}
+                  >
+                    {item.kind}
+                  </span>
+                  <span className="mt-2 block text-sm font-bold text-gray-900 group-hover:underline">
+                    {item.title}
+                  </span>
+                  <span className="mt-1 block text-xs text-gray-500 leading-relaxed line-clamp-2">
+                    {item.blurb}
+                  </span>
+                </Link>
+              ))}
+            </div>
           </div>
         ) : null}
 

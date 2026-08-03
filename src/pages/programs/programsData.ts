@@ -898,3 +898,28 @@ export function getProgramAccentSoft(program: Program): string {
   const pathway = pathways.find((p) => p.id === program.pathway);
   return pathway?.colorLight ?? 'rgba(0,0,0,0.06)';
 }
+
+/**
+ * Other programs that share at least one audience tag with `program`, ranked
+ * by number of shared tags (ties broken by same pathway, then title). Powers
+ * the "Related" links on a program detail page — every match is grounded in
+ * the program's own `tags` data.
+ */
+export function getRelatedPrograms(program: Program, limit = 4): Program[] {
+  const scored = allPrograms
+    .filter((p) => p.id !== program.id)
+    .map((p) => ({
+      program: p,
+      sharedCount: p.tags.filter((t) => program.tags.includes(t)).length,
+      samePathway: p.pathway === program.pathway,
+    }))
+    .filter((p) => p.sharedCount > 0);
+
+  scored.sort((a, b) => {
+    if (b.sharedCount !== a.sharedCount) return b.sharedCount - a.sharedCount;
+    if (a.samePathway !== b.samePathway) return a.samePathway ? -1 : 1;
+    return a.program.title.localeCompare(b.program.title);
+  });
+
+  return scored.slice(0, limit).map((p) => p.program);
+}
