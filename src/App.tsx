@@ -58,6 +58,12 @@ const PressPortalPage = lazy(() =>
 const PressReleasePage = lazy(() =>
   import('./pages/press/PressReleasePage').then((module) => ({ default: module.PressReleasePage }))
 );
+const BrandKitPage = lazy(() =>
+  import('./pages/press/BrandKitPage').then((module) => ({ default: module.BrandKitPage }))
+);
+const OrganizationBackgroundPage = lazy(() =>
+  import('./pages/press/OrganizationBackgroundPage').then((module) => ({ default: module.OrganizationBackgroundPage }))
+);
 const AboutPage = lazy(() =>
   import('./pages/AboutPage').then((module) => ({ default: module.AboutPage }))
 );
@@ -177,6 +183,8 @@ function AppContent() {
         <Route path="/newsroom" element={<Navigate to="/press" replace />} />
         <Route path="/media" element={<Navigate to="/press" replace />} />
         <Route path="/press" element={<PressPortalPage />} />
+        <Route path="/brand-kit" element={<BrandKitPage />} />
+        <Route path="/organization-background" element={<OrganizationBackgroundPage />} />
         <Route path="/press/:slug" element={<PressReleasePage />} />
         <Route path="/get-involved" element={<GetInvolvedPage />} />
         <Route path="/volunteer" element={<Navigate to="/intake?intent=volunteer" replace />} />
