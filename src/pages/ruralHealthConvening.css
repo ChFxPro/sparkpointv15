@@ -344,7 +344,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: 20px;
 }
 
 .rh-hero-logo-link {
@@ -386,6 +386,10 @@
 
 .rh-hero-logo-link.tier-foothills img {
   height: 18px;
+}
+
+.rh-hero-logo-link.tier-foothills.rh-logo-stage-vaya img {
+  height: 25px;
 }
 
 .rh-hero-logo-divider {
@@ -1283,6 +1287,8 @@ a.rh-logo-stage:focus-visible {
 .rh-foothills-logos {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 28px;
   margin: 12px 0 0;
 }
 
@@ -1294,6 +1300,10 @@ a.rh-logo-stage:focus-visible {
   width: auto;
   height: 40px;
   max-width: 170px;
+}
+
+.rh-logo-stage-foothills.rh-logo-stage-vaya img {
+  height: 54px;
 }
 
 .rh-final-cta {
@@ -1836,6 +1846,10 @@ a.rh-logo-stage:focus-visible {
     width: auto;
     height: 36px;
     max-width: 150px;
+  }
+
+  .rh-logo-stage-foothills.rh-logo-stage-vaya img {
+    height: 48px;
   }
 
   .rh-sparkpoint-logo {
