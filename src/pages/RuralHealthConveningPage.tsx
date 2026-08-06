@@ -19,6 +19,7 @@ import pisgahHealthFoundationLogo from '../assets/sponsors/phf.png';
 import transylvaniaRegionalHospitalLogo from '../assets/sponsors/trh.webp';
 import transylvaniaTdaLogo from '../assets/sponsors/brevard_tda.webp';
 import dogwoodHealthTrustLogo from '../assets/sponsors/dogwood.png';
+import vayaHealthLogo from '../assets/sponsors/vaya_health.webp';
 import './ruralHealthConvening.css';
 
 const PAGE_PATH = '/rural-health-convening';
@@ -110,6 +111,14 @@ const foothillsSponsors = [
     stageClassName: 'rh-logo-stage-dogwood',
     width: 454,
     height: 119,
+  },
+  {
+    name: 'Vaya Health',
+    href: 'https://www.vayahealth.com',
+    src: vayaHealthLogo,
+    stageClassName: 'rh-logo-stage-vaya',
+    width: 576,
+    height: 346,
   },
 ];
 
@@ -439,7 +448,7 @@ export function RuralHealthConveningPage() {
                       {foothillsSponsors.map((sponsor) => (
                         <a
                           key={sponsor.name}
-                          className="rh-hero-logo-link tier-foothills"
+                          className={`rh-hero-logo-link tier-foothills ${sponsor.stageClassName}`}
                           href={sponsor.href}
                           target="_blank"
                           rel="noopener noreferrer"
