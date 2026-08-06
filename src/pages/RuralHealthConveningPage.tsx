@@ -261,15 +261,29 @@ export function RuralHealthConveningPage() {
   const remainingSeats = useRemainingSeats();
   const [impactCodeStatus, setImpactCodeStatus] = useState<'idle' | 'copied' | 'manual'>('idle');
 
-  function handleCopyImpactCode() {
+  function handleCopyImpactCode(event: React.MouseEvent<HTMLAnchorElement>) {
+    // Once the manual-copy fallback has been shown, let the link navigate normally—
+    // the user has already seen the code and doesn't need another intercepted click.
+    if (impactCodeStatus === 'manual') {
+      return;
+    }
+
+    event.preventDefault();
+
     if (typeof navigator === 'undefined' || !navigator.clipboard) {
       setImpactCodeStatus('manual');
       return;
     }
+
     navigator.clipboard
       .writeText(IMPACT_DISCOUNT_CODE)
-      .then(() => setImpactCodeStatus('copied'))
-      .catch(() => setImpactCodeStatus('manual'));
+      .then(() => {
+        setImpactCodeStatus('copied');
+        window.open(REGISTRATION_URL, '_blank', 'noopener');
+      })
+      .catch(() => {
+        setImpactCodeStatus('manual');
+      });
   }
 
   const impactCodeStatusMessage =
