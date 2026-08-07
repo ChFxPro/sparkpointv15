@@ -1,15 +1,23 @@
+import '@fontsource-variable/fraunces';
+
+import { ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { useRemainingSeats } from '../hooks/useRemainingSeats';
 import {
-  HIGH_PRIORITY,
-  ONGOING_PROJECTS,
+  EVENT_PLANNING_BOARD,
+  EVENT_PLANNING_SYNCED_AT,
   RURAL_HEALTH_EVENT_DATE,
-  SHOW_RURAL_HEALTH_SEATS_TICKER,
-  type OpsItem,
+  type MondayStatus,
 } from '../data/opsStatus';
 import './internalStatus.css';
 
 const PAGE_PATH = '/internal/status';
+const BASE = import.meta.env.BASE_URL;
+const SPARKPOINT_LOGO = `${BASE}logo-wordmark.webp`;
+const NCRHA_LOGO = `${BASE}assets/Rural%20Health/${encodeURIComponent('NCRHA-Logo.webp')}`;
+const FHLI_LOGO = `${BASE}assets/Rural%20Health/${encodeURIComponent('FHLI Logo.webp')}`;
+const WNC_EVENT_MARK = `${BASE}assets/Rural%20Health/${encodeURIComponent('NC Rural Health Convening trimmed.webp')}`;
 
 function daysUntil(isoDate: string) {
   const target = new Date(isoDate).getTime();
@@ -17,25 +25,28 @@ function daysUntil(isoDate: string) {
   return Math.ceil((target - now) / (1000 * 60 * 60 * 24));
 }
 
-function OpsList({ title, items }: { title: string; items: OpsItem[] }) {
-  return (
-    <section className="is-section">
-      <h2>{title}</h2>
-      <ul className="is-list">
-        {items.map((item) => (
-          <li key={item.id}>
-            <span className={`is-status is-status-${item.status.toLowerCase()}`}>{item.status}</span>
-            <span className="is-item-body">
-              <strong>
-                {item.id} — {item.title}
-              </strong>
-              {item.note ? <span className="is-item-note">{item.note}</span> : null}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
+function statusDotClass(status: MondayStatus) {
+  switch (status) {
+    case 'In Progress':
+      return 'is-status-dot is-status-dot-in-progress';
+    case 'Done':
+      return 'is-status-dot is-status-dot-done';
+    case 'Stuck':
+      return 'is-status-dot is-status-dot-stuck';
+    default:
+      return 'is-status-dot is-status-dot-not-started';
+  }
+}
+
+function statusLabel(status: MondayStatus) {
+  return status ?? 'Not started';
+}
+
+function formatDate(iso: string) {
+  return new Date(`${iso}T00:00:00`).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+  });
 }
 
 export function InternalStatusPage() {
@@ -45,33 +56,77 @@ export function InternalStatusPage() {
   return (
     <div className="is-page">
       <SEOHead
-        title="Internal Status"
-        description="Internal SparkPoint status dashboard."
+        title="2026 WNC Regional Rural Health Convening — Planning Status"
+        description="Planning status for the 2026 WNC Regional Rural Health Convening."
         path={PAGE_PATH}
         noindex
       />
 
-      <header className="is-header">
-        <h1>Internal status</h1>
-        <p>Not linked anywhere on the public site. Edit src/data/opsStatus.ts to update.</p>
-      </header>
+      <div className="is-shell">
+        <header className="is-masthead">
+          <Link className="is-back-link" to="/">
+            <ArrowLeft aria-hidden="true" size={16} strokeWidth={1.8} />
+            <span>Back to SparkPoint</span>
+          </Link>
+          <span className="is-masthead-tag">Planning status</span>
+        </header>
 
-      <section className="is-section is-metrics">
-        <div className="is-metric">
-          <strong>{days >= 0 ? days : 0}</strong>
-          <span>days to the Rural Health Convening</span>
-        </div>
-        <div className="is-metric">
-          <strong>{remainingSeats === null ? '—' : remainingSeats}</strong>
-          <span>
-            seats remaining (general pool)
-            {!SHOW_RURAL_HEALTH_SEATS_TICKER && <em> — public ticker is currently OFF</em>}
-          </span>
-        </div>
-      </section>
+        <section className="is-hero">
+          <div className="is-brand-lockup" aria-hidden="true">
+            <div className="is-presenter-logos">
+              <img className="is-presenter-logo" src={SPARKPOINT_LOGO} alt="" width={839} height={290} />
+              <img className="is-presenter-logo" src={NCRHA_LOGO} alt="" width={2064} height={331} />
+              <img className="is-presenter-logo" src={FHLI_LOGO} alt="" width={1600} height={438} />
+            </div>
+            <span>present</span>
+            <img className="is-event-mark" src={WNC_EVENT_MARK} alt="" width={2677} height={1494} />
+          </div>
+          <h1>2026 WNC Regional Rural Health Convening</h1>
+          <p>Where things stand as we build toward October 1.</p>
+        </section>
 
-      <OpsList title="Ongoing projects" items={ONGOING_PROJECTS} />
-      <OpsList title="High priority" items={HIGH_PRIORITY} />
+        <section className="is-metrics">
+          <div className="is-metric">
+            <strong>{days >= 0 ? days : 0}</strong>
+            <span>Days to the convening</span>
+          </div>
+          <div className="is-metric">
+            <strong>{remainingSeats === null ? '—' : remainingSeats}</strong>
+            <span>General registration seats remaining</span>
+          </div>
+        </section>
+
+        <div className="is-section-heading">
+          <h2>Event planning</h2>
+          <span className="is-synced-at">As of {formatDate(EVENT_PLANNING_SYNCED_AT)}</span>
+        </div>
+
+        <div className="is-board">
+          {EVENT_PLANNING_BOARD.map((group) => (
+            <div className="is-board-group" key={group.title}>
+              <h3>{group.title}</h3>
+              <ul className="is-board-list">
+                {group.items.map((item) => (
+                  <li key={item.id}>
+                    <span className={statusDotClass(item.status)} aria-hidden="true" />
+                    <span>
+                      <span className="is-item-name">{item.name}</span>
+                      <small className="is-item-due">
+                        {statusLabel(item.status)}
+                        {item.dueDate ? ` · ${formatDate(item.dueDate)}` : ''}
+                      </small>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <p className="is-footnote">
+          SparkPoint, NCRHA &amp; FHLI · 2026 WNC Regional Rural Health Convening
+        </p>
+      </div>
     </div>
   );
 }
