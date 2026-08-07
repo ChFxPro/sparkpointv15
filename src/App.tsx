@@ -80,6 +80,7 @@ const KnowYourNumbersPage = lazy(() =>
   import('./pages/KnowYourNumbersPage').then((module) => ({ default: module.KnowYourNumbersPage }))
 );
 const RuralHealthConveningPage = lazy(() => import('./pages/RuralHealthConveningPage'));
+const InternalStatusPage = lazy(() => import('./pages/InternalStatusPage'));
 const CommunityChampionsArticle = lazy(() => import('./pages/CommunityChampionsArticle'));
 const HeleneOneYearArticle = lazy(() => import('./pages/HeleneOneYearArticle'));
 const HEALTHCARE_STORY_FORM_URL =
@@ -120,8 +121,8 @@ function RouteLoading() {
 // Flagship program routes that render as immersive, chromeless landing pages.
 // These skip the site-wide <Header /> and wrapping <main> so the program's own
 // hero can occupy the full viewport without colliding with site chrome.
-const CHROMELESS_PATH_PREFIXES = ['/programs/purpose-workshops', '/rural-health-convening'];
-const CUSTOM_FOOTER_PATH_PREFIXES = ['/rural-health-convening'];
+const CHROMELESS_PATH_PREFIXES = ['/programs/purpose-workshops', '/rural-health-convening', '/internal'];
+const CUSTOM_FOOTER_PATH_PREFIXES = ['/rural-health-convening', '/internal'];
 
 function isChromelessPath(pathname: string): boolean {
   return CHROMELESS_PATH_PREFIXES.some(
@@ -203,6 +204,7 @@ function AppContent() {
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/resources/know-your-numbers" element={<KnowYourNumbersPage />} />
         <Route path="/rural-health-convening" element={<RuralHealthConveningPage />} />
+        <Route path="/internal/status" element={<InternalStatusPage />} />
         <Route
           path="/healthcare-story"
           element={
