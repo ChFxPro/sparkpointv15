@@ -15,6 +15,8 @@ import './internalStatus.css';
 const PAGE_PATH = '/internal/status';
 const BASE = import.meta.env.BASE_URL;
 const SPARKPOINT_LOGO = `${BASE}logo-wordmark.webp`;
+const NCRHA_LOGO = `${BASE}assets/Rural%20Health/${encodeURIComponent('NCRHA-Logo.webp')}`;
+const FHLI_LOGO = `${BASE}assets/Rural%20Health/${encodeURIComponent('FHLI Logo.webp')}`;
 const WNC_EVENT_MARK = `${BASE}assets/Rural%20Health/${encodeURIComponent('NC Rural Health Convening trimmed.webp')}`;
 
 function daysUntil(isoDate: string) {
@@ -71,8 +73,12 @@ export function InternalStatusPage() {
 
         <section className="is-hero">
           <div className="is-brand-lockup" aria-hidden="true">
-            <img className="is-sparkpoint-logo" src={SPARKPOINT_LOGO} alt="" width={839} height={290} />
-            <span>presents</span>
+            <div className="is-presenter-logos">
+              <img className="is-presenter-logo" src={SPARKPOINT_LOGO} alt="" width={839} height={290} />
+              <img className="is-presenter-logo" src={NCRHA_LOGO} alt="" width={2064} height={331} />
+              <img className="is-presenter-logo" src={FHLI_LOGO} alt="" width={1600} height={438} />
+            </div>
+            <span>present</span>
             <img className="is-event-mark" src={WNC_EVENT_MARK} alt="" width={2677} height={1494} />
           </div>
           <h1>2026 WNC Regional Rural Health Convening</h1>
@@ -117,7 +123,9 @@ export function InternalStatusPage() {
           ))}
         </div>
 
-        <p className="is-footnote">SparkPoint · 2026 WNC Regional Rural Health Convening</p>
+        <p className="is-footnote">
+          SparkPoint, NCRHA &amp; FHLI · 2026 WNC Regional Rural Health Convening
+        </p>
       </div>
     </div>
   );
