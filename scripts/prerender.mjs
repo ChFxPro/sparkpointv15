@@ -33,6 +33,7 @@ const REDIRECTS = {
   '/donations': 'https://secure.yoursparkpoint.org/donations',
   '/newsletter': 'https://secure.yoursparkpoint.org/newsletter',
   '/rh_tickets': 'https://secure.yoursparkpoint.org/store/p/2026-rural-health-convening',
+  '/pcr_collab': `${ORIGIN}/events/thrive-at-five`,
   '/sponsors': `${ORIGIN}/partners`,
   '/news-media': `${ORIGIN}/press`,
   '/newsroom': `${ORIGIN}/press`,

@@ -1,5 +1,5 @@
 # SparkPoint Agent Guide
-Last updated: 2026-07-28
+Last updated: 2026-08-07
 
 ## Read First
 - Read this file before modifying code in this repo.
@@ -47,7 +47,9 @@ Last updated: 2026-07-28
 - `/press/:slug`
 - `/resources/know-your-numbers`
 - `/rural-health-convening` (2026 WNC Regional Rural Health Convening event portal and Rural Health Field Simulator introduction)
+- `/internal/status` (unlisted, noindexed status dashboard — days to the convening, live seat count, event-planning board snapshot; not linked from any nav/footer, excluded from the sitemap/prerender by construction — don't add inbound links to it)
 - `/rh_tickets` -> direct external redirect to the 2026 Rural Health Convening purchase page
+- `/pcr_collab` -> redirect to `/events/thrive-at-five` (branded vanity URL; static prerender stub, same pattern as `/sponsors`)
 - `/newsletter` -> external redirect to Squarespace newsletter
 - `/donations` -> external redirect to Squarespace donations
 - `/intake` (`?intent=contact|volunteer|partner`)
