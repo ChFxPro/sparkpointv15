@@ -1,6 +1,6 @@
 import '@fontsource-variable/fraunces';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -17,7 +17,8 @@ import {
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../components/ui/tooltip';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { useRemainingSeats } from '../hooks/useRemainingSeats';
+import { SHOW_RURAL_HEALTH_SEATS_TICKER } from '../data/opsStatus';
 import uncHealthPardeeLogo from '../assets/sponsors/unc_health.png';
 import pisgahHealthFoundationLogo from '../assets/sponsors/phf.png';
 import transylvaniaRegionalHospitalLogo from '../assets/sponsors/trh.webp';
@@ -31,7 +32,6 @@ import './ruralHealthConvening.css';
 const PAGE_PATH = '/rural-health-convening';
 const REGISTRATION_URL =
   'https://secure.yoursparkpoint.org/store/p/2026-rural-health-convening';
-const TICKET_STOCK_ENDPOINT = `https://${projectId}.supabase.co/functions/v1/rh-ticket-stock`;
 const GENERAL_REGISTRATION_TOTAL = 150;
 const IMPACT_HEALTH_URL = 'https://impacthealth.org';
 const IMPACT_DISCOUNT_CODE = 'IMPACT-REG';
@@ -40,33 +40,6 @@ const SPARKPOINT_LOGO = `${BASE}logo-wordmark.webp`;
 
 function ruralHealthAsset(filename: string) {
   return `${BASE}assets/Rural%20Health/${encodeURIComponent(filename)}`;
-}
-
-function useRemainingSeats() {
-  const [remaining, setRemaining] = useState<number | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    fetch(TICKET_STOCK_ENDPOINT, {
-      headers: { apikey: publicAnonKey, Authorization: `Bearer ${publicAnonKey}` },
-    })
-      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
-      .then((data: { remaining?: unknown }) => {
-        if (!cancelled && typeof data.remaining === 'number') {
-          setRemaining(data.remaining);
-        }
-      })
-      .catch(() => {
-        // Live count unavailable — callers fall back to the static total.
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  return remaining;
 }
 
 const summitSponsors = [
@@ -636,7 +609,7 @@ export function RuralHealthConveningPage() {
                     </dt>
                     <dd>
                       <strong>{primary}</strong>
-                      {label === 'Registration' ? (
+                      {label === 'Registration' && SHOW_RURAL_HEALTH_SEATS_TICKER ? (
                         <span>{seatsAvailableLabel}</span>
                       ) : secondary ? (
                         <span>{secondary}</span>
@@ -751,13 +724,15 @@ export function RuralHealthConveningPage() {
                 </div>
               </div>
 
-              <div className="rh-priority-note rh-seats-panel">
-                <strong>
-                  {remainingSeats === null ? GENERAL_REGISTRATION_TOTAL : remainingSeats}
-                </strong>
-                <span>{remainingSeats === null ? 'seats available' : 'seats left'}</span>
-                <p>Reserve your seat at the 2026 Rural Health Convening.</p>
-              </div>
+              {SHOW_RURAL_HEALTH_SEATS_TICKER && (
+                <div className="rh-priority-note rh-seats-panel">
+                  <strong>
+                    {remainingSeats === null ? GENERAL_REGISTRATION_TOTAL : remainingSeats}
+                  </strong>
+                  <span>{remainingSeats === null ? 'seats available' : 'seats left'}</span>
+                  <p>Reserve your seat at the 2026 Rural Health Convening.</p>
+                </div>
+              )}
 
               <p className="rh-scholarship-note">
                 <Mail aria-hidden="true" size={22} strokeWidth={1.7} />
