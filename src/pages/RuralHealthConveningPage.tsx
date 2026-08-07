@@ -6,6 +6,9 @@ import {
   ArrowRight,
   CalendarDays,
   Clock3,
+  Copy,
+  ExternalLink,
+  Info,
   Mail,
   MapPin,
   Ticket,
@@ -13,6 +16,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../components/ui/tooltip';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import uncHealthPardeeLogo from '../assets/sponsors/unc_health.png';
 import pisgahHealthFoundationLogo from '../assets/sponsors/phf.png';
@@ -20,6 +24,8 @@ import transylvaniaRegionalHospitalLogo from '../assets/sponsors/trh.webp';
 import transylvaniaTdaLogo from '../assets/sponsors/brevard_tda.webp';
 import dogwoodHealthTrustLogo from '../assets/sponsors/dogwood.png';
 import vayaHealthLogo from '../assets/sponsors/vaya_health.webp';
+import impactHealthLogoDark from '../assets/rural_health/impact_health_dk.webp';
+import wncrrhcLogoLight from '../assets/rural_health/wncrrhc_logo_lt.webp';
 import './ruralHealthConvening.css';
 
 const PAGE_PATH = '/rural-health-convening';
@@ -27,6 +33,8 @@ const REGISTRATION_URL =
   'https://secure.yoursparkpoint.org/store/p/2026-rural-health-convening';
 const TICKET_STOCK_ENDPOINT = `https://${projectId}.supabase.co/functions/v1/rh-ticket-stock`;
 const GENERAL_REGISTRATION_TOTAL = 150;
+const IMPACT_HEALTH_URL = 'https://impacthealth.org';
+const IMPACT_DISCOUNT_CODE = 'IMPACT-REG';
 const BASE = import.meta.env.BASE_URL;
 const SPARKPOINT_LOGO = `${BASE}logo-wordmark.webp`;
 
@@ -142,7 +150,7 @@ const eventDetails = [
   {
     icon: Ticket,
     label: 'Registration',
-    primary: 'Register now to reserve your seat',
+    primary: '$65 Standard Rate or $40 Impact Health-Supported Inclusive Rate',
   },
   {
     icon: Utensils,
@@ -251,16 +259,46 @@ const eventJsonLd = {
 
 export function RuralHealthConveningPage() {
   const remainingSeats = useRemainingSeats();
+  const [impactCodeStatus, setImpactCodeStatus] = useState<'idle' | 'copied' | 'manual'>('idle');
+
+  function handleCopyImpactCode(event: React.MouseEvent<HTMLAnchorElement>) {
+    // Once the manual-copy fallback has been shown, let the link navigate normally—
+    // the user has already seen the code and doesn't need another intercepted click.
+    if (impactCodeStatus === 'manual') {
+      return;
+    }
+
+    event.preventDefault();
+
+    if (typeof navigator === 'undefined' || !navigator.clipboard) {
+      setImpactCodeStatus('manual');
+      return;
+    }
+
+    navigator.clipboard
+      .writeText(IMPACT_DISCOUNT_CODE)
+      .then(() => {
+        setImpactCodeStatus('copied');
+        window.open(REGISTRATION_URL, '_blank', 'noopener');
+      })
+      .catch(() => {
+        setImpactCodeStatus('manual');
+      });
+  }
+
+  const impactCodeStatusMessage =
+    impactCodeStatus === 'copied'
+      ? `Code ${IMPACT_DISCOUNT_CODE} copied—paste it in the Promo Code field at checkout to bring your total to $40.`
+      : impactCodeStatus === 'manual'
+        ? `Copy code ${IMPACT_DISCOUNT_CODE} and paste it in the Promo Code field at checkout to bring your total to $40.`
+        : `Enter code ${IMPACT_DISCOUNT_CODE} in the Promo Code field at checkout to bring your total to $40.`;
+
   const seatsAvailableLabel =
     remainingSeats === null
       ? `Only ${GENERAL_REGISTRATION_TOTAL} seats available`
       : remainingSeats > 0
         ? `Only ${remainingSeats} seat${remainingSeats === 1 ? '' : 's'} left`
         : 'Registration full — email us about the waitlist';
-  const seatsShortLabel =
-    remainingSeats === null
-      ? `${GENERAL_REGISTRATION_TOTAL} seats available`
-      : `${remainingSeats} seat${remainingSeats === 1 ? '' : 's'} left`;
 
   return (
     <div className="rh-page">
@@ -360,12 +398,7 @@ export function RuralHealthConveningPage() {
               </dl>
 
               <div className="rh-actions">
-                <a
-                  className="rh-button rh-button-primary"
-                  href={REGISTRATION_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a className="rh-button rh-button-primary" href="#event-details">
                   Register now
                   <ArrowRight aria-hidden="true" size={19} />
                 </a>
@@ -622,35 +655,117 @@ export function RuralHealthConveningPage() {
                 width={3300}
                 height={2550}
               />
-              <div className="rh-ticket-row">
-                <a
-                  className="rh-ticket-stub"
-                  href={REGISTRATION_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <span>Registration</span>
-                  <strong>Register now</strong>
-                  <small>Reserve your seat—{seatsShortLabel}.</small>
-                  <ArrowRight aria-hidden="true" size={30} />
-                </a>
+              <div className="rh-rate-intro">
+                <p className="rh-rate-eyebrow-lead">
+                  Inclusive Registration, supported by Impact Health
+                </p>
+                <p>
+                  Impact Health is helping make the Rural Health Convening more accessible by
+                  supporting a $40 Inclusive Registration Rate—so cost isn't a barrier to
+                  attending. Choose the registration rate that works for you—no application or
+                  explanation required. Both registration options include the complete
+                  convening experience.
+                </p>
+              </div>
 
-                <div className="rh-priority-note">
-                  <strong>
-                    {remainingSeats === null ? GENERAL_REGISTRATION_TOTAL : remainingSeats}
-                  </strong>
-                  <span>{remainingSeats === null ? 'seats available' : 'seats left'}</span>
-                  <p>
-                    Register now to save your seat at the 2026 Rural Health Convening.
+              <div className="rh-rate-grid">
+                <div className="rh-rate-card rh-rate-card-standard">
+                  <img
+                    className="rh-rate-card-mark"
+                    src={wncrrhcLogoLight}
+                    alt="2026 WNC Regional Rural Health Convening"
+                    width={3300}
+                    height={1744}
+                  />
+                  <p className="rh-rate-eyebrow">Standard Registration</p>
+                  <p className="rh-rate-price">$65</p>
+                  <div className="rh-rate-note rh-rate-note-pointer">
+                    <span className="rh-rate-note-pointer-text">Barrier-free $40 rate</span>
+                    <ArrowRight aria-hidden="true" size={14} />
+                  </div>
+                  <a
+                    className="rh-button rh-button-secondary rh-rate-button"
+                    href={REGISTRATION_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Continue to registration
+                    <ExternalLink aria-hidden="true" size={16} />
+                  </a>
+                  <p className="rh-rate-status">Pay $65 at checkout.</p>
+                </div>
+
+                <div className="rh-rate-card rh-rate-card-inclusive">
+                  <a
+                    className="rh-rate-impact-link"
+                    href={IMPACT_HEALTH_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visit Impact Health"
+                  >
+                    <img
+                      className="rh-rate-card-mark"
+                      src={impactHealthLogoDark}
+                      alt="Impact Health"
+                      width={3300}
+                      height={1744}
+                    />
+                  </a>
+                  <p className="rh-rate-eyebrow">Inclusive Registration</p>
+                  <p className="rh-rate-price">$40</p>
+                  <div className="rh-rate-note">
+                    <span>Code</span>
+                    <span className="rh-rate-note-value">
+                      <code>{IMPACT_DISCOUNT_CODE}</code>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button
+                            type="button"
+                            className="rh-rate-info-trigger"
+                            aria-label="Where do I enter this code?"
+                          >
+                            <Info aria-hidden="true" size={11} />
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-52 text-left">
+                          You'll fill out a short registration form first. The Promo Code
+                          field is on the final checkout step.
+                        </TooltipContent>
+                      </Tooltip>
+                    </span>
+                  </div>
+                  <a
+                    className="rh-button rh-button-primary rh-rate-button"
+                    href={REGISTRATION_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={handleCopyImpactCode}
+                  >
+                    <Copy aria-hidden="true" size={16} />
+                    Copy code &amp; continue
+                    <ExternalLink aria-hidden="true" size={16} />
+                  </a>
+                  <p className="rh-rate-status" role="status" aria-live="polite">
+                    {impactCodeStatusMessage}
                   </p>
                 </div>
+              </div>
+
+              <div className="rh-priority-note rh-seats-panel">
+                <strong>
+                  {remainingSeats === null ? GENERAL_REGISTRATION_TOTAL : remainingSeats}
+                </strong>
+                <span>{remainingSeats === null ? 'seats available' : 'seats left'}</span>
+                <p>Reserve your seat at the 2026 Rural Health Convening.</p>
               </div>
 
               <p className="rh-scholarship-note">
                 <Mail aria-hidden="true" size={22} strokeWidth={1.7} />
                 <span>
-                  Questions about registration or scholarships? Email{' '}
-                  <a href="mailto:info@yoursparkpoint.org">info@yoursparkpoint.org</a>.
+                  Questions about registration or accessibility? Email{' '}
+                  <a href="mailto:info@yoursparkpoint.org">info@yoursparkpoint.org</a>. If the
+                  Impact Health-supported credit doesn't apply at checkout, send us your order
+                  confirmation and we'll make it right.
                 </span>
               </p>
             </aside>
@@ -955,17 +1070,12 @@ export function RuralHealthConveningPage() {
               of view.
             </p>
             <div className="rh-actions rh-actions-centered">
-              <a
-                className="rh-button rh-button-primary"
-                href={REGISTRATION_URL}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a className="rh-button rh-button-primary" href="#event-details">
                 Register now
                 <ArrowRight aria-hidden="true" size={19} />
               </a>
               <a className="rh-final-email" href="mailto:info@yoursparkpoint.org">
-                Scholarship questions? Email info@yoursparkpoint.org
+                Accessibility questions? Email info@yoursparkpoint.org
               </a>
             </div>
           </div>
