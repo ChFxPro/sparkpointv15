@@ -19,3 +19,6 @@ public/assets/behind_story/manifest.json
 
 # Generated print/design collateral (PPTX, PDF exports)
 output/
+
+# Playwright CLI debug logs/snapshots
+.playwright-cli/
