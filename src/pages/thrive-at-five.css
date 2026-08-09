@@ -27,6 +27,7 @@
 }
 
 .taf-hero-image,
+.taf-hero-video,
 .taf-hero-shade {
   position: absolute;
   inset: 0;
@@ -34,15 +35,21 @@
   height: 100%;
 }
 
-.taf-hero-image {
+.taf-hero-image,
+.taf-hero-video {
   object-fit: cover;
   object-position: center;
+}
+
+.taf-hero-video {
+  background: var(--taf-green-deep);
 }
 
 .taf-hero-shade {
   background:
     linear-gradient(90deg, rgba(8, 32, 27, 0.96) 0%, rgba(8, 32, 27, 0.82) 45%, rgba(8, 32, 27, 0.16) 78%),
     linear-gradient(0deg, rgba(8, 32, 27, 0.8), transparent 45%);
+  pointer-events: none;
 }
 
 .taf-hero-inner {
@@ -145,8 +152,7 @@
 }
 
 .taf-button svg,
-.taf-text-link svg,
-.taf-music-copy a svg {
+.taf-text-link svg {
   width: 17px;
   height: 17px;
 }
@@ -154,6 +160,26 @@
 .taf-button-light {
   color: var(--taf-green-deep);
   background: white;
+}
+
+.taf-button-cta {
+  min-height: 58px;
+  padding: 15px 28px;
+  color: var(--taf-green-deep);
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  background: linear-gradient(120deg, #f7d36d, var(--taf-gold) 55%, #e8b23a);
+  box-shadow: 0 16px 34px rgba(213, 163, 45, 0.4), 0 2px 0 rgba(255, 255, 255, 0.4) inset;
+}
+
+.taf-button-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 42px rgba(213, 163, 45, 0.5), 0 2px 0 rgba(255, 255, 255, 0.4) inset;
+}
+
+.taf-button-cta:focus-visible {
+  outline: 3px solid white;
+  outline-offset: 3px;
 }
 
 .taf-button-ghost {
@@ -223,6 +249,60 @@
   font-weight: 550;
 }
 
+.taf-highlights {
+  padding: clamp(78px, 10vw, 126px) 0;
+  color: white;
+  background: #1d1716;
+}
+
+.taf-highlights-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(300px, 0.9fr);
+  align-items: center;
+  gap: clamp(48px, 8vw, 100px);
+}
+
+.taf-highlights-video {
+  position: relative;
+  padding-top: 56.25%;
+  overflow: hidden;
+  background: #090706;
+  border-radius: 5px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3);
+}
+
+.taf-highlights-player {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  background: #090706;
+}
+
+.taf-highlights-player::-webkit-media-controls-panel {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.55), transparent);
+}
+
+.taf-highlights-copy h2 {
+  margin-top: 14px;
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-weight: 790;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.taf-highlights-copy > p:not(.taf-section-kicker) {
+  margin-top: 22px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.75;
+}
+
+.taf-highlights-copy .taf-hero-actions {
+  margin-top: 32px;
+}
+
 .taf-intro {
   padding: clamp(86px, 11vw, 146px) 0;
   background:
@@ -277,7 +357,6 @@
 
 .taf-intro-copy h2,
 .taf-lineup h2,
-.taf-music h2,
 .taf-hub h2,
 .taf-partners h2,
 .taf-final h2 {
@@ -566,47 +645,6 @@
   box-shadow: 0 12px 26px rgba(18, 61, 52, 0.18);
 }
 
-.taf-music {
-  padding: clamp(78px, 10vw, 126px) 0;
-  background: #1d1716;
-}
-
-.taf-music-grid {
-  display: grid;
-  grid-template-columns: minmax(260px, 0.7fr) minmax(0, 1.3fr);
-  align-items: center;
-  gap: clamp(48px, 8vw, 100px);
-}
-
-.taf-music-copy {
-  color: white;
-}
-
-.taf-music-copy h2 {
-  max-width: 420px;
-}
-
-.taf-music-copy > p:not(.taf-section-kicker) {
-  margin-top: 24px;
-  color: rgba(255, 255, 255, 0.67);
-  line-height: 1.7;
-}
-
-.taf-recap-note {
-  margin-top: 12px;
-  color: rgba(255, 255, 255, 0.45);
-  font-size: 0.85rem;
-  font-style: italic;
-}
-
-.taf-music-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 28px;
-  margin-top: 28px;
-}
-
-.taf-music-copy a,
 .taf-text-link {
   display: inline-flex;
   align-items: center;
@@ -618,92 +656,6 @@
   letter-spacing: 0.08em;
   text-decoration: none;
   text-transform: uppercase;
-}
-
-.taf-music-links a {
-  margin-top: 0;
-}
-
-.taf-video-frame {
-  position: relative;
-  padding-top: 56.25%;
-  overflow: hidden;
-  background: #090706;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3);
-}
-
-.taf-video-frame iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-.taf-video-poster {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  color: white;
-  background: #090706;
-  border: 0;
-  cursor: pointer;
-}
-
-.taf-video-poster::after {
-  position: absolute;
-  inset: 0;
-  content: '';
-  background: rgba(9, 7, 6, 0.5);
-  transition: background-color 180ms ease;
-}
-
-.taf-video-poster:hover::after {
-  background: rgba(9, 7, 6, 0.38);
-}
-
-.taf-video-poster > img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  object-position: center 44%;
-}
-
-.taf-video-poster > span,
-.taf-video-poster > strong {
-  position: absolute;
-  z-index: 1;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.taf-video-poster > span {
-  top: calc(50% - 46px);
-  width: 76px;
-  height: 76px;
-  display: grid;
-  place-items: center;
-  color: var(--taf-green-deep);
-  background: white;
-  border-radius: 50%;
-  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.28);
-}
-
-.taf-video-poster > span svg {
-  width: 26px;
-  height: 26px;
-  margin-left: 4px;
-}
-
-.taf-video-poster > strong {
-  top: calc(50% + 52px);
-  font-size: 0.74rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  white-space: nowrap;
 }
 
 .taf-hub {
@@ -829,7 +781,7 @@
 @media (max-width: 940px) {
   .taf-hero-inner,
   .taf-lineup-heading,
-  .taf-music-grid,
+  .taf-highlights-grid,
   .taf-purchase-grid,
   .taf-partners-card,
   .taf-story-grid {
@@ -879,7 +831,8 @@
     min-height: 850px;
   }
 
-  .taf-hero-image {
+  .taf-hero-image,
+  .taf-hero-video {
     object-position: 62% center;
   }
 
