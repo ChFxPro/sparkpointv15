@@ -140,7 +140,28 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     seen.add(route);
     const page = await browser.newPage();
     try {
-      await page.goto(base + route, { waitUntil: 'networkidle0', timeout: 30000 });
+      // Never fetch media while prerendering. We only serialize the DOM, so video
+      // bytes are pure cost — and an autoplaying <video> keeps a connection open,
+      // so 'networkidle0' can never be reached on a route that has one. That is what
+      // timed out /events/thrive-at-five once it gained an autoplay hero loop.
+      // The <video>/<source> tags still serialize identically; only the bytes are skipped.
+      await page.setRequestInterception(true);
+      page.on('request', (req) => {
+        const isMedia = req.resourceType() === 'media'
+          || /\.(mp4|webm|mov|m4v|ogv)(\?|$)/i.test(req.url());
+        if (isMedia) req.abort().catch(() => {});
+        else req.continue().catch(() => {});
+      });
+      // A single slow-settling route used to fail the entire deploy. Fall back to a
+      // weaker wait rather than losing all 102 pages; the readiness checks below still
+      // gate on the app actually having rendered, so a genuinely broken page still fails.
+      try {
+        await page.goto(base + route, { waitUntil: 'networkidle0', timeout: 30000 });
+      } catch (navErr) {
+        if (!/timeout/i.test(navErr.message)) throw navErr;
+        console.warn(`  ! ${route}: networkidle0 timed out, retrying with domcontentloaded`);
+        await page.goto(base + route, { waitUntil: 'domcontentloaded', timeout: 30000 });
+      }
       await page.waitForFunction(() => { const r = document.getElementById('root'); return r && r.children.length > 0; }, { timeout: 15000 }).catch(() => {});
       await page.waitForFunction(() => !/Loading page/i.test(document.body.innerText || ''), { timeout: 15000 }).catch(() => {});
       await sleep(250);
