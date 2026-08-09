@@ -6,9 +6,8 @@ import {
   Home,
   Landmark,
   MapPin,
-  Play,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { canonicalUrl } from '../lib/siteOrigin';
@@ -20,15 +19,20 @@ const ASSET_BASE = `${BASE}assets/events/pisgah_coffee_fundraiser/`;
 const EVENT_PATH = '/events/thrive-at-five';
 const MAP_URL =
   'https://www.google.com/maps/search/?api=1&query=6283+Asheville+Highway+Pisgah+Forest+NC+28768';
-const FACEBOOK_EVENT_URL = 'https://www.facebook.com/share/1BaHvsc1p3/';
 const COFFEE_PURCHASE_URL = COMMON_GROUND_PURCHASE_URL;
 const PISGAH_STORY_URL = 'https://pisgahroasters.com/pages/our-story';
 
-const heroImage = `${ASSET_BASE}Sparkpoint Photos-2.webp`;
+const heroImage = `${ASSET_BASE}pisgah-coffee-hero-poster.webp?v=2026-08-09-3`;
 const packageImage = `${ASSET_BASE}SparkPoint - Common Ground.webp`;
 const hubImage = `${ASSET_BASE}ChatGPT Image May 28, 2026 at 03_24_30 PM.webp`;
 const pisgahLogo = `${ASSET_BASE}PisgahCoffeeRoasters.webp`;
 const productDetailImage = `${ASSET_BASE}Sparkpoint Photos-1.webp`;
+const HERO_LOOP_VERSION = '2026-08-09-2';
+const heroLoopWebm = `${ASSET_BASE}pisgah-coffee-hero-loop.webm?v=${HERO_LOOP_VERSION}`;
+const heroLoopMp4 = `${ASSET_BASE}pisgah-coffee-hero-loop.mp4?v=${HERO_LOOP_VERSION}`;
+const highlightVideoWebm = `${ASSET_BASE}pisgah-coffee-highlight.webm`;
+const highlightVideoMp4 = `${ASSET_BASE}pisgah-coffee-highlight.mp4`;
+const highlightVideoPoster = `${ASSET_BASE}pisgah-coffee-highlight-poster.webp`;
 
 const productJsonLd = {
   '@context': 'https://schema.org',
@@ -49,8 +53,50 @@ const productJsonLd = {
   url: canonicalUrl(EVENT_PATH),
 };
 
+const highlightVideoJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: 'Thrive @ Five 2026: Common Ground Resilience Roast release highlights',
+  description:
+    'Highlights from the July 31, 2026 Thrive @ Five release party at Pisgah Coffee Roasters, celebrating the Common Ground Resilience Roast and SparkPoint’s Resilience Hub fundraiser in Transylvania County, NC.',
+  thumbnailUrl: [
+    canonicalUrl('/assets/events/pisgah_coffee_fundraiser/pisgah-coffee-highlight-poster.webp'),
+  ],
+  uploadDate: '2026-08-09',
+  duration: 'PT1M15S',
+  contentUrl: canonicalUrl('/assets/events/pisgah_coffee_fundraiser/pisgah-coffee-highlight.mp4'),
+  publisher: {
+    '@type': 'Organization',
+    name: 'SparkPoint',
+    logo: {
+      '@type': 'ImageObject',
+      url: canonicalUrl('/logo-wordmark.webp'),
+    },
+  },
+};
+
 export default function ThriveAtFivePage() {
-  const [videoLoaded, setVideoLoaded] = useState(false);
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = heroVideoRef.current;
+    if (!video) return;
+
+    // Belt-and-suspenders for Safari: setting `muted` only as a JSX/HTML
+    // attribute doesn't always land as the DOM property in time for the
+    // browser's autoplay check. Set it explicitly and kick off play()
+    // ourselves. If a browser still blocks it, fail silently and let the
+    // poster frame stand in — no stuck "blocked" UI.
+    video.muted = true;
+    video.defaultMuted = true;
+
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        // Autoplay blocked — poster frame remains visible as the fallback.
+      });
+    }
+  }, []);
 
   return (
     <div className="taf-page">
@@ -60,11 +106,35 @@ export default function ThriveAtFivePage() {
         path={EVENT_PATH}
         image="/assets/events/pisgah_coffee_fundraiser/Sparkpoint Photos-2.webp"
         imageAlt="Common Ground Resilience Roast coffee, created by SparkPoint and Pisgah Coffee Roasters."
-        jsonLd={productJsonLd}
+        jsonLd={[productJsonLd, highlightVideoJsonLd]}
       />
 
       <section className="taf-hero" aria-labelledby="taf-title">
-        <img className="taf-hero-image" src={heroImage} alt="" />
+        <video
+          ref={heroVideoRef}
+          className="taf-hero-video"
+          poster={heroImage}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+          onError={(event) => {
+            // eslint-disable-next-line no-console
+            console.error('Hero video failed to load', event.currentTarget.error, {
+              mp4: heroLoopMp4,
+              webm: heroLoopWebm,
+            });
+          }}
+          onCanPlay={() => {
+            // eslint-disable-next-line no-console
+            console.info('Hero video can play');
+          }}
+        >
+          <source src={heroLoopMp4} type="video/mp4" />
+          <source src={heroLoopWebm} type="video/webm" />
+        </video>
         <div className="taf-hero-shade" aria-hidden="true" />
         <div className="taf-shell taf-hero-inner">
           <div className="taf-hero-copy">
@@ -83,7 +153,7 @@ export default function ThriveAtFivePage() {
               SparkPoint&rsquo;s new Resilience Hub all August long.
             </p>
             <div className="taf-hero-actions">
-              <a className="taf-button taf-button-light" href={COFFEE_PURCHASE_URL} target="_blank" rel="noreferrer">
+              <a className="taf-button taf-button-cta" href={COFFEE_PURCHASE_URL} target="_blank" rel="noreferrer">
                 <Coffee aria-hidden="true" /> Buy now
               </a>
               <a className="taf-button taf-button-ghost" href={MAP_URL} target="_blank" rel="noreferrer">
@@ -114,6 +184,48 @@ export default function ThriveAtFivePage() {
               </div>
             </dl>
           </aside>
+        </div>
+      </section>
+
+      <section className="taf-highlights" aria-labelledby="taf-highlights-title">
+        <div className="taf-shell taf-highlights-grid">
+          <div className="taf-highlights-video">
+            <video
+              className="taf-highlights-player"
+              poster={highlightVideoPoster}
+              controls
+              playsInline
+              preload="metadata"
+            >
+              <source src={highlightVideoWebm} type="video/webm" />
+              <source src={highlightVideoMp4} type="video/mp4" />
+              Your browser doesn&rsquo;t support embedded video.{' '}
+              <a href={highlightVideoMp4}>Download the video</a> instead.
+            </video>
+          </div>
+          <div className="taf-highlights-copy">
+            <p className="taf-section-kicker">Friday, July 31 &middot; Full recap</p>
+            <h2 id="taf-highlights-title">Watch the night in full.</h2>
+            <p>
+              From the first pour to the last song, this is what a season of
+              connection looks like in Transylvania County — neighbors, coffee,
+              and Mark &amp; Sally Wingate closing out the night alongside Sarah
+              Siskind.
+            </p>
+            <p>
+              Every bag of Common Ground sold through August helps fund
+              SparkPoint&rsquo;s new Resilience Hub — Pisgah Coffee Roasters is
+              giving half of August&rsquo;s profits straight to the build.
+            </p>
+            <div className="taf-hero-actions">
+              <a className="taf-button taf-button-cta" href={COFFEE_PURCHASE_URL} target="_blank" rel="noreferrer">
+                <Coffee aria-hidden="true" /> Buy now
+              </a>
+              <a className="taf-button taf-button-ghost" href={MAP_URL} target="_blank" rel="noreferrer">
+                Visit Pisgah Coffee Roasters <ArrowRight aria-hidden="true" />
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -299,52 +411,6 @@ export default function ThriveAtFivePage() {
               <span aria-hidden="true">+</span>
               <img src={pisgahLogo} alt="Pisgah Coffee Roasters" />
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="taf-music" aria-labelledby="taf-music-title">
-        <div className="taf-shell taf-music-grid">
-          <div className="taf-music-copy">
-            <p className="taf-section-kicker">Friday, July 31 &middot; Release recap</p>
-            <h2 id="taf-music-title">Mark &amp; Sally Wingate</h2>
-            <p>
-              The first pour happened on July 31 — Mark and Sally Wingate opened the evening
-              alongside acclaimed singer-songwriter Sarah Siskind.
-            </p>
-            <p className="taf-recap-note">More photos and video from the night are coming soon.</p>
-            <div className="taf-music-links">
-              <a href="https://youtu.be/DCcg_p2q7_U" target="_blank" rel="noreferrer">
-                Watch on YouTube <ExternalLink aria-hidden="true" />
-              </a>
-              <a href={FACEBOOK_EVENT_URL} target="_blank" rel="noreferrer">
-                See the Facebook recap <ExternalLink aria-hidden="true" />
-              </a>
-            </div>
-          </div>
-          <div className="taf-video-frame">
-            {videoLoaded ? (
-              <iframe
-                src="https://www.youtube-nocookie.com/embed/DCcg_p2q7_U?autoplay=1"
-                title="Mark and Sally Wingate performing with Sarah Siskind"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              />
-            ) : (
-              <button
-                type="button"
-                className="taf-video-poster"
-                onClick={() => setVideoLoaded(true)}
-                aria-label="Play Mark and Sally Wingate performing with Sarah Siskind"
-              >
-                <img src={productDetailImage} alt="" />
-                <span>
-                  <Play aria-hidden="true" fill="currentColor" />
-                </span>
-                <strong>Watch the performance</strong>
-              </button>
-            )}
           </div>
         </div>
       </section>
