@@ -23,6 +23,12 @@ import {
 } from '../components/internal-reports/reportBeats';
 import { supabase } from '../lib/supabaseClient';
 import './internalReportDashboard.css';
+// PrintReportPage's .ir-print-* rules live in internalReports.css, not this
+// route's own stylesheet. With Vite's per-lazy-route CSS splitting, a direct
+// visit to this URL (bookmark, refresh) never loads the login/home chunk
+// that normally pulls internalReports.css in — without this import, the
+// print portal would render with no styling on a cold visit.
+import './internalReports.css';
 
 const BASE = import.meta.env.BASE_URL;
 const SPARKPOINT_LOGO = `${BASE}logo-wordmark.webp`;
