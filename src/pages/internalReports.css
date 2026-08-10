@@ -1,0 +1,1007 @@
+/* Internal reports portal — SparkPoint's brand system (Manrope, pink/gold/
+   purple/orange), Manrope already loaded globally in main.tsx.
+
+   Design approach: this is a DATA report, not a brand/story moment — so it
+   gets exactly one bold color statement (the gradient hero band) and stays
+   restrained everywhere else. Numbers are the hierarchy device (size, not
+   card fills); color marks meaning (a small dot/icon per metric) rather than
+   decorating every surface. No photographic background, no glassmorphism —
+   those read as premium on a narrative page (see MissionPage.tsx) but fight
+   legibility on a page whose whole job is "scan these numbers accurately." */
+
+.ir-page {
+  --ir-pink: #E03694;
+  --ir-gold: #FDB515;
+  --ir-gold-text: #8a5c09; /* darkened for text-on-white; raw --ir-gold fails contrast as text */
+  --ir-purple: #9E509F;
+  --ir-orange: #F15F48;
+  --ir-ink: #1A1A1A;
+  --ir-muted: #6b6b70;
+  --ir-border: #e5e5ea;
+  --ir-surface: #ffffff;
+  --ir-canvas: #fbf4f9; /* warm pink-tinted neutral, not flat gray — carries the brand hue into supporting surfaces */
+  --ir-brand-gradient: linear-gradient(90deg, var(--ir-pink) 0%, var(--ir-gold) 55%, var(--ir-orange) 100%);
+  --ir-hero-gradient: linear-gradient(120deg, var(--ir-pink) 0%, #b5439a 45%, var(--ir-orange) 100%);
+
+  min-height: 100vh;
+  color: var(--ir-ink);
+  background: var(--ir-surface);
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.ir-page *,
+.ir-page *::before,
+.ir-page *::after {
+  box-sizing: border-box;
+}
+
+.ir-page :where(h1, h2, h3, p, dl, dd) {
+  margin: 0;
+}
+
+.ir-page :where(h1, h2, h3) {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.ir-page a:focus-visible,
+.ir-page button:focus-visible,
+.ir-page input:focus-visible,
+.ir-page summary:focus-visible {
+  outline: 3px solid var(--ir-pink);
+  outline-offset: 3px;
+}
+
+/* The hero band's own controls need a light-on-color outline instead. */
+.ir-hero-band a:focus-visible,
+.ir-hero-band button:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+.ir-shell {
+  max-width: 1020px;
+  margin: 0 auto;
+  padding: 0 24px 72px;
+}
+
+.ir-shell-narrow {
+  max-width: 440px;
+}
+
+@media (max-width: 400px) {
+  .ir-shell {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* Plain masthead — quiet, functional, not a color moment. The color
+   statement lives in the hero band below it. */
+
+.ir-masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 16px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--ir-border);
+}
+
+@media (max-width: 400px) {
+  .ir-masthead {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+.ir-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ir-ink);
+  text-decoration: none;
+}
+
+.ir-back-link:hover {
+  color: var(--ir-pink);
+}
+
+.ir-masthead-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ir-pink);
+}
+
+/* The one bold color moment on the page — everything else stays restrained
+   so this actually reads as a statement instead of one gradient among many. */
+
+.ir-hero-band {
+  background: var(--ir-hero-gradient);
+  padding: 40px 24px 36px;
+  color: #fff;
+}
+
+.ir-hero-band-inner {
+  max-width: 1020px;
+  margin: 0 auto;
+}
+
+.ir-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  margin-bottom: 14px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+}
+
+.ir-hero-band h1 {
+  font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+  line-height: 1.08;
+  color: #fff;
+}
+
+.ir-hero-band p {
+  margin-top: 10px;
+  font-size: 0.98rem;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 62ch;
+}
+
+.ir-story {
+  margin-top: 22px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #fff;
+  max-width: 68ch;
+}
+
+.ir-loading {
+  padding: 72px 24px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--ir-muted);
+}
+
+.ir-hero-band .ir-loading {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Momentum badge — a small graphic chip inside the hero band, not a second
+   banner competing with it. Lives on the gradient, so it needs its own
+   light-on-color treatment: the product-register dark gold-on-white used
+   for the stat deltas would read muddy here, not energetic. */
+
+.ir-momentum {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 22px;
+  padding: 10px 18px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+}
+
+.ir-momentum.is-down {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+}
+
+.ir-momentum strong {
+  color: inherit;
+}
+
+.ir-momentum svg {
+  flex-shrink: 0;
+  color: #ffd166;
+}
+
+.ir-momentum.is-down svg {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Goal progress */
+
+.ir-goal {
+  margin-top: 10px;
+  max-width: 220px;
+}
+
+.ir-goal-track {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--ir-border);
+  overflow: hidden;
+}
+
+.ir-goal-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--ir-brand-gradient);
+}
+
+.ir-goal-label {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.72rem;
+  color: var(--ir-muted);
+}
+
+/* Funder blurb */
+
+.ir-funder-blurb {
+  padding: 22px 24px;
+  background: var(--ir-canvas);
+  border: 1px solid var(--ir-border);
+  border-radius: 16px;
+  margin-bottom: 44px;
+}
+
+.ir-funder-blurb p {
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: var(--ir-ink);
+  margin-bottom: 14px;
+}
+
+/* Portal home — report cards. Clean, functional, a single accent line —
+   not a competing color surface now that the band above carries the color. */
+
+.ir-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+  margin-top: 32px;
+}
+
+.ir-report-card {
+  display: block;
+  position: relative;
+  padding: 26px 24px 24px;
+  background: var(--ir-surface);
+  border: 1px solid var(--ir-border);
+  border-radius: 16px;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, border-color 0.15s ease-out;
+}
+
+.ir-report-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: var(--ir-brand-gradient);
+}
+
+.ir-report-card:hover {
+  transform: translateY(-3px);
+  border-color: transparent;
+  box-shadow: 0 16px 32px rgba(26, 26, 26, 0.12);
+}
+
+.ir-report-card:active {
+  transform: translateY(-1px) scale(0.99);
+  transition-duration: 100ms;
+}
+
+.ir-report-card-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ir-purple);
+}
+
+.ir-report-card h2 {
+  margin-top: 8px;
+  font-size: 1.15rem;
+}
+
+.ir-report-card p {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--ir-muted);
+}
+
+.ir-empty-state {
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--ir-muted);
+  background: var(--ir-canvas);
+  border: 1px dashed var(--ir-border);
+  border-radius: 16px;
+  margin-top: 32px;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Stats — one typographic scale, not three card systems. Size carries
+   hierarchy; a small colored dot carries meaning. Numbers stay ink so
+   contrast is never a question, no matter which metric it is. */
+
+.ir-stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px 40px;
+  padding: 36px 0 32px;
+  border-bottom: 1px solid var(--ir-border);
+}
+
+.ir-stat {
+  min-width: 110px;
+}
+
+.ir-stat-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+}
+
+.ir-stat strong {
+  display: block;
+  font-weight: 800;
+  color: var(--ir-ink);
+  line-height: 0.98;
+}
+
+.ir-stat span.ir-stat-label {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--ir-muted);
+}
+
+/* Three sizes = three tiers of importance — pushed further apart than a
+   first pass for real dynamic contrast, not just a mild size nudge. The
+   hero and mid tiers also carry their metric's color on the numeral itself
+   (via --stat-accent, set inline per-metric); both tiers are large+bold
+   enough to clear WCAG's 3:1 large-text threshold at every brand color used
+   this way. The minor tier stays plain ink — color there is carried by the
+   dot alone, keeping the base of the hierarchy quiet. */
+
+.ir-stat--hero strong {
+  font-size: clamp(3.2rem, 6.4vw, 4.6rem);
+  letter-spacing: -0.035em;
+  color: var(--stat-accent, var(--ir-ink));
+}
+
+.ir-stat--mid strong {
+  font-size: clamp(1.6rem, 2.4vw, 2rem);
+  letter-spacing: -0.02em;
+  color: var(--stat-accent, var(--ir-ink));
+}
+
+.ir-stat--minor strong {
+  font-size: clamp(1.1rem, 1.4vw, 1.3rem);
+  letter-spacing: -0.01em;
+}
+
+.ir-stat-delta {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.78rem;
+}
+
+.ir-stat-delta.is-up {
+  font-weight: 700;
+  color: var(--ir-gold-text);
+}
+
+.ir-stat-delta.is-down {
+  font-weight: 500;
+  color: var(--ir-muted);
+}
+
+@media (max-width: 640px) {
+  .ir-stat-row {
+    gap: 24px 32px;
+  }
+}
+
+.ir-section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 44px 0 18px;
+}
+
+.ir-section-heading h2 {
+  display: inline-block;
+  padding-bottom: 8px;
+  font-size: 1.25rem;
+  /* Short colored underline, not a full-width rule — an editorial section
+     marker that echoes the hero band's gradient without repeating it as a
+     full color block. */
+  border-bottom: 3px solid;
+  border-image: var(--ir-brand-gradient) 1;
+}
+
+/* Narrative insights — an annotated list, not a stack of cards. */
+
+.ir-insights {
+  display: flex;
+  flex-direction: column;
+}
+
+.ir-insight {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--ir-border);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--ir-ink);
+}
+
+.ir-insight:last-child {
+  border-bottom: none;
+}
+
+.ir-insight-badge {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 8px;
+  height: 8px;
+  margin-top: 7px;
+  border-radius: 50%;
+  /* background color is set inline per-insight, by meaning (reach/engagement/
+     growth) via KIND_COLORS in InternalReportDashboardPage.tsx — not by
+     position, which used to reshuffle arbitrarily as insights changed. */
+}
+
+/* Chart panels */
+
+.ir-chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.ir-chart-panel {
+  padding: 20px 20px 8px;
+  background: var(--ir-canvas);
+  border: 1px solid var(--ir-border);
+  border-radius: 16px;
+}
+
+.ir-chart-panel h3 {
+  font-size: 0.85rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.ir-chart-panel-sub {
+  font-size: 0.76rem;
+  color: var(--ir-muted);
+  margin-bottom: 8px;
+  display: block;
+}
+
+@media (max-width: 760px) {
+  .ir-chart-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Daily data (collapsible, de-emphasized relative to the visual stats) */
+
+.ir-table-details {
+  border: 1px solid var(--ir-border);
+  border-radius: 16px;
+  background: var(--ir-surface);
+  overflow: hidden;
+}
+
+.ir-table-details summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 18px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ir-ink);
+  cursor: pointer;
+  list-style: none;
+}
+
+.ir-table-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.ir-table-details summary::before {
+  content: '▸';
+  color: var(--ir-pink);
+  transition: transform 0.15s ease;
+}
+
+.ir-table-details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.ir-table-wrap {
+  overflow-x: auto;
+  border-top: 1px solid var(--ir-border);
+}
+
+.ir-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.ir-table th,
+.ir-table td {
+  padding: 8px 14px;
+  text-align: right;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--ir-border);
+}
+
+.ir-table th:first-child,
+.ir-table td:first-child {
+  text-align: left;
+}
+
+.ir-table thead th {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ir-muted);
+  background: var(--ir-canvas);
+}
+
+/* Downloads */
+
+.ir-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ir-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  font-size: 0.83rem;
+  font-weight: 700;
+  font-family: inherit;
+  color: var(--ir-ink);
+  background: var(--ir-surface);
+  border: 1px solid var(--ir-border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease-out, color 0.15s ease-out, transform 100ms ease-out;
+}
+
+.ir-download-btn:hover {
+  border-color: var(--ir-pink);
+  color: var(--ir-pink);
+}
+
+/* Feedback on press, not on release — a button should feel grabbed the
+   instant it's touched, not just after the click resolves. */
+.ir-download-btn:active {
+  transform: scale(0.97);
+}
+
+.ir-download-btn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.ir-download-btn:disabled:active {
+  transform: none;
+}
+
+.ir-download-btn--primary {
+  color: #fff;
+  background: var(--ir-pink);
+  border-color: var(--ir-pink);
+}
+
+.ir-download-btn--primary:hover {
+  color: #fff;
+  background: #c2257d;
+  border-color: #c2257d;
+}
+
+.ir-print-status {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  color: var(--ir-muted);
+}
+
+/* Login form */
+
+.ir-login-card {
+  padding: 32px;
+  margin-top: -68px;
+  position: relative;
+  background: var(--ir-surface);
+  border: 1px solid var(--ir-border);
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(26, 26, 26, 0.1);
+}
+
+.ir-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.ir-field label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ir-ink);
+}
+
+.ir-input {
+  padding: 11px 13px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--ir-ink);
+  background: #fff;
+  border: 1px solid var(--ir-border);
+  border-radius: 10px;
+}
+
+.ir-input:focus-visible {
+  border-color: var(--ir-pink);
+}
+
+.ir-submit {
+  width: 100%;
+  padding: 13px;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  font-family: inherit;
+  color: #fff;
+  background: var(--ir-pink);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease-out, transform 100ms ease-out;
+}
+
+.ir-submit:hover {
+  background: #c2257d;
+}
+
+.ir-submit:active {
+  transform: scale(0.98);
+}
+
+.ir-submit:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.ir-submit:disabled:active {
+  transform: none;
+}
+
+.ir-error {
+  margin-bottom: 16px;
+  padding: 11px 13px;
+  font-size: 0.82rem;
+  color: #9a2b1f;
+  background: rgba(241, 95, 72, 0.1);
+  border: 1px solid rgba(241, 95, 72, 0.35);
+  border-radius: 10px;
+}
+
+.ir-status-message {
+  margin-bottom: 16px;
+  padding: 11px 13px;
+  font-size: 0.82rem;
+  color: #6b3d6c;
+  background: rgba(158, 80, 159, 0.1);
+  border: 1px solid rgba(158, 80, 159, 0.3);
+  border-radius: 10px;
+}
+
+.ir-forgot-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ir-muted);
+  background: none;
+  border: none;
+  padding: 8px 0;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.ir-forgot-link:hover {
+  color: var(--ir-pink);
+}
+
+.ir-footnote {
+  margin-top: 40px;
+  font-size: 0.78rem;
+  color: var(--ir-muted);
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Print-formatted one-pager. Same pattern as knowYourNumbers.css: a hidden
+   portal rendered as a sibling of #root, shown only for window.print(). */
+
+.ir-print-root {
+  display: none;
+}
+
+@page {
+  size: 8.5in 11in;
+  margin: 0;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  body.ir-printing #root {
+    display: none !important;
+  }
+
+  body.ir-printing > .ir-print-root {
+    display: block !important;
+  }
+}
+
+.ir-print-page {
+  width: 8.5in;
+  height: 11in;
+  padding: 0.65in;
+  box-sizing: border-box;
+  background: #fff;
+  color: var(--ir-ink, #1A1A1A);
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.ir-print-accent-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #E03694 0%, #FDB515 55%, #F15F48 100%);
+  margin-bottom: 0.32in;
+}
+
+.ir-print-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 0.3in;
+}
+
+.ir-print-logo {
+  height: 22px;
+  width: auto;
+}
+
+.ir-print-eyebrow {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #E03694;
+}
+
+.ir-print-header h1 {
+  margin-top: 6px;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.ir-print-header p {
+  margin-top: 4px;
+  font-size: 10px;
+  color: #6b6b70;
+}
+
+.ir-print-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.16in;
+  margin-bottom: 0.34in;
+}
+
+.ir-print-stat {
+  padding: 0.16in;
+  border: 1px solid #e5e5ea;
+  border-radius: 0 0 10px 10px;
+  border-top: 3px solid var(--stat-color, #E03694);
+}
+
+.ir-print-stat strong {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.ir-print-stat span {
+  display: block;
+  margin-top: 3px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6b6b70;
+}
+
+.ir-print-insights {
+  list-style: none;
+  margin: 0 0 0.28in;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.08in;
+}
+
+.ir-print-insights li {
+  position: relative;
+  padding-left: 0.16in;
+  font-size: 9.5px;
+  line-height: 1.5;
+  color: #3a3a3d;
+}
+
+.ir-print-insights li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.06in;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #E03694;
+}
+
+.ir-print-chart-heading {
+  margin-bottom: 0.1in;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #1A1A1A;
+}
+
+.ir-print-chart-frame {
+  display: flex;
+  gap: 0.08in;
+  margin-bottom: 0.3in;
+}
+
+.ir-print-chart-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 1.15in;
+  padding: 0.1in 0 0;
+  font-size: 7px;
+  color: #6b6b70;
+  text-align: right;
+}
+
+.ir-print-bars {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 1.15in;
+  padding: 0.1in 0.05in 0;
+  border-bottom: 1px solid #e5e5ea;
+}
+
+.ir-print-gridline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #ececef;
+}
+
+.ir-print-bar {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 0;
+  min-width: 1px;
+  background: linear-gradient(180deg, #E03694, #FDB515);
+  border-radius: 2px 2px 0 0;
+}
+
+.ir-print-downloads {
+  margin-top: auto;
+  padding-top: 0.2in;
+  border-top: 1px solid #e5e5ea;
+  font-size: 8.5px;
+  color: #6b6b70;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ir-print-downloads strong {
+  color: #1A1A1A;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Motion, transparency, and contrast preferences. Reduced motion doesn't
+   mean no feedback — it means a gentler, non-vestibular equivalent: cross-
+   fades instead of slides/springs, no elastic/overshoot, but comprehension-
+   aiding color/opacity changes stay. */
+
+@media (prefers-reduced-motion: reduce) {
+  .ir-page *,
+  .ir-page *::before,
+  .ir-page *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .ir-report-card:hover,
+  .ir-report-card:active {
+    transform: none;
+  }
+
+  .ir-download-btn:active,
+  .ir-submit:active {
+    transform: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .ir-report-card,
+  .ir-empty-state,
+  .ir-login-card,
+  .ir-chart-panel,
+  .ir-funder-blurb {
+    border-color: var(--ir-ink);
+  }
+}

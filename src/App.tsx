@@ -81,6 +81,9 @@ const KnowYourNumbersPage = lazy(() =>
 );
 const RuralHealthConveningPage = lazy(() => import('./pages/RuralHealthConveningPage'));
 const InternalStatusPage = lazy(() => import('./pages/InternalStatusPage'));
+const InternalLoginPage = lazy(() => import('./pages/InternalLoginPage'));
+const InternalReportsHomePage = lazy(() => import('./pages/InternalReportsHomePage'));
+const InternalReportDashboardPage = lazy(() => import('./pages/InternalReportDashboardPage'));
 const CommunityChampionsArticle = lazy(() => import('./pages/CommunityChampionsArticle'));
 const HeleneOneYearArticle = lazy(() => import('./pages/HeleneOneYearArticle'));
 const HEALTHCARE_STORY_FORM_URL =
@@ -206,6 +209,9 @@ function AppContent() {
         <Route path="/resources/know-your-numbers" element={<KnowYourNumbersPage />} />
         <Route path="/rural-health-convening" element={<RuralHealthConveningPage />} />
         <Route path="/internal/status" element={<InternalStatusPage />} />
+        <Route path="/internal/login" element={<InternalLoginPage />} />
+        <Route path="/internal/reports" element={<InternalReportsHomePage />} />
+        <Route path="/internal/reports/:reportType/:period" element={<InternalReportDashboardPage />} />
         <Route
           path="/healthcare-story"
           element={

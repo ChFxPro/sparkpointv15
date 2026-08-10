@@ -22,3 +22,13 @@ output/
 
 # Playwright CLI debug logs/snapshots
 .playwright-cli/
+.playwright-mcp/
+
+# Local secrets for one-off scripts (e.g. SUPABASE_SERVICE_ROLE_KEY) — never commit
+.env
+.env.*
+!.env.example
+
+# Monthly raw CSV exports dropped for scripts/internal-reports/ingest.mjs —
+# transient input, not source; re-exported from the platform each month.
+scripts/internal-reports/incoming/
