@@ -1,5 +1,5 @@
 # SparkPoint Agent Guide
-Last updated: 2026-08-07
+Last updated: 2026-08-10
 
 ## Read First
 - Read this file before modifying code in this repo.
@@ -27,6 +27,7 @@ Last updated: 2026-08-07
 - Events hub is available at `/events`, with reusable upcoming/past event listings driven by `src/data/events.ts`.
 - Rural Health Convening landing page is available at `/rural-health-convening`, with a priority registration list for the limited 200-seat event, partner/sponsor attribution, and a public introduction to the Rural Health Field Simulator. Sponsor logos link to each org's website; sponsor billing follows three active tiers — Summit ($3,500: UNC Health Pardee, Transylvania Regional Hospital, equal size/prominence), Ridgeline ($2,500: Pisgah Health Foundation, visibly smaller/secondary), and Highlands ($1,500: Transylvania County Tourism Development Authority, tertiary) — reflected in the hero credit line and partnership-section logo hierarchy.
 - Thrive @ Five: Common Ground Release Party is available at `/events/thrive-at-five`, with the July 31 event details, August coffee fundraiser, August 1 purchase CTA, performance video, and Resilience Hub story; it is the current featured event on `/events`.
+- Internal social media reports portal is available at `/internal/reports`, gated by real Supabase Auth (not obscurity) — `/internal/login`, `/internal/reports`, and `/internal/reports/:reportType/:period` are excluded from static prerendering by design, so the login gate is enforced client-side rather than by hiding a public route. Reports live in the `report_snapshots` table (RLS restricted to `authenticated`), refreshed monthly via `scripts/internal-reports/ingest.mjs` (CSV parsing and the Supabase upsert are two separate stages so the CSV-pull step alone can be automated later). The report dashboard itself is a scroll-driven visual narrative (`src/pages/InternalReportDashboardPage.tsx` + `internalReportDashboard.css`); the login/reports-list pages share a calmer system in `internalReports.css`.
 
 ## Routes
 - `/` home
@@ -48,6 +49,9 @@ Last updated: 2026-08-07
 - `/resources/know-your-numbers`
 - `/rural-health-convening` (2026 WNC Regional Rural Health Convening event portal and Rural Health Field Simulator introduction)
 - `/internal/status` (unlisted, noindexed status dashboard — days to the convening, live seat count, event-planning board snapshot; not linked from any nav/footer, excluded from the sitemap/prerender by construction — don't add inbound links to it)
+- `/internal/login` (sign-in for the internal reports portal; real Supabase Auth — access is granted per-person via the Supabase Dashboard, no self-serve signup)
+- `/internal/reports` (internal reports portal home — lists available reports for the signed-in user; redirects to `/internal/login` if unauthenticated)
+- `/internal/reports/:reportType/:period` (one report's dashboard, e.g. `/internal/reports/social_media/2026-07`; requires an authenticated session, same as above)
 - `/rh_tickets` -> direct external redirect to the 2026 Rural Health Convening purchase page
 - `/pcr_collab` -> redirect to `/events/thrive-at-five` (branded vanity URL; static prerender stub, same pattern as `/sponsors`)
 - `/newsletter` -> external redirect to Squarespace newsletter

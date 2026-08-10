@@ -67,13 +67,21 @@ export async function parseReportDir(dir, { period, title, dateRange, reportType
   const filesInDir = await readdir(dir);
   const byDate = new Map();
 
+  // Every metric field starts at 0, not undefined — if one export's date
+  // range is shorter than another's (a short month-boundary quirk, or one
+  // metric genuinely has zero activity that day and Meta omits the row),
+  // JSON.stringify silently drops undefined keys, so the uploaded row for
+  // that date would be missing the field entirely rather than reading 0.
+  const zeroRow = (date) =>
+    Object.fromEntries([['date', date], ...Object.values(CSV_FIELD_MAP).map((field) => [field, 0])]);
+
   for (const [filename, field] of Object.entries(CSV_FIELD_MAP)) {
     if (!filesInDir.includes(filename)) {
       throw new Error(`Missing ${filename} in ${dir}`);
     }
     const rows = await parseMetaCsv(path.join(dir, filename));
     for (const { date, value } of rows) {
-      if (!byDate.has(date)) byDate.set(date, { date });
+      if (!byDate.has(date)) byDate.set(date, zeroRow(date));
       byDate.get(date)[field] = value;
     }
   }
