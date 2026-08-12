@@ -1,0 +1,52 @@
+name: CI
+
+# Runs on every PR into main.
+#
+# This mirrors the build job in deploy.yml exactly — same Node version, same
+# env vars, same command — so a green check here means the Pages deploy will
+# build too. That is the whole point: today `deploy.yml` only runs *after* a
+# merge to main, so a build-breaking change is discovered during the live
+# deploy rather than on the PR.
+#
+# Deliberately no typecheck and no test step:
+#   - There is no `test` script in package.json.
+#   - `tsc` does not pass on this project. The Figma Make imports use versioned
+#     specifiers (`lucide-react@0.487.0`, `@radix-ui/react-accordion@1.2.3`)
+#     that tsc cannot resolve, plus assorted strict-mode errors.
+# Adding either would make this gate red on day one, and a gate that is always
+# red is a gate everyone learns to ignore. `vite build` is the honest gate here
+# because it is exactly what ships. If the type errors get cleaned up later,
+# add `tsc` then.
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install (clean, from lockfile)
+        run: npm ci
+
+      # Same env as deploy.yml's build step, so this check predicts the deploy.
+      - name: Build
+        env:
+          PUBLIC_BASE: /
+          SITE_ORIGIN: https://yoursparkpoint.org
+          PUBLIC_ORIGIN: https://yoursparkpoint.org
+          VITE_SITE_ORIGIN: https://yoursparkpoint.org
+        run: npm run build

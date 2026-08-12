@@ -1,0 +1,54 @@
+name: gitleaks
+
+# Secret scan on every PR into main. Fails the PR if a secret is detected.
+#
+# Scans the FULL history rather than just the PR range. The repo's history is
+# small in scanned bytes (250 commits, ~4.9 MB, under 3 seconds), and a full
+# scan avoids the base/head SHA arithmetic that silently under-scans on
+# force-pushes and rebases. If this ever gets slow, narrow it then.
+#
+# Note the .git directory is ~1 GB, but that is dominated by binary image
+# blobs which gitleaks skips — the scanned payload is the 4.9 MB above.
+#
+# This complements, rather than replaces, GitHub's own secret scanning and push
+# protection (both already enabled on this repo). GitHub's scanner catches
+# provider-recognised credentials at push time; gitleaks catches generic
+# high-entropy patterns in history at review time.
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  gitleaks:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install gitleaks
+        env:
+          GITLEAKS_VERSION: 8.30.1
+        run: |
+          set -euo pipefail
+          curl -sSfL \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
+            -o /tmp/gitleaks.tar.gz
+          tar -xzf /tmp/gitleaks.tar.gz -C /tmp gitleaks
+          sudo install /tmp/gitleaks /usr/local/bin/gitleaks
+          gitleaks version
+
+      # --redact keeps any detected secret out of the public build log.
+      # gitleaks exits 1 when it finds something, which fails the job.
+      - name: Scan git history
+        run: |
+          gitleaks git . \
+            --config .gitleaks.toml \
+            --redact \
+            --verbose \
+            --log-opts="--all"
