@@ -21,16 +21,34 @@ no history, no diff. Put the source here and ship it through a PR instead.
 |---|---|---|
 | `make-server-393f2b0a` | this directory | Public intake. Carries the SEC-004 hardening (16 KB body ceiling, field validation). |
 | `rh-ticket-stock` | this directory | Recovered 2026-08-12. Read-only ticket-stock proxy for the convening page; called by `src/hooks/useRemainingSeats.ts`. |
-| `probe-headers` | this directory | Recovered 2026-08-12. One-off debug probe of storage response headers. Almost certainly disposable — see below. |
-| `program-triage` | **not in this repo** | Recovered but held: hardcodes a live shared key. See the deploy-hazard note below. |
-| `triage-api` | **not in this repo** | Same. |
+| ~~`program-triage`~~ · ~~`triage-api`~~ · ~~`probe-headers`~~ | — | **Deleted from the project 2026-08-12.** A program-triage tool built and self-tested 2026-07-31, never rolled out. See below. |
 | `server` | **a different repo** — `DataAdmin/Spwebdatahandlingapp` | Do **not** add a `server/` directory here; deploying it would overwrite that project's live function. |
 | `make-server-de2b7016` | none | Orphaned Figma-Make auto-deploy, superseded by `server`. Live, with no local way to update it. |
 
-`probe-headers` was recovered for completeness because it was unrecoverable, not because it
-is wanted. It fetches two files from public storage and reports their headers — a debugging
-aid from 2026-07-31 with no caller in this codebase. Reasonable to delete from the project
-once someone confirms that.
+## The 2026-07-31 triage tool, and why it is gone
+
+`program-triage`, `triage-api` and `probe-headers` were deployed on 2026-07-31 as a tool for
+sorting SparkPoint's programs into keep / merge / archive. It was self-tested once and never
+rolled out — the submissions table held exactly one row, Jeff's own. All three were deleted
+from the project on 2026-08-12.
+
+Two things are worth knowing, because they generalise:
+
+- **`program-triage` and `triage-api` both hardcoded a shared dashboard key** (org name plus
+  year) which gated an endpoint returning every submission. That is why they were never
+  committed here: publishing the literal in a public repo would have removed the last
+  friction in front of it. The functions are deleted, so the key is now inert.
+- **`gitleaks` did not flag it.** A homemade shared password matches no provider format and
+  no entropy rule, so the CI secret scan would have passed those files. See "Secret
+  handling" below — this class of secret has to be caught in review.
+
+The tool's genuinely valuable part was the program inventory embedded in its source: all 24
+programs with their Listen/Learn/Lead path, format, cluster, whether each appears on the
+website or in the 2026 handout, and an evidence assessment of whether it is actually
+running. That content was extracted to the Digital Brain vault
+(`08-Sources/sparkpoint-program-inventory-2026.md`) before deletion, along with Jeff's
+single triage pass. The source itself is backed up outside any repo at
+`~/Claude/backups/supabase-suqtfbculwuetfdhdgdh-20260812/`.
 
 ## Deploy hazard: stale duplicate checkouts
 
