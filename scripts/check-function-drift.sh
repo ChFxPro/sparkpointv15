@@ -10,11 +10,19 @@
 # had already been deleted. A byte comparison against what Supabase is actually
 # serving has no such failure mode.
 #
-# Reports one of four states per function:
-#   match     deployed bytes == repo bytes
-#   DRIFT     both exist and differ — someone deployed from somewhere else
-#   no-source deployed but not in this repo (nothing here can update it)
+# Compares the whole function directory, not just the entrypoint: a function that
+# imports a sibling can drift in that file while index.ts still matches.
+#
+# Reports one of five states per function:
+#   match         deployed tree == repo tree (file count and bytes shown)
+#   DRIFT         both exist and differ — lists which files, per side
+#   expected      deployed, no source here, and that is known and declared
+#   no-source     deployed but absent from this repo, and NOT declared — a real finding
 #   not-deployed  in this repo but not on the project
+#
+# The `expected` exemptions describe one project's inventory only. Pointed at any
+# other --project-ref they are disabled, since the same slug means something else
+# there.
 #
 # Read-only. Downloads to a temp dir and never writes to the repo or the project.
 #
@@ -24,8 +32,12 @@
 
 set -euo pipefail
 
-REF="${2:-suqtfbculwuetfdhdgdh}"
-[[ "${1:-}" == "--project-ref" && -n "${2:-}" ]] && REF="$2"
+PROD_REF="suqtfbculwuetfdhdgdh"
+REF="$PROD_REF"
+if [[ "${1:-}" == "--project-ref" ]]; then
+  [[ -n "${2:-}" ]] || { echo "--project-ref needs a value" >&2; exit 2; }
+  REF="$2"
+fi
 
 command -v supabase >/dev/null 2>&1 || { echo "supabase CLI not found" >&2; exit 2; }
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || { echo "not in a git repo" >&2; exit 2; }
@@ -35,6 +47,26 @@ trap 'rm -rf "$TMP"' EXIT
 
 printf '\nEdge function drift check — project %s\n\n' "$REF"
 
+# Functions deliberately not sourced from this repo. A permanently-red check is a
+# check people stop reading, so these are declared rather than reported forever.
+# Anything NOT listed here that turns up no-source is a real finding.
+#
+# These describe ONE project's inventory — the production ref below. Pointed at any
+# other project, the same slug means something else entirely, so the exemptions are
+# not applied and every sourceless function is reported. Add a new block per
+# project if this is ever needed elsewhere.
+declare -A EXPECTED_NO_SOURCE=()
+if [[ "$REF" == "$PROD_REF" ]]; then
+  EXPECTED_NO_SOURCE=(
+    [server]="owned by DataAdmin/Spwebdatahandlingapp (same project ref) — do NOT add supabase/functions/server/ here"
+    [make-server-de2b7016]="orphaned Figma-Make auto-deploy, superseded by 'server'; live but not locally updatable"
+  )
+else
+  printf '  note: --project-ref is not the production project, so no-source\n'
+  printf '        exemptions are disabled; every sourceless function is reported.\n\n'
+fi
+
+
 # Deployed slugs, parsed from the CLI's table output.
 DEPLOYED="$(supabase functions list --project-ref "$REF" 2>/dev/null \
   | awk -F'|' 'NR>1 && NF>3 {gsub(/ /,"",$3); if ($3 != "" && $3 != "SLUG" && $3 !~ /^-+$/) print $3}' | sort -u)"
@@ -43,14 +75,6 @@ DEPLOYED="$(supabase functions list --project-ref "$REF" 2>/dev/null \
 
 LOCAL="$(cd "$ROOT" && ls -1 supabase/functions 2>/dev/null | while read -r d; do
   [[ -d "supabase/functions/$d" ]] && echo "$d"; done | sort -u)"
-
-# Functions deliberately not sourced from this repo. A permanently-red check is a
-# check people stop reading, so these are declared rather than reported forever.
-# Anything NOT listed here that turns up no-source is a real finding.
-declare -A EXPECTED_NO_SOURCE=(
-  [server]="owned by DataAdmin/Spwebdatahandlingapp (same project ref) — do NOT add supabase/functions/server/ here"
-  [make-server-de2b7016]="orphaned Figma-Make auto-deploy, superseded by 'server'; live but not locally updatable"
-)
 
 problems=0
 
@@ -74,20 +98,25 @@ for slug in $DEPLOYED; do
     printf '  %-24s ERROR       could not download\n' "$slug"
     problems=$((problems+1)); continue; }
 
-  dl=""
-  for cand in "$TMP/supabase/functions/$slug/index.ts" "$TMP/supabase/functions/$slug/index.tsx"; do
-    [[ -f "$cand" ]] && dl="$cand" && break
-  done
+  # Compare the WHOLE function directory, not just the entrypoint. A function that
+  # imports a sibling (helper, template, kv_store) can drift in that file while
+  # index.ts matches, which an entrypoint-only check would call clean.
+  dl_dir="$TMP/supabase/functions/$slug"
+  if [[ ! -d "$dl_dir" ]]; then
+    printf '  %-24s ERROR       download produced no directory\n' "$slug"
+    problems=$((problems+1)); continue
+  fi
 
-  if [[ -z "$dl" ]]; then
-    printf '  %-24s ERROR       download produced no entrypoint\n' "$slug"
-    problems=$((problems+1))
-  elif diff -q "$dl" "$repo_file" >/dev/null 2>&1; then
-    printf '  %-24s match       %s bytes\n' "$slug" "$(wc -c < "$repo_file" | tr -d ' ')"
+  # -r recurses; .DS_Store is a Finder artifact, never a deployment input.
+  DIFF_OUT="$(diff -r -q -x '.DS_Store' "$dl_dir" "$ROOT/supabase/functions/$slug" 2>&1 || true)"
+
+  if [[ -z "$DIFF_OUT" ]]; then
+    nfiles=$(find "$ROOT/supabase/functions/$slug" -type f ! -name '.DS_Store' | wc -l | tr -d ' ')
+    nbytes=$(find "$ROOT/supabase/functions/$slug" -type f ! -name '.DS_Store' -exec cat {} + | wc -c | tr -d ' ')
+    printf '  %-24s match       %s file(s), %s bytes\n' "$slug" "$nfiles" "$nbytes"
   else
-    printf '  %-24s DRIFT       deployed %s B vs repo %s B\n' "$slug" \
-      "$(wc -c < "$dl" | tr -d ' ')" "$(wc -c < "$repo_file" | tr -d ' ')"
-    printf '  %-24s             diff: diff <(supabase functions download %s) %s\n' "" "$slug" "${repo_file#"$ROOT"/}"
+    printf '  %-24s DRIFT\n' "$slug"
+    printf '%s\n' "$DIFF_OUT" | sed 's|'"$dl_dir"'|<deployed>|g; s|'"$ROOT"'/supabase/functions/'"$slug"'|<repo>|g; s/^/                             /'
     problems=$((problems+1))
   fi
 done

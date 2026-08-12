@@ -85,10 +85,26 @@ DIR="supabase/functions/$SLUG"
 ok "function directory exists"
 
 if [[ "${ALLOW_DIRTY:-0}" != "1" ]]; then
-  DIRTY="$(git status --porcelain -- "$DIR" | wc -l | tr -d ' ')"
-  [[ "$DIRTY" == "0" ]] || die "$DIRTY uncommitted change(s) under $DIR.
-     Commit them, or re-run with ALLOW_DIRTY=1 if this is a deliberate hotfix."
-  ok "function source is committed"
+  # Check every input Deno actually bundles, not just the slug directory. The
+  # shared config at supabase/functions/ is applied to whichever function is
+  # being built, so an uncommitted change there would reach production through a
+  # slug directory that looks clean — bypassing the PR gate this script exists to
+  # enforce. README.md is documentation, not a build input, so it is excluded.
+  SHARED_INPUTS=()
+  for f in supabase/functions/deno.json supabase/functions/deno.lock \
+           supabase/functions/import_map.json; do
+    [[ -f "$f" ]] && SHARED_INPUTS+=("$f")
+  done
+
+  DIRTY_LIST="$(git status --porcelain -- "$DIR" ${SHARED_INPUTS[@]+"${SHARED_INPUTS[@]}"})"
+  if [[ -n "$DIRTY_LIST" ]]; then
+    die "Uncommitted changes in a deployment input:
+$(printf '%s\n' "$DIRTY_LIST" | sed 's/^/       /')
+     These all get bundled into the deployed function. Commit them, or re-run
+     with ALLOW_DIRTY=1 if this is a deliberate hotfix."
+  fi
+  ok "function source and shared config are committed"
+  [[ ${#SHARED_INPUTS[@]} -gt 0 ]] && ok "checked shared inputs: ${SHARED_INPUTS[*]#supabase/functions/}"
 fi
 
 # 7. Confirm, showing exactly what is about to happen.
