@@ -50,19 +50,55 @@ running. That content was extracted to the Digital Brain vault
 single triage pass. The source itself is backed up outside any repo at
 `~/Claude/backups/supabase-suqtfbculwuetfdhdgdh-20260812/`.
 
-## Deploy hazard: stale duplicate checkouts
+## Use the scripts, not the bare CLI
 
-As of 2026-08-11 `make-server-393f2b0a` existed in **four** CLI-valid deploy directories.
-Three were stale at 7,461 bytes against the real 11,808, and **none of the three contained
-the SEC-004 hardening** — deploying from any of them would silently roll back the request
-size limit and field validation on a live public form:
+```bash
+scripts/deploy-function.sh <slug>        # guarded deploy
+scripts/check-function-drift.sh          # is deployed == repo?
+```
 
-- `sparkpointv15/.claude/worktrees/resource-directory/…`
-- `sparkpointv15/.claude/worktrees/mystifying-euler-52c838/…`
-- `dr_ora/.worktrees/sparkpoint-kyn/…` ← a sparkpoint worktree parked under an unrelated repo
+**`deploy-function.sh`** refuses to run unless you are in the canonical checkout (not a
+worktree), at the repo root, on `main`, level with `origin/main`, with the function's source
+committed — then shows the slug, path, project and commit and asks for confirmation. The
+worktree check is the one that matters: it catches the exact way a pre-hardening handler
+could otherwise reach production.
 
-Before running any `supabase functions deploy`, confirm you are in the repo root on `main`,
-not in a worktree.
+**`check-function-drift.sh`** downloads every deployed function and byte-compares it against
+this repo. It is the only check on these functions that cannot be fooled by a renamed
+symbol — see the comment at the top of the script for how a grep-based check reported the
+*correct* intake handler as unhardened. Read-only. Run it after any deploy, and any time you
+are unsure what is actually live.
+
+Functions knowingly sourced from elsewhere (`server`, `make-server-de2b7016`) are declared
+inside the drift script so the check can pass green. Anything else reporting `no-source` is
+a real finding.
+
+## Deploy hazard: stale duplicate checkouts — resolved 2026-08-12, but it recurs
+
+`supabase functions deploy <slug>` reads `<current directory>/supabase/functions/<slug>/`.
+Nothing marks a directory as the real one, so **any full checkout of this repo is a live
+deploy button** — and a git worktree is a full checkout.
+
+On 2026-08-12 there were **seven** CLI-valid deploy directories for `make-server-393f2b0a`
+on one machine, not the four first counted (the initial search missed `~/.claude/jobs/`).
+Three held a pre-SEC-004 copy at 7,461 bytes against the real 11,808:
+
+- `sparkpointv15/.claude/worktrees/resource-directory/` — also held one unmerged commit,
+  since preserved on `origin/feat/resource-directory`, plus a `.gitignore` rule now ported here
+- `sparkpointv15/.claude/worktrees/mystifying-euler-52c838/`
+- `dr_ora/.worktrees/sparkpoint-kyn/` — a sparkpoint worktree parked under an unrelated repo,
+  where nothing about the path hinted it could overwrite this project's production endpoint
+
+All non-canonical checkouts were removed, leaving exactly one deploy path. Feature branches
+were preserved on `origin` first; only the working copies went.
+
+**This will happen again** — the next worktree recreates it. That is what
+`scripts/deploy-function.sh` is for: it refuses to deploy from a linked worktree rather than
+relying on anyone remembering. To audit by hand at any time:
+
+```bash
+find ~ -type d -path "*/supabase/functions/*" -not -path "*/node_modules/*" -not -path "*/.git/*"
+```
 
 ## Secret handling
 

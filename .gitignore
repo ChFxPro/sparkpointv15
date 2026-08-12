@@ -32,3 +32,9 @@ output/
 # Monthly raw CSV exports dropped for scripts/internal-reports/ingest.mjs —
 # transient input, not source; re-exported from the platform each month.
 scripts/internal-reports/incoming/
+
+# Local-only seed / reference data — never serve or commit (may contain internal staff notes).
+# The Resource Directory's runtime source of truth is src/data/resources.ts, not these files.
+# Ported 2026-08-12 from the feat/resource-directory worktree before it was removed;
+# nothing has ever been committed here, so this is preventive.
+/public/databases/
