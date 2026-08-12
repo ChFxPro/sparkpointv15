@@ -111,13 +111,28 @@ Last updated: 2026-08-10
 - Do not hardcode new rollup totals directly in page components.
 
 ### Supabase edge functions — where they actually live
-- This repo deploys exactly one function: `supabase/functions/make-server-393f2b0a/`
-  (health + public intake). That is the only path the Supabase CLI reads.
-- The frontend calls two functions: `make-server-393f2b0a/intake` and `rh-ticket-stock`.
-- The deployed function named `server` on project `suqtfbculwuetfdhdgdh` is **owned by a
-  different repo** (`DataAdmin/Spwebdatahandlingapp`). Do not add a
+**`supabase/functions/README.md` is the canonical inventory.** Read it before deploying,
+adding, or deleting a function. Kept there rather than duplicated here, because a fact
+stated in two places drifts — this section already went stale once.
+
+The short version:
+
+- `supabase/functions/<slug>/` is the **only** path the Supabase CLI reads. Anything under
+  `src/` or inside a worktree is not a deploy path.
+- This repo deploys two functions: `make-server-393f2b0a` (health + public intake) and
+  `rh-ticket-stock` (read-only seat-count proxy for the convening page). The frontend calls
+  exactly those two.
+- **Ship functions from that directory through a PR — never by passing source inline to an
+  MCP `deploy_edge_function` call.** Four live functions were deployed that way and ended up
+  with no source in any repo; recovering them is what PR #132 was for. Inline deploys also
+  bypass the build check and the secret scan.
+- The deployed function named `server` is **owned by a different repo**
+  (`DataAdmin/Spwebdatahandlingapp`, same project ref). Do not add a
   `supabase/functions/server/` directory here — deploying it would overwrite that project's
   live function.
+- Read secrets from `Deno.env.get(...)`. Note that `gitleaks` will **not** catch a homemade
+  shared password like `"orgname2026"` — it matches no provider format and no entropy rule.
+  That class of secret has to be caught in review.
 - A second copy of the intake handler used to sit at `src/supabase/functions/server/`
   (the original Figma Make scaffold layout). It was never a deploy path, nothing imported
   it, and its `make-server-535d8907` routes were never deployed — but it was being patched
