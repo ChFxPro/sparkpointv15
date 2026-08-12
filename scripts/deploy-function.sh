@@ -60,8 +60,14 @@ fi
 ok "canonical checkout (not a worktree)"
 
 # 3. Must be run from the repo root, so the CLI's relative path resolves as expected.
+# Compare PHYSICAL paths. `git rev-parse --show-toplevel` always returns the real
+# path, while $PWD keeps whatever symlinked path you arrived through — on macOS
+# /tmp is a symlink to /private/tmp, so comparing the two refused a checkout that
+# WAS at its repo root. Fails closed, so it was never dangerous, but a guard that
+# cries wolf is a guard people start bypassing.
 ROOT="$(git rev-parse --show-toplevel)"
-[[ "$PWD" == "$ROOT" ]] || die "Run from the repo root ($ROOT), not $PWD."
+HERE="$(pwd -P)"
+[[ "$HERE" == "$ROOT" ]] || die "Run from the repo root ($ROOT), not $HERE."
 ok "at repo root"
 
 # 4. Must be on main.
