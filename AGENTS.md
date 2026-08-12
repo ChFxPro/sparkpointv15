@@ -102,13 +102,27 @@ Last updated: 2026-08-10
 - Added minimal launch pages for sponsors, resilience hub, and news/media.
 - Added Stories top tabs with Programs navigation.
 
-## 2025 Impact Metrics Source
+## Impact Metrics Source
 - Canonical file for 2025 website totals: `src/data/impact2025.ts`.
+- Canonical file for 2024 totals: `src/data/impact2024.ts`.
 - If launch metrics change, update constants there first, then verify:
   - `src/pages/ImpactPage.tsx`
   - `src/components/ImpactSection.tsx`
-  - `src/supabase/functions/server/index.tsx` (seeded API payload)
-- Do not hardcode new 2025 rollup totals directly in page components.
+- Do not hardcode new rollup totals directly in page components.
+
+### Supabase edge functions — where they actually live
+- This repo deploys exactly one function: `supabase/functions/make-server-393f2b0a/`
+  (health + public intake). That is the only path the Supabase CLI reads.
+- The frontend calls two functions: `make-server-393f2b0a/intake` and `rh-ticket-stock`.
+- The deployed function named `server` on project `suqtfbculwuetfdhdgdh` is **owned by a
+  different repo** (`DataAdmin/Spwebdatahandlingapp`). Do not add a
+  `supabase/functions/server/` directory here — deploying it would overwrite that project's
+  live function.
+- A second copy of the intake handler used to sit at `src/supabase/functions/server/`
+  (the original Figma Make scaffold layout). It was never a deploy path, nothing imported
+  it, and its `make-server-535d8907` routes were never deployed — but it was being patched
+  in parallel, so security fixes had to be written twice. Removed; see git history if the
+  old `/impact/*` or `/volunteer` handlers are ever needed.
 
 ## Development Standards
 - Always branch before feature work.

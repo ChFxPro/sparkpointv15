@@ -91,6 +91,17 @@ Total claims: 90
 
 ### /api/impact/*
 
+> **Superseded — this whole section is historical.** The file it inventories,
+> `src/supabase/functions/server/index.tsx`, was removed: it was never a deploy path, the
+> app never imported it, and its `make-server-535d8907` routes (`/impact/init`,
+> `/impact/metrics`, `/volunteer`) were never deployed, so `/api/impact/*` was never a live
+> endpoint. The 2024 figures below are now preserved as `src/data/impact2024.ts`. The 2025
+> figures below (103 events / 3,510 attendance) were **already wrong** when this inventory
+> was written and were corrected in the canonical `src/data/impact2025.ts`
+> (109 events / 5,866 attendance) — see `docs/recon/launch-recon-map.md` rows 50–52, which
+> flagged exactly this drift as P0. Line references below are stale. Kept for provenance,
+> not as a pointer to anything current.
+
 - **SparkPoint Impact Dashboard API - Updated 2025** | values: [2025] | units: other | risk: low | file: src/supabase/functions/server/index.tsx:1-1
   notes: Comment-level year marker for API seed logic.
 - **2024 metrics snapshot: community_events 37, workshops 29, youth_events 18, presentations 13, total_events 97, attendance 7000, unique_partners 40, individuals_trained 500, avg_attendance 72.1, ready_groups 8** | values: [2024,37,29,18,13,97,7000,40,500,72.1,8] | units: other | risk: high | file: src/supabase/functions/server/index.tsx:60-72
