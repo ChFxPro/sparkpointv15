@@ -3,8 +3,31 @@ import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
-const defaultBase = '/sparkpointv15/';
-const defaultSiteOrigin = 'https://www.yoursparkpoint.org';
+// Matches production. The site is served from the apex custom domain (see the CNAME
+// step in .github/workflows/deploy.yml), so every deployed build uses base '/'.
+//
+// This used to default to '/sparkpointv15/' — the GitHub Pages *project* URL
+// (chfxpro.github.io/sparkpointv15/) from before the custom domain existed. Because CI
+// sets PUBLIC_BASE=/ explicitly, that default only ever applied to local builds, which
+// meant `npm run build` silently produced something production never ships: assets
+// referenced at /sparkpointv15/... that the prerenderer's root-serving preview server
+// could not load, so React never booted and all ~88 pages serialized as the same empty
+// SPA shell — while the build still exited 0. (scripts/prerender.mjs now hard-fails on
+// that, but matching prod here is what stops it happening in the first place.)
+//
+// If you ever need to serve from the raw project URL again — e.g. the custom domain or
+// its DNS has to come off — build with an explicit override instead of editing this:
+//   PUBLIC_BASE=/sparkpointv15/ npm run build
+// (public/404.html's `repoSegment` shim exists for that same scenario and is a no-op on
+// the apex domain.)
+const defaultBase = '/';
+// Apex, matching production and the CNAME written by .github/workflows/deploy.yml.
+// Every other origin default in the repo already resolves to the apex — src/lib/siteOrigin.ts,
+// scripts/replace-site-origin.js and scripts/prerender.mjs — so this was the lone outlier at
+// 'https://www.yoursparkpoint.org'. CI sets SITE_ORIGIN/PUBLIC_ORIGIN/VITE_SITE_ORIGIN
+// explicitly, so the old value only reached local builds, where it silently produced
+// canonical/OG URLs on a hostname the site does not canonically serve.
+const defaultSiteOrigin = 'https://yoursparkpoint.org';
 
 if (!process.env.VITE_SITE_ORIGIN) {
   process.env.VITE_SITE_ORIGIN = process.env.SITE_ORIGIN ?? process.env.PUBLIC_ORIGIN ?? defaultSiteOrigin;
