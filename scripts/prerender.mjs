@@ -55,6 +55,21 @@ const REDIRECTS = {
   '/wellness-rooted-in-connection': `${ORIGIN}/programs/wellness-rooted-in-connection-collaborative-trcn`,
   '/wellnessrootedinconnection': `${ORIGIN}/programs/wellness-rooted-in-connection-collaborative-trcn`,
   '/helene-one-year-of-healing': `${ORIGIN}/stories/community-champions/helene-anniversary`,
+  // Second batch, from the 8/13/26 GSC "Not found (404)" export. Targets verified
+  // against the live route table in src/App.tsx — note /community-connectors sits at
+  // the root, NOT under /programs/.
+  '/community-connections': `${ORIGIN}/community-connectors`,
+  '/home-impact': `${ORIGIN}/impact`,
+  '/trauma-resilient-communities-partnership': `${ORIGIN}/programs/wellness-rooted-in-connection-collaborative-trcn`,
+  '/cognitivehealthresources': `${ORIGIN}/resources/know-your-numbers`,
+  // "/supported" is the retired Squarespace URL for SupportEd (Connected Classrooms &
+  // Educator Well-Being) — not a "supporters" page. Confirmed against the 2026 program
+  // inventory, which independently flagged this URL as a live 404 with a broken backlink.
+  '/supported': `${ORIGIN}/programs/supported-connected-classrooms`,
+  // Duplicate of the Helene one-year story. Both URLs were live and both were in the
+  // sitemap; /stories/community-champions/helene-anniversary is canonical. Listing it
+  // here also drops it from the generated sitemap and skips prerendering it.
+  '/stories/disaster-recovery/helene-one-year': `${ORIGIN}/stories/community-champions/helene-anniversary`,
 };
 // Client-side redirect aliases with no static stub yet: leave to the SPA fallback.
 // (Empty for now — keep as a hook for any future alias that shouldn't get a stub,
@@ -63,7 +78,11 @@ const SKIP = new Set();
 const STATIC = ['/', '/about', '/mission', '/impact', '/programs', '/programs/purpose-workshops',
   '/get-involved', '/community-connectors', '/partners', '/resilience-hub', '/directory', '/press', '/stories', '/events',
   '/trust', '/privacy', '/intake', '/resources/know-your-numbers', '/rural-health-convening',
-  '/events/thrive-at-five'];
+  '/events/thrive-at-five',
+  // Hand-written route in App.tsx (HeleneOneYearArticle) rather than a stories.ts entry,
+  // so route derivation never picked it up and it had no build output — meaning the
+  // /helene-one-year-of-healing redirect had been pointing at a hard 404 this whole time.
+  '/stories/community-champions/helene-anniversary'];
 
 const norm = (u) => { let x = u.split('#')[0].split('?')[0]; if (x.length > 1) x = x.replace(/\/+$/, ''); return x || '/'; };
 
@@ -131,7 +150,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const server = await startServer();
   const base = `http://localhost:${PORT}`;
   const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
-  const done = [], failed = [];
+  const done = [], failed = [], emptyRoutes = [];
   const queue = [...seed], seen = new Set();
 
   while (queue.length) {
@@ -181,7 +200,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
         // failed the build outright. Slowness is tolerated; a page that never renders is not.
         throw new Error(`route did not render after domcontentloaded fallback (${notReady})`);
       }
-      if (notReady) console.warn(`  ! ${route}: ${notReady} (settled normally — writing anyway, pre-existing behaviour)`);
+      if (notReady) { emptyRoutes.push(route); console.warn(`  ! ${route}: ${notReady} (settled normally — writing anyway, pre-existing behaviour)`); }
       await sleep(250);
       const hrefs = await page.$$eval('a[href]', (as) => as.map((a) => a.getAttribute('href') || ''));
       for (const h of hrefs) {
@@ -206,11 +225,34 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   await browser.close();
   server.close();
 
+  // Guard against a silently useless prerender. Individual empty routes are tolerated
+  // (the warning above), but if MOST routes render empty the app never booted at all —
+  // and every page would be written as the same empty SPA shell while the build still
+  // exited 0. The usual cause is a base-path mismatch: vite.config.mts defaults `base`
+  // to '/sparkpointv15/', so a plain `npm run build` emits <script src="/sparkpointv15/...">
+  // which this root-serving preview server cannot resolve, so no JS ever executes.
+  // CI passes PUBLIC_BASE=/ (see .github/workflows/deploy.yml) and renders correctly.
+  if (done.length && emptyRoutes.length > done.length / 2) {
+    console.error(
+      `\n✗ prerender produced empty HTML for ${emptyRoutes.length}/${done.length} routes.\n` +
+      `  Every page would ship as an identical empty shell with no content or per-page meta.\n` +
+      `  Most likely the asset base path does not match how these files are served.\n` +
+      `  Rebuild the way CI does:  PUBLIC_BASE=/ npm run build`
+    );
+    process.exit(1);
+  }
+
   // QR-safe 200 redirect stubs for external redirect routes
   for (const [route, target] of Object.entries(REDIRECTS)) {
     const file = path.join(OUT, route.replace(/^\//, '') + '.html');
     await mkdir(path.dirname(file), { recursive: true });
-    const stub = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><link rel="canonical" href="${target}"><meta http-equiv="refresh" content="0;url=${target}"><title>Redirecting…</title><script>location.replace(${JSON.stringify(target)})</script></head><body><p>Redirecting to <a href="${target}">${target}</a>…</p></body></html>`;
+    // No `noindex` here, deliberately. GitHub Pages cannot issue a real 301, so the
+    // canonical + 0s meta refresh is the ONLY signal that consolidates a retired URL's
+    // ranking value onto its replacement. Adding `noindex` contradicts the canonical —
+    // Google drops the URL instead of passing the equity forward, which is the opposite
+    // of what these stubs exist to do. These pages stay out of sitemap.xml (see below),
+    // so they still won't be crawled as standalone content.
+    const stub = `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="canonical" href="${target}"><meta http-equiv="refresh" content="0;url=${target}"><title>Redirecting…</title><script>location.replace(${JSON.stringify(target)})</script></head><body><p>Redirecting to <a href="${target}">${target}</a>…</p></body></html>`;
     await writeFile(file, stub);
     done.push(route);
   }
