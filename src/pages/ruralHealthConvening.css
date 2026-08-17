@@ -305,7 +305,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 12px 20px;
 }
 
 .rh-hero-partner-logos {
@@ -388,11 +388,33 @@
   height: 18px;
 }
 
+.rh-hero-logo-link.tier-friends img {
+  height: 16px;
+}
+
+/* Stacked and multi-line lockups need extra box height to match the optical
+   weight of the single-line wordmarks sitting beside them in the same tier. */
 .rh-hero-logo-link.tier-foothills.rh-logo-stage-vaya img {
   height: 25px;
 }
 
-.rh-hero-logo-divider {
+.rh-hero-logo-link.tier-foothills.rh-logo-stage-first-citizens img {
+  height: 22px;
+}
+
+.rh-hero-logo-link.tier-friends.rh-logo-stage-advent img {
+  height: 18px;
+}
+
+.rh-hero-logo-link.tier-friends.rh-logo-stage-uhc img {
+  height: 24px;
+}
+
+/* The tier separator lives inside the tier it precedes rather than as its own
+   flex item, so a wrapped line can never end with an orphaned rule. */
+.rh-hero-logo-tier:not(:first-child)::before {
+  content: '';
+  flex: none;
   width: 1px;
   height: 38px;
   background: rgba(47, 74, 60, 0.18);
@@ -1422,9 +1444,12 @@ a.rh-logo-stage:focus-visible {
 
 .rh-foothills-logos {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 28px;
+  /* The stages carry their own fixed height, so wrapped rows need no extra
+     row-gap on top of it. */
+  gap: 0 28px;
   margin: 12px 0 0;
 }
 
@@ -1440,6 +1465,43 @@ a.rh-logo-stage:focus-visible {
 
 .rh-logo-stage-foothills.rh-logo-stage-vaya img {
   height: 54px;
+}
+
+.rh-logo-stage-foothills.rh-logo-stage-first-citizens img {
+  height: 48px;
+}
+
+.rh-friends-field {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px dotted rgba(47, 74, 60, 0.24);
+}
+
+.rh-friends-logos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0 28px;
+  margin: 12px 0 0;
+}
+
+.rh-logo-stage-friends {
+  height: 80px;
+}
+
+.rh-logo-stage-friends img {
+  width: auto;
+  height: 34px;
+  max-width: 200px;
+}
+
+.rh-logo-stage-friends.rh-logo-stage-advent img {
+  height: 36px;
+}
+
+.rh-logo-stage-friends.rh-logo-stage-uhc img {
+  height: 46px;
 }
 
 .rh-final-cta {
@@ -1969,6 +2031,28 @@ a.rh-logo-stage:focus-visible {
 
   .rh-logo-stage-foothills.rh-logo-stage-vaya img {
     height: 48px;
+  }
+
+  .rh-logo-stage-foothills.rh-logo-stage-first-citizens img {
+    height: 46px;
+  }
+
+  .rh-logo-stage-friends {
+    height: 68px;
+  }
+
+  .rh-logo-stage-friends img {
+    width: auto;
+    height: 30px;
+    max-width: 170px;
+  }
+
+  .rh-logo-stage-friends.rh-logo-stage-advent img {
+    height: 32px;
+  }
+
+  .rh-logo-stage-friends.rh-logo-stage-uhc img {
+    height: 42px;
   }
 
   .rh-sparkpoint-logo {

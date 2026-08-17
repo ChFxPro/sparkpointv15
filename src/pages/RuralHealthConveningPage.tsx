@@ -25,6 +25,9 @@ import transylvaniaRegionalHospitalLogo from '../assets/sponsors/trh.webp';
 import transylvaniaTdaLogo from '../assets/sponsors/brevard_tda.webp';
 import dogwoodHealthTrustLogo from '../assets/sponsors/dogwood.png';
 import vayaHealthLogo from '../assets/sponsors/vaya_health.webp';
+import firstCitizensBankLogo from '../assets/sponsors/first_citizens.webp';
+import adventHealthLogo from '../assets/sponsors/advent_health.webp';
+import unitedHealthcareLogo from '../assets/sponsors/united_healthcare.webp';
 import impactHealthLogoDark from '../assets/rural_health/impact_health_dk.webp';
 import wncrrhcLogoLight from '../assets/rural_health/wncrrhc_logo_lt.webp';
 import './ruralHealthConvening.css';
@@ -100,6 +103,33 @@ const foothillsSponsors = [
     stageClassName: 'rh-logo-stage-vaya',
     width: 576,
     height: 346,
+  },
+  {
+    name: 'First Citizens Bank',
+    href: 'https://www.firstcitizens.com',
+    src: firstCitizensBankLogo,
+    stageClassName: 'rh-logo-stage-first-citizens',
+    width: 340,
+    height: 160,
+  },
+];
+
+const friendsSponsors = [
+  {
+    name: 'AdventHealth',
+    href: 'https://www.adventhealth.com',
+    src: adventHealthLogo,
+    stageClassName: 'rh-logo-stage-advent',
+    width: 1226,
+    height: 309,
+  },
+  {
+    name: 'UnitedHealthcare',
+    href: 'https://www.uhc.com',
+    src: unitedHealthcareLogo,
+    stageClassName: 'rh-logo-stage-uhc',
+    width: 1280,
+    height: 403,
   },
 ];
 
@@ -226,6 +256,22 @@ const eventJsonLd = {
     {
       '@type': 'Organization',
       name: 'Dogwood Health Trust',
+    },
+    {
+      '@type': 'Organization',
+      name: 'Vaya Health',
+    },
+    {
+      '@type': 'Organization',
+      name: 'First Citizens Bank',
+    },
+    {
+      '@type': 'Organization',
+      name: 'AdventHealth',
+    },
+    {
+      '@type': 'Organization',
+      name: 'UnitedHealthcare',
     },
   ],
 };
@@ -419,7 +465,6 @@ export function RuralHealthConveningPage() {
                         </a>
                       ))}
                     </div>
-                    <span className="rh-hero-logo-divider" aria-hidden="true" />
                     <div className="rh-hero-logo-tier">
                       {ridgelineSponsors.map((sponsor) => (
                         <a
@@ -434,7 +479,6 @@ export function RuralHealthConveningPage() {
                         </a>
                       ))}
                     </div>
-                    <span className="rh-hero-logo-divider" aria-hidden="true" />
                     <div className="rh-hero-logo-tier">
                       {highlandsSponsors.map((sponsor) => (
                         <a
@@ -449,12 +493,25 @@ export function RuralHealthConveningPage() {
                         </a>
                       ))}
                     </div>
-                    <span className="rh-hero-logo-divider" aria-hidden="true" />
                     <div className="rh-hero-logo-tier">
                       {foothillsSponsors.map((sponsor) => (
                         <a
                           key={sponsor.name}
                           className={`rh-hero-logo-link tier-foothills ${sponsor.stageClassName}`}
+                          href={sponsor.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Visit ${sponsor.name}`}
+                        >
+                          <img src={sponsor.src} alt={sponsor.name} width={sponsor.width} height={sponsor.height} />
+                        </a>
+                      ))}
+                    </div>
+                    <div className="rh-hero-logo-tier">
+                      {friendsSponsors.map((sponsor) => (
+                        <a
+                          key={sponsor.name}
+                          className={`rh-hero-logo-link tier-friends ${sponsor.stageClassName}`}
                           href={sponsor.href}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -966,6 +1023,31 @@ export function RuralHealthConveningPage() {
                       <a
                         key={sponsor.name}
                         className={`rh-logo-stage rh-logo-stage-foothills ${sponsor.stageClassName}`}
+                        href={sponsor.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Visit ${sponsor.name}`}
+                      >
+                        <img
+                          src={sponsor.src}
+                          alt={sponsor.name}
+                          width={sponsor.width}
+                          height={sponsor.height}
+                        />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rh-friends-field">
+                  <p className="rh-logo-label rh-logo-label-tertiary">
+                    With Friends support from
+                  </p>
+                  <div className="rh-friends-logos">
+                    {friendsSponsors.map((sponsor) => (
+                      <a
+                        key={sponsor.name}
+                        className={`rh-logo-stage rh-logo-stage-friends ${sponsor.stageClassName}`}
                         href={sponsor.href}
                         target="_blank"
                         rel="noopener noreferrer"
