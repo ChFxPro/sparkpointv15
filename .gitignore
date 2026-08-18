@@ -32,3 +32,6 @@ output/
 # Monthly raw CSV exports dropped for scripts/internal-reports/ingest.mjs —
 # transient input, not source; re-exported from the platform each month.
 scripts/internal-reports/incoming/
+
+# Graphify code-graph output — regenerable via `graphify update .`
+graphify-out/

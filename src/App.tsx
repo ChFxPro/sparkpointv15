@@ -81,7 +81,9 @@ const KnowYourNumbersPage = lazy(() =>
 );
 const RuralHealthConveningPage = lazy(() => import('./pages/RuralHealthConveningPage'));
 const InternalStatusPage = lazy(() => import('./pages/InternalStatusPage'));
-const InternalLoginPage = lazy(() => import('./pages/InternalLoginPage'));
+const BackstagePage = lazy(() => import('./pages/BackstagePage'));
+const PartnerSharePage = lazy(() => import('./pages/PartnerSharePage'));
+const ConveningWorkspacePage = lazy(() => import('./pages/ConveningWorkspacePage'));
 const InternalReportsHomePage = lazy(() => import('./pages/InternalReportsHomePage'));
 const InternalReportDashboardPage = lazy(() => import('./pages/InternalReportDashboardPage'));
 const CommunityChampionsArticle = lazy(() => import('./pages/CommunityChampionsArticle'));
@@ -153,6 +155,7 @@ function AppContent() {
         <Route path="/stories/:categoryId" element={<StoryCategoryPage />} />
         <Route path="/stories/:categoryId/:slug" element={<StoryArticlePage />} />
         <Route path="/impact" element={<ImpactPage />} />
+        <Route path="/home-impact" element={<Navigate to="/impact" replace />} />
         <Route path="/programs" element={<ProgramsPage />} />
         <Route path="/programs/purpose-workshops" element={<PurposeWorkshopsPage />} />
         {/* Legacy Squarespace-era program URLs, retained as redirects for old backlinks/bookmarks. */}
@@ -174,9 +177,15 @@ function AppContent() {
           path="/wellnessrootedinconnection"
           element={<Navigate to="/programs/wellness-rooted-in-connection-collaborative-trcn" replace />}
         />
+        <Route
+          path="/trauma-resilient-communities-partnership"
+          element={<Navigate to="/programs/wellness-rooted-in-connection-collaborative-trcn" replace />}
+        />
+        <Route path="/supported" element={<Navigate to="/programs/supported-connected-classrooms" replace />} />
         <Route path="/programs/:slug" element={<ProgramDetailRoute />} />
         <Route path="/community-connectors" element={<CommunityConnectorsPage />} />
         <Route path="/commconn" element={<Navigate to="/community-connectors" replace />} />
+        <Route path="/community-connections" element={<Navigate to="/community-connectors" replace />} />
         <Route path="/partners" element={<SponsorsPage />} />
         <Route path="/sponsors" element={<Navigate to="/partners" replace />} />
         <Route path="/pcr_collab" element={<Navigate to="/events/thrive-at-five" replace />} />
@@ -200,6 +209,11 @@ function AppContent() {
         <Route path="/about-us" element={<Navigate to="/about" replace />} />
         <Route path="/community-champions/helene-one-year" element={<CommunityChampionsArticle />} />
         <Route path="/stories/community-champions/helene-anniversary" element={<HeleneOneYearArticle />} />
+        {/* Duplicate of the story above — consolidated onto the community-champions URL. */}
+        <Route
+          path="/stories/disaster-recovery/helene-one-year"
+          element={<Navigate to="/stories/community-champions/helene-anniversary" replace />}
+        />
         <Route
           path="/helene-one-year-of-healing"
           element={<Navigate to="/stories/community-champions/helene-anniversary" replace />}
@@ -207,9 +221,15 @@ function AppContent() {
         <Route path="/trust" element={<TrustPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/resources/know-your-numbers" element={<KnowYourNumbersPage />} />
+        <Route path="/cognitivehealthresources" element={<Navigate to="/resources/know-your-numbers" replace />} />
         <Route path="/rural-health-convening" element={<RuralHealthConveningPage />} />
+        <Route path="/internal" element={<BackstagePage />} />
+        <Route path="/internal/convening" element={<ConveningWorkspacePage />} />
+        <Route path="/internal/share/:partnerSlug" element={<PartnerSharePage />} />
         <Route path="/internal/status" element={<InternalStatusPage />} />
-        <Route path="/internal/login" element={<InternalLoginPage />} />
+        {/* Sign-in now lives on Backstage itself. This route stays because
+            Supabase password-reset emails already point at it. */}
+        <Route path="/internal/login" element={<BackstagePage />} />
         <Route path="/internal/reports" element={<InternalReportsHomePage />} />
         <Route path="/internal/reports/:reportType/:period" element={<InternalReportDashboardPage />} />
         <Route

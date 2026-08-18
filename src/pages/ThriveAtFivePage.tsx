@@ -209,8 +209,7 @@ export default function ThriveAtFivePage() {
             <p>
               From the first pour to the last song, this is what a season of
               connection looks like in Transylvania County — neighbors, coffee,
-              and Mark &amp; Sally Wingate closing out the night alongside Sarah
-              Siskind.
+              and Mark &amp; Sally Wingate closing out the night.
             </p>
             <p>
               Every bag of Common Ground sold through August helps fund
