@@ -19,7 +19,7 @@ Last updated: 2026-08-10
 - Mailing address boilerplate now uses `SparkPoint P.O. Box 2452, Brevard, NC 28712` across UI + structured data.
 - SEO metadata is standardized through `src/components/SEOHead.tsx` across route pages.
 - Structured data now includes Organization/NGO, WebSite, WebPage, and BreadcrumbList globally, plus page-level Article/Event schema where applicable.
-- Canonical site origin defaults to `https://www.yoursparkpoint.org` (see `src/lib/siteOrigin.ts` and `vite.config.ts`).
+- Canonical site origin defaults to the apex `https://yoursparkpoint.org` (see `src/lib/siteOrigin.ts` and `vite.config.mts`). `www.` 301-redirects to the apex, and canonical tags, `og:url`, and the sitemap all emit apex URLs — keep them that way, or the canonical will point at a URL that redirects.
 - `public/robots.txt` and `public/sitemap.xml` use `__SITE_ORIGIN__` placeholders replaced during postbuild.
 - Unified menu drawer includes a `Partners` link under the `About SparkPoint` group, pointing to `/partners`.
 - Permanent press portal is available at `/press`, with reusable release pages under `/press/:slug`.

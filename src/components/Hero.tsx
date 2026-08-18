@@ -155,7 +155,10 @@ export function Hero() {
               alt="SparkPoint Logo"
               width={839}
               height={290}
-              fetchPriority="high"
+              // React 18 silently drops the camelCase `fetchPriority` prop (React 19 added it),
+              // so the priority hint never reached the DOM. Spread the real lowercase
+              // attribute — React 18's types only declare the camelCase form.
+              {...{ fetchpriority: 'high' }}
               loading="eager"
               sizes="(min-width: 1024px) 320px, (min-width: 768px) 256px, 200px"
               className="h-20 md:h-32 lg:h-40 w-auto"
