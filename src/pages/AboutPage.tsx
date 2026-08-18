@@ -500,7 +500,10 @@ export function AboutPage() {
               height={1241}
               loading="eager"
               decoding="async"
-              fetchPriority="high"
+              // React 18 silently drops the camelCase `fetchPriority` prop (React 19 added it),
+              // so the priority hint never reached the DOM. Spread the real lowercase
+              // attribute — React 18's types only declare the camelCase form.
+              {...{ fetchpriority: 'high' }}
             />
           </picture>
           {/* Readability Layer: Strong Gradient Overlay */}

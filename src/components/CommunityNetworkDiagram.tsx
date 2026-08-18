@@ -174,11 +174,15 @@ export function CommunityNetworkDiagram() {
                 {!prefersReducedMotion && RING_PING_POINTS.map((p, i) => (
                   <g key={i}>
                     <circle cx={`${p.x}%`} cy={`${p.y}%`} r="2.5" fill="#FDB515" />
+                    {/* Motion reads a keyframe's start value from computed style, where SVG
+                        geometry attributes aren't exposed, so without an explicit initial it
+                        writes r="undefined" on the first frame. */}
                     <motion.circle
                       cx={`${p.x}%`}
                       cy={`${p.y}%`}
                       r="2.5"
                       fill="#FDB515"
+                      initial={{ r: 2.5, opacity: 0.6 }}
                       animate={{ r: [2.5, 9], opacity: [0.6, 0] }}
                       transition={{ duration: 2.6, repeat: Infinity, ease: 'easeOut', delay: i * 1.3 }}
                     />
