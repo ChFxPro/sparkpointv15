@@ -30,11 +30,13 @@ export interface EventPlanningGroup {
 // the status is appropriate to show here. Re-sync by pulling the board again and
 // updating this list; there's no live connection.
 //
-// Grouped by actual status rather than Monday's lane placement — Monday's own board
-// still has some Done items sitting in the "In Progress" lane (lane is a manual kanban
-// placement, not auto-synced to status), so anything marked Done lives under Completed
-// here regardless of which lane it's in on the board itself.
-export const EVENT_PLANNING_SYNCED_AT = '2026-08-07';
+// Grouped by actual status rather than Monday's lane placement — on the board itself a
+// lane is a manual kanban placement that isn't auto-synced to status, so Done items sit
+// in the "In Progress" lane and vice versa. Here the group ALWAYS follows the status
+// column: Done → Completed, In Progress → In Progress, no status set → To Do. Keep it
+// that way; a partner reading this page shouldn't see an item under "To Do" labelled
+// "In Progress".
+export const EVENT_PLANNING_SYNCED_AT = '2026-08-20';
 
 export const EVENT_PLANNING_BOARD: EventPlanningGroup[] = [
   {
@@ -45,24 +47,25 @@ export const EVENT_PLANNING_BOARD: EventPlanningGroup[] = [
       { id: '12202262990', name: 'Send Personal Invites', status: 'In Progress' },
       { id: '12067931260', name: 'Establish Event Planning Committee', status: 'In Progress' },
       { id: '12067870694', name: 'Develop Event Marketing Plan', status: 'In Progress' },
-      {
-        id: '12602019125',
-        name: 'Prep Resilience Hub info and ways for attendees to support/sponsor',
-        status: null,
-      },
       { id: '12602046324', name: 'Prep promo of Simulator model', status: 'In Progress' },
+      { id: '12067866068', name: 'Confirm speaker(s)', status: 'In Progress' },
+      { id: '12067960512', name: 'Open tickets/registration', status: 'In Progress' },
+      { id: '12068343974', name: 'Design Simulator', status: 'In Progress' },
     ],
   },
   {
     title: 'To Do',
     items: [
-      { id: '12067866068', name: 'Confirm speaker(s)', status: 'In Progress' },
-      { id: '12067960512', name: 'Open tickets/registration', status: 'In Progress' },
-      { id: '12068343974', name: 'Design Simulator', status: 'In Progress' },
+      {
+        id: '12602019125',
+        name: 'Prep Resilience Hub info and ways for attendees to support/sponsor',
+        status: null,
+      },
       { id: '12068340560', name: 'Confirm event volunteers', status: null },
       { id: '12068366339', name: 'Identify breakfast & lunch vendors', status: null },
-      { id: '12068334030', name: 'Brainstorm Hub after-party', status: 'Stuck' },
-      { id: '12068374286', name: 'Figure out story collection / PNI', status: null },
+      { id: '12068374286', name: 'Plan story collection approach', status: null },
+      { id: '12835053061', name: 'Develop post-event follow-up, led by NCRHA', status: null },
+      { id: '12835076297', name: 'Signage and posters with sponsors', status: null },
     ],
   },
   {
