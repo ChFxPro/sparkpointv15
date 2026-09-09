@@ -5,17 +5,14 @@ import { ArrowRight } from 'lucide-react';
 import { Button } from './ui/button';
 import { ACTIVE_STORY_COLLECTIONS } from '../data/storyCollections';
 
-// Mirrors the facts row on the Rural Health Convening card so the two homepage
-// promos carry the same visual weight.
-const facts = [
-  { label: 'Who', value: 'Transylvania County residents' },
-  { label: 'Takes', value: 'About five minutes' },
-  { label: 'Incentive', value: '$100 gift card drawing' },
-];
-
 export function StoryCollectionPromoCard() {
   const collection = ACTIVE_STORY_COLLECTIONS[0];
   if (!collection) return null;
+
+  // The facts row and footnote mirror the Rural Health Convening card so the two
+  // homepage promos carry the same visual weight; both come from the collection
+  // itself so a different active collection never inherits another one's claims.
+  const facts = collection.promoFacts ?? [];
 
   return (
     <div className="group relative h-full pt-9 md:pt-11">
@@ -40,18 +37,20 @@ export function StoryCollectionPromoCard() {
             </p>
             <p className="mt-1.5 max-w-xl leading-relaxed text-white/70">{collection.summary}</p>
 
-            <dl className="mt-4 grid gap-x-5 gap-y-3 sm:grid-cols-3">
-              {facts.map((fact) => (
-                <div key={fact.label}>
-                  <dt className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#FDB515]">
-                    {fact.label}
-                  </dt>
-                  <dd className="mt-0.5 text-[11px] font-bold uppercase leading-snug tracking-[0.12em] text-white/90">
-                    {fact.value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
+            {facts.length > 0 && (
+              <dl className="mt-4 grid gap-x-5 gap-y-3 sm:grid-cols-3">
+                {facts.map((fact) => (
+                  <div key={fact.label}>
+                    <dt className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#FDB515]">
+                      {fact.label}
+                    </dt>
+                    <dd className="mt-0.5 text-[11px] font-bold uppercase leading-snug tracking-[0.12em] text-white/90">
+                      {fact.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            )}
           </div>
           <div className="flex flex-col gap-3">
             <Button
@@ -63,9 +62,11 @@ export function StoryCollectionPromoCard() {
                 Share your story <ArrowRight size={18} className="ml-1.5" aria-hidden="true" />
               </Link>
             </Button>
-            <p className="text-center text-[10px] font-bold uppercase leading-relaxed tracking-[0.13em] text-white/55">
-              Anonymous &middot; Combined responses guide care and connection
-            </p>
+            {collection.promoFootnote && (
+              <p className="text-center text-[10px] font-bold uppercase leading-relaxed tracking-[0.13em] text-white/55">
+                {collection.promoFootnote}
+              </p>
+            )}
           </div>
         </div>
       </div>
