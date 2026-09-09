@@ -5,6 +5,14 @@ import { ArrowRight } from 'lucide-react';
 import { Button } from './ui/button';
 import { ACTIVE_STORY_COLLECTIONS } from '../data/storyCollections';
 
+// Mirrors the facts row on the Rural Health Convening card so the two homepage
+// promos carry the same visual weight.
+const facts = [
+  { label: 'Who', value: 'Transylvania County residents' },
+  { label: 'Takes', value: 'About five minutes' },
+  { label: 'Incentive', value: '$100 gift card drawing' },
+];
+
 export function StoryCollectionPromoCard() {
   const collection = ACTIVE_STORY_COLLECTIONS[0];
   if (!collection) return null;
@@ -21,20 +29,44 @@ export function StoryCollectionPromoCard() {
             <span className="mb-3 flex w-full items-center justify-end gap-2 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#FDB515]">
               {collection.statusLabel} <span className="h-2 w-2 animate-pulse rounded-full bg-[#25b06a]" aria-hidden="true" />
             </span>
-            <h2 className="mb-2 text-2xl font-bold text-white md:text-3xl">{collection.title}</h2>
-            <p className="max-w-xl leading-relaxed text-white/70">
-              <span className="text-white">{collection.tagline}</span> {collection.summary}
+            <h2 className="mb-1 text-2xl font-bold text-white md:text-3xl">{collection.title}</h2>
+            <div
+              className="my-3 h-px w-full max-w-[240px]"
+              style={{ background: 'linear-gradient(90deg, #E03694, #FDB515 60%, transparent)' }}
+              aria-hidden="true"
+            />
+            <p className="max-w-xl text-[1.3rem] font-semibold leading-tight text-white md:text-[1.45rem]">
+              {collection.tagline}
+            </p>
+            <p className="mt-1.5 max-w-xl leading-relaxed text-white/70">{collection.summary}</p>
+
+            <dl className="mt-4 grid gap-x-5 gap-y-3 sm:grid-cols-3">
+              {facts.map((fact) => (
+                <div key={fact.label}>
+                  <dt className="text-[10px] font-bold uppercase tracking-[0.16em] text-[#FDB515]">
+                    {fact.label}
+                  </dt>
+                  <dd className="mt-0.5 text-[11px] font-bold uppercase leading-snug tracking-[0.12em] text-white/90">
+                    {fact.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+          <div className="flex flex-col gap-3">
+            <Button
+              asChild
+              className="w-full rounded-full px-8 py-6 text-base shadow-lg hover:shadow-xl"
+              style={{ background: 'linear-gradient(135deg, #E03694, #9E509F)', color: 'white' }}
+            >
+              <Link to={collection.formPath ?? `/stories/collections/${collection.id}`}>
+                Share your story <ArrowRight size={18} className="ml-1.5" aria-hidden="true" />
+              </Link>
+            </Button>
+            <p className="text-center text-[10px] font-bold uppercase leading-relaxed tracking-[0.13em] text-white/55">
+              Anonymous &middot; Combined responses guide care and connection
             </p>
           </div>
-          <Button
-            asChild
-            className="w-full rounded-full px-8 py-6 text-base shadow-lg hover:shadow-xl md:w-auto"
-            style={{ background: 'linear-gradient(135deg, #E03694, #9E509F)', color: 'white' }}
-          >
-            <Link to={collection.formPath ?? `/stories/collections/${collection.id}`}>
-              Share your story <ArrowRight size={18} className="ml-1.5" aria-hidden="true" />
-            </Link>
-          </Button>
         </div>
       </div>
 
