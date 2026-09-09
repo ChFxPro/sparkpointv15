@@ -16,6 +16,11 @@ export interface SocialCopyBlock {
 
 export type StoryCollectionStatus = 'active' | 'closed';
 
+export interface PromoFact {
+  label: string;
+  value: string;
+}
+
 export interface StoryCollection {
   id: string; // slug used at /stories/collections/:id
   title: string;
@@ -27,6 +32,8 @@ export interface StoryCollection {
   description: string; // longer paragraph for the detail page
   incentive?: string;
   privacyNote?: string;
+  promoFacts?: PromoFact[]; // label/value pairs for the homepage promo card's facts row
+  promoFootnote?: string; // one-line caption under the homepage promo card's button
   formPath?: string; // vanity path on this site, e.g. '/healthcare-story' — only for active collections
   formUrlAbsolute?: string; // full https URL — used in QR/social copy
   resultsPath?: string; // where a closed collection's stories now live
@@ -60,6 +67,12 @@ export const STORY_COLLECTIONS: StoryCollection[] = [
     incentive: 'Every response is entered for a chance to win a $100 gift card.',
     privacyNote:
       'Your responses are anonymous and combined with others to help identify barriers, highlight what works, and strengthen care, connection, and support across our community.',
+    promoFacts: [
+      { label: 'Who', value: 'Transylvania County residents' },
+      { label: 'Takes', value: 'About five minutes' },
+      { label: 'Incentive', value: '$100 gift card drawing' },
+    ],
+    promoFootnote: 'Anonymous · Combined responses guide care and connection',
     formPath: '/healthcare-story',
     formUrlAbsolute: 'https://yoursparkpoint.org/healthcare-story',
     image: ruralHealthcareFlyer,

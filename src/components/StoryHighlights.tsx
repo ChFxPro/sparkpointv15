@@ -144,9 +144,9 @@ export function StoryHighlights() {
           )}
           <HighlightTile
             image={coffeeImage}
-            kicker="Available now"
+            kicker="Partner story"
             title="The story behind the roast"
-            copy="A family-owned roastery, a third annual collaboration, and a coffee that's building SparkPoint's Resilience Hub."
+            copy="A family-owned roastery, a third annual collaboration, and a coffee that helped build SparkPoint's Resilience Hub."
             ctaLabel="Read the story"
             ctaHref="/events/thrive-at-five"
             delay={0.4}
