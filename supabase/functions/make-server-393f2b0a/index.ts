@@ -128,6 +128,20 @@ function cap(s: string) {
 }
 
 // ---------------- Monday push (optional, won’t break intake if it fails) ----------------
+// Monday silently truncates a long-text value over 2,000 characters on write —
+// verified against the API, where the stored value came back cut mid-word with a
+// bare "...". Supabase can hold considerably more than that (a 4,000-character
+// message plus the extras), so cut it deliberately instead and say where the rest
+// lives; the alternative is a triager reading half a sentence with no idea there
+// is more.
+const MONDAY_LONG_TEXT_LIMIT = 2_000;
+
+function fitToMondayLongText(text: string, submissionId: string) {
+  if (text.length <= MONDAY_LONG_TEXT_LIMIT) return text;
+  const notice = `\n\n[Truncated — full submission in Supabase: ${submissionId}]`;
+  return text.slice(0, MONDAY_LONG_TEXT_LIMIT - notice.length).trimEnd() + notice;
+}
+
 // The board's Message column holds the whole submission: the free-text body plus
 // the intent-specific extras, which otherwise have nowhere to land on the item.
 function buildMondayMessage(args: {
@@ -198,7 +212,7 @@ async function pushToMonday(args: {
     [colIntent]: { labels: [cap(args.intent)] }, // dropdown column
     [colDate]: { date: yyyyMmDd },          // date column
     [colItemName]: itemName,                // text column
-    [colMessage]: { text: buildMondayMessage(args) }, // long text column
+    [colMessage]: { text: fitToMondayLongText(buildMondayMessage(args), args.submissionId) }, // long text column
   };
 
   const query = `
@@ -337,9 +351,13 @@ const intakeHandler = async (c: any) => {
     const intent = allowedValue(body.intent, "Intent", ["volunteer", "partner", "contact"] as const);
     const name = requiredText(body.name, "Name", 100);
     const email = requiredEmail(body.email);
-    const phone = optionalText(body.phone, "Phone", 50, false);
-    const message = optionalText(body.message, "Message", 5_000);
-    const source_path = optionalText(body.source_path, "Source path", 2_048, false);
+    // These three ceilings mirror the `intake_*_len` check constraints on
+    // intake_submissions. A looser limit here does not accept more, it just moves
+    // the rejection to the INSERT, where it surfaces as a 500 and the submission
+    // is lost outright instead of returning a 400 the form can show the person.
+    const phone = optionalText(body.phone, "Phone", 40, false);
+    const message = optionalText(body.message, "Message", 4_000);
+    const source_path = optionalText(body.source_path, "Source path", 300, false);
     const interests = optionalTextList(body.interests, "Interests", 12, 100);
     const availability = optionalText(body.availability, "Availability", 500);
     const organization = optionalText(body.organization, "Organization", 200, false);
