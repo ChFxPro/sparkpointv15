@@ -89,3 +89,20 @@ of the inquiry never leaves Supabase.
 **If a new column is added to the board, it must also be wired into `pushToMonday`.**
 Adding the column in Monday alone does nothing; the mutation only sends the ids listed
 above.
+
+## Spam Honeypot
+The intake form renders an off-screen text input named `website` — positioned at
+`left: -9999px` rather than `display: none` (which many bots know to skip), marked
+`aria-hidden`, and given `tabIndex={-1}` so nobody using the form, including with a
+screen reader or keyboard, can reach it. It is never `required`.
+
+`intakeHandler` checks it **before any other validation** and, when it is non-empty,
+returns the same `{ success: true, submissionId }` shape a real submission gets
+without writing to Postgres or pushing to Monday. The success response is
+deliberate: a `400` would tell the bot which field gave it away.
+
+Legitimate submissions are unaffected — the field is absent or an empty string.
+
+To verify a change here, submit with `"website": "spam"` in the payload: the response
+should be `200 {"success":true,...}` and **no** new row should appear in
+`intake_submissions`.

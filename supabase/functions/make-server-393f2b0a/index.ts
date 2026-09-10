@@ -113,6 +113,16 @@ const readIntakeBody = async (request: Request): Promise<JsonRecord> => {
   }
 };
 
+// The intake form renders an off-screen "website" field that no real person can
+// see or tab to. Bots fill every input they find, so a non-empty value here means
+// the submission is automated.
+const HONEYPOT_FIELD = "website";
+
+const isHoneypotTripped = (body: JsonRecord) => {
+  const value = body[HONEYPOT_FIELD];
+  return typeof value === "string" && value.trim() !== "";
+};
+
 function cap(s: string) {
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 }
@@ -307,6 +317,18 @@ const healthHandler = (c: any) =>
 const intakeHandler = async (c: any) => {
   try {
     const body = await readIntakeBody(c.req.raw);
+
+    // Checked before any other validation, and answered with the same success
+    // shape a real submission gets: a 400 here would tell the bot which field
+    // gave it away. Nothing is stored or pushed to Monday.
+    if (isHoneypotTripped(body)) {
+      console.log("Honeypot tripped; dropping submission.");
+      return c.json({
+        success: true,
+        submissionId: `intake_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
+      });
+    }
+
     const intent = allowedValue(body.intent, "Intent", ["volunteer", "partner", "contact"] as const);
     const name = requiredText(body.name, "Name", 100);
     const email = requiredEmail(body.email);
