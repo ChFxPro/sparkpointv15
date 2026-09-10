@@ -1,165 +1,144 @@
-# SparkPoint Email Deliverability Diagnosis — yoursparkpoint.org
+# SparkPoint Email Deliverability — yoursparkpoint.org
 
-**Date:** 2026-09-10
-**Symptom:** Squarespace newsletters and Squarespace order/ticket receipts frequently land in recipients' spam folders.
-**Status:** Root cause confirmed. **DNS fixes applied and verified 2026-09-10.**
-Sender-address verification in Squarespace remains outstanding — see Resolution at the end.
+**Status: RESOLVED for Email Campaigns as of 2026-09-10.** One follow-up remains — see Outstanding.
 
----
-
-## Resolution status (2026-09-10)
-
-| Step | State |
-|---|---|
-| `squarespace._domainkey` CNAME published | ✅ Live, chases to a valid 2048-bit key |
-| `_dmarc` updated with `rua=` reporting | ✅ Live, single clean record |
-| `info@yoursparkpoint.org` sender verified in Squarespace | ⬜ **Outstanding — blocks the fix** |
-| Test campaign headers confirmed | ⬜ Pending |
-| Ticket receipt headers confirmed | ⬜ Pending |
-
-**Correction to the mechanism described below.** The original diagnosis said Squarespace mail *fails*
-DMARC. It is more specific than that: Squarespace never attempts to send as `yoursparkpoint.org` at
-all. While the sender is unverified it **rewrites the From address** to a shared subdomain —
-observed live as `SparkPoint <info.yoursparkpoint.org@grkcc7.sqspmail.com>`.
-
-That means DKIM alone does not fix this. Squarespace requires the domain authenticated **and** the
-sender address verified before it will send as you. The DNS half is done; the verification half is
-not. Until both are complete, mail still goes out on the shared `sqspmail.com` subdomain, whose
-reputation you do not control and whose domain does not match the links in your own emails.
-
-## TL;DR
-
-**Every email Squarespace sends on your behalf fails DMARC**, because the DKIM record that lets
-Squarespace sign as `yoursparkpoint.org` was never added to the zone.
-
-Missing record:
-
-| Type | Host | Value |
-|---|---|---|
-| CNAME | `squarespace._domainkey` | `squarespace-domainkey.squarespace-mail.com` |
-
-Confirmed absent — `dig CNAME squarespace._domainkey.yoursparkpoint.org` returns nothing.
-
-Your Microsoft 365 mail (`info@`, `maggie@`, staff mail) authenticates correctly. **Squarespace is the
-only unauthenticated sender on the domain**, which is exactly why the problem is specific to
-newsletters and receipts.
+Newsletters and event-ticket receipts were landing in spam. Root cause was a missing DKIM record;
+it is now published and verified. **The current operational state is below. The original diagnosis
+is preserved as an appendix and describes the pre-fix world — do not act on it.**
 
 ---
 
-## Live DNS evidence (queried 2026-09-10)
+## Current state (verified 2026-09-10)
 
-| Record | Value | Verdict |
-|---|---|---|
-| SPF (`@` TXT) | `v=spf1 a:dispatch-us.ppe-hosted.com include:secureserver.net ~all` | ✅ Valid for M365/Proofpoint |
-| SPF lookup chain | `secureserver.net` → `spf-0.secureserver.net` → `spf.protection.outlook.com` | ✅ ~4 DNS lookups, well under the 10 limit |
-| DKIM `selector1/2._domainkey` | → `…netorgft13099510.onmicrosoft.com` | ✅ M365 DKIM live |
-| **DKIM `squarespace._domainkey`** | **NXDOMAIN** | ❌ **MISSING — root cause** |
-| DMARC (`_dmarc` TXT) | `v=DMARC1; p=none` | ⚠️ Valid but no `rua=` → zero reporting |
-| MX | `mx1/mx2-us1.ppe-hosted.com` | ✅ Proofpoint (GoDaddy Advanced Email Security) |
-| DKIM `k2/k3._domainkey` | → `dkim2/dkim3.mcsv.net` | ⚠️ Mailchimp — orphaned? |
-| CNAME `url920`, `36555601` | → `sendgrid.net` | ⚠️ SendGrid — orphaned? |
-| `secure.yoursparkpoint.org` | → `ext-cust.squarespace.com` | ✅ Squarespace Commerce (checkout/ticketing) |
-| BIMI / MTA-STS / TLS-RPT | none | ℹ️ Optional, not a cause |
+### Live authentication records
 
-Repo check: no transactional email is sent from application code (no Resend/SendGrid/SMTP calls in
-`src/` or `supabase/functions/`). All outbound mail is Microsoft 365 or Squarespace.
+| Type | Host | Value | Purpose |
+|---|---|---|---|
+| CNAME | `squarespace._domainkey` | `squarespace-domainkey.squarespace-mail.com` | Squarespace DKIM |
+| TXT | `_dmarc` | `v=DMARC1; p=none; rua=mailto:info@yoursparkpoint.org; fo=1` | DMARC + reporting |
+| TXT | `@` | `v=spf1 a:dispatch-us.ppe-hosted.com include:secureserver.net ~all` | SPF (M365/Proofpoint) |
+| CNAME | `selector1/selector2._domainkey` | `…netorgft13099510.onmicrosoft.com` | Microsoft 365 DKIM |
 
----
+DMARC policy is deliberately `p=none`. **Do not tighten it** until aggregate reports at
+`info@yoursparkpoint.org` confirm every legitimate sender aligns.
 
-## Why this puts mail in spam
+### Verified working
 
-DMARC only passes if the `From:` domain **aligns** with SPF or DKIM. For Squarespace-sent mail today:
+Test campaign to Gmail, 2026-09-10:
 
-1. **SPF alignment — impossible.** Squarespace uses its own Return-Path (`squarespace-mail.com`).
-   SPF passes *for Squarespace's domain*, not yours, so it never aligns with `yoursparkpoint.org`.
-   **There is no Squarespace SPF include to add.** (Many blog posts claim otherwise; it does nothing.)
-2. **DKIM alignment — currently failing.** Without `squarespace._domainkey`, Squarespace signs with
-   `d=squarespace-mail.com` instead of `d=yoursparkpoint.org`. Unaligned.
-3. **Net result: DMARC = fail** on every campaign and every receipt.
+```
+From:  SparkPoint <info@yoursparkpoint.org>
+DKIM:  'PASS' with domain yoursparkpoint.org
+DMARC: 'PASS'
 
-Practical consequences at the receiving end:
+dkim=pass header.i=@yoursparkpoint.org header.s=squarespace
+dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=yoursparkpoint.org
+```
 
-- Gmail displays **"via squarespace-mail.com"** under your sender name — a visible trust downgrade.
-- Gmail, Yahoo and Outlook all weight DMARC alignment heavily for bulk/marketing mail. An
-  unauthenticated bulk sender on a domain that *does* publish DMARC reads as a spoofing candidate.
-- Receipts are worse-hit than they look: transactional mail from an unauthenticated domain is exactly
-  the phishing shape filters are tuned for.
+**SPF does not align, and that is correct.** SPF passes against Squarespace's Return-Path
+(`mgcp02.squarespace-mail.com`), not `yoursparkpoint.org`. Squarespace owns the Return-Path, so SPF
+alignment is impossible by design and DKIM alignment carries DMARC on its own.
 
-DKIM is the **only** alignment path available for Squarespace. That single missing CNAME is the whole
-authentication story for these emails.
+Squarespace Email Campaigns sends via Mailgun.
 
----
-
-## Fix — in order
-
-### 1. Add the Squarespace DKIM record ← this is the actual fix
-
-In Squarespace: **Email Campaigns → Sender Profiles** (or **Settings → Domains → Email**). Verify the
-`yoursparkpoint.org` sender address; Squarespace will then display the DKIM record to publish.
-
-Squarespace is already the authoritative DNS host for this zone (`ns01-04.squarespacedns.com`), so it
-will likely offer to add the record automatically. **Use the exact value Squarespace shows** — the
-documented default is `squarespace._domainkey → squarespace-domainkey.squarespace-mail.com`, but take
-the panel's value if it differs.
-
-Verify after ~15 min:
+### Re-verifying after any change
 
 ```bash
-dig +short CNAME squarespace._domainkey.yoursparkpoint.org
+D=yoursparkpoint.org; NS=connect1.squarespacedns.com
+dig +norecurse CNAME squarespace._domainkey.$D @$NS +short
+dig +norecurse TXT _dmarc.$D @$NS +short
 ```
 
-Then send a test to a Gmail account → **Show original** → confirm `DKIM: 'PASS' with domain
-yoursparkpoint.org` and `DMARC: 'PASS'`. The "via squarespace-mail.com" line should disappear.
+Then send a test campaign to Gmail → **Show original** → confirm `From` is
+`info@yoursparkpoint.org`, `DKIM: PASS` with domain `yoursparkpoint.org`, and `DMARC: PASS`.
 
-### 2. Turn on DMARC reporting (do this at the same time)
+---
 
-Current record is `v=DMARC1; p=none` with no reporting address, so you have no visibility into which
-senders are failing. Replace with:
+## Outstanding
 
-```
-v=DMARC1; p=none; rua=mailto:dmarc@yoursparkpoint.org; fo=1
-```
+**Commerce / ticket receipts are unverified.** Everything confirmed above is Email Campaigns.
+Order and ticket notifications are a separate Squarespace sending path, and their docs do not state
+whether they share the Email Campaigns sender profile and DKIM signature.
 
-Keep `p=none` until reports show every legitimate sender aligned. Only then consider `p=quarantine`.
-Tightening before step 1 is verified would send your own newsletters to spam on purpose.
+Tracked as **MAIL-001** in `WORKLIST.md`. Resolve by placing a real ticket order and reading the
+receipt's headers — `dkim=pass header.i=@yoursparkpoint.org` means receipts are covered by the same
+fix. A Squarespace *test* notification is not sufficient evidence: their docs state test sends always
+originate from `no-reply@squarespace-mail.info` regardless of configuration.
 
-### 3. Check the Commerce / ticket receipt sender
+If receipts do not pass, the documented fallback is switching the receipt From address to
+Squarespace's own `no-reply@squarespace.info` — authenticated on their domain, at the cost of
+branding on receipts.
 
-**Settings → Selling → Customer Notifications.** Confirm the From address is a `yoursparkpoint.org`
-address so step 1's DKIM signature applies to it. Re-test a real ticket purchase after the DKIM record
-is live — Squarespace documents DKIM for Email Campaigns explicitly, and commerce notifications are
-less clearly documented, so verify rather than assume.
+### Lower priority
 
-If receipts *still* fail after DKIM is confirmed passing on campaigns, the fallback Squarespace itself
-recommends is switching the receipt From address to their own `no-reply@squarespace.info` — fully
-authenticated on their domain, at the cost of your branding on receipts.
-
-### 4. Remove orphaned sender records
-
-`k2._domainkey` / `k3._domainkey` (Mailchimp) and the `url920` / `36555601` CNAMEs (SendGrid) are live
-in the zone. If neither platform is in use, delete them. They aren't causing the spam problem, but
-they leave dangling delegations that would let a re-registered account sign as your domain, and they
-muddy DMARC reports once step 2 is on.
-
-### 5. Non-authentication factors (secondary, address after the above)
-
-- **Domain sending reputation** is currently built on a history of DMARC-failing mail. Expect
-  improvement over days, not instantly, after step 1.
-- **List hygiene.** Imported or purchased lists, or contacts who never explicitly opted in, generate
-  spam complaints that no amount of DNS work will fix.
-- **Consistency.** Send from one From address, on a predictable cadence — erratic bulk sending from a
-  cold domain is itself a spam signal.
+- **Orphaned sender records.** `k2/k3._domainkey` (Mailchimp) and `url920` / `36555601`
+  (SendGrid) are live in the zone. If unused, remove them — they leave dangling delegations and will
+  muddy DMARC reports.
+- **Reputation and list hygiene.** The domain's sending history was built on rewritten From
+  addresses; expect improvement over weeks, not instantly. Contacts who never explicitly opted in
+  generate complaints that no DNS change fixes.
 
 ---
 
 ## Do NOT do
 
-- **Don't add an SPF include for Squarespace.** Squarespace controls the Return-Path; there is nothing
-  to include, and editing SPF risks breaking working M365 mail.
-- **Don't set `p=quarantine`/`p=reject`** before DMARC reports confirm alignment.
-- **Don't disconnect the domain in the Squarespace panel.** Squarespace hosts the DNS zone, including
-  all MX and M365 records — disconnecting would break staff email. (Same warning as in
-  `DNS-SSL-DIAGNOSIS-SPARKPOINT.md`.)
+- **Do not add an SPF include for Squarespace.** They control the Return-Path; there is nothing to
+  include. Editing SPF risks breaking working staff email.
+- **Do not set `p=quarantine` or `p=reject`** before DMARC reports confirm alignment.
+- **Do not add records at GoDaddy.** GoDaddy is the registrar only. Nameservers delegate to
+  `connect1/connect2.squarespacedns.com`, so records added in GoDaddy's DNS manager never resolve.
+- **Do not disconnect or transfer the domain** in the Squarespace panel, and **do not set the apex as
+  primary domain** — `secure.yoursparkpoint.org` is the commerce site's primary domain and runs live
+  ticket checkout. See TICKET-001 in `WORKLIST.md`.
+
+---
+
+## Operational notes
+
+**DNS editor:** https://account.squarespace.com/domains/linked/yoursparkpoint.org/dns/dns-settings
+
+Go directly to that URL. It is unreachable by clicking through Squarespace's UI — the site-level
+DNS Settings row renders but is inert, and the `secure.` domain page has no DNS row at all.
+
+**The Squarespace DNS panel can display records it does not publish.** `api._domainkey` appears in
+the record list but returns nothing from the authoritative nameserver. **Verify every change with
+`dig`, never with the panel.**
+
+Full zone capture: `DNS-ZONE-BACKUP-yoursparkpoint.org.md`.
+
+---
+
+## Appendix — original diagnosis (2026-09-10, pre-fix)
+
+> Historical record of the problem as found. Superseded by Current state above.
+
+Squarespace had never been authorized to sign as `yoursparkpoint.org` — the `squarespace._domainkey`
+record was absent from the zone (`dig` returned NXDOMAIN).
+
+The mechanism was more specific than a DMARC failure. Squarespace never attempted to send as
+`yoursparkpoint.org` at all: while the sender was unauthenticated it **rewrote the From address** to a
+shared subdomain, observed live as:
+
+```
+SparkPoint <info.yoursparkpoint.org@grkcc7.sqspmail.com>
+```
+
+That put outbound mail on a domain whose reputation SparkPoint did not control, and whose name did
+not match the links inside the emails — a from-domain/link-domain mismatch is a standard spam
+heuristic. Transactional receipts were hit hardest, since unauthenticated transactional mail is the
+exact shape filters are tuned against.
+
+Microsoft 365 staff mail was never affected; it authenticated correctly throughout via the SPF chain
+(`secureserver.net` → `spf-0.secureserver.net` → `spf.protection.outlook.com`, ~4 lookups) and
+`selector1/2._domainkey`. **Squarespace was the only unauthenticated sender on the domain**, which is
+why the problem was specific to newsletters and receipts.
+
+Repo check at the time: no transactional email is sent from application code — no Resend, SendGrid,
+or SMTP calls in `src/` or `supabase/functions/`. All outbound mail is Microsoft 365 or Squarespace.
+
+Two conditions had to be met before Squarespace would stop rewriting the From address: the domain
+authenticated **and** the sender address verified. `info@yoursparkpoint.org` proved to be already
+verified from the original campaigns setup, so publishing the DKIM record completed both.
 
 ---
 
@@ -167,5 +146,5 @@ muddy DMARC reports once step 2 is on.
 
 - [DNS records for email — Squarespace Help Center](https://support.squarespace.com/hc/en-us/articles/31120985010957-DNS-records-for-email)
 - [Email notifications your site sends — Squarespace Help Center](https://support.squarespace.com/hc/en-us/articles/360049390031-Customer-email-notifications)
+- [Nameserver connect vs. DNS connect — Squarespace Help Center](https://support.squarespace.com/hc/en-us/articles/8387079117581-Nameserver-connect-vs-DNS-connect)
 - [Squarespace Email Campaigns — Valimail](https://support.valimail.com/en/articles/8759544-squarespace-email-campaigns)
-- [How to stop Squarespace emails going to junk — Stellastra](https://stellastra.com/how-to-stop-squarespace-emails-going-to-spam/)
