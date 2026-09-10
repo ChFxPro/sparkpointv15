@@ -323,9 +323,14 @@ const intakeHandler = async (c: any) => {
     // gave it away. Nothing is stored or pushed to Monday.
     if (isHoneypotTripped(body)) {
       console.log("Honeypot tripped; dropping submission.");
+      // The id has to match the real format exactly, intent segment included, or
+      // comparing two responses is enough to fingerprint the trap.
+      const echoedIntent = typeof body.intent === "string" && /^[a-z]{1,20}$/.test(body.intent)
+        ? body.intent
+        : "contact";
       return c.json({
         success: true,
-        submissionId: `intake_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
+        submissionId: `intake_${echoedIntent}_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
       });
     }
 
