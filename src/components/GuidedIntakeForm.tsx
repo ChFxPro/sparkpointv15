@@ -30,7 +30,9 @@ export function GuidedIntakeForm({ initialIntent = 'contact', sourcePath = '/' }
     availability: '',
     // Partner specific
     organization: '',
-    partnershipDetails: ''
+    partnershipDetails: '',
+    // Honeypot — never filled by a real person, see the hidden field below
+    website: ''
   });
 
   useEffect(() => {
@@ -76,7 +78,8 @@ export function GuidedIntakeForm({ initialIntent = 'contact', sourcePath = '/' }
         interests: activeTab === 'volunteer' ? formData.interests : [],
         availability: activeTab === 'volunteer' ? formData.availability : '',
         organization: activeTab === 'partner' ? formData.organization : '',
-        partnershipDetails: activeTab === 'partner' ? formData.partnershipDetails : ''
+        partnershipDetails: activeTab === 'partner' ? formData.partnershipDetails : '',
+        website: formData.website
       };
 
       const endpoint = `https://${projectId}.supabase.co/functions/v1/make-server-393f2b0a/intake`;
@@ -431,6 +434,23 @@ export function GuidedIntakeForm({ initialIntent = 'contact', sourcePath = '/' }
                    By submitting, you agree to share this info with our team. We respect your privacy.
                  </p>
               </div>
+            </div>
+
+            {/* Honeypot. Positioned off-screen rather than `display: none`, which
+                many bots know to skip, and hidden from assistive tech and the tab
+                order so nobody using the form can reach it. Anything that arrives
+                with this filled is dropped server-side. */}
+            <div aria-hidden="true" className="absolute left-[-9999px] w-px h-px overflow-hidden">
+              <label htmlFor="website">Website</label>
+              <input
+                type="text"
+                id="website"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                value={formData.website}
+                onChange={handleInputChange}
+              />
             </div>
           </form>
         </div>

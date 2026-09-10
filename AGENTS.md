@@ -1,5 +1,5 @@
 # SparkPoint Agent Guide
-Last updated: 2026-09-09
+Last updated: 2026-09-10
 
 ## Read First
 - Read this file before modifying code in this repo.
@@ -17,6 +17,15 @@ Last updated: 2026-09-09
 - 2025 impact totals are centralized in `src/data/impact2025.ts` and consumed in impact surfaces.
 - Mission and partner network groupings are aligned to the latest partner update source.
 - Mailing address boilerplate now uses `SparkPoint P.O. Box 2452, Brevard, NC 28712` across UI + structured data.
+- Public intake (`/intake`) writes to the `intake_submissions` Postgres table and pushes a best-effort item to the
+  `SparkPoint Intake Inbox` Monday board (`18399040367`). The board's long-text **Message** column carries the whole
+  submission — free text, blank line, then `- Label: value` extras. **Adding a column in Monday's UI does nothing on
+  its own:** `pushToMonday` only sends the column ids it is given, which is how the Message column sat empty from
+  2026-07-21 until PR #154. Monday truncates a long-text value over 2,000 characters on write, so the composed value
+  is capped with a pointer to the Supabase id. The intake validator's field ceilings mirror the `intake_*_len` check
+  constraints on the table — keep them in step, or a submission passes validation and then dies on the INSERT as a
+  500 instead of returning a 400. The form also carries an off-screen `website` honeypot; a tripped submission is
+  answered with a normal-looking success and stored nowhere.
 - SEO metadata is standardized through `src/components/SEOHead.tsx` across route pages.
 - Structured data now includes Organization/NGO, WebSite, WebPage, and BreadcrumbList globally, plus page-level Article/Event schema where applicable.
 - Canonical site origin defaults to the apex `https://yoursparkpoint.org` (see `src/lib/siteOrigin.ts` and `vite.config.mts`). `www.` 301-redirects to the apex, and canonical tags, `og:url`, and the sitemap all emit apex URLs — keep them that way, or the canonical will point at a URL that redirects.
@@ -127,6 +136,13 @@ The short version:
   MCP `deploy_edge_function` call.** Four live functions were deployed that way and ended up
   with no source in any repo; recovering them is what PR #132 was for. Inline deploys also
   bypass the build check and the secret scan.
+- **Deploy with `scripts/deploy-function.sh`, not a bare `supabase functions deploy`.** The
+  bare command works from any full checkout, a linked worktree included, and will happily ship
+  branch code to production; the script refuses unless you are in the canonical checkout, at
+  the repo root, on `main`, level with `origin/main`, with the source committed. This was
+  bypassed during PR #154 — three deploys went out from a worktree on a feature branch — which
+  is exactly the failure mode the script exists to prevent, so prefer it even when the change
+  itself looks safe.
 - The deployed function named `server` is **owned by a different repo**
   (`DataAdmin/Spwebdatahandlingapp`, same project ref). Do not add a
   `supabase/functions/server/` directory here — deploying it would overwrite that project's

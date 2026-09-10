@@ -113,11 +113,61 @@ const readIntakeBody = async (request: Request): Promise<JsonRecord> => {
   }
 };
 
+// The intake form renders an off-screen "website" field that no real person can
+// see or tab to. Bots fill every input they find, so a non-empty value here means
+// the submission is automated.
+const HONEYPOT_FIELD = "website";
+
+const isHoneypotTripped = (body: JsonRecord) => {
+  const value = body[HONEYPOT_FIELD];
+  return typeof value === "string" && value.trim() !== "";
+};
+
 function cap(s: string) {
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 }
 
 // ---------------- Monday push (optional, won’t break intake if it fails) ----------------
+// Monday silently truncates a long-text value over 2,000 characters on write —
+// verified against the API, where the stored value came back cut mid-word with a
+// bare "...". Supabase can hold considerably more than that (a 4,000-character
+// message plus the extras), so cut it deliberately instead and say where the rest
+// lives; the alternative is a triager reading half a sentence with no idea there
+// is more.
+const MONDAY_LONG_TEXT_LIMIT = 2_000;
+
+function fitToMondayLongText(text: string, submissionId: string) {
+  if (text.length <= MONDAY_LONG_TEXT_LIMIT) return text;
+  const notice = `\n\n[Truncated — full submission in Supabase: ${submissionId}]`;
+  return text.slice(0, MONDAY_LONG_TEXT_LIMIT - notice.length).trimEnd() + notice;
+}
+
+// The board's Message column holds the whole submission: the free-text body plus
+// the intent-specific extras, which otherwise have nowhere to land on the item.
+function buildMondayMessage(args: {
+  intent: string;
+  message?: string;
+  interests?: string[];
+  availability?: string;
+  organization?: string;
+  partnershipDetails?: string;
+}) {
+  const details: string[] = [];
+
+  if (args.intent === "volunteer") {
+    if (args.interests?.length) details.push(`- Interests: ${args.interests.join(", ")}`);
+    if (args.availability) details.push(`- Availability: ${args.availability}`);
+  }
+
+  if (args.intent === "partner") {
+    if (args.organization) details.push(`- Organization: ${args.organization}`);
+    if (args.partnershipDetails) details.push(`- Partnership details: ${args.partnershipDetails}`);
+  }
+
+  const blocks = [args.message?.trim() ?? "", details.join("\n")].filter(Boolean);
+  return blocks.join("\n\n");
+}
+
 async function pushToMonday(args: {
   intent: string;
   name: string;
@@ -125,6 +175,10 @@ async function pushToMonday(args: {
   phone?: string;
   message?: string;
   source_path?: string;
+  interests?: string[];
+  availability?: string;
+  organization?: string;
+  partnershipDetails?: string;
   submissionId: string;
   createdAtISO: string;
 }) {
@@ -144,6 +198,9 @@ async function pushToMonday(args: {
   const colIntent = Deno.env.get("MONDAY_COL_INTENT")!;
   const colDate = Deno.env.get("MONDAY_COL_DATE")!;
   const colItemName = Deno.env.get("MONDAY_COL_ITEMNAME")!;
+  // Long-text "Message" column on the SparkPoint Intake Inbox board. Falls back to
+  // the board's current column id so the body still lands if the env var is unset.
+  const colMessage = Deno.env.get("MONDAY_COL_MESSAGE") ?? "long_text_mm5f41m1";
 
   const itemName = `${args.name} — ${cap(args.intent)}`;
   const yyyyMmDd = args.createdAtISO.slice(0, 10);
@@ -155,6 +212,7 @@ async function pushToMonday(args: {
     [colIntent]: { labels: [cap(args.intent)] }, // dropdown column
     [colDate]: { date: yyyyMmDd },          // date column
     [colItemName]: itemName,                // text column
+    [colMessage]: { text: fitToMondayLongText(buildMondayMessage(args), args.submissionId) }, // long text column
   };
 
   const query = `
@@ -273,12 +331,33 @@ const healthHandler = (c: any) =>
 const intakeHandler = async (c: any) => {
   try {
     const body = await readIntakeBody(c.req.raw);
+
+    // Checked before any other validation, and answered with the same success
+    // shape a real submission gets: a 400 here would tell the bot which field
+    // gave it away. Nothing is stored or pushed to Monday.
+    if (isHoneypotTripped(body)) {
+      console.log("Honeypot tripped; dropping submission.");
+      // The id has to match the real format exactly, intent segment included, or
+      // comparing two responses is enough to fingerprint the trap.
+      const echoedIntent = typeof body.intent === "string" && /^[a-z]{1,20}$/.test(body.intent)
+        ? body.intent
+        : "contact";
+      return c.json({
+        success: true,
+        submissionId: `intake_${echoedIntent}_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
+      });
+    }
+
     const intent = allowedValue(body.intent, "Intent", ["volunteer", "partner", "contact"] as const);
     const name = requiredText(body.name, "Name", 100);
     const email = requiredEmail(body.email);
-    const phone = optionalText(body.phone, "Phone", 50, false);
-    const message = optionalText(body.message, "Message", 5_000);
-    const source_path = optionalText(body.source_path, "Source path", 2_048, false);
+    // These three ceilings mirror the `intake_*_len` check constraints on
+    // intake_submissions. A looser limit here does not accept more, it just moves
+    // the rejection to the INSERT, where it surfaces as a 500 and the submission
+    // is lost outright instead of returning a 400 the form can show the person.
+    const phone = optionalText(body.phone, "Phone", 40, false);
+    const message = optionalText(body.message, "Message", 4_000);
+    const source_path = optionalText(body.source_path, "Source path", 300, false);
     const interests = optionalTextList(body.interests, "Interests", 12, 100);
     const availability = optionalText(body.availability, "Availability", 500);
     const organization = optionalText(body.organization, "Organization", 200, false);
@@ -320,15 +399,19 @@ const intakeHandler = async (c: any) => {
 
     // Push to Monday (best-effort)
     pushToMonday({
-  intent,
-  name,
-  email,
-  phone,
-  message,
-  source_path,
-  submissionId,
-  createdAtISO,
-}).catch((err) => console.error("Monday push error:", err));
+      intent,
+      name,
+      email,
+      phone,
+      message,
+      source_path,
+      interests,
+      availability,
+      organization,
+      partnershipDetails,
+      submissionId,
+      createdAtISO,
+    }).catch((err) => console.error("Monday push error:", err));
 
     return c.json({ success: true, submissionId });
   } catch (error) {
