@@ -65,3 +65,27 @@ curl -sS -D - -o - -X POST "${BASE}/intake" \
 2. OPTIONS handler returns `204` with a body (causes 500 preflight failure).
 3. Missing frontend auth headers (`apikey` + `Authorization`) causes 401.
 4. Wrong function slug/path in bundle (`server/intake` instead of `make-server-393f2b0a/intake`).
+
+## Monday Push (SparkPoint Intake Inbox)
+Board: `SparkPoint Intake Inbox` (id `18399040367`).
+
+The intake handler pushes each submission to Monday best-effort — a failed push is
+logged and never fails the submission, so the Supabase `intake_submissions` table is
+always the source of truth.
+
+Required function secrets:
+- `MONDAY_API_TOKEN`, `MONDAY_BOARD_ID`
+- `MONDAY_COL_EMAIL`, `MONDAY_COL_PHONE`, `MONDAY_COL_STATUS`,
+  `MONDAY_COL_INTENT`, `MONDAY_COL_DATE`, `MONDAY_COL_ITEMNAME`
+- `MONDAY_COL_MESSAGE` — long-text "Message" column (currently `long_text_mm5f41m1`).
+  The code falls back to that id if the secret is unset.
+
+The Message column carries the full submission: the free-text `message` body, then a
+blank line, then the intent-specific extras as `- Label: value` lines
+(`Interests`/`Availability` for volunteer, `Organization`/`Partnership details` for
+partner). Without it the Monday item shows only who/when/intent — the actual content
+of the inquiry never leaves Supabase.
+
+**If a new column is added to the board, it must also be wired into `pushToMonday`.**
+Adding the column in Monday alone does nothing; the mutation only sends the ids listed
+above.

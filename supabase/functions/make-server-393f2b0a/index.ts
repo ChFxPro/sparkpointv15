@@ -118,6 +118,32 @@ function cap(s: string) {
 }
 
 // ---------------- Monday push (optional, won’t break intake if it fails) ----------------
+// The board's Message column holds the whole submission: the free-text body plus
+// the intent-specific extras, which otherwise have nowhere to land on the item.
+function buildMondayMessage(args: {
+  intent: string;
+  message?: string;
+  interests?: string[];
+  availability?: string;
+  organization?: string;
+  partnershipDetails?: string;
+}) {
+  const details: string[] = [];
+
+  if (args.intent === "volunteer") {
+    if (args.interests?.length) details.push(`- Interests: ${args.interests.join(", ")}`);
+    if (args.availability) details.push(`- Availability: ${args.availability}`);
+  }
+
+  if (args.intent === "partner") {
+    if (args.organization) details.push(`- Organization: ${args.organization}`);
+    if (args.partnershipDetails) details.push(`- Partnership details: ${args.partnershipDetails}`);
+  }
+
+  const blocks = [args.message?.trim() ?? "", details.join("\n")].filter(Boolean);
+  return blocks.join("\n\n");
+}
+
 async function pushToMonday(args: {
   intent: string;
   name: string;
@@ -125,6 +151,10 @@ async function pushToMonday(args: {
   phone?: string;
   message?: string;
   source_path?: string;
+  interests?: string[];
+  availability?: string;
+  organization?: string;
+  partnershipDetails?: string;
   submissionId: string;
   createdAtISO: string;
 }) {
@@ -144,6 +174,9 @@ async function pushToMonday(args: {
   const colIntent = Deno.env.get("MONDAY_COL_INTENT")!;
   const colDate = Deno.env.get("MONDAY_COL_DATE")!;
   const colItemName = Deno.env.get("MONDAY_COL_ITEMNAME")!;
+  // Long-text "Message" column on the SparkPoint Intake Inbox board. Falls back to
+  // the board's current column id so the body still lands if the env var is unset.
+  const colMessage = Deno.env.get("MONDAY_COL_MESSAGE") ?? "long_text_mm5f41m1";
 
   const itemName = `${args.name} — ${cap(args.intent)}`;
   const yyyyMmDd = args.createdAtISO.slice(0, 10);
@@ -155,6 +188,7 @@ async function pushToMonday(args: {
     [colIntent]: { labels: [cap(args.intent)] }, // dropdown column
     [colDate]: { date: yyyyMmDd },          // date column
     [colItemName]: itemName,                // text column
+    [colMessage]: { text: buildMondayMessage(args) }, // long text column
   };
 
   const query = `
@@ -320,15 +354,19 @@ const intakeHandler = async (c: any) => {
 
     // Push to Monday (best-effort)
     pushToMonday({
-  intent,
-  name,
-  email,
-  phone,
-  message,
-  source_path,
-  submissionId,
-  createdAtISO,
-}).catch((err) => console.error("Monday push error:", err));
+      intent,
+      name,
+      email,
+      phone,
+      message,
+      source_path,
+      interests,
+      availability,
+      organization,
+      partnershipDetails,
+      submissionId,
+      createdAtISO,
+    }).catch((err) => console.error("Monday push error:", err));
 
     return c.json({ success: true, submissionId });
   } catch (error) {
