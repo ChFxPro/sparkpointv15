@@ -3,7 +3,7 @@
 import { motion } from 'motion/react';
 import { useState } from 'react';
 import { Link } from 'react-router';
-import { MapPin, Mail, Facebook, Instagram, Youtube, Check } from 'lucide-react';
+import { MapPin, Mail, Check } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
@@ -13,8 +13,12 @@ import candidSeal from 'figma:asset/5a36f7b11c9d0bf970613a37a28b121b31918d77.png
 import livingWageLogo from 'figma:asset/ec17a6fe91f3b0bf97249c7bd911f4723893563c.png';
 import { CONTACT_INFO } from '../data/contactInfo';
 
-// Custom TikTok Icon to match Lucide style
-const TikTok = ({ size = 24, style }: { size?: number | string; style?: React.CSSProperties }) => (
+// Social brand marks drawn inline in Lucide's outline style. Lucide 1.x removed
+// its brand icons, so Facebook, Instagram, and YouTube keep the exact paths from
+// lucide-react 0.487 (ISC) instead of importing them.
+type SocialIconProps = { size?: number | string; style?: React.CSSProperties };
+
+const SocialIcon = ({ size = 24, style, children }: SocialIconProps & { children: React.ReactNode }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -26,9 +30,37 @@ const TikTok = ({ size = 24, style }: { size?: number | string; style?: React.CS
     strokeLinecap="round"
     strokeLinejoin="round"
     style={style}
+    aria-hidden="true"
   >
-    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+    {children}
   </svg>
+);
+
+const Facebook = (props: SocialIconProps) => (
+  <SocialIcon {...props}>
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </SocialIcon>
+);
+
+const Instagram = (props: SocialIconProps) => (
+  <SocialIcon {...props}>
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </SocialIcon>
+);
+
+const Youtube = (props: SocialIconProps) => (
+  <SocialIcon {...props}>
+    <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" />
+    <path d="m10 15 5-3-5-3z" />
+  </SocialIcon>
+);
+
+const TikTok = (props: SocialIconProps) => (
+  <SocialIcon {...props}>
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+  </SocialIcon>
 );
 
 const quickLinks = [
