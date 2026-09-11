@@ -26,6 +26,7 @@ import transylvaniaTdaLogo from '../assets/sponsors/brevard_tda.webp';
 import dogwoodHealthTrustLogo from '../assets/sponsors/dogwood.png';
 import vayaHealthLogo from '../assets/sponsors/vaya_health.webp';
 import firstCitizensBankLogo from '../assets/sponsors/first_citizens.webp';
+import hendersonvillePediatricsLogo from '../assets/sponsors/hendersonville_peds.webp';
 import adventHealthLogo from '../assets/sponsors/advent_health.webp';
 import unitedHealthcareLogo from '../assets/sponsors/united_healthcare.webp';
 import impactHealthLogoDark from '../assets/rural_health/impact_health_dk.webp';
@@ -111,6 +112,14 @@ const foothillsSponsors = [
     stageClassName: 'rh-logo-stage-first-citizens',
     width: 340,
     height: 160,
+  },
+  {
+    name: 'Hendersonville Pediatrics',
+    href: 'https://www.hendersonvillepediatrics.com/',
+    src: hendersonvillePediatricsLogo,
+    stageClassName: 'rh-logo-stage-hendersonville-peds',
+    width: 497,
+    height: 129,
   },
 ];
 
@@ -264,6 +273,10 @@ const eventJsonLd = {
     {
       '@type': 'Organization',
       name: 'First Citizens Bank',
+    },
+    {
+      '@type': 'Organization',
+      name: 'Hendersonville Pediatrics',
     },
     {
       '@type': 'Organization',

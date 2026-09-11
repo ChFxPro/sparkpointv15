@@ -402,6 +402,10 @@
   height: 22px;
 }
 
+.rh-hero-logo-link.tier-foothills.rh-logo-stage-hendersonville-peds img {
+  height: 22px;
+}
+
 .rh-hero-logo-link.tier-friends.rh-logo-stage-advent img {
   height: 18px;
 }
@@ -1471,6 +1475,10 @@ a.rh-logo-stage:focus-visible {
   height: 48px;
 }
 
+.rh-logo-stage-foothills.rh-logo-stage-hendersonville-peds img {
+  height: 44px;
+}
+
 .rh-friends-field {
   margin-top: 20px;
   padding-top: 18px;
@@ -2035,6 +2043,10 @@ a.rh-logo-stage:focus-visible {
 
   .rh-logo-stage-foothills.rh-logo-stage-first-citizens img {
     height: 46px;
+  }
+
+  .rh-logo-stage-foothills.rh-logo-stage-hendersonville-peds img {
+    height: 38px;
   }
 
   .rh-logo-stage-friends {
