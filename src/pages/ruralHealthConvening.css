@@ -414,6 +414,10 @@
   height: 24px;
 }
 
+.rh-hero-logo-link.tier-friends.rh-logo-stage-comporium img {
+  height: 30px;
+}
+
 /* The tier separator lives inside the tier it precedes rather than as its own
    flex item, so a wrapped line can never end with an orphaned rule. */
 .rh-hero-logo-tier:not(:first-child)::before {
@@ -1512,6 +1516,10 @@ a.rh-logo-stage:focus-visible {
   height: 46px;
 }
 
+.rh-logo-stage-friends.rh-logo-stage-comporium img {
+  height: 58px;
+}
+
 .rh-final-cta {
   position: relative;
   padding: clamp(68px, 7vw, 104px) 0;
@@ -2065,6 +2073,10 @@ a.rh-logo-stage:focus-visible {
 
   .rh-logo-stage-friends.rh-logo-stage-uhc img {
     height: 42px;
+  }
+
+  .rh-logo-stage-friends.rh-logo-stage-comporium img {
+    height: 50px;
   }
 
   .rh-sparkpoint-logo {
