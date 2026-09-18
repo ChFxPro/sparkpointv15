@@ -29,6 +29,7 @@ import firstCitizensBankLogo from '../assets/sponsors/first_citizens.webp';
 import hendersonvillePediatricsLogo from '../assets/sponsors/hendersonville_peds.webp';
 import adventHealthLogo from '../assets/sponsors/advent_health.webp';
 import unitedHealthcareLogo from '../assets/sponsors/united_healthcare.webp';
+import comporiumLogo from '../assets/sponsors/comporium.webp';
 import impactHealthLogoDark from '../assets/rural_health/impact_health_dk.webp';
 import wncrrhcLogoLight from '../assets/rural_health/wncrrhc_logo_lt.webp';
 import './ruralHealthConvening.css';
@@ -139,6 +140,14 @@ const friendsSponsors = [
     stageClassName: 'rh-logo-stage-uhc',
     width: 1280,
     height: 403,
+  },
+  {
+    name: 'Comporium',
+    href: 'https://www.comporium.com',
+    src: comporiumLogo,
+    stageClassName: 'rh-logo-stage-comporium',
+    width: 280,
+    height: 189,
   },
 ];
 
@@ -285,6 +294,10 @@ const eventJsonLd = {
     {
       '@type': 'Organization',
       name: 'UnitedHealthcare',
+    },
+    {
+      '@type': 'Organization',
+      name: 'Comporium',
     },
   ],
 };
