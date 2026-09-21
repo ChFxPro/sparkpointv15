@@ -1344,21 +1344,33 @@ a.rh-logo-stage:focus-visible {
   line-height: 1.6;
 }
 
-.rh-fhli-link {
+.rh-affiliate-logos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 16px 44px;
+  margin-top: 14px;
+}
+
+.rh-fhli-link,
+.rh-orh-link {
   display: block;
   width: fit-content;
-  margin: 14px auto 0;
   opacity: 0.9;
   transition: opacity 180ms ease, transform 180ms ease;
 }
 
 .rh-fhli-link:hover,
-.rh-fhli-link:focus-visible {
+.rh-fhli-link:focus-visible,
+.rh-orh-link:hover,
+.rh-orh-link:focus-visible {
   opacity: 1;
   transform: translateY(-2px);
 }
 
-.rh-fhli-link:focus-visible {
+.rh-fhli-link:focus-visible,
+.rh-orh-link:focus-visible {
   outline: 2px solid rgba(47, 74, 60, 0.55);
   outline-offset: 4px;
 }
@@ -1367,6 +1379,18 @@ a.rh-logo-stage:focus-visible {
   width: min(100%, 340px);
   height: auto;
   max-height: 94px;
+  object-fit: contain;
+}
+
+/* Same ink area as the FHLI mark beside it (the rule the hero partner row
+   uses), so the seal lockup and FHLI's wordmark read as equals. */
+.rh-orh-logo {
+  display: block;
+  /* A fixed width, not min(100%, …): a percentage leaves the fit-content link
+     sized to the image's intrinsic 480px, which wraps and off-centers it. */
+  width: 257px;
+  max-width: 100%;
+  height: auto;
   object-fit: contain;
 }
 
