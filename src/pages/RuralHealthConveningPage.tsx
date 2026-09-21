@@ -585,6 +585,21 @@ export function RuralHealthConveningPage() {
                         height={438}
                       />
                     </a>
+                    <a
+                      className="rh-hero-partner-link"
+                      href="https://www.ncdhhs.gov/divisions/office-rural-health"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Visit NC DHHS Office of Rural Health"
+                    >
+                      <img
+                        className="rh-hero-partner-logo logo-orh"
+                        src={ruralHealthAsset('ORH-NCDHHS-Logo.webp')}
+                        alt="NC Department of Health and Human Services, Office of Rural Health"
+                        width={480}
+                        height={170}
+                      />
+                    </a>
                   </div>
                 </div>
               </div>
