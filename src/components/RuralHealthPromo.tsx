@@ -4,6 +4,8 @@ import '@fontsource-variable/fraunces';
 
 import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
+import { useRemainingSeats } from '../hooks/useRemainingSeats';
+import { SHOW_RURAL_HEALTH_SEATS_TICKER } from '../data/opsStatus';
 
 // Homepage promo for the 2026 WNC Regional Rural Health Convening. The palette,
 // paper grain, star rule, plate frame, and square-cornered button are lifted from
@@ -39,6 +41,11 @@ const facts = [
 ];
 
 export function RuralHealthPromoCard() {
+  const remainingSeats = useRemainingSeats();
+  // Same rule as the convening page: only show a count once the live value arrives.
+  const showSeatsBadge = SHOW_RURAL_HEALTH_SEATS_TICKER && remainingSeats !== null;
+  const soldOut = showSeatsBadge && remainingSeats === 0;
+
   return (
     <div className="group relative h-full pt-9 md:pt-11">
       <div
@@ -64,13 +71,40 @@ export function RuralHealthPromoCard() {
         <div className="relative flex flex-1 flex-col justify-between gap-6 p-7 pt-12 md:p-8 md:pt-14">
           <div>
             <div className="pr-20 md:pr-32">
-              <span
-                className="mb-4 inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.16em]"
-                style={{ color: CHESTNUT }}
-              >
-                <span className="h-2 w-2 animate-pulse rounded-full" style={{ background: CLAY }} aria-hidden="true" />
-                Registration open
-              </span>
+              <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2">
+                <span
+                  className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.16em]"
+                  style={{ color: CHESTNUT }}
+                >
+                  <span className="h-2 w-2 animate-pulse rounded-full" style={{ background: CLAY }} aria-hidden="true" />
+                  {soldOut ? 'Registration full' : 'Registration open'}
+                </span>
+                {showSeatsBadge && (
+                  <span
+                    className="inline-flex items-baseline gap-1 rounded-[2px] px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.14em]"
+                    style={{
+                      color: PAPER,
+                      background: CLAY,
+                      boxShadow: `inset 0 0 0 1px ${CLAY}, inset 0 0 0 2px rgba(245, 239, 221, 0.55)`,
+                    }}
+                  >
+                    {soldOut ? (
+                      'Waitlist'
+                    ) : (
+                      <>
+                        <span
+                          className="text-[13px] font-bold leading-none tracking-normal"
+                          style={{ fontFamily: DISPLAY_FONT }}
+                        >
+                          {remainingSeats}
+                        </span>
+                        <span className="sr-only">{remainingSeats === 1 ? 'seat' : 'seats'}</span>
+                        left
+                      </>
+                    )}
+                  </span>
+                )}
+              </div>
               <h2 className="mb-1">
                 <img
                   src={eventMark}
