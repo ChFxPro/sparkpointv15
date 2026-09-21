@@ -1143,21 +1143,38 @@ export function RuralHealthConveningPage() {
                   Association, a program of the Foundation for Health Leadership &amp;
                   Innovation.
                 </p>
-                <a
-                  className="rh-fhli-link"
-                  href="https://foundationhli.org"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Visit Foundation for Health Leadership and Innovation"
-                >
-                  <img
-                    className="rh-fhli-logo"
-                    src={ruralHealthAsset('FHLI Logo.webp')}
-                    alt="Foundation for Health Leadership and Innovation"
-                    width={1600}
-                    height={438}
-                  />
-                </a>
+                <div className="rh-affiliate-logos">
+                  <a
+                    className="rh-fhli-link"
+                    href="https://foundationhli.org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visit Foundation for Health Leadership and Innovation"
+                  >
+                    <img
+                      className="rh-fhli-logo"
+                      src={ruralHealthAsset('FHLI Logo.webp')}
+                      alt="Foundation for Health Leadership and Innovation"
+                      width={1600}
+                      height={438}
+                    />
+                  </a>
+                  <a
+                    className="rh-orh-link"
+                    href="https://www.ncdhhs.gov/divisions/office-rural-health"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Visit NC DHHS Office of Rural Health"
+                  >
+                    <img
+                      className="rh-orh-logo"
+                      src={ruralHealthAsset('ORH-NCDHHS-Logo.webp')}
+                      alt="NC Department of Health and Human Services, Office of Rural Health"
+                      width={480}
+                      height={170}
+                    />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
