@@ -1046,11 +1046,33 @@
   color: rgba(245, 239, 221, 0.82);
 }
 
-.rh-seats-panel {
-  width: min(100%, 300px);
+.rh-priority-note.rh-seats-panel {
+  width: 100%;
   min-height: 0;
-  margin: 24px auto 0;
-  padding: 20px;
+  margin: 0 0 28px;
+  padding: 18px 26px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  text-align: left;
+}
+
+.rh-seats-panel strong {
+  margin-top: 0;
+  font-size: clamp(3.5rem, 6vw, 4.75rem);
+  line-height: 0.8;
+}
+
+.rh-seats-panel span {
+  display: block;
+  margin-top: 0;
+}
+
+.rh-seats-panel p {
+  max-width: 260px;
+  margin: 6px 0 0;
+  text-align: left;
 }
 
 .rh-simulator {

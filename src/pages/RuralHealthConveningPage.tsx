@@ -37,7 +37,6 @@ import './ruralHealthConvening.css';
 const PAGE_PATH = '/rural-health-convening';
 const REGISTRATION_URL =
   'https://secure.yoursparkpoint.org/store/p/2026-rural-health-convening';
-const GENERAL_REGISTRATION_TOTAL = 150;
 const IMPACT_HEALTH_URL = 'https://impacthealth.org';
 const IMPACT_DISCOUNT_CODE = 'IMPACT-REG';
 const BASE = import.meta.env.BASE_URL;
@@ -338,12 +337,13 @@ export function RuralHealthConveningPage() {
         ? `Copy code ${IMPACT_DISCOUNT_CODE} and paste it in the Promo Code field at checkout to bring your total to $40.`
         : `Enter code ${IMPACT_DISCOUNT_CODE} in the Promo Code field at checkout to bring your total to $40.`;
 
+  // Only show a count once the live value arrives. While loading, or if the stock
+  // endpoint fails, hide the counter rather than implying all seats are open.
+  const showSeatsCount = SHOW_RURAL_HEALTH_SEATS_TICKER && remainingSeats !== null;
   const seatsAvailableLabel =
-    remainingSeats === null
-      ? `Only ${GENERAL_REGISTRATION_TOTAL} seats available`
-      : remainingSeats > 0
-        ? `Only ${remainingSeats} seat${remainingSeats === 1 ? '' : 's'} left`
-        : 'Registration full — email us about the waitlist';
+    remainingSeats !== null && remainingSeats > 0
+      ? `Only ${remainingSeats} seat${remainingSeats === 1 ? '' : 's'} left`
+      : 'Registration full — email us about the waitlist';
 
   return (
     <div className="rh-page">
@@ -707,7 +707,7 @@ export function RuralHealthConveningPage() {
                     </dt>
                     <dd>
                       <strong>{primary}</strong>
-                      {label === 'Registration' && SHOW_RURAL_HEALTH_SEATS_TICKER ? (
+                      {label === 'Registration' && showSeatsCount ? (
                         <span>{seatsAvailableLabel}</span>
                       ) : secondary ? (
                         <span>{secondary}</span>
@@ -726,6 +726,19 @@ export function RuralHealthConveningPage() {
                 width={3300}
                 height={2550}
               />
+              {showSeatsCount && (
+                <div className="rh-priority-note rh-seats-panel">
+                  <strong>{remainingSeats}</strong>
+                  <div className="rh-seats-copy">
+                    <span>{remainingSeats === 1 ? 'seat left' : 'seats left'}</span>
+                    <p>
+                      {remainingSeats === 0
+                        ? 'Registration is full. Email info@yoursparkpoint.org to join the waitlist.'
+                        : 'Final seats are shared across both registration rates.'}
+                    </p>
+                  </div>
+                </div>
+              )}
               <div className="rh-rate-intro">
                 <p className="rh-rate-eyebrow-lead">
                   Inclusive Registration, supported by Impact Health
@@ -821,16 +834,6 @@ export function RuralHealthConveningPage() {
                   </p>
                 </div>
               </div>
-
-              {SHOW_RURAL_HEALTH_SEATS_TICKER && (
-                <div className="rh-priority-note rh-seats-panel">
-                  <strong>
-                    {remainingSeats === null ? GENERAL_REGISTRATION_TOTAL : remainingSeats}
-                  </strong>
-                  <span>{remainingSeats === null ? 'seats available' : 'seats left'}</span>
-                  <p>Reserve your seat at the 2026 Rural Health Convening.</p>
-                </div>
-              )}
 
               <p className="rh-scholarship-note">
                 <Mail aria-hidden="true" size={22} strokeWidth={1.7} />
