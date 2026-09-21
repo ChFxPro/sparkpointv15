@@ -340,6 +340,18 @@
   object-fit: contain;
 }
 
+/* NCRHA's wordmark fills its box edge to edge, so FHLI (padded, with a small
+   two-line wordmark and tagline) and the ORH seal lockup read lighter at the
+   same height. These heights give each the same ink area as NCRHA at 26px,
+   which is what makes the three read as optical equals. */
+.rh-hero-partner-logo.logo-fhli {
+  height: 39px;
+}
+
+.rh-hero-partner-logo.logo-orh {
+  height: 38px;
+}
+
 .rh-hero-logo-tier {
   display: flex;
   flex-wrap: wrap;
