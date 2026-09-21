@@ -726,6 +726,27 @@ export function RuralHealthConveningPage() {
                 width={3300}
                 height={2550}
               />
+              {SHOW_RURAL_HEALTH_SEATS_TICKER && (
+                <div className="rh-priority-note rh-seats-panel">
+                  <strong>
+                    {remainingSeats === null ? GENERAL_REGISTRATION_TOTAL : remainingSeats}
+                  </strong>
+                  <div className="rh-seats-copy">
+                    <span>
+                      {remainingSeats === null
+                        ? 'seats available'
+                        : remainingSeats === 1
+                          ? 'seat left'
+                          : 'seats left'}
+                    </span>
+                    <p>
+                      {remainingSeats === 0
+                        ? 'Registration is full. Email info@yoursparkpoint.org to join the waitlist.'
+                        : 'Final seats are shared across both registration rates.'}
+                    </p>
+                  </div>
+                </div>
+              )}
               <div className="rh-rate-intro">
                 <p className="rh-rate-eyebrow-lead">
                   Inclusive Registration, supported by Impact Health
@@ -821,16 +842,6 @@ export function RuralHealthConveningPage() {
                   </p>
                 </div>
               </div>
-
-              {SHOW_RURAL_HEALTH_SEATS_TICKER && (
-                <div className="rh-priority-note rh-seats-panel">
-                  <strong>
-                    {remainingSeats === null ? GENERAL_REGISTRATION_TOTAL : remainingSeats}
-                  </strong>
-                  <span>{remainingSeats === null ? 'seats available' : 'seats left'}</span>
-                  <p>Reserve your seat at the 2026 Rural Health Convening.</p>
-                </div>
-              )}
 
               <p className="rh-scholarship-note">
                 <Mail aria-hidden="true" size={22} strokeWidth={1.7} />

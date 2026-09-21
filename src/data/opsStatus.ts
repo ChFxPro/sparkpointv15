@@ -4,7 +4,7 @@
 // (staff contacts, budgets, security/engineering backlog).
 
 // Flip to `true` to bring the public seats-remaining ticker back on the convening page.
-export const SHOW_RURAL_HEALTH_SEATS_TICKER = false;
+export const SHOW_RURAL_HEALTH_SEATS_TICKER = true;
 
 // 2026 WNC Regional Rural Health Convening.
 export const RURAL_HEALTH_EVENT_DATE = '2026-10-01T08:30:00-04:00';
