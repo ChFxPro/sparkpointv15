@@ -739,6 +739,11 @@ export function RuralHealthConveningPage() {
                   </div>
                 </div>
               )}
+              <p className="rh-seats-release">
+                The first block of seats filled, so a few more are open for October 1 at
+                Deerwoode Reserve, where participants walk a rural family’s path to care.
+                Registration closes Friday, September 25.
+              </p>
               <div className="rh-rate-intro">
                 <p className="rh-rate-eyebrow-lead">
                   Inclusive Registration, supported by Impact Health
