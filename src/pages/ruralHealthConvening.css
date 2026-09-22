@@ -1075,6 +1075,19 @@
   text-align: left;
 }
 
+/* Sits directly under the seats panel so the count and the close date read as one
+   unit. Deliberately a sibling of that panel rather than inside it: the panel is
+   gated on a live count arriving, and the September 25 close date has to show even
+   when `rh-ticket-stock` is slow or down. */
+.rh-seats-release {
+  margin: -14px 0 26px;
+  padding: 0 4px;
+  color: var(--rh-forest);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  font-weight: 650;
+}
+
 .rh-simulator {
   padding: clamp(80px, 8vw, 128px) 0;
   color: var(--rh-paper);
