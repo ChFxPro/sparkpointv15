@@ -345,6 +345,16 @@ export function RuralHealthConveningPage() {
       ? `Only ${remainingSeats} seat${remainingSeats === 1 ? '' : 's'} left`
       : 'Registration full — email us about the waitlist';
 
+  // The seat-release sentence is a live availability claim, so it is tied to the same
+  // positive count the ticker shows: at 0 the panel above reads "Registration is full",
+  // and with no count at all there is nothing backing "a few more are open". The close
+  // date is not conditional — September 25 appears nowhere else on the page, so it has
+  // to survive a failed or hidden count.
+  const seatsReleaseNote =
+    showSeatsCount && remainingSeats !== null && remainingSeats > 0
+      ? 'The first block of seats filled, so a few more are open for October 1 at Deerwoode Reserve, where participants walk a rural family’s path to care. Registration closes Friday, September 25.'
+      : 'Registration for October 1 at Deerwoode Reserve closes Friday, September 25.';
+
   return (
     <div className="rh-page">
       <SEOHead
@@ -739,11 +749,7 @@ export function RuralHealthConveningPage() {
                   </div>
                 </div>
               )}
-              <p className="rh-seats-release">
-                The first block of seats filled, so a few more are open for October 1 at
-                Deerwoode Reserve, where participants walk a rural family’s path to care.
-                Registration closes Friday, September 25.
-              </p>
+              <p className="rh-seats-release">{seatsReleaseNote}</p>
               <div className="rh-rate-intro">
                 <p className="rh-rate-eyebrow-lead">
                   Inclusive Registration, supported by Impact Health
