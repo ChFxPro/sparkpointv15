@@ -1,24 +1,17 @@
 import '@fontsource-variable/fraunces';
 
-import { useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
   CalendarDays,
+  Camera,
   Clock3,
-  Copy,
-  ExternalLink,
-  Info,
   Mail,
   MapPin,
-  Ticket,
-  Utensils,
+  Users,
 } from 'lucide-react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
-import { Tooltip, TooltipContent, TooltipTrigger } from '../components/ui/tooltip';
-import { useRemainingSeats } from '../hooks/useRemainingSeats';
-import { SHOW_RURAL_HEALTH_SEATS_TICKER } from '../data/opsStatus';
 import uncHealthPardeeLogo from '../assets/sponsors/unc_health.png';
 import pisgahHealthFoundationLogo from '../assets/sponsors/phf.png';
 import transylvaniaRegionalHospitalLogo from '../assets/sponsors/trh.webp';
@@ -30,20 +23,31 @@ import hendersonvillePediatricsLogo from '../assets/sponsors/hendersonville_peds
 import adventHealthLogo from '../assets/sponsors/advent_health.webp';
 import unitedHealthcareLogo from '../assets/sponsors/united_healthcare.webp';
 import comporiumLogo from '../assets/sponsors/comporium.webp';
-import impactHealthLogoDark from '../assets/rural_health/impact_health_dk.webp';
-import wncrrhcLogoLight from '../assets/rural_health/wncrrhc_logo_lt.webp';
 import './ruralHealthConvening.css';
 
 const PAGE_PATH = '/rural-health-convening';
-const REGISTRATION_URL =
-  'https://secure.yoursparkpoint.org/store/p/2026-rural-health-convening';
 const IMPACT_HEALTH_URL = 'https://impacthealth.org';
-const IMPACT_DISCOUNT_CODE = 'IMPACT-REG';
 const BASE = import.meta.env.BASE_URL;
 const SPARKPOINT_LOGO = `${BASE}logo-wordmark.webp`;
 
 function ruralHealthAsset(filename: string) {
   return `${BASE}assets/Rural%20Health/${encodeURIComponent(filename)}`;
+}
+
+// The convening took place October 1, 2026 and this page is now its recap.
+//
+// Photos: drop files into public/assets/Rural Health/recap/ and list them here, in
+// display order. The gallery section renders only once this has at least one entry, so
+// an empty list shows the "photos coming soon" note in the recap panel instead of an
+// empty grid. Keep alt text descriptive — these are the page's main content now.
+const recapPhotos: { file: string; alt: string; caption?: string; width: number; height: number }[] = [];
+
+// Video: set to an embeddable URL (e.g. https://www.youtube-nocookie.com/embed/<id>
+// or https://player.vimeo.com/video/<id>) once the recap video is published.
+const RECAP_VIDEO_EMBED_URL: string | null = null;
+
+function recapAsset(filename: string) {
+  return `${BASE}assets/Rural%20Health/recap/${encodeURIComponent(filename)}`;
 }
 
 const summitSponsors = [
@@ -168,14 +172,10 @@ const eventDetails = [
     secondary: '395 Riversedge Rd, Brevard, NC',
   },
   {
-    icon: Ticket,
-    label: 'Registration',
-    primary: '$65 Standard Rate or $40 Impact Health-Supported Inclusive Rate',
-  },
-  {
-    icon: Utensils,
-    label: 'Included',
-    primary: 'Light breakfast and full lunch',
+    icon: Users,
+    label: 'Attendance',
+    primary: 'A full house',
+    secondary: 'Care, community, philanthropy, and government in one room',
   },
 ];
 
@@ -225,7 +225,7 @@ const eventJsonLd = {
   '@type': 'Event',
   name: '2026 WNC Regional Rural Health Convening',
   description:
-    'A day of connection, collaboration, and shared learning for rural health leaders across Western North Carolina, featuring the Rural Health Field Simulator.',
+    'A full-house day of connection, collaboration, and shared learning for rural health leaders across Western North Carolina, featuring the Rural Health Field Simulator.',
   startDate: '2026-10-01T08:30:00-04:00',
   endDate: '2026-10-01T15:00:00-04:00',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
@@ -302,64 +302,11 @@ const eventJsonLd = {
 };
 
 export function RuralHealthConveningPage() {
-  const remainingSeats = useRemainingSeats();
-  const [impactCodeStatus, setImpactCodeStatus] = useState<'idle' | 'copied' | 'manual'>('idle');
-
-  function handleCopyImpactCode(event: React.MouseEvent<HTMLAnchorElement>) {
-    // Once the manual-copy fallback has been shown, let the link navigate normally—
-    // the user has already seen the code and doesn't need another intercepted click.
-    if (impactCodeStatus === 'manual') {
-      return;
-    }
-
-    event.preventDefault();
-
-    if (typeof navigator === 'undefined' || !navigator.clipboard) {
-      setImpactCodeStatus('manual');
-      return;
-    }
-
-    navigator.clipboard
-      .writeText(IMPACT_DISCOUNT_CODE)
-      .then(() => {
-        setImpactCodeStatus('copied');
-        window.open(REGISTRATION_URL, '_blank', 'noopener');
-      })
-      .catch(() => {
-        setImpactCodeStatus('manual');
-      });
-  }
-
-  const impactCodeStatusMessage =
-    impactCodeStatus === 'copied'
-      ? `Code ${IMPACT_DISCOUNT_CODE} copied—paste it in the Promo Code field at checkout to bring your total to $40.`
-      : impactCodeStatus === 'manual'
-        ? `Copy code ${IMPACT_DISCOUNT_CODE} and paste it in the Promo Code field at checkout to bring your total to $40.`
-        : `Enter code ${IMPACT_DISCOUNT_CODE} in the Promo Code field at checkout to bring your total to $40.`;
-
-  // Only show a count once the live value arrives. While loading, or if the stock
-  // endpoint fails, hide the counter rather than implying all seats are open.
-  const showSeatsCount = SHOW_RURAL_HEALTH_SEATS_TICKER && remainingSeats !== null;
-  const seatsAvailableLabel =
-    remainingSeats !== null && remainingSeats > 0
-      ? `Only ${remainingSeats} seat${remainingSeats === 1 ? '' : 's'} left`
-      : 'Registration full — email us about the waitlist';
-
-  // The seat-release sentence is a live availability claim, so it is tied to the same
-  // positive count the ticker shows: at 0 the panel above reads "Registration is full",
-  // and with no count at all there is nothing backing "a few more are open". The close
-  // date is not conditional — September 25 appears nowhere else on the page, so it has
-  // to survive a failed or hidden count.
-  const seatsReleaseNote =
-    showSeatsCount && remainingSeats !== null && remainingSeats > 0
-      ? 'The first block of seats filled, so a few more are open for October 1 at Deerwoode Reserve, where participants walk a rural family’s path to care. Registration closes Friday, September 25.'
-      : 'Registration for October 1 at Deerwoode Reserve closes Friday, September 25.';
-
   return (
     <div className="rh-page">
       <SEOHead
-        title="2026 Rural Health Convening | SparkPoint"
-        description="Join rural health leaders in Brevard, NC on Oct. 1, 2026, presented by UNC Health Pardee & Transylvania Regional Hospital, with Pisgah Health Foundation."
+        title="2026 Rural Health Convening Recap | SparkPoint"
+        description="A full house of rural health leaders gathered in Brevard, NC on Oct. 1, 2026, presented by UNC Health Pardee & Transylvania Regional Hospital."
         path={PAGE_PATH}
         image="/assets/Rural%20Health/rural%20sim%20hero.webp"
         imageAlt="A field-atlas connection map showing the many doors, barriers, and handoffs that shape rural health access."
@@ -381,7 +328,7 @@ export function RuralHealthConveningPage() {
       />
 
       <a className="rh-skip-link" href="#main-content">
-        Skip to event details
+        Skip to the recap
       </a>
 
       <header className="rh-masthead">
@@ -421,9 +368,13 @@ export function RuralHealthConveningPage() {
         <section className="rh-hero" aria-labelledby="rh-hero-title">
           <div className="rh-shell rh-hero-grid">
             <div className="rh-hero-copy">
+              <p className="rh-past-kicker">
+                <span aria-hidden="true">✦</span>
+                October 1, 2026 · A full house
+              </p>
               <h1 id="rh-hero-title">
                 <span>Where rural</span>
-                <span>health comes</span>
+                <span>health came</span>
                 <span>together.</span>
               </h1>
               <div className="rh-star-rule" aria-hidden="true">
@@ -432,9 +383,10 @@ export function RuralHealthConveningPage() {
                 <span />
               </div>
               <p className="rh-hero-lede">
-                Join rural health leaders from across Western North Carolina for a day of
-                connection, collaboration, and shared learning—with the Rural Health Field
-                Simulator at the center.
+                Rural health leaders from across Western North Carolina filled the room at
+                Deerwoode Reserve for a day of connection, collaboration, and shared
+                learning—with the Rural Health Field Simulator at the center. Thank you to
+                everyone who came, listened, and left with new people to call.
               </p>
 
               <dl className="rh-hero-facts">
@@ -443,8 +395,8 @@ export function RuralHealthConveningPage() {
                   <dd>Thursday, October 1, 2026</dd>
                 </div>
                 <div>
-                  <dt>Time</dt>
-                  <dd>8:30 a.m.–3:00 p.m.</dd>
+                  <dt>Attendance</dt>
+                  <dd>A full house</dd>
                 </div>
                 <div>
                   <dt>Place</dt>
@@ -454,7 +406,7 @@ export function RuralHealthConveningPage() {
 
               <div className="rh-actions">
                 <a className="rh-button rh-button-primary" href="#event-details">
-                  Register now
+                  See the recap
                   <ArrowRight aria-hidden="true" size={19} />
                 </a>
                 <a className="rh-button rh-button-secondary" href="#simulator">
@@ -625,23 +577,23 @@ export function RuralHealthConveningPage() {
             <div>
               <h2 id="rh-network-title">One day. A stronger rural health network.</h2>
               <p>
-                The convening brings together people working across care, community,
+                The convening brought together people working across care, community,
                 philanthropy, and government to see the system together and strengthen the
                 relationships that help rural communities thrive.
               </p>
             </div>
-            <div className="rh-network-outcomes" aria-label="What the convening offers">
+            <div className="rh-network-outcomes" aria-label="What the convening made possible">
               <p>
-                <strong>Connect across roles</strong>
-                Build relationships that bridge organizations and communities.
+                <strong>Connected across roles</strong>
+                Relationships that bridge organizations and communities.
               </p>
               <p>
-                <strong>Walk the system</strong>
-                Explore rural health access through the Field Simulator.
+                <strong>Walked the system</strong>
+                Rural health access, explored together through the Field Simulator.
               </p>
               <p>
-                <strong>Carry insight forward</strong>
-                Leave with clearer connections and practical next steps.
+                <strong>Carrying insight forward</strong>
+                Clearer connections and practical next steps to build on.
               </p>
             </div>
           </div>
@@ -655,15 +607,15 @@ export function RuralHealthConveningPage() {
           <div className="rh-shell">
             <div className="rh-regional-update-copy">
               <p className="rh-regional-update-eyebrow">
-                What to expect · October 1 program
+                The October 1 program
               </p>
               <h2 id="rh-regional-update-title">
                 A historic moment for rural health in North Carolina.
               </h2>
               <p>
                 North Carolina’s rural health community is calling this a historic
-                moment—and on October 1, Western North Carolina steps into it together.
-                The day brings a statewide briefing from NCDHHS, a special regional
+                moment—and on October 1, Western North Carolina stepped into it together.
+                The day brought a statewide briefing from NCDHHS, a special regional
                 update on NC ROOTS, a first look at how story collection is helping us
                 understand and connect our community, and the participatory Rural
                 Health Field Simulator.
@@ -671,9 +623,9 @@ export function RuralHealthConveningPage() {
             </div>
 
             <div className="rh-program-list-heading">
-              <p>What you’ll experience</p>
+              <p>What the day held</p>
             </div>
-            <ol className="rh-program-list" aria-label="What you'll experience on October 1">
+            <ol className="rh-program-list" aria-label="The October 1 program">
               {programLineup.map((item) => (
                 <li key={item.number}>
                   <span aria-hidden="true">{item.number}</span>
@@ -695,7 +647,7 @@ export function RuralHealthConveningPage() {
           <div className="rh-shell rh-event-grid">
             <div className="rh-event-copy">
               <h2 id="rh-event-title">
-                Gather with the people building rural health from the ground up.
+                A full house, and a room full of new connections.
               </h2>
               <div className="rh-star-rule rh-star-rule-short" aria-hidden="true">
                 <span />
@@ -703,9 +655,11 @@ export function RuralHealthConveningPage() {
                 <span />
               </div>
               <p>
-                A day for healthcare providers, nonprofits, public and behavioral health
-                professionals, funders, government partners, and community leaders to
-                connect, collaborate, and learn together.
+                Healthcare providers, nonprofits, public and behavioral health
+                professionals, funders, government partners, and community leaders filled
+                every seat—and spent the day meeting the people on the other side of the
+                handoffs they navigate every week. Those connections are what the convening
+                was built for, and they are where the work goes next.
               </p>
 
               <dl className="rh-detail-list">
@@ -717,18 +671,14 @@ export function RuralHealthConveningPage() {
                     </dt>
                     <dd>
                       <strong>{primary}</strong>
-                      {label === 'Registration' && showSeatsCount ? (
-                        <span>{seatsAvailableLabel}</span>
-                      ) : secondary ? (
-                        <span>{secondary}</span>
-                      ) : null}
+                      {secondary ? <span>{secondary}</span> : null}
                     </dd>
                   </div>
                 ))}
               </dl>
             </div>
 
-            <aside className="rh-ticket-panel" aria-label="Registration">
+            <aside className="rh-ticket-panel rh-recap-panel" aria-label="Convening recap">
               <img
                 className="rh-ticket-event-mark"
                 src={ruralHealthAsset('NC Rural Health Convening copy.webp')}
@@ -736,128 +686,81 @@ export function RuralHealthConveningPage() {
                 width={3300}
                 height={2550}
               />
-              {showSeatsCount && (
-                <div className="rh-priority-note rh-seats-panel">
-                  <strong>{remainingSeats}</strong>
-                  <div className="rh-seats-copy">
-                    <span>{remainingSeats === 1 ? 'seat left' : 'seats left'}</span>
-                    <p>
-                      {remainingSeats === 0
-                        ? 'Registration is full. Email info@yoursparkpoint.org to join the waitlist.'
-                        : 'Final seats are shared across both registration rates.'}
-                    </p>
-                  </div>
-                </div>
+              <div className="rh-priority-note rh-recap-stamp">
+                <span>October 1, 2026</span>
+                <strong>Full house</strong>
+                <p>Every seat filled. So many connections made.</p>
+              </div>
+
+              {recapPhotos.length === 0 && !RECAP_VIDEO_EMBED_URL ? (
+                <p className="rh-scholarship-note rh-recap-coming">
+                  <Camera aria-hidden="true" size={22} strokeWidth={1.7} />
+                  <span>
+                    Photos and video from the day are on their way. Have a photo you’d
+                    like to share? Send it to{' '}
+                    <a href="mailto:info@yoursparkpoint.org">info@yoursparkpoint.org</a>.
+                  </span>
+                </p>
+              ) : (
+                <a className="rh-button rh-button-primary rh-recap-media-link" href="#recap-media">
+                  {recapPhotos.length > 0 ? 'See photos from the day' : 'Watch the recap'}
+                  <ArrowRight aria-hidden="true" size={19} />
+                </a>
               )}
-              <p className="rh-seats-release">{seatsReleaseNote}</p>
-              <div className="rh-rate-intro">
-                <p className="rh-rate-eyebrow-lead">
-                  Inclusive Registration, supported by Impact Health
-                </p>
-                <p>
-                  Impact Health is helping make the Rural Health Convening more accessible by
-                  supporting a $40 Inclusive Registration Rate—so cost isn't a barrier to
-                  attending. Choose the registration rate that works for you—no application or
-                  explanation required. Both registration options include the complete
-                  convening experience.
-                </p>
-              </div>
 
-              <div className="rh-rate-grid">
-                <div className="rh-rate-card rh-rate-card-standard">
-                  <img
-                    className="rh-rate-card-mark"
-                    src={wncrrhcLogoLight}
-                    alt="2026 WNC Regional Rural Health Convening"
-                    width={3300}
-                    height={1744}
-                  />
-                  <p className="rh-rate-eyebrow">Standard Registration</p>
-                  <p className="rh-rate-price">$65</p>
-                  <div className="rh-rate-note rh-rate-note-pointer">
-                    <span className="rh-rate-note-pointer-text">Barrier-free $40 rate</span>
-                    <ArrowRight aria-hidden="true" size={14} />
-                  </div>
-                  <a
-                    className="rh-button rh-button-secondary rh-rate-button"
-                    href={REGISTRATION_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Continue to registration
-                    <ExternalLink aria-hidden="true" size={16} />
-                  </a>
-                  <p className="rh-rate-status">Pay $65 at checkout.</p>
-                </div>
-
-                <div className="rh-rate-card rh-rate-card-inclusive">
-                  <a
-                    className="rh-rate-impact-link"
-                    href={IMPACT_HEALTH_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Visit Impact Health"
-                  >
-                    <img
-                      className="rh-rate-card-mark"
-                      src={impactHealthLogoDark}
-                      alt="Impact Health"
-                      width={3300}
-                      height={1744}
-                    />
-                  </a>
-                  <p className="rh-rate-eyebrow">Inclusive Registration</p>
-                  <p className="rh-rate-price">$40</p>
-                  <div className="rh-rate-note">
-                    <span>Code</span>
-                    <span className="rh-rate-note-value">
-                      <code>{IMPACT_DISCOUNT_CODE}</code>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <button
-                            type="button"
-                            className="rh-rate-info-trigger"
-                            aria-label="Where do I enter this code?"
-                          >
-                            <Info aria-hidden="true" size={11} />
-                          </button>
-                        </TooltipTrigger>
-                        <TooltipContent className="max-w-52 text-left">
-                          You'll fill out a short registration form first. The Promo Code
-                          field is on the final checkout step.
-                        </TooltipContent>
-                      </Tooltip>
-                    </span>
-                  </div>
-                  <a
-                    className="rh-button rh-button-primary rh-rate-button"
-                    href={REGISTRATION_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={handleCopyImpactCode}
-                  >
-                    <Copy aria-hidden="true" size={16} />
-                    Copy code &amp; continue
-                    <ExternalLink aria-hidden="true" size={16} />
-                  </a>
-                  <p className="rh-rate-status" role="status" aria-live="polite">
-                    {impactCodeStatusMessage}
-                  </p>
-                </div>
-              </div>
-
-              <p className="rh-scholarship-note">
-                <Mail aria-hidden="true" size={22} strokeWidth={1.7} />
-                <span>
-                  Questions about registration or accessibility? Email{' '}
-                  <a href="mailto:info@yoursparkpoint.org">info@yoursparkpoint.org</a>. If the
-                  Impact Health-supported credit doesn't apply at checkout, send us your order
-                  confirmation and we'll make it right.
-                </span>
+              <p className="rh-recap-thanks">
+                With thanks to{' '}
+                <a href={IMPACT_HEALTH_URL} target="_blank" rel="noopener noreferrer">
+                  Impact Health
+                </a>
+                , whose support of a $40 Inclusive Registration Rate helped make sure cost
+                wasn’t a barrier to being in the room.
               </p>
             </aside>
           </div>
         </section>
+
+        {recapPhotos.length > 0 || RECAP_VIDEO_EMBED_URL ? (
+          <section
+            id="recap-media"
+            className="rh-recap-media"
+            aria-labelledby="rh-recap-media-title"
+          >
+            <div className="rh-shell">
+              <p className="rh-regional-update-eyebrow">From the day</p>
+              <h2 id="rh-recap-media-title">October 1, in pictures.</h2>
+
+              {RECAP_VIDEO_EMBED_URL ? (
+                <div className="rh-recap-video">
+                  <iframe
+                    src={RECAP_VIDEO_EMBED_URL}
+                    title="2026 WNC Regional Rural Health Convening recap video"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                </div>
+              ) : null}
+
+              {recapPhotos.length > 0 ? (
+                <div className="rh-recap-gallery">
+                  {recapPhotos.map((photo) => (
+                    <figure key={photo.file}>
+                      <img
+                        src={recapAsset(photo.file)}
+                        alt={photo.alt}
+                        width={photo.width}
+                        height={photo.height}
+                        loading="lazy"
+                      />
+                      {photo.caption ? <figcaption>{photo.caption}</figcaption> : null}
+                    </figure>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          </section>
+        ) : null}
 
         <section id="simulator" className="rh-simulator" aria-labelledby="rh-simulator-title">
           <div className="rh-shell">
@@ -945,14 +848,13 @@ export function RuralHealthConveningPage() {
               <div className="rh-ongoing">
                 <h3>Built for this convening. Designed to keep learning.</h3>
                 <p>
-                  After October 1, the simulator will continue as a SparkPoint program for
-                  facilitated learning, partnership-building, and rural health systems
-                  insight.
+                  The simulator now continues as a SparkPoint program for facilitated
+                  learning, partnership-building, and rural health systems insight.
                 </p>
-                <a className="rh-text-link" href="#event-partners">
-                  Explore the simulator at the convening
+                <Link className="rh-text-link" to="/intake?intent=partner">
+                  Bring the simulator to your organization
                   <ArrowRight aria-hidden="true" size={18} />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -973,7 +875,8 @@ export function RuralHealthConveningPage() {
               </div>
               <p>
                 Rural health changes when the people closest to the work can see the system
-                together, learn across roles, and leave with stronger connections.
+                together, learn across roles, and leave with stronger connections. Thank you
+                to every sponsor and partner who made the day possible.
               </p>
             </div>
 
@@ -1003,7 +906,7 @@ export function RuralHealthConveningPage() {
                   ])}
                 </div>
                 <p className="rh-relationship">
-                  UNC Health Pardee and Transylvania Regional Hospital are Summit sponsors of
+                  UNC Health Pardee and Transylvania Regional Hospital were Summit sponsors of
                   the 2026 WNC Regional Rural Health Convening, providing lead support for a
                   day of connection and shared learning.
                 </p>
@@ -1057,7 +960,7 @@ export function RuralHealthConveningPage() {
                     ))}
                   </div>
                   <p className="rh-visit-invitation">
-                    Make a little more of your time in Transylvania County.{' '}
+                    Come back and spend more time in Transylvania County.{' '}
                     <a
                       href="https://www.explorebrevard.com/"
                       target="_blank"
@@ -1193,20 +1096,26 @@ export function RuralHealthConveningPage() {
 
         <section className="rh-final-cta" aria-labelledby="rh-final-title">
           <div className="rh-shell">
-            <h2 id="rh-final-title">Join us on October 1.</h2>
+            <h2 id="rh-final-title">Thank you for filling the room.</h2>
             <p>
-              Come ready to listen, share, and see the rural health system from a new point
-              of view.
+              The connections made on October 1 are where the work continues. Stay close
+              for photos, video, and what comes next for rural health in Western North
+              Carolina.
             </p>
             <div className="rh-actions rh-actions-centered">
-              <a className="rh-button rh-button-primary" href="#event-details">
-                Register now
+              <Link className="rh-button rh-button-primary" to="/newsletter">
+                Get SparkPoint updates
                 <ArrowRight aria-hidden="true" size={19} />
-              </a>
-              <a className="rh-final-email" href="mailto:info@yoursparkpoint.org">
-                Accessibility questions? Email info@yoursparkpoint.org
-              </a>
+              </Link>
+              <Link className="rh-button rh-button-secondary" to="/intake?intent=partner">
+                Partner with us
+                <ArrowRight aria-hidden="true" size={19} />
+              </Link>
             </div>
+            <a className="rh-final-email" href="mailto:info@yoursparkpoint.org">
+              <Mail aria-hidden="true" size={16} />
+              Have photos from the day? Send them to info@yoursparkpoint.org
+            </a>
           </div>
         </section>
       </main>

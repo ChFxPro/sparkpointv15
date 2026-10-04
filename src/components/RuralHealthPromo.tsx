@@ -4,10 +4,9 @@ import '@fontsource-variable/fraunces';
 
 import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
-import { useRemainingSeats } from '../hooks/useRemainingSeats';
-import { SHOW_RURAL_HEALTH_SEATS_TICKER } from '../data/opsStatus';
 
-// Homepage promo for the 2026 WNC Regional Rural Health Convening. The palette,
+// Homepage promo for the 2026 WNC Regional Rural Health Convening — now a recap card
+// for the October 1 event, pointing at the convening page's past-event recap. The palette,
 // paper grain, star rule, plate frame, and square-cornered button are lifted from
 // src/pages/ruralHealthConvening.css so the card reads as a window into that page.
 export const RURAL_HEALTH_CONVENING_PATH = '/rural-health-convening';
@@ -27,8 +26,10 @@ const DISPLAY_FONT = "'Fraunces Variable', 'Fraunces', Georgia, serif";
 const PAPER_GRAIN =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='2' stitchTiles='stitch'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='.035'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E\")";
 
-// The convening wraps at 3:00 p.m. on October 1, 2026; retire the promo once it ends.
-const PROMO_EXPIRES = new Date('2026-10-01T15:00:00-04:00');
+// The convening took place October 1, 2026. The card stays up as a recap for a month
+// afterward, then retires; move this date if the recap should run longer (for example
+// once photos or the video land on the convening page).
+const PROMO_EXPIRES = new Date('2026-11-01T00:00:00-04:00');
 
 export function isRuralHealthPromoActive(now = new Date()) {
   return now < PROMO_EXPIRES;
@@ -36,16 +37,11 @@ export function isRuralHealthPromoActive(now = new Date()) {
 
 const facts = [
   { label: 'Date', value: 'Thu, Oct 1, 2026' },
-  { label: 'Time', value: '8:30 a.m.–3:00 p.m.' },
+  { label: 'Attendance', value: 'A full house' },
   { label: 'Place', value: 'Deerwoode Reserve · Brevard, NC' },
 ];
 
 export function RuralHealthPromoCard() {
-  const remainingSeats = useRemainingSeats();
-  // Same rule as the convening page: only show a count once the live value arrives.
-  const showSeatsBadge = SHOW_RURAL_HEALTH_SEATS_TICKER && remainingSeats !== null;
-  const soldOut = showSeatsBadge && remainingSeats === 0;
-
   return (
     <div className="group relative h-full pt-9 md:pt-11">
       <div
@@ -76,34 +72,19 @@ export function RuralHealthPromoCard() {
                   className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.16em]"
                   style={{ color: CHESTNUT }}
                 >
-                  <span className="h-2 w-2 animate-pulse rounded-full" style={{ background: CLAY }} aria-hidden="true" />
-                  {soldOut ? 'Registration full' : 'Registration open'}
+                  <span className="h-2 w-2 rounded-full" style={{ background: CLAY }} aria-hidden="true" />
+                  Held October 1
                 </span>
-                {showSeatsBadge && (
-                  <span
-                    className="inline-flex items-baseline gap-1 rounded-[2px] px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.14em]"
-                    style={{
-                      color: PAPER,
-                      background: CLAY,
-                      boxShadow: `inset 0 0 0 1px ${CLAY}, inset 0 0 0 2px rgba(245, 239, 221, 0.55)`,
-                    }}
-                  >
-                    {soldOut ? (
-                      'Waitlist'
-                    ) : (
-                      <>
-                        <span
-                          className="text-[13px] font-bold leading-none tracking-normal"
-                          style={{ fontFamily: DISPLAY_FONT }}
-                        >
-                          {remainingSeats}
-                        </span>
-                        <span className="sr-only">{remainingSeats === 1 ? 'seat' : 'seats'}</span>
-                        left
-                      </>
-                    )}
-                  </span>
-                )}
+                <span
+                  className="inline-flex items-baseline rounded-[2px] px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.14em]"
+                  style={{
+                    color: PAPER,
+                    background: CLAY,
+                    boxShadow: `inset 0 0 0 1px ${CLAY}, inset 0 0 0 2px rgba(245, 239, 221, 0.55)`,
+                  }}
+                >
+                  Full house
+                </span>
               </div>
               <h2 className="mb-1">
                 <img
@@ -133,11 +114,12 @@ export function RuralHealthPromoCard() {
               className="max-w-xl text-[1.3rem] font-semibold leading-tight md:text-[1.45rem]"
               style={{ fontFamily: DISPLAY_FONT, color: FOREST, textWrap: 'balance' }}
             >
-              Where rural health comes together.
+              Where rural health came together.
             </p>
             <p className="mt-1.5 max-w-xl leading-relaxed" style={{ color: 'rgba(43, 38, 32, 0.78)' }}>
-              WNC&rsquo;s rural health leaders gather for a day of connection, collaboration, and
-              shared learning&mdash;with the Rural Health Field Simulator at the center.
+              A full house of WNC&rsquo;s rural health leaders spent the day connecting, collaborating,
+              and walking the Rural Health Field Simulator together&mdash;and left with so many new
+              connections.
             </p>
 
             <dl className="mt-4 grid gap-x-5 gap-y-3 sm:grid-cols-3">
@@ -166,13 +148,13 @@ export function RuralHealthPromoCard() {
               className="inline-flex min-h-[54px] w-full items-center justify-center gap-3 rounded-[1px] border-2 border-[#2f4a3c] bg-[#2f4a3c] px-8 text-[0.95rem] font-extrabold text-[#f5efdd] shadow-lg transition-[transform,background-color,box-shadow] duration-150 hover:-translate-y-0.5 hover:bg-[#20362c] hover:shadow-xl"
               style={{ boxShadow: `inset 0 0 0 2px ${FOREST}, inset 0 0 0 3px rgba(245, 239, 221, 0.72)` }}
             >
-              Register now <ArrowRight size={18} aria-hidden="true" />
+              See the recap <ArrowRight size={18} aria-hidden="true" />
             </Link>
             <p
               className="text-center text-[10px] font-bold uppercase leading-relaxed tracking-[0.13em]"
               style={{ color: 'rgba(47, 74, 60, 0.7)' }}
             >
-              Presented by UNC Health Pardee &amp; Transylvania Regional Hospital
+              Thank you to presenting sponsors UNC Health Pardee &amp; Transylvania Regional Hospital
             </p>
           </div>
         </div>
