@@ -1,21 +1,18 @@
 import '@fontsource-variable/fraunces';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
   CalendarDays,
   Camera,
-  ChevronLeft,
-  ChevronRight,
   Clock3,
   Mail,
   MapPin,
   Users,
-  X,
 } from 'lucide-react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
+import { RecapMedia, hasRecapMedia, hasRecapVideo, recapPhotoCount } from './RuralHealthRecap';
 import uncHealthPardeeLogo from '../assets/sponsors/unc_health.png';
 import pisgahHealthFoundationLogo from '../assets/sponsors/phf.png';
 import transylvaniaRegionalHospitalLogo from '../assets/sponsors/trh.webp';
@@ -38,168 +35,8 @@ function ruralHealthAsset(filename: string) {
   return `${BASE}assets/Rural%20Health/${encodeURIComponent(filename)}`;
 }
 
-// The convening took place October 1, 2026 and this page is now its recap.
-//
-// Photos: each entry is a pair of WebP files in public/assets/Rural Health/recap/ —
-// `<id>-800.webp` for the grid and `<id>-1600.webp` for the enlarged view, both 1600
-// px wide at full size (`height` is the 1600-wide height, used to reserve layout
-// space). The first photo leads the gallery full width, so keep the strongest image
-// there. Order is display order. Alt text describes the scene; people are not named
-// unless they are a named speaker on the program.
-type RecapPhoto = { id: string; height: number; alt: string; caption?: string };
-
-const recapPhotos: RecapPhoto[] = [
-  {
-    id: 'rhc-2026-01',
-    height: 1103,
-    alt: 'Laurie Stradley, CEO of Impact Health, speaks from the podium beside a slide quoting Virginia Burden—“Cooperation is the thorough conviction that nobody can get there unless everybody gets there”—as a full room listens.',
-    caption: 'Laurie Stradley, CEO of Impact Health, shares the regional update on NC ROOTS with a full room.',
-  },
-  {
-    id: 'rhc-2026-02',
-    height: 1067,
-    alt: 'Four attendees talk under the open-air pavilion at Deerwoode Reserve, with trees and mountains behind them.',
-  },
-  {
-    id: 'rhc-2026-03',
-    height: 900,
-    alt: 'Three attendees look over handouts and a tablet together at a table on the pavilion.',
-  },
-  {
-    id: 'rhc-2026-04',
-    height: 1067,
-    alt: 'A small group compares printed materials in conversation under the pavilion roof.',
-  },
-  {
-    id: 'rhc-2026-05',
-    height: 900,
-    alt: 'Attendees with handouts gather at a resource table under the pavilion.',
-  },
-  {
-    id: 'rhc-2026-06',
-    height: 900,
-    alt: 'Three women lean in over a tablet inside the timber-walled event hall.',
-  },
-  {
-    id: 'rhc-2026-07',
-    height: 1134,
-    alt: 'A smiling attendee in a quilted vest stands on the lawn, a vintage teal pickup truck behind him.',
-  },
-  {
-    id: 'rhc-2026-08',
-    height: 900,
-    alt: 'Four attendees work through handouts and a tablet together inside the hall.',
-  },
-  {
-    id: 'rhc-2026-09',
-    height: 900,
-    alt: 'Two women laugh as they look at a tablet together in the event hall.',
-  },
-  {
-    id: 'rhc-2026-10',
-    height: 1067,
-    alt: 'A group crowds around a tablet held by one attendee, studying the screen closely.',
-  },
-  {
-    id: 'rhc-2026-11',
-    height: 900,
-    alt: 'Three women review a tablet and printed pages together under the pavilion.',
-  },
-  {
-    id: 'rhc-2026-12',
-    height: 900,
-    alt: 'Two women at a round table listen intently, a tablet in front of them.',
-  },
-  {
-    id: 'rhc-2026-13',
-    height: 900,
-    alt: 'Three attendees read printed pages and a tablet in the event hall.',
-  },
-  {
-    id: 'rhc-2026-14',
-    height: 900,
-    alt: 'An attendee beside a window listens closely to a conversation.',
-  },
-  {
-    id: 'rhc-2026-15',
-    height: 1067,
-    alt: 'Three women talk beside a wooden wall, one gesturing as she speaks.',
-  },
-  {
-    id: 'rhc-2026-16',
-    height: 900,
-    alt: 'A group of attendees chats outdoors on the sunny gravel patio.',
-  },
-  {
-    id: 'rhc-2026-17',
-    height: 900,
-    alt: 'Two attendees talk through a tablet outdoors on the sunny patio.',
-  },
-  {
-    id: 'rhc-2026-18',
-    height: 900,
-    alt: 'Attendees gather around a table on the lawn, pines and hills behind them.',
-  },
-  {
-    id: 'rhc-2026-19',
-    height: 1067,
-    alt: 'Two men talk under the pavilion, one holding a tablet, as others visit resource tables behind them.',
-  },
-  {
-    id: 'rhc-2026-20',
-    height: 900,
-    alt: 'An attendee writes at a table inside the hall.',
-  },
-  {
-    id: 'rhc-2026-21',
-    height: 900,
-    alt: 'A smiling attendee in a UNC Health Pardee polo in the timber-walled hall.',
-  },
-  {
-    id: 'rhc-2026-22',
-    height: 900,
-    alt: 'Three women talk in front of a SparkPoint banner.',
-  },
-  {
-    id: 'rhc-2026-23',
-    height: 900,
-    alt: 'An attendee laughs during a conversation, a SparkPoint banner behind her.',
-  },
-  {
-    id: 'rhc-2026-24',
-    height: 900,
-    alt: 'An attendee gestures as she speaks with others in the hall.',
-  },
-  {
-    id: 'rhc-2026-25',
-    height: 900,
-    alt: 'Two men listen closely during a discussion, one resting his chin on his hand.',
-  },
-  {
-    id: 'rhc-2026-26',
-    height: 900,
-    alt: 'An attendee smiles in conversation near a SparkPoint banner.',
-  },
-  {
-    id: 'rhc-2026-27',
-    height: 900,
-    alt: 'Two women talk at the edge of the pavilion, the bright lawn behind them.',
-  },
-];
-
-// Video: set to an embeddable URL (e.g. https://www.youtube-nocookie.com/embed/<id>
-// or https://player.vimeo.com/video/<id>) once the recap video is published.
-const RECAP_VIDEO_EMBED_URL: string | null = null;
-
-const RECAP_PHOTO_WIDTH = 1600;
-
-function recapAsset(id: string, width: 800 | 1600) {
-  return `${BASE}assets/Rural%20Health/recap/${id}-${width}.webp`;
-}
-
-function recapSrcSet(id: string) {
-  return `${recapAsset(id, 800)} 800w, ${recapAsset(id, 1600)} 1600w`;
-}
+// The convening took place October 1, 2026 and this page is now its recap. The photo
+// and video section lives in ./RuralHealthRecap.tsx.
 
 const summitSponsors = [
   {
@@ -452,188 +289,6 @@ const eventJsonLd = {
   ],
 };
 
-function RecapLightbox({
-  index,
-  onClose,
-  onStep,
-}: {
-  index: number;
-  onClose: () => void;
-  onStep: (delta: number) => void;
-}) {
-  const closeRef = useRef<HTMLButtonElement>(null);
-  const photo = recapPhotos[index];
-
-  useEffect(() => {
-    const opener = document.activeElement as HTMLElement | null;
-    closeRef.current?.focus();
-    const { overflow } = document.body.style;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = overflow;
-      opener?.focus();
-    };
-  }, []);
-
-  useEffect(() => {
-    function handleKey(event: KeyboardEvent) {
-      if (event.key === 'Escape') onClose();
-      else if (event.key === 'ArrowRight') onStep(1);
-      else if (event.key === 'ArrowLeft') onStep(-1);
-    }
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [onClose, onStep]);
-
-  return (
-    <div
-      className="rh-lightbox"
-      role="dialog"
-      aria-modal="true"
-      aria-label={`Photo ${index + 1} of ${recapPhotos.length}`}
-      onClick={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      <button
-        ref={closeRef}
-        type="button"
-        className="rh-lightbox-close"
-        onClick={onClose}
-        aria-label="Close photo"
-      >
-        <X aria-hidden="true" size={26} />
-      </button>
-      <button
-        type="button"
-        className="rh-lightbox-step rh-lightbox-prev"
-        onClick={() => onStep(-1)}
-        aria-label="Previous photo"
-      >
-        <ChevronLeft aria-hidden="true" size={30} />
-      </button>
-      <figure>
-        <img
-          src={recapAsset(photo.id, 1600)}
-          alt={photo.alt}
-          width={RECAP_PHOTO_WIDTH}
-          height={photo.height}
-        />
-        <figcaption>
-          <span>
-            {index + 1} / {recapPhotos.length}
-          </span>
-          {photo.caption ?? photo.alt}
-        </figcaption>
-      </figure>
-      <button
-        type="button"
-        className="rh-lightbox-step rh-lightbox-next"
-        onClick={() => onStep(1)}
-        aria-label="Next photo"
-      >
-        <ChevronRight aria-hidden="true" size={30} />
-      </button>
-    </div>
-  );
-}
-
-function RecapMedia() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const close = useCallback(() => setOpenIndex(null), []);
-  const step = useCallback(
-    (delta: number) =>
-      setOpenIndex((current) =>
-        current === null ? current : (current + delta + recapPhotos.length) % recapPhotos.length,
-      ),
-    [],
-  );
-  const [leadPhoto, ...morePhotos] = recapPhotos;
-
-  return (
-    <section id="recap-media" className="rh-recap-media" aria-labelledby="rh-recap-media-title">
-      <div className="rh-shell">
-        <div className={`rh-recap-intro${leadPhoto ? '' : ' rh-recap-intro-solo'}`}>
-          <div className="rh-recap-media-heading">
-            <p className="rh-recap-eyebrow">From the day · October 1, 2026</p>
-            <h2 id="rh-recap-media-title">October 1, in pictures.</h2>
-            <div className="rh-star-rule rh-star-rule-short" aria-hidden="true">
-              <span />
-              <b>✦</b>
-              <span />
-            </div>
-            <p>
-              A full house at Deerwoode Reserve—and a day of conversations between people
-              who don’t usually share a room. Select any photo to see it larger.
-            </p>
-          </div>
-
-          {leadPhoto ? (
-            <figure className="rh-recap-lead">
-              <button
-                type="button"
-                onClick={() => setOpenIndex(0)}
-                aria-label={`Enlarge photo: ${leadPhoto.caption ?? leadPhoto.alt}`}
-              >
-                <img
-                  src={recapAsset(leadPhoto.id, 1600)}
-                  srcSet={recapSrcSet(leadPhoto.id)}
-                  sizes="(max-width: 960px) calc(100vw - 48px), 66vw"
-                  alt={leadPhoto.alt}
-                  width={RECAP_PHOTO_WIDTH}
-                  height={leadPhoto.height}
-                />
-              </button>
-              {leadPhoto.caption ? <figcaption>{leadPhoto.caption}</figcaption> : null}
-            </figure>
-          ) : null}
-        </div>
-
-        {RECAP_VIDEO_EMBED_URL ? (
-          <div className="rh-recap-video">
-            <iframe
-              src={RECAP_VIDEO_EMBED_URL}
-              title="2026 WNC Regional Rural Health Convening recap video"
-              loading="lazy"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
-          </div>
-        ) : null}
-
-        {morePhotos.length > 0 ? (
-          <ul className="rh-recap-gallery">
-            {morePhotos.map((photo, offset) => (
-              <li key={photo.id}>
-                <button
-                  type="button"
-                  onClick={() => setOpenIndex(offset + 1)}
-                  aria-label={`Enlarge photo: ${photo.caption ?? photo.alt}`}
-                >
-                  <img
-                    src={recapAsset(photo.id, 800)}
-                    srcSet={recapSrcSet(photo.id)}
-                    sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1100px) 50vw, 500px"
-                    alt={photo.alt}
-                    width={RECAP_PHOTO_WIDTH}
-                    height={photo.height}
-                    loading="lazy"
-                  />
-                </button>
-                {photo.caption ? <p>{photo.caption}</p> : null}
-              </li>
-            ))}
-          </ul>
-        ) : null}
-      </div>
-
-      {openIndex !== null ? <RecapLightbox index={openIndex} onClose={close} onStep={step} /> : null}
-    </section>
-  );
-}
-
-const hasRecapMedia = recapPhotos.length > 0 || RECAP_VIDEO_EMBED_URL !== null;
-
 export function RuralHealthConveningPage() {
   return (
     <div className="rh-page">
@@ -742,7 +397,7 @@ export function RuralHealthConveningPage() {
                   className="rh-button rh-button-primary"
                   href={hasRecapMedia ? '#recap-media' : '#event-details'}
                 >
-                  {recapPhotos.length > 0 ? 'See photos from the day' : 'See the recap'}
+                  {recapPhotoCount > 0 ? 'See photos from the day' : 'See the recap'}
                   <ArrowRight aria-hidden="true" size={19} />
                 </a>
                 <a className="rh-button rh-button-secondary" href="#simulator">
@@ -1042,10 +697,10 @@ export function RuralHealthConveningPage() {
               ) : (
                 <>
                   <a className="rh-button rh-button-primary rh-recap-media-link" href="#recap-media">
-                    {recapPhotos.length > 0 ? 'See photos from the day' : 'Watch the recap'}
+                    {recapPhotoCount > 0 ? 'See photos from the day' : 'Watch the recap'}
                     <ArrowRight aria-hidden="true" size={19} />
                   </a>
-                  {!RECAP_VIDEO_EMBED_URL ? (
+                  {!hasRecapVideo ? (
                     <p className="rh-scholarship-note rh-recap-coming">
                       <Camera aria-hidden="true" size={22} strokeWidth={1.7} />
                       <span>
