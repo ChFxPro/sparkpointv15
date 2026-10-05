@@ -1,10 +1,6 @@
-// Content source for the internal status dashboard (/internal/status) and for the
-// public Rural Health Convening page's seats-remaining ticker visibility. This page is
+// Content source for the internal status dashboard (/internal/status). This page is
 // shared with partners — keep content here presentable and free of internal-only detail
 // (staff contacts, budgets, security/engineering backlog).
-
-// Flip to `true` to bring the public seats-remaining ticker back on the convening page.
-export const SHOW_RURAL_HEALTH_SEATS_TICKER = true;
 
 // 2026 WNC Regional Rural Health Convening.
 export const RURAL_HEALTH_EVENT_DATE = '2026-10-01T08:30:00-04:00';

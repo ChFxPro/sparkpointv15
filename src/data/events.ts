@@ -71,11 +71,8 @@ export const EVENTS: SparkPointEvent[] = [
     locationName: 'Transylvania County Library',
     locationLabel: 'Rogow Family Community Room, 212 S Gaston St, Brevard',
     summary:
-      'Dr. Ora Wells joins the Alzheimer’s Association and NC Cooperative Extension for an interactive workshop on brain health prevention, cognitive reserve strategies, nutrition, and wellness activities for everyone.',
+      'Dr. Ora Wells joined the Alzheimer’s Association and NC Cooperative Extension for an interactive workshop on brain health prevention, cognitive reserve strategies, nutrition, and wellness activities for everyone.',
     detailPath: '/stories/talks-lectures/dr-ora-brain-health',
-    registrationPath:
-      'https://transylvaniacounty.librarycalendar.com/event/building-brain-healthy-habits-158',
-    registrationLabel: 'Register — space is limited',
     imagePath: 'assets/dr_ora_brain_img/drora_crowd1.webp',
     imageAlt: 'Dr. Ora Wells speaking to a full room at a past Brain Health talk.',
     partnerLine:
@@ -93,11 +90,8 @@ export const EVENTS: SparkPointEvent[] = [
     locationName: 'Deerwoode Reserve',
     locationLabel: 'Brevard, North Carolina',
     summary:
-      'A day for rural health leaders across Western North Carolina to connect, collaborate, and experience the Rural Health Field Simulator together.',
+      'A full house of rural health leaders from across Western North Carolina connected, collaborated, and walked the Rural Health Field Simulator together.',
     detailPath: '/rural-health-convening',
-    registrationPath:
-      'https://secure.yoursparkpoint.org/store/p/2026-rural-health-convening',
-    registrationLabel: 'Register now',
     imagePath: 'assets/Rural Health/rural sim hero.webp',
     imageAlt:
       'The Rural Health Field Simulator connection map showing the paths between trusted doors, care providers, and community resources.',

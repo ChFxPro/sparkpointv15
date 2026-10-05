@@ -102,7 +102,7 @@ export function StoryHighlights() {
             className="mx-auto max-w-3xl"
             style={{ color: '#666666', fontSize: 'clamp(1rem, 2vw, 1.25rem)', lineHeight: '1.5' }}
           >
-            What&rsquo;s happening right now — upcoming talks, community-powered fundraisers, and the voices we&rsquo;re collecting along the way.
+            What&rsquo;s been happening — community talks, regional convenings, partner stories, and the voices we&rsquo;re collecting along the way.
           </p>
         </motion.div>
 
@@ -111,22 +111,21 @@ export function StoryHighlights() {
             <HighlightTile
               featured
               image={eventAssetUrl(drOraEvent)}
-              kicker="Upcoming · Aug 10"
+              kicker="Recent talk · Aug 10"
               title={drOraEvent.title}
-              copy="Dr. Ora returns to the Transylvania County Library with the Alzheimer’s Association and NC Cooperative Extension — brain health, nutrition, and hands-on wellness for everyone."
-              ctaLabel="Register now"
-              ctaHref={drOraEvent.registrationPath ?? drOraEvent.detailPath}
-              external
+              copy="Dr. Ora returned to the Transylvania County Library with the Alzheimer’s Association and NC Cooperative Extension for an evening of brain health, nutrition, and hands-on wellness."
+              ctaLabel="Read Dr. Ora’s story"
+              ctaHref={drOraEvent.detailPath}
               delay={0.1}
             />
           )}
           {ruralHealthEvent && (
             <HighlightTile
               image={eventAssetUrl(ruralHealthEvent)}
-              kicker="Oct 1 · Convening"
-              title="Experience the Rural Health Field Simulator"
-              copy="WNC's rural health leaders gather at Deerwoode Reserve to connect, collaborate, and step inside the Field Simulator together."
-              ctaLabel="Explore the convening"
+              kicker="Oct 1 · A full house"
+              title="Where rural health came together"
+              copy="A full house of WNC's rural health leaders gathered at Deerwoode Reserve to connect, collaborate, and step inside the Field Simulator together."
+              ctaLabel="See the recap"
               ctaHref={ruralHealthEvent.detailPath}
               delay={0.2}
             />
