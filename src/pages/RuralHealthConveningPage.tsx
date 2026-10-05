@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
+import { RecapMedia, hasRecapMedia, hasRecapVideo, recapPhotoCount } from './RuralHealthRecap';
 import uncHealthPardeeLogo from '../assets/sponsors/unc_health.png';
 import pisgahHealthFoundationLogo from '../assets/sponsors/phf.png';
 import transylvaniaRegionalHospitalLogo from '../assets/sponsors/trh.webp';
@@ -34,21 +35,8 @@ function ruralHealthAsset(filename: string) {
   return `${BASE}assets/Rural%20Health/${encodeURIComponent(filename)}`;
 }
 
-// The convening took place October 1, 2026 and this page is now its recap.
-//
-// Photos: drop files into public/assets/Rural Health/recap/ and list them here, in
-// display order. The gallery section renders only once this has at least one entry, so
-// an empty list shows the "photos coming soon" note in the recap panel instead of an
-// empty grid. Keep alt text descriptive — these are the page's main content now.
-const recapPhotos: { file: string; alt: string; caption?: string; width: number; height: number }[] = [];
-
-// Video: set to an embeddable URL (e.g. https://www.youtube-nocookie.com/embed/<id>
-// or https://player.vimeo.com/video/<id>) once the recap video is published.
-const RECAP_VIDEO_EMBED_URL: string | null = null;
-
-function recapAsset(filename: string) {
-  return `${BASE}assets/Rural%20Health/recap/${encodeURIComponent(filename)}`;
-}
+// The convening took place October 1, 2026 and this page is now its recap. The photo
+// and video section lives in ./RuralHealthRecap.tsx.
 
 const summitSponsors = [
   {
@@ -405,8 +393,11 @@ export function RuralHealthConveningPage() {
               </dl>
 
               <div className="rh-actions">
-                <a className="rh-button rh-button-primary" href="#event-details">
-                  See the recap
+                <a
+                  className="rh-button rh-button-primary"
+                  href={hasRecapMedia ? '#recap-media' : '#event-details'}
+                >
+                  {recapPhotoCount > 0 ? 'See photos from the day' : 'See the recap'}
                   <ArrowRight aria-hidden="true" size={19} />
                 </a>
                 <a className="rh-button rh-button-secondary" href="#simulator">
@@ -569,6 +560,8 @@ export function RuralHealthConveningPage() {
           </div>
         </section>
 
+        {hasRecapMedia ? <RecapMedia /> : null}
+
         <section className="rh-network-intro" aria-labelledby="rh-network-title">
           <div className="rh-shell rh-network-grid">
             <div className="rh-compass" aria-hidden="true">
@@ -692,7 +685,7 @@ export function RuralHealthConveningPage() {
                 <p>Every seat filled. So many connections made.</p>
               </div>
 
-              {recapPhotos.length === 0 && !RECAP_VIDEO_EMBED_URL ? (
+              {!hasRecapMedia ? (
                 <p className="rh-scholarship-note rh-recap-coming">
                   <Camera aria-hidden="true" size={22} strokeWidth={1.7} />
                   <span>
@@ -702,10 +695,21 @@ export function RuralHealthConveningPage() {
                   </span>
                 </p>
               ) : (
-                <a className="rh-button rh-button-primary rh-recap-media-link" href="#recap-media">
-                  {recapPhotos.length > 0 ? 'See photos from the day' : 'Watch the recap'}
-                  <ArrowRight aria-hidden="true" size={19} />
-                </a>
+                <>
+                  <a className="rh-button rh-button-primary rh-recap-media-link" href="#recap-media">
+                    {recapPhotoCount > 0 ? 'See photos from the day' : 'Watch the recap'}
+                    <ArrowRight aria-hidden="true" size={19} />
+                  </a>
+                  {!hasRecapVideo ? (
+                    <p className="rh-scholarship-note rh-recap-coming">
+                      <Camera aria-hidden="true" size={22} strokeWidth={1.7} />
+                      <span>
+                        A recap video is on its way. Have a photo from the day to share? Send it
+                        to <a href="mailto:info@yoursparkpoint.org">info@yoursparkpoint.org</a>.
+                      </span>
+                    </p>
+                  ) : null}
+                </>
               )}
 
               <p className="rh-recap-thanks">
@@ -719,48 +723,6 @@ export function RuralHealthConveningPage() {
             </aside>
           </div>
         </section>
-
-        {recapPhotos.length > 0 || RECAP_VIDEO_EMBED_URL ? (
-          <section
-            id="recap-media"
-            className="rh-recap-media"
-            aria-labelledby="rh-recap-media-title"
-          >
-            <div className="rh-shell">
-              <p className="rh-regional-update-eyebrow">From the day</p>
-              <h2 id="rh-recap-media-title">October 1, in pictures.</h2>
-
-              {RECAP_VIDEO_EMBED_URL ? (
-                <div className="rh-recap-video">
-                  <iframe
-                    src={RECAP_VIDEO_EMBED_URL}
-                    title="2026 WNC Regional Rural Health Convening recap video"
-                    loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  />
-                </div>
-              ) : null}
-
-              {recapPhotos.length > 0 ? (
-                <div className="rh-recap-gallery">
-                  {recapPhotos.map((photo) => (
-                    <figure key={photo.file}>
-                      <img
-                        src={recapAsset(photo.file)}
-                        alt={photo.alt}
-                        width={photo.width}
-                        height={photo.height}
-                        loading="lazy"
-                      />
-                      {photo.caption ? <figcaption>{photo.caption}</figcaption> : null}
-                    </figure>
-                  ))}
-                </div>
-              ) : null}
-            </div>
-          </section>
-        ) : null}
 
         <section id="simulator" className="rh-simulator" aria-labelledby="rh-simulator-title">
           <div className="rh-shell">
