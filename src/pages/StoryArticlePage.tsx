@@ -11,7 +11,7 @@ import { canonicalUrl } from '../lib/siteOrigin';
 import { SEOHead } from '../components/SEOHead';
 import { BrainHealthResources } from '../components/BrainHealthResources';
 import { DrOraEventGallery } from '../components/DrOraEventGallery';
-import { DrOraUpcomingTalk } from '../components/DrOraUpcomingTalk';
+import { DrOraRecentTalk } from '../components/DrOraRecentTalk';
 
 interface RelatedLink {
   to: string;
@@ -300,7 +300,7 @@ export function StoryArticlePage() {
             )}
           </header>
 
-          {article.slug === 'dr-ora-brain-health' && <DrOraUpcomingTalk />}
+          {article.slug === 'dr-ora-brain-health' && <DrOraRecentTalk />}
 
           {/* Embedded Video */}
           <motion.div

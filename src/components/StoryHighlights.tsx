@@ -102,7 +102,7 @@ export function StoryHighlights() {
             className="mx-auto max-w-3xl"
             style={{ color: '#666666', fontSize: 'clamp(1rem, 2vw, 1.25rem)', lineHeight: '1.5' }}
           >
-            What&rsquo;s happening right now — upcoming talks, community-powered fundraisers, and the voices we&rsquo;re collecting along the way.
+            What&rsquo;s been happening — community talks, regional convenings, partner stories, and the voices we&rsquo;re collecting along the way.
           </p>
         </motion.div>
 
@@ -111,12 +111,11 @@ export function StoryHighlights() {
             <HighlightTile
               featured
               image={eventAssetUrl(drOraEvent)}
-              kicker="Upcoming · Aug 10"
+              kicker="Recent talk · Aug 10"
               title={drOraEvent.title}
-              copy="Dr. Ora returns to the Transylvania County Library with the Alzheimer’s Association and NC Cooperative Extension — brain health, nutrition, and hands-on wellness for everyone."
-              ctaLabel="Register now"
-              ctaHref={drOraEvent.registrationPath ?? drOraEvent.detailPath}
-              external
+              copy="Dr. Ora returned to the Transylvania County Library with the Alzheimer’s Association and NC Cooperative Extension for an evening of brain health, nutrition, and hands-on wellness."
+              ctaLabel="Read Dr. Ora’s story"
+              ctaHref={drOraEvent.detailPath}
               delay={0.1}
             />
           )}
