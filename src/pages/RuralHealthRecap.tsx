@@ -483,6 +483,7 @@ function RecapLightbox({
   onClose: () => void;
   onStep: (delta: number) => void;
 }) {
+  const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const photo = recapPhotos[index];
 
@@ -502,6 +503,23 @@ function RecapLightbox({
       if (event.key === 'Escape') onClose();
       else if (event.key === 'ArrowRight') onStep(1);
       else if (event.key === 'ArrowLeft') onStep(-1);
+      else if (event.key === 'Tab') {
+        // Keep focus on the dialog's own controls; aria-modal alone doesn't stop Tab
+        // from reaching the page behind the overlay.
+        const controls = Array.from(dialogRef.current?.querySelectorAll('button') ?? []);
+        if (controls.length === 0) return;
+        const first = controls[0];
+        const last = controls[controls.length - 1];
+        const current = document.activeElement;
+        const inside = current instanceof Node && dialogRef.current?.contains(current);
+        if (event.shiftKey && (current === first || !inside)) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && (current === last || !inside)) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
     }
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
@@ -509,6 +527,7 @@ function RecapLightbox({
 
   return (
     <div
+      ref={dialogRef}
       className="rh-lightbox"
       role="dialog"
       aria-modal="true"
