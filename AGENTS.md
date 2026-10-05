@@ -62,7 +62,7 @@ Last updated: 2026-10-04
 - `/internal/login` (sign-in for the internal reports portal; real Supabase Auth — access is granted per-person via the Supabase Dashboard, no self-serve signup)
 - `/internal/reports` (internal reports portal home — lists available reports for the signed-in user; redirects to `/internal/login` if unauthenticated)
 - `/internal/reports/:reportType/:period` (one report's dashboard, e.g. `/internal/reports/social_media/2026-07`; requires an authenticated session, same as above)
-- `/rh_tickets` -> direct external redirect to the 2026 Rural Health Convening purchase page
+- `/rh_tickets` and `/tickets/wncrrhc` -> redirect to `/rural-health-convening` (the convening is over; these printed ticket links now land on the recap instead of checkout)
 - `/pcr_collab` -> redirect to `/events/thrive-at-five` (branded vanity URL; static prerender stub, same pattern as `/sponsors`)
 - `/newsletter` -> external redirect to Squarespace newsletter
 - `/donations` -> external redirect to Squarespace donations

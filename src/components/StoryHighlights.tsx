@@ -123,10 +123,10 @@ export function StoryHighlights() {
           {ruralHealthEvent && (
             <HighlightTile
               image={eventAssetUrl(ruralHealthEvent)}
-              kicker="Oct 1 · Convening"
-              title="Experience the Rural Health Field Simulator"
-              copy="WNC's rural health leaders gather at Deerwoode Reserve to connect, collaborate, and step inside the Field Simulator together."
-              ctaLabel="Explore the convening"
+              kicker="Oct 1 · A full house"
+              title="Where rural health came together"
+              copy="A full house of WNC's rural health leaders gathered at Deerwoode Reserve to connect, collaborate, and step inside the Field Simulator together."
+              ctaLabel="See the recap"
               ctaHref={ruralHealthEvent.detailPath}
               delay={0.2}
             />

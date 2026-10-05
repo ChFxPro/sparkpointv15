@@ -6,7 +6,6 @@ import { Footer } from './components/Footer';
 import { StructuredData } from './components/StructuredData';
 import { ExternalRedirect } from './components/ExternalRedirect';
 import { TicketRedirect } from './components/TicketRedirect';
-import { RURAL_HEALTH_CONVENING_TICKET_URL } from './data/ticketLinks';
 import { HomePage } from './pages/HomePage';
 import { AccessibilityProvider } from './context/AccessibilityContext';
 import { MotionConfig } from 'motion/react';
@@ -242,21 +241,11 @@ function AppContent() {
         <Route path="/donations" element={<ExternalRedirect to="https://secure.yoursparkpoint.org/donations" />} />
         <Route path="/newsletter" element={<ExternalRedirect to="https://secure.yoursparkpoint.org/newsletter" />} />
         <Route path="/tickets" element={<TicketRedirect />} />
+        {/* The 2026 convening is over; its printed ticket links (invitations, QR codes)
+            now land on the recap instead of a checkout for a past event. */}
+        <Route path="/tickets/wncrrhc" element={<Navigate to="/rural-health-convening" replace />} />
         <Route path="/tickets/:slug" element={<TicketRedirect />} />
-        <Route
-          path="/rh_tickets"
-          element={
-            <ExternalRedirect
-              to={RURAL_HEALTH_CONVENING_TICKET_URL}
-              title="Rural Health Convening Tickets | SparkPoint"
-              description="Purchase tickets for the 2026 WNC Regional Rural Health Convening."
-              path="/rh_tickets"
-              heading="Opening Rural Health Convening tickets…"
-              body="You’re being sent to SparkPoint’s secure event checkout."
-              linkText="Continue to Rural Health Convening tickets"
-            />
-          }
-        />
+        <Route path="/rh_tickets" element={<Navigate to="/rural-health-convening" replace />} />
         <Route path="*" element={<HomePage />} />
       </Routes>
     </Suspense>
