@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
-import { useState, useRef, useEffect } from 'react';
+import { Fragment, useState, useRef, useEffect } from 'react';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { SEOHead } from '../components/SEOHead';
 import { KeepExploringLinks } from '../components/KeepExploringLinks';
@@ -424,7 +424,7 @@ function ListenLearnLeadDiagram() {
                    style={{ opacity: isDimmed ? 0.3 : 1 }}
                 >
                   {/* Connector Lines to Nodes */}
-                  {arc.nodes.map((node, i) => {
+                  {arc.nodes.map((node) => {
                     // End the connector at the same radial position as the HTML node icon center
                     const endRadius = nodeRadius;
                     const startPos = polarToCartesian(center, center, arcRadius + 18, node.angle);
@@ -437,10 +437,9 @@ function ListenLearnLeadDiagram() {
                     );
 
                     return (
-                      <>
+                      <Fragment key={node.label}>
                         {/* Curved connector with subtle pulse on hover */}
                         <motion.path
-                          key={i}
                           d={connectorD}
                           fill="none"
                           stroke={arc.color}
@@ -486,7 +485,7 @@ function ListenLearnLeadDiagram() {
                             filter: isHovered ? "url(#glow-soft)" : "none"
                           }}
                         />
-                      </>
+                      </Fragment>
                     );
                   })}
 
@@ -638,7 +637,7 @@ function ListenLearnLeadDiagram() {
 
                   return (
                     <motion.div
-                      key={i}
+                      key={node.label}
                       className="absolute pointer-events-auto -translate-x-1/2 -translate-y-1/2"
                       style={{
                         left: `${nodePos.x}%`,
@@ -731,10 +730,10 @@ function ListenLearnLeadDiagram() {
               </div>
               
               <div className="grid grid-cols-1 gap-4">
-                {arc.nodes.map((node, i) => {
+                {arc.nodes.map((node) => {
                   const NodeIcon = node.icon;
                   return (
-                    <div key={i} className="flex items-center gap-4">
+                    <div key={node.label} className="flex items-center gap-4">
                       <div 
                         className="w-10 h-10 rounded-full bg-black/40 border flex-shrink-0 flex items-center justify-center"
                         style={{ borderColor: arc.color }}

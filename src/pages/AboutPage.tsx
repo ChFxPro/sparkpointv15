@@ -1060,7 +1060,6 @@ export function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-20 md:mb-32">
             {staff.map((member, index) => (
               <Dialog key={member.name}>
-                <DialogTrigger asChild>
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -1095,9 +1094,18 @@ export function AboutPage() {
                         <h3 className="text-xl font-bold text-white mb-1">{member.name}</h3>
                         <p className="text-[#E03694] text-sm font-medium tracking-wide uppercase">{member.role}</p>
                       </div>
+                      {/* Stretched trigger: a real button over the whole card, so the bio opens from the keyboard
+                          and Radix can return focus here on close. Kept as a sibling so the name stays a heading;
+                          the focus ring is inset because the card clips overflow. */}
+                      <DialogTrigger asChild>
+                        <button
+                          type="button"
+                          aria-label={`Read ${member.name}'s bio`}
+                          className="absolute inset-0 z-10 rounded-xl cursor-pointer focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-inset focus-visible:ring-[#E03694]"
+                        />
+                      </DialogTrigger>
                     </div>
                   </motion.div>
-                </DialogTrigger>
                   <DialogContent className="bg-[#1a1a1a] border-white/10 text-white max-w-2xl max-h-[85vh] overflow-y-auto">
                     <DialogHeader>
                       <div className="flex flex-col md:flex-row gap-8 items-start mb-6">
@@ -1139,7 +1147,6 @@ export function AboutPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {boardMembers.map((member, index) => (
                 <Dialog key={member.name}>
-                  <DialogTrigger asChild>
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -1177,9 +1184,18 @@ export function AboutPage() {
                           <h4 className="text-lg font-bold text-white leading-snug mb-1">{member.name}</h4>
                           <p className="text-[#E03694] text-xs font-medium tracking-wide uppercase">{member.role}</p>
                         </div>
+                        {/* Stretched trigger: a real button over the whole card, so the bio opens from the keyboard
+                            and Radix can return focus here on close. Kept as a sibling so the name stays a heading;
+                            the focus ring is inset because the card clips overflow. */}
+                        <DialogTrigger asChild>
+                          <button
+                            type="button"
+                            aria-label={`Read ${member.name}'s bio`}
+                            className="absolute inset-0 z-10 rounded-xl cursor-pointer focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-inset focus-visible:ring-[#E03694]"
+                          />
+                        </DialogTrigger>
                       </div>
                     </motion.div>
-                  </DialogTrigger>
                   <DialogContent className="bg-[#1a1a1a] border-white/10 text-white max-w-xl">
                     <DialogHeader>
                        <div className="flex gap-6 items-start">
