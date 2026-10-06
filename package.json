@@ -72,6 +72,9 @@
   },
   "scripts": {
     "generate:press": "node scripts/generate-press-media-kits.js",
+    "photos:add": "node scripts/rural-health-photo-share.mjs add",
+    "photos:check": "node scripts/rural-health-photo-share.mjs check",
+    "photos:remove-zips": "node scripts/rural-health-photo-share.mjs remove-zips",
     "predev": "npm run generate:press && node scripts/behind-story-manifest.mjs",
     "dev": "vite",
     "prebuild": "npm run generate:press && node scripts/behind-story-manifest.mjs",
