@@ -214,7 +214,16 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
         if (r.startsWith('/assets/') || r.startsWith('/downloads/')) continue; // skip build asset dirs
         if (!seen.has(r) && !SKIP.has(r) && !REDIRECTS[r]) queue.push(r);
       }
-      const html = await page.content();
+      // Vite's preload helper injects <link rel="modulepreload"> (and chunk CSS <link>)
+      // tags for lazy route chunks with absolute URLs built from the page's origin — here
+      // the local preview server. Serialized as-is, every visitor's browser would try to
+      // fetch http://localhost:4747/assets/... and log ERR_CONNECTION_REFUSED. Strip the
+      // origin so those URLs become site-relative, then refuse to write anything that still
+      // points at the preview server.
+      const html = (await page.content()).replaceAll(base + '/', '/');
+      if (html.includes(`localhost:${PORT}`)) {
+        throw new Error(`serialized HTML still references the prerender server (localhost:${PORT})`);
+      }
       if (route === '/') {
         await writeFile(path.join(OUT, 'index.html'), html);
       } else {
