@@ -182,6 +182,14 @@ function PhotoTile({ photo, onOpen, onShare }: { photo: SharePhoto; onOpen: () =
           height={photo.height}
           loading="lazy"
           decoding="async"
+          onError={(event) => {
+            // One retry, bypassing any cached failure (e.g. a request made mid-upload).
+            const img = event.currentTarget;
+            if (img.dataset.retried) return;
+            img.dataset.retried = 'true';
+            img.srcset = '';
+            img.src = `${webp(photo, 960)}?retry=1`;
+          }}
         />
       </button>
       <div className="rhp-tile-bar">
