@@ -79,6 +79,7 @@ const KnowYourNumbersPage = lazy(() =>
   import('./pages/KnowYourNumbersPage').then((module) => ({ default: module.KnowYourNumbersPage }))
 );
 const RuralHealthConveningPage = lazy(() => import('./pages/RuralHealthConveningPage'));
+const RuralHealthPhotoSharePage = lazy(() => import('./pages/RuralHealthPhotoSharePage'));
 const InternalStatusPage = lazy(() => import('./pages/InternalStatusPage'));
 const InternalLoginPage = lazy(() => import('./pages/InternalLoginPage'));
 const InternalReportsHomePage = lazy(() => import('./pages/InternalReportsHomePage'));
@@ -220,6 +221,8 @@ function AppContent() {
         <Route path="/resources/know-your-numbers" element={<KnowYourNumbersPage />} />
         <Route path="/cognitivehealthresources" element={<Navigate to="/resources/know-your-numbers" replace />} />
         <Route path="/rural-health-convening" element={<RuralHealthConveningPage />} />
+        {/* Unlisted photo-share page: reached by direct link only (see the page header). */}
+        <Route path="/rural-health-convening/photos" element={<RuralHealthPhotoSharePage />} />
         <Route path="/internal/status" element={<InternalStatusPage />} />
         <Route path="/internal/login" element={<InternalLoginPage />} />
         <Route path="/internal/reports" element={<InternalReportsHomePage />} />

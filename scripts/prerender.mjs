@@ -75,6 +75,10 @@ const REDIRECTS = {
 // (Empty for now — keep as a hook for any future alias that shouldn't get a stub,
 // e.g. a route intentionally left unindexable.)
 const SKIP = new Set();
+// Unlisted pages: prerendered, so a shared direct link gets a real 200 with its own
+// preview image instead of GitHub Pages' 404.html, but left out of sitemap.xml. They
+// must also set `noindex` themselves and must not be linked from any listed page.
+const UNLISTED = new Set(['/rural-health-convening/photos']);
 const STATIC = ['/', '/about', '/mission', '/impact', '/programs', '/programs/purpose-workshops',
   '/get-involved', '/community-connectors', '/partners', '/resilience-hub', '/directory', '/press', '/stories', '/events',
   '/trust', '/privacy', '/intake', '/resources/know-your-numbers', '/rural-health-convening',
@@ -100,7 +104,7 @@ async function importData(entry) {
 }
 
 async function deriveRoutes() {
-  const routes = new Set(STATIC.map(norm));
+  const routes = new Set([...STATIC, ...UNLISTED].map(norm));
   const { STORIES_DATA } = await importData(STORIES_FILE);
   for (const c of STORIES_DATA) {
     routes.add('/stories/' + c.id);
@@ -257,9 +261,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     done.push(route);
   }
 
-  // Regenerate sitemap (skip the noindex redirect stubs), only in a real run
+  // Regenerate sitemap (skip the redirect stubs and unlisted pages), only in a real run
   if (!DRY) {
-    const urls = done.filter((r) => !REDIRECTS[r]).map(norm).filter((v, i, a) => a.indexOf(v) === i).sort();
+    const urls = done.filter((r) => !REDIRECTS[r] && !UNLISTED.has(r)).map(norm).filter((v, i, a) => a.indexOf(v) === i).sort();
     const sm = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u) => `  <url><loc>${ORIGIN}${u === '/' ? '/' : u}</loc></url>`).join('\n')}\n</urlset>\n`;
     await writeFile(path.join(DIST, 'sitemap.xml'), sm);
   }

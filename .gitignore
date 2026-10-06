@@ -11,6 +11,8 @@ supabase/.temp/
 src/assets/commconn/movs/*.mp4
 
 .prerender-preview/
+# Local cache for scripts/rural-health-photo-share.mjs — the photos live in Supabase Storage.
+.photo-share-cache/
 public/assets/behind_story/manifest.json
 
 # Agent handoff scratch (drafts, prompts, lock junk) — never ship

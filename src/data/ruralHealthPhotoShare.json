@@ -1,0 +1,449 @@
+{
+  "photographers": [
+    "Jeff Bannister",
+    "Hannah Erickson",
+    "Afton Lorenz",
+    "Seyl Park"
+  ],
+  "creditLine": "Photos by Jeff Bannister, Hannah Erickson, Afton Lorenz, and Seyl Park for SparkPoint",
+  "usage": [
+    "Share them about the convening — on social media, in newsletters, reports, presentations, and news coverage.",
+    "Credit the photos to SparkPoint and the photographers when you post.",
+    "Please don't alter them in ways that change the moment, or use them in advertising."
+  ],
+  "contactEmail": "info@yoursparkpoint.org",
+  "downloadPrefix": "SparkPoint-Rural-Health-Convening-2026",
+  "zipName": "SparkPoint-Rural-Health-Convening-2026-Photos.zip",
+  "sets": [
+    {
+      "id": "room",
+      "title": "In the room",
+      "note": "A full house in the barn at Deerwoode Reserve."
+    },
+    {
+      "id": "system",
+      "title": "Walking the system",
+      "note": "Small groups working through the Rural Health Field Simulator."
+    },
+    {
+      "id": "grounds",
+      "title": "Out on the grounds",
+      "note": "Circles under the pavilion, around the fire ring, and out on the lawn."
+    }
+  ],
+  "photos": [
+    {
+      "id": "01",
+      "source": "20261001 SparkPoint - Seyl Park-01188.jpg",
+      "set": "room",
+      "title": "A full house",
+      "alt": "A wide view of the event barn at Deerwoode Reserve, every round table filled with attendees beneath rows of chandeliers, a presentation slide on the far screen.",
+      "width": 3000,
+      "height": 2000,
+      "bytes": 1222828
+    },
+    {
+      "id": "02",
+      "source": "20261001 SparkPoint - Seyl Park-01584.jpg",
+      "set": "room",
+      "title": "From the back of the room",
+      "alt": "From the back of the barn, attendees at round tables face a speaker at the podium, with tall glass garage doors and chandeliers overhead.",
+      "width": 3000,
+      "height": 2000,
+      "bytes": 1126361
+    },
+    {
+      "id": "03",
+      "source": "20261001 SparkPoint - Seyl Park-01261.jpg",
+      "set": "room",
+      "title": "Across the table",
+      "alt": "Two attendees in conversation at a round table—one in a red jacket listening, hand at her chin, the other in a green blouse speaking and gesturing.",
+      "width": 3000,
+      "height": 2000,
+      "bytes": 839608
+    },
+    {
+      "id": "04",
+      "source": "20261001 SparkPoint - Seyl Park-00605.jpg",
+      "set": "system",
+      "title": "At the station",
+      "alt": "Attendees wearing name badges hold simulator handouts and a tablet at a station beside a First Citizens Bank banner.",
+      "width": 3000,
+      "height": 2000,
+      "bytes": 694221
+    },
+    {
+      "id": "05",
+      "source": "20261001 SparkPoint - Seyl Park-00617.jpg",
+      "set": "system",
+      "title": "Story cards in hand",
+      "alt": "Four attendees read printed story cards together at a simulator station.",
+      "width": 3000,
+      "height": 2000,
+      "bytes": 818626
+    },
+    {
+      "id": "06",
+      "source": "20261001 SparkPoint - Seyl Park-00706.jpg",
+      "set": "system",
+      "title": "Station C6",
+      "alt": "Attendees with tablets gather around a blue-draped simulator station table marked C6 under the open-air pavilion.",
+      "width": 3000,
+      "height": 2000,
+      "bytes": 797279
+    },
+    {
+      "id": "07",
+      "source": "20261001 SparkPoint - Seyl Park-00657.jpg",
+      "set": "system",
+      "title": "Every choice on the tablet",
+      "alt": "Three attendees lean in over a tablet and a folder in the afternoon sun outside the barn.",
+      "width": 3000,
+      "height": 2000,
+      "bytes": 793401
+    },
+    {
+      "id": "08",
+      "source": "20261001 SparkPoint - Seyl Park-00681.jpg",
+      "set": "system",
+      "title": "Working it through",
+      "alt": "Four attendees crowd around a tablet outdoors, talking through a simulator scenario together.",
+      "width": 3000,
+      "height": 2000,
+      "bytes": 960000
+    },
+    {
+      "id": "09",
+      "source": "20261001 SparkPoint - Seyl Park-01314.jpg",
+      "set": "grounds",
+      "title": "Under the pavilion",
+      "alt": "Attendees sit in a wide circle of chairs and benches under the pavilion, mid-discussion, with the grounds behind them.",
+      "width": 3000,
+      "height": 2000,
+      "bytes": 939754
+    },
+    {
+      "id": "10",
+      "source": "20261001 SparkPoint - Seyl Park-01011.jpg",
+      "set": "grounds",
+      "title": "Around the fire ring",
+      "alt": "A circle of attendees in blue Adirondack chairs around a stone fire ring, beside a log cabin and a wooden gazebo.",
+      "width": 3000,
+      "height": 2000,
+      "bytes": 1612950
+    },
+    {
+      "id": "11",
+      "source": "20261001 SparkPoint - Seyl Park-01483.jpg",
+      "set": "grounds",
+      "title": "Out on the lawn",
+      "alt": "A small group talks in a circle of Adirondack chairs on the grass at the edge of the woods.",
+      "width": 3000,
+      "height": 2000,
+      "bytes": 1452644
+    },
+    {
+      "id": "12",
+      "source": "DSC_5737(1).jpg",
+      "sourceBytes": 17342888,
+      "set": "room",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 3000,
+      "height": 2068,
+      "bytes": 375014
+    },
+    {
+      "id": "13",
+      "source": "Video_stills_0004_Layer-16.png",
+      "sourceBytes": 3208957,
+      "set": "room",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 324122
+    },
+    {
+      "id": "14",
+      "source": "Video_stills_0005_Layer-15.png",
+      "sourceBytes": 2725092,
+      "set": "room",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 221953
+    },
+    {
+      "id": "15",
+      "source": "Video_stills_0013_Layer-7.png",
+      "sourceBytes": 2854456,
+      "set": "room",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 256304
+    },
+    {
+      "id": "16",
+      "source": "Video_stills_0014_Layer-6.png",
+      "sourceBytes": 2708476,
+      "set": "room",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 197601
+    },
+    {
+      "id": "17",
+      "source": "Video_stills_0015_Layer-5.png",
+      "sourceBytes": 2741695,
+      "set": "room",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 268027
+    },
+    {
+      "id": "18",
+      "source": "Video_stills_0016_Layer-4.png",
+      "sourceBytes": 2504947,
+      "set": "room",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 207519
+    },
+    {
+      "id": "19",
+      "source": "Video_stills_0017_Layer-3.png",
+      "sourceBytes": 2705872,
+      "set": "room",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 267191
+    },
+    {
+      "id": "20",
+      "source": "Video_stills_0018_Layer-2.png",
+      "sourceBytes": 2728577,
+      "set": "room",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 229293
+    },
+    {
+      "id": "21",
+      "source": "Video_stills_0019_Layer-1.png",
+      "sourceBytes": 2823592,
+      "set": "room",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 248276
+    },
+    {
+      "id": "22",
+      "source": "DSC_5576.jpg",
+      "sourceBytes": 18451789,
+      "set": "system",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 3000,
+      "height": 2000,
+      "bytes": 442963
+    },
+    {
+      "id": "23",
+      "source": "Video_stills_0000_Layer-20.png",
+      "sourceBytes": 2877354,
+      "set": "system",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 333427
+    },
+    {
+      "id": "24",
+      "source": "Video_stills_0001_Layer-19.png",
+      "sourceBytes": 2568266,
+      "set": "system",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 278065
+    },
+    {
+      "id": "25",
+      "source": "Video_stills_0003_Layer-17.png",
+      "sourceBytes": 2812558,
+      "set": "system",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 291142
+    },
+    {
+      "id": "26",
+      "source": "Video_stills_0006_Layer-14.png",
+      "sourceBytes": 2982024,
+      "set": "system",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 346266
+    },
+    {
+      "id": "27",
+      "source": "Video_stills_0007_Layer-13.png",
+      "sourceBytes": 2422265,
+      "set": "system",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 267188
+    },
+    {
+      "id": "28",
+      "source": "Video_stills_0008_Layer-12.png",
+      "sourceBytes": 2982709,
+      "set": "system",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 309976
+    },
+    {
+      "id": "29",
+      "source": "Video_stills_0009_Layer-11.png",
+      "sourceBytes": 2254343,
+      "set": "system",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 215399
+    },
+    {
+      "id": "30",
+      "source": "Video_stills_0010_Layer-10.png",
+      "sourceBytes": 3150108,
+      "set": "system",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 381990
+    },
+    {
+      "id": "31",
+      "source": "Video_stills_0011_Layer-9.png",
+      "sourceBytes": 3208667,
+      "set": "system",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 384185
+    },
+    {
+      "id": "32",
+      "source": "DSC_5557.jpg",
+      "sourceBytes": 18392727,
+      "set": "grounds",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 3000,
+      "height": 2000,
+      "bytes": 411622
+    },
+    {
+      "id": "33",
+      "source": "DSC_5566.jpg",
+      "sourceBytes": 17783601,
+      "set": "grounds",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 3000,
+      "height": 2000,
+      "bytes": 537535
+    },
+    {
+      "id": "34",
+      "source": "DSC_5574.jpg",
+      "sourceBytes": 16671704,
+      "set": "grounds",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 3000,
+      "height": 2000,
+      "bytes": 402411
+    },
+    {
+      "id": "35",
+      "source": "DSC_5582(1).jpg",
+      "sourceBytes": 14069331,
+      "set": "grounds",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 3000,
+      "height": 2126,
+      "bytes": 489209
+    },
+    {
+      "id": "36",
+      "source": "DSC_5595.jpg",
+      "sourceBytes": 16666993,
+      "set": "grounds",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 3000,
+      "height": 2000,
+      "bytes": 538322
+    },
+    {
+      "id": "37",
+      "source": "Video_stills_0002_Layer-18.png",
+      "sourceBytes": 2848273,
+      "set": "grounds",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 352196
+    },
+    {
+      "id": "38",
+      "source": "Video_stills_0012_Layer-8.png",
+      "sourceBytes": 2970927,
+      "set": "grounds",
+      "title": "",
+      "alt": "A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 329169
+    }
+  ],
+  "zipBytes": {
+    "all": 20181268,
+    "room": 5790556,
+    "system": 7321470,
+    "grounds": 7071063
+  }
+}
