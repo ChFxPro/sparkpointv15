@@ -745,14 +745,36 @@ function FieldCard({ activeId, onOpen, onSelect }: { activeId: string; onOpen: (
 }
 
 // Holds the map. Where the map is wider than the frame (narrow phones), it scrolls
-// sideways and opens centered on the briefing hub.
+// sideways and opens centered on the briefing hub. It re-centers whenever the frame
+// changes width (e.g. a phone rotated to portrait) until the visitor drags it
+// themselves, after which their position is left alone.
 function WebScroller({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const overflow = el.scrollWidth - el.clientWidth;
-    if (overflow > 0) el.scrollLeft = overflow * (HUB.x / WEB_WIDTH);
+    let userMoved = false;
+    let programmatic = false;
+    const center = () => {
+      if (userMoved) return;
+      const overflow = el.scrollWidth - el.clientWidth;
+      programmatic = true;
+      el.scrollLeft = overflow > 0 ? overflow * (HUB.x / WEB_WIDTH) : 0;
+      requestAnimationFrame(() => {
+        programmatic = false;
+      });
+    };
+    const onScroll = () => {
+      if (!programmatic) userMoved = true;
+    };
+    center();
+    el.addEventListener('scroll', onScroll, { passive: true });
+    const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(center);
+    observer?.observe(el);
+    return () => {
+      el.removeEventListener('scroll', onScroll);
+      observer?.disconnect();
+    };
   }, []);
   return (
     <div ref={ref} className="rh-web-scroll">

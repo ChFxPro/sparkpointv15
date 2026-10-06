@@ -353,7 +353,7 @@ export function RuralHealthConveningPage() {
         imageAlt="A field-atlas connection map showing the many doors, barriers, and handoffs that shape rural health access."
         imageType="image/webp"
         imageWidth={1536}
-        imageHeight={1067}
+        imageHeight={1024}
         keywords={[
           'WNC Rural Health Convening',
           'rural health',
@@ -637,7 +637,7 @@ export function RuralHealthConveningPage() {
                     <img
                       src={highlightSrc(outcome.photo, 800)}
                       srcSet={highlightSrcSet(outcome.photo)}
-                      sizes="(max-width: 640px) calc(100vw - 60px), (max-width: 1180px) 30vw, 440px"
+                      sizes="(max-width: 720px) calc(100vw - 60px), (max-width: 1180px) 30vw, 440px"
                       alt={outcome.alt}
                       width={1600}
                       height={1067}
