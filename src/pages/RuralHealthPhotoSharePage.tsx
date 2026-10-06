@@ -72,13 +72,36 @@ async function copyText(text: string) {
   }
 }
 
-// Sharing the image file itself (not just a link) is what makes "share to Instagram"
-// work from a phone. navigator.share must run inside the tap's user activation, which
-// a 1 MB fetch can outlast, so files are fetched ahead of time (on hover, focus, press,
-// or lightbox open) and the tap shares whatever is already in hand.
+// ── Sharing and downloading ──
+//
+// Sharing never hands out this page's link: the page is passed to participants
+// directly, not meant to spread. A website can't post an image to Instagram,
+// Facebook, or LinkedIn itself — their web share links take a URL only — so photos
+// go through the device's share sheet as files (phones, and some desktop browsers),
+// which is also how one post can carry several photos. Where a browser can't share
+// files, only Download is offered. People pick up to MAX_SELECT photos at a time:
+// enough for a post (Instagram's carousel takes 10), not the whole set. Several
+// photos download as one ZIP built in the browser from just that selection.
+
+const MAX_SELECT = 5;
+
+// Whether this browser can share image files. Checked on the client after mount, so
+// the prerendered HTML (and browsers without it) show Download only.
+function detectFileShare() {
+  try {
+    if (typeof navigator === 'undefined' || !navigator.canShare) return false;
+    const probe = new File([new Uint8Array([0xff, 0xd8, 0xff])], 'probe.jpg', { type: 'image/jpeg' });
+    return navigator.canShare({ files: [probe] });
+  } catch {
+    return false;
+  }
+}
+
+// navigator.share must run inside the tap's user activation, which fetching a 1 MB
+// photo can outlast, so files are fetched ahead of time (when a photo is selected,
+// hovered, focused, or opened) and the tap shares what's already in hand.
 const fileCache = new Map<string, Promise<File | null>>();
-function prefetchFile(photo: SharePhoto) {
-  if (typeof navigator === 'undefined' || !navigator.canShare) return null;
+function loadFile(photo: SharePhoto) {
   let pending = fileCache.get(photo.id);
   if (!pending) {
     pending = fetch(fileUrl(photo))
@@ -95,41 +118,124 @@ function prefetchFile(photo: SharePhoto) {
 
 const isAbort = (error: unknown) => error instanceof DOMException && error.name === 'AbortError';
 
-// Sharing is per photo, and never hands out this page's link: the page is meant to
-// be passed to participants directly, not to spread. Phones share the image file
-// itself (straight into Instagram, Facebook, Messages…); where a browser can't share
-// files (most desktops), the photo is downloaded instead, ready to attach to a post.
-function startDownload(photo: SharePhoto) {
+function clickLink(href: string, filename?: string) {
   const link = document.createElement('a');
-  link.href = downloadHref(photo);
+  link.href = href;
   link.rel = 'noopener';
+  if (filename) link.download = filename;
   document.body.appendChild(link);
   link.click();
   link.remove();
 }
 
-function usePhotoShare(announce: (message: string) => void) {
-  return useCallback(
-    async (photo: SharePhoto) => {
+// Minimal "stored" (uncompressed) ZIP — JPEGs don't compress further, and this keeps
+// the bundle free of a ZIP library for one small selection.
+const CRC_TABLE = Array.from({ length: 256 }, (_, n) => {
+  let c = n;
+  for (let k = 0; k < 8; k += 1) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+  return c >>> 0;
+});
+function crc32(bytes: Uint8Array) {
+  let c = 0xffffffff;
+  for (const byte of bytes) c = CRC_TABLE[(c ^ byte) & 0xff] ^ (c >>> 8);
+  return (c ^ 0xffffffff) >>> 0;
+}
+function storedZip(entries: { name: string; data: Uint8Array<ArrayBuffer> }[]) {
+  const encoder = new TextEncoder();
+  const parts: BlobPart[] = [];
+  const central: Uint8Array<ArrayBuffer>[] = [];
+  let offset = 0;
+  for (const { name, data } of entries) {
+    const nameBytes = encoder.encode(name);
+    const crc = crc32(data);
+    const local = new DataView(new ArrayBuffer(30));
+    local.setUint32(0, 0x04034b50, true);
+    local.setUint16(4, 20, true);
+    local.setUint16(6, 0x0800, true); // UTF-8 names
+    local.setUint16(12, 0x0021, true); // 1980-01-01
+    local.setUint32(14, crc, true);
+    local.setUint32(18, data.length, true);
+    local.setUint32(22, data.length, true);
+    local.setUint16(26, nameBytes.length, true);
+    parts.push(local.buffer, nameBytes, data);
+
+    const dir = new DataView(new ArrayBuffer(46));
+    dir.setUint32(0, 0x02014b50, true);
+    dir.setUint16(4, 20, true);
+    dir.setUint16(6, 20, true);
+    dir.setUint16(8, 0x0800, true);
+    dir.setUint16(14, 0x0021, true);
+    dir.setUint32(16, crc, true);
+    dir.setUint32(20, data.length, true);
+    dir.setUint32(24, data.length, true);
+    dir.setUint16(28, nameBytes.length, true);
+    dir.setUint32(42, offset, true);
+    central.push(new Uint8Array(dir.buffer), nameBytes);
+    offset += 30 + nameBytes.length + data.length;
+  }
+  const centralSize = central.reduce((sum, part) => sum + part.length, 0);
+  const end = new DataView(new ArrayBuffer(22));
+  end.setUint32(0, 0x06054b50, true);
+  end.setUint16(8, entries.length, true);
+  end.setUint16(10, entries.length, true);
+  end.setUint32(12, centralSize, true);
+  end.setUint32(16, offset, true);
+  return new Blob([...parts, ...central, end.buffer], { type: 'application/zip' });
+}
+
+function usePhotoActions(announce: (message: string) => void) {
+  // Instagram drops any text that comes with shared images, so the caption goes on
+  // the clipboard first (before the share sheet takes the tap's activation).
+  const share = useCallback(
+    async (list: SharePhoto[]) => {
+      const captionCopied = copyText(SUGGESTED_CAPTION);
       try {
-        const file = await prefetchFile(photo);
-        if (file && navigator.canShare({ files: [file] })) {
-          await navigator.share({ files: [file], text: `From the 2026 WNC Regional Rural Health Convening. ${creditLine}.` });
-          return;
-        }
+        const files = await Promise.all(list.map(loadFile));
+        if (files.some((file) => !file)) throw new Error('A photo didn’t load');
+        await navigator.share({ files: files as File[] });
+        announce((await captionCopied) ? 'Caption copied—paste it into your post' : 'Shared');
       } catch (error) {
         if (isAbort(error)) return;
         if (error instanceof DOMException && error.name === 'NotAllowedError') {
-          // The file arrived after the tap's activation expired; it's cached now.
-          announce('Photo ready—tap Share again');
+          // The files arrived after the tap's activation expired; they're cached now.
+          announce(list.length === 1 ? 'Photo ready—tap Share again' : 'Photos ready—tap Share again');
           return;
         }
+        announce('Couldn’t open sharing here—try Download instead');
       }
-      startDownload(photo);
-      announce('Photo downloaded—attach it to your post');
     },
     [announce],
   );
+
+  const download = useCallback(
+    async (list: SharePhoto[]) => {
+      if (list.length === 1) {
+        clickLink(downloadHref(list[0]));
+        return;
+      }
+      announce(`Preparing ${list.length} photos…`);
+      const files = await Promise.all(list.map(loadFile));
+      if (files.some((file) => !file)) {
+        announce('A photo didn’t load—please try again');
+        return;
+      }
+      const folder = `${shareData.downloadPrefix}-Photos`;
+      const note = `2026 WNC Regional Rural Health Convening · October 1, 2026 · Brevard, NC\n\n${creditLine}.\n\n${shareData.usage.map((line) => `- ${line}`).join('\n')}\n`;
+      const entries = [
+        { name: `${folder}/About these photos.txt`, data: new TextEncoder().encode(note) },
+        ...(await Promise.all(
+          (files as File[]).map(async (file) => ({ name: `${folder}/${file.name}`, data: new Uint8Array(await file.arrayBuffer()) })),
+        )),
+      ];
+      const url = URL.createObjectURL(storedZip(entries));
+      clickLink(url, `${folder}.zip`);
+      window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+      announce(`${list.length} photos downloaded`);
+    },
+    [announce],
+  );
+
+  return { share, download };
 }
 
 function CopyButton({ text, label, copiedLabel }: { text: string; label: string; copiedLabel: string }) {
@@ -147,30 +253,56 @@ function CopyButton({ text, label, copiedLabel }: { text: string; label: string;
   );
 }
 
-function PhotoTile({ photo, onOpen, onShare }: { photo: SharePhoto; onOpen: () => void; onShare: () => void }) {
-  const warm = () => void prefetchFile(photo);
+function PhotoTile({
+  photo,
+  selected,
+  canShareFiles,
+  onOpen,
+  onToggle,
+  onShare,
+}: {
+  photo: SharePhoto;
+  selected: boolean;
+  canShareFiles: boolean;
+  onOpen: () => void;
+  onToggle: () => void;
+  onShare: () => void;
+}) {
+  const warm = () => void loadFile(photo);
   return (
-    <li className="rhp-tile" id={`photo-${photo.id}`}>
-      <button type="button" className="rhp-tile-open" onClick={onOpen} aria-label={`Open ${photoLabel(photo)}`}>
-        <img
-          src={webp(photo, 960)}
-          srcSet={`${webp(photo, 960)} 960w, ${webp(photo, 1920)} 1920w`}
-          sizes="(max-width: 640px) 50vw, (max-width: 1100px) 33vw, 25vw"
-          alt={photo.alt}
-          width={photo.width}
-          height={photo.height}
-          loading="lazy"
-          decoding="async"
-          onError={(event) => {
-            // One retry, bypassing any cached failure (e.g. a request made mid-upload).
-            const img = event.currentTarget;
-            if (img.dataset.retried) return;
-            img.dataset.retried = 'true';
-            img.srcset = '';
-            img.src = `${webp(photo, 960)}?retry=1`;
-          }}
-        />
-      </button>
+    <li className={`rhp-tile${selected ? ' is-selected' : ''}`} id={`photo-${photo.id}`}>
+      <div className="rhp-tile-media">
+        <button type="button" className="rhp-tile-open" onClick={onOpen} aria-label={`Open ${photoLabel(photo)}`}>
+          <img
+            src={webp(photo, 960)}
+            srcSet={`${webp(photo, 960)} 960w, ${webp(photo, 1920)} 1920w`}
+            sizes="(max-width: 640px) 50vw, (max-width: 1100px) 33vw, 25vw"
+            alt={photo.alt}
+            width={photo.width}
+            height={photo.height}
+            loading="lazy"
+            decoding="async"
+            onError={(event) => {
+              // One retry, bypassing any cached failure (e.g. a request made mid-upload).
+              const img = event.currentTarget;
+              if (img.dataset.retried) return;
+              img.dataset.retried = 'true';
+              img.srcset = '';
+              img.src = `${webp(photo, 960)}?retry=1`;
+            }}
+          />
+        </button>
+        <button
+          type="button"
+          className="rhp-select"
+          aria-pressed={selected}
+          aria-label={`${selected ? 'Deselect' : 'Select'} ${photoLabel(photo)}`}
+          title={selected ? 'Selected' : 'Select'}
+          onClick={onToggle}
+        >
+          <Check aria-hidden="true" size={16} strokeWidth={3} />
+        </button>
+      </div>
       <div className="rhp-tile-bar">
         <span className="rhp-tile-label">
           <b>No. {photo.id}</b>
@@ -184,20 +316,86 @@ function PhotoTile({ photo, onOpen, onShare }: { photo: SharePhoto; onOpen: () =
         >
           <Download aria-hidden="true" size={17} />
         </a>
-        <button
-          type="button"
-          className="rhp-icon-action"
-          onClick={onShare}
-          onPointerEnter={warm}
-          onPointerDown={warm}
-          onFocus={warm}
-          aria-label={`Share ${photoLabel(photo)}`}
-          title="Share"
-        >
-          <Share2 aria-hidden="true" size={17} />
-        </button>
+        {canShareFiles && (
+          <button
+            type="button"
+            className="rhp-icon-action"
+            onClick={onShare}
+            onPointerEnter={warm}
+            onPointerDown={warm}
+            onFocus={warm}
+            aria-label={`Share ${photoLabel(photo)}`}
+            title="Share"
+          >
+            <Share2 aria-hidden="true" size={17} />
+          </button>
+        )}
       </div>
     </li>
+  );
+}
+
+function SelectionTray({
+  selected,
+  canShareFiles,
+  onShare,
+  onDownload,
+  onRemove,
+  onClear,
+}: {
+  selected: SharePhoto[];
+  canShareFiles: boolean;
+  onShare: () => void;
+  onDownload: () => void;
+  onRemove: (photo: SharePhoto) => void;
+  onClear: () => void;
+}) {
+  if (!selected.length) return null;
+  const many = selected.length > 1;
+  return (
+    <div className="rhp-tray" role="region" aria-label="Selected photos">
+      <div className="rhp-tray-inner">
+        <ul className="rhp-tray-thumbs">
+          {selected.map((photo) => (
+            <li key={photo.id}>
+              <button type="button" onClick={() => onRemove(photo)} aria-label={`Remove ${photoLabel(photo)} from selection`}>
+                <img src={webp(photo, 960)} alt="" width={photo.width} height={photo.height} />
+                <X aria-hidden="true" size={12} strokeWidth={3} />
+              </button>
+            </li>
+          ))}
+        </ul>
+        <div className="rhp-tray-copy">
+          <p>
+            <strong>{selected.length}</strong> of {MAX_SELECT} selected
+          </p>
+          <p className="rhp-tray-hint">
+            {canShareFiles
+              ? 'Share posts them together, and copies a caption to paste in.'
+              : 'To post from a computer, download, then add the photos to your post.'}
+          </p>
+        </div>
+        <div className="rhp-tray-actions">
+          {canShareFiles && (
+            <button type="button" className="rhp-tray-button rhp-tray-primary" onClick={onShare}>
+              <Share2 aria-hidden="true" size={17} />
+              Share {many ? selected.length : ''}
+            </button>
+          )}
+          <button
+            type="button"
+            className={`rhp-tray-button${canShareFiles ? '' : ' rhp-tray-primary'}`}
+            onClick={onDownload}
+          >
+            <Download aria-hidden="true" size={17} />
+            Download {many ? selected.length : ''}
+          </button>
+          <button type="button" className="rhp-tray-clear" onClick={onClear}>
+            Clear
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -207,12 +405,18 @@ function PhotoLightbox({
   onClose,
   onStep,
   onShare,
+  canShareFiles,
+  isSelected,
+  onToggle,
 }: {
   list: SharePhoto[];
   index: number;
   onClose: () => void;
   onStep: (delta: number) => void;
   onShare: (photo: SharePhoto) => void;
+  canShareFiles: boolean;
+  isSelected: (photo: SharePhoto) => boolean;
+  onToggle: (photo: SharePhoto) => void;
 }) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -231,7 +435,7 @@ function PhotoLightbox({
   }, []);
 
   useEffect(() => {
-    void prefetchFile(photo);
+    void loadFile(photo);
     // Warm the neighbours so stepping through feels instant.
     for (const delta of [1, -1]) new Image().src = webp(list[(index + delta + list.length) % list.length], 1920);
   }, [index, list, photo]);
@@ -299,13 +503,19 @@ function PhotoLightbox({
           </span>
           {photo.title && <strong>{photo.title}</strong>}
           <div className="rhp-lightbox-actions">
-            <a className="rhp-action rhp-action-solid" href={downloadHref(photo)}>
+            {canShareFiles && (
+              <button type="button" className="rhp-action rhp-action-solid" onClick={() => onShare(photo)}>
+                <Share2 aria-hidden="true" size={17} />
+                Share
+              </button>
+            )}
+            <a className={`rhp-action${canShareFiles ? '' : ' rhp-action-solid'}`} href={downloadHref(photo)}>
               <Download aria-hidden="true" size={17} />
               Download
             </a>
-            <button type="button" className="rhp-action" onClick={() => onShare(photo)}>
-              <Share2 aria-hidden="true" size={17} />
-              Share
+            <button type="button" className="rhp-action" aria-pressed={isSelected(photo)} onClick={() => onToggle(photo)}>
+              <Check aria-hidden="true" size={17} />
+              {isSelected(photo) ? 'Selected' : 'Select'}
             </button>
           </div>
         </figcaption>
@@ -391,6 +601,10 @@ export function RuralHealthPhotoSharePage() {
   const [active, setActive] = useState<number | null>(null);
   const [notice, setNotice] = useState('');
   const noticeTimer = useRef<number>();
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [canShareFiles, setCanShareFiles] = useState(false);
+
+  useEffect(() => setCanShareFiles(detectFileShare()), []);
 
   const visible = useMemo(() => (filter ? photos.filter((p) => p.set === filter) : photos), [filter]);
 
@@ -399,7 +613,26 @@ export function RuralHealthPhotoSharePage() {
     window.clearTimeout(noticeTimer.current);
     noticeTimer.current = window.setTimeout(() => setNotice(''), 3200);
   }, []);
-  const sharePhoto = usePhotoShare(announce);
+  const { share, download } = usePhotoActions(announce);
+
+  const selected = useMemo(
+    () => selectedIds.map((id) => photos.find((p) => p.id === id)).filter((p): p is SharePhoto => Boolean(p)),
+    [selectedIds],
+  );
+  const isSelected = useCallback((photo: SharePhoto) => selectedIds.includes(photo.id), [selectedIds]);
+  const toggle = useCallback(
+    (photo: SharePhoto) => {
+      if (selectedIds.includes(photo.id)) {
+        setSelectedIds(selectedIds.filter((id) => id !== photo.id));
+      } else if (selectedIds.length >= MAX_SELECT) {
+        announce(`You can pick up to ${MAX_SELECT} photos at a time`);
+      } else {
+        void loadFile(photo); // in hand before the Share tap
+        setSelectedIds([...selectedIds, photo.id]);
+      }
+    },
+    [announce, selectedIds],
+  );
 
   // A deep link always opens against the full list, so clear any filter first.
   useEffect(() => {
@@ -442,7 +675,7 @@ export function RuralHealthPhotoSharePage() {
   const filterNote = filter ? shareData.sets.find((s) => s.id === filter)?.note : null;
 
   return (
-    <div className="rh-page rhp-page">
+    <div className={`rh-page rhp-page${selected.length ? ' has-tray' : ''}`}>
       <SEOHead
         title="Photos · 2026 Rural Health Convening | SparkPoint"
         description="Thank you for filling the room. Photos from the October 1, 2026 WNC Regional Rural Health Convening—free to download and share with credit."
@@ -534,7 +767,7 @@ export function RuralHealthPhotoSharePage() {
             </div>
 
             <p className="rhp-filter-note" aria-live="polite">
-              {filterNote ?? 'Tap any photo to see it larger, then share it or save it for your own post.'}
+              {filterNote ?? `Tap a photo to see it larger. Pick up to ${MAX_SELECT} with the check mark to ${canShareFiles ? 'share or download them together' : 'download them together'}.`}
             </p>
 
             <ul className="rhp-grid">
@@ -542,8 +775,11 @@ export function RuralHealthPhotoSharePage() {
                 <PhotoTile
                   key={photo.id}
                   photo={photo}
+                  selected={isSelected(photo)}
+                  canShareFiles={canShareFiles}
                   onOpen={() => openPhoto(photo)}
-                  onShare={() => void sharePhoto(photo)}
+                  onToggle={() => toggle(photo)}
+                  onShare={() => void share([photo])}
                 />
               ))}
             </ul>
@@ -613,8 +849,26 @@ export function RuralHealthPhotoSharePage() {
       </main>
 
       {active !== null && visible[active] && (
-        <PhotoLightbox list={visible} index={active} onClose={close} onStep={step} onShare={(photo) => void sharePhoto(photo)} />
+        <PhotoLightbox
+          list={visible}
+          index={active}
+          onClose={close}
+          onStep={step}
+          onShare={(photo) => void share([photo])}
+          canShareFiles={canShareFiles}
+          isSelected={isSelected}
+          onToggle={toggle}
+        />
       )}
+
+      <SelectionTray
+        selected={selected}
+        canShareFiles={canShareFiles}
+        onShare={() => void share(selected)}
+        onDownload={() => void download(selected)}
+        onRemove={toggle}
+        onClear={() => setSelectedIds([])}
+      />
 
       <p className={`rhp-toast${notice ? ' is-visible' : ''}`} role="status" aria-live="polite">
         {notice}
