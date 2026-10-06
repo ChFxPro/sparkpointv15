@@ -25,9 +25,18 @@
 //   rebuilds and uploads the ZIPs (every photo, plus one per group), and records the
 //   photos in the JSON. The page shows them once that JSON change is merged.
 //
-//   Re-running is safe and resumes: a photo already recorded (same file name and size)
-//   is not added twice, and only files missing from the bucket are uploaded (--force
-//   remakes and re-uploads everything in the folder).
+//   Duplicates are never added twice: a photo already recorded with the same file name
+//   and size is recognised, and so is the same image under another name or export —
+//   each photo's visual fingerprint (a 256-bit dHash, stored as `hash`) is compared with
+//   every photo already in the gallery and earlier in the batch. Near-identical images
+//   are skipped; merely similar ones (e.g. burst frames) are added but listed so you can
+//   check them. Re-running is safe and resumes: only files missing from the bucket are
+//   uploaded (--force remakes and re-uploads everything in the folder).
+//
+//   npm run photos:check -- "<folder>"
+//     A dry run: no key, no uploads, nothing changed except backfilling fingerprints.
+//     Lists which photos are new, which are duplicates (of which No.), and which only
+//     look similar.
 //
 //   Flags, all optional: npm run photos:add -- "<folder>" --set <group-id> [--force]
 //
@@ -135,6 +144,54 @@ async function secretKey() {
 const cleanPath = (input) =>
   path.resolve(input.trim().replace(/^['"]|['"]$/g, '').replace(/\\(.)/g, '$1').replace(/^~(?=\/)/, process.env.HOME ?? '~'));
 
+// ── Duplicate detection ──
+
+// Difference hash, 256 bits: shrink to a common 256 px greyscale (so an original and
+// its web copy start from the same pixels), blur off noise, then one bit per
+// left/right brightness step on a 17×16 grid. Survives resizing, re-encoding, renaming,
+// and exposure tweaks; different moments land far apart. Measured on the first 73
+// photos: the same image scored 4–9 apart (original vs. web copy, re-export, re-save),
+// a slightly cropped re-export 19, and the closest two different photos 24.
+async function fingerprint(sharp, input) {
+  const small = await sharp(input).autoOrient().resize(256, 256, { fit: 'inside' }).greyscale().blur(1).toBuffer();
+  const { data } = await sharp(small).resize(17, 16, { fit: 'fill' }).raw().toBuffer({ resolveWithObject: true });
+  let bits = 0n;
+  for (let y = 0; y < 16; y += 1) {
+    for (let x = 0; x < 16; x += 1) bits = (bits << 1n) | (data[y * 17 + x] > data[y * 17 + x + 1] ? 1n : 0n);
+  }
+  return bits.toString(16).padStart(64, '0');
+}
+
+function distance(a, b) {
+  let x = BigInt(`0x${a}`) ^ BigInt(`0x${b}`);
+  let n = 0;
+  for (; x; x &= x - 1n) n += 1;
+  return n;
+}
+
+const DUPLICATE = 14; // ≤ this many of 256 bits differ: the same image — skipped
+const SIMILAR = 22; // ≤ this: added, but listed for a look (crops, burst frames)
+
+// Gives every recorded photo a fingerprint, from its cached (or downloaded) grid image.
+async function backfillFingerprints(sharp, data) {
+  let changed = false;
+  for (const photo of data.photos) {
+    if (photo.hash?.length === 64) continue; // also replaces any older, shorter hash
+    photo.hash = await fingerprint(sharp, await cached(`rhp-${photo.id}-960.webp`));
+    changed = true;
+  }
+  if (changed) writeData(data);
+}
+
+function closest(hash, pool) {
+  let best = null;
+  for (const other of pool) {
+    const d = distance(hash, other.hash);
+    if (!best || d < best.d) best = { d, other };
+  }
+  return best;
+}
+
 const slug = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
 async function chooseSet(data, count) {
@@ -225,6 +282,64 @@ function findSetFolders(data, dir) {
     .sort((a, b) => data.sets.findIndex((s) => s.id === a.set) - data.sets.findIndex((s) => s.id === b.set));
 }
 
+async function folderFrom(args) {
+  let folderArg = args.find((a, i) => !a.startsWith('--') && args[i - 1] !== '--set');
+  if (!folderArg) folderArg = await ask('Drag the photo folder into this window, then press Return: ');
+  const folder = cleanPath(folderArg);
+  if (!fs.existsSync(folder) || !fs.statSync(folder).isDirectory()) fail(`Not a folder: ${folder}`);
+  return folder;
+}
+
+// Dry run: what would `add` do with this folder? No key, no uploads.
+async function check(args) {
+  const { default: sharp } = await import('sharp');
+  const data = readData();
+  const folder = await folderFrom(args);
+  const files = [
+    ...findSetFolders(data, folder).flatMap(({ dir }) => listImages(dir).map((name) => ({ file: path.join(dir, name), name }))),
+    ...listImages(folder).map((name) => ({ file: path.join(folder, name), name })),
+  ];
+  if (!files.length) fail(`No photos found in ${folder}.`);
+  console.log(`Checking ${files.length} photos against the ${data.photos.length} in the gallery…\n`);
+  await backfillFingerprints(sharp, data);
+  const pool = [...data.photos];
+  const counts = { new: 0, duplicate: 0, similar: 0, blank: 0 };
+  for (const { file, name } of files) {
+    const sourceBytes = fs.statSync(file).size;
+    const known = data.photos.find((p) => p.source === name && (p.sourceBytes === undefined || p.sourceBytes === sourceBytes));
+    if (known) {
+      counts.duplicate += 1;
+      console.log(`  = ${name}  already uploaded as No. ${known.id}`);
+      continue;
+    }
+    if ((await sharp(file).stats()).entropy < 0.5) {
+      counts.blank += 1;
+      console.log(`  – ${name}  blank image`);
+      continue;
+    }
+    const hash = await fingerprint(sharp, file);
+    const match = closest(hash, pool);
+    const label = (other) => (other.id ? `No. ${other.id}` : other.source);
+    if (match && match.d <= DUPLICATE) {
+      counts.duplicate += 1;
+      console.log(`  = ${name}  same image as ${label(match.other)}`);
+      continue;
+    }
+    if (match && match.d <= SIMILAR) {
+      counts.similar += 1;
+      console.log(`  ~ ${name}  new, but looks a lot like ${label(match.other)}`);
+    } else {
+      counts.new += 1;
+      console.log(`  + ${name}  new`);
+    }
+    pool.push({ source: name, hash });
+  }
+  console.log(
+    `\n${counts.new + counts.similar} would be added${counts.similar ? ` (${counts.similar} look similar to another photo)` : ''}, ` +
+      `${counts.duplicate} duplicate${counts.duplicate === 1 ? '' : 's'} skipped${counts.blank ? `, ${counts.blank} blank skipped` : ''}.`,
+  );
+}
+
 async function add(args) {
   const { default: sharp } = await import('sharp');
   const data = readData();
@@ -235,10 +350,7 @@ async function add(args) {
     fail(`Unknown group "${flagSet}". Groups: ${data.sets.map((s) => s.id).join(', ')} — or leave out --set to pick or create one.`);
   }
 
-  let folderArg = args.find((a, i) => !a.startsWith('--') && args[i - 1] !== '--set');
-  if (!folderArg) folderArg = await ask('Drag the photo folder into this window, then press Return: ');
-  const folder = cleanPath(folderArg);
-  if (!fs.existsSync(folder) || !fs.statSync(folder).isDirectory()) fail(`Not a folder: ${folder}`);
+  const folder = await folderFrom(args);
 
   // Work out which files go to which group before asking for the key.
   const batch = [];
@@ -256,9 +368,12 @@ async function add(args) {
 
   const key = await secretKey();
   fs.mkdirSync(cacheDir, { recursive: true });
+  await backfillFingerprints(sharp, data);
   console.log(`\nAdding ${batch.length} photos…`);
   const added = [];
+  const similar = [];
   let skippedBlank = 0;
+  let skippedDuplicate = 0;
   let unchanged = 0;
 
   for (const { file, name, set } of batch) {
@@ -272,8 +387,16 @@ async function add(args) {
         console.log(`  – ${name}: blank image, skipped`);
         continue;
       }
+      const hash = await fingerprint(sharp, file);
+      const match = closest(hash, data.photos);
+      if (match && match.d <= DUPLICATE) {
+        skippedDuplicate += 1;
+        console.log(`  = ${name}: same image as No. ${match.other.id}, skipped`);
+        continue;
+      }
+      if (match && match.d <= SIMILAR) similar.push([name, match.other.id]);
       const next = Math.max(0, ...data.photos.map((p) => Number(p.id))) + 1;
-      photo = { id: String(next).padStart(2, '0'), source: name, sourceBytes, set, title: '', alt: DEFAULT_ALT };
+      photo = { id: String(next).padStart(2, '0'), source: name, sourceBytes, set, title: '', alt: DEFAULT_ALT, hash };
     }
 
     const outputs = [
@@ -325,7 +448,12 @@ async function add(args) {
     .join(', ');
   console.log(`\nDone. ${added.length} new photo${added.length === 1 ? '' : 's'}${counts ? ` (${counts})` : ''}.`);
   if (unchanged) console.log(`${unchanged} already uploaded, left as is.`);
+  if (skippedDuplicate) console.log(`${skippedDuplicate} duplicate${skippedDuplicate === 1 ? '' : 's'} of photos already in the gallery skipped.`);
   if (skippedBlank) console.log(`${skippedBlank} blank image${skippedBlank === 1 ? '' : 's'} skipped.`);
+  if (similar.length) {
+    console.log('\nAdded, but they look a lot like an existing photo — worth a glance:');
+    for (const [name, id] of similar) console.log(`  ${name} ~ No. ${id}`);
+  }
   if (added.length) {
     let branch = '';
     try {
@@ -439,9 +567,11 @@ async function zipAll(key) {
 const [command, ...rest] = process.argv.slice(2);
 if (command === 'add' || command === 'ingest') {
   await add(rest);
+} else if (command === 'check') {
+  await check(rest);
 } else if (command === 'zip') {
   await zipAll(await secretKey());
   console.log('\nDone. Commit the updated src/data/ruralHealthPhotoShare.json so the page shows the new ZIP sizes.');
 } else {
-  fail('Usage: npm run photos:add [-- "<folder>" --set <group-id> --force]   |   npm run photos:zip');
+  fail('Usage: npm run photos:add [-- "<folder>" --set <group-id> --force]   |   npm run photos:check -- "<folder>"   |   npm run photos:zip');
 }

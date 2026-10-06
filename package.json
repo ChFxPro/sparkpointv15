@@ -73,6 +73,7 @@
   "scripts": {
     "generate:press": "node scripts/generate-press-media-kits.js",
     "photos:add": "node scripts/rural-health-photo-share.mjs add",
+    "photos:check": "node scripts/rural-health-photo-share.mjs check",
     "photos:zip": "node scripts/rural-health-photo-share.mjs zip",
     "predev": "npm run generate:press && node scripts/behind-story-manifest.mjs",
     "dev": "vite",
