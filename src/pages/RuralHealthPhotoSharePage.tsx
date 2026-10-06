@@ -19,7 +19,7 @@ import './ruralHealthPhotoShare.css';
 // prerender.mjs keeps it out of the sitemap (UNLISTED). It is still prerendered so a
 // shared link unfurls with a real preview instead of hitting the GitHub Pages 404.
 //
-// The image files and ZIPs live in the public-read Supabase Storage bucket
+// The image files live in the public-read Supabase Storage bucket
 // `convening-photos` (rural-health-2026/), not in this repo, so the gallery can grow
 // to hundreds of photos. Their metadata — sets, optional titles, alt, sizes — plus the
 // credit and usage terms live in src/data/ruralHealthPhotoShare.json (display order =
@@ -40,28 +40,18 @@ const sets = shareData.sets
   .filter((set) => set.count > 0);
 const featured = photos[0];
 
-// Stored ZIP size when the script has recorded it, else the sum of its photos (a
-// stored ZIP is only a few KB larger).
-const zipBytes: Record<string, number> = 'zipBytes' in shareData ? (shareData.zipBytes as Record<string, number>) : {};
-const zipMegabytes = (setId: string | null) => {
-  const bytes = zipBytes[setId ?? 'all'] ?? photos.filter((p) => !setId || p.set === setId).reduce((sum, p) => sum + p.bytes, 0);
-  return Math.max(1, Math.round(bytes / 1e6));
-};
 const webp = (photo: SharePhoto, size: 960 | 1920) => `${PHOTO_BASE}/rhp-${photo.id}-${size}.webp`;
 const downloadName = (photo: SharePhoto) => `${shareData.downloadPrefix}-${photo.id}.jpg`;
 const fileUrl = (photo: SharePhoto) => `${PHOTO_BASE}/${downloadName(photo)}`;
 // The bucket is cross-origin, where browsers ignore <a download>; Supabase's
 // `?download=` makes it answer with Content-Disposition: attachment instead.
 const downloadHref = (photo: SharePhoto) => `${fileUrl(photo)}?download=${encodeURIComponent(downloadName(photo))}`;
-const zipHref = (setId: string | null) => {
-  const name = setId ? `${shareData.downloadPrefix}-${setId}.zip` : shareData.zipName;
-  return `${PHOTO_BASE}/${name}?download=${encodeURIComponent(name)}`;
-};
-const photoUrl = (photo: SharePhoto) => `${canonicalUrl(PAGE_PATH)}#photo-${photo.id}`;
 const photoLabel = (photo: SharePhoto) => (photo.title ? `photo ${photo.id}, ${photo.title}` : `photo ${photo.id}`);
 
-// No photo credit here on purpose: the caption travels with whatever the poster picks.
-const SUGGESTED_CAPTION = `What a day at the 2026 WNC Regional Rural Health Convening. A full house of rural health leaders from across Western North Carolina filled the barn at Deerwoode Reserve in Brevard, walked a family's story through the Rural Health Field Simulator together, and left with new people to call. Thank you, SparkPoint, for bringing us into one room. ${canonicalUrl(RECAP_PATH).replace(/^https?:\/\//, '')}`;
+// Written in the participant's voice, about the day. No photo credit (the caption
+// travels with whatever photo is picked) and no thanks to SparkPoint, which would read
+// as the host scripting its own praise.
+const SUGGESTED_CAPTION = `Spent October 1 at the 2026 WNC Regional Rural Health Convening in Brevard with rural health leaders from across Western North Carolina. We walked a family's story through the Rural Health Field Simulator, saw where the doors, delays, and handoffs really are, and left with new people to call. Rural health is stronger when we build it together. ${canonicalUrl(RECAP_PATH).replace(/^https?:\/\//, '')}`;
 
 async function copyText(text: string) {
   try {
@@ -105,19 +95,26 @@ function prefetchFile(photo: SharePhoto) {
 
 const isAbort = (error: unknown) => error instanceof DOMException && error.name === 'AbortError';
 
-function usePhotoActions(announce: (message: string) => void) {
-  const sharePhoto = useCallback(
+// Sharing is per photo, and never hands out this page's link: the page is meant to
+// be passed to participants directly, not to spread. Phones share the image file
+// itself (straight into Instagram, Facebook, Messages…); where a browser can't share
+// files (most desktops), the photo is downloaded instead, ready to attach to a post.
+function startDownload(photo: SharePhoto) {
+  const link = document.createElement('a');
+  link.href = downloadHref(photo);
+  link.rel = 'noopener';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+}
+
+function usePhotoShare(announce: (message: string) => void) {
+  return useCallback(
     async (photo: SharePhoto) => {
-      const title = photo.title || 'Photo from the 2026 WNC Regional Rural Health Convening';
-      const text = `From the 2026 WNC Regional Rural Health Convening. ${creditLine}.`;
       try {
         const file = await prefetchFile(photo);
         if (file && navigator.canShare({ files: [file] })) {
-          await navigator.share({ files: [file], title, text });
-          return;
-        }
-        if (navigator.share) {
-          await navigator.share({ title, text, url: photoUrl(photo) });
+          await navigator.share({ files: [file], text: `From the 2026 WNC Regional Rural Health Convening. ${creditLine}.` });
           return;
         }
       } catch (error) {
@@ -128,29 +125,11 @@ function usePhotoActions(announce: (message: string) => void) {
           return;
         }
       }
-      announce((await copyText(photoUrl(photo))) ? 'Link to this photo copied' : 'Couldn’t copy the link');
+      startDownload(photo);
+      announce('Photo downloaded—attach it to your post');
     },
     [announce],
   );
-
-  const sharePage = useCallback(async () => {
-    const url = canonicalUrl(PAGE_PATH);
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'Photos from the 2026 WNC Regional Rural Health Convening',
-          text: `Photos from the convening, free to download and share. ${creditLine}.`,
-          url,
-        });
-        return;
-      } catch (error) {
-        if (isAbort(error)) return;
-      }
-    }
-    announce((await copyText(url)) ? 'Page link copied' : 'Couldn’t copy the link');
-  }, [announce]);
-
-  return { sharePhoto, sharePage };
 }
 
 function CopyButton({ text, label, copiedLabel }: { text: string; label: string; copiedLabel: string }) {
@@ -420,7 +399,7 @@ export function RuralHealthPhotoSharePage() {
     window.clearTimeout(noticeTimer.current);
     noticeTimer.current = window.setTimeout(() => setNotice(''), 3200);
   }, []);
-  const { sharePhoto, sharePage } = usePhotoActions(announce);
+  const sharePhoto = usePhotoShare(announce);
 
   // A deep link always opens against the full list, so clear any filter first.
   useEffect(() => {
@@ -460,7 +439,6 @@ export function RuralHealthPhotoSharePage() {
     setShown(PAGE_SIZE);
   };
 
-  const filterTitle = filter ? setTitle[filter] : null;
   const filterNote = filter ? shareData.sets.find((s) => s.id === filter)?.note : null;
 
   return (
@@ -503,17 +481,12 @@ export function RuralHealthPhotoSharePage() {
               <p className="rhp-lede">
                 Rural health leaders from across Western North Carolina packed the barn at Deerwoode Reserve to
                 listen, walk the Rural Health Field Simulator together, and leave with new people to call. These
-                are the photos from that day—yours to download and share.
+                are the photos from that day. Pick a few favorites and share them with your network.
               </p>
               <div className="rh-actions">
                 <a className="rh-button rh-button-primary" href="#photos">
                   See the photos
                   <ArrowDown aria-hidden="true" size={19} />
-                </a>
-                <a className="rh-button rh-button-secondary" href={zipHref(null)}>
-                  <Download aria-hidden="true" size={19} />
-                  Download all {photos.length}
-                  <small>ZIP · {zipMegabytes(null)} MB</small>
                 </a>
               </div>
             </div>
@@ -558,21 +531,10 @@ export function RuralHealthPhotoSharePage() {
                   </button>
                 ))}
               </div>
-              <div className="rhp-toolbar-actions">
-                <a className="rhp-action" href={zipHref(filter)}>
-                  <Download aria-hidden="true" size={17} />
-                  {filterTitle ? `Download “${filterTitle}”` : 'Download all'}
-                  <small>{zipMegabytes(filter)} MB</small>
-                </a>
-                <button type="button" className="rhp-action" onClick={sharePage}>
-                  <Share2 aria-hidden="true" size={17} />
-                  Share page
-                </button>
-              </div>
             </div>
 
             <p className="rhp-filter-note" aria-live="polite">
-              {filterNote ?? 'Tap any photo to see it larger. Every photo can be downloaded or shared on its own.'}
+              {filterNote ?? 'Tap any photo to see it larger, then share it or save it for your own post.'}
             </p>
 
             <ul className="rhp-grid">

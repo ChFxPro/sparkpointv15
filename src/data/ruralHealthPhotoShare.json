@@ -12,7 +12,6 @@
   ],
   "contactEmail": "info@yoursparkpoint.org",
   "downloadPrefix": "SparkPoint-Rural-Health-Convening-2026",
-  "zipName": "SparkPoint-Rural-Health-Convening-2026-Photos.zip",
   "sets": [
     {
       "id": "room",
@@ -896,11 +895,5 @@
       "height": 2000,
       "bytes": 1120914
     }
-  ],
-  "zipBytes": {
-    "all": 51450656,
-    "room": 15218395,
-    "system": 19602770,
-    "grounds": 16631290
-  }
+  ]
 }

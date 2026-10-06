@@ -22,8 +22,9 @@
 //   For each photo it makes rhp-<id>-960.webp (grid), rhp-<id>-1920.webp (lightbox), and
 //   a JPEG download up to 3000 px (never enlarged; EXIF/IPTC/XMP kept so a photographer's
 //   copyright travels with it — check a batch carries no GPS first), uploads all three,
-//   rebuilds and uploads the ZIPs (every photo, plus one per group), and records the
-//   photos in the JSON. The page shows them once that JSON change is merged.
+//   and records the photos in the JSON. The page shows them once that JSON change is
+//   merged. There are deliberately no download-all ZIPs: the page is for sharing a few
+//   favorites, not for passing the whole set around.
 //
 //   Duplicates are never added twice: a photo already recorded with the same file name
 //   and size is recognised, and so is the same image under another name or export —
@@ -40,22 +41,19 @@
 //
 //   Flags, all optional: npm run photos:add -- "<folder>" --set <group-id> [--force]
 //
-//   npm run photos:zip
-//     Rebuilds and uploads only the ZIPs — run after moving photos between groups or
-//     editing captions in the JSON (each ZIP carries a credit/caption read-me).
+//   npm run photos:remove-zips
+//     One-time cleanup: deletes the download-all ZIPs that earlier versions uploaded.
 //
 // The key: a secret key (sb_secret_…) from Supabase Dashboard > Project Settings >
 // API Keys, or the legacy service_role JWT. It's read from SUPABASE_SECRET_KEY (or
 // SUPABASE_SERVICE_ROLE_KEY) if set, otherwise asked for. Never commit it.
 //
 // Processed files are cached in .photo-share-cache/ (gitignored); on another machine
-// the ZIP step re-downloads whatever it's missing from the bucket. If a ZIP upload is
-// refused as too large, raise the upload limit under Storage > Settings in Supabase.
+// fingerprints of photos it hasn't cached are taken from the bucket.
 import fs from 'node:fs';
 import path from 'node:path';
 import readline from 'node:readline/promises';
 import { execFileSync } from 'node:child_process';
-import * as zlib from 'node:zlib';
 
 const PROJECT_ID = 'suqtfbculwuetfdhdgdh';
 const BUCKET = 'convening-photos';
@@ -69,25 +67,10 @@ const cacheDir = path.join(root, '.photo-share-cache');
 const readData = () => JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 const writeData = (data) => fs.writeFileSync(dataPath, `${JSON.stringify(data, null, 2)}\n`);
 const downloadName = (data, photo) => `${data.downloadPrefix}-${photo.id}.jpg`;
-const setZipName = (data, set) => `${data.downloadPrefix}-${set.id}.zip`;
 const DEFAULT_ALT = 'A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.';
 const IMAGE_EXT = /\.(jpe?g|png|webp|tiff?)$/i;
-const MIME = { '.webp': 'image/webp', '.jpg': 'image/jpeg', '.zip': 'application/zip' };
+const MIME = { '.webp': 'image/webp', '.jpg': 'image/jpeg' };
 const mb = (bytes) => `${(bytes / 1e6).toFixed(1)} MB`;
-
-// zlib.crc32 needs Node 20.15+; keep a table fallback for older 20.x.
-const CRC_TABLE = Array.from({ length: 256 }, (_, n) => {
-  let c = n;
-  for (let k = 0; k < 8; k += 1) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
-  return c >>> 0;
-});
-const crc32 =
-  zlib.crc32 ??
-  ((buf) => {
-    let c = 0xffffffff;
-    for (const byte of buf) c = CRC_TABLE[(c ^ byte) & 0xff] ^ (c >>> 8);
-    return (c ^ 0xffffffff) >>> 0;
-  });
 
 // ── Prompts ──
 
@@ -240,11 +223,7 @@ async function upload(key, name, body) {
     if (res.status === 401 || res.status === 403 || /invalid|jwt|signature|unauthorized/i.test(detail)) {
       fail(`Supabase refused the key (${res.status}). Check that you pasted a secret key for the SparkPoint V15 project.`);
     }
-    const hint =
-      res.status === 413 || /too large|exceeded/i.test(detail)
-        ? ' — raise the upload limit under Storage > Settings in the Supabase dashboard.'
-        : '';
-    throw new Error(`Upload of ${name} failed (${res.status}): ${detail}${hint}`);
+    throw new Error(`Upload of ${name} failed (${res.status}): ${detail}`);
   }
 }
 
@@ -436,11 +415,6 @@ async function add(args) {
     console.log(`  ${isNew ? '+' : '↻'} No. ${photo.id}  ${name} → ${title} (${mb(photo.bytes)})`);
   }
 
-  if (added.length || force || unchanged < batch.length) {
-    console.log('\nRebuilding the download-all ZIPs…');
-    await zipAll(key);
-  }
-
   const counts = data.sets
     .map((s) => [s.title, added.filter((p) => p.set === s.id).length])
     .filter(([, n]) => n)
@@ -470,96 +444,23 @@ async function add(args) {
   }
 }
 
-// ── ZIPs ──
+// ── Cleanup ──
 
-function createStoredZip(entries) {
-  const local = [];
-  const central = [];
-  let offset = 0;
-  for (const { name, data } of entries) {
-    const nameBuf = Buffer.from(name, 'utf8');
-    const crc = crc32(data);
-    const head = Buffer.alloc(30);
-    head.writeUInt32LE(0x04034b50, 0);
-    head.writeUInt16LE(20, 4);
-    head.writeUInt16LE(0x0800, 6); // UTF-8 names
-    head.writeUInt16LE(0, 8); // stored: JPEGs don't deflate
-    head.writeUInt16LE(0x0021, 12); // 1980-01-01, so rebuilds are byte-identical
-    head.writeUInt32LE(crc, 14);
-    head.writeUInt32LE(data.length, 18);
-    head.writeUInt32LE(data.length, 22);
-    head.writeUInt16LE(nameBuf.length, 26);
-    local.push(head, nameBuf, data);
-
-    const dir = Buffer.alloc(46);
-    dir.writeUInt32LE(0x02014b50, 0);
-    dir.writeUInt16LE(20, 4);
-    dir.writeUInt16LE(20, 6);
-    dir.writeUInt16LE(0x0800, 8);
-    dir.writeUInt16LE(0, 10);
-    dir.writeUInt16LE(0x0021, 14);
-    dir.writeUInt32LE(crc, 16);
-    dir.writeUInt32LE(data.length, 20);
-    dir.writeUInt32LE(data.length, 24);
-    dir.writeUInt16LE(nameBuf.length, 28);
-    dir.writeUInt32LE(offset, 42);
-    central.push(dir, nameBuf);
-    offset += head.length + nameBuf.length + data.length;
-  }
-  // Plain (non-Zip64) ZIP: fine up to 4 GB and 65,535 entries.
-  const centralBuf = Buffer.concat(central);
-  const end = Buffer.alloc(22);
-  end.writeUInt32LE(0x06054b50, 0);
-  end.writeUInt16LE(entries.length, 8);
-  end.writeUInt16LE(entries.length, 10);
-  end.writeUInt32LE(centralBuf.length, 12);
-  end.writeUInt32LE(offset, 16);
-  return Buffer.concat([...local, centralBuf, end]);
-}
-
-async function buildZip(data, zipName, photos, heading) {
-  const folder = zipName.replace(/\.zip$/i, '');
-  const sets = Object.fromEntries(data.sets.map((s) => [s.id, s.title]));
-  const note = [
-    '2026 WNC Regional Rural Health Convening',
-    'October 1, 2026 · Deerwoode Reserve · Brevard, NC',
-    heading,
-    '',
-    `${data.creditLine}.`,
-    '',
-    'USING THESE PHOTOS',
-    ...data.usage.map((line) => `- ${line}`),
-    `- Credit line: ${data.creditLine}`,
-    '',
-    'PHOTOS',
-    ...photos.flatMap((p) => ['', downloadName(data, p), [sets[p.set], p.title].filter(Boolean).join(' · '), p.alt]),
-    '',
-    `Need a full-resolution original for print? ${data.contactEmail}`,
-    '',
-  ].join('\n');
-
-  const entries = [{ name: `${folder}/READ-ME — credit and captions.txt`, data: Buffer.from(note, 'utf8') }];
-  for (const photo of photos) {
-    entries.push({ name: `${folder}/${downloadName(data, photo)}`, data: await cached(downloadName(data, photo)) });
-  }
-  return createStoredZip(entries);
-}
-
-async function zipAll(key) {
+async function removeZips() {
+  const key = await secretKey();
   const data = readData();
-  const zips = [[data.zipName, data.photos, 'All photos', null]];
-  for (const set of data.sets) {
-    const photos = data.photos.filter((p) => p.set === set.id);
-    if (photos.length) zips.push([setZipName(data, set), photos, set.title, set.id]);
+  const names = ['SparkPoint-Rural-Health-Convening-2026-Photos.zip', ...data.sets.map((set) => `${data.downloadPrefix}-${set.id}.zip`)];
+  const res = await fetch(`${STORAGE}/${BUCKET}`, {
+    method: 'DELETE',
+    headers: { ...authHeaders(key), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prefixes: names.map((name) => `${PREFIX}/${name}`) }),
+  });
+  if (!res.ok) fail(`Supabase refused the delete (${res.status}): ${await res.text()}`);
+  const removed = await res.json();
+  console.log(`Removed ${removed.length} ZIP${removed.length === 1 ? '' : 's'} from the bucket.`);
+  for (const name of names) {
+    if (await inBucket(name)) console.log(`  still there: ${name}`);
   }
-  data.zipBytes = {};
-  for (const [name, photos, heading, setId] of zips) {
-    const zip = await buildZip(data, name, photos, heading);
-    await upload(key, name, zip);
-    data.zipBytes[setId ?? 'all'] = zip.length;
-    console.log(`  zip ${heading}: ${photos.length} photos, ${mb(zip.length)}`);
-  }
-  writeData(data);
 }
 
 // ── Entry ──
@@ -569,9 +470,8 @@ if (command === 'add' || command === 'ingest') {
   await add(rest);
 } else if (command === 'check') {
   await check(rest);
-} else if (command === 'zip') {
-  await zipAll(await secretKey());
-  console.log('\nDone. Commit the updated src/data/ruralHealthPhotoShare.json so the page shows the new ZIP sizes.');
+} else if (command === 'remove-zips') {
+  await removeZips();
 } else {
-  fail('Usage: npm run photos:add [-- "<folder>" --set <group-id> --force]   |   npm run photos:check -- "<folder>"   |   npm run photos:zip');
+  fail('Usage: npm run photos:add [-- "<folder>" --set <group-id> --force]   |   npm run photos:check -- "<folder>"   |   npm run photos:remove-zips');
 }

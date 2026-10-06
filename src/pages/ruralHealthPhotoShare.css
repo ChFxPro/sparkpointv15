@@ -27,16 +27,6 @@
   text-transform: uppercase;
 }
 
-.rhp-page .rh-button small,
-.rhp-action small {
-  padding-left: 10px;
-  border-left: 1px solid currentColor;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  opacity: 0.7;
-}
-
 /* ── Thank-you hero ── */
 
 .rhp-hero {
@@ -195,12 +185,6 @@
 
 .rhp-filters button[aria-pressed='true'] span {
   color: #e4bf64;
-}
-
-.rhp-toolbar-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 
 .rhp-action {
@@ -753,11 +737,6 @@
   .rhp-closing-actions,
   .rhp-closing .rh-button {
     width: 100%;
-  }
-
-  .rhp-toolbar-actions,
-  .rhp-toolbar-actions .rhp-action {
-    flex: 1;
   }
 
   .rhp-tiers {
