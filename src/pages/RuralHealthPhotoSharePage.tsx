@@ -60,7 +60,8 @@ const zipHref = (setId: string | null) => {
 const photoUrl = (photo: SharePhoto) => `${canonicalUrl(PAGE_PATH)}#photo-${photo.id}`;
 const photoLabel = (photo: SharePhoto) => (photo.title ? `photo ${photo.id}, ${photo.title}` : `photo ${photo.id}`);
 
-const SUGGESTED_CAPTION = `Grateful to have been part of the 2026 WNC Regional Rural Health Convening in Brevard on October 1—a full house of rural health leaders from across Western North Carolina, hosted by SparkPoint. ${creditLine}. ${canonicalUrl(RECAP_PATH).replace(/^https?:\/\//, '')}`;
+// No photo credit here on purpose: the caption travels with whatever the poster picks.
+const SUGGESTED_CAPTION = `What a day at the 2026 WNC Regional Rural Health Convening. A full house of rural health leaders from across Western North Carolina filled the barn at Deerwoode Reserve in Brevard, walked a family's story through the Rural Health Field Simulator together, and left with new people to call. Thank you, SparkPoint, for bringing us into one room. ${canonicalUrl(RECAP_PATH).replace(/^https?:\/\//, '')}`;
 
 async function copyText(text: string) {
   try {
