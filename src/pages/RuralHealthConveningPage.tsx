@@ -6,6 +6,7 @@ import {
   CalendarDays,
   Camera,
   Clock3,
+  ExternalLink,
   Mail,
   MapPin,
   Users,
@@ -58,7 +59,7 @@ const outcomes = [
   },
   {
     title: 'Carrying insight forward',
-    body: 'Connection to Action cards: the commitments people posted before they left.',
+    body: 'Through the Connection to Action cards, 30 new collaborative groups formed, each moving toward better access and care for rural communities.',
     photo: 'action-cards',
     alt: 'A hand-lettered “Connection to Action Cards” sign above rows of filled-in cards taped to a window, with the gravel patio and Adirondack chairs outside.',
   },
@@ -217,6 +218,25 @@ const simulatorSteps = [
     body: 'See what each journey reveals about burden, trust, and the connections a stronger system needs.',
   },
 ];
+
+// Resources Maggie Sauer (Director, NC DHHS Office of Rural Health) asked us to share
+// with attendees, from Sarah's follow-up email. The block renders only while every
+// entry has a confirmed `href` — never fill one in with a guess. The NCMJ link is the
+// newsletter announcing the Fall 2026 issue, with the email's per-recipient `?e=`
+// tracking parameter removed.
+const briefingResources: { title: string; source: string; href: string | null }[] = [
+  {
+    title: 'New from the NC Medical Journal',
+    source: 'North Carolina Medical Journal · Fall 2026 issue',
+    href: 'https://mailchi.mp/nciom/new-from-the-nc-medical-journal-61777',
+  },
+  {
+    title: 'National Academies Initiative on Rural Well-Being',
+    source: 'National Academies of Sciences, Engineering, and Medicine',
+    href: 'https://nap.nationalacademies.org/resource/other/initiative-on-rural-wellbeing/',
+  },
+];
+const showBriefingResources = briefingResources.every((resource) => resource.href);
 
 const programLineup = [
   {
@@ -682,6 +702,37 @@ export function RuralHealthConveningPage() {
                 </li>
               ))}
             </ol>
+
+            {showBriefingResources ? (
+              <aside className="rh-resources" aria-labelledby="rh-resources-title">
+                <div className="rh-resources-copy">
+                  <p className="rh-resources-eyebrow">Shared by Maggie Sauer</p>
+                  <h3 id="rh-resources-title">Keep learning, together.</h3>
+                  <p>
+                    Maggie Sauer, Director of the NC DHHS Office of Rural Health, asked us to
+                    share two resources with attendees as we continue learning and moving this
+                    work forward together.
+                  </p>
+                </div>
+                <ul className="rh-resources-list">
+                  {briefingResources.map((resource) => (
+                    <li key={resource.title}>
+                      <a href={resource.href ?? undefined} target="_blank" rel="noopener noreferrer">
+                        <span className="rh-resources-source">{resource.source}</span>
+                        <strong>{resource.title}</strong>
+                        <ExternalLink aria-hidden="true" size={18} />
+                        <span className="sr-only"> (opens in a new tab)</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <p className="rh-resources-thanks">
+                  We are grateful to Maggie for sharing these resources and for her continued
+                  leadership and partnership in strengthening rural health across North
+                  Carolina.
+                </p>
+              </aside>
+            ) : null}
           </div>
         </section>
 
@@ -735,7 +786,7 @@ export function RuralHealthConveningPage() {
               <div className="rh-priority-note rh-recap-stamp">
                 <span>October 1, 2026</span>
                 <strong>Full house</strong>
-                <p>Every seat filled. So many connections made.</p>
+                <p>Every seat filled. 30 new collaborative groups formed.</p>
               </div>
 
               {!hasRecapMedia ? (
