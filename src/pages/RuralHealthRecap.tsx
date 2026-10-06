@@ -4,8 +4,10 @@ import { ChevronLeft, ChevronRight, Expand, X } from 'lucide-react';
 // Photo recap for the 2026 WNC Regional Rural Health Convening (October 1, 2026),
 // drawn as a connection web in the style of the page's Connection Map: the regional
 // briefing is the hub, the photos gather around three "doors", and a few dashed
-// handoffs cross between them. Below 900px the web gives way to one swipeable strip
-// per door, since 27 nodes can't be read at phone width.
+// handoffs cross between them. The map shows at every width: below 900px the field
+// card drops under it, and on narrow phones the map keeps a minimum width inside a
+// sideways-scrolling frame (opened centered on the briefing) so every photo stays
+// tappable. Owner asked for the map everywhere rather than per-door photo strips.
 //
 // Files: each photo `id` has three WebP sizes in public/assets/Rural Health/recap/ —
 // `<id>-400` (web nodes), `<id>-800` (field card, strips), `<id>-1600` (lightbox) —
@@ -742,41 +744,19 @@ function FieldCard({ activeId, onOpen, onSelect }: { activeId: string; onOpen: (
   );
 }
 
-function RecapStrips({ onOpen }: { onOpen: (index: number) => void }) {
+// Holds the map. Where the map is wider than the frame (narrow phones), it scrolls
+// sideways and opens centered on the briefing hub.
+function WebScroller({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const overflow = el.scrollWidth - el.clientWidth;
+    if (overflow > 0) el.scrollLeft = overflow * (HUB.x / WEB_WIDTH);
+  }, []);
   return (
-    <div className="rh-strips">
-      {clusters.map((cluster) => {
-        const photos = recapPhotos.filter((p) => p.cluster === cluster.id);
-        return (
-          <section key={cluster.id} className="rh-strip" aria-label={cluster.title}>
-            <h3>
-              <span aria-hidden="true">✦</span> {cluster.title}
-            </h3>
-            <p>{cluster.note}</p>
-            <ol>
-              {photos.map((photo) => {
-                const index = photoIndex[photo.id];
-                return (
-                  <li key={photo.id}>
-                    <button type="button" onClick={() => onOpen(index)} aria-label={`View larger: ${photo.title}`}>
-                      <img
-                        src={recapAsset(photo.id, 800)}
-                        alt={photo.alt}
-                        width={PHOTO_WIDTH}
-                        height={photo.height}
-                        loading="lazy"
-                      />
-                    </button>
-                    <span className="rh-strip-plate">{plateLabel(index)}</span>
-                    <strong>{photo.title}</strong>
-                    <span className="rh-strip-note">{photo.note}</span>
-                  </li>
-                );
-              })}
-            </ol>
-          </section>
-        );
-      })}
+    <div ref={ref} className="rh-web-scroll">
+      {children}
     </div>
   );
 }
@@ -808,6 +788,8 @@ export function RecapMedia() {
             health system: the regional briefing at the center, and the connections that
             formed around it. <span className="rh-recap-hint">Hover a point to trace its
             route; select it to read the plate.</span>
+            <span className="rh-recap-hint rh-recap-hint-touch">Tap a point to read its
+            plate; drag the map sideways to explore.</span>
           </p>
         </div>
 
@@ -831,7 +813,9 @@ export function RecapMedia() {
                   <span>Connection map · October 1, 2026</span>
                   <span>{recapPhotos.length} plates · one full house</span>
                 </div>
-                <ConnectionWeb activeId={activeId} onSelect={setActiveId} />
+                <WebScroller>
+                  <ConnectionWeb activeId={activeId} onSelect={setActiveId} />
+                </WebScroller>
                 <ul className="rh-web-legend" aria-hidden="true">
                   <li>
                     <i className="rh-legend-trunk" /> Route to the briefing
@@ -850,7 +834,6 @@ export function RecapMedia() {
                 onSelect={setActiveId}
               />
             </div>
-            <RecapStrips onOpen={setOpenIndex} />
           </>
         ) : null}
       </div>
