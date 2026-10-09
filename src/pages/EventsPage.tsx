@@ -47,7 +47,75 @@ function EventFacts({ event, compact = false }: { event: SparkPointEvent; compac
   );
 }
 
+function SaveTheDate({ event }: { event: SparkPointEvent }) {
+  return (
+    <section className="sp-events-feature-section" aria-labelledby="featured-event-title">
+      <div className="sp-events-shell">
+        <p className="sp-events-section-label">Save the date</p>
+        <motion.article
+          className="sp-featured-event sp-save-the-date"
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.55 }}
+        >
+          <div className="sp-save-date-mark" aria-hidden="true">
+            <span className="sp-save-date-glow" />
+            <b>{eventMonth(event.startDate)}</b>
+            <strong>{eventDay(event.startDate)}</strong>
+            <small>{new Date(event.startDate).getFullYear()}</small>
+          </div>
+
+          <div className="sp-featured-event-copy">
+            <p className="sp-event-category">{event.category} · Save the date</p>
+            <h2 id="featured-event-title">{event.title}</h2>
+            <p className="sp-featured-summary">{event.summary}</p>
+            <EventFacts event={event} />
+            <p className="sp-event-partner-line">
+              Venue, tickets, and sponsorship opportunities will be announced here first.
+            </p>
+            <div className="sp-event-actions">
+              <Link className="sp-event-button sp-event-button-primary" to="/newsletter">
+                Get gala updates <ArrowRight aria-hidden="true" />
+              </Link>
+              <Link
+                className="sp-event-button sp-event-button-secondary"
+                to="/intake?intent=partner"
+              >
+                Ask about sponsoring
+              </Link>
+            </div>
+          </div>
+        </motion.article>
+      </div>
+    </section>
+  );
+}
+
 function EventCard({ event }: { event: SparkPointEvent }) {
+  if (event.teaser || !event.detailPath || !event.imagePath) {
+    return (
+      <article className="sp-event-card">
+        <div className="sp-event-card-image sp-event-card-teaser" aria-hidden="true">
+          <span className="sp-event-date-stamp">
+            <b>{eventMonth(event.startDate)}</b>
+            <strong>{eventDay(event.startDate)}</strong>
+          </span>
+          <p>Save the date</p>
+        </div>
+        <div className="sp-event-card-copy">
+          <p className="sp-event-category">{event.category}</p>
+          <h3>{event.title}</h3>
+          <p>{event.summary}</p>
+          <EventFacts event={event} compact />
+          <Link className="sp-event-text-link" to="/newsletter">
+            Get updates <ArrowRight aria-hidden="true" />
+          </Link>
+        </div>
+      </article>
+    );
+  }
+
   return (
     <article className="sp-event-card">
       <Link className="sp-event-card-image" to={event.detailPath} aria-label={`View ${event.title}`}>
@@ -92,7 +160,7 @@ export default function EventsPage() {
       itemListElement: upcomingEvents.map((event, index) => ({
         '@type': 'ListItem',
         position: index + 1,
-        url: canonicalUrl(event.detailPath),
+        url: canonicalUrl(event.detailPath ?? '/events'),
         name: event.title,
       })),
     },
@@ -104,7 +172,7 @@ export default function EventsPage() {
         title="Events & Gatherings | SparkPoint"
         description="Discover upcoming SparkPoint events, workshops, convenings, and shared learning experiences across Transylvania County and Western North Carolina."
         path="/events"
-        image={featuredEvent ? `/${featuredEvent.imagePath}` : undefined}
+        image={featuredEvent?.imagePath ? `/${featuredEvent.imagePath}` : undefined}
         imageAlt={featuredEvent?.imageAlt}
         jsonLd={itemListJsonLd}
       />
@@ -133,7 +201,9 @@ export default function EventsPage() {
         </div>
       </section>
 
-      {featuredEvent ? (
+      {featuredEvent && (featuredEvent.teaser || !featuredEvent.detailPath || !featuredEvent.imagePath) ? (
+        <SaveTheDate event={featuredEvent} />
+      ) : featuredEvent?.detailPath && featuredEvent.imagePath ? (
         <section className="sp-events-feature-section" aria-labelledby="featured-event-title">
           <div className="sp-events-shell">
             <p className="sp-events-section-label">Featured gathering</p>
