@@ -283,12 +283,17 @@ function PhotoTile({
             loading="lazy"
             decoding="async"
             onError={(event) => {
-              // One retry, bypassing any cached failure (e.g. a request made mid-upload).
+              // Up to two retries after short pauses, bypassing any cached failure. Right
+              // after a batch upload, Supabase's CDN can briefly refuse a burst of
+              // first-time requests; an immediate retry would hit the same wall.
               const img = event.currentTarget;
-              if (img.dataset.retried) return;
-              img.dataset.retried = 'true';
-              img.srcset = '';
-              img.src = `${webp(photo, 960)}?retry=1`;
+              const tries = Number(img.dataset.tries ?? 0);
+              if (tries >= 2) return;
+              img.dataset.tries = String(tries + 1);
+              window.setTimeout(() => {
+                img.srcset = '';
+                img.src = `${webp(photo, 960)}?retry=${tries + 1}`;
+              }, tries === 0 ? 1500 : 4000);
             }}
           />
         </button>
