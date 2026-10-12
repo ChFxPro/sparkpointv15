@@ -18,6 +18,7 @@ const StoriesPage = lazy(() =>
 );
 const EventsPage = lazy(() => import('./pages/EventsPage'));
 const ThriveAtFivePage = lazy(() => import('./pages/ThriveAtFivePage'));
+const GalaPage = lazy(() => import('./pages/GalaPage'));
 const StoryCategoryPage = lazy(() =>
   import('./pages/StoryCategoryPage').then((module) => ({ default: module.StoryCategoryPage }))
 );
@@ -148,6 +149,7 @@ function AppContent() {
         <Route path="/stories" element={<StoriesPage />} />
         <Route path="/events" element={<EventsPage />} />
         <Route path="/events/thrive-at-five" element={<ThriveAtFivePage />} />
+        <Route path="/events/sparkpoint-gala" element={<GalaPage />} />
         <Route path="/stories/collections" element={<StoryCollectionsPage />} />
         <Route path="/stories/collections/:id" element={<StoryCollectionDetailPage />} />
         <Route path="/stories/:categoryId" element={<StoryCategoryPage />} />

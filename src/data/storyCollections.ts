@@ -34,7 +34,6 @@ export interface StoryCollection {
   privacyNote?: string;
   promoFacts?: PromoFact[]; // label/value pairs for the homepage promo card's facts row
   promoFootnote?: string; // one-line caption under the homepage promo card's button
-  promoBadge?: string; // round sticker on the homepage promo card's flyer, e.g. 'Enter to\nwin $100' — omit to hide it
   formPath?: string; // vanity path on this site, e.g. '/healthcare-story' — only for active collections
   formUrlAbsolute?: string; // full https URL — used in QR/social copy
   resultsPath?: string; // where a closed collection's stories now live

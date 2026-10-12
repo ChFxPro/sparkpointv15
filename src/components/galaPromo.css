@@ -1,0 +1,446 @@
+/* Homepage Gala promo: a first-class boarding pass (see GalaPromo.tsx). */
+.gpromo {
+  --midnight: #0b1322;
+  --midnight-2: #14213a;
+  --brass: #d9b56a;
+  --brass-light: #f1d9a0;
+  --paper: #fbf6ea;
+  --ink: #1b1a1f;
+  --muted: #5f5a52;
+  --label: #8a7754;
+  --plum: #8e2a5c;
+  --display: 'Fraunces Variable', 'Fraunces', Georgia, serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  position: relative;
+  height: 100%;
+  padding-top: 2.25rem;
+}
+
+@media (min-width: 768px) {
+  .gpromo {
+    padding-top: 2.75rem;
+  }
+}
+
+.gpromo-tilt {
+  height: 100%;
+  perspective: 1400px;
+}
+
+.gpromo-pass {
+  position: relative;
+  height: 100%;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  color: var(--ink);
+  filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.35));
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Navy header band with foil lettering. */
+.gpromo-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 22px 14px 74px; /* room on the left for the stamp */
+  color: #f7f1e5;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(217, 181, 106, 0.24), transparent 60%),
+    linear-gradient(120deg, #1b2a48, var(--midnight));
+  border-radius: 18px 18px 0 0;
+}
+
+.gpromo-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--display);
+  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.gpromo-class {
+  display: grid;
+  justify-items: end;
+  flex: none;
+}
+
+.gpromo-class small {
+  color: rgba(247, 241, 229, 0.62);
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.gpromo-class b {
+  background: linear-gradient(100deg, #f6e2a8, #c9a24f 40%, #fff4d1 55%, #b58b3a 75%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* Paper body; it flexes so the stub stays pinned to the bottom. */
+.gpromo-main,
+.gpromo-stub {
+  position: relative;
+  background:
+    repeating-radial-gradient(circle at 0% 100%, transparent 0 18px, rgba(122, 96, 52, 0.05) 18px 19px),
+    var(--paper);
+}
+
+.gpromo-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px 22px 18px;
+  /* Notches where the tear line meets the edges. */
+  -webkit-mask: radial-gradient(circle at 0 100%, transparent 12px, #000 13px) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 100%, transparent 12px, #000 13px) right / 51% 100% no-repeat;
+  mask: radial-gradient(circle at 0 100%, transparent 12px, #000 13px) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 100%, transparent 12px, #000 13px) right / 51% 100% no-repeat;
+}
+
+.gpromo-intro {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  align-items: center;
+  gap: 18px;
+}
+
+/* An airplane window: rounded, framed, with the shade half-drawn. */
+.gpromo-window {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 46% / 36%;
+  box-shadow:
+    0 0 0 4px #e9e2d2,
+    0 0 0 6px #cfc4ab,
+    0 0 0 7px rgba(0, 0, 0, 0.08),
+    inset 0 0 0 2px rgba(0, 0, 0, 0.25),
+    inset 0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+.gpromo-window img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 74% 45%;
+}
+
+.gpromo-shade {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 24%;
+  background: linear-gradient(180deg, #e9e2d2, #d9cfb8);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gpromo-shade::after {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  width: 18px;
+  height: 3px;
+  content: '';
+  background: #b9a77f;
+  border-radius: 2px;
+  transform: translateX(-50%);
+}
+
+/* Hovering raises the window shade. */
+.gpromo:hover .gpromo-shade {
+  transform: translateY(-75%);
+}
+
+.gpromo-kicker,
+.gpromo-route span,
+.gpromo-fields dt,
+.gpromo-note {
+  color: var(--label);
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.gpromo-kicker {
+  color: var(--plum);
+}
+
+.gpromo-headline {
+  margin-top: 6px;
+  color: var(--midnight);
+  font-family: var(--display);
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.gpromo-headline em {
+  color: var(--plum);
+  font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
+}
+
+.gpromo-lede {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.gpromo-route {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.gpromo-route strong {
+  display: block;
+  color: var(--midnight);
+  font-family: var(--display);
+  font-size: clamp(2.2rem, 4vw, 2.9rem);
+  font-weight: 600;
+  line-height: 0.95;
+}
+
+.gpromo-route div:last-child {
+  text-align: right;
+}
+
+.gpromo-route span {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.56rem;
+}
+
+.gpromo-route svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.gpromo-arc {
+  fill: none;
+  stroke: #e03694;
+  stroke-dasharray: 3 6;
+  stroke-linecap: round;
+  stroke-width: 2;
+}
+
+.gpromo-route circle {
+  fill: #e03694;
+}
+
+.gpromo-plane {
+  fill: var(--midnight);
+  stroke: var(--midnight);
+  stroke-linejoin: round;
+}
+
+.gpromo-fields {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px 14px;
+  padding-top: 14px;
+  border-top: 1px solid #e4d8bd;
+}
+
+.gpromo-fields dd {
+  margin-top: 3px;
+  font-family: var(--mono);
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Stub: perforated top edge, notches, button and barcode. */
+.gpromo-stub {
+  display: grid;
+  gap: 12px;
+  padding: 18px 22px 18px;
+  border-top: 2px dashed #d3c39e;
+  border-radius: 0 0 18px 18px;
+  -webkit-mask: radial-gradient(circle at 0 0, transparent 12px, #000 13px) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 0, transparent 12px, #000 13px) right / 51% 100% no-repeat;
+  mask: radial-gradient(circle at 0 0, transparent 12px, #000 13px) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 0, transparent 12px, #000 13px) right / 51% 100% no-repeat;
+}
+
+.gpromo-button {
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 24px;
+  color: var(--midnight);
+  background: linear-gradient(135deg, var(--brass-light), var(--brass));
+  border-radius: 999px;
+  box-shadow: 0 10px 24px rgba(217, 181, 106, 0.3);
+  font-size: 1rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.gpromo-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(217, 181, 106, 0.4);
+}
+
+.gpromo-button:focus-visible {
+  outline: 3px solid var(--plum);
+  outline-offset: 3px;
+}
+
+.gpromo-code {
+  width: 100%;
+  max-width: 230px;
+  height: auto;
+  display: block;
+  margin-inline: auto;
+  opacity: 0.88;
+}
+
+.gpromo-note {
+  text-align: center;
+  color: #a8956d;
+}
+
+/* Foil sheen that follows the pointer. */
+.gpromo-foil {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 244, 209, 0.55), transparent 42%);
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 400ms ease;
+}
+
+.gpromo-tilt.can-tilt:hover .gpromo-foil {
+  opacity: 1;
+}
+
+/* Passport stamp inked across the top-left corner. */
+.gpromo-stamp {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: -6px;
+  width: 92px;
+  height: 92px;
+  overflow: visible;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.3));
+  transform: rotate(-12deg);
+  transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.gpromo:hover .gpromo-stamp {
+  transform: rotate(-16deg) scale(1.04);
+}
+
+.gpromo-stamp circle {
+  fill: #f6e7c1;
+  stroke: var(--plum);
+  stroke-width: 2.4;
+}
+
+.gpromo-stamp circle + circle {
+  fill: none;
+  stroke-width: 1.4;
+}
+
+.gpromo-stamp text {
+  fill: var(--plum);
+  font-family: var(--mono);
+  font-weight: 800;
+  text-anchor: middle;
+}
+
+.gpromo-stamp .is-ring {
+  font-size: 8px;
+  letter-spacing: 1.2px;
+}
+
+.gpromo-stamp .is-day {
+  font-family: var(--display);
+  font-size: 14px;
+}
+
+.gpromo-stamp .is-year {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+}
+
+@media (max-width: 480px) {
+  .gpromo-band {
+    padding: 14px 16px 12px 70px;
+  }
+
+  .gpromo-brand {
+    gap: 7px;
+    font-size: 1.02rem;
+  }
+
+  .gpromo-class small {
+    display: none;
+  }
+
+  .gpromo-class b {
+    font-size: 0.95rem;
+  }
+
+  .gpromo-intro {
+    grid-template-columns: 78px 1fr;
+    gap: 14px;
+  }
+
+  .gpromo-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gpromo-pass,
+  .gpromo-shade,
+  .gpromo-stamp,
+  .gpromo-button {
+    transition: none;
+  }
+
+  .gpromo:hover .gpromo-shade {
+    transform: none;
+  }
+
+  .gpromo:hover .gpromo-stamp {
+    transform: rotate(-12deg);
+  }
+
+  .gpromo-button:hover {
+    transform: none;
+  }
+}

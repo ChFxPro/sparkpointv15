@@ -567,3 +567,130 @@
     transform: none;
   }
 }
+
+/* Save-the-date panel: an announced event with no venue or photo yet. */
+.sp-save-date-mark {
+  position: relative;
+  min-height: 520px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  color: white;
+  background:
+    radial-gradient(circle at 50% 46%, rgba(253, 181, 21, 0.2), transparent 55%),
+    linear-gradient(160deg, #2b1730, #1a1a1a 70%);
+}
+
+.sp-save-date-glow {
+  position: absolute;
+  z-index: -1;
+  inset: 50% auto auto 50%;
+  width: 360px;
+  height: 360px;
+  border: 1px solid rgba(253, 181, 21, 0.28);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 0 34px rgba(253, 181, 21, 0.05),
+    0 0 0 70px rgba(224, 54, 148, 0.05);
+}
+
+.sp-save-date-mark b {
+  color: var(--events-gold);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+}
+
+.sp-save-date-mark strong {
+  margin-top: 6px;
+  font-size: clamp(7rem, 15vw, 11rem);
+  font-weight: 760;
+  letter-spacing: -0.06em;
+  line-height: 0.85;
+}
+
+.sp-save-date-mark small {
+  margin-top: 18px;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+}
+
+.sp-event-card-teaser {
+  display: grid;
+  place-items: end start;
+  padding: 24px;
+  background: linear-gradient(140deg, #1a1a1a, #2b1730 60%, #4d2142);
+}
+
+.sp-event-card-teaser p {
+  color: var(--events-gold);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 920px) {
+  .sp-save-date-mark {
+    min-height: 340px;
+  }
+}
+
+@media (max-width: 640px) {
+  .sp-save-date-mark {
+    min-height: 280px;
+  }
+
+  .sp-save-date-glow {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+/* The gala's save-the-date borrows its page's night-flight palette. */
+.sp-save-the-date {
+  background: linear-gradient(160deg, #0b1322, #14213a);
+}
+
+.sp-save-the-date::before {
+  background: linear-gradient(90deg, #f1d9a0, #d9b56a, var(--events-pink));
+}
+
+.sp-save-the-date .sp-save-date-mark {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(11, 19, 34, 0.82) 0 22%, rgba(11, 19, 34, 0.35) 48%, transparent 70%),
+    url('/assets/events/gala/world-dots.svg') center / 150% auto no-repeat,
+    radial-gradient(circle at 50% 46%, rgba(217, 181, 106, 0.16), transparent 55%),
+    linear-gradient(160deg, #14213a, #0b1322 70%);
+}
+
+.sp-save-the-date .sp-save-date-mark strong,
+.sp-save-the-date h2 {
+  font-family: 'Fraunces Variable', 'Fraunces', Georgia, serif;
+  font-weight: 500;
+}
+
+.sp-save-the-date .sp-save-date-mark b,
+.sp-save-the-date .sp-event-category {
+  color: #d9b56a;
+}
+
+.sp-save-the-date .sp-save-date-glow {
+  border-color: rgba(217, 181, 106, 0.3);
+  box-shadow:
+    0 0 0 34px rgba(217, 181, 106, 0.05),
+    0 0 0 70px rgba(217, 181, 106, 0.03);
+}
+
+.sp-save-the-date .sp-event-button-primary {
+  color: #0b1322;
+  background: linear-gradient(135deg, #f1d9a0, #d9b56a);
+  box-shadow: 0 10px 24px rgba(217, 181, 106, 0.25);
+}

@@ -10,6 +10,11 @@ export type EventCategory =
 export const COMMON_GROUND_PURCHASE_URL =
   'https://pisgahroasters.com/collections/limited-edition/products/commonground-premium-microlot-roast';
 
+// Monday WorkForm for Gala sponsor leads ("SparkPoint Gala · Sponsorship Interest",
+// board 18435094223 in the SparkPoint workspace). Used by the seat-map teaser.
+export const GALA_PARTNER_FORM_URL =
+  'https://forms.monday.com/forms/8bc904c73a179d5be96939ed2c05b62a';
+
 export interface SparkPointEvent {
   id: string;
   title: string;
@@ -22,19 +27,43 @@ export interface SparkPointEvent {
   locationName: string;
   locationLabel: string;
   summary: string;
-  detailPath: string;
+  detailPath?: string;
   registrationPath?: string;
   registrationLabel?: string;
-  imagePath: string;
-  imageAlt: string;
+  imagePath?: string;
+  imageAlt?: string;
   featured?: boolean;
   partnerLine?: string;
+  // A save-the-date: announced before there is a venue or photo. The Events
+  // page gives it a typographic panel instead of the photo layout (linking to
+  // `detailPath` when there is one), and it never lists under Past Gatherings.
+  // Drop this flag once the venue and a photo are in.
+  teaser?: boolean;
 }
 
 // Add future events here. The Events page sorts upcoming gatherings by date,
 // chooses the first explicitly featured event as its lead, and moves expired
 // entries into the Past Gatherings section automatically.
 export const EVENTS: SparkPointEvent[] = [
+  {
+    id: 'sparkpoint-gala-2026',
+    title: 'The SparkPoint Gala',
+    shortTitle: 'SparkPoint Gala',
+    category: 'Fundraiser',
+    startDate: '2026-12-11T18:00:00-05:00',
+    // No end time announced yet; holding the whole evening keeps it upcoming
+    // until the night is over.
+    endDate: '2026-12-11T23:59:00-05:00',
+    dateLabel: 'Friday, December 11, 2026',
+    timeLabel: '6:00 p.m.',
+    locationName: 'Venue to be announced',
+    locationLabel: 'Tickets and details coming soon',
+    summary:
+      'See the world. Strengthen home. An evening of connection and a live auction of eight travel experiences, with a portion of every trip coming home to support the Transylvania Resilience Hub.',
+    detailPath: '/events/sparkpoint-gala',
+    featured: true,
+    teaser: true,
+  },
   {
     id: 'thrive-at-five-common-ground-2026',
     title: 'Thrive @ Five: Common Ground Release Party',
@@ -101,7 +130,7 @@ export const EVENTS: SparkPointEvent[] = [
 ];
 
 export function eventAssetUrl(event: SparkPointEvent) {
-  return `${import.meta.env.BASE_URL}${event.imagePath}`;
+  return event.imagePath ? `${import.meta.env.BASE_URL}${event.imagePath}` : undefined;
 }
 
 export function getUpcomingEvents(now = new Date()) {
@@ -111,7 +140,9 @@ export function getUpcomingEvents(now = new Date()) {
 }
 
 export function getPastEvents(now = new Date()) {
-  return EVENTS.filter((event) => new Date(event.endDate ?? event.startDate) < now).sort(
+  return EVENTS.filter(
+    (event) => !event.teaser && new Date(event.endDate ?? event.startDate) < now
+  ).sort(
     (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
   );
 }
