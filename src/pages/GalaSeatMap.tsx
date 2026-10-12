@@ -22,67 +22,121 @@ export const CABIN_LABELS: Record<Cabin, string> = {
   main: 'Main Cabin',
 };
 
-// Geometry is drawn nose-left in a 1000 × 420 box; phones get the same drawing
-// rotated nose-up.
+// The plane is drawn nose-left in a 1200 × 900 box with roughly airliner
+// proportions: the fuselage is ~7× longer than it is wide, and the wingspan
+// is ~0.75× the length. The centreline is y = 450; the cabin runs y 381–519.
+// Phones get the same drawing rotated nose-up and cropped to the cabin.
+const W = 1200;
+const H = 900;
+
 function buildSeats(): Seat[] {
   const seats: Seat[] = [];
-  const add = (cabin: Cabin, rows: number[], x0: number, pitch: number, ys: number[], letters: string, size: number, firstRow: number) => {
-    rows.forEach((_, rowIndex) => {
+  const add = (cabin: Cabin, rowCount: number, x0: number, pitch: number, ys: number[], letters: string, size: number, firstRow: number) => {
+    for (let row = 0; row < rowCount; row += 1) {
       ys.forEach((y, seatIndex) => {
-        seats.push({
-          id: `${firstRow + rowIndex}${letters[seatIndex]}`,
-          cabin,
-          x: x0 + rowIndex * pitch,
-          y,
-          size,
-        });
+        seats.push({ id: `${firstRow + row}${letters[seatIndex]}`, cabin, x: x0 + row * pitch, y, size });
       });
-    });
+    }
   };
-  add('first', [0, 1, 2], 196, 46, [150, 240], 'AF', 34, 1);
-  add('business', [0, 1, 2, 3], 352, 42, [138, 172, 226, 260], 'ACDF', 28, 5);
-  add('main', [0, 1, 2, 3, 4, 5, 6, 7, 8], 548, 38, [132, 154, 176, 222, 244, 266], 'ABCDEF', 19, 10);
+  add('first', 3, 236, 46, [412, 488], 'AF', 30, 1);
+  add('business', 4, 398, 40, [398, 425, 475, 502], 'ACDF', 24, 5);
+  add('main', 11, 592, 35, [393, 412, 431, 469, 488, 507], 'ABCDEF', 17, 10);
   return seats;
 }
 
+// Reflect a path drawn above the centreline to below it (y → H − y).
+const mirror = (path: string) =>
+  path.replace(/(-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)/g, (_, x, y) => `${x} ${H - Number(y)}`);
+
 const FUSELAGE =
-  'M160 110 H880 C930 110 960 150 985 210 C960 270 930 310 880 310 H160 C80 310 34 262 34 210 C34 158 80 110 160 110 Z';
-const WING_TOP = 'M470 112 L590 112 L700 14 L640 14 Z';
-const WING_BOTTOM = 'M470 308 L590 308 L700 406 L640 406 Z';
-const TAIL_TOP = 'M890 118 L950 118 L985 66 L960 66 Z';
-const TAIL_BOTTOM = 'M890 302 L950 302 L985 354 L960 354 Z';
+  'M232 372 L1010 372 C1080 372 1138 410 1166 444 L1166 456 C1138 490 1080 528 1010 528 L232 528 C118 528 40 496 40 450 C40 404 118 372 232 372 Z';
+// Swept wing with a trailing-edge kink and a winglet at the tip.
+const WING = 'M508 374 L846 48 L852 30 L888 30 L898 48 L816 196 L744 330 L740 374 Z';
+const STABILIZER = 'M1032 376 L1118 268 L1150 268 L1114 376 Z';
+// Engine nacelle (a top-down capsule) under each wing; its front pokes out
+// ahead of the leading edge.
+const ENGINE = { x: 552, y: 252, w: 150, h: 36 };
+const FIN = 'M1018 450 L1150 445 L1168 450 L1150 455 Z';
 
-export function GalaSeatMap() {
-  const seats = useMemo(buildSeats, []);
-  const [active, setActive] = useState<Seat | null>(null);
+interface DrawingProps {
+  id: string;
+  seats: Seat[];
+  active: Seat | null;
+  onEnter: (seat: Seat) => void;
+  onLeave: (seat: Seat) => void;
+}
 
-  const drawing = (
+function Drawing({ id, seats, active, onEnter, onLeave }: DrawingProps) {
+  // Gradient ids are per drawing: a gradient defined inside a display:none
+  // <svg> doesn't paint, so the two variants can't share one.
+  const body = `gala-fuselage-${id}`;
+  const metal = `gala-metal-${id}`;
+  return (
     <>
-      <path className="gala-seatmap-wing" d={WING_TOP} />
-      <path className="gala-seatmap-wing" d={WING_BOTTOM} />
-      <path className="gala-seatmap-wing" d={TAIL_TOP} />
-      <path className="gala-seatmap-wing" d={TAIL_BOTTOM} />
-      <path className="gala-seatmap-fuselage" d={FUSELAGE} />
-      {/* Cockpit windows */}
-      <path className="gala-seatmap-cockpit" d="M70 190 Q60 210 70 230 L92 224 Q86 210 92 196 Z" />
-      {/* Cabin dividers */}
-      <line className="gala-seatmap-divider" x1="330" y1="122" x2="330" y2="298" />
-      <line className="gala-seatmap-divider" x1="526" y1="122" x2="526" y2="298" />
-      {/* Cabin windows along both sides */}
-      {Array.from({ length: 20 }, (_, index) => 190 + index * 36).map((x) => (
-        <g key={x} className="gala-seatmap-window">
-          <rect x={x} y="116" width="14" height="4" rx="2" />
-          <rect x={x} y="300" width="14" height="4" rx="2" />
+      <defs>
+        <linearGradient id={body} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#e6dece" />
+          <stop offset="0.2" stopColor="#fffdf7" />
+          <stop offset="0.55" stopColor="#fffdf7" />
+          <stop offset="1" stopColor="#ded4c0" />
+        </linearGradient>
+        <linearGradient id={metal} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="#d6cab0" />
+          <stop offset="1" stopColor="#ebe3d0" />
+        </linearGradient>
+      </defs>
+
+      {/* Engines sit under the wings, so they're drawn first. */}
+      {[ENGINE.y, H - ENGINE.y - ENGINE.h].map((y) => (
+        <g key={y} className="gala-seatmap-engine">
+          <rect x={ENGINE.x} y={y} width={ENGINE.w} height={ENGINE.h} rx={ENGINE.h / 2} fill={`url(#${metal})`} />
+          <ellipse cx={ENGINE.x + 7} cy={y + ENGINE.h / 2} rx="5" ry={ENGINE.h / 2 - 5} className="gala-seatmap-intake" />
         </g>
       ))}
+
+      <path className="gala-seatmap-wing" d={WING} fill={`url(#${metal})`} />
+      <path className="gala-seatmap-wing" d={mirror(WING)} fill={`url(#${metal})`} />
+      <path className="gala-seatmap-wing" d={STABILIZER} fill={`url(#${metal})`} />
+      <path className="gala-seatmap-wing" d={mirror(STABILIZER)} fill={`url(#${metal})`} />
+
+      <path className="gala-seatmap-fuselage" d={FUSELAGE} fill={`url(#${body})`} />
+      <path className="gala-seatmap-fin" d={FIN} />
+
+      {/* Four-pane windscreen */}
+      <g className="gala-seatmap-cockpit">
+        <path d="M74 428 Q66 450 74 472 L92 466 Q86 450 92 434 Z" />
+        <line x1="70" y1="439" x2="90" y2="443" />
+        <line x1="70" y1="461" x2="90" y2="457" />
+        <line x1="68" y1="450" x2="88" y2="450" />
+      </g>
+
+      {/* Cabin windows, just inside the fuselage outline */}
+      {Array.from({ length: 26 }, (_, index) => 232 + index * 30).map((x) => (
+        <g key={x} className="gala-seatmap-window">
+          <rect x={x} y="375.5" width="11" height="3.5" rx="1.75" />
+          <rect x={x} y="521" width="11" height="3.5" rx="1.75" />
+        </g>
+      ))}
+
+      {/* Doors, front and rear */}
+      {[204, 1004].map((x) => (
+        <g key={x} className="gala-seatmap-door">
+          <rect x={x} y="373.5" width="16" height="5" rx="1" />
+          <rect x={x} y="521.5" width="16" height="5" rx="1" />
+        </g>
+      ))}
+
+      <line className="gala-seatmap-divider" x1="378" y1="384" x2="378" y2="516" />
+      <line className="gala-seatmap-divider" x1="574" y1="384" x2="574" y2="516" />
+
       {seats.map((seat, index) => (
         <g
           key={seat.id}
           className={`gala-seat gala-seat-${seat.cabin}${active?.id === seat.id ? ' is-active' : ''}`}
           style={{ '--i': index } as CSSProperties}
           transform={`translate(${seat.x} ${seat.y - seat.size / 2})`}
-          onPointerEnter={() => setActive(seat)}
-          onPointerLeave={() => setActive((current) => (current?.id === seat.id ? null : current))}
+          onPointerEnter={() => onEnter(seat)}
+          onPointerLeave={() => onLeave(seat)}
           onClick={() => window.open(GALA_PARTNER_FORM_URL, '_blank', 'noopener,noreferrer')}
         >
           {/* Passengers face the nose, so the seat back sits on the tail side. */}
@@ -92,15 +146,26 @@ export function GalaSeatMap() {
       ))}
     </>
   );
+}
+
+export function GalaSeatMap() {
+  const seats = useMemo(buildSeats, []);
+  const [active, setActive] = useState<Seat | null>(null);
+  const onEnter = (seat: Seat) => setActive(seat);
+  const onLeave = (seat: Seat) => setActive((current) => (current?.id === seat.id ? null : current));
 
   return (
     <div className="gala-seatmap">
       <div className="gala-seatmap-frame" aria-hidden="true">
-        <svg className="gala-seatmap-wide" viewBox="0 0 1000 420">
-          {drawing}
+        <svg className="gala-seatmap-wide" viewBox={`0 0 ${W} ${H}`}>
+          <Drawing id="wide" seats={seats} active={active} onEnter={onEnter} onLeave={onLeave} />
         </svg>
-        <svg className="gala-seatmap-tall" viewBox="0 0 420 1000">
-          <g transform="translate(420 0) rotate(90)">{drawing}</g>
+        {/* Nose-up, cropped to the cabin so seats stay a usable size on phones;
+            the wings run off the frame edges, as in airline seat maps. */}
+        <svg className="gala-seatmap-tall" viewBox={`${H / 2 - 190} 20 380 ${W - 40}`}>
+          <g transform={`translate(${H} 0) rotate(90)`}>
+            <Drawing id="tall" seats={seats} active={active} onEnter={onEnter} onLeave={onLeave} />
+          </g>
         </svg>
       </div>
       <p className="gala-seatmap-status" aria-hidden="true">

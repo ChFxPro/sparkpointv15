@@ -1794,22 +1794,53 @@
   display: none !important;
 }
 
+.gala-seatmap-wide {
+  max-width: 1000px;
+  margin-inline: auto;
+}
+
+/* Fills come from the per-drawing gradients in the markup. */
 .gala-seatmap-wing {
-  fill: #e6dcc6;
-  stroke: #c9b994;
+  stroke: #b9a77f;
+  stroke-linejoin: round;
   stroke-width: 1.5;
 }
 
-.gala-seatmap-fuselage {
-  fill: #fffdf7;
-  stroke: #1f3152;
-  stroke-width: 2.5;
-  filter: drop-shadow(0 8px 14px rgba(31, 49, 82, 0.12));
+.gala-seatmap-engine rect {
+  stroke: #a9966c;
+  stroke-width: 1.5;
 }
 
-.gala-seatmap-cockpit {
+.gala-seatmap-intake {
+  fill: #2a3550;
+  opacity: 0.75;
+}
+
+.gala-seatmap-fuselage {
+  stroke: #1f3152;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 10px 16px rgba(31, 49, 82, 0.16));
+}
+
+.gala-seatmap-fin {
+  fill: #d6cab0;
+  stroke: #1f3152;
+  stroke-width: 1.5;
+}
+
+.gala-seatmap-cockpit path {
   fill: #1f3152;
-  opacity: 0.8;
+}
+
+.gala-seatmap-cockpit line {
+  stroke: #fffdf7;
+  stroke-width: 1.4;
+}
+
+.gala-seatmap-door rect {
+  fill: none;
+  stroke: #8a9ab3;
+  stroke-width: 1.2;
 }
 
 .gala-seatmap-divider {
@@ -2464,7 +2495,7 @@
 
   .gala-seatmap-tall {
     display: block !important;
-    max-width: 280px;
+    max-width: 300px;
     margin-inline: auto;
   }
 
