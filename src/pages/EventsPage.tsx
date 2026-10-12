@@ -1,3 +1,4 @@
+import '@fontsource-variable/fraunces';
 import { motion } from 'motion/react';
 import { ArrowRight, CalendarDays, Clock3, MapPin } from 'lucide-react';
 import { Link } from 'react-router';
@@ -67,7 +68,7 @@ function SaveTheDate({ event }: { event: SparkPointEvent }) {
           </div>
 
           <div className="sp-featured-event-copy">
-            <p className="sp-event-category">{event.category} · Save the date</p>
+            <p className="sp-event-category">{event.category} · Live travel auction</p>
             <h2 id="featured-event-title">{event.title}</h2>
             <p className="sp-featured-summary">{event.summary}</p>
             <EventFacts event={event} />

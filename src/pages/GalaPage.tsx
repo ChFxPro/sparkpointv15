@@ -1,35 +1,34 @@
-import { motion } from 'motion/react';
-import {
-  ArrowRight,
-  CalendarDays,
-  Clock3,
-  Gavel,
-  HeartHandshake,
-  MapPin,
-  Plane,
-  Users,
-} from 'lucide-react';
+import '@fontsource-variable/fraunces';
+import { motion, useReducedMotion } from 'motion/react';
+import { ArrowRight, CalendarDays, Clock3, MapPin } from 'lucide-react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
+import { GalaDepartureBoard } from './GalaDepartureBoard';
+import { GalaRouteMap } from './GalaRouteMap';
 import './gala.css';
 
+const BASE = import.meta.env.BASE_URL;
 const GALA_PATH = '/events/sparkpoint-gala';
+const postcardImage = `${BASE}assets/events/gala/hub-winter-postcard.webp`;
 
-// The four numbers on the boarding pass. Source: Sarah's travel-auction notes
-// (2026-10-11). Don't state the giveback percentage until it's confirmed.
-const AUCTION_FACTS = [
-  { value: '8', label: 'travel experiences', detail: 'Trips to destinations around the world' },
-  { value: '3', label: 'years to travel', detail: 'Plenty of time to plan the trip' },
-  { value: '0', label: 'blackout dates', detail: 'Go when it works for you' },
-  { value: '1', label: 'year at the Gala price', detail: 'Extra buyers lock in the same price' },
+// Auction facts come from Sarah's travel-auction notes (2026-10-11). Keep off
+// this page: that board members may bid (internal), the AmFund contact, and
+// any giveback percentage until one is confirmed.
+const STAMPS = [
+  { shape: 'round', top: '8', middle: 'Travel experiences', bottom: 'Worldwide', tilt: -8 },
+  { shape: 'rect', top: '3 years', middle: 'to travel', bottom: 'From purchase', tilt: 5 },
+  { shape: 'oval', top: 'No', middle: 'Blackout dates', bottom: 'Go when you like', tilt: -3 },
+  { shape: 'rect', top: 'Live', middle: 'Auction', bottom: 'Professional auctioneer', tilt: -6 },
+  { shape: 'round', top: '2+', middle: 'Winners per trip', bottom: 'Same price', tilt: 7 },
+  { shape: 'oval', top: '1 year', middle: 'Gala price locked', bottom: 'After the event', tilt: -4 },
 ];
 
-const OCCASIONS = [
-  'Anniversaries',
-  'Milestone birthdays',
-  'Honeymoons',
-  'Family vacations',
-  'Bucket-list adventures',
+const TAGS = [
+  { occasion: 'Anniversary', line: 'Celebrate the years somewhere new.' },
+  { occasion: 'Milestone birthday', line: 'Mark the big one with a bigger view.' },
+  { occasion: 'Honeymoon', line: 'Begin forever far from ordinary.' },
+  { occasion: 'Family vacation', line: 'The memories everyone brings home.' },
+  { occasion: 'Bucket list', line: 'The trip you’ve always talked about.' },
 ];
 
 const GIVES_BACK = [
@@ -38,55 +37,93 @@ const GIVES_BACK = [
     copy: 'A portion of each travel package purchased supports SparkPoint’s mission of strengthening community well-being through collaboration and connection.',
   },
   {
-    title: 'Help bring the Transylvania Resilience Hub to life',
+    title: 'Help bring the Resilience Hub to life',
     copy: 'Gala support helps advance this new community resource, designed to bring people, organizations, and services together under one roof.',
   },
   {
-    title: 'Invest in a stronger, more connected community',
-    copy: 'The Resilience Hub will provide space for collaboration, leadership development, community resources, and programs that strengthen resilience and address local needs.',
+    title: 'Invest in a more connected community',
+    copy: 'The Hub will provide space for collaboration, leadership development, community resources, and programs that strengthen resilience and address local needs.',
   },
   {
-    title: 'Your vacation can have a lasting impact',
+    title: 'A vacation with a lasting impact',
     copy: 'Make unforgettable travel memories while helping SparkPoint build a healthier, more connected, and resilient Transylvania County.',
   },
 ];
 
-const reveal = {
-  initial: { opacity: 0, y: 20 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.55 },
-};
+function useReveal(delay = 0) {
+  const reduceMotion = useReducedMotion();
+  if (reduceMotion) return {};
+  return {
+    initial: { opacity: 0, y: 24 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: '-60px' },
+    transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] as const },
+  };
+}
+
+function Stamp({ stamp, index }: { stamp: (typeof STAMPS)[number]; index: number }) {
+  const reduceMotion = useReducedMotion();
+  const motionProps = reduceMotion
+    ? {}
+    : {
+        initial: { opacity: 0, scale: 1.6, rotate: stamp.tilt * 2 },
+        whileInView: { opacity: 1, scale: 1, rotate: stamp.tilt },
+        viewport: { once: true, margin: '-40px' },
+        transition: { type: 'spring' as const, stiffness: 420, damping: 18, delay: 0.15 + index * 0.16 },
+      };
+  return (
+    <motion.li
+      className={`gala-stamp gala-stamp-${stamp.shape} gala-stamp-ink-${index % 3}`}
+      style={{ rotate: stamp.tilt }}
+      {...motionProps}
+    >
+      <strong>{stamp.top}</strong>
+      <span>{stamp.middle}</span>
+      <small>{stamp.bottom}</small>
+    </motion.li>
+  );
+}
 
 export default function GalaPage() {
+  const reveal = useReveal();
+  const revealLate = useReveal(0.12);
+
   return (
     <div className="gala-page">
       <SEOHead
         title="The SparkPoint Gala & Travel Auction | December 11, 2026"
-        description="Save the date for the SparkPoint Gala on Friday, December 11, 2026 at 6 p.m. Bid on eight travel experiences in a live auction—travel that gives back to Transylvania County’s Resilience Hub."
+        description="See the world. Strengthen home. Join the SparkPoint Gala on Friday, December 11, 2026 at 6 p.m. and bid on eight travel experiences in a live auction that gives back to Transylvania County’s Resilience Hub."
         path={GALA_PATH}
         keywords={['SparkPoint Gala', 'travel auction', 'Resilience Hub', 'Brevard', 'Transylvania County']}
       />
 
+      {/* 1 — Departures */}
       <section className="gala-hero" aria-labelledby="gala-title">
-        <div className="gala-hero-sky" aria-hidden="true">
-          <span className="gala-hero-ring" />
-          <span className="gala-hero-ring gala-hero-ring-2" />
-          <svg className="gala-hero-route" viewBox="0 0 600 240" preserveAspectRatio="none">
-            <path d="M10 210 C 160 40, 400 10, 590 90" />
+        <div className="gala-hero-globe" aria-hidden="true">
+          <svg viewBox="-110 -110 220 220">
+            <circle r="100" />
+            <ellipse rx="100" ry="34" />
+            <ellipse rx="100" ry="70" />
+            <ellipse rx="34" ry="100" />
+            <ellipse rx="70" ry="100" />
+            <line x1="-100" x2="100" />
+            <line y1="-100" y2="100" />
           </svg>
         </div>
         <div className="gala-shell gala-hero-inner">
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, ease: 'easeOut' }}
-          >
-            <p className="gala-kicker">Save the date</p>
-            <h1 id="gala-title">The SparkPoint Gala</h1>
+          <motion.div className="gala-hero-copy" {...reveal}>
+            <p className="gala-kicker">
+              <span>The SparkPoint Gala</span>
+              <span aria-hidden="true">✦</span>
+              <span>Live travel auction</span>
+            </p>
+            <h1 id="gala-title">
+              See the world.
+              <em>Strengthen home.</em>
+            </h1>
             <p className="gala-hero-lede">
-              An evening of connection, celebration, and a live travel auction where your
-              next adventure could change lives.
+              One evening, eight journeys around the world, and every one of them giving back
+              to the place we call home.
             </p>
             <dl className="gala-hero-facts">
               <div>
@@ -106,135 +143,286 @@ export default function GalaPage() {
               </div>
             </dl>
             <div className="gala-actions">
-              <Link className="gala-button gala-button-primary" to="/newsletter">
-                Get gala updates <ArrowRight aria-hidden="true" />
+              <Link className="gala-button gala-button-gold" to="/newsletter">
+                Get boarding updates <ArrowRight aria-hidden="true" />
               </Link>
-              <a className="gala-button gala-button-ghost" href="#travel-auction">
-                See the travel auction
+              <a className="gala-button gala-button-ghost" href="#passport">
+                How the auction works
               </a>
             </div>
+          </motion.div>
+          <motion.div {...revealLate}>
+            <GalaDepartureBoard />
           </motion.div>
         </div>
       </section>
 
-      <section id="travel-auction" className="gala-auction" aria-labelledby="auction-title">
+      {/* 2 — Routes */}
+      <section className="gala-routes" aria-labelledby="routes-title">
         <div className="gala-shell">
-          <motion.div className="gala-section-head" {...reveal}>
-            <p className="gala-label">The travel auction</p>
-            <h2 id="auction-title">Your next adventure could change lives!</h2>
+          <motion.div className="gala-routes-head" {...reveal}>
+            <p className="gala-label">Your next adventure could change lives</p>
+            <h2 id="routes-title">
+              Eight departures. <em>One home base.</em>
+            </h2>
             <p>
-              Eight trips to destinations around the world go up for bid during the Gala,
-              led by a professional live auctioneer. Each one is travel that gives back:
-              part of every package purchased supports SparkPoint and its mission.
+              Every trip auctioned at the Gala leaves from here. And a portion of every
+              package comes right back to Transylvania County.
             </p>
           </motion.div>
+          <GalaRouteMap />
+        </div>
+      </section>
 
-          <motion.div className="gala-pass" {...reveal}>
-            <div className="gala-pass-main">
-              <div className="gala-pass-top">
-                <span>
-                  <Plane aria-hidden="true" /> SparkPoint Gala · Travel Auction
-                </span>
-                <span>Dec 11 · 2026</span>
+      {/* 3 — Passport */}
+      <section id="passport" className="gala-passport-section" aria-labelledby="passport-title">
+        <div className="gala-shell">
+          <motion.div className="gala-section-head" {...reveal}>
+            <p className="gala-label gala-label-ink">How the auction works</p>
+            <h2 id="passport-title">
+              Your passport to <em>the auction.</em>
+            </h2>
+          </motion.div>
+
+          <motion.div className="gala-passport" {...reveal}>
+            <div className="gala-passport-page gala-passport-data">
+              <p className="gala-passport-issuer">
+                <span>SparkPoint Gala</span>
+                <span>Passport · Passeport</span>
+              </p>
+              <div className="gala-passport-photo" aria-hidden="true">
+                <span>✦</span>
               </div>
-              <ul className="gala-pass-facts">
-                {AUCTION_FACTS.map((fact) => (
-                  <li key={fact.label}>
-                    <strong>{fact.value}</strong>
-                    <b>{fact.label}</b>
-                    <span>{fact.detail}</span>
-                  </li>
+              <dl className="gala-passport-fields">
+                <div>
+                  <dt>Bearer</dt>
+                  <dd>You</dd>
+                </div>
+                <div>
+                  <dt>Home port</dt>
+                  <dd>Transylvania County, NC</dd>
+                </div>
+                <div>
+                  <dt>Valid for</dt>
+                  <dd>3 years from purchase</dd>
+                </div>
+                <div>
+                  <dt>Restrictions</dt>
+                  <dd>None. No blackout dates.</dd>
+                </div>
+              </dl>
+              <p className="gala-passport-mrz" aria-hidden="true">
+                P&lt;SPK&lt;&lt;GALA&lt;&lt;DEC&lt;11&lt;2026&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+                <br />
+                SEE&lt;THE&lt;WORLD&lt;&lt;STRENGTHEN&lt;HOME&lt;&lt;
+              </p>
+            </div>
+            <div className="gala-passport-page gala-passport-visas">
+              <p className="gala-passport-issuer">
+                <span>Visas · Entries</span>
+                <span>12</span>
+              </p>
+              <ul className="gala-stamps">
+                {STAMPS.map((stamp, index) => (
+                  <Stamp key={stamp.middle} stamp={stamp} index={index} />
                 ))}
               </ul>
             </div>
-            <div className="gala-pass-stub" aria-hidden="true">
-              <span>Destination</span>
-              <strong>Anywhere</strong>
-              <span>Gives back to</span>
-              <strong>Transylvania County</strong>
-            </div>
           </motion.div>
 
-          <div className="gala-auction-notes">
-            <motion.article {...reveal}>
-              <Gavel aria-hidden="true" />
-              <h3>Live, with a professional auctioneer</h3>
-              <p>
-                An experienced auctioneer leads the bidding during the Gala, so the
-                room gets to share the excitement.
-              </p>
-            </motion.article>
-            <motion.article {...reveal}>
-              <Users aria-hidden="true" />
-              <h3>More than one winner per trip</h3>
-              <p>
-                More than one guest can buy the same trip at its auction price, and more
-                buyers can lock in that Gala price for up to a year after the event.
-              </p>
-            </motion.article>
+          <div className="gala-passport-notes">
+            <motion.p {...reveal}>
+              <strong>Eight trips, one live auction.</strong> A professional auctioneer leads
+              the bidding on eight travel experiences to destinations around the world.
+            </motion.p>
+            <motion.p {...revealLate}>
+              <strong>More than one winner.</strong> Several guests can buy the same trip at its
+              auction price, and more travelers can lock in that Gala price for up to a year
+              after the event.
+            </motion.p>
           </div>
-
-          <motion.div className="gala-occasions" {...reveal}>
-            <p>Made for</p>
-            <ul>
-              {OCCASIONS.map((occasion) => (
-                <li key={occasion}>{occasion}</li>
-              ))}
-            </ul>
-          </motion.div>
-
           <p className="gala-fine-print">
-            The trip lineup and the details and terms for each package will be shared before
-            the Gala.
+            The trip lineup and each package’s details and terms are shared before the Gala.
           </p>
         </div>
       </section>
 
-      <section className="gala-gives" aria-labelledby="gives-title">
-        <div className="gala-shell gala-gives-inner">
-          <motion.div className="gala-gives-head" {...reveal}>
-            <HeartHandshake aria-hidden="true" />
-            <p className="gala-label">Travel that gives back</p>
-            <h2 id="gives-title">Travel that gives back to our community.</h2>
-            <p>
-              Gala support helps bring the{' '}
-              <Link to="/resilience-hub">Transylvania Resilience Hub</Link> to life.
-            </p>
+      {/* 4 — Luggage tags */}
+      <section className="gala-tags-section" aria-labelledby="tags-title">
+        <div className="gala-shell">
+          <motion.div className="gala-section-head gala-section-head-center" {...reveal}>
+            <p className="gala-label gala-label-ink">Made for the moments that matter</p>
+            <h2 id="tags-title">
+              Where will yours <em>take you?</em>
+            </h2>
           </motion.div>
-          <ol className="gala-gives-list">
-            {GIVES_BACK.map((item, index) => (
-              <motion.li key={item.title} {...reveal} transition={{ duration: 0.55, delay: index * 0.06 }}>
-                <span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
-                <div>
-                  <h3>{item.title}</h3>
-                  <p>{item.copy}</p>
+          <ul className="gala-tags">
+            {TAGS.map((tag, index) => (
+              <motion.li key={tag.occasion} className="gala-tag" {...staggerReveal(index)}>
+                <span className="gala-tag-string" aria-hidden="true" />
+                <div className="gala-tag-body">
+                  <span className="gala-tag-hole" aria-hidden="true" />
+                  <small>Destination: anywhere</small>
+                  <strong>{tag.occasion}</strong>
+                  <p>{tag.line}</p>
                 </div>
+              </motion.li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* 5 — The return trip */}
+      <section className="gala-return" aria-labelledby="return-title">
+        <div className="gala-shell">
+          <motion.div className="gala-section-head" {...reveal}>
+            <p className="gala-label">The return trip</p>
+            <h2 id="return-title">
+              Travel that gives back <em>to our community.</em>
+            </h2>
+          </motion.div>
+
+          <motion.article className="gala-postcard" {...reveal}>
+            <figure className="gala-postcard-front">
+              <img
+                src={postcardImage}
+                alt="Concept rendering of the Transylvania Resilience Hub in winter: a brick building with a glowing SparkPoint sign, lit windows, and snow on the ground."
+                loading="lazy"
+              />
+              <figcaption>
+                <span>Greetings from</span>
+                <strong>Home</strong>
+                <small>Transylvania Resilience Hub · concept rendering</small>
+              </figcaption>
+            </figure>
+            <div className="gala-postcard-back">
+              <div className="gala-postcard-message">
+                <p>
+                  Every great trip ends with coming home. A portion of every travel package
+                  sold at the Gala comes back to SparkPoint, helping bring the{' '}
+                  <Link to="/resilience-hub">Transylvania Resilience Hub</Link> to life: one
+                  roof where people, organizations, and services come together.
+                </p>
+                <p className="gala-postcard-sign">With love from home, SparkPoint</p>
+              </div>
+              <div className="gala-postcard-address">
+                <div className="gala-postcard-stamp" aria-hidden="true">
+                  <span>✦</span>
+                  <small>Gives back</small>
+                </div>
+                <div className="gala-postcard-postmark" aria-hidden="true">
+                  <span>Brevard NC</span>
+                  <span>Dec 11 2026</span>
+                </div>
+                <p>
+                  <span>To:</span> Home
+                  <br />
+                  Transylvania County
+                  <br />
+                  North Carolina
+                </p>
+              </div>
+            </div>
+          </motion.article>
+
+          <ol className="gala-gives">
+            {GIVES_BACK.map((item, index) => (
+              <motion.li key={item.title} {...staggerReveal(index)}>
+                <span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                <h3>{item.title}</h3>
+                <p>{item.copy}</p>
               </motion.li>
             ))}
           </ol>
         </div>
       </section>
 
-      <section className="gala-next" aria-labelledby="gala-next-title">
-        <div className="gala-shell gala-next-inner">
-          <div>
-            <p className="gala-label">More to come</p>
-            <h2 id="gala-next-title">Venue, tickets, and the trip lineup are on the way.</h2>
-            <p>
-              Join the newsletter to hear first. Businesses and organizations interested
-              in sponsoring the Gala can reach out now.
-            </p>
-          </div>
-          <div className="gala-next-actions">
-            <Link className="gala-button gala-button-primary" to="/newsletter">
-              Get gala updates <ArrowRight aria-hidden="true" />
-            </Link>
-            <Link className="gala-button gala-button-outline" to="/intake?intent=partner">
-              Ask about sponsoring
-            </Link>
-          </div>
+      {/* 6 — Boarding pass */}
+      <section className="gala-close" aria-labelledby="close-title">
+        <div className="gala-shell">
+          <motion.div className="gala-section-head gala-section-head-center" {...reveal}>
+            <p className="gala-label">Venue, tickets, and destinations coming soon</p>
+            <h2 id="close-title">
+              Your seat <em>is waiting.</em>
+            </h2>
+          </motion.div>
+
+          <motion.div className="gala-boarding" {...reveal}>
+            <div className="gala-boarding-main">
+              <div className="gala-boarding-top">
+                <span>✦ SparkPoint Gala</span>
+                <span>Boarding pass</span>
+              </div>
+              <div className="gala-boarding-route">
+                <div>
+                  <small>From</small>
+                  <strong>BRV</strong>
+                  <span>Brevard, NC</span>
+                </div>
+                <svg viewBox="0 0 120 24" aria-hidden="true">
+                  <path d="M2 20 Q60 -8 118 20" />
+                </svg>
+                <div>
+                  <small>To</small>
+                  <strong>ANY</strong>
+                  <span>Anywhere</span>
+                </div>
+              </div>
+              <dl className="gala-boarding-fields">
+                <div>
+                  <dt>Passenger</dt>
+                  <dd>You</dd>
+                </div>
+                <div>
+                  <dt>Flight</dt>
+                  <dd>SPK 1211</dd>
+                </div>
+                <div>
+                  <dt>Date</dt>
+                  <dd>11 Dec 2026</dd>
+                </div>
+                <div>
+                  <dt>Boarding</dt>
+                  <dd>6:00 p.m.</dd>
+                </div>
+                <div>
+                  <dt>Gate</dt>
+                  <dd>TBA</dd>
+                </div>
+                <div>
+                  <dt>Seat</dt>
+                  <dd>Yours</dd>
+                </div>
+              </dl>
+            </div>
+            <div className="gala-boarding-stub">
+              <p>Be first to know when tickets and destinations are announced.</p>
+              <Link className="gala-button gala-button-gold" to="/newsletter">
+                Get boarding updates <ArrowRight aria-hidden="true" />
+              </Link>
+              <span className="gala-barcode" aria-hidden="true" />
+            </div>
+          </motion.div>
+
+          <motion.p className="gala-partner" {...reveal}>
+            Want your business on board? <Link to="/intake?intent=partner">Become a Gala travel partner</Link>
+          </motion.p>
         </div>
       </section>
     </div>
   );
+}
+
+// Staggered reveal for list items. A plain function so it can be
+// called inside .map; it reads reduced motion from the media query directly.
+function staggerReveal(index: number) {
+  if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+    return {};
+  }
+  return {
+    initial: { opacity: 0, y: 26 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: '-40px' },
+    transition: { duration: 0.55, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] as const },
+  };
 }

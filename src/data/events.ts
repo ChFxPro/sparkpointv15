@@ -54,7 +54,7 @@ export const EVENTS: SparkPointEvent[] = [
     locationName: 'Venue to be announced',
     locationLabel: 'Tickets and details coming soon',
     summary:
-      'An evening of connection and celebration, with a live auction of eight travel experiences where a portion of every trip supports the Transylvania Resilience Hub.',
+      'See the world. Strengthen home. An evening of connection and a live auction of eight travel experiences, with a portion of every trip coming home to support the Transylvania Resilience Hub.',
     detailPath: '/events/sparkpoint-gala',
     featured: true,
     teaser: true,
