@@ -4,7 +4,7 @@ import { Sparkmark } from '../components/Sparkmark';
 const BASE = import.meta.env.BASE_URL;
 const postcardImage = `${BASE}assets/events/gala/hub-winter-postcard.webp`;
 
-// USPS POSTNET for Brevard's ZIP, 28712 (SparkPoint's mailing ZIP): a frame
+// USPS POSTNET for 28712, SparkPoint's mailing ZIP: a frame
 // bar, five bars per digit (two tall, three short), a check digit, and a
 // closing frame bar. 1 = tall bar.
 const POSTNET_DIGITS: Record<string, string> = {
@@ -66,7 +66,7 @@ export function GalaPostcard() {
           </div>
 
           <span className="gala-postcard-divider" aria-hidden="true">
-            SparkPoint Gala · Travel that gives back · Brevard, NC
+            SparkPoint Gala · Travel that gives back · Transylvania County, NC
           </span>
 
           <div className="gala-postcard-address">
@@ -77,11 +77,16 @@ export function GalaPostcard() {
                     <path key={y} d={`M0 ${y} q 9 -5 18 0 t 18 0 t 18 0 t 18 0 t 18 0`} />
                   ))}
                 </g>
-                <circle cx="124" cy="38" r="31" />
-                <circle cx="124" cy="38" r="25" />
-                <text x="124" y="31">BREVARD NC</text>
-                <text x="124" y="42" className="is-date">DEC 11</text>
-                <text x="124" y="52">2026</text>
+                <defs>
+                  <path id="gala-postmark-ring" d="M124 38 m-27 0 a27 27 0 1 1 54 0 a27 27 0 1 1 -54 0" />
+                </defs>
+                <circle cx="124" cy="38" r="33" />
+                <circle cx="124" cy="38" r="20" />
+                <text className="is-ring">
+                  <textPath href="#gala-postmark-ring" startOffset="25%">TRANSYLVANIA CO · NC ·</textPath>
+                </text>
+                <text x="124" y="37" className="is-date">DEC 11</text>
+                <text x="124" y="47">2026</text>
               </svg>
               <div className="gala-postcard-stamp">
                 <div>
@@ -97,7 +102,7 @@ export function GalaPostcard() {
               <br />
               Transylvania County
               <br />
-              North Carolina 28712
+              North Carolina
             </p>
             <svg
               className="gala-postcard-zip"

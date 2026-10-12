@@ -15,7 +15,8 @@ function project(lon: number, lat: number): [number, number] {
   return [((lon + 180) / 360) * W, ((TOP - lat) / (TOP - BOTTOM)) * H];
 }
 
-const HOME = project(-82.73, 35.23); // Brevard, NC
+// Home base: Transylvania County, NC (marked at the county seat).
+const HOME = project(-82.73, 35.23);
 
 // ILLUSTRATIVE ONLY — these are spread across the map to suggest "anywhere",
 // not the actual auction trips. Replace with the real destinations (and add
@@ -68,7 +69,7 @@ export function GalaRouteMap() {
     <div ref={ref} className={visible ? 'gala-map is-visible' : 'gala-map'}>
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="gala-map-title">
         <title id="gala-map-title">
-          Eight illustrative travel routes leaving Brevard, North Carolina for destinations
+          Eight illustrative travel routes leaving Transylvania County, North Carolina for destinations
           around the world, with the giveback travelling home.
         </title>
         <image href={`${BASE}assets/events/gala/world-dots.svg`} width={W} height={H} opacity="0.55" />
@@ -111,7 +112,7 @@ export function GalaRouteMap() {
           <circle className="gala-map-pulse gala-map-pulse-2" r="7" />
           <circle r="9" className="gala-map-home-halo" />
           <image href={SPARKMARK_URL} x="-12" y="-12" width="24" height="24" />
-          <text x="-15" y="26" textAnchor="end">Brevard, NC</text>
+          <text x="-15" y="26" textAnchor="end">Transylvania County, NC</text>
         </g>
       </svg>
       <div className="gala-map-legend">

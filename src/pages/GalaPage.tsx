@@ -109,7 +109,7 @@ export default function GalaPage() {
         imageType="image/jpeg"
         imageWidth={1200}
         imageHeight={630}
-        keywords={['SparkPoint Gala', 'travel auction', 'Resilience Hub', 'Brevard', 'Transylvania County']}
+        keywords={['SparkPoint Gala', 'travel auction', 'Resilience Hub', 'Transylvania County', 'Western North Carolina']}
       />
 
       {/* 1 — Departures */}
@@ -239,7 +239,7 @@ export default function GalaPage() {
                     </defs>
                     <circle cx="50" cy="50" r="47" />
                     <text>
-                      <textPath href="#gala-seal-ring">SPARKPOINT · BREVARD NC · 2026 ·</textPath>
+                      <textPath href="#gala-seal-ring">SPARKPOINT · TRANSYLVANIA CO · 2026 ·</textPath>
                     </text>
                   </svg>
                   <Sparkmark variant="ink" size="36%" className="gala-passport-seal-mark" />
@@ -351,7 +351,7 @@ export default function GalaPage() {
                       <strong>{tag.occasion}</strong>
                       <p>{tag.line}</p>
                       <div className="gala-tag-route" aria-hidden="true">
-                        <span>BRV</span>
+                        <span>TCN</span>
                         <i />
                         <span>Anywhere</span>
                       </div>

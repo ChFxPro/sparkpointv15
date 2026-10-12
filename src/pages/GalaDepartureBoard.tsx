@@ -146,7 +146,7 @@ export function GalaDepartureBoard() {
       <div className="gala-board-inner" aria-hidden="true">
         <div className="gala-board-title">
           <span>Departures</span>
-          <span className="gala-board-clock">Brevard, NC · Home base</span>
+          <span className="gala-board-clock">Transylvania County · Home base</span>
         </div>
         <div className="gala-board-row gala-board-head">
           <span className="col-flight">Flight</span>

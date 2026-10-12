@@ -103,9 +103,9 @@ export function GalaBoardingPass() {
             <div className="gala-pass-route">
               <div>
                 <small>From</small>
-                <strong>BRV</strong>
+                <strong>TCN</strong>
                 <span>
-                  Brevard, <span className="gala-pass-long">North Carolina</span>
+                  Transylvania County, <span className="gala-pass-long">North Carolina</span>
                   <span className="gala-pass-short">NC</span>
                 </span>
               </div>
@@ -158,7 +158,7 @@ export function GalaBoardingPass() {
           </header>
           <div className="gala-pass-stub-body">
             <p className="gala-pass-stub-route" aria-hidden="true">
-              <b>BRV</b>
+              <b>TCN</b>
               <span />
               <b>ANY</b>
             </p>

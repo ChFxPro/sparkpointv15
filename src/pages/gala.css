@@ -763,9 +763,9 @@
 .gala-passport-seal text {
   fill: #8e2a5c;
   font-family: var(--gala-mono);
-  font-size: 9.4px;
+  font-size: 8px;
   font-weight: 700;
-  letter-spacing: 1.2px;
+  letter-spacing: 0.9px;
 }
 
 .gala-passport-seal path {
@@ -1524,6 +1524,11 @@
 
 .gala-postcard-postmark text.is-date {
   font-size: 10px;
+}
+
+.gala-postcard-postmark text.is-ring {
+  font-size: 6.4px;
+  letter-spacing: 0.9px;
 }
 
 .gala-postcard-to {
