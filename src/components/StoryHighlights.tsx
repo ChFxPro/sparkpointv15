@@ -135,7 +135,7 @@ export function StoryHighlights() {
               image={storyCollection.image}
               kicker="Now collecting"
               title="Every voice counts"
-              copy="Share your healthcare story — help us understand what's working, and what's not, across Transylvania County. Enter to win $100."
+              copy="Share your healthcare story — help us understand what's working, and what's not, across Transylvania County."
               ctaLabel="Share your story"
               ctaHref={storyCollection.formPath ?? '/stories'}
               delay={0.3}
