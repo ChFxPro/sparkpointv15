@@ -6,6 +6,7 @@ import {
   CalendarDays,
   Camera,
   Clock3,
+  ExternalLink,
   Mail,
   MapPin,
   Users,
@@ -13,6 +14,7 @@ import {
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { RecapMedia, hasRecapMedia, hasRecapVideo, recapPhotoCount } from './RuralHealthRecap';
+import { SponsorFlyover } from './RuralHealthSponsorFlyover';
 import uncHealthPardeeLogo from '../assets/sponsors/unc_health.png';
 import pisgahHealthFoundationLogo from '../assets/sponsors/phf.png';
 import transylvaniaRegionalHospitalLogo from '../assets/sponsors/trh.webp';
@@ -30,6 +32,38 @@ const PAGE_PATH = '/rural-health-convening';
 const IMPACT_HEALTH_URL = 'https://impacthealth.org';
 const BASE = import.meta.env.BASE_URL;
 const SPARKPOINT_LOGO = `${BASE}logo-wordmark.webp`;
+
+// Highlight photos placed through the recap (one per section, not a gallery). Each is
+// an `-800` / `-1600` WebP pair in public/assets/Rural Health/recap/highlights/, all
+// 1600×1067 at full size, selected from the October 1 event photography.
+function highlightSrc(name: string, width: 800 | 1600) {
+  return `${BASE}assets/Rural%20Health/recap/highlights/${name}-${width}.webp`;
+}
+
+function highlightSrcSet(name: string) {
+  return `${highlightSrc(name, 800)} 800w, ${highlightSrc(name, 1600)} 1600w`;
+}
+
+const outcomes = [
+  {
+    title: 'Connected across roles',
+    body: 'Relationships that bridge organizations and communities, started at the same table.',
+    photo: 'across-the-table',
+    alt: 'Two attendees in conversation across a round table in the event hall, one leaning in to listen.',
+  },
+  {
+    title: 'Walked the system',
+    body: 'Rural health access, explored together through the Field Simulator.',
+    photo: 'simulator-tablet',
+    alt: 'A small group gathers around a tablet as one participant points to the screen while working through the Rural Health Field Simulator.',
+  },
+  {
+    title: 'Carrying insight forward',
+    body: 'Through the Connection to Action cards, 30 new collaborative groups formed, each moving toward better access and care for rural communities.',
+    photo: 'action-cards',
+    alt: 'A hand-lettered “Connection to Action Cards” sign above rows of filled-in cards taped to a window, with the gravel patio and Adirondack chairs outside.',
+  },
+];
 
 function ruralHealthAsset(filename: string) {
   return `${BASE}assets/Rural%20Health/${encodeURIComponent(filename)}`;
@@ -184,6 +218,25 @@ const simulatorSteps = [
     body: 'See what each journey reveals about burden, trust, and the connections a stronger system needs.',
   },
 ];
+
+// Resources Maggie Sauer (Director, NC DHHS Office of Rural Health) asked us to share
+// with attendees, from Sarah's follow-up email. The block renders only while every
+// entry has a confirmed `href` — never fill one in with a guess. The NCMJ link is the
+// newsletter announcing the Fall 2026 issue, with the email's per-recipient `?e=`
+// tracking parameter removed.
+const briefingResources: { title: string; source: string; href: string | null }[] = [
+  {
+    title: 'New from the NC Medical Journal',
+    source: 'North Carolina Medical Journal · Fall 2026 issue',
+    href: 'https://mailchi.mp/nciom/new-from-the-nc-medical-journal-61777',
+  },
+  {
+    title: 'National Academies Initiative on Rural Well-Being',
+    source: 'National Academies of Sciences, Engineering, and Medicine',
+    href: 'https://nap.nationalacademies.org/resource/other/initiative-on-rural-wellbeing/',
+  },
+];
+const showBriefingResources = briefingResources.every((resource) => resource.href);
 
 const programLineup = [
   {
@@ -562,8 +615,10 @@ export function RuralHealthConveningPage() {
 
         {hasRecapMedia ? <RecapMedia /> : null}
 
+        <SponsorFlyover />
+
         <section className="rh-network-intro" aria-labelledby="rh-network-title">
-          <div className="rh-shell rh-network-grid">
+          <div className="rh-shell rh-network-grid rh-network-grid-photos">
             <div className="rh-compass" aria-hidden="true">
               ✦
             </div>
@@ -575,20 +630,25 @@ export function RuralHealthConveningPage() {
                 relationships that help rural communities thrive.
               </p>
             </div>
-            <div className="rh-network-outcomes" aria-label="What the convening made possible">
-              <p>
-                <strong>Connected across roles</strong>
-                Relationships that bridge organizations and communities.
-              </p>
-              <p>
-                <strong>Walked the system</strong>
-                Rural health access, explored together through the Field Simulator.
-              </p>
-              <p>
-                <strong>Carrying insight forward</strong>
-                Clearer connections and practical next steps to build on.
-              </p>
-            </div>
+            <ul className="rh-outcome-plates" aria-label="What the convening made possible">
+              {outcomes.map((outcome) => (
+                <li key={outcome.title}>
+                  <figure>
+                    <img
+                      src={highlightSrc(outcome.photo, 800)}
+                      srcSet={highlightSrcSet(outcome.photo)}
+                      sizes="(max-width: 720px) calc(100vw - 60px), (max-width: 1180px) 30vw, 440px"
+                      alt={outcome.alt}
+                      width={1600}
+                      height={1067}
+                      loading="lazy"
+                    />
+                  </figure>
+                  <h3>{outcome.title}</h3>
+                  <p>{outcome.body}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 
@@ -615,6 +675,19 @@ export function RuralHealthConveningPage() {
               </p>
             </div>
 
+            <figure className="rh-program-photo">
+              <img
+                src={highlightSrc('morning-program', 1600)}
+                srcSet={highlightSrcSet('morning-program')}
+                sizes="(max-width: 1528px) calc(100vw - 48px), 1480px"
+                alt="Seen from the back of the hall, a full room at round tables faces a speaker at the podium beneath wagon-wheel chandeliers."
+                width={1600}
+                height={1067}
+                loading="lazy"
+              />
+              <figcaption>The program, from the back of a full hall.</figcaption>
+            </figure>
+
             <div className="rh-program-list-heading">
               <p>What the day held</p>
             </div>
@@ -629,6 +702,37 @@ export function RuralHealthConveningPage() {
                 </li>
               ))}
             </ol>
+
+            {showBriefingResources ? (
+              <aside className="rh-resources" aria-labelledby="rh-resources-title">
+                <div className="rh-resources-copy">
+                  <p className="rh-resources-eyebrow">Shared by Maggie Sauer</p>
+                  <h3 id="rh-resources-title">Keep learning, together.</h3>
+                  <p>
+                    Maggie Sauer, Director of the NC DHHS Office of Rural Health, asked us to
+                    share two resources with attendees as we continue learning and moving this
+                    work forward together.
+                  </p>
+                </div>
+                <ul className="rh-resources-list">
+                  {briefingResources.map((resource) => (
+                    <li key={resource.title}>
+                      <a href={resource.href ?? undefined} target="_blank" rel="noopener noreferrer">
+                        <span className="rh-resources-source">{resource.source}</span>
+                        <strong>{resource.title}</strong>
+                        <ExternalLink aria-hidden="true" size={18} />
+                        <span className="sr-only"> (opens in a new tab)</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <p className="rh-resources-thanks">
+                  We are grateful to Maggie for sharing these resources and for her continued
+                  leadership and partnership in strengthening rural health across North
+                  Carolina.
+                </p>
+              </aside>
+            ) : null}
           </div>
         </section>
 
@@ -682,7 +786,7 @@ export function RuralHealthConveningPage() {
               <div className="rh-priority-note rh-recap-stamp">
                 <span>October 1, 2026</span>
                 <strong>Full house</strong>
-                <p>Every seat filled. So many connections made.</p>
+                <p>Every seat filled. 30 new collaborative groups formed.</p>
               </div>
 
               {!hasRecapMedia ? (
@@ -1058,11 +1162,21 @@ export function RuralHealthConveningPage() {
 
         <section className="rh-final-cta" aria-labelledby="rh-final-title">
           <div className="rh-shell">
+            <figure className="rh-final-photo">
+              <img
+                src={highlightSrc('every-connection-tent', 1600)}
+                srcSet={highlightSrcSet('every-connection-tent')}
+                sizes="(max-width: 1528px) calc(100vw - 48px), 1480px"
+                alt="Attendees gather under a SparkPoint tent whose banner reads “Every connection makes us stronger,” with the mountains behind them."
+                width={1600}
+                height={1067}
+                loading="lazy"
+              />
+            </figure>
             <h2 id="rh-final-title">Thank you for filling the room.</h2>
             <p>
               The connections made on October 1 are where the work continues. Stay close
-              for photos, video, and what comes next for rural health in Western North
-              Carolina.
+              for what comes next for rural health in Western North Carolina.
             </p>
             <div className="rh-actions rh-actions-centered">
               <Link className="rh-button rh-button-primary" to="/newsletter">
