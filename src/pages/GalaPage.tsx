@@ -7,12 +7,12 @@ import { SEOHead } from '../components/SEOHead';
 import { Sparkmark } from '../components/Sparkmark';
 import { GalaBoardingPass } from './GalaBoardingPass';
 import { GalaDepartureBoard } from './GalaDepartureBoard';
+import { GalaPostcard } from './GalaPostcard';
 import { GalaRouteMap } from './GalaRouteMap';
 import './gala.css';
 
 const BASE = import.meta.env.BASE_URL;
 const GALA_PATH = '/events/sparkpoint-gala';
-const postcardImage = `${BASE}assets/events/gala/hub-winter-postcard.webp`;
 // Hero photo: Astra Liu on Unsplash (photo-1539612793508, Unsplash License), with a
 // faint airline emblem on the winglet retouched out.
 const heroPhoto = (width: number) => `${BASE}assets/events/gala/hero-wing-${width}.webp`;
@@ -375,48 +375,9 @@ export default function GalaPage() {
             </h2>
           </motion.div>
 
-          <motion.article className="gala-postcard" {...reveal}>
-            <figure className="gala-postcard-front">
-              <img
-                src={postcardImage}
-                alt="Concept rendering of the Transylvania Resilience Hub in winter: a brick building with a glowing SparkPoint sign, lit windows, and snow on the ground."
-                loading="lazy"
-              />
-              <figcaption>
-                <span>Greetings from</span>
-                <strong>Home</strong>
-                <small>Transylvania Resilience Hub · concept rendering</small>
-              </figcaption>
-            </figure>
-            <div className="gala-postcard-back">
-              <div className="gala-postcard-message">
-                <p>
-                  Every great trip ends with coming home. A portion of every travel package
-                  sold at the Gala comes back to SparkPoint, helping bring the{' '}
-                  <Link to="/resilience-hub">Transylvania Resilience Hub</Link> to life: one
-                  roof where people, organizations, and services come together.
-                </p>
-                <p className="gala-postcard-sign">With love from home, SparkPoint</p>
-              </div>
-              <div className="gala-postcard-address">
-                <div className="gala-postcard-stamp" aria-hidden="true">
-                  <Sparkmark size="34px" />
-                  <small>Gives back</small>
-                </div>
-                <div className="gala-postcard-postmark" aria-hidden="true">
-                  <span>Brevard NC</span>
-                  <span>Dec 11 2026</span>
-                </div>
-                <p>
-                  <span>To:</span> Home
-                  <br />
-                  Transylvania County
-                  <br />
-                  North Carolina
-                </p>
-              </div>
-            </div>
-          </motion.article>
+          <motion.div className="gala-postcard-scene" {...reveal}>
+            <GalaPostcard />
+          </motion.div>
 
           <ol className="gala-gives">
             {GIVES_BACK.map((item, index) => (

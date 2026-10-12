@@ -1220,82 +1220,184 @@
     var(--gala-evergreen);
 }
 
+/* Postcard: linen card stock taped to the evergreen "tabletop". */
+.gala-postcard-scene {
+  margin-top: 56px;
+}
+
 .gala-postcard {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  margin-top: 52px;
-  color: var(--gala-ink);
-  background: #fbf6ea;
-  border-radius: 6px;
-  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
-  transform: rotate(-1deg);
-}
-
-.gala-postcard-front {
   position: relative;
-  margin: 14px;
-  overflow: hidden;
-  border-radius: 3px;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 8px;
+  padding: 14px;
+  color: var(--gala-ink);
+  background:
+    repeating-linear-gradient(0deg, rgba(120, 100, 60, 0.05) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(120, 100, 60, 0.05) 0 1px, transparent 1px 3px),
+    #fbf6ea;
+  border-radius: 4px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 2px 3px rgba(0, 0, 0, 0.25),
+    0 40px 70px rgba(0, 0, 0, 0.45);
+  transform: rotate(-1.2deg);
+  transition:
+    transform 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 600ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.gala-postcard-front img {
+.gala-postcard:hover {
+  transform: rotate(-0.3deg) translateY(-4px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 2px 3px rgba(0, 0, 0, 0.25),
+    0 52px 90px rgba(0, 0, 0, 0.5);
+}
+
+/* Translucent pink tape with torn ends. */
+.gala-tape {
+  position: absolute;
+  z-index: 3;
+  top: -16px;
+  width: 116px;
+  height: 34px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.12) 0 2px, transparent 2px 6px),
+    rgba(224, 54, 148, 0.42);
+  clip-path: polygon(0 8%, 6% 0, 12% 10%, 18% 2%, 24% 8%, 100% 4%, 96% 18%, 100% 34%, 95% 50%, 100% 66%, 96% 82%, 100% 96%, 0 100%, 4% 82%, 0 64%, 5% 48%, 0 30%, 4% 16%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  mix-blend-mode: multiply;
+}
+
+.gala-tape-left {
+  left: 6%;
+  transform: rotate(-8deg);
+}
+
+.gala-tape-right {
+  right: 8%;
+  transform: rotate(6deg);
+}
+
+/* Front: a bordered photo print with a big-letter greeting. */
+.gala-postcard-front {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+
+.gala-postcard-print {
+  position: relative;
+  overflow: hidden;
+  border: 8px solid #fffdf7;
+  box-shadow: 0 0 0 1px #e2d6bb;
+}
+
+.gala-postcard-print img {
   width: 100%;
   height: 100%;
   min-height: 340px;
   display: block;
   object-fit: cover;
+  filter: saturate(1.05) contrast(1.03);
 }
 
-.gala-postcard-front figcaption {
+.gala-postcard-print::after {
   position: absolute;
+  inset: 0;
+  content: '';
+  background: radial-gradient(ellipse at 50% 40%, transparent 55%, rgba(11, 19, 34, 0.35));
+  pointer-events: none;
+}
+
+.gala-postcard-print figcaption {
+  position: absolute;
+  z-index: 1;
   inset: auto 0 0;
-  padding: 60px 24px 20px;
-  color: white;
-  background: linear-gradient(0deg, rgba(11, 19, 34, 0.85), transparent);
+  display: grid;
+  justify-items: start;
+  padding: 70px 22px 18px;
+  background: linear-gradient(0deg, rgba(11, 19, 34, 0.82), transparent);
 }
 
-.gala-postcard-front figcaption span {
-  display: block;
+.gala-postcard-greet {
+  color: #fff8e6;
   font-family: var(--gala-display);
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   font-style: italic;
+  transform: rotate(-4deg);
+  transform-origin: left bottom;
 }
 
-.gala-postcard-front figcaption strong {
-  display: block;
+/* Vintage large-letter postcard lettering, in the sparkmark's colours. */
+.gala-postcard-big {
+  margin-top: -2px;
+  background: linear-gradient(180deg, #ffe39a 0%, #fdb515 38%, #f15f48 70%, #e03694 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 2px #fff8e6;
+  filter: drop-shadow(4px 5px 0 #0b1322);
   font-family: var(--gala-display);
-  font-size: clamp(3rem, 6vw, 4.6rem);
-  font-weight: 600;
-  font-style: italic;
+  font-size: clamp(3.6rem, 7.4vw, 5.6rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
   line-height: 0.9;
-  color: var(--gala-brass-light);
+  text-transform: uppercase;
 }
 
-.gala-postcard-front figcaption small {
-  display: block;
-  margin-top: 8px;
-  opacity: 0.7;
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
+.gala-postcard-place {
+  margin-top: 10px;
+  color: rgba(255, 248, 230, 0.85);
+  font-family: var(--gala-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 }
 
+.gala-postcard-credit {
+  color: #8a8172;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+}
+
+/* Back */
 .gala-postcard-back {
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 24px;
-  padding: 32px 30px 32px 10px;
+  grid-template-rows: auto 1fr;
+  padding: 10px 14px 14px 18px;
 }
 
-.gala-postcard-message {
-  padding-right: 22px;
-  border-right: 1px solid #ddd0b4;
+.gala-postcard-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #ddd0b4;
+  color: #8e2a5c;
+  font-family: var(--gala-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.gala-postcard-grid {
+  display: grid;
+  grid-template-columns: 1.25fr auto 1fr;
+  gap: 18px;
+  padding-top: 18px;
 }
 
 .gala-postcard-message p {
-  color: #2d2a33;
+  color: #1f3a66;
   font-family: var(--gala-display);
   font-size: 1.12rem;
   font-style: italic;
+  font-variation-settings: 'opsz' 36, 'SOFT' 100;
   line-height: 1.6;
 }
 
@@ -1305,76 +1407,150 @@
 }
 
 .gala-postcard-sign {
-  margin-top: 18px;
-  color: #8e2a5c !important;
+  display: grid;
+  margin-top: 16px;
+}
+
+.gala-postcard-sign span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.5rem;
+  font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
+  transform: rotate(-3deg);
+  transform-origin: left center;
+}
+
+/* Vertical divider with micro-printing, as on real postcard backs. */
+.gala-postcard-divider {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding-left: 6px;
+  border-left: 1px solid #ddd0b4;
+  color: #b3a07a;
+  font-family: var(--gala-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.2em;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .gala-postcard-address {
-  position: relative;
   display: grid;
   align-content: space-between;
-  gap: 24px;
+  gap: 18px;
 }
 
+.gala-postcard-postage {
+  position: relative;
+  min-height: 110px;
+}
+
+/* Perforated stamp: a pattern of holes in the padding ring only. */
 .gala-postcard-stamp {
-  justify-self: end;
-  width: 76px;
-  height: 92px;
+  --r: 3.5px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 92px;
+  padding: 7px;
+  background: #fffdf7;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+  -webkit-mask:
+    radial-gradient(var(--r) at var(--r) var(--r), #0000 97%, #000) calc(-1 * var(--r)) calc(-1 * var(--r)) / calc(3 * var(--r)) calc(3 * var(--r)) round,
+    linear-gradient(#000 0 0) content-box;
+  mask:
+    radial-gradient(var(--r) at var(--r) var(--r), #0000 97%, #000) calc(-1 * var(--r)) calc(-1 * var(--r)) / calc(3 * var(--r)) calc(3 * var(--r)) round,
+    linear-gradient(#000 0 0) content-box;
+  transform: rotate(3deg);
+}
+
+.gala-postcard-stamp > div {
   display: grid;
-  place-items: center;
-  align-content: center;
-  gap: 6px;
+  justify-items: center;
+  gap: 4px;
+  padding: 12px 6px 10px;
   color: var(--gala-brass-light);
-  background: linear-gradient(160deg, #1b2a48, var(--gala-midnight));
-  outline: 3px dotted #fbf6ea;
-  outline-offset: -5px;
-  border: 4px solid #fbf6ea;
-  box-shadow: 0 0 0 1px #ddd0b4;
-  font-size: 1.7rem;
-  transform: rotate(4deg);
+  background:
+    radial-gradient(circle at 50% 30%, rgba(217, 181, 106, 0.25), transparent 60%),
+    linear-gradient(160deg, #1b2a48, var(--gala-midnight));
+  box-shadow: inset 0 0 0 1px rgba(241, 217, 160, 0.4);
+}
+
+.gala-postcard-stamp b {
+  font-family: var(--gala-display);
+  font-size: 0.78rem;
+  font-weight: 600;
 }
 
 .gala-postcard-stamp small {
-  font-size: 0.52rem;
-  font-weight: 800;
+  font-family: var(--gala-mono);
+  font-size: 0.48rem;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
+/* Circular date stamp with wavy cancellation lines across the stamp. */
 .gala-postcard-postmark {
   position: absolute;
-  top: 38px;
-  right: 46px;
-  width: 92px;
-  height: 92px;
-  display: grid;
-  place-items: center;
-  align-content: center;
-  color: rgba(27, 26, 31, 0.6);
-  border: 2px solid rgba(27, 26, 31, 0.45);
-  border-radius: 50%;
-  font-family: var(--gala-mono);
-  font-size: 0.56rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  transform: rotate(-14deg);
+  z-index: 2;
+  top: 26px;
+  right: 62px;
+  width: 170px;
+  height: 80px;
+  overflow: visible;
+  mix-blend-mode: multiply;
+  opacity: 0.72;
+  transform: rotate(-8deg);
 }
 
-.gala-postcard-address p {
-  color: #2d2a33;
+.gala-postcard-postmark circle,
+.gala-postcard-waves path {
+  fill: none;
+  stroke: #2a2a33;
+  stroke-width: 1.6;
+}
+
+.gala-postcard-postmark text {
+  fill: #2a2a33;
+  font-family: var(--gala-mono);
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-anchor: middle;
+}
+
+.gala-postcard-postmark text.is-date {
+  font-size: 10px;
+}
+
+.gala-postcard-to {
+  color: #1f3a66;
   font-family: var(--gala-display);
   font-size: 1.05rem;
-  line-height: 2;
-  background: repeating-linear-gradient(180deg, transparent 0 calc(2em - 1px), #ddd0b4 calc(2em - 1px) 2em);
+  font-style: italic;
+  line-height: 2.1;
+  background: repeating-linear-gradient(180deg, transparent 0 calc(2.1em - 1px), #ddd0b4 calc(2.1em - 1px) 2.1em);
 }
 
-.gala-postcard-address p span {
+.gala-postcard-to span {
   color: #8a7754;
   font-family: var(--gala-mono);
-  font-size: 0.7rem;
+  font-size: 0.66rem;
+  font-style: normal;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+.gala-postcard-zip {
+  width: 130px;
+  height: 12px;
+}
+
+.gala-postcard-zip rect {
+  fill: #2a2a33;
 }
 
 .gala-gives {
@@ -1747,10 +1923,6 @@
   .gala-postcard {
     grid-template-columns: 1fr;
   }
-
-  .gala-postcard-back {
-    padding: 8px 28px 30px;
-  }
 }
 
 @media (max-width: 860px) {
@@ -1966,27 +2138,45 @@
   }
 
   .gala-postcard {
-    transform: none;
+    padding: 10px;
+    transform: rotate(-0.6deg);
   }
 
-  .gala-postcard-front img {
+  .gala-postcard-print img {
     min-height: 240px;
   }
 
   .gala-postcard-back {
+    padding: 4px 8px 12px;
+  }
+
+  .gala-postcard-grid {
     grid-template-columns: 1fr;
-    padding: 6px 20px 24px;
+  }
+
+  .gala-postcard-divider {
+    display: none;
   }
 
   .gala-postcard-message {
-    padding: 0 0 20px;
-    border-right: 0;
+    padding-bottom: 20px;
     border-bottom: 1px solid #ddd0b4;
   }
 
-  .gala-postcard-postmark {
-    top: 4px;
-    right: 90px;
+  .gala-tape {
+    width: 82px;
+  }
+
+  .gala-postcard-head {
+    gap: 8px;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    white-space: nowrap;
+  }
+
+  .gala-postcard-place {
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
   }
 
   .gala-pass-body {
@@ -2029,6 +2219,14 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .gala-postcard {
+    transition: none;
+  }
+
+  .gala-postcard:hover {
+    transform: rotate(-1.2deg);
+  }
+
   .gala-pass,
   .gala-pass-stub {
     transition: none;
