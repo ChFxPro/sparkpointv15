@@ -26,7 +26,7 @@ const STAMPS = [
   { shape: 'rect', top: '3 years', middle: 'to travel', bottom: 'From purchase', tilt: 5 },
   { shape: 'oval', top: 'No', middle: 'Blackout dates', bottom: 'Go when you like', tilt: -3 },
   { shape: 'rect', top: 'Live', middle: 'Auction', bottom: 'Professional auctioneer', tilt: -6 },
-  { shape: 'round', top: '2+', middle: 'Winners per trip', bottom: 'Same price', tilt: 7 },
+  { shape: 'round', top: 'Match', middle: 'The winning bid', bottom: 'Open to every guest', tilt: 7 },
   { shape: 'oval', top: '1 year', middle: 'Gala price locked', bottom: 'After the event', tilt: -4 },
 ];
 
@@ -309,9 +309,9 @@ export default function GalaPage() {
               the bidding on eight travel experiences to destinations around the world.
             </motion.p>
             <motion.p {...revealLate}>
-              <strong>More than one winner.</strong> Several guests can buy the same trip at its
-              auction price, and more travelers can lock in that Gala price for up to a year
-              after the event.
+              <strong>Match the winning bid.</strong> Once a trip sells, any guest at the Gala can buy
+              that same trip at the winning bid. And that Gala price stays locked in for up to a
+              year after the event.
             </motion.p>
           </div>
           <p className="gala-fine-print">
