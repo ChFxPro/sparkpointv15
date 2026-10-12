@@ -1687,13 +1687,27 @@
   line-height: 1.55;
 }
 
-.gala-pass-barcode {
-  width: 100%;
-  height: 52px;
+.gala-pass-code {
+  display: grid;
+  gap: 6px;
 }
 
-.gala-pass-barcode rect {
-  fill: var(--gala-ink);
+.gala-pass-code img {
+  width: 100%;
+  height: auto;
+  display: block;
+  /* PDF417 needs a quiet zone; the stub's padding provides it. */
+  image-rendering: crisp-edges;
+}
+
+.gala-pass-code figcaption {
+  color: #a8956d;
+  font-family: var(--gala-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .gala-partner {

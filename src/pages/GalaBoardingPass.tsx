@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react';
 import { useReducedMotion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router';
@@ -26,35 +26,16 @@ const FIELDS = [
   ['Zone', 'Everyone'],
 ];
 
-/** A deterministic PDF417-style barcode: rows of bars of varying width. */
-function useBarcode(rows = 9, width = 120) {
-  return useMemo(() => {
-    let seed = 1211;
-    const random = () => {
-      seed = (seed * 16807) % 2147483647;
-      return seed / 2147483647;
-    };
-    const rects: Array<{ x: number; y: number; w: number }> = [];
-    for (let row = 0; row < rows; row += 1) {
-      let x = 0;
-      while (x < width) {
-        const bar = 1 + Math.floor(random() * 3);
-        const gap = 1 + Math.floor(random() * 2);
-        if (x + bar > width) break;
-        rects.push({ x, y: row * 4, w: bar });
-        x += bar + gap;
-      }
-    }
-    return { rects, height: rows * 4 - 1 };
-  }, [rows, width]);
-}
+// A real PDF417 code (the format printed on paper boarding passes) that
+// encodes https://yoursparkpoint.org/events/sparkpoint-gala, so it scans.
+// Generated once with bwip-js; regenerate it if the page URL changes.
+const BARCODE = `${import.meta.env.BASE_URL}assets/events/gala/pass-pdf417.svg`;
 
 export function GalaBoardingPass() {
   const reduceMotion = useReducedMotion();
   const wrapRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
   const [canTilt, setCanTilt] = useState(false);
-  const barcode = useBarcode();
 
   useEffect(() => {
     setCanTilt(!reduceMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches);
@@ -185,16 +166,10 @@ export function GalaBoardingPass() {
             <Link className="gala-button gala-button-gold" to="/newsletter">
               Get boarding updates <ArrowRight aria-hidden="true" />
             </Link>
-            <svg
-              className="gala-pass-barcode"
-              viewBox={`0 0 120 ${barcode.height}`}
-              preserveAspectRatio="none"
-              aria-hidden="true"
-            >
-              {barcode.rects.map((rect, index) => (
-                <rect key={index} x={rect.x} y={rect.y} width={rect.w} height="3" />
-              ))}
-            </svg>
+            <figure className="gala-pass-code">
+              <img src={BARCODE} alt="" loading="lazy" />
+              <figcaption>Scan to open this page</figcaption>
+            </figure>
           </div>
         </div>
       </div>
