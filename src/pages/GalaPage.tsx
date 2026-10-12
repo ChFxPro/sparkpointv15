@@ -10,6 +10,8 @@ import './gala.css';
 const BASE = import.meta.env.BASE_URL;
 const GALA_PATH = '/events/sparkpoint-gala';
 const postcardImage = `${BASE}assets/events/gala/hub-winter-postcard.webp`;
+// Hero photo: Astra Liu on Unsplash (photo-1539612793508, Unsplash License).
+const heroPhoto = (width: number) => `${BASE}assets/events/gala/hero-wing-${width}.webp`;
 
 // Auction facts come from Sarah's travel-auction notes (2026-10-11). Keep off
 // this page: that board members may bid (internal), the AmFund contact, and
@@ -94,21 +96,25 @@ export default function GalaPage() {
         title="The SparkPoint Gala & Travel Auction | December 11, 2026"
         description="See the world. Strengthen home. Join the SparkPoint Gala on Friday, December 11, 2026 at 6 p.m. and bid on eight travel experiences in a live auction that gives back to Transylvania County’s Resilience Hub."
         path={GALA_PATH}
+        image="/assets/events/gala/gala-share.jpg"
+        imageAlt="An airplane wing above a sea of golden clouds at sunset."
+        imageType="image/jpeg"
+        imageWidth={1200}
+        imageHeight={630}
         keywords={['SparkPoint Gala', 'travel auction', 'Resilience Hub', 'Brevard', 'Transylvania County']}
       />
 
       {/* 1 — Departures */}
       <section className="gala-hero" aria-labelledby="gala-title">
-        <div className="gala-hero-globe" aria-hidden="true">
-          <svg viewBox="-110 -110 220 220">
-            <circle r="100" />
-            <ellipse rx="100" ry="34" />
-            <ellipse rx="100" ry="70" />
-            <ellipse rx="34" ry="100" />
-            <ellipse rx="70" ry="100" />
-            <line x1="-100" x2="100" />
-            <line y1="-100" y2="100" />
-          </svg>
+        <div className="gala-hero-photo" aria-hidden="true">
+          <img
+            src={heroPhoto(1400)}
+            srcSet={`${heroPhoto(800)} 800w, ${heroPhoto(1400)} 1400w, ${heroPhoto(2400)} 2400w`}
+            sizes="100vw"
+            alt=""
+            // React 18 drops camelCase fetchPriority; the spread emits the real attribute.
+            {...{ fetchpriority: 'high' }}
+          />
         </div>
         <div className="gala-shell gala-hero-inner">
           <motion.div className="gala-hero-copy" {...reveal}>

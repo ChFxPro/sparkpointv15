@@ -126,39 +126,54 @@
 .gala-hero {
   position: relative;
   overflow: hidden;
-  padding: 150px 0 110px;
+  padding: 170px 0 110px;
   color: var(--gala-ivory);
+  /* Flat under the photo, so its fade-out lands on exactly this colour. */
   background:
-    radial-gradient(ellipse at 85% 10%, rgba(217, 181, 106, 0.16), transparent 50%),
     radial-gradient(ellipse at 0% 100%, rgba(224, 54, 148, 0.14), transparent 45%),
-    linear-gradient(180deg, var(--gala-midnight), var(--gala-midnight-2));
+    var(--gala-midnight-2);
 }
 
-.gala-hero-globe {
+.gala-hero-copy h1,
+.gala-hero-lede,
+.gala-hero-facts {
+  text-shadow: 0 2px 24px rgba(11, 19, 34, 0.6);
+}
+
+.gala-hero-photo {
   position: absolute;
-  top: -120px;
-  right: -180px;
-  width: 720px;
-  opacity: 0.32;
+  inset: 0 0 auto;
+  height: min(100%, 980px);
+  overflow: hidden;
   pointer-events: none;
 }
 
-.gala-hero-globe svg {
+.gala-hero-photo img {
   width: 100%;
-  animation: gala-spin 140s linear infinite;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 70% 40%;
+  filter: saturate(1.12) contrast(1.04);
+  animation: gala-drift 16s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.gala-hero-globe circle,
-.gala-hero-globe ellipse,
-.gala-hero-globe line {
-  fill: none;
-  stroke: var(--gala-brass);
-  stroke-width: 0.35;
+/* Darken toward the headline, then fade into the night sky under the board. */
+.gala-hero-photo::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background:
+    linear-gradient(90deg, rgba(11, 19, 34, 0.82) 0%, rgba(11, 19, 34, 0.5) 34%, rgba(11, 19, 34, 0.08) 62%, transparent 100%),
+    linear-gradient(180deg, rgba(11, 19, 34, 0.45) 0%, transparent 18%, transparent 52%, rgba(20, 33, 58, 0.8) 78%, var(--gala-midnight-2) 96%);
 }
 
-@keyframes gala-spin {
+@keyframes gala-drift {
+  from {
+    transform: scale(1.08);
+  }
   to {
-    transform: rotate(360deg);
+    transform: scale(1);
   }
 }
 
@@ -224,20 +239,22 @@
 
 /* Split-flap board */
 .gala-board {
-  --cell: clamp(13px, 1.75vw, 22px);
-  padding: clamp(14px, 2vw, 26px);
-  background: linear-gradient(180deg, #05080f, #0a0f1a);
-  border: 1px solid rgba(217, 181, 106, 0.22);
+  padding: clamp(16px, 2.2vw, 30px);
+  background: linear-gradient(180deg, #1c2230, #141925);
+  border: 1px solid rgba(217, 181, 106, 0.3);
   border-radius: 18px;
   box-shadow:
-    0 40px 80px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 40px 80px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .gala-board-inner {
+  /* Tiles are sized from the board's own width so they always fill it:
+     N tiles, 2px between tiles, and a 0.9-tile gap between columns. */
+  container-type: inline-size;
+  --cell: min(34px, calc((100cqi - 72px) / 42.7)); /* 4 columns, 40 tiles */
   display: grid;
-  gap: 6px;
-  overflow: hidden;
+  gap: 7px;
 }
 
 .gala-board-title {
@@ -245,20 +262,20 @@
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 6px 20px;
-  margin-bottom: 10px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(217, 181, 106, 0.18);
-  color: var(--gala-brass);
+  margin-bottom: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(217, 181, 106, 0.25);
+  color: var(--gala-brass-light);
   font-family: var(--gala-display);
-  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+  font-size: clamp(1.5rem, 2.8vw, 2.3rem);
   font-style: italic;
 }
 
 .gala-board-clock {
   align-self: end;
-  color: rgba(247, 241, 229, 0.5);
+  color: rgba(247, 241, 229, 0.72);
   font-family: var(--gala-mono);
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-style: normal;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -272,9 +289,10 @@
 }
 
 .gala-board-head {
-  color: rgba(247, 241, 229, 0.42);
+  color: rgba(247, 241, 229, 0.75);
   font-family: var(--gala-mono);
-  font-size: 0.64rem;
+  font-size: 0.74rem;
+  font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
@@ -283,16 +301,13 @@
   display: block;
 }
 
-.gala-board-head .col-flight {
+.gala-board-head .col-flight,
+.gala-board-head .col-time {
   width: calc(var(--cell) * 7 + 2px * 6);
 }
 
 .gala-board-head .col-destination {
   width: calc(var(--cell) * 16 + 2px * 15);
-}
-
-.gala-board-head .col-time {
-  width: calc(var(--cell) * 7 + 2px * 6);
 }
 
 .gala-flap-group {
@@ -303,14 +318,15 @@
 .gala-flap {
   position: relative;
   width: var(--cell);
-  height: calc(var(--cell) * 1.42);
+  height: calc(var(--cell) * 1.4);
   display: grid;
   place-items: center;
-  color: #f4ecd9;
-  background: linear-gradient(180deg, #1b2130 0 49%, #141926 51% 100%);
+  color: #fffaf0;
+  background: linear-gradient(180deg, #0c0f16 0 49%, #07090e 51% 100%);
   border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   font-family: var(--gala-mono);
-  font-size: calc(var(--cell) * 0.78);
+  font-size: calc(var(--cell) * 0.8);
   font-weight: 700;
   line-height: 1;
 }
@@ -320,7 +336,8 @@
   inset: 50% 0 auto;
   height: 1px;
   content: '';
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.9);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .gala-flap.is-blank {
@@ -328,15 +345,38 @@
 }
 
 .gala-board-row.is-highlight .gala-flap {
-  color: var(--gala-brass-light);
+  color: #ffd98a;
 }
 
 .gala-board-row.is-highlight .col-status .gala-flap {
-  color: #6fe3a6;
+  color: #7cf2b4;
 }
 
 .gala-board-row:not(.is-highlight):not(.gala-board-head) .col-status .gala-flap {
-  color: #ff8fc8;
+  color: #ff9ccf;
+}
+
+@media (min-width: 1300px) {
+  /* Let the board run a little wider than the text column on big screens. */
+  .gala-board {
+    width: min(100vw - 48px, 1360px);
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 1100px) {
+  .gala-board-inner {
+    --cell: min(34px, calc((100cqi - 60px) / 34.8)); /* 3 columns, 33 tiles */
+  }
+
+  .gala-board .col-flight {
+    display: none;
+  }
+
+  .gala-board-row {
+    grid-template-columns: auto auto auto;
+  }
 }
 
 /* 2 — Routes */
@@ -1176,13 +1216,16 @@
 }
 
 @media (max-width: 860px) {
-  .gala-board {
-    --cell: clamp(11px, 3.4vw, 22px);
+  .gala-board-inner {
+    --cell: min(30px, calc((100cqi - 48px) / 26.9)); /* 2 columns, 26 tiles */
   }
 
-  .gala-board .col-time,
-  .gala-board .col-flight {
+  .gala-board .col-time {
     display: none;
+  }
+
+  .gala-board-row {
+    grid-template-columns: auto auto;
   }
 
   .gala-passport {
@@ -1239,9 +1282,17 @@
     padding: 124px 0 80px;
   }
 
-  .gala-hero-globe {
-    top: -60px;
-    right: -320px;
+  .gala-hero-photo {
+    height: 760px;
+  }
+
+  .gala-hero-photo img {
+    object-position: 78% 30%;
+  }
+
+  .gala-hero-photo::after {
+    background:
+      linear-gradient(180deg, rgba(11, 19, 34, 0.55) 0%, rgba(11, 19, 34, 0.7) 40%, rgba(20, 33, 58, 0.92) 75%, var(--gala-midnight-2) 100%);
   }
 
   .gala-hero-inner {
@@ -1254,10 +1305,20 @@
   }
 
   .gala-board {
-    /* 26 tiles (destination + status) across: shell gutter, board padding
-       and border, 24 tile gaps, and a 0.9-tile column gap. */
-    --cell: calc((100vw - 32px - 30px - 48px) / 26.9);
     padding: 14px;
+  }
+
+  /* Phones: destination tiles only, so they can be twice the size. */
+  .gala-board-inner {
+    --cell: min(26px, calc((100cqi - 30px) / 16));
+  }
+
+  .gala-board .col-status {
+    display: none;
+  }
+
+  .gala-board-row {
+    grid-template-columns: auto;
   }
 
   .gala-board-clock {
@@ -1343,7 +1404,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .gala-hero-globe svg,
+  .gala-hero-photo img,
   .gala-map-pulse {
     animation: none;
   }
