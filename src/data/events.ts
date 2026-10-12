@@ -10,6 +10,11 @@ export type EventCategory =
 export const COMMON_GROUND_PURCHASE_URL =
   'https://pisgahroasters.com/collections/limited-edition/products/commonground-premium-microlot-roast';
 
+// Monday WorkForm for Gala sponsor leads ("SparkPoint Gala · Travel Partners",
+// board 18435094223 in the SparkPoint workspace). Used by the seat-map teaser.
+export const GALA_PARTNER_FORM_URL =
+  'https://forms.monday.com/forms/8bc904c73a179d5be96939ed2c05b62a';
+
 export interface SparkPointEvent {
   id: string;
   title: string;

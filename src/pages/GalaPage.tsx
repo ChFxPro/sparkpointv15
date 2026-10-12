@@ -5,6 +5,7 @@ import type { CSSProperties } from 'react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { Sparkmark } from '../components/Sparkmark';
+import { GALA_PARTNER_FORM_URL } from '../data/events';
 import { GalaBoardingPass } from './GalaBoardingPass';
 import { GalaDepartureBoard } from './GalaDepartureBoard';
 import { GalaPostcard } from './GalaPostcard';
@@ -417,9 +418,14 @@ export default function GalaPage() {
                 Want first pick of seats? Tell us you’re interested, and we’ll reach out before
                 the seat map opens.
               </p>
-              <Link className="gala-button gala-button-plum" to="/intake?intent=partner">
+              <a
+                className="gala-button gala-button-plum"
+                href={GALA_PARTNER_FORM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Request early boarding <ArrowRight aria-hidden="true" />
-              </Link>
+              </a>
             </motion.aside>
           </div>
 

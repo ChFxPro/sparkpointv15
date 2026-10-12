@@ -1,12 +1,10 @@
 import { useMemo, useState, type CSSProperties } from 'react';
-import { useNavigate } from 'react-router';
+import { GALA_PARTNER_FORM_URL } from '../data/events';
 
 // A teaser seat map for Gala sponsorships ("travel partners"). Levels, prices
 // and seat counts aren't set yet, so every seat is "opening soon" and the
 // layout is illustrative: three cabins, not a real inventory. Once levels are
 // decided, give each seat a status (and a sponsor logo when claimed).
-
-const PARTNER_PATH = '/intake?intent=partner';
 
 type Cabin = 'first' | 'business' | 'main';
 
@@ -55,7 +53,6 @@ const TAIL_TOP = 'M890 118 L950 118 L985 66 L960 66 Z';
 const TAIL_BOTTOM = 'M890 302 L950 302 L985 354 L960 354 Z';
 
 export function GalaSeatMap() {
-  const navigate = useNavigate();
   const seats = useMemo(buildSeats, []);
   const [active, setActive] = useState<Seat | null>(null);
 
@@ -86,7 +83,7 @@ export function GalaSeatMap() {
           transform={`translate(${seat.x} ${seat.y - seat.size / 2})`}
           onPointerEnter={() => setActive(seat)}
           onPointerLeave={() => setActive((current) => (current?.id === seat.id ? null : current))}
-          onClick={() => navigate(PARTNER_PATH)}
+          onClick={() => window.open(GALA_PARTNER_FORM_URL, '_blank', 'noopener,noreferrer')}
         >
           {/* Passengers face the nose, so the seat back sits on the tail side. */}
           <rect className="gala-seat-cushion" x="0" y="0" width={seat.size * 0.8} height={seat.size} rx={seat.size * 0.22} />
