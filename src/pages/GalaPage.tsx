@@ -343,6 +343,7 @@ export default function GalaPage() {
                   <div className="gala-tag-body">
                     <span className="gala-tag-eyelet" aria-hidden="true" />
                     <Sparkmark variant="ink" size="22px" className="gala-tag-mark" />
+                    <div className="gala-tag-window">
                     <div className="gala-tag-card">
                       <div className="gala-tag-card-head">
                         <small>Occasion</small>
@@ -356,7 +357,11 @@ export default function GalaPage() {
                         <span>Anywhere</span>
                       </div>
                     </div>
-                    <span className="gala-tag-brand" aria-hidden="true">SparkPoint Gala</span>
+                    </div>
+                    <span className="gala-tag-brand" aria-hidden="true">
+                      <Sparkmark size="14px" />
+                      SparkPoint Gala
+                    </span>
                   </div>
                 </div>
               </motion.li>
