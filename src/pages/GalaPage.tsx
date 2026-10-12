@@ -10,7 +10,8 @@ import './gala.css';
 const BASE = import.meta.env.BASE_URL;
 const GALA_PATH = '/events/sparkpoint-gala';
 const postcardImage = `${BASE}assets/events/gala/hub-winter-postcard.webp`;
-// Hero photo: Astra Liu on Unsplash (photo-1539612793508, Unsplash License).
+// Hero photo: Astra Liu on Unsplash (photo-1539612793508, Unsplash License), with a
+// faint airline emblem on the winglet retouched out.
 const heroPhoto = (width: number) => `${BASE}assets/events/gala/hero-wing-${width}.webp`;
 
 // Auction facts come from Sarah's travel-auction notes (2026-10-11). Keep off
