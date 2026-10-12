@@ -5,6 +5,7 @@ import type { CSSProperties } from 'react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { Sparkmark } from '../components/Sparkmark';
+import { GalaBoardingPass } from './GalaBoardingPass';
 import { GalaDepartureBoard } from './GalaDepartureBoard';
 import { GalaRouteMap } from './GalaRouteMap';
 import './gala.css';
@@ -439,63 +440,8 @@ export default function GalaPage() {
             </h2>
           </motion.div>
 
-          <motion.div className="gala-boarding" {...reveal}>
-            <div className="gala-boarding-main">
-              <div className="gala-boarding-top">
-                <span>
-                  <Sparkmark size="22px" /> SparkPoint Gala
-                </span>
-                <span>Boarding pass</span>
-              </div>
-              <div className="gala-boarding-route">
-                <div>
-                  <small>From</small>
-                  <strong>BRV</strong>
-                  <span>Brevard, NC</span>
-                </div>
-                <svg viewBox="0 0 120 24" aria-hidden="true">
-                  <path d="M2 20 Q60 -8 118 20" />
-                </svg>
-                <div>
-                  <small>To</small>
-                  <strong>ANY</strong>
-                  <span>Anywhere</span>
-                </div>
-              </div>
-              <dl className="gala-boarding-fields">
-                <div>
-                  <dt>Passenger</dt>
-                  <dd>You</dd>
-                </div>
-                <div>
-                  <dt>Flight</dt>
-                  <dd>SPK 1211</dd>
-                </div>
-                <div>
-                  <dt>Date</dt>
-                  <dd>11 Dec 2026</dd>
-                </div>
-                <div>
-                  <dt>Boarding</dt>
-                  <dd>6:00 p.m.</dd>
-                </div>
-                <div>
-                  <dt>Gate</dt>
-                  <dd>TBA</dd>
-                </div>
-                <div>
-                  <dt>Seat</dt>
-                  <dd>Yours</dd>
-                </div>
-              </dl>
-            </div>
-            <div className="gala-boarding-stub">
-              <p>Be first to know when tickets and destinations are announced.</p>
-              <Link className="gala-button gala-button-gold" to="/newsletter">
-                Get boarding updates <ArrowRight aria-hidden="true" />
-              </Link>
-              <span className="gala-barcode" aria-hidden="true" />
-            </div>
+          <motion.div {...reveal}>
+            <GalaBoardingPass />
           </motion.div>
 
           <motion.p className="gala-partner" {...reveal}>

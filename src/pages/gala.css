@@ -1421,22 +1421,34 @@
     var(--gala-midnight);
 }
 
-.gala-boarding {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 300px;
-  max-width: 940px;
+/* First-class boarding pass */
+.gala-pass-wrap {
+  max-width: 980px;
   margin: 52px auto 0;
+  perspective: 1400px;
+}
+
+.gala-pass {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 290px;
   color: var(--gala-ink);
   filter: drop-shadow(0 34px 60px rgba(0, 0, 0, 0.5));
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.gala-boarding-main,
-.gala-boarding-stub {
-  background: #fbf6ea;
+.gala-pass-main,
+.gala-pass-stub {
+  position: relative;
+  overflow: hidden;
+  background:
+    repeating-radial-gradient(circle at 0% 100%, transparent 0 18px, rgba(122, 96, 52, 0.05) 18px 19px),
+    #fbf6ea;
 }
 
-.gala-boarding-main {
-  padding: 30px 34px 34px;
+/* Semicircle notches at the tear line. */
+.gala-pass-main {
   border-radius: 18px 0 0 18px;
   -webkit-mask: radial-gradient(circle at 100% 0, transparent 14px, #000 15px) top / 100% 51% no-repeat,
     radial-gradient(circle at 100% 100%, transparent 14px, #000 15px) bottom / 100% 51% no-repeat;
@@ -1444,90 +1456,177 @@
     radial-gradient(circle at 100% 100%, transparent 14px, #000 15px) bottom / 100% 51% no-repeat;
 }
 
-.gala-boarding-stub {
+.gala-pass-stub {
   display: grid;
-  align-content: center;
-  gap: 18px;
-  padding: 30px 28px;
+  grid-template-rows: auto 1fr;
   border-left: 2px dashed #d3c39e;
   border-radius: 0 18px 18px 0;
   -webkit-mask: radial-gradient(circle at 0 0, transparent 14px, #000 15px) top / 100% 51% no-repeat,
     radial-gradient(circle at 0 100%, transparent 14px, #000 15px) bottom / 100% 51% no-repeat;
   mask: radial-gradient(circle at 0 0, transparent 14px, #000 15px) top / 100% 51% no-repeat,
     radial-gradient(circle at 0 100%, transparent 14px, #000 15px) bottom / 100% 51% no-repeat;
+  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.gala-boarding-top {
+/* The stub eases away along the perforation, as if about to be torn off. */
+.gala-pass-wrap.can-tilt .gala-pass-stub:hover {
+  transform: translateX(8px) rotate(1.2deg);
+}
+
+/* Navy header band with foil lettering. */
+.gala-pass-band {
+  min-height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding-bottom: 18px;
-  border-bottom: 1px solid #e4d8bd;
-  color: #8e2a5c;
-  font-size: 0.72rem;
-  font-weight: 800;
+  padding: 12px 30px;
+  color: var(--gala-ivory);
+  background:
+    radial-gradient(ellipse at 15% 0%, rgba(217, 181, 106, 0.22), transparent 60%),
+    linear-gradient(120deg, #1b2a48, var(--gala-midnight));
+}
+
+.gala-pass-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--gala-display);
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.gala-pass-class {
+  display: grid;
+  justify-items: end;
+}
+
+.gala-pass-class small,
+.gala-pass-band-stub {
+  color: rgba(247, 241, 229, 0.62);
+  font-family: var(--gala-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
-.gala-boarding-route {
+.gala-pass-class b {
+  background: linear-gradient(100deg, #f6e2a8, #c9a24f 40%, #fff4d1 55%, #b58b3a 75%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: var(--gala-display);
+  font-size: 1.15rem;
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.gala-pass-band-stub {
+  padding: 16px 22px;
+}
+
+.gala-pass-body {
+  position: relative;
+  padding: 26px 30px 24px;
+}
+
+.gala-pass-watermark {
+  position: absolute;
+  top: 50%;
+  right: -40px;
+  color: rgba(142, 42, 92, 0.06);
+  transform: translateY(-50%) rotate(12deg);
+  pointer-events: none;
+}
+
+.gala-pass-route {
+  position: relative;
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 18px;
-  margin-top: 24px;
 }
 
-.gala-boarding-route small,
-.gala-boarding-fields dt {
+.gala-pass-route small,
+.gala-pass-fields dt,
+.gala-pass-note {
   display: block;
   color: #8a7754;
+  font-family: var(--gala-mono);
   font-size: 0.62rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
-.gala-boarding-route strong {
+.gala-pass-route strong {
   display: block;
-  font-family: var(--gala-display);
-  font-size: clamp(2.6rem, 6vw, 3.8rem);
-  font-weight: 600;
-  line-height: 1;
   color: var(--gala-midnight);
+  font-family: var(--gala-display);
+  font-size: clamp(2.8rem, 6.4vw, 4.4rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 0.95;
 }
 
-.gala-boarding-route span {
+.gala-pass-route span {
+  display: block;
+  margin-top: 4px;
   color: var(--gala-muted);
   font-size: 0.85rem;
 }
 
-.gala-boarding-route > div:last-child {
+.gala-pass-route > div:last-child {
   text-align: right;
 }
 
-.gala-boarding-route svg {
-  width: 100%;
-  height: 30px;
+.gala-pass-route span span {
+  display: inline;
+  margin: 0;
 }
 
-.gala-boarding-route path {
+.gala-pass-short {
+  display: none !important;
+}
+
+.gala-pass-route svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.gala-pass-arc {
   fill: none;
   stroke: var(--gala-pink);
-  stroke-dasharray: 3 5;
+  stroke-dasharray: 3 6;
   stroke-linecap: round;
   stroke-width: 2;
 }
 
-.gala-boarding-fields {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px 20px;
-  margin-top: 28px;
+.gala-pass-route circle {
+  fill: var(--gala-pink);
 }
 
-.gala-boarding-fields dd {
+.gala-pass-plane {
+  fill: var(--gala-midnight);
+  stroke: var(--gala-midnight);
+  stroke-linejoin: round;
+  stroke-width: 1;
+}
+
+.gala-pass-fields {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px 20px;
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid #e4d8bd;
+}
+
+.gala-pass-fields dd {
   margin-top: 4px;
   font-family: var(--gala-mono);
   font-size: 1.02rem;
@@ -1535,24 +1634,66 @@
   text-transform: uppercase;
 }
 
-.gala-boarding-stub p {
+.gala-pass-note {
+  position: relative;
+  margin-top: 24px;
+  padding-top: 14px;
+  border-top: 1px dashed #e4d8bd;
+  color: #a8956d;
+  font-size: 0.6rem;
+}
+
+/* Foil sheen that follows the pointer. */
+.gala-pass-foil {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 244, 209, 0.55), transparent 42%);
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  transition: opacity 400ms ease;
+  pointer-events: none;
+}
+
+.gala-pass-wrap.can-tilt:hover .gala-pass-foil {
+  opacity: 1;
+}
+
+.gala-pass-stub-body {
+  display: grid;
+  align-content: center;
+  gap: 16px;
+  padding: 24px 26px;
+}
+
+.gala-pass-stub-route {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--gala-midnight);
+  font-family: var(--gala-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.gala-pass-stub-route span {
+  flex: 1;
+  height: 0;
+  border-top: 2px dashed var(--gala-pink);
+}
+
+.gala-pass-stub-body > p:not(.gala-pass-stub-route) {
   color: var(--gala-muted);
   font-size: 0.95rem;
   line-height: 1.55;
 }
 
-.gala-barcode {
-  height: 46px;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--gala-ink) 0 2px,
-    transparent 2px 4px,
-    var(--gala-ink) 4px 5px,
-    transparent 5px 8px,
-    var(--gala-ink) 8px 11px,
-    transparent 11px 12px
-  );
-  opacity: 0.85;
+.gala-pass-barcode {
+  width: 100%;
+  height: 52px;
+}
+
+.gala-pass-barcode rect {
+  fill: var(--gala-ink);
 }
 
 .gala-partner {
@@ -1637,22 +1778,34 @@
     grid-template-columns: 1fr;
   }
 
-  .gala-boarding {
+  .gala-pass {
     grid-template-columns: 1fr;
   }
 
-  .gala-boarding-main {
+  .gala-pass-main {
     border-radius: 18px 18px 0 0;
-    -webkit-mask: none;
-    mask: none;
+    -webkit-mask: radial-gradient(circle at 0 100%, transparent 14px, #000 15px) left / 51% 100% no-repeat,
+      radial-gradient(circle at 100% 100%, transparent 14px, #000 15px) right / 51% 100% no-repeat;
+    mask: radial-gradient(circle at 0 100%, transparent 14px, #000 15px) left / 51% 100% no-repeat,
+      radial-gradient(circle at 100% 100%, transparent 14px, #000 15px) right / 51% 100% no-repeat;
   }
 
-  .gala-boarding-stub {
+  .gala-pass-stub {
     border-top: 2px dashed #d3c39e;
     border-left: 0;
     border-radius: 0 0 18px 18px;
-    -webkit-mask: none;
-    mask: none;
+    -webkit-mask: radial-gradient(circle at 0 0, transparent 14px, #000 15px) left / 51% 100% no-repeat,
+      radial-gradient(circle at 100% 0, transparent 14px, #000 15px) right / 51% 100% no-repeat;
+    mask: radial-gradient(circle at 0 0, transparent 14px, #000 15px) left / 51% 100% no-repeat,
+      radial-gradient(circle at 100% 0, transparent 14px, #000 15px) right / 51% 100% no-repeat;
+  }
+
+  .gala-pass-band-stub {
+    display: none;
+  }
+
+  .gala-pass-wrap.can-tilt .gala-pass-stub:hover {
+    transform: translateY(6px);
   }
 
   .gala-map svg {
@@ -1822,16 +1975,51 @@
     right: 90px;
   }
 
-  .gala-boarding-main {
-    padding: 24px 22px 26px;
+  .gala-pass-body {
+    padding: 22px 20px 20px;
   }
 
-  .gala-boarding-fields {
+  .gala-pass-band {
+    padding: 14px 20px;
+  }
+
+  .gala-pass-route {
+    grid-template-columns: auto minmax(56px, 1fr) auto;
+    align-items: start;
+    gap: 10px;
+  }
+
+  .gala-pass-route svg {
+    align-self: center;
+  }
+
+  .gala-pass-long {
+    display: none !important;
+  }
+
+  .gala-pass-short {
+    display: inline !important;
+  }
+
+  .gala-pass-brand {
+    font-size: 1.05rem;
+  }
+
+  .gala-pass-fields {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gala-pass-stub-body {
+    padding: 20px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .gala-pass,
+  .gala-pass-stub {
+    transition: none;
+  }
+
   .gala-passport-holo,
   .gala-hero-photo img,
   .gala-map-pulse {
@@ -1874,11 +2062,7 @@
   align-items: center;
 }
 
-.gala-boarding-top > span:first-child {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
+
 
 .gala-passport-emblem {
   position: relative;
