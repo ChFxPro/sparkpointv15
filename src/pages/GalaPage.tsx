@@ -13,6 +13,8 @@ const postcardImage = `${BASE}assets/events/gala/hub-winter-postcard.webp`;
 // Hero photo: Astra Liu on Unsplash (photo-1539612793508, Unsplash License), with a
 // faint airline emblem on the winglet retouched out.
 const heroPhoto = (width: number) => `${BASE}assets/events/gala/hero-wing-${width}.webp`;
+// Passport photo: Age Cymru on Unsplash (photo-1674140731715, Unsplash License).
+const passportPhoto = (width: number) => `${BASE}assets/events/gala/passport-bearer-${width}.webp`;
 
 // Auction facts come from Sarah's travel-auction notes (2026-10-11). Keep off
 // this page: that board members may bid (internal), the AmFund contact, and
@@ -192,48 +194,108 @@ export default function GalaPage() {
           </motion.div>
 
           <motion.div className="gala-passport" {...reveal}>
+            <span className="gala-passport-ribbon" aria-hidden="true" />
             <div className="gala-passport-page gala-passport-data">
-              <p className="gala-passport-issuer">
-                <span>SparkPoint Gala</span>
-                <span>Passport · Passeport</span>
-              </p>
+              <header className="gala-passport-issuer">
+                <span className="gala-passport-emblem" aria-hidden="true">
+                  <svg viewBox="0 0 40 40">
+                    <circle cx="20" cy="20" r="18" />
+                    <circle cx="20" cy="20" r="14.5" />
+                    <path d="M20 9 L22.6 17.4 L31 20 L22.6 22.6 L20 31 L17.4 22.6 L9 20 L17.4 17.4 Z" />
+                  </svg>
+                </span>
+                <span className="gala-passport-title">
+                  <b>SparkPoint Gala</b>
+                  <small>Passport · Passeport · Pasaporte</small>
+                </span>
+                <dl className="gala-passport-codes">
+                  <div>
+                    <dt>Type</dt>
+                    <dd>P</dd>
+                  </div>
+                  <div>
+                    <dt>Code</dt>
+                    <dd>SPK</dd>
+                  </div>
+                  <div>
+                    <dt>Passport No.</dt>
+                    <dd>GALA1211</dd>
+                  </div>
+                </dl>
+              </header>
+
               <div className="gala-passport-photo" aria-hidden="true">
-                <span>✦</span>
+                <img src={passportPhoto(300)} srcSet={`${passportPhoto(300)} 300w, ${passportPhoto(600)} 600w`} sizes="150px" alt="" loading="lazy" />
+                <span className="gala-passport-holo" />
+                <span className="gala-passport-seal">
+                  <svg viewBox="0 0 100 100">
+                    <defs>
+                      <path id="gala-seal-ring" d="M50 50 m-36 0 a36 36 0 1 1 72 0 a36 36 0 1 1 -72 0" />
+                    </defs>
+                    <circle cx="50" cy="50" r="47" />
+                    <text>
+                      <textPath href="#gala-seal-ring">SPARKPOINT ✦ BREVARD NC ✦ 2026 ✦</textPath>
+                    </text>
+                    <path d="M50 34 L53.5 46.5 L66 50 L53.5 53.5 L50 66 L46.5 53.5 L34 50 L46.5 46.5 Z" />
+                  </svg>
+                </span>
               </div>
+
               <dl className="gala-passport-fields">
+                <div className="is-wide">
+                  <dt>Bearer · Titulaire</dt>
+                  <dd className="is-name">You</dd>
+                </div>
                 <div>
-                  <dt>Bearer</dt>
-                  <dd>You</dd>
+                  <dt>Nationality</dt>
+                  <dd>Curious</dd>
                 </div>
                 <div>
                   <dt>Home port</dt>
                   <dd>Transylvania County, NC</dd>
                 </div>
                 <div>
+                  <dt>Date of issue</dt>
+                  <dd>11 Dec 2026</dd>
+                </div>
+                <div>
                   <dt>Valid for</dt>
                   <dd>3 years from purchase</dd>
                 </div>
-                <div>
+                <div className="is-wide">
                   <dt>Restrictions</dt>
                   <dd>None. No blackout dates.</dd>
                 </div>
               </dl>
+
+              <div className="gala-passport-sign">
+                <div>
+                  <span className="gala-passport-signature">Bon voyage!</span>
+                  <small>Signature of bearer</small>
+                </div>
+                <img className="gala-passport-ghost" src={passportPhoto(300)} alt="" aria-hidden="true" loading="lazy" />
+              </div>
+
               <p className="gala-passport-mrz" aria-hidden="true">
                 P&lt;SPK&lt;&lt;GALA&lt;&lt;DEC&lt;11&lt;2026&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
                 <br />
                 SEE&lt;THE&lt;WORLD&lt;&lt;STRENGTHEN&lt;HOME&lt;&lt;
               </p>
+              <span className="gala-passport-folio" aria-hidden="true">02</span>
             </div>
             <div className="gala-passport-page gala-passport-visas">
-              <p className="gala-passport-issuer">
-                <span>Visas · Entries</span>
-                <span>12</span>
-              </p>
+              <header className="gala-passport-issuer">
+                <span className="gala-passport-title">
+                  <b>Visas · Entries</b>
+                  <small>Admitted to the auction</small>
+                </span>
+              </header>
               <ul className="gala-stamps">
                 {STAMPS.map((stamp, index) => (
                   <Stamp key={stamp.middle} stamp={stamp} index={index} />
                 ))}
               </ul>
+              <span className="gala-passport-folio" aria-hidden="true">03</span>
             </div>
           </motion.div>
 

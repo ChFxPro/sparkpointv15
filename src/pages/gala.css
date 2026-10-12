@@ -541,21 +541,55 @@
     var(--gala-ivory);
 }
 
+/* Open passport resting on its navy leather cover. */
 .gala-passport {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin-top: 52px;
-  background: #e9dcc0;
-  border-radius: 14px;
+  padding: 14px;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.06), transparent 40%),
+    repeating-radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 3px),
+    linear-gradient(160deg, #1b2a48, #0e1830);
+  border-radius: 18px;
   box-shadow:
-    0 2px 0 #cbb98f,
-    0 30px 70px rgba(60, 44, 20, 0.22);
-  overflow: hidden;
+    inset 0 0 0 2px rgba(217, 181, 106, 0.55),
+    inset 0 0 0 5px #13203a,
+    inset 0 0 0 6px rgba(217, 181, 106, 0.35),
+    0 3px 0 #0a1224,
+    0 40px 80px rgba(20, 22, 40, 0.35);
+}
+
+/* Spine stitching between the pages. */
+.gala-passport::after {
+  position: absolute;
+  z-index: 2;
+  top: 26px;
+  bottom: 26px;
+  left: 50%;
+  width: 0;
+  content: '';
+  border-left: 2px dashed rgba(124, 106, 73, 0.45);
+  transform: translateX(-1px);
+  pointer-events: none;
+}
+
+.gala-passport-ribbon {
+  position: absolute;
+  z-index: 3;
+  top: -10px;
+  right: 9%;
+  width: 16px;
+  height: 120px;
+  background: linear-gradient(90deg, #a3245f, var(--gala-pink) 50%, #a3245f);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 86%, 0 100%);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
 .gala-passport-page {
   position: relative;
-  padding: clamp(24px, 3.4vw, 44px);
+  padding: clamp(24px, 3.2vw, 40px) clamp(24px, 3.2vw, 40px) clamp(36px, 3.6vw, 46px);
   background:
     repeating-radial-gradient(circle at 50% 120%, transparent 0 14px, rgba(122, 96, 52, 0.07) 14px 15px),
     repeating-linear-gradient(115deg, transparent 0 22px, rgba(224, 54, 148, 0.035) 22px 23px),
@@ -564,72 +598,252 @@
 
 .gala-passport-data {
   display: grid;
-  grid-template-columns: 116px 1fr;
-  grid-template-rows: auto 1fr auto;
-  gap: 24px 28px;
-  box-shadow: inset -18px 0 26px -20px rgba(60, 44, 20, 0.45);
+  grid-template-columns: 150px 1fr;
+  grid-template-areas:
+    'issuer issuer'
+    'photo fields'
+    'sign sign'
+    'mrz mrz';
+  gap: 22px 26px;
+  border-radius: 6px 0 0 6px;
+  box-shadow: inset -22px 0 30px -22px rgba(60, 44, 20, 0.55);
 }
 
 .gala-passport-visas {
-  box-shadow: inset 18px 0 26px -20px rgba(60, 44, 20, 0.45);
+  border-radius: 0 6px 6px 0;
+  box-shadow: inset 22px 0 30px -22px rgba(60, 44, 20, 0.55);
+}
+
+/* Faint world watermark on the visa page. */
+.gala-passport-visas::before {
+  position: absolute;
+  inset: 18% 6% 10%;
+  content: '';
+  background: url('/assets/events/gala/world-dots.svg') center / contain no-repeat;
+  opacity: 0.3;
+  filter: sepia(1) saturate(0.7) brightness(0.62);
+  pointer-events: none;
 }
 
 .gala-passport-issuer {
-  grid-column: 1 / -1;
+  grid-area: issuer;
   display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  color: #7c6a49;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #d8c7a1;
+}
+
+.gala-passport-emblem {
+  flex: none;
+  width: 44px;
+  height: 44px;
+}
+
+.gala-passport-emblem svg {
+  width: 100%;
+  height: 100%;
+}
+
+.gala-passport-emblem circle {
+  fill: none;
+  stroke: #b08d45;
+  stroke-width: 1.4;
+}
+
+.gala-passport-emblem path {
+  fill: #b08d45;
+}
+
+.gala-passport-title {
+  display: grid;
+  gap: 2px;
+  margin-right: auto;
+}
+
+.gala-passport-title b {
+  color: #3a2f1d;
+  font-family: var(--gala-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.gala-passport-title small,
+.gala-passport-codes dt,
+.gala-passport-fields dt,
+.gala-passport-sign small {
+  color: #8a7754;
   font-family: var(--gala-mono);
-  font-size: 0.68rem;
+  font-size: 0.6rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+}
+
+.gala-passport-codes {
+  display: flex;
+  gap: 16px;
+  text-align: right;
+}
+
+.gala-passport-codes dd {
+  margin-top: 2px;
+  color: #2d2618;
+  font-family: var(--gala-mono);
+  font-size: 0.86rem;
+  font-weight: 700;
 }
 
 .gala-passport-photo {
-  width: 116px;
-  height: 148px;
-  display: grid;
-  place-items: center;
-  color: var(--gala-pink);
-  background:
-    radial-gradient(circle at 50% 38%, rgba(224, 54, 148, 0.16) 0 22%, transparent 23%),
-    radial-gradient(ellipse at 50% 100%, rgba(224, 54, 148, 0.16) 0 40%, transparent 41%),
-    #f6eedc;
-  border: 1px solid #d8c7a1;
-  border-radius: 6px;
-  font-size: 1.6rem;
+  grid-area: photo;
+  position: relative;
+  align-self: start;
+  width: 150px;
+  aspect-ratio: 300 / 385;
+  padding: 5px;
+  background: #fbf6ea;
+  border: 1px solid #d3c09a;
+  box-shadow: 0 1px 2px rgba(60, 44, 20, 0.2);
 }
 
-.gala-passport-photo span {
-  margin-top: 44px;
+.gala-passport-photo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  filter: saturate(0.82) sepia(0.14) contrast(1.04);
+}
+
+/* Holographic laminate that catches the light as you move. */
+.gala-passport-holo {
+  position: absolute;
+  inset: 5px;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 9px, rgba(255, 255, 255, 0.07) 9px 10px),
+    conic-gradient(from 210deg at 70% 30%, rgba(255, 120, 200, 0.22), rgba(120, 220, 255, 0.2), rgba(255, 230, 140, 0.22), rgba(255, 120, 200, 0.22));
+  background-size: 100% 100%, 220% 220%;
+  mix-blend-mode: soft-light;
+  animation: gala-holo 7s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes gala-holo {
+  from {
+    background-position: 0 0, 0% 0%;
+  }
+  to {
+    background-position: 0 0, 100% 100%;
+  }
+}
+
+.gala-passport-seal {
+  position: absolute;
+  left: -24px;
+  bottom: -22px;
+  width: 78px;
+  height: 78px;
+  transform: rotate(-14deg);
+  mix-blend-mode: multiply;
+  opacity: 0.75;
+}
+
+.gala-passport-seal svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.gala-passport-seal circle {
+  fill: none;
+  stroke: #8e2a5c;
+  stroke-width: 2;
+}
+
+.gala-passport-seal text {
+  fill: #8e2a5c;
+  font-family: var(--gala-mono);
+  font-size: 9.4px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
+
+.gala-passport-seal path {
+  fill: #8e2a5c;
 }
 
 .gala-passport-fields {
+  grid-area: fields;
   display: grid;
+  grid-template-columns: 1fr 1fr;
   align-content: start;
-  gap: 14px;
+  gap: 14px 18px;
 }
 
-.gala-passport-fields dt {
-  color: #8a7754;
-  font-size: 0.64rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+.gala-passport-fields .is-wide {
+  grid-column: 1 / -1;
 }
 
 .gala-passport-fields dd {
-  margin-top: 2px;
+  margin-top: 3px;
   color: var(--gala-ink);
   font-family: var(--gala-display);
-  font-size: 1.2rem;
+  font-size: 1.08rem;
+  line-height: 1.25;
+}
+
+.gala-passport-fields dd.is-name {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.gala-passport-sign {
+  grid-area: sign;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.gala-passport-sign > div {
+  flex: 1;
+  max-width: 300px;
+  display: grid;
+  gap: 4px;
+  border-bottom: 1px solid #b8a37a;
+}
+
+.gala-passport-signature {
+  color: #1f3a66;
+  font-family: var(--gala-display);
+  font-size: 1.9rem;
+  font-style: italic;
+  font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
+  transform: rotate(-4deg);
+  transform-origin: left bottom;
+}
+
+.gala-passport-sign small {
+  margin-bottom: -18px;
+  padding-top: 2px;
+}
+
+/* Ghost image: the faint security duplicate of the photo. */
+.gala-passport-ghost {
+  width: 46px;
+  height: 59px;
+  object-fit: cover;
+  filter: grayscale(1) contrast(0.7) brightness(1.15);
+  mix-blend-mode: multiply;
+  opacity: 0.32;
 }
 
 .gala-passport-mrz {
-  grid-column: 1 / -1;
-  padding-top: 18px;
+  grid-area: mrz;
+  margin-top: 8px;
+  padding: 12px 0 0;
   border-top: 1px solid #d8c7a1;
   color: #4d4433;
   font-family: var(--gala-mono);
@@ -639,7 +853,25 @@
   overflow-wrap: anywhere;
 }
 
+.gala-passport-folio {
+  position: absolute;
+  bottom: 12px;
+  color: #a8956d;
+  font-family: var(--gala-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+}
+
+.gala-passport-data .gala-passport-folio {
+  left: 18px;
+}
+
+.gala-passport-visas .gala-passport-folio {
+  right: 18px;
+}
+
 .gala-stamps {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 22px 14px;
@@ -1234,11 +1466,20 @@
 
   .gala-passport-data,
   .gala-passport-visas {
+    border-radius: 6px;
     box-shadow: none;
   }
 
   .gala-passport-visas {
-    border-top: 1px dashed #cbb98f;
+    margin-top: 10px;
+  }
+
+  .gala-passport::after {
+    display: none;
+  }
+
+  .gala-passport-ribbon {
+    right: 40px;
   }
 
   .gala-passport-notes {
@@ -1332,18 +1573,37 @@
     padding-block: 76px;
   }
 
+  .gala-passport {
+    padding: 10px;
+  }
+
   .gala-passport-data {
-    grid-template-columns: 84px 1fr;
+    grid-template-columns: 110px 1fr;
+    grid-template-areas:
+      'issuer issuer'
+      'photo photo'
+      'fields fields'
+      'sign sign'
+      'mrz mrz';
     gap: 18px;
   }
 
-  .gala-passport-photo {
-    width: 84px;
-    height: 108px;
+  .gala-passport-codes {
+    display: none;
   }
 
-  .gala-passport-photo span {
-    margin-top: 30px;
+  .gala-passport-photo {
+    width: 128px;
+  }
+
+  .gala-passport-seal {
+    left: auto;
+    right: -56px;
+    bottom: 8px;
+  }
+
+  .gala-passport-fields dd.is-name {
+    font-size: 1.7rem;
   }
 
   .gala-stamps {
@@ -1404,6 +1664,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .gala-passport-holo,
   .gala-hero-photo img,
   .gala-map-pulse {
     animation: none;
