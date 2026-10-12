@@ -29,10 +29,10 @@ export interface SparkPointEvent {
   imageAlt?: string;
   featured?: boolean;
   partnerLine?: string;
-  // A save-the-date: announced before there is a venue, photo, or detail page.
-  // The Events page gives it a typographic panel instead of the photo layout,
-  // and it never lists under Past Gatherings — fill in the details (and drop
-  // this flag) once they exist.
+  // A save-the-date: announced before there is a venue or photo. The Events
+  // page gives it a typographic panel instead of the photo layout (linking to
+  // `detailPath` when there is one), and it never lists under Past Gatherings.
+  // Drop this flag once the venue and a photo are in.
   teaser?: boolean;
 }
 
@@ -54,7 +54,8 @@ export const EVENTS: SparkPointEvent[] = [
     locationName: 'Venue to be announced',
     locationLabel: 'Tickets and details coming soon',
     summary:
-      'An evening to celebrate the people, partners, and connections that carried SparkPoint through 2026—and to look ahead to what we build together next.',
+      'An evening of connection and celebration, with a live auction of eight travel experiences where a portion of every trip supports the Transylvania Resilience Hub.',
+    detailPath: '/events/sparkpoint-gala',
     featured: true,
     teaser: true,
   },

@@ -72,17 +72,19 @@ function SaveTheDate({ event }: { event: SparkPointEvent }) {
             <p className="sp-featured-summary">{event.summary}</p>
             <EventFacts event={event} />
             <p className="sp-event-partner-line">
-              Venue, tickets, and sponsorship opportunities will be announced here first.
+              Venue and tickets will be announced here first.
             </p>
             <div className="sp-event-actions">
-              <Link className="sp-event-button sp-event-button-primary" to="/newsletter">
-                Get gala updates <ArrowRight aria-hidden="true" />
-              </Link>
+              {event.detailPath ? (
+                <Link className="sp-event-button sp-event-button-primary" to={event.detailPath}>
+                  Explore the gala <ArrowRight aria-hidden="true" />
+                </Link>
+              ) : null}
               <Link
-                className="sp-event-button sp-event-button-secondary"
-                to="/intake?intent=partner"
+                className={`sp-event-button ${event.detailPath ? 'sp-event-button-secondary' : 'sp-event-button-primary'}`}
+                to="/newsletter"
               >
-                Ask about sponsoring
+                Get updates
               </Link>
             </div>
           </div>
@@ -108,8 +110,8 @@ function EventCard({ event }: { event: SparkPointEvent }) {
           <h3>{event.title}</h3>
           <p>{event.summary}</p>
           <EventFacts event={event} compact />
-          <Link className="sp-event-text-link" to="/newsletter">
-            Get updates <ArrowRight aria-hidden="true" />
+          <Link className="sp-event-text-link" to={event.detailPath ?? '/newsletter'}>
+            {event.detailPath ? 'Event details' : 'Get updates'} <ArrowRight aria-hidden="true" />
           </Link>
         </div>
       </article>

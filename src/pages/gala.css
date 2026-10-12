@@ -1,0 +1,584 @@
+.gala-page {
+  --gala-ink: #1a1a1a;
+  --gala-night: #1d1220;
+  --gala-plum: #2b1730;
+  --gala-pink: #e03694;
+  --gala-gold: #fdb515;
+  --gala-coral: #f15f48;
+  --gala-paper: #fdfaf4;
+  color: var(--gala-ink);
+  background: var(--gala-paper);
+}
+
+.gala-shell {
+  width: min(100% - 48px, 1152px);
+  margin-inline: auto;
+}
+
+.gala-label,
+.gala-kicker {
+  color: var(--gala-pink);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Hero */
+.gala-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 160px 0 96px;
+  color: white;
+  background:
+    radial-gradient(circle at 78% 30%, rgba(253, 181, 21, 0.18), transparent 42%),
+    linear-gradient(150deg, var(--gala-night), var(--gala-plum) 55%, #4d2142);
+}
+
+.gala-hero::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: 6px;
+  content: '';
+  background: linear-gradient(90deg, var(--gala-pink), var(--gala-gold), var(--gala-coral));
+}
+
+.gala-hero-sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.gala-hero-ring {
+  position: absolute;
+  top: 50%;
+  right: -120px;
+  width: 560px;
+  height: 560px;
+  border: 1px solid rgba(253, 181, 21, 0.22);
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.gala-hero-ring-2 {
+  right: -40px;
+  width: 400px;
+  height: 400px;
+  border-color: rgba(224, 54, 148, 0.24);
+}
+
+.gala-hero-route {
+  position: absolute;
+  right: 4%;
+  bottom: 14%;
+  width: min(56%, 640px);
+  height: 240px;
+}
+
+.gala-hero-route path {
+  fill: none;
+  stroke: rgba(253, 181, 21, 0.5);
+  stroke-dasharray: 2 10;
+  stroke-linecap: round;
+  stroke-width: 2;
+}
+
+.gala-hero-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.gala-hero-inner > div {
+  max-width: 720px;
+}
+
+.gala-kicker {
+  color: var(--gala-gold);
+}
+
+.gala-hero h1 {
+  margin-top: 16px;
+  font-size: clamp(3.3rem, 8vw, 6.4rem);
+  font-weight: 760;
+  letter-spacing: -0.055em;
+  line-height: 0.92;
+}
+
+.gala-hero-lede {
+  max-width: 600px;
+  margin-top: 26px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  font-style: italic;
+  line-height: 1.55;
+}
+
+.gala-hero-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin-top: 32px;
+}
+
+.gala-hero-facts > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gala-hero-facts svg {
+  width: 18px;
+  height: 18px;
+  color: var(--gala-gold);
+}
+
+.gala-hero-facts dd {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.gala-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 36px;
+}
+
+.gala-button {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 22px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 760;
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.gala-button:hover {
+  transform: translateY(-2px);
+}
+
+.gala-button svg {
+  width: 17px;
+  height: 17px;
+}
+
+.gala-button-primary {
+  color: white;
+  background: linear-gradient(135deg, var(--gala-pink), #9e509f);
+  box-shadow: 0 10px 24px rgba(224, 54, 148, 0.25);
+}
+
+.gala-button-ghost {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.gala-button-outline {
+  color: var(--gala-pink);
+  border-color: rgba(224, 54, 148, 0.35);
+  background: white;
+}
+
+/* Travel auction */
+.gala-auction {
+  padding: 96px 0 88px;
+}
+
+.gala-section-head {
+  max-width: 760px;
+}
+
+.gala-section-head h2,
+.gala-gives-head h2,
+.gala-next h2 {
+  margin-top: 12px;
+  font-size: clamp(2.1rem, 4.4vw, 3.6rem);
+  font-weight: 740;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+}
+
+.gala-section-head > p:last-child {
+  margin-top: 20px;
+  color: #5d5860;
+  font-size: 1.12rem;
+  line-height: 1.7;
+}
+
+/* Boarding pass */
+.gala-pass {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 230px;
+  margin-top: 48px;
+  overflow: hidden;
+  background: white;
+  border: 1px solid #eadfe6;
+  border-radius: 22px;
+  box-shadow: 0 22px 54px rgba(52, 23, 45, 0.12);
+}
+
+.gala-pass-main {
+  padding: 28px 34px 34px;
+}
+
+.gala-pass-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0e8ed;
+  color: #8a8290;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.gala-pass-top span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gala-pass-top svg {
+  width: 16px;
+  height: 16px;
+  color: var(--gala-pink);
+}
+
+.gala-pass-facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 26px;
+}
+
+.gala-pass-facts li {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+}
+
+.gala-pass-facts strong {
+  color: var(--gala-plum);
+  font-size: clamp(3rem, 5vw, 4.2rem);
+  font-weight: 760;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+}
+
+.gala-pass-facts b {
+  color: var(--gala-pink);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.gala-pass-facts span {
+  color: #6d6870;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.gala-pass-stub {
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  padding: 28px;
+  color: white;
+  background: linear-gradient(160deg, var(--gala-plum), var(--gala-night));
+  border-left: 2px dashed rgba(253, 181, 21, 0.45);
+}
+
+.gala-pass-stub span {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.gala-pass-stub strong {
+  margin-bottom: 14px;
+  color: var(--gala-gold);
+  font-size: 1.2rem;
+  font-weight: 760;
+  line-height: 1.2;
+}
+
+.gala-pass-stub strong:last-child {
+  margin-bottom: 0;
+}
+
+.gala-auction-notes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 26px;
+}
+
+.gala-auction-notes article {
+  padding: 28px;
+  background: white;
+  border: 1px solid #eee6eb;
+  border-radius: 18px;
+}
+
+.gala-auction-notes svg {
+  width: 26px;
+  height: 26px;
+  color: var(--gala-pink);
+}
+
+.gala-auction-notes h3 {
+  margin-top: 14px;
+  font-size: 1.3rem;
+  font-weight: 730;
+  letter-spacing: -0.02em;
+}
+
+.gala-auction-notes p {
+  margin-top: 10px;
+  color: #615c64;
+  line-height: 1.65;
+}
+
+.gala-occasions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 18px;
+  margin-top: 40px;
+}
+
+.gala-occasions > p {
+  color: #8a8290;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+}
+
+.gala-occasions ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.gala-occasions li {
+  padding: 8px 16px;
+  color: var(--gala-plum);
+  background: #fbeef5;
+  border: 1px solid #f3d6e6;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.gala-fine-print {
+  margin-top: 26px;
+  color: #8a8290;
+  font-size: 0.85rem;
+}
+
+/* Travel that gives back */
+.gala-gives {
+  padding: 96px 0;
+  color: white;
+  background: linear-gradient(150deg, var(--gala-night), var(--gala-plum));
+}
+
+.gala-gives-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 64px;
+  align-items: start;
+}
+
+.gala-gives-head > svg {
+  width: 34px;
+  height: 34px;
+  margin-bottom: 18px;
+  color: var(--gala-gold);
+}
+
+.gala-gives-head .gala-label {
+  color: var(--gala-gold);
+}
+
+.gala-gives-head > p:last-child {
+  margin-top: 20px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 1.1rem;
+  line-height: 1.65;
+}
+
+.gala-gives-head a {
+  color: var(--gala-gold);
+  text-underline-offset: 3px;
+}
+
+.gala-gives-list {
+  display: grid;
+  gap: 4px;
+}
+
+.gala-gives-list li {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 16px;
+  padding: 24px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.gala-gives-list li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.gala-gives-list li > span {
+  color: var(--gala-pink);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  padding-top: 4px;
+}
+
+.gala-gives-list h3 {
+  font-size: 1.25rem;
+  font-weight: 730;
+  letter-spacing: -0.02em;
+}
+
+.gala-gives-list p {
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.65;
+}
+
+/* More to come */
+.gala-next {
+  padding: 80px 0;
+  background: linear-gradient(135deg, #fbf1f7, #fffaf0);
+  border-bottom: 1px solid #f0e3eb;
+}
+
+.gala-next-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+}
+
+.gala-next-inner > div:first-child {
+  max-width: 640px;
+}
+
+.gala-next-inner p:not(.gala-label) {
+  margin-top: 14px;
+  color: #68636b;
+  line-height: 1.65;
+}
+
+.gala-next-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 920px) {
+  .gala-pass {
+    grid-template-columns: 1fr;
+  }
+
+  .gala-pass-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gala-pass-stub {
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+    gap: 6px 16px;
+    border-top: 2px dashed rgba(253, 181, 21, 0.45);
+    border-left: 0;
+  }
+
+  .gala-pass-stub strong {
+    margin-bottom: 0;
+  }
+
+  .gala-gives-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .gala-next-inner {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  .gala-shell {
+    width: min(100% - 32px, 560px);
+  }
+
+  .gala-hero {
+    padding: 128px 0 72px;
+  }
+
+  .gala-hero-ring {
+    right: -260px;
+  }
+
+  .gala-hero-route {
+    display: none;
+  }
+
+  .gala-auction,
+  .gala-gives {
+    padding: 68px 0;
+  }
+
+  .gala-pass-main {
+    padding: 22px 22px 26px;
+  }
+
+  .gala-pass-facts {
+    gap: 22px 16px;
+  }
+
+  .gala-auction-notes {
+    grid-template-columns: 1fr;
+  }
+
+  .gala-actions,
+  .gala-next-actions,
+  .gala-button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gala-button {
+    transition: none;
+  }
+
+  .gala-button:hover {
+    transform: none;
+  }
+}

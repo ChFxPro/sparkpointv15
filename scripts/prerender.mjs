@@ -82,7 +82,7 @@ const UNLISTED = new Set(['/rural-health-convening/photos']);
 const STATIC = ['/', '/about', '/mission', '/impact', '/programs', '/programs/purpose-workshops',
   '/get-involved', '/community-connectors', '/partners', '/resilience-hub', '/directory', '/press', '/stories', '/events',
   '/trust', '/privacy', '/intake', '/resources/know-your-numbers', '/rural-health-convening',
-  '/events/thrive-at-five',
+  '/events/thrive-at-five', '/events/sparkpoint-gala',
   // Hand-written route in App.tsx (HeleneOneYearArticle) rather than a stories.ts entry,
   // so route derivation never picked it up and it had no build output — meaning the
   // /helene-one-year-of-healing redirect had been pointing at a hard 404 this whole time.
