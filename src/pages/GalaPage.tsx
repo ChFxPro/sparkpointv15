@@ -1,8 +1,10 @@
 import '@fontsource-variable/fraunces';
 import { motion, useReducedMotion } from 'motion/react';
 import { ArrowRight, CalendarDays, Clock3, MapPin } from 'lucide-react';
+import type { CSSProperties } from 'react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
+import { Sparkmark } from '../components/Sparkmark';
 import { GalaDepartureBoard } from './GalaDepartureBoard';
 import { GalaRouteMap } from './GalaRouteMap';
 import './gala.css';
@@ -28,12 +30,14 @@ const STAMPS = [
   { shape: 'oval', top: '1 year', middle: 'Gala price locked', bottom: 'After the event', tilt: -4 },
 ];
 
+// Leather luggage tags. `code` is a playful airport-style code; `tilt` and
+// `drop` (strap length) vary so the row hangs naturally from its rail.
 const TAGS = [
-  { occasion: 'Anniversary', line: 'Celebrate the years somewhere new.' },
-  { occasion: 'Milestone birthday', line: 'Mark the big one with a bigger view.' },
-  { occasion: 'Honeymoon', line: 'Begin forever far from ordinary.' },
-  { occasion: 'Family vacation', line: 'The memories everyone brings home.' },
-  { occasion: 'Bucket list', line: 'The trip you’ve always talked about.' },
+  { occasion: 'Anniversary', code: 'ANV', line: 'Celebrate the years somewhere new.', tone: 'cognac', tilt: -3, drop: 34 },
+  { occasion: 'Milestone birthday', code: 'BDY', line: 'Mark the big one with a bigger view.', tone: 'navy', tilt: 2, drop: 58 },
+  { occasion: 'Honeymoon', code: 'HNY', line: 'Begin forever far from ordinary.', tone: 'plum', tilt: -1.5, drop: 22 },
+  { occasion: 'Family vacation', code: 'FAM', line: 'The memories everyone brings home.', tone: 'forest', tilt: 3, drop: 50 },
+  { occasion: 'Bucket list', code: 'BKT', line: 'The trip you’ve always talked about.', tone: 'tan', tilt: -2.5, drop: 30 },
 ];
 
 const GIVES_BACK = [
@@ -123,7 +127,7 @@ export default function GalaPage() {
           <motion.div className="gala-hero-copy" {...reveal}>
             <p className="gala-kicker">
               <span>The SparkPoint Gala</span>
-              <span aria-hidden="true">✦</span>
+              <Sparkmark size="1.7em" />
               <span>Live travel auction</span>
             </p>
             <h1 id="gala-title">
@@ -201,8 +205,8 @@ export default function GalaPage() {
                   <svg viewBox="0 0 40 40">
                     <circle cx="20" cy="20" r="18" />
                     <circle cx="20" cy="20" r="14.5" />
-                    <path d="M20 9 L22.6 17.4 L31 20 L22.6 22.6 L20 31 L17.4 22.6 L9 20 L17.4 17.4 Z" />
                   </svg>
+                  <Sparkmark variant="ink" size="58%" className="gala-passport-emblem-mark" />
                 </span>
                 <span className="gala-passport-title">
                   <b>SparkPoint Gala</b>
@@ -234,10 +238,10 @@ export default function GalaPage() {
                     </defs>
                     <circle cx="50" cy="50" r="47" />
                     <text>
-                      <textPath href="#gala-seal-ring">SPARKPOINT ✦ BREVARD NC ✦ 2026 ✦</textPath>
+                      <textPath href="#gala-seal-ring">SPARKPOINT · BREVARD NC · 2026 ·</textPath>
                     </text>
-                    <path d="M50 34 L53.5 46.5 L66 50 L53.5 53.5 L50 66 L46.5 53.5 L34 50 L46.5 46.5 Z" />
                   </svg>
+                  <Sparkmark variant="ink" size="36%" className="gala-passport-seal-mark" />
                 </span>
               </div>
 
@@ -327,13 +331,32 @@ export default function GalaPage() {
           </motion.div>
           <ul className="gala-tags">
             {TAGS.map((tag, index) => (
-              <motion.li key={tag.occasion} className="gala-tag" {...staggerReveal(index)}>
-                <span className="gala-tag-string" aria-hidden="true" />
-                <div className="gala-tag-body">
-                  <span className="gala-tag-hole" aria-hidden="true" />
-                  <small>Destination: anywhere</small>
-                  <strong>{tag.occasion}</strong>
-                  <p>{tag.line}</p>
+              <motion.li
+                key={tag.occasion}
+                className={`gala-tag gala-tag-${tag.tone}`}
+                style={{ '--tilt': `${tag.tilt}deg`, '--drop': `${tag.drop}px` } as CSSProperties}
+                {...staggerReveal(index)}
+              >
+                <div className="gala-tag-swing">
+                  <span className="gala-tag-strap" aria-hidden="true" />
+                  <div className="gala-tag-body">
+                    <span className="gala-tag-eyelet" aria-hidden="true" />
+                    <Sparkmark variant="ink" size="22px" className="gala-tag-mark" />
+                    <div className="gala-tag-card">
+                      <div className="gala-tag-card-head">
+                        <small>Occasion</small>
+                        <b aria-hidden="true">{tag.code}</b>
+                      </div>
+                      <strong>{tag.occasion}</strong>
+                      <p>{tag.line}</p>
+                      <div className="gala-tag-route" aria-hidden="true">
+                        <span>BRV</span>
+                        <i />
+                        <span>Anywhere</span>
+                      </div>
+                    </div>
+                    <span className="gala-tag-brand" aria-hidden="true">SparkPoint Gala</span>
+                  </div>
                 </div>
               </motion.li>
             ))}
@@ -376,7 +399,7 @@ export default function GalaPage() {
               </div>
               <div className="gala-postcard-address">
                 <div className="gala-postcard-stamp" aria-hidden="true">
-                  <span>✦</span>
+                  <Sparkmark size="34px" />
                   <small>Gives back</small>
                 </div>
                 <div className="gala-postcard-postmark" aria-hidden="true">
@@ -419,7 +442,9 @@ export default function GalaPage() {
           <motion.div className="gala-boarding" {...reveal}>
             <div className="gala-boarding-main">
               <div className="gala-boarding-top">
-                <span>✦ SparkPoint Gala</span>
+                <span>
+                  <Sparkmark size="22px" /> SparkPoint Gala
+                </span>
                 <span>Boarding pass</span>
               </div>
               <div className="gala-boarding-route">

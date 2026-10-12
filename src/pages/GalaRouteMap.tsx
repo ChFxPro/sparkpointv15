@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { useReducedMotion } from 'motion/react';
+import { SPARKMARK_URL } from '../components/Sparkmark';
 
 const BASE = import.meta.env.BASE_URL;
 
@@ -108,8 +109,9 @@ export function GalaRouteMap() {
         <g className="gala-map-homebase" transform={`translate(${HOME[0]} ${HOME[1]})`}>
           <circle className="gala-map-pulse" r="7" />
           <circle className="gala-map-pulse gala-map-pulse-2" r="7" />
-          <circle r="5.5" className="gala-map-home-dot" />
-          <text x="-10" y="22" textAnchor="end">Brevard, NC</text>
+          <circle r="9" className="gala-map-home-halo" />
+          <image href={SPARKMARK_URL} x="-12" y="-12" width="24" height="24" />
+          <text x="-15" y="26" textAnchor="end">Brevard, NC</text>
         </g>
       </svg>
       <div className="gala-map-legend">

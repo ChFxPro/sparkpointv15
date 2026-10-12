@@ -26,6 +26,7 @@ Last updated: 2026-10-04
   constraints on the table — keep them in step, or a submission passes validation and then dies on the INSERT as a
   500 instead of returning a 400. The form also carries an off-screen `website` honeypot; a tripped submission is
   answered with a normal-looking success and stored nowhere.
+- Brand stars: use `src/components/Sparkmark.tsx` (the official sparkmark, full colour or a one-colour `ink` mask) wherever a star or ✦ would appear, rather than a drawn or typed star.
 - SEO metadata is standardized through `src/components/SEOHead.tsx` across route pages.
 - Structured data now includes Organization/NGO, WebSite, WebPage, and BreadcrumbList globally, plus page-level Article/Event schema where applicable.
 - Canonical site origin defaults to the apex `https://yoursparkpoint.org` (see `src/lib/siteOrigin.ts` and `vite.config.mts`). `www.` 301-redirects to the apex, and canonical tags, `og:url`, and the sitemap all emit apex URLs — keep them that way, or the canonical will point at a URL that redirects.

@@ -28,6 +28,7 @@
 
 .gala-page h1,
 .gala-page h2 {
+  text-wrap: balance;
   font-family: var(--gala-display);
   font-weight: 400;
   font-variation-settings: 'opsz' 144, 'SOFT' 50;
@@ -459,10 +460,9 @@
   filter: drop-shadow(0 0 5px rgba(224, 54, 148, 0.95));
 }
 
-.gala-map-home-dot {
-  fill: var(--gala-pink);
-  stroke: white;
-  stroke-width: 1.5;
+.gala-map-home-halo {
+  fill: var(--gala-midnight-2);
+  opacity: 0.85;
 }
 
 .gala-map-pulse {
@@ -970,107 +970,245 @@
   font-size: 0.85rem;
 }
 
-/* 4 — Luggage tags */
+/* 4 — Luggage tags: leather tags hanging from a brass rail */
 .gala-tags-section {
-  padding: 30px 0 110px;
+  padding: 30px 0 120px;
   background: var(--gala-ivory);
 }
 
 .gala-tags {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 18px;
-  margin-top: 54px;
+  gap: 22px;
+  margin-top: 60px;
+  padding-top: 14px;
+}
+
+/* The brass rail the straps hang from. */
+.gala-tags::before {
+  position: absolute;
+  top: 0;
+  left: -2%;
+  right: -2%;
+  height: 10px;
+  content: '';
+  background: linear-gradient(180deg, #f6e2a8, #c9a24f 45%, #8a6a2a);
+  border-radius: 999px;
+  box-shadow: 0 6px 12px rgba(60, 44, 20, 0.25);
 }
 
 .gala-tag {
+  --leather: #8a4b25;
+  --leather-dark: #5f3016;
+  --stitch: rgba(255, 228, 180, 0.55);
+  display: flex;
+  justify-content: center;
+}
+
+.gala-tag-navy {
+  --leather: #1f3152;
+  --leather-dark: #111c33;
+  --stitch: rgba(241, 217, 160, 0.5);
+}
+
+.gala-tag-plum {
+  --leather: #6b2348;
+  --leather-dark: #42132b;
+  --stitch: rgba(255, 200, 225, 0.5);
+}
+
+.gala-tag-forest {
+  --leather: #24463a;
+  --leather-dark: #142a22;
+  --stitch: rgba(220, 240, 210, 0.45);
+}
+
+.gala-tag-tan {
+  --leather: #b27c45;
+  --leather-dark: #7c522a;
+  --stitch: rgba(255, 240, 210, 0.6);
+}
+
+.gala-tag-swing {
+  width: 100%;
   display: grid;
   justify-items: center;
+  transform: rotate(var(--tilt));
+  transform-origin: 50% 0;
 }
 
-.gala-tag:nth-child(odd) .gala-tag-body {
-  --tilt: -2.5deg;
+.gala-tag:hover .gala-tag-swing {
+  animation: gala-swing 1.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.gala-tag:nth-child(even) .gala-tag-body {
-  --tilt: 2deg;
+@keyframes gala-swing {
+  0% { transform: rotate(var(--tilt)); }
+  18% { transform: rotate(calc(var(--tilt) + 7deg)); }
+  40% { transform: rotate(calc(var(--tilt) - 4.5deg)); }
+  62% { transform: rotate(calc(var(--tilt) + 2.5deg)); }
+  82% { transform: rotate(calc(var(--tilt) - 1deg)); }
+  100% { transform: rotate(var(--tilt)); }
 }
 
-.gala-tag-string {
-  width: 2px;
-  height: 46px;
-  background: linear-gradient(180deg, transparent, #a68a52);
+/* Leather strap: loops over the rail and down into the tag's eyelet. */
+.gala-tag-strap {
+  width: 14px;
+  height: calc(var(--drop) + 48px);
+  margin-top: -18px;
+  margin-bottom: -30px;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.25), transparent 30%, transparent 70%, rgba(0, 0, 0, 0.3)),
+    var(--leather-dark);
+  border-radius: 7px 7px 0 0;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
 }
 
 .gala-tag-body {
   position: relative;
   width: 100%;
-  min-height: 250px;
-  padding: 46px 20px 24px;
-  color: var(--gala-ivory);
+  max-width: 200px;
+  display: grid;
+  justify-items: center;
+  padding: 52px 14px 16px;
+  color: #f7ecd6;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 30%),
-    var(--gala-midnight-2);
-  clip-path: polygon(22% 0, 78% 0, 100% 12%, 100% 100%, 0 100%, 0 12%);
-  border-radius: 0 0 12px 12px;
-  transform: rotate(var(--tilt));
-  transform-origin: 50% 0;
-  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    radial-gradient(ellipse at 30% 0%, rgba(255, 255, 255, 0.14), transparent 55%),
+    repeating-radial-gradient(circle at 20% 30%, rgba(0, 0, 0, 0.05) 0 1px, transparent 1px 3px),
+    linear-gradient(170deg, var(--leather), var(--leather-dark));
+  /* Rounded tab top, square-ish body. */
+  border-radius: 46px 46px 14px 14px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.25),
+    0 18px 30px rgba(50, 30, 15, 0.28),
+    0 2px 4px rgba(50, 30, 15, 0.25);
 }
 
-.gala-tag:nth-child(2) .gala-tag-body,
-.gala-tag:nth-child(4) .gala-tag-body {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 30%),
-    #8e2a5c;
-}
-
-.gala-tag:nth-child(3) .gala-tag-body {
-  color: var(--gala-midnight);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent 30%),
-    var(--gala-brass);
-}
-
-.gala-tag:hover .gala-tag-body {
-  transform: rotate(calc(var(--tilt) * -1.6));
-}
-
-.gala-tag-hole {
+/* Saddle stitching around the edge. */
+.gala-tag-body::before {
   position: absolute;
-  top: 16px;
+  inset: 7px;
+  content: '';
+  border: 1.5px dashed var(--stitch);
+  border-radius: 40px 40px 9px 9px;
+  pointer-events: none;
+}
+
+.gala-tag-eyelet {
+  position: absolute;
+  top: 14px;
   left: 50%;
-  width: 14px;
-  height: 14px;
-  background: var(--gala-ivory);
-  border: 2px solid rgba(166, 138, 82, 0.8);
+  width: 22px;
+  height: 22px;
+  background: radial-gradient(circle, var(--leather-dark) 0 5px, transparent 5.5px), linear-gradient(145deg, #f6e2a8, #b58b3a 55%, #7c5a1e);
   border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
   transform: translateX(-50%);
 }
 
-.gala-tag-body small {
-  display: block;
-  opacity: 0.6;
+/* Debossed sparkmark. */
+.gala-tag-mark {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  color: rgba(0, 0, 0, 0.34);
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.22));
+}
+
+/* The ivory address card behind the tag's window. */
+.gala-tag-card {
+  position: relative;
+  width: 100%;
+  min-height: 196px;
+  display: grid;
+  align-content: start;
+  padding: 12px 12px 10px;
+  color: var(--gala-ink);
+  background:
+    repeating-linear-gradient(180deg, transparent 0 21px, rgba(140, 120, 80, 0.16) 21px 22px),
+    #fbf6ea;
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.08),
+    inset 0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+/* Window glare */
+.gala-tag-card::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.45) 0 18%, transparent 30% 100%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.gala-tag-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.gala-tag-card-head small,
+.gala-tag-route span {
+  color: #8a7754;
   font-family: var(--gala-mono);
-  font-size: 0.6rem;
+  font-size: 0.58rem;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
-.gala-tag-body strong {
-  display: block;
-  margin-top: 14px;
-  font-family: var(--gala-display);
-  font-size: 1.6rem;
-  font-weight: 500;
-  line-height: 1.05;
+.gala-tag-card-head b {
+  color: #8e2a5c;
+  font-family: var(--gala-mono);
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1;
 }
 
-.gala-tag-body p {
-  margin-top: 14px;
-  opacity: 0.82;
+.gala-tag-card strong {
+  margin-top: 10px;
+  font-family: var(--gala-display);
+  font-size: 1.32rem;
+  font-weight: 600;
+  line-height: 1.08;
+}
+
+.gala-tag-card p {
+  margin-top: 8px;
+  color: #5f5a52;
+  font-family: var(--gala-display);
   font-size: 0.92rem;
-  line-height: 1.5;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.gala-tag-route {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(140, 120, 80, 0.3);
+}
+
+.gala-tag-route i {
+  flex: 1;
+  height: 0;
+  border-top: 1.5px dashed #c9a24f;
+}
+
+.gala-tag-brand {
+  margin-top: 12px;
+  color: rgba(255, 240, 215, 0.6);
+  font-family: var(--gala-display);
+  font-size: 0.82rem;
+  font-style: italic;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.35);
 }
 
 /* 5 — The return trip */
@@ -1185,8 +1323,9 @@
   display: grid;
   place-items: center;
   align-content: center;
-  color: white;
-  background: linear-gradient(160deg, var(--gala-pink), #8e2a5c);
+  gap: 6px;
+  color: var(--gala-brass-light);
+  background: linear-gradient(160deg, #1b2a48, var(--gala-midnight));
   outline: 3px dotted #fbf6ea;
   outline-offset: -5px;
   border: 4px solid #fbf6ea;
@@ -1320,6 +1459,7 @@
 
 .gala-boarding-top {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
   padding-bottom: 18px;
@@ -1431,7 +1571,18 @@
 @media (max-width: 1020px) {
   .gala-tags {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    row-gap: 8px;
+    row-gap: 18px;
+  }
+
+  /* Wrapped rows have no rail to hang from; give each tag a short hook. */
+  .gala-tags::before {
+    display: none;
+  }
+
+  .gala-tag-strap {
+    height: 40px;
+    margin-top: 0;
+    border-radius: 7px;
   }
 
   .gala-gives {
@@ -1612,16 +1763,33 @@
 
   .gala-tags {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 4px 12px;
+    gap: 10px 12px;
   }
 
   .gala-tag-body {
-    min-height: 220px;
-    padding: 42px 14px 20px;
+    padding: 46px 10px 12px;
   }
 
-  .gala-tag-body strong {
-    font-size: 1.3rem;
+  .gala-tag-card {
+    min-height: 186px;
+    padding: 10px 9px 8px;
+  }
+
+  /* An odd last tag hangs centred under the pair above it. */
+  .gala-tag:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .gala-tag:last-child:nth-child(odd) .gala-tag-body {
+    max-width: calc(50% - 6px);
+  }
+
+  .gala-tag-card strong {
+    font-size: 1.12rem;
+  }
+
+  .gala-tag-card-head b {
+    font-size: 1.15rem;
   }
 
   .gala-gives {
@@ -1673,9 +1841,12 @@
   .gala-map-route,
   .gala-map-dest,
   .gala-map-num,
-  .gala-button,
-  .gala-tag-body {
+  .gala-button {
     transition: none;
+  }
+
+  .gala-tag:hover .gala-tag-swing {
+    animation: none;
   }
 
   .gala-map-route {
@@ -1687,14 +1858,53 @@
     opacity: 1;
   }
 
-  .gala-button:hover,
-  .gala-tag:hover .gala-tag-body {
-    transform: rotate(var(--tilt, 0deg));
+  .gala-button:hover {
+    transform: none;
   }
 }
 
 /* On ivory paper, brass italics are too faint; use SparkPoint plum. */
 .gala-passport-section h2 em,
 .gala-tags-section h2 em {
+  color: #8e2a5c;
+}
+
+/* Sparkmark placements */
+.gala-kicker {
+  align-items: center;
+}
+
+.gala-boarding-top > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gala-passport-emblem {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.gala-passport-emblem svg {
+  position: absolute;
+  inset: 0;
+}
+
+.gala-passport-emblem-mark {
+  color: #b08d45;
+}
+
+.gala-passport-seal {
+  display: grid;
+  place-items: center;
+}
+
+.gala-passport-seal svg {
+  position: absolute;
+  inset: 0;
+}
+
+.gala-passport-seal-mark {
   color: #8e2a5c;
 }
