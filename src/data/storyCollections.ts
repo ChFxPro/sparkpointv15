@@ -34,6 +34,7 @@ export interface StoryCollection {
   privacyNote?: string;
   promoFacts?: PromoFact[]; // label/value pairs for the homepage promo card's facts row
   promoFootnote?: string; // one-line caption under the homepage promo card's button
+  promoBadge?: string; // round sticker on the homepage promo card's flyer, e.g. 'Enter to\nwin $100' — omit to hide it
   formPath?: string; // vanity path on this site, e.g. '/healthcare-story' — only for active collections
   formUrlAbsolute?: string; // full https URL — used in QR/social copy
   resultsPath?: string; // where a closed collection's stories now live
@@ -60,17 +61,17 @@ export const STORY_COLLECTIONS: StoryCollection[] = [
     statusLabel: 'Now collecting',
     tagline: 'Everyone has a healthcare story.',
     summary:
-      "Help SparkPoint understand the realities of accessing care in Transylvania County — share your experience for a chance to win a $100 gift card.",
-    promoLine: 'Share your healthcare story for a chance to win a $100 gift card.',
+      "Help SparkPoint understand the realities of accessing care in Transylvania County — share your experience in a few anonymous minutes.",
+    promoLine: "Share your healthcare story — we're still listening.",
     description:
       "Every view has a story behind it. SparkPoint is collecting real experiences of accessing health care across Transylvania County — the wins, the barriers, and everything in between. Your story helps us identify what's working, what's not, and where connection and support are needed most.",
-    incentive: 'Every response is entered for a chance to win a $100 gift card.',
+    incentive: "Our $100 gift card drawing has been held — thank you to everyone who entered. We're reaching out to the winner now.",
     privacyNote:
       'Your responses are anonymous and combined with others to help identify barriers, highlight what works, and strengthen care, connection, and support across our community.',
     promoFacts: [
       { label: 'Who', value: 'Transylvania County residents' },
       { label: 'Takes', value: 'About five minutes' },
-      { label: 'Incentive', value: '$100 gift card drawing' },
+      { label: 'Gift card', value: 'Drawn · contacting winner' },
     ],
     promoFootnote: 'Anonymous · Combined responses guide care and connection',
     formPath: '/healthcare-story',
@@ -87,24 +88,24 @@ export const STORY_COLLECTIONS: StoryCollection[] = [
     socialCopy: [
       {
         platform: 'Facebook & Instagram',
-        text: "Everyone has a healthcare story. SparkPoint wants to hear yours — share your experience accessing care in Transylvania County and you'll be entered for a chance to win a $100 gift card. It only takes a few minutes, and your voice helps us understand what's working and what's not.\n\nShare your story: https://yoursparkpoint.org/healthcare-story\n\n#YourSparkPoint #RuralHealth #TransylvaniaCounty",
+        text: "Everyone has a healthcare story. SparkPoint wants to hear yours — share your experience accessing care in Transylvania County. It only takes a few minutes, and your voice helps us understand what's working and what's not.\n\nShare your story: https://yoursparkpoint.org/healthcare-story\n\n#YourSparkPoint #RuralHealth #TransylvaniaCounty",
       },
       {
         platform: 'X / Threads',
-        text: 'Every view has a story behind it. Share your rural health care experience with SparkPoint for a chance to win a $100 gift card → https://yoursparkpoint.org/healthcare-story',
+        text: 'Every view has a story behind it. Share your rural health care experience with SparkPoint → https://yoursparkpoint.org/healthcare-story',
       },
       {
         platform: 'Email & newsletter',
-        text: "Subject: Share your healthcare story\n\nEveryone has a healthcare story — and we want to hear yours. SparkPoint is collecting real experiences of accessing health care across Transylvania County to help us understand the realities our neighbors face. Responses are anonymous and combined with others to help identify barriers and strengthen care.\n\nAs a thank-you, every response is entered for a chance to win a $100 gift card.\n\nShare your story: https://yoursparkpoint.org/healthcare-story",
+        text: "Subject: Share your healthcare story\n\nEveryone has a healthcare story — and we want to hear yours. SparkPoint is collecting real experiences of accessing health care across Transylvania County to help us understand the realities our neighbors face. Responses are anonymous and combined with others to help identify barriers and strengthen care.\n\nShare your story: https://yoursparkpoint.org/healthcare-story",
       },
       {
         platform: 'Text / direct message',
-        text: "Hi! SparkPoint is collecting healthcare stories from folks across Transylvania County and I thought of you. It's anonymous, takes a few minutes, and you're entered to win a $100 gift card: https://yoursparkpoint.org/healthcare-story",
+        text: "Hi! SparkPoint is collecting healthcare stories from folks across Transylvania County and I thought of you. It's anonymous and takes a few minutes: https://yoursparkpoint.org/healthcare-story",
       },
     ],
     seoTitle: 'Rural Health Care Stories | SparkPoint Story Collection',
     seoDescription:
-      'Share your experience accessing health care in Transylvania County. SparkPoint is collecting rural health care stories to identify barriers and strengthen support — anonymous, a few minutes, chance to win a $100 gift card.',
+      'Share your experience accessing health care in Transylvania County. SparkPoint is collecting rural health care stories to identify barriers and strengthen support — anonymous and takes a few minutes.',
   },
   {
     id: 'helene-recovery',

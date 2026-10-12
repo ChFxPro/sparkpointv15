@@ -77,9 +77,9 @@ export function StoryCollectionPromoCard() {
           style={{ background: 'radial-gradient(circle, #FDB515, transparent 70%)' }}
           aria-hidden="true"
         />
-        {collection.incentive ? (
+        {collection.promoBadge ? (
           <span
-            className="absolute -left-3 -top-3 z-20 grid h-14 w-14 rotate-[-8deg] place-items-center rounded-full text-center text-[9px] font-black uppercase leading-tight transition-transform duration-300 ease-out group-hover:-translate-y-1 group-hover:scale-105"
+            className="absolute -left-3 -top-3 z-20 grid h-14 w-14 rotate-[-8deg] place-items-center whitespace-pre-line rounded-full text-center text-[9px] font-black uppercase leading-tight transition-transform duration-300 ease-out group-hover:-translate-y-1 group-hover:scale-105"
             style={{
               color: '#3a1f42',
               background: 'linear-gradient(135deg, #FDB515, #f7d36d)',
@@ -87,9 +87,7 @@ export function StoryCollectionPromoCard() {
               boxShadow: '0 10px 24px rgba(0,0,0,0.25)',
             }}
           >
-            Enter to
-            <br />
-            win $100
+            {collection.promoBadge}
           </span>
         ) : null}
         <div className="h-28 w-24 rotate-[-6deg] overflow-hidden rounded-lg shadow-2xl transition-transform duration-300 ease-out group-hover:-translate-y-1.5 group-hover:scale-105 md:h-32 md:w-28">
