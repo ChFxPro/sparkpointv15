@@ -79,10 +79,8 @@ export const STORY_COLLECTIONS: StoryCollection[] = [
     image: ruralHealthcareFlyer,
     imageAlt:
       'SparkPoint flyer over a Blue Ridge Mountains sunset: "Every view has a story behind it — everyone has a healthcare story."',
-    flyerImage: ruralHealthcareFlyer,
-    flyerImageAlt:
-      'SparkPoint Rural Health Care Stories flyer with a QR code and link to yoursparkpoint.org/healthcare-story.',
-    flyerDownloadFile: 'SparkPoint-Rural-Healthcare-Story-Flyer.jpg',
+    // Flyer pulled from the media kit 2026-10-12: its artwork still advertises the $100
+    // drawing, which has been held. Restore these three fields with a re-exported flyer.
     qrImage: ruralHealthcareQr,
     qrDownloadFile: 'SparkPoint-Rural-Healthcare-Story-QR.png',
     socialCopy: [
