@@ -1,0 +1,2655 @@
+/* The SparkPoint Gala — "See the world. Strengthen home."
+   Midnight + brass for the journey, ivory paper for travel documents,
+   evergreen for home. SparkPoint pink marks the giveback. */
+
+.gala-page {
+  --gala-midnight: #0b1322;
+  --gala-midnight-2: #14213a;
+  --gala-brass: #d9b56a;
+  --gala-brass-light: #f1d9a0;
+  --gala-ivory: #f7f1e5;
+  --gala-paper: #efe5cf;
+  --gala-ink: #1b1a1f;
+  --gala-muted: #5f5a52;
+  --gala-pink: #e03694;
+  --gala-coral: #f15f48;
+  --gala-evergreen: #10241d;
+  --gala-display: 'Fraunces Variable', 'Fraunces', Georgia, serif;
+  --gala-mono: ui-monospace, 'SF Mono', 'Menlo', 'Consolas', monospace;
+  color: var(--gala-ink);
+  background: var(--gala-ivory);
+  overflow-x: clip;
+}
+
+.gala-shell {
+  width: min(100% - 48px, 1180px);
+  margin-inline: auto;
+}
+
+.gala-page h1,
+.gala-page h2 {
+  text-wrap: balance;
+  font-family: var(--gala-display);
+  font-weight: 400;
+  font-variation-settings: 'opsz' 144, 'SOFT' 50;
+  letter-spacing: -0.02em;
+}
+
+.gala-page h1 em,
+.gala-page h2 em {
+  font-style: italic;
+  font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
+  color: var(--gala-brass);
+}
+
+.gala-label,
+.gala-kicker {
+  color: var(--gala-brass);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.gala-label-ink {
+  color: var(--gala-pink);
+}
+
+.gala-section-head {
+  max-width: 760px;
+}
+
+.gala-section-head-center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.gala-section-head h2,
+.gala-routes-head h2 {
+  margin-top: 14px;
+  font-size: clamp(2.4rem, 5.4vw, 4.4rem);
+  line-height: 1;
+}
+
+/* Buttons */
+.gala-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+.gala-button {
+  min-height: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 24px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 760;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+.gala-button:hover {
+  transform: translateY(-2px);
+}
+
+.gala-button svg {
+  width: 17px;
+  height: 17px;
+}
+
+.gala-button-gold {
+  color: var(--gala-midnight);
+  background: linear-gradient(135deg, var(--gala-brass-light), var(--gala-brass));
+  box-shadow: 0 12px 30px rgba(217, 181, 106, 0.28);
+}
+
+.gala-button-ghost {
+  color: var(--gala-ivory);
+  border-color: rgba(241, 217, 160, 0.38);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.gala-button-ghost:hover {
+  background: rgba(241, 217, 160, 0.1);
+}
+
+/* 1 — Hero / departures */
+.gala-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 170px 0 110px;
+  color: var(--gala-ivory);
+  /* Flat under the photo, so its fade-out lands on exactly this colour. */
+  background:
+    radial-gradient(ellipse at 0% 100%, rgba(224, 54, 148, 0.14), transparent 45%),
+    var(--gala-midnight-2);
+}
+
+.gala-hero-copy h1,
+.gala-hero-lede,
+.gala-hero-facts {
+  text-shadow: 0 2px 24px rgba(11, 19, 34, 0.6);
+}
+
+.gala-hero-photo {
+  position: absolute;
+  inset: 0 0 auto;
+  height: min(100%, 980px);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.gala-hero-photo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 70% 40%;
+  filter: saturate(1.12) contrast(1.04);
+  animation: gala-drift 16s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Darken toward the headline, then fade into the night sky under the board. */
+.gala-hero-photo::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background:
+    linear-gradient(90deg, rgba(11, 19, 34, 0.82) 0%, rgba(11, 19, 34, 0.5) 34%, rgba(11, 19, 34, 0.08) 62%, transparent 100%),
+    linear-gradient(180deg, rgba(11, 19, 34, 0.45) 0%, transparent 18%, transparent 52%, rgba(20, 33, 58, 0.8) 78%, var(--gala-midnight-2) 96%);
+}
+
+@keyframes gala-drift {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.gala-hero-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 64px;
+}
+
+.gala-hero-copy {
+  max-width: 780px;
+}
+
+.gala-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
+.gala-hero h1 {
+  margin-top: 22px;
+  font-size: clamp(3.6rem, 9.5vw, 8rem);
+  line-height: 0.9;
+}
+
+.gala-hero h1 em {
+  display: block;
+}
+
+.gala-hero-lede {
+  max-width: 560px;
+  margin-top: 28px;
+  color: rgba(247, 241, 229, 0.78);
+  font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+  line-height: 1.6;
+}
+
+.gala-hero-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 30px;
+  margin-top: 30px;
+}
+
+.gala-hero-facts > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gala-hero-facts svg {
+  width: 18px;
+  height: 18px;
+  color: var(--gala-brass);
+}
+
+.gala-hero-facts dd {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+/* Split-flap board */
+.gala-board {
+  padding: clamp(16px, 2.2vw, 30px);
+  background: linear-gradient(180deg, #1c2230, #141925);
+  border: 1px solid rgba(217, 181, 106, 0.3);
+  border-radius: 18px;
+  box-shadow:
+    0 40px 80px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.gala-board-inner {
+  /* Tiles are sized from the board's own width so they always fill it:
+     N tiles, 2px between tiles, and a 0.9-tile gap between columns. */
+  container-type: inline-size;
+  --cell: min(34px, calc((100cqi - 72px) / 42.7)); /* 4 columns, 40 tiles */
+  display: grid;
+  gap: 7px;
+}
+
+.gala-board-title {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px 20px;
+  margin-bottom: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(217, 181, 106, 0.25);
+  color: var(--gala-brass-light);
+  font-family: var(--gala-display);
+  font-size: clamp(1.5rem, 2.8vw, 2.3rem);
+  font-style: italic;
+}
+
+.gala-board-clock {
+  align-self: end;
+  color: rgba(247, 241, 229, 0.72);
+  font-family: var(--gala-mono);
+  font-size: 0.78rem;
+  font-style: normal;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.gala-board-row {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  justify-content: space-between;
+  gap: calc(var(--cell) * 0.9);
+}
+
+.gala-board-head {
+  color: rgba(247, 241, 229, 0.75);
+  font-family: var(--gala-mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.gala-board-head span {
+  display: block;
+}
+
+.gala-board-head .col-flight,
+.gala-board-head .col-time {
+  width: calc(var(--cell) * 7 + 2px * 6);
+}
+
+.gala-board-head .col-destination {
+  width: calc(var(--cell) * 16 + 2px * 15);
+}
+
+.gala-flap-group {
+  display: flex;
+  gap: 2px;
+}
+
+.gala-flap {
+  position: relative;
+  width: var(--cell);
+  height: calc(var(--cell) * 1.4);
+  display: grid;
+  place-items: center;
+  color: #fffaf0;
+  background: linear-gradient(180deg, #0c0f16 0 49%, #07090e 51% 100%);
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  font-family: var(--gala-mono);
+  font-size: calc(var(--cell) * 0.8);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.gala-flap::after {
+  position: absolute;
+  inset: 50% 0 auto;
+  height: 1px;
+  content: '';
+  background: rgba(0, 0, 0, 0.9);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.gala-flap.is-blank {
+  color: transparent;
+}
+
+.gala-board-row.is-highlight .gala-flap {
+  color: #ffd98a;
+}
+
+.gala-board-row.is-highlight .col-status .gala-flap {
+  color: #7cf2b4;
+}
+
+.gala-board-row:not(.is-highlight):not(.gala-board-head) .col-status .gala-flap {
+  color: #ff9ccf;
+}
+
+@media (min-width: 1300px) {
+  /* Let the board run a little wider than the text column on big screens. */
+  .gala-board {
+    width: min(100vw - 48px, 1360px);
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 1100px) {
+  .gala-board-inner {
+    --cell: min(34px, calc((100cqi - 60px) / 34.8)); /* 3 columns, 33 tiles */
+  }
+
+  .gala-board .col-flight {
+    display: none;
+  }
+
+  .gala-board-row {
+    grid-template-columns: auto auto auto;
+  }
+}
+
+/* 2 — Routes */
+.gala-routes {
+  padding: 40px 0 110px;
+  color: var(--gala-ivory);
+  background: var(--gala-midnight-2);
+}
+
+.gala-routes-head {
+  max-width: 760px;
+}
+
+.gala-routes-head > p:last-child {
+  margin-top: 20px;
+  color: rgba(247, 241, 229, 0.72);
+  font-size: 1.12rem;
+  line-height: 1.65;
+}
+
+.gala-map {
+  margin-top: 48px;
+}
+
+.gala-map svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.gala-map-route {
+  fill: none;
+  stroke: var(--gala-brass);
+  stroke-width: 1.3;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0.85;
+  transition: stroke-dashoffset 1.6s cubic-bezier(0.65, 0, 0.35, 1);
+  transition-delay: calc(var(--i) * 140ms);
+}
+
+.gala-map.is-visible .gala-map-route {
+  stroke-dashoffset: 0;
+}
+
+.gala-map-dest {
+  fill: var(--gala-midnight-2);
+  stroke: var(--gala-brass-light);
+  stroke-width: 1.6;
+  opacity: 0;
+  transition: opacity 400ms ease;
+  transition-delay: calc(1.2s + var(--i) * 140ms);
+}
+
+.gala-map-num {
+  fill: var(--gala-brass-light);
+  font-family: var(--gala-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-anchor: middle;
+  opacity: 0;
+  transition: opacity 400ms ease;
+  transition-delay: calc(1.3s + var(--i) * 140ms);
+}
+
+.gala-map.is-visible .gala-map-dest,
+.gala-map.is-visible .gala-map-num {
+  opacity: 1;
+}
+
+.gala-map-out {
+  fill: var(--gala-brass-light);
+  filter: drop-shadow(0 0 4px rgba(241, 217, 160, 0.9));
+}
+
+.gala-map-home {
+  fill: var(--gala-pink);
+  filter: drop-shadow(0 0 5px rgba(224, 54, 148, 0.95));
+}
+
+.gala-map-home-halo {
+  fill: var(--gala-midnight-2);
+  opacity: 0.85;
+}
+
+.gala-map-pulse {
+  fill: none;
+  stroke: var(--gala-pink);
+  stroke-width: 1.2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: gala-pulse 2.8s ease-out infinite;
+}
+
+.gala-map-pulse-2 {
+  animation-delay: 1.4s;
+}
+
+@keyframes gala-pulse {
+  from {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(4.2);
+  }
+}
+
+.gala-map-homebase text {
+  fill: var(--gala-ivory);
+  font-family: var(--gala-display);
+  font-size: 15px;
+  font-style: italic;
+}
+
+.gala-map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 28px;
+  margin-top: 26px;
+  color: rgba(247, 241, 229, 0.78);
+  font-size: 0.9rem;
+}
+
+.gala-map-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gala-map-legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.gala-map-legend .is-out {
+  background: var(--gala-brass-light);
+  box-shadow: 0 0 8px rgba(241, 217, 160, 0.8);
+}
+
+.gala-map-legend .is-home {
+  background: var(--gala-pink);
+  box-shadow: 0 0 8px rgba(224, 54, 148, 0.85);
+}
+
+.gala-map-note {
+  color: rgba(247, 241, 229, 0.48);
+  font-size: 0.8rem;
+}
+
+/* 3 — Passport */
+.gala-passport-section {
+  padding: 110px 0 100px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(217, 181, 106, 0.16), transparent 40%),
+    var(--gala-ivory);
+}
+
+/* Open passport resting on its navy leather cover. */
+.gala-passport {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 52px;
+  padding: 14px;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.06), transparent 40%),
+    repeating-radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 3px),
+    linear-gradient(160deg, #1b2a48, #0e1830);
+  border-radius: 18px;
+  box-shadow:
+    inset 0 0 0 2px rgba(217, 181, 106, 0.55),
+    inset 0 0 0 5px #13203a,
+    inset 0 0 0 6px rgba(217, 181, 106, 0.35),
+    0 3px 0 #0a1224,
+    0 40px 80px rgba(20, 22, 40, 0.35);
+}
+
+/* Spine stitching between the pages. */
+.gala-passport::after {
+  position: absolute;
+  z-index: 2;
+  top: 26px;
+  bottom: 26px;
+  left: 50%;
+  width: 0;
+  content: '';
+  border-left: 2px dashed rgba(124, 106, 73, 0.45);
+  transform: translateX(-1px);
+  pointer-events: none;
+}
+
+.gala-passport-ribbon {
+  position: absolute;
+  z-index: 3;
+  top: -10px;
+  right: 9%;
+  width: 16px;
+  height: 120px;
+  background: linear-gradient(90deg, #a3245f, var(--gala-pink) 50%, #a3245f);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 86%, 0 100%);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.gala-passport-page {
+  position: relative;
+  padding: clamp(24px, 3.2vw, 40px) clamp(24px, 3.2vw, 40px) clamp(36px, 3.6vw, 46px);
+  background:
+    repeating-radial-gradient(circle at 50% 120%, transparent 0 14px, rgba(122, 96, 52, 0.07) 14px 15px),
+    repeating-linear-gradient(115deg, transparent 0 22px, rgba(224, 54, 148, 0.035) 22px 23px),
+    var(--gala-paper);
+}
+
+.gala-passport-data {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  grid-template-areas:
+    'issuer issuer'
+    'photo fields'
+    'sign sign'
+    'mrz mrz';
+  gap: 22px 26px;
+  border-radius: 6px 0 0 6px;
+  box-shadow: inset -22px 0 30px -22px rgba(60, 44, 20, 0.55);
+}
+
+.gala-passport-visas {
+  border-radius: 0 6px 6px 0;
+  box-shadow: inset 22px 0 30px -22px rgba(60, 44, 20, 0.55);
+}
+
+/* Faint world watermark on the visa page. */
+.gala-passport-visas::before {
+  position: absolute;
+  inset: 18% 6% 10%;
+  content: '';
+  background: url('/assets/events/gala/world-dots.svg') center / contain no-repeat;
+  opacity: 0.3;
+  filter: sepia(1) saturate(0.7) brightness(0.62);
+  pointer-events: none;
+}
+
+.gala-passport-issuer {
+  grid-area: issuer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #d8c7a1;
+}
+
+.gala-passport-emblem {
+  flex: none;
+  width: 44px;
+  height: 44px;
+}
+
+.gala-passport-emblem svg {
+  width: 100%;
+  height: 100%;
+}
+
+.gala-passport-emblem circle {
+  fill: none;
+  stroke: #b08d45;
+  stroke-width: 1.4;
+}
+
+.gala-passport-emblem path {
+  fill: #b08d45;
+}
+
+.gala-passport-title {
+  display: grid;
+  gap: 2px;
+  margin-right: auto;
+}
+
+.gala-passport-title b {
+  color: #3a2f1d;
+  font-family: var(--gala-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.gala-passport-title small,
+.gala-passport-codes dt,
+.gala-passport-fields dt,
+.gala-passport-sign small {
+  color: #8a7754;
+  font-family: var(--gala-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.gala-passport-codes {
+  display: flex;
+  gap: 16px;
+  text-align: right;
+}
+
+.gala-passport-codes dd {
+  margin-top: 2px;
+  color: #2d2618;
+  font-family: var(--gala-mono);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.gala-passport-photo {
+  grid-area: photo;
+  position: relative;
+  align-self: start;
+  width: 150px;
+  aspect-ratio: 300 / 385;
+  padding: 5px;
+  background: #fbf6ea;
+  border: 1px solid #d3c09a;
+  box-shadow: 0 1px 2px rgba(60, 44, 20, 0.2);
+}
+
+.gala-passport-photo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  filter: saturate(0.82) sepia(0.14) contrast(1.04);
+}
+
+/* Holographic laminate that catches the light as you move. */
+.gala-passport-holo {
+  position: absolute;
+  inset: 5px;
+  background:
+    repeating-linear-gradient(135deg, transparent 0 9px, rgba(255, 255, 255, 0.07) 9px 10px),
+    conic-gradient(from 210deg at 70% 30%, rgba(255, 120, 200, 0.22), rgba(120, 220, 255, 0.2), rgba(255, 230, 140, 0.22), rgba(255, 120, 200, 0.22));
+  background-size: 100% 100%, 220% 220%;
+  mix-blend-mode: soft-light;
+  animation: gala-holo 7s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes gala-holo {
+  from {
+    background-position: 0 0, 0% 0%;
+  }
+  to {
+    background-position: 0 0, 100% 100%;
+  }
+}
+
+.gala-passport-seal {
+  position: absolute;
+  left: -24px;
+  bottom: -22px;
+  width: 78px;
+  height: 78px;
+  transform: rotate(-14deg);
+  mix-blend-mode: multiply;
+  opacity: 0.75;
+}
+
+.gala-passport-seal svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.gala-passport-seal circle {
+  fill: none;
+  stroke: #8e2a5c;
+  stroke-width: 2;
+}
+
+.gala-passport-seal text {
+  fill: #8e2a5c;
+  font-family: var(--gala-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.9px;
+}
+
+.gala-passport-seal path {
+  fill: #8e2a5c;
+}
+
+.gala-passport-fields {
+  grid-area: fields;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-content: start;
+  gap: 14px 18px;
+}
+
+.gala-passport-fields .is-wide {
+  grid-column: 1 / -1;
+}
+
+.gala-passport-fields dd {
+  margin-top: 3px;
+  color: var(--gala-ink);
+  font-family: var(--gala-display);
+  font-size: 1.08rem;
+  line-height: 1.25;
+}
+
+.gala-passport-fields dd.is-name {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.gala-passport-sign {
+  grid-area: sign;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.gala-passport-sign > div {
+  flex: 1;
+  max-width: 300px;
+  display: grid;
+  gap: 4px;
+  border-bottom: 1px solid #b8a37a;
+}
+
+.gala-passport-signature {
+  color: #1f3a66;
+  font-family: var(--gala-display);
+  font-size: 1.9rem;
+  font-style: italic;
+  font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
+  transform: rotate(-4deg);
+  transform-origin: left bottom;
+}
+
+.gala-passport-sign small {
+  margin-bottom: -18px;
+  padding-top: 2px;
+}
+
+/* Ghost image: the faint security duplicate of the photo. */
+.gala-passport-ghost {
+  width: 46px;
+  height: 59px;
+  object-fit: cover;
+  filter: grayscale(1) contrast(0.7) brightness(1.15);
+  mix-blend-mode: multiply;
+  opacity: 0.32;
+}
+
+.gala-passport-mrz {
+  grid-area: mrz;
+  margin-top: 8px;
+  padding: 12px 0 0;
+  border-top: 1px solid #d8c7a1;
+  color: #4d4433;
+  font-family: var(--gala-mono);
+  font-size: clamp(0.6rem, 1.15vw, 0.82rem);
+  letter-spacing: 0.12em;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.gala-passport-folio {
+  position: absolute;
+  bottom: 12px;
+  color: #a8956d;
+  font-family: var(--gala-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+}
+
+.gala-passport-data .gala-passport-folio {
+  left: 18px;
+}
+
+.gala-passport-visas .gala-passport-folio {
+  right: 18px;
+}
+
+.gala-stamps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px 14px;
+  margin-top: 26px;
+  place-items: center;
+}
+
+.gala-stamp {
+  --stamp: #b2245f;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  width: 100%;
+  max-width: 150px;
+  min-height: 118px;
+  padding: 12px 10px;
+  color: var(--stamp);
+  border: 2.5px solid var(--stamp);
+  text-align: center;
+  text-transform: uppercase;
+  mix-blend-mode: multiply;
+  opacity: 0.88;
+  /* Worn-ink texture */
+  -webkit-mask-image: radial-gradient(circle at 30% 40%, #000 60%, rgba(0, 0, 0, 0.72) 100%);
+  mask-image: radial-gradient(circle at 30% 40%, #000 60%, rgba(0, 0, 0, 0.72) 100%);
+}
+
+.gala-stamp-ink-1 {
+  --stamp: #1f4f7a;
+}
+
+.gala-stamp-ink-2 {
+  --stamp: #2f6b4f;
+}
+
+.gala-stamp-round {
+  aspect-ratio: 1;
+  min-height: 0;
+  border-radius: 50%;
+  outline: 1px solid var(--stamp);
+  outline-offset: -7px;
+}
+
+.gala-stamp-oval {
+  border-radius: 50% / 42%;
+}
+
+.gala-stamp-rect {
+  border-radius: 6px;
+  border-style: double;
+  border-width: 5px;
+}
+
+.gala-stamp strong {
+  font-family: var(--gala-display);
+  font-size: 1.7rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.gala-stamp span {
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+}
+
+.gala-stamp small {
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  opacity: 0.8;
+}
+
+.gala-passport-notes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px 48px;
+  margin-top: 44px;
+}
+
+.gala-passport-notes p {
+  color: var(--gala-muted);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.gala-passport-notes strong {
+  color: var(--gala-ink);
+}
+
+.gala-fine-print {
+  margin-top: 26px;
+  color: #8a8172;
+  font-size: 0.85rem;
+}
+
+/* 4 — Luggage tags: leather tags hanging from a brass rail */
+.gala-tags-section {
+  padding: 30px 0 120px;
+  background: var(--gala-ivory);
+}
+
+.gala-tags {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 60px;
+  padding-top: 14px;
+}
+
+/* The brass rail the straps hang from. */
+.gala-tags::before {
+  position: absolute;
+  top: 0;
+  left: -2%;
+  right: -2%;
+  height: 10px;
+  content: '';
+  background: linear-gradient(180deg, #f6e2a8, #c9a24f 45%, #8a6a2a);
+  border-radius: 999px;
+  box-shadow: 0 6px 12px rgba(60, 44, 20, 0.25);
+}
+
+.gala-tag {
+  --leather: #8a4b25;
+  --leather-dark: #5f3016;
+  --stitch: rgba(255, 228, 180, 0.55);
+  display: flex;
+  justify-content: center;
+}
+
+.gala-tag-navy {
+  --leather: #1f3152;
+  --leather-dark: #111c33;
+  --stitch: rgba(241, 217, 160, 0.5);
+}
+
+.gala-tag-plum {
+  --leather: #6b2348;
+  --leather-dark: #42132b;
+  --stitch: rgba(255, 200, 225, 0.5);
+}
+
+.gala-tag-forest {
+  --leather: #24463a;
+  --leather-dark: #142a22;
+  --stitch: rgba(220, 240, 210, 0.45);
+}
+
+.gala-tag-tan {
+  --leather: #b27c45;
+  --leather-dark: #7c522a;
+  --stitch: rgba(255, 240, 210, 0.6);
+}
+
+.gala-tag-swing {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  transform: rotate(var(--tilt));
+  transform-origin: 50% 0;
+}
+
+.gala-tag:hover .gala-tag-swing {
+  animation: gala-swing 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes gala-swing {
+  0% { transform: rotate(var(--tilt)); }
+  18% { transform: rotate(calc(var(--tilt) + 7deg)); }
+  40% { transform: rotate(calc(var(--tilt) - 4.5deg)); }
+  62% { transform: rotate(calc(var(--tilt) + 2.5deg)); }
+  82% { transform: rotate(calc(var(--tilt) - 1deg)); }
+  100% { transform: rotate(var(--tilt)); }
+}
+
+/* Leather strap: loops over the rail and down into the tag's eyelet. */
+.gala-tag-strap {
+  width: 16px;
+  height: calc(var(--drop) + 48px);
+  margin-top: -18px;
+  margin-bottom: -30px;
+  background:
+    repeating-linear-gradient(180deg, var(--stitch) 0 4px, transparent 4px 8px) 3px 0 / 1px 100% no-repeat,
+    repeating-linear-gradient(180deg, var(--stitch) 0 4px, transparent 4px 8px) calc(100% - 3px) 0 / 1px 100% no-repeat,
+    linear-gradient(90deg, rgba(0, 0, 0, 0.25), transparent 30%, transparent 70%, rgba(0, 0, 0, 0.3)),
+    var(--leather-dark);
+  border-radius: 7px 7px 0 0;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+.gala-tag-body {
+  position: relative;
+  width: 100%;
+  max-width: 200px;
+  display: grid;
+  justify-items: center;
+  padding: 52px 14px 16px;
+  color: #f7ecd6;
+  background:
+    radial-gradient(ellipse at 30% 0%, rgba(255, 255, 255, 0.16), transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(170deg, var(--leather), var(--leather-dark));
+  background-size: auto, 160px 160px, auto;
+  background-blend-mode: normal, overlay, normal;
+  /* Rounded tab top, square-ish body. */
+  border-radius: 46px 46px 14px 14px;
+  box-shadow:
+    /* painted edge */
+    inset 0 0 0 2px rgba(0, 0, 0, 0.32),
+    inset 0 2px 0 2px rgba(255, 255, 255, 0.12),
+    0 18px 30px rgba(50, 30, 15, 0.28),
+    0 2px 4px rgba(50, 30, 15, 0.25);
+  transition: box-shadow 500ms cubic-bezier(0.22, 1, 0.36, 1), transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gala-tag:hover .gala-tag-body {
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 0 0 2px rgba(0, 0, 0, 0.32),
+    inset 0 2px 0 2px rgba(255, 255, 255, 0.12),
+    0 28px 40px rgba(50, 30, 15, 0.32),
+    0 3px 6px rgba(50, 30, 15, 0.25);
+}
+
+/* Saddle stitching around the edge. */
+.gala-tag-body::before {
+  position: absolute;
+  inset: 7px;
+  content: '';
+  border: 1.5px dashed var(--stitch);
+  border-radius: 40px 40px 9px 9px;
+  pointer-events: none;
+}
+
+.gala-tag-eyelet {
+  position: absolute;
+  z-index: 1;
+  top: 18px;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  background: radial-gradient(circle at 35% 30%, #fff4cf 0 2px, #e2c172 3px, #a47a2c 70%, #6f4f18);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 2px rgba(0, 0, 0, 0.2),
+    0 2px 3px rgba(0, 0, 0, 0.45);
+  transform: translateX(-50%);
+}
+
+/* Debossed sparkmark. */
+.gala-tag-mark {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  color: rgba(0, 0, 0, 0.34);
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.22));
+}
+
+/* Recessed, stitched window the address card sits behind. */
+.gala-tag-window {
+  position: relative;
+  width: 100%;
+  padding: 5px;
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.22);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.45),
+    0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+/* The ivory address card behind the tag's window. */
+.gala-tag-card {
+  position: relative;
+  width: 100%;
+  min-height: 196px;
+  display: grid;
+  align-content: start;
+  padding: 12px 12px 10px;
+  color: var(--gala-ink);
+  background:
+    repeating-linear-gradient(180deg, transparent 0 21px, rgba(140, 120, 80, 0.16) 21px 22px),
+    #fbf6ea;
+  border-radius: 5px;
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 0, 0, 0.08),
+    inset 0 3px 8px rgba(0, 0, 0, 0.22);
+}
+
+/* Window glare */
+.gala-tag-card::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.45) 0 18%, transparent 30% 100%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.gala-tag-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.gala-tag-card-head small,
+.gala-tag-route span {
+  color: #8a7754;
+  font-family: var(--gala-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.gala-tag-card-head b {
+  padding: 2px 5px 1px;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  color: #8e2a5c;
+  font-family: var(--gala-mono);
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+
+.gala-tag-card strong {
+  margin-top: 10px;
+  font-family: var(--gala-display);
+  font-size: 1.32rem;
+  font-weight: 600;
+  line-height: 1.08;
+}
+
+.gala-tag-card p {
+  margin-top: 8px;
+  color: #5f5a52;
+  font-family: var(--gala-display);
+  font-size: 0.92rem;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.gala-tag-route {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(140, 120, 80, 0.3);
+}
+
+.gala-tag-route i {
+  flex: 1;
+  height: 0;
+  border-top: 1.5px dashed #c9a24f;
+}
+
+.gala-tag-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  background: linear-gradient(100deg, #f6e2a8, #c9a24f 40%, #fff4d1 55%, #b58b3a 75%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: var(--gala-display);
+  font-size: 0.86rem;
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  filter: drop-shadow(0 -1px 0 rgba(0, 0, 0, 0.45));
+}
+
+/* 5 — The return trip */
+.gala-return {
+  padding: 110px 0;
+  color: var(--gala-ivory);
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(224, 54, 148, 0.14), transparent 45%),
+    var(--gala-evergreen);
+}
+
+/* Postcard: linen card stock taped to the evergreen "tabletop". */
+.gala-postcard-scene {
+  margin-top: 56px;
+}
+
+.gala-postcard {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 8px;
+  padding: 14px;
+  color: var(--gala-ink);
+  background:
+    repeating-linear-gradient(0deg, rgba(120, 100, 60, 0.05) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(120, 100, 60, 0.05) 0 1px, transparent 1px 3px),
+    #fbf6ea;
+  border-radius: 4px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 2px 3px rgba(0, 0, 0, 0.25),
+    0 40px 70px rgba(0, 0, 0, 0.45);
+  transform: rotate(-1.2deg);
+  transition:
+    transform 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gala-postcard:hover {
+  transform: rotate(-0.3deg) translateY(-4px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 2px 3px rgba(0, 0, 0, 0.25),
+    0 52px 90px rgba(0, 0, 0, 0.5);
+}
+
+/* Translucent pink tape with torn ends. */
+.gala-tape {
+  position: absolute;
+  z-index: 3;
+  top: -16px;
+  width: 116px;
+  height: 34px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.12) 0 2px, transparent 2px 6px),
+    rgba(224, 54, 148, 0.42);
+  clip-path: polygon(0 8%, 6% 0, 12% 10%, 18% 2%, 24% 8%, 100% 4%, 96% 18%, 100% 34%, 95% 50%, 100% 66%, 96% 82%, 100% 96%, 0 100%, 4% 82%, 0 64%, 5% 48%, 0 30%, 4% 16%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+  mix-blend-mode: multiply;
+}
+
+.gala-tape-left {
+  left: 6%;
+  transform: rotate(-8deg);
+}
+
+.gala-tape-right {
+  right: 8%;
+  transform: rotate(6deg);
+}
+
+/* Front: a bordered photo print with a big-letter greeting. */
+.gala-postcard-front {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+
+.gala-postcard-print {
+  position: relative;
+  overflow: hidden;
+  border: 8px solid #fffdf7;
+  box-shadow: 0 0 0 1px #e2d6bb;
+}
+
+.gala-postcard-print img {
+  width: 100%;
+  height: 100%;
+  min-height: 340px;
+  display: block;
+  object-fit: cover;
+  filter: saturate(1.05) contrast(1.03);
+}
+
+.gala-postcard-print::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: radial-gradient(ellipse at 50% 40%, transparent 55%, rgba(11, 19, 34, 0.35));
+  pointer-events: none;
+}
+
+.gala-postcard-print figcaption {
+  position: absolute;
+  z-index: 1;
+  inset: auto 0 0;
+  display: grid;
+  justify-items: start;
+  padding: 70px 22px 18px;
+  background: linear-gradient(0deg, rgba(11, 19, 34, 0.82), transparent);
+}
+
+.gala-postcard-greet {
+  color: #fff8e6;
+  font-family: var(--gala-display);
+  font-size: 1.25rem;
+  font-style: italic;
+  transform: rotate(-4deg);
+  transform-origin: left bottom;
+}
+
+/* Vintage large-letter postcard lettering, in the sparkmark's colours. */
+/* Two layers: a solid cream copy (thickened, with the navy shadow) and the
+   gradient letters on top. Stroking the gradient letters directly traced
+   the variable font's overlapping contours, leaving stray lines inside. */
+.gala-postcard-big {
+  position: relative;
+  margin-top: -2px;
+  color: #fff8e6;
+  -webkit-text-stroke: 5px #fff8e6;
+  filter: drop-shadow(4px 5px 0 #0b1322);
+  font-family: var(--gala-display);
+  font-size: clamp(3.6rem, 7.4vw, 5.6rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.gala-postcard-big::after {
+  position: absolute;
+  inset: 0;
+  content: attr(data-text);
+  background: linear-gradient(180deg, #ffe39a 0%, #fdb515 38%, #f15f48 70%, #e03694 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 0;
+}
+
+.gala-postcard-place {
+  margin-top: 10px;
+  color: rgba(255, 248, 230, 0.85);
+  font-family: var(--gala-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.gala-postcard-credit {
+  color: #8a8172;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+}
+
+/* Back */
+.gala-postcard-back {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  padding: 10px 14px 14px 18px;
+}
+
+.gala-postcard-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #ddd0b4;
+  color: #8e2a5c;
+  font-family: var(--gala-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.gala-postcard-grid {
+  display: grid;
+  grid-template-columns: 1.25fr auto 1fr;
+  gap: 18px;
+  padding-top: 18px;
+}
+
+.gala-postcard-message p {
+  color: #1f3a66;
+  font-family: var(--gala-display);
+  font-size: 1.12rem;
+  font-style: italic;
+  font-variation-settings: 'opsz' 36, 'SOFT' 100;
+  line-height: 1.6;
+}
+
+.gala-postcard-message a {
+  color: #8e2a5c;
+  text-underline-offset: 3px;
+}
+
+.gala-postcard-sign {
+  display: grid;
+  margin-top: 16px;
+}
+
+.gala-postcard-sign span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.5rem;
+  font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
+  transform: rotate(-3deg);
+  transform-origin: left center;
+}
+
+/* Vertical divider with micro-printing, as on real postcard backs. */
+.gala-postcard-divider {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding-left: 6px;
+  border-left: 1px solid #ddd0b4;
+  color: #b3a07a;
+  font-family: var(--gala-mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.2em;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.gala-postcard-address {
+  display: grid;
+  align-content: space-between;
+  gap: 18px;
+}
+
+.gala-postcard-postage {
+  position: relative;
+  min-height: 110px;
+}
+
+/* Perforated stamp: a pattern of holes in the padding ring only. */
+.gala-postcard-stamp {
+  --r: 3.5px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 92px;
+  padding: 7px;
+  background: #fffdf7;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
+  -webkit-mask:
+    radial-gradient(var(--r) at var(--r) var(--r), #0000 97%, #000) calc(-1 * var(--r)) calc(-1 * var(--r)) / calc(3 * var(--r)) calc(3 * var(--r)) round,
+    linear-gradient(#000 0 0) content-box;
+  mask:
+    radial-gradient(var(--r) at var(--r) var(--r), #0000 97%, #000) calc(-1 * var(--r)) calc(-1 * var(--r)) / calc(3 * var(--r)) calc(3 * var(--r)) round,
+    linear-gradient(#000 0 0) content-box;
+  transform: rotate(3deg);
+}
+
+.gala-postcard-stamp > div {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 12px 6px 10px;
+  color: var(--gala-brass-light);
+  background:
+    radial-gradient(circle at 50% 30%, rgba(217, 181, 106, 0.25), transparent 60%),
+    linear-gradient(160deg, #1b2a48, var(--gala-midnight));
+  box-shadow: inset 0 0 0 1px rgba(241, 217, 160, 0.4);
+}
+
+.gala-postcard-stamp b {
+  font-family: var(--gala-display);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.gala-postcard-stamp small {
+  font-family: var(--gala-mono);
+  font-size: 0.48rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Circular date stamp with wavy cancellation lines across the stamp. */
+.gala-postcard-postmark {
+  position: absolute;
+  z-index: 2;
+  top: 26px;
+  right: 62px;
+  width: 170px;
+  height: 80px;
+  overflow: visible;
+  mix-blend-mode: multiply;
+  opacity: 0.72;
+  transform: rotate(-8deg);
+}
+
+.gala-postcard-postmark circle,
+.gala-postcard-waves path {
+  fill: none;
+  stroke: #2a2a33;
+  stroke-width: 1.6;
+}
+
+.gala-postcard-postmark text {
+  fill: #2a2a33;
+  font-family: var(--gala-mono);
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-anchor: middle;
+}
+
+.gala-postcard-postmark text.is-date {
+  font-size: 10px;
+}
+
+.gala-postcard-postmark text.is-ring {
+  font-size: 6.4px;
+  letter-spacing: 0.9px;
+}
+
+.gala-postcard-to {
+  color: #1f3a66;
+  font-family: var(--gala-display);
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 2.1;
+  background: repeating-linear-gradient(180deg, transparent 0 calc(2.1em - 1px), #ddd0b4 calc(2.1em - 1px) 2.1em);
+}
+
+.gala-postcard-to span {
+  color: #8a7754;
+  font-family: var(--gala-mono);
+  font-size: 0.66rem;
+  font-style: normal;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.gala-postcard-zip {
+  width: 130px;
+  height: 12px;
+}
+
+.gala-postcard-zip rect {
+  fill: #2a2a33;
+}
+
+.gala-gives {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 30px;
+  margin-top: 70px;
+}
+
+.gala-gives li {
+  padding-top: 20px;
+  border-top: 1px solid rgba(241, 217, 160, 0.25);
+}
+
+.gala-gives span {
+  color: var(--gala-pink);
+  font-family: var(--gala-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.gala-gives h3 {
+  margin-top: 12px;
+  font-family: var(--gala-display);
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.gala-gives p {
+  margin-top: 10px;
+  color: rgba(247, 241, 229, 0.7);
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+/* 6 — Boarding pass */
+.gala-close {
+  padding: 110px 0 120px;
+  color: var(--gala-ivory);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(217, 181, 106, 0.16), transparent 50%),
+    var(--gala-midnight);
+}
+
+/* 6 — Travel partners: teaser seat map */
+.gala-partners {
+  padding: 110px 0 100px;
+  background:
+    radial-gradient(circle at 90% 0%, rgba(217, 181, 106, 0.16), transparent 40%),
+    var(--gala-ivory);
+}
+
+.gala-partners h2 em {
+  color: #8e2a5c;
+}
+
+.gala-partners-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+  align-items: end;
+  gap: 40px;
+}
+
+.gala-partners-head .gala-section-head > p:last-child {
+  margin-top: 18px;
+  color: var(--gala-muted);
+  font-size: 1.08rem;
+  line-height: 1.65;
+}
+
+.gala-partners-cta {
+  display: grid;
+  gap: 14px;
+  padding: 24px 26px;
+  background: #fbf6ea;
+  border: 1px solid #e4d8bd;
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(60, 44, 20, 0.12);
+}
+
+.gala-partners-cta-label {
+  color: #8e2a5c;
+  font-family: var(--gala-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.gala-partners-cta p:not(.gala-partners-cta-label) {
+  color: var(--gala-muted);
+  line-height: 1.6;
+}
+
+.gala-button-plum {
+  color: white;
+  background: linear-gradient(135deg, var(--gala-pink), #8e2a5c);
+  box-shadow: 0 12px 26px rgba(142, 42, 92, 0.25);
+}
+
+.gala-seatmap-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 24px;
+  margin-top: 52px;
+  color: var(--gala-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.gala-seatmap-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gala-seatmap-legend li::before {
+  width: 14px;
+  height: 14px;
+  content: '';
+  border-radius: 4px;
+}
+
+.gala-seatmap-legend .is-first::before {
+  background: #c9a24f;
+}
+
+.gala-seatmap-legend .is-business::before {
+  background: #8e2a5c;
+}
+
+.gala-seatmap-legend .is-main::before {
+  background: #1f3152;
+}
+
+.gala-seatmap-legend .is-status {
+  margin-left: auto;
+  color: #8a7754;
+  font-family: var(--gala-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.gala-seatmap-legend .is-status::before {
+  width: 8px;
+  height: 8px;
+  background: var(--gala-pink);
+  border-radius: 50%;
+  animation: gala-blink 1.6s ease-in-out infinite;
+}
+
+@keyframes gala-blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.gala-seatmap {
+  margin-top: 18px;
+}
+
+.gala-seatmap-frame {
+  padding: 18px;
+  background:
+    linear-gradient(rgba(31, 49, 82, 0.05) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, rgba(31, 49, 82, 0.05) 1px, transparent 1px) 0 0 / 24px 24px,
+    #f3ecdc;
+  border: 1px solid #e4d8bd;
+  border-radius: 18px;
+}
+
+.gala-seatmap-frame svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.gala-seatmap-tall {
+  display: none !important;
+}
+
+.gala-seatmap-wide {
+  max-width: 1000px;
+  margin-inline: auto;
+}
+
+/* Fills come from the per-drawing gradients in the markup. */
+.gala-seatmap-wing {
+  stroke: #b9a77f;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.gala-seatmap-engine rect {
+  stroke: #a9966c;
+  stroke-width: 1.5;
+}
+
+.gala-seatmap-intake {
+  fill: #2a3550;
+  opacity: 0.75;
+}
+
+.gala-seatmap-fuselage {
+  stroke: #1f3152;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 10px 16px rgba(31, 49, 82, 0.16));
+}
+
+.gala-seatmap-fin {
+  fill: #d6cab0;
+  stroke: #1f3152;
+  stroke-width: 1.5;
+}
+
+.gala-seatmap-cockpit path {
+  fill: #1f3152;
+}
+
+.gala-seatmap-cockpit line {
+  stroke: #fffdf7;
+  stroke-width: 1.4;
+}
+
+.gala-seatmap-door rect {
+  fill: none;
+  stroke: #8a9ab3;
+  stroke-width: 1.2;
+}
+
+.gala-seatmap-divider {
+  stroke: #c9b994;
+  stroke-dasharray: 4 5;
+  stroke-width: 1.5;
+}
+
+.gala-seatmap-window rect {
+  fill: #9fb3cf;
+}
+
+/* Seats: outlined "opening soon", with a shimmer wave nose to tail. */
+.gala-seat {
+  --seat: #1f3152;
+  cursor: pointer;
+}
+
+.gala-seat-first {
+  --seat: #b58b3a;
+}
+
+.gala-seat-business {
+  --seat: #8e2a5c;
+}
+
+.gala-seat rect {
+  fill: var(--seat);
+  fill-opacity: 0.16;
+  stroke: var(--seat);
+  stroke-width: 1.4;
+  transition: fill-opacity 250ms ease;
+  animation: gala-seat-shimmer 7s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 45ms);
+}
+
+.gala-seat-back {
+  fill-opacity: 0.3 !important;
+}
+
+@keyframes gala-seat-shimmer {
+  0%,
+  12%,
+  100% {
+    fill-opacity: 0.16;
+  }
+  6% {
+    fill-opacity: 0.65;
+  }
+}
+
+.gala-seat:hover rect,
+.gala-seat.is-active rect {
+  fill-opacity: 1 !important;
+  animation: none;
+}
+
+.gala-seatmap-status {
+  min-height: 1.6em;
+  margin-top: 14px;
+  color: var(--gala-muted);
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+.gala-seatmap-status b {
+  color: #8e2a5c;
+}
+
+/* First-class boarding pass */
+.gala-pass-wrap {
+  max-width: 980px;
+  margin: 52px auto 0;
+  perspective: 1400px;
+}
+
+.gala-pass {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  color: var(--gala-ink);
+  filter: drop-shadow(0 34px 60px rgba(0, 0, 0, 0.5));
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gala-pass-main,
+.gala-pass-stub {
+  position: relative;
+  overflow: hidden;
+  background:
+    repeating-radial-gradient(circle at 0% 100%, transparent 0 18px, rgba(122, 96, 52, 0.05) 18px 19px),
+    #fbf6ea;
+}
+
+/* Semicircle notches at the tear line. */
+.gala-pass-main {
+  border-radius: 18px 0 0 18px;
+  -webkit-mask: radial-gradient(circle at 100% 0, transparent 14px, #000 15px) top / 100% 51% no-repeat,
+    radial-gradient(circle at 100% 100%, transparent 14px, #000 15px) bottom / 100% 51% no-repeat;
+  mask: radial-gradient(circle at 100% 0, transparent 14px, #000 15px) top / 100% 51% no-repeat,
+    radial-gradient(circle at 100% 100%, transparent 14px, #000 15px) bottom / 100% 51% no-repeat;
+}
+
+.gala-pass-stub {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border-left: 2px dashed #d3c39e;
+  border-radius: 0 18px 18px 0;
+  -webkit-mask: radial-gradient(circle at 0 0, transparent 14px, #000 15px) top / 100% 51% no-repeat,
+    radial-gradient(circle at 0 100%, transparent 14px, #000 15px) bottom / 100% 51% no-repeat;
+  mask: radial-gradient(circle at 0 0, transparent 14px, #000 15px) top / 100% 51% no-repeat,
+    radial-gradient(circle at 0 100%, transparent 14px, #000 15px) bottom / 100% 51% no-repeat;
+  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* The stub eases away along the perforation, as if about to be torn off. */
+.gala-pass-wrap.can-tilt .gala-pass-stub:hover {
+  transform: translateX(8px) rotate(1.2deg);
+}
+
+/* Navy header band with foil lettering. */
+.gala-pass-band {
+  min-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 30px;
+  color: var(--gala-ivory);
+  background:
+    radial-gradient(ellipse at 15% 0%, rgba(217, 181, 106, 0.22), transparent 60%),
+    linear-gradient(120deg, #1b2a48, var(--gala-midnight));
+}
+
+.gala-pass-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--gala-display);
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.gala-pass-class {
+  display: grid;
+  justify-items: end;
+}
+
+.gala-pass-class small,
+.gala-pass-band-stub {
+  color: rgba(247, 241, 229, 0.62);
+  font-family: var(--gala-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.gala-pass-class b {
+  background: linear-gradient(100deg, #f6e2a8, #c9a24f 40%, #fff4d1 55%, #b58b3a 75%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: var(--gala-display);
+  font-size: 1.15rem;
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.gala-pass-band-stub {
+  padding: 16px 22px;
+}
+
+.gala-pass-body {
+  position: relative;
+  padding: 26px 30px 24px;
+}
+
+.gala-pass-watermark {
+  position: absolute;
+  top: 50%;
+  right: -40px;
+  color: rgba(142, 42, 92, 0.06);
+  transform: translateY(-50%) rotate(12deg);
+  pointer-events: none;
+}
+
+.gala-pass-route {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+}
+
+.gala-pass-route small,
+.gala-pass-fields dt,
+.gala-pass-note {
+  display: block;
+  color: #8a7754;
+  font-family: var(--gala-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.gala-pass-route strong {
+  display: block;
+  color: var(--gala-midnight);
+  font-family: var(--gala-display);
+  font-size: clamp(2.8rem, 6.4vw, 4.4rem);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 0.95;
+}
+
+.gala-pass-route span {
+  display: block;
+  margin-top: 4px;
+  color: var(--gala-muted);
+  font-size: 0.85rem;
+}
+
+.gala-pass-route > div:last-child {
+  text-align: right;
+}
+
+.gala-pass-route span span {
+  display: inline;
+  margin: 0;
+}
+
+.gala-pass-short {
+  display: none !important;
+}
+
+.gala-pass-route svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.gala-pass-arc {
+  fill: none;
+  stroke: var(--gala-pink);
+  stroke-dasharray: 3 6;
+  stroke-linecap: round;
+  stroke-width: 2;
+}
+
+.gala-pass-route circle {
+  fill: var(--gala-pink);
+}
+
+.gala-pass-plane {
+  fill: var(--gala-midnight);
+  stroke: var(--gala-midnight);
+  stroke-linejoin: round;
+  stroke-width: 1;
+}
+
+.gala-pass-fields {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px 20px;
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid #e4d8bd;
+}
+
+.gala-pass-fields dd {
+  margin-top: 4px;
+  font-family: var(--gala-mono);
+  font-size: 1.02rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.gala-pass-note {
+  position: relative;
+  margin-top: 24px;
+  padding-top: 14px;
+  border-top: 1px dashed #e4d8bd;
+  color: #a8956d;
+  font-size: 0.6rem;
+}
+
+/* Foil sheen that follows the pointer. */
+.gala-pass-foil {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--mx) var(--my), rgba(255, 244, 209, 0.55), transparent 42%);
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  transition: opacity 400ms ease;
+  pointer-events: none;
+}
+
+.gala-pass-wrap.can-tilt:hover .gala-pass-foil {
+  opacity: 1;
+}
+
+.gala-pass-stub-body {
+  display: grid;
+  align-content: center;
+  gap: 16px;
+  padding: 24px 26px;
+}
+
+.gala-pass-stub-route {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--gala-midnight);
+  font-family: var(--gala-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.gala-pass-stub-route span {
+  flex: 1;
+  height: 0;
+  border-top: 2px dashed var(--gala-pink);
+}
+
+.gala-pass-stub-body > p:not(.gala-pass-stub-route) {
+  color: var(--gala-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.gala-pass-code {
+  display: grid;
+  gap: 6px;
+}
+
+.gala-pass-code img {
+  width: 100%;
+  height: auto;
+  display: block;
+  /* PDF417 needs a quiet zone; the stub's padding provides it. */
+  image-rendering: crisp-edges;
+}
+
+.gala-pass-code figcaption {
+  color: #a8956d;
+  font-family: var(--gala-mono);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.gala-partner {
+  margin-top: 40px;
+  color: rgba(247, 241, 229, 0.7);
+  text-align: center;
+}
+
+.gala-partner a {
+  color: var(--gala-brass-light);
+  font-weight: 700;
+  text-underline-offset: 4px;
+}
+
+/* Responsive */
+@media (max-width: 1020px) {
+  .gala-tags {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 18px;
+  }
+
+  /* Wrapped rows have no rail to hang from; give each tag a short hook. */
+  .gala-tags::before {
+    display: none;
+  }
+
+  .gala-tag-strap {
+    height: 40px;
+    margin-top: 0;
+    border-radius: 7px;
+  }
+
+  .gala-gives {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gala-postcard {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .gala-board-inner {
+    --cell: min(30px, calc((100cqi - 48px) / 26.9)); /* 2 columns, 26 tiles */
+  }
+
+  .gala-board .col-time {
+    display: none;
+  }
+
+  .gala-board-row {
+    grid-template-columns: auto auto;
+  }
+
+  .gala-passport {
+    grid-template-columns: 1fr;
+  }
+
+  .gala-passport-data,
+  .gala-passport-visas {
+    border-radius: 6px;
+    box-shadow: none;
+  }
+
+  .gala-passport-visas {
+    margin-top: 10px;
+  }
+
+  .gala-passport::after {
+    display: none;
+  }
+
+  .gala-passport-ribbon {
+    right: 40px;
+  }
+
+  .gala-passport-notes {
+    grid-template-columns: 1fr;
+  }
+
+  .gala-pass {
+    grid-template-columns: 1fr;
+  }
+
+  .gala-partners-head {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .gala-pass-main {
+    border-radius: 18px 18px 0 0;
+    -webkit-mask: radial-gradient(circle at 0 100%, transparent 14px, #000 15px) left / 51% 100% no-repeat,
+      radial-gradient(circle at 100% 100%, transparent 14px, #000 15px) right / 51% 100% no-repeat;
+    mask: radial-gradient(circle at 0 100%, transparent 14px, #000 15px) left / 51% 100% no-repeat,
+      radial-gradient(circle at 100% 100%, transparent 14px, #000 15px) right / 51% 100% no-repeat;
+  }
+
+  .gala-pass-stub {
+    border-top: 2px dashed #d3c39e;
+    border-left: 0;
+    border-radius: 0 0 18px 18px;
+    -webkit-mask: radial-gradient(circle at 0 0, transparent 14px, #000 15px) left / 51% 100% no-repeat,
+      radial-gradient(circle at 100% 0, transparent 14px, #000 15px) right / 51% 100% no-repeat;
+    mask: radial-gradient(circle at 0 0, transparent 14px, #000 15px) left / 51% 100% no-repeat,
+      radial-gradient(circle at 100% 0, transparent 14px, #000 15px) right / 51% 100% no-repeat;
+  }
+
+  .gala-pass-band-stub {
+    display: none;
+  }
+
+  .gala-pass-wrap.can-tilt .gala-pass-stub:hover {
+    transform: translateY(6px);
+  }
+
+  .gala-map svg {
+    width: 160%;
+    margin-left: -18%;
+  }
+
+  .gala-map {
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 640px) {
+  .gala-shell {
+    width: min(100% - 32px, 560px);
+  }
+
+  .gala-hero {
+    padding: 124px 0 80px;
+  }
+
+  .gala-hero-photo {
+    height: 760px;
+  }
+
+  .gala-hero-photo img {
+    object-position: 78% 30%;
+  }
+
+  .gala-hero-photo::after {
+    background:
+      linear-gradient(180deg, rgba(11, 19, 34, 0.55) 0%, rgba(11, 19, 34, 0.7) 40%, rgba(20, 33, 58, 0.92) 75%, var(--gala-midnight-2) 100%);
+  }
+
+  .gala-hero-inner {
+    gap: 44px;
+  }
+
+  .gala-actions,
+  .gala-button {
+    width: 100%;
+  }
+
+  .gala-board {
+    padding: 14px;
+  }
+
+  /* Phones: destination tiles only, so they can be twice the size. */
+  .gala-board-inner {
+    --cell: min(26px, calc((100cqi - 30px) / 16));
+  }
+
+  .gala-board .col-status {
+    display: none;
+  }
+
+  .gala-board-row {
+    grid-template-columns: auto;
+  }
+
+  .gala-board-clock {
+    display: none;
+  }
+
+  .gala-routes,
+  .gala-passport-section,
+  .gala-return,
+  .gala-close {
+    padding-block: 76px;
+  }
+
+  .gala-passport {
+    padding: 10px;
+  }
+
+  .gala-passport-data {
+    grid-template-columns: 110px 1fr;
+    grid-template-areas:
+      'issuer issuer'
+      'photo photo'
+      'fields fields'
+      'sign sign'
+      'mrz mrz';
+    gap: 18px;
+  }
+
+  .gala-passport-codes {
+    display: none;
+  }
+
+  .gala-passport-photo {
+    width: 128px;
+  }
+
+  .gala-passport-seal {
+    left: auto;
+    right: -56px;
+    bottom: 8px;
+  }
+
+  .gala-passport-fields dd.is-name {
+    font-size: 1.7rem;
+  }
+
+  .gala-stamps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gala-tags {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px 12px;
+  }
+
+  .gala-tag-body {
+    padding: 46px 10px 12px;
+  }
+
+  .gala-tag-card {
+    min-height: 186px;
+    padding: 10px 9px 8px;
+  }
+
+  /* An odd last tag hangs centred under the pair above it. */
+  .gala-tag:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .gala-tag:last-child:nth-child(odd) .gala-tag-body {
+    max-width: calc(50% - 6px);
+  }
+
+  .gala-tag-card strong {
+    font-size: 1.12rem;
+  }
+
+  .gala-tag-card-head b {
+    font-size: 1.15rem;
+  }
+
+  .gala-gives {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    margin-top: 52px;
+  }
+
+  .gala-postcard {
+    padding: 10px;
+    transform: rotate(-0.6deg);
+  }
+
+  .gala-postcard-print img {
+    min-height: 240px;
+  }
+
+  .gala-postcard-back {
+    padding: 4px 8px 12px;
+  }
+
+  .gala-postcard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gala-postcard-divider {
+    display: none;
+  }
+
+  .gala-postcard-message {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd0b4;
+  }
+
+  .gala-tape {
+    width: 82px;
+  }
+
+  .gala-partners {
+    padding-block: 76px;
+  }
+
+  .gala-seatmap-wide {
+    display: none !important;
+  }
+
+  .gala-seatmap-tall {
+    display: block !important;
+    max-width: 300px;
+    margin-inline: auto;
+  }
+
+  .gala-seatmap-legend .is-status {
+    margin-left: 0;
+  }
+
+  .gala-postcard-head {
+    gap: 8px;
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    white-space: nowrap;
+  }
+
+  .gala-postcard-place {
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
+  }
+
+  .gala-pass-body {
+    padding: 22px 20px 20px;
+  }
+
+  .gala-pass-band {
+    padding: 14px 20px;
+  }
+
+  .gala-pass-route {
+    grid-template-columns: auto minmax(56px, 1fr) auto;
+    align-items: start;
+    gap: 10px;
+  }
+
+  .gala-pass-route svg {
+    align-self: center;
+  }
+
+  .gala-pass-long {
+    display: none !important;
+  }
+
+  .gala-pass-short {
+    display: inline !important;
+  }
+
+  .gala-pass-brand {
+    font-size: 1.05rem;
+  }
+
+  .gala-pass-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gala-pass-stub-body {
+    padding: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gala-seat rect,
+  .gala-seatmap-legend .is-status::before {
+    animation: none;
+  }
+
+  .gala-postcard {
+    transition: none;
+  }
+
+  .gala-postcard:hover {
+    transform: rotate(-1.2deg);
+  }
+
+  .gala-pass,
+  .gala-pass-stub {
+    transition: none;
+  }
+
+  .gala-passport-holo,
+  .gala-hero-photo img,
+  .gala-map-pulse {
+    animation: none;
+  }
+
+  .gala-map-route,
+  .gala-map-dest,
+  .gala-map-num,
+  .gala-button {
+    transition: none;
+  }
+
+  .gala-tag:hover .gala-tag-swing {
+    animation: none;
+  }
+
+  .gala-tag-body {
+    transition: none;
+  }
+
+  .gala-tag:hover .gala-tag-body {
+    transform: none;
+  }
+
+  .gala-map-route {
+    stroke-dashoffset: 0;
+  }
+
+  .gala-map-dest,
+  .gala-map-num {
+    opacity: 1;
+  }
+
+  .gala-button:hover {
+    transform: none;
+  }
+}
+
+/* On ivory paper, brass italics are too faint; use SparkPoint plum. */
+.gala-passport-section h2 em,
+.gala-tags-section h2 em {
+  color: #8e2a5c;
+}
+
+/* Sparkmark placements */
+.gala-kicker {
+  align-items: center;
+}
+
+
+
+.gala-passport-emblem {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.gala-passport-emblem svg {
+  position: absolute;
+  inset: 0;
+}
+
+.gala-passport-emblem-mark {
+  color: #b08d45;
+}
+
+.gala-passport-seal {
+  display: grid;
+  place-items: center;
+}
+
+.gala-passport-seal svg {
+  position: absolute;
+  inset: 0;
+}
+
+.gala-passport-seal-mark {
+  color: #8e2a5c;
+}

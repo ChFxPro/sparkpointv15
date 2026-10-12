@@ -110,23 +110,23 @@ export function StoryHighlights() {
           {drOraEvent && (
             <HighlightTile
               featured
-              image={eventAssetUrl(drOraEvent)}
+              image={eventAssetUrl(drOraEvent) ?? ''}
               kicker="Recent talk · Aug 10"
               title={drOraEvent.title}
               copy="Dr. Ora returned to the Transylvania County Library with the Alzheimer’s Association and NC Cooperative Extension for an evening of brain health, nutrition, and hands-on wellness."
               ctaLabel="Read Dr. Ora’s story"
-              ctaHref={drOraEvent.detailPath}
+              ctaHref={drOraEvent.detailPath ?? '/events'}
               delay={0.1}
             />
           )}
           {ruralHealthEvent && (
             <HighlightTile
-              image={eventAssetUrl(ruralHealthEvent)}
+              image={eventAssetUrl(ruralHealthEvent) ?? ''}
               kicker="Oct 1 · A full house"
               title="Where rural health came together"
               copy="A full house of WNC's rural health leaders gathered at Deerwoode Reserve to connect, collaborate, and step inside the Field Simulator together."
               ctaLabel="See the recap"
-              ctaHref={ruralHealthEvent.detailPath}
+              ctaHref={ruralHealthEvent.detailPath ?? '/events'}
               delay={0.2}
             />
           )}
