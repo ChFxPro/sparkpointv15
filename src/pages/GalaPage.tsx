@@ -8,6 +8,7 @@ import { Sparkmark } from '../components/Sparkmark';
 import { GalaBoardingPass } from './GalaBoardingPass';
 import { GalaDepartureBoard } from './GalaDepartureBoard';
 import { GalaPostcard } from './GalaPostcard';
+import { GalaSeatMap } from './GalaSeatMap';
 import { GalaRouteMap } from './GalaRouteMap';
 import './gala.css';
 
@@ -396,7 +397,48 @@ export default function GalaPage() {
         </div>
       </section>
 
-      {/* 6 — Boarding pass */}
+      {/* 6 — Travel partners (sponsor teaser) */}
+      <section id="travel-partners" className="gala-partners" aria-labelledby="partners-title">
+        <div className="gala-shell">
+          <div className="gala-partners-head">
+            <motion.div className="gala-section-head" {...reveal}>
+              <p className="gala-label gala-label-ink">Travel partners</p>
+              <h2 id="partners-title">
+                Your brand, cleared <em>for takeoff.</em>
+              </h2>
+              <p>
+                The Gala puts your business in front of the people who travel, give, and lead
+                in Transylvania County. Partnership seats are being finalized now.
+              </p>
+            </motion.div>
+            <motion.aside className="gala-partners-cta" {...revealLate}>
+              <p className="gala-partners-cta-label">Early boarding</p>
+              <p>
+                Want first pick of seats? Tell us you’re interested, and we’ll reach out before
+                the seat map opens.
+              </p>
+              <Link className="gala-button gala-button-plum" to="/intake?intent=partner">
+                Request early boarding <ArrowRight aria-hidden="true" />
+              </Link>
+            </motion.aside>
+          </div>
+
+          <motion.div {...reveal}>
+            <ul className="gala-seatmap-legend">
+              <li className="is-first">First Class</li>
+              <li className="is-business">Business</li>
+              <li className="is-main">Main Cabin</li>
+              <li className="is-status">Seat map opening soon</li>
+            </ul>
+            <GalaSeatMap />
+          </motion.div>
+          <p className="gala-fine-print">
+            Illustrative seat map. Partnership levels and benefits will be announced soon.
+          </p>
+        </div>
+      </section>
+
+      {/* 7 — Boarding pass */}
       <section className="gala-close" aria-labelledby="close-title">
         <div className="gala-shell">
           <motion.div className="gala-section-head gala-section-head-center" {...reveal}>
@@ -411,7 +453,7 @@ export default function GalaPage() {
           </motion.div>
 
           <motion.p className="gala-partner" {...reveal}>
-            Want your business on board? <Link to="/intake?intent=partner">Become a Gala travel partner</Link>
+            Want your business on board? <a href="#travel-partners">Become a Gala travel partner</a>
           </motion.p>
         </div>
       </section>

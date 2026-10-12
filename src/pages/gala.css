@@ -1655,6 +1655,230 @@
     var(--gala-midnight);
 }
 
+/* 6 — Travel partners: teaser seat map */
+.gala-partners {
+  padding: 110px 0 100px;
+  background:
+    radial-gradient(circle at 90% 0%, rgba(217, 181, 106, 0.16), transparent 40%),
+    var(--gala-ivory);
+}
+
+.gala-partners h2 em {
+  color: #8e2a5c;
+}
+
+.gala-partners-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+  align-items: end;
+  gap: 40px;
+}
+
+.gala-partners-head .gala-section-head > p:last-child {
+  margin-top: 18px;
+  color: var(--gala-muted);
+  font-size: 1.08rem;
+  line-height: 1.65;
+}
+
+.gala-partners-cta {
+  display: grid;
+  gap: 14px;
+  padding: 24px 26px;
+  background: #fbf6ea;
+  border: 1px solid #e4d8bd;
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(60, 44, 20, 0.12);
+}
+
+.gala-partners-cta-label {
+  color: #8e2a5c;
+  font-family: var(--gala-mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.gala-partners-cta p:not(.gala-partners-cta-label) {
+  color: var(--gala-muted);
+  line-height: 1.6;
+}
+
+.gala-button-plum {
+  color: white;
+  background: linear-gradient(135deg, var(--gala-pink), #8e2a5c);
+  box-shadow: 0 12px 26px rgba(142, 42, 92, 0.25);
+}
+
+.gala-seatmap-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 24px;
+  margin-top: 52px;
+  color: var(--gala-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.gala-seatmap-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gala-seatmap-legend li::before {
+  width: 14px;
+  height: 14px;
+  content: '';
+  border-radius: 4px;
+}
+
+.gala-seatmap-legend .is-first::before {
+  background: #c9a24f;
+}
+
+.gala-seatmap-legend .is-business::before {
+  background: #8e2a5c;
+}
+
+.gala-seatmap-legend .is-main::before {
+  background: #1f3152;
+}
+
+.gala-seatmap-legend .is-status {
+  margin-left: auto;
+  color: #8a7754;
+  font-family: var(--gala-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.gala-seatmap-legend .is-status::before {
+  width: 8px;
+  height: 8px;
+  background: var(--gala-pink);
+  border-radius: 50%;
+  animation: gala-blink 1.6s ease-in-out infinite;
+}
+
+@keyframes gala-blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.gala-seatmap {
+  margin-top: 18px;
+}
+
+.gala-seatmap-frame {
+  padding: 18px;
+  background:
+    linear-gradient(rgba(31, 49, 82, 0.05) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, rgba(31, 49, 82, 0.05) 1px, transparent 1px) 0 0 / 24px 24px,
+    #f3ecdc;
+  border: 1px solid #e4d8bd;
+  border-radius: 18px;
+}
+
+.gala-seatmap-frame svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.gala-seatmap-tall {
+  display: none !important;
+}
+
+.gala-seatmap-wing {
+  fill: #e6dcc6;
+  stroke: #c9b994;
+  stroke-width: 1.5;
+}
+
+.gala-seatmap-fuselage {
+  fill: #fffdf7;
+  stroke: #1f3152;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 8px 14px rgba(31, 49, 82, 0.12));
+}
+
+.gala-seatmap-cockpit {
+  fill: #1f3152;
+  opacity: 0.8;
+}
+
+.gala-seatmap-divider {
+  stroke: #c9b994;
+  stroke-dasharray: 4 5;
+  stroke-width: 1.5;
+}
+
+.gala-seatmap-window rect {
+  fill: #9fb3cf;
+}
+
+/* Seats: outlined "opening soon", with a shimmer wave nose to tail. */
+.gala-seat {
+  --seat: #1f3152;
+  cursor: pointer;
+}
+
+.gala-seat-first {
+  --seat: #b58b3a;
+}
+
+.gala-seat-business {
+  --seat: #8e2a5c;
+}
+
+.gala-seat rect {
+  fill: var(--seat);
+  fill-opacity: 0.16;
+  stroke: var(--seat);
+  stroke-width: 1.4;
+  transition: fill-opacity 250ms ease;
+  animation: gala-seat-shimmer 7s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 45ms);
+}
+
+.gala-seat-back {
+  fill-opacity: 0.3 !important;
+}
+
+@keyframes gala-seat-shimmer {
+  0%,
+  12%,
+  100% {
+    fill-opacity: 0.16;
+  }
+  6% {
+    fill-opacity: 0.65;
+  }
+}
+
+.gala-seat:hover rect,
+.gala-seat.is-active rect {
+  fill-opacity: 1 !important;
+  animation: none;
+}
+
+.gala-seatmap-status {
+  min-height: 1.6em;
+  margin-top: 14px;
+  color: var(--gala-muted);
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+.gala-seatmap-status b {
+  color: #8e2a5c;
+}
+
 /* First-class boarding pass */
 .gala-pass-wrap {
   max-width: 980px;
@@ -2026,6 +2250,11 @@
     grid-template-columns: 1fr;
   }
 
+  .gala-partners-head {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
   .gala-pass-main {
     border-radius: 18px 18px 0 0;
     -webkit-mask: radial-gradient(circle at 0 100%, transparent 14px, #000 15px) left / 51% 100% no-repeat,
@@ -2225,6 +2454,24 @@
     width: 82px;
   }
 
+  .gala-partners {
+    padding-block: 76px;
+  }
+
+  .gala-seatmap-wide {
+    display: none !important;
+  }
+
+  .gala-seatmap-tall {
+    display: block !important;
+    max-width: 280px;
+    margin-inline: auto;
+  }
+
+  .gala-seatmap-legend .is-status {
+    margin-left: 0;
+  }
+
   .gala-postcard-head {
     gap: 8px;
     font-size: 0.78rem;
@@ -2277,6 +2524,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .gala-seat rect,
+  .gala-seatmap-legend .is-status::before {
+    animation: none;
+  }
+
   .gala-postcard {
     transition: none;
   }
