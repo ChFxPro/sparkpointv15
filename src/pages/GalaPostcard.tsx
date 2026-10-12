@@ -35,7 +35,7 @@ export function GalaPostcard() {
           />
           <figcaption>
             <span className="gala-postcard-greet">Greetings from</span>
-            <strong className="gala-postcard-big">Home</strong>
+            <strong className="gala-postcard-big" data-text="Home">Home</strong>
             <span className="gala-postcard-place">Transylvania County · North Carolina</span>
           </figcaption>
         </div>
