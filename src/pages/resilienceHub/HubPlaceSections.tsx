@@ -108,7 +108,8 @@ export function TransformationSection({ reveal }: RevealProps) {
 
 // Room outlines are traced from ARCA Design sheet A101 ("Sparkpoint
 // Alterations", 26030, 2026-06-23, For Permit & Construction), in the
-// sheet's own coordinates. Square footage is the architect's. The uses are
+// sheet's own coordinates. Square footage is the architect's, except the studio, which uses
+// SparkPoint's 128 sq ft planning figure (the sheet labels it 124). The uses are
 // SparkPoint's intended program for each room, not part of the drawings.
 
 type RoomId = 'studio' | 'meeting' | 'conference' | 'reception' | 'offices';
@@ -135,7 +136,7 @@ const ROOMS: Room[] = [
   {
     id: 'studio',
     name: 'StoryLab studio',
-    sf: '124 sq ft',
+    sf: '128 sq ft',
     use: 'Recording, interviews, and editing, where community stories are captured with care.',
     shapes: ['70,95 455,95 455,250 70,250'],
     labels: [{ x: 262, y: 172 }],

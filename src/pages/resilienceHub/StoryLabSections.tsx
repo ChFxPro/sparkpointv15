@@ -1,9 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { motion } from 'motion/react';
-import { Link } from 'react-router';
 import {
   ArrowDown,
-  ArrowRight,
   BookOpen,
   Check,
   Ear,
@@ -23,7 +21,6 @@ import { Sparkmark } from '../../components/Sparkmark';
 import studioSmall from '../../assets/hub/storylab-studio-960.webp';
 import studioLarge from '../../assets/hub/storylab-studio-1536.webp';
 import { RenderingNote } from './HubPlaceSections';
-import { Button } from '../../components/ui/button';
 import './resilienceHub.css';
 
 // Figures and copy below come from the StoryLab · Resilience Hub one-pager
@@ -95,7 +92,7 @@ const INITIATIVES: Initiative[] = [
     definition:
       'A community media studio and listening process where lived experience becomes useful learning.',
     rows: [
-      { label: 'What it is', value: 'A 124 sq ft studio and a Listen, Learn, Lead process' },
+      { label: 'What it is', value: 'A 128 sq ft studio and a Listen, Learn, Lead process' },
       { label: 'Who takes part', value: 'Residents, nonprofits, and local leaders sharing their stories' },
       { label: 'What comes of it', value: 'Story collections, archives, and insight that shapes programs and funding' },
     ],
@@ -345,7 +342,7 @@ export function StoryLabSection({ reveal }: RevealProps) {
           </motion.figure>
           <div>
             <h3 className="rh-studio-block__title">Inside the studio</h3>
-            <p className="rh-studio-block__meta">Office, edit bay, and filming studio in 124 sq ft</p>
+            <p className="rh-studio-block__meta">Office, edit bay, and filming studio in 128 sq ft</p>
             <ol className="rh-studio-zones">
               {STUDIO_ZONES.map((zone, index) => (
                 <li key={zone.title}>
@@ -481,52 +478,6 @@ export function WhyTrustSection({ reveal }: RevealProps) {
           </dl>
         </motion.div>
       </div>
-    </section>
-  );
-}
-
-// ─── The investment ───
-
-export function InvestmentSection({ reveal }: RevealProps) {
-  return (
-    <section className="rh-band rh-band--paper" aria-labelledby="rh-invest-title">
-      <motion.div
-        className="rh-wrap rh-invest"
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={reveal}
-      >
-        <h2 id="rh-invest-title" className="sr-only">Investing in StoryLab</h2>
-        <div className="rh-invest__cell">
-          <span className="rh-invest__kicker">The investment</span>
-          <span className="rh-invest__value">$68,000</span>
-          <span className="rh-invest__detail">
-            One-time capital: studio build-out, equipment, and training pods.
-          </span>
-        </div>
-        <div className="rh-invest__cell">
-          <span className="rh-invest__kicker">What a funded year returns</span>
-          <span className="rh-invest__value">$13.5K&ndash;$41K</span>
-          <span className="rh-invest__detail">
-            Modeled direct value in one pilot year: produced media, accessibility work,
-            documentation, and reduced contractor reliance.
-          </span>
-        </div>
-        <div className="rh-invest__cell rh-invest__cell--cta">
-          <Sparkmark size="1.75rem" variant="ink" />
-          <p>
-            A model for rural communities: preserve local stories, train local talent, and turn
-            lived experience into better decisions.
-          </p>
-          <Button asChild className="rh-invest__button">
-            <Link to="/intake?intent=partner">
-              Talk with us about StoryLab
-              <ArrowRight />
-            </Link>
-          </Button>
-        </div>
-      </motion.div>
     </section>
   );
 }

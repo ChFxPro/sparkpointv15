@@ -24,7 +24,6 @@ import {
   FellowshipSection,
   GroundworkSection,
   InitiativesSection,
-  InvestmentSection,
   StoryLabSection,
   WhyTrustSection,
 } from './resilienceHub/StoryLabSections';
@@ -532,7 +531,6 @@ export function ResilienceHubPage() {
       <StoryLabSection reveal={reveal} />
       <FellowshipSection reveal={reveal} />
       <WhyTrustSection reveal={reveal} />
-      <InvestmentSection reveal={reveal} />
 
       {/* ──── 6. WHO IT SERVES (near-white glass) ──── */}
       <section
