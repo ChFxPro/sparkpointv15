@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { Link } from 'react-router';
 import {
@@ -9,28 +9,25 @@ import {
   Building2,
   CalendarDays,
   Compass,
-  Cpu,
-  GraduationCap,
   Handshake,
   HeartHandshake,
   House,
-  Layers,
   MapPin,
-  MessageCircle,
-  Mic,
-  RefreshCw,
   Shield,
-  ShieldCheck,
   Sparkles,
   Users,
-  Video,
   type LucideIcon,
 } from 'lucide-react';
-import hubAutumnImage from '../assets/hub/_0001_Resilience Hub Autumn.jpg';
-import hubWinterImage from '../assets/hub/_0002_Resilience Hub Winter.jpg';
-import hubDayImage from '../assets/hub/_0003_Resilience Hub Day.jpg';
-import hubSpringImage from '../assets/hub/_0000_Resilience Hub Spring.jpg';
-import hubNightImage from '../assets/hub/_0005_Resilience Hub Night.jpg';
+import { RenderingNote, SuitePlanSection, TransformationSection } from './resilienceHub/HubPlaceSections';
+import { getSeasonalHeroId, HUB_HERO_VIEWS, type HubHeroViewId } from './resilienceHub/hubViews';
+import {
+  FellowshipSection,
+  GroundworkSection,
+  InitiativesSection,
+  InvestmentSection,
+  StoryLabSection,
+  WhyTrustSection,
+} from './resilienceHub/StoryLabSections';
 import { KeepExploringLinks } from '../components/KeepExploringLinks';
 import { SEOHead } from '../components/SEOHead';
 import { Button } from '../components/ui/button';
@@ -38,27 +35,9 @@ import { useAccessibility } from '../context/AccessibilityContext';
 
 // ─── TYPES ───
 
-type HubHeroViewId = 'spring' | 'day' | 'autumn' | 'winter' | 'night';
-
-type HubHeroView = {
-  id: HubHeroViewId;
-  label: string;
-  image: string;
-  description: string;
-};
-
 type DetailCard = {
   title: string;
   body: string;
-  icon: LucideIcon;
-  accent: string;
-};
-
-type PracticeCard = {
-  label: 'Listen' | 'Learn' | 'Lead';
-  title: string;
-  body: string;
-  points: string[];
   icon: LucideIcon;
   accent: string;
 };
@@ -72,39 +51,6 @@ type AudienceCard = {
 };
 
 // ─── DATA ───
-
-const HUB_HERO_VIEWS: HubHeroView[] = [
-  {
-    id: 'spring',
-    label: 'Spring',
-    image: hubSpringImage,
-    description: 'Spring view of the SparkPoint Resilience Hub exterior in Brevard.',
-  },
-  {
-    id: 'day',
-    label: 'Day',
-    image: hubDayImage,
-    description: 'Daytime view of the SparkPoint Resilience Hub exterior in Brevard.',
-  },
-  {
-    id: 'autumn',
-    label: 'Autumn',
-    image: hubAutumnImage,
-    description: 'Autumn view of the SparkPoint Resilience Hub exterior in Brevard.',
-  },
-  {
-    id: 'winter',
-    label: 'Winter',
-    image: hubWinterImage,
-    description: 'Winter view of the SparkPoint Resilience Hub exterior in Brevard.',
-  },
-  {
-    id: 'night',
-    label: 'Night',
-    image: hubNightImage,
-    description: 'Night view of the SparkPoint Resilience Hub exterior in Brevard.',
-  },
-];
 
 const HUB_HIGHLIGHTS: DetailCard[] = [
   {
@@ -123,66 +69,6 @@ const HUB_HIGHLIGHTS: DetailCard[] = [
     title: 'Place-based and local',
     body: '94 S. Caldwell Street in Brevard, near Hendersonville Pediatrics, MAHEC, and The Sharing House.',
     icon: MapPin,
-    accent: '#F15F48',
-  },
-];
-
-const WHY_SPACE_EXISTS: DetailCard[] = [
-  {
-    title: 'Trusted relationships matter',
-    body: 'Resilience grows through people knowing where to go, who to call, and how to stay connected before a crisis and after it.',
-    icon: Users,
-    accent: '#FDB515',
-  },
-  {
-    title: 'Lower barriers to support',
-    body: 'The hub helps make information, referrals, and collaboration easier to reach without adding another maze to navigate.',
-    icon: Compass,
-    accent: '#E03694',
-  },
-  {
-    title: 'Year-round community capacity',
-    body: 'It is meant for everyday support and shared learning, not just moments of urgency, so trust and readiness can build over time.',
-    icon: Shield,
-    accent: '#9E509F',
-  },
-];
-
-const LISTEN_LEARN_LEAD: PracticeCard[] = [
-  {
-    label: 'Listen',
-    title: 'Ground the space in community voice',
-    body: 'SparkPoint uses the hub to stay close to lived experience, hear what residents and partners are navigating, and shape support around real conditions in Transylvania County.',
-    points: [
-      'Story-informed conversations and resident feedback',
-      'Practical insight into gaps, strengths, and next steps',
-      'A welcoming setting for people to be heard without pressure',
-    ],
-    icon: MessageCircle,
-    accent: '#FDB515',
-  },
-  {
-    label: 'Learn',
-    title: 'Make shared learning easier',
-    body: 'The hub functions as a learning lab for programs and initiatives, where workshops, partner meetings, and resource navigation can turn information into action.',
-    points: [
-      'Workshops and small-group learning',
-      'Cross-sector meetings and collaborative problem-solving',
-      'Usable tools for health, well-being, and preparedness',
-    ],
-    icon: BookOpen,
-    accent: '#9E509F',
-  },
-  {
-    label: 'Lead',
-    title: 'Strengthen collective capacity',
-    body: 'SparkPoint stewards the hub as a connector, convener, and capacity-builder, helping people and organizations align around what the community needs most.',
-    points: [
-      'Coordinated preparedness and recovery support',
-      'Youth and leadership development that grows local confidence',
-      'Shared momentum that outlasts any single event or initiative',
-    ],
-    icon: Handshake,
     accent: '#F15F48',
   },
 ];
@@ -223,54 +109,6 @@ const WHAT_HAPPENS_HERE: DetailCard[] = [
     body: 'A practical setting for coordinated preparedness efforts, emotional recovery support, and steady care after difficult seasons.',
     icon: Shield,
     accent: '#9E509F',
-  },
-];
-
-const STORYLAB_CARDS: DetailCard[] = [
-  {
-    title: 'Ethical story collection',
-    body: 'Community stories are gathered with care \u2014 using trauma-informed consent, accessible formats, and dignity-centered practices across the county.',
-    icon: Mic,
-    accent: '#FDB515',
-  },
-  {
-    title: 'Community sensemaking',
-    body: 'Stories are reviewed collaboratively to surface patterns, unmet needs, and shared strengths \u2014 turning lived experience into structured insight that can inform action.',
-    icon: Layers,
-    accent: '#9E509F',
-  },
-  {
-    title: 'Returning insight to the community',
-    body: 'What is learned goes back to the people who shared it \u2014 through convenings, shared summaries, and dialogue that keeps the feedback loop honest.',
-    icon: RefreshCw,
-    accent: '#E03694',
-  },
-];
-
-const MEDIA_NAV_CARDS: DetailCard[] = [
-  {
-    title: 'Learn by doing',
-    body: 'Navigators contribute to real SparkPoint and partner projects \u2014 video, audio, editing, and community-facing outputs \u2014 not simulated coursework.',
-    icon: Video,
-    accent: '#FDB515',
-  },
-  {
-    title: 'Ethical media practice',
-    body: 'Every project is grounded in informed consent, trauma-informed storytelling, and accountability to the people and communities represented.',
-    icon: ShieldCheck,
-    accent: '#E03694',
-  },
-  {
-    title: 'Accessibility and AI-assisted workflows',
-    body: 'Participants build fluency in captioning, transcription, and responsible AI tools \u2014 always with strong human-in-the-loop standards.',
-    icon: Cpu,
-    accent: '#9E509F',
-  },
-  {
-    title: 'Pathways into nonprofit and civic roles',
-    body: 'Navigators build portfolios and applied experience aligned with the communications needs of nonprofits, schools, clinics, and local government.',
-    icon: GraduationCap,
-    accent: '#F15F48',
   },
 ];
 
@@ -323,52 +161,20 @@ const KEEP_EXPLORING_LINKS = [
   },
 ];
 
-// ─── HELPERS ───
-
-function getDarkAppearance() {
-  if (typeof window === 'undefined') return false;
-  const root = document.documentElement;
-  if (root.classList.contains('dark')) return true;
-  if (root.classList.contains('light')) return false;
-  return window.matchMedia('(prefers-color-scheme: dark)').matches;
-}
-
 // ─── PAGE ───
 
 export function ResilienceHubPage() {
   const systemReducedMotion = useReducedMotion();
   const { motionPreference } = useAccessibility();
   const prefersReducedMotion = systemReducedMotion || motionPreference === 'reduce';
-  const [darkAppearance, setDarkAppearance] = useState(() => getDarkAppearance());
+  const [seasonalHeroId] = useState<HubHeroViewId>(() => getSeasonalHeroId());
   const [selectedHeroId, setSelectedHeroId] = useState<HubHeroViewId | null>(null);
   const { scrollY } = useScroll();
   const backgroundY = useTransform(scrollY, [0, 1000], [0, prefersReducedMotion ? 0 : 150]);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return undefined;
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const updateAppearance = () => setDarkAppearance(getDarkAppearance());
-    updateAppearance();
-    if (typeof mediaQuery.addEventListener === 'function') {
-      mediaQuery.addEventListener('change', updateAppearance);
-    } else {
-      mediaQuery.addListener(updateAppearance);
-    }
-    const observer = new MutationObserver(updateAppearance);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    return () => {
-      if (typeof mediaQuery.removeEventListener === 'function') {
-        mediaQuery.removeEventListener('change', updateAppearance);
-      } else {
-        mediaQuery.removeListener(updateAppearance);
-      }
-      observer.disconnect();
-    };
-  }, []);
-
-  const defaultHeroId: HubHeroViewId = darkAppearance ? 'night' : 'day';
-  const activeHeroId = selectedHeroId ?? defaultHeroId;
+  const activeHeroId = selectedHeroId ?? seasonalHeroId;
   const activeHero = HUB_HERO_VIEWS.find((v) => v.id === activeHeroId) ?? HUB_HERO_VIEWS[1];
+  const seasonalHero = HUB_HERO_VIEWS.find((v) => v.id === seasonalHeroId) ?? HUB_HERO_VIEWS[1];
 
   const reveal = prefersReducedMotion
     ? { duration: 0 }
@@ -393,7 +199,9 @@ export function ResilienceHubPage() {
             transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.5 }}
           >
             <img
-              src={activeHero.image}
+              src={activeHero.large}
+              srcSet={`${activeHero.small} 1280w, ${activeHero.large} 2400w`}
+              sizes="100vw"
               alt=""
               className="h-full w-full object-cover"
               style={{ objectPosition: 'center 58%', minHeight: '120%' }}
@@ -420,7 +228,7 @@ export function ResilienceHubPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-3xl"
+          className="max-w-2xl"
         >
           <p
             className="text-xs font-semibold uppercase"
@@ -434,7 +242,7 @@ export function ResilienceHubPage() {
             Resilience Hub
           </p>
           <h1
-            className="text-4xl font-bold tracking-tight leading-tight text-white"
+            className="text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-white"
             style={{
               textShadow: '0 4px 20px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.4)',
               marginBottom: 14,
@@ -449,7 +257,20 @@ export function ResilienceHubPage() {
               textShadow: '0 2px 10px rgba(0,0,0,0.5)',
             }}
           >
-            94 S. Caldwell Street, Brevard, NC
+            94 S. Caldwell Street, Brevard, NC &middot; Home of{' '}
+            <a href="#storylab" className="font-semibold text-white underline underline-offset-4">
+              StoryLab
+            </a>{' '}
+            and{' '}
+            <a href="#media-navigators" className="font-semibold text-white underline underline-offset-4">
+              Media Navigators
+            </a>
+          </p>
+          <p className="rh-season-chip" aria-live="polite">
+            <span className="rh-season-chip__dot" aria-hidden="true" />
+            {selectedHeroId && selectedHeroId !== seasonalHeroId
+              ? `Showing the ${activeHero.label.toLowerCase()} view`
+              : `${seasonalHero.seasonLabel ?? seasonalHero.label} at the hub`}
           </p>
         </motion.div>
 
@@ -465,8 +286,8 @@ export function ResilienceHubPage() {
           <span
             className="text-xs font-medium"
             style={{
-              color: 'rgba(255,255,255,0.45)',
-              textShadow: '0 1px 4px rgba(0,0,0,0.4)',
+              color: 'rgba(255,255,255,0.75)',
+              textShadow: '0 1px 4px rgba(0,0,0,0.5)',
               marginRight: 4,
             }}
           >
@@ -498,16 +319,17 @@ export function ResilienceHubPage() {
               {view.label}
             </button>
           ))}
-          {selectedHeroId && (
+          {selectedHeroId && selectedHeroId !== seasonalHeroId && (
             <button
               type="button"
               onClick={() => setSelectedHeroId(null)}
               className="px-3 py-1.5 text-xs font-medium underline underline-offset-4"
-              style={{ color: 'rgba(255,255,255,0.45)', textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}
+              style={{ color: 'rgba(255,255,255,0.8)', textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}
             >
-              Reset
+              Back to {(seasonalHero.seasonLabel ?? seasonalHero.label).toLowerCase()}
             </button>
           )}
+          <RenderingNote className="rh-hero-note basis-full" />
         </motion.div>
         <span className="sr-only">{activeHero.description}</span>
       </section>
@@ -612,224 +434,8 @@ export function ResilienceHubPage() {
         </div>
       </section>
 
-      {/* ──── 3. WHY THIS SPACE EXISTS (light glass) ──── */}
-      <section
-        className="relative z-10 px-6"
-        style={{
-          backgroundColor: 'rgba(250, 250, 248, 0.88)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          borderTop: '1px solid rgba(255,255,255,0.50)',
-          paddingTop: 80,
-          paddingBottom: 80,
-        }}
-      >
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={reveal}
-            className="max-w-3xl"
-          >
-            <p
-              className="text-xs font-semibold uppercase"
-              style={{ letterSpacing: '0.22em', color: '#9E509F', marginBottom: 16 }}
-            >
-              Why this space exists
-            </p>
-            <h2
-              className="text-3xl font-bold tracking-tight"
-              style={{ color: '#111827', marginBottom: 20 }}
-            >
-              Connection is the foundation of healthy, resilient communities.
-            </h2>
-            <p className="text-lg leading-relaxed" style={{ color: '#4B5563' }}>
-              The Resilience Hub exists because resilience is built through trusted relationships,
-              access to resources, shared learning, and practical support that people can return
-              to over time.
-            </p>
-          </motion.div>
-
-          <style>{`@media (min-width: 768px) { .rh-why-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; } }`}</style>
-          <div className="rh-why-grid grid grid-cols-1 gap-5" style={{ marginTop: 36 }}>
-            {WHY_SPACE_EXISTS.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={
-                    prefersReducedMotion
-                      ? { duration: 0 }
-                      : { duration: 0.5, delay: index * 0.06 }
-                  }
-                  whileHover={prefersReducedMotion ? {} : { y: -4 }}
-                  className="bg-white"
-                  style={{
-                    borderRadius: 16,
-                    border: '1px solid rgba(0,0,0,0.06)',
-                    padding: 28,
-                    transition: 'box-shadow 0.3s',
-                  }}
-                >
-                  <div
-                    className="flex items-center justify-center"
-                    style={{
-                      width: 44,
-                      height: 44,
-                      borderRadius: 9999,
-                      backgroundColor: `${item.accent}15`,
-                      color: item.accent,
-                      marginBottom: 16,
-                    }}
-                  >
-                    <Icon size={20} strokeWidth={2.2} />
-                  </div>
-                  <h3
-                    className="text-lg font-semibold"
-                    style={{ color: '#111827', marginBottom: 8 }}
-                  >
-                    {item.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>
-                    {item.body}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ──── 4. LISTEN • LEARN • LEAD (dark glass reveal) ──── */}
-      <section
-        className="relative z-10 px-6"
-        style={{
-          backgroundColor: 'rgba(26, 26, 26, 0.82)',
-          backdropFilter: 'blur(14px)',
-          WebkitBackdropFilter: 'blur(14px)',
-          borderTop: '1px solid rgba(255,255,255,0.05)',
-          paddingTop: 80,
-          paddingBottom: 80,
-        }}
-      >
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={reveal}
-            className="max-w-3xl"
-          >
-            <p
-              className="text-xs font-semibold uppercase"
-              style={{ letterSpacing: '0.22em', color: '#9E509F', marginBottom: 16 }}
-            >
-              Listen • Learn • Lead in practice
-            </p>
-            <h2
-              className="text-3xl font-bold tracking-tight text-white"
-              style={{ marginBottom: 20 }}
-            >
-              The space reflects how SparkPoint works.
-            </h2>
-            <p
-              className="text-lg leading-relaxed"
-              style={{ color: 'rgba(255,255,255,0.65)' }}
-            >
-              The hub turns SparkPoint&apos;s framework into something tangible: a place where
-              community voice can shape action, learning can stay close to real needs, and
-              collaboration can build long-term capacity.
-            </p>
-          </motion.div>
-
-          <style>{`@media (min-width: 1024px) { .rh-lll-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; } }`}</style>
-          <div className="rh-lll-grid grid grid-cols-1 gap-6" style={{ marginTop: 40 }}>
-            {LISTEN_LEARN_LEAD.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <motion.div
-                  key={item.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={
-                    prefersReducedMotion
-                      ? { duration: 0 }
-                      : { duration: 0.5, delay: index * 0.1 }
-                  }
-                  className="h-full flex flex-col"
-                  style={{
-                    borderRadius: 20,
-                    border: '1px solid rgba(255,255,255,0.10)',
-                    backgroundColor: 'rgba(255,255,255,0.06)',
-                    padding: 28,
-                  }}
-                >
-                  <div className="flex items-start gap-4" style={{ marginBottom: 20 }}>
-                    <div
-                      className="flex items-center justify-center flex-shrink-0"
-                      style={{
-                        width: 48,
-                        height: 48,
-                        borderRadius: 9999,
-                        backgroundColor: `${item.accent}20`,
-                        color: item.accent,
-                        marginTop: 2,
-                      }}
-                    >
-                      <Icon size={22} strokeWidth={2.2} />
-                    </div>
-                    <div>
-                      <p
-                        className="text-xs font-semibold uppercase"
-                        style={{ letterSpacing: '0.16em', color: item.accent, marginBottom: 6 }}
-                      >
-                        {item.label}
-                      </p>
-                      <h3
-                        className="text-xl font-semibold text-white"
-                      >
-                        {item.title}
-                      </h3>
-                    </div>
-                  </div>
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{ color: 'rgba(255,255,255,0.65)', marginBottom: 20 }}
-                  >
-                    {item.body}
-                  </p>
-                  <ul className="space-y-3 mt-auto">
-                    {item.points.map((point) => (
-                      <li
-                        key={point}
-                        className="flex items-start gap-3 text-sm leading-relaxed"
-                        style={{ color: 'rgba(255,255,255,0.55)' }}
-                      >
-                        <span
-                          className="flex-shrink-0"
-                          style={{
-                            width: 6,
-                            height: 6,
-                            borderRadius: 9999,
-                            backgroundColor: item.accent,
-                            marginTop: 7,
-                          }}
-                        />
-                        {point}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      <GroundworkSection reveal={reveal} />
+      <TransformationSection reveal={reveal} />
 
       {/* ──── 5. WHAT HAPPENS HERE (near-white glass) ──── */}
       <section
@@ -921,217 +527,12 @@ export function ResilienceHubPage() {
         </div>
       </section>
 
-      {/* ──── 5b. STORYLAB STUDIO (dark glass) ──── */}
-      <section
-        className="relative z-10 px-6"
-        style={{
-          backgroundColor: 'rgba(18, 18, 20, 0.88)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          borderTop: '1px solid rgba(255,255,255,0.05)',
-          paddingTop: 80,
-          paddingBottom: 80,
-        }}
-      >
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={reveal}
-            className="max-w-3xl"
-          >
-            <p
-              className="text-xs font-semibold uppercase"
-              style={{ letterSpacing: '0.22em', color: '#FDB515', marginBottom: 16 }}
-            >
-              StoryLab Studio
-            </p>
-            <h2
-              className="text-3xl font-bold tracking-tight text-white"
-              style={{ marginBottom: 20 }}
-            >
-              Where community voice becomes shared learning.
-            </h2>
-            <p
-              className="text-lg leading-relaxed"
-              style={{ color: 'rgba(255,255,255,0.65)' }}
-            >
-              The Resilience Hub includes a dedicated StoryLab Studio &mdash; a space for
-              collecting, stewarding, and learning from community stories ethically. Grounded in
-              Participatory Narrative Inquiry, the StoryLab supports a repeatable cycle: listen to
-              lived experience, learn what it reveals, lead with what the community needs, and
-              return what was learned.
-            </p>
-            <p
-              className="text-sm leading-relaxed"
-              style={{ color: 'rgba(255,255,255,0.45)', marginTop: 12 }}
-            >
-              Story work here is not about awareness alone. It informs programs, partnerships,
-              convenings, and funding priorities &mdash; connecting what people share to what
-              the community does next.
-            </p>
-          </motion.div>
-
-          <style>{`@media (min-width: 768px) { .rh-storylab-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; } }`}</style>
-          <div className="rh-storylab-grid grid grid-cols-1 gap-5" style={{ marginTop: 40 }}>
-            {STORYLAB_CARDS.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={
-                    prefersReducedMotion
-                      ? { duration: 0 }
-                      : { duration: 0.5, delay: index * 0.08 }
-                  }
-                  whileHover={prefersReducedMotion ? {} : { y: -4 }}
-                  style={{
-                    borderRadius: 16,
-                    border: '1px solid rgba(255,255,255,0.08)',
-                    backgroundColor: 'rgba(255,255,255,0.05)',
-                    padding: 28,
-                    transition: 'box-shadow 0.3s, border-color 0.3s',
-                  }}
-                >
-                  <div
-                    className="flex items-center justify-center"
-                    style={{
-                      width: 44,
-                      height: 44,
-                      borderRadius: 9999,
-                      backgroundColor: `${item.accent}20`,
-                      color: item.accent,
-                      marginBottom: 16,
-                    }}
-                  >
-                    <Icon size={20} strokeWidth={2.2} />
-                  </div>
-                  <h3
-                    className="text-lg font-semibold"
-                    style={{ color: '#fff', marginBottom: 8 }}
-                  >
-                    {item.title}
-                  </h3>
-                  <p
-                    className="text-sm leading-relaxed"
-                    style={{ color: 'rgba(255,255,255,0.60)' }}
-                  >
-                    {item.body}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ──── 5c. MEDIA NAVIGATORS (light glass) ──── */}
-      <section
-        className="relative z-10 px-6"
-        style={{
-          backgroundColor: 'rgba(250, 250, 248, 0.88)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          borderTop: '1px solid rgba(255,255,255,0.50)',
-          paddingTop: 80,
-          paddingBottom: 80,
-        }}
-      >
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={reveal}
-            className="max-w-3xl"
-          >
-            <p
-              className="text-xs font-semibold uppercase"
-              style={{ letterSpacing: '0.22em', color: '#9E509F', marginBottom: 16 }}
-            >
-              Media Navigators
-            </p>
-            <h2
-              className="text-3xl font-bold tracking-tight"
-              style={{ color: '#111827', marginBottom: 20 }}
-            >
-              Building practical skills through real community work.
-            </h2>
-            <p className="text-lg leading-relaxed" style={{ color: '#4B5563' }}>
-              Media Navigators is a cohort-based apprenticeship pathway for people interested in
-              media, communications, and ethical storytelling. Participants learn by supporting
-              real SparkPoint and partner projects &mdash; building transferable skills while
-              helping nonprofits, schools, and civic organizations that lack in-house media
-              capacity.
-            </p>
-            <p
-              className="text-sm leading-relaxed"
-              style={{ color: '#6B7280', marginTop: 12 }}
-            >
-              The goal is not to train specialists for large agencies, but to prepare versatile media
-              generalists who can support organizations where one person often wears many hats.
-            </p>
-          </motion.div>
-
-          <style>{`
-            @media (min-width: 640px) { .rh-medianav-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
-            @media (min-width: 1280px) { .rh-medianav-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; } }
-          `}</style>
-          <div className="rh-medianav-grid grid grid-cols-1 gap-5" style={{ marginTop: 36 }}>
-            {MEDIA_NAV_CARDS.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={
-                    prefersReducedMotion
-                      ? { duration: 0 }
-                      : { duration: 0.45, delay: index * 0.06 }
-                  }
-                  whileHover={prefersReducedMotion ? {} : { y: -4 }}
-                  className="bg-white"
-                  style={{
-                    borderRadius: 16,
-                    border: '1px solid rgba(0,0,0,0.06)',
-                    padding: 24,
-                    transition: 'box-shadow 0.3s',
-                  }}
-                >
-                  <div
-                    className="flex items-center justify-center"
-                    style={{
-                      width: 44,
-                      height: 44,
-                      borderRadius: 9999,
-                      backgroundColor: `${item.accent}15`,
-                      color: item.accent,
-                      marginBottom: 16,
-                    }}
-                  >
-                    <Icon size={20} strokeWidth={2.2} />
-                  </div>
-                  <h3
-                    className="text-lg font-semibold"
-                    style={{ color: '#111827', marginBottom: 8 }}
-                  >
-                    {item.title}
-                  </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>
-                    {item.body}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      <SuitePlanSection reveal={reveal} />
+      <InitiativesSection reveal={reveal} />
+      <StoryLabSection reveal={reveal} />
+      <FellowshipSection reveal={reveal} />
+      <WhyTrustSection reveal={reveal} />
+      <InvestmentSection reveal={reveal} />
 
       {/* ──── 6. WHO IT SERVES (near-white glass) ──── */}
       <section
