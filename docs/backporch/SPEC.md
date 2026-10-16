@@ -29,8 +29,9 @@ BackPorch shows empty and the homepage band hides. Sample posts live in
 **To launch, in order:**
 1. Combine the homepage and BackPorch branches on one branch, catch up with `main`, and
    place `BackPorchBand` under the new hero.
-2. Apply `supabase/migrations/20261015_backporch.sql` (not yet applied anywhere) and add
-   the editors' emails to `porch_editors` (Jeff, Maggie Grimm; Maggie needs a Supabase login).
+2. ~~Apply the migrations~~ (done 2026-10-16: `create_backporch`, `backporch_tighten_grants`).
+   Add the editors' emails to `porch_editors` (Jeff, Maggie Grimm; Maggie needs a Supabase
+   login), and raise the project-wide Storage upload limit to 150 MB in the Dashboard.
 3. Test for real with sign-in: uploads (photo, clip, audio, PDF), link previews, a poll
    vote, reactions, pin and take-down, the Facebook kit downloads.
 4. Open the pull request, check the build, merge.
