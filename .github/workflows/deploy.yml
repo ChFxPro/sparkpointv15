@@ -3,7 +3,14 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: ["main"]
+  # Also started by the BackPorch editor's "Update the site now" button
+  # (supabase/functions/backporch-publish).
   workflow_dispatch:
+  # Backstop rebuild so BackPorch posts (baked at build time by
+  # scripts/backporch/bake.mjs) catch up on their own: scheduled posts go up,
+  # expired ones come off the lists, and feeds and link previews refresh.
+  schedule:
+    - cron: "17 */2 * * *"
 
 permissions:
   contents: read

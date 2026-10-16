@@ -8,6 +8,7 @@ import { ConnectionSection } from '../components/ConnectionSection';
 import { HomePromoShowcase } from '../components/HomePromoShowcase';
 import { CTAFinal } from '../components/CTAFinal';
 import { SEOHead } from '../components/SEOHead';
+import { BackPorchBand } from '../components/backporch/BackPorchBand';
 
 const InteractiveSparkPointInfographic = lazy(() => import('../imports/InteractiveSparkPointInfographic'));
 
@@ -44,6 +45,7 @@ export function HomePage() {
       />
 
       <Hero />
+      <BackPorchBand />
       <HomePromoShowcase />
 
       <MissionGrid />
