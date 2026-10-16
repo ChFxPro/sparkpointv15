@@ -18,17 +18,11 @@ import {
   Shield,
   type LucideIcon,
 } from 'lucide-react';
-import brevardMusicCenterLogo from '../assets/sponsors/brevard_music_center.png';
-import brevardTCDALogo from '../assets/sponsors/brevard_tcda.png';
-import comporiumLogo from '../assets/sponsors/comporium.png';
-import dogwoodLogo from '../assets/sponsors/dogwood.png';
-import phfLogo from '../assets/sponsors/phf.png';
-import redCrossLogo from '../assets/sponsors/red_cross.png';
-import selfHelpLogo from '../assets/sponsors/self_help.png';
 import sponsorHeroJpg from '../assets/sponsors/sponsor_hero.jpg';
 import sponsorHeroWebp from '../assets/sponsors/sponsor_hero.webp';
-import uncHealthLogo from '../assets/sponsors/unc_health.png';
+import { CommunityNetworkDiagram } from '../components/CommunityNetworkDiagram';
 import { KeepExploringLinks } from '../components/KeepExploringLinks';
+import { PARTNER_LOGOS } from '../components/partnerLogos';
 import { SEOHead } from '../components/SEOHead';
 import { Button } from '../components/ui/button';
 import { useAccessibility } from '../context/AccessibilityContext';
@@ -45,18 +39,6 @@ const SECTOR_ICONS: Record<string, LucideIcon> = {
   Sparkles,
 };
 
-// Logo images stay bundled here (this page already had proven, working imports of
-// these exact files) — src/data/partners.ts only stores the string `logoKey`.
-const PARTNER_LOGOS: Record<string, string> = {
-  dogwood: dogwoodLogo,
-  phf: phfLogo,
-  'unc-health': uncHealthLogo,
-  'red-cross': redCrossLogo,
-  'brevard-music-center': brevardMusicCenterLogo,
-  'brevard-tcda': brevardTCDALogo,
-  comporium: comporiumLogo,
-  'self-help': selfHelpLogo,
-};
 
 // --- HOW WE PARTNER ---
 
@@ -231,6 +213,13 @@ export function SponsorsPage() {
             ))}
           </div>
         </motion.div>
+      </section>
+
+      {/* ──── Partner network: the county at the center, sectors around it (moved here from the homepage) ──── */}
+      <section className="relative z-10 px-6 pt-20 md:pt-24" style={{ backgroundColor: '#2A1430' }}>
+        <div className="mx-auto max-w-7xl">
+          <CommunityNetworkDiagram />
+        </div>
       </section>
 
       {/* ──── 2. HOW WE PARTNER (dark glass — like Mission "Feedback Loop" section) ──── */}

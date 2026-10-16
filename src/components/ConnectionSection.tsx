@@ -1,322 +1,296 @@
-'use client';
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router';
+import { ArrowRight } from 'lucide-react';
+import { LitSentence } from './home/LitSentence';
+import { STORY_COLLECTIONS } from '../data/storyCollections';
 
-import { AnimatePresence, motion } from 'motion/react';
-
-import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { useNavigate } from 'react-router';
-
-// Local program imagery (WebP + JPG fallback)
-import sparkpurposeWebp from '../assets/connection_happens/sparkpurpose1.webp';
-import sparkpurposeJpg from '../assets/connection_happens/sparkpurpose1.jpg';
 import storyWebp from '../assets/connection_happens/story1.webp';
-import storyJpg from '../assets/connection_happens/story1.jpg';
-import vosWebp from '../assets/connection_happens/vos1.webp';
-import vosJpg from '../assets/connection_happens/vos1.jpg';
+import connectorsWebp from '../assets/commconn/imgs/comcon_group_elev-1200.webp';
+import hub800 from '../assets/hub/hub-day-800.webp';
+import hub1600 from '../assets/hub/hub-day-1600.webp';
+// TrailHead's own lockup (the double blaze and wordmark, cream for dark grounds),
+// from the logo kit in Branding/TrailHead; see that folder's README.
+import trailheadLockup from '../assets/trailhead/trailhead-lockup-horizontal-reversed.svg';
 
-type ProgramModalProps = {
-  open: boolean;
-  onClose: () => void;
-  badge: string;
+// What SparkPoint is building now, one program per pathway it belongs to,
+// in the program pages' pathway colours (Listen, Lead, Connect; see
+// src/pages/programs/programsData.ts). On large screens the list on the
+// left stays put and lights the program whose card is in view while the
+// cards stack on the right; on smaller screens the cards simply follow
+// one another.
+
+// The simulator's name (2026-10-15), written joined and capitalised like
+// SparkPoint. Until it's widely known, introduce it alongside SparkPoint
+// ("a SparkPoint simulation"): said aloud it's the same word as Salesforce's
+// Trailhead. Scenarios are editions of it, e.g. "TrailHead: Rural Health".
+const SIMULATOR_NAME = 'TrailHead';
+
+// `color` is the pathway colour from the programs page; `deep` is a darker
+// shade of it that each card is drawn in, dark enough for white text.
+const PATHWAY = {
+  listen: { label: 'Listen', color: '#9E509F', deep: '#5e2a63' },
+  lead: { label: 'Lead', color: '#E03694', deep: '#9c1a5e' },
+  connect: { label: 'Connect', color: '#F15F48', deep: '#a8392a' },
+} as const;
+
+const recapPhoto = (width: 800 | 1600) =>
+  `${import.meta.env.BASE_URL}assets/Rural%20Health/recap/highlights/simulator-tablet-${width}.webp`;
+
+const activeCollection = STORY_COLLECTIONS.find((c) => c.status === 'active');
+
+type Program = {
+  id: string;
+  pathway: keyof typeof PATHWAY;
   title: string;
-  subtitle?: string;
   body: string;
-  highlights: string[];
+  tags: string[];
+  image: { src: string; srcSet?: string; alt: string; position?: string };
+  links: { label: string; to: string }[];
+  /** Card colour when it shouldn't be its pathway's `deep` shade (two Connect cards sit back to back). */
+  tone?: string;
+  /** A program with its own brand shows its logo in place of the set title. */
+  logo?: string;
 };
 
-function ProgramModal({ open, onClose, badge, title, subtitle, body, highlights }: ProgramModalProps) {
-  useEffect(() => {
-    if (!open) return;
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [open, onClose]);
+const PROGRAMS: Program[] = [
+  {
+    id: 'story-collection',
+    pathway: 'listen',
+    title: 'Community Story Collection',
+    body: activeCollection
+      ? `We gather residents’ stories on one question at a time and take what we hear to the people making local decisions. Right now: ${activeCollection.title.toLowerCase()}.`
+      : 'We gather residents’ stories on one question at a time and take what we hear to the people making local decisions.',
+    tags: ['Open to every resident', 'Anonymous'],
+    image: {
+      src: storyWebp,
+      alt: 'A resident tells her story on camera, seen both in the room behind and on the recording monitor in front.',
+      // The storyteller herself sits behind the monitor at the top left; keep her in frame.
+      position: '0% 30%',
+    },
+    links: activeCollection
+      ? [
+          { label: 'Share your story', to: `/stories/collections/${activeCollection.id}` },
+          { label: 'Read community stories', to: '/stories' },
+        ]
+      : [{ label: 'Read community stories', to: '/stories' }],
+  },
+  {
+    id: 'simulator',
+    pathway: 'lead',
+    title: SIMULATOR_NAME,
+    body: 'A SparkPoint simulation that turns a room into a system: small groups carry a fictional family through its doors, delays, and handoffs. It filled the room on October 1, and it can be rebuilt around the system your group works on.',
+    tags: ['Facilitated session', 'For organizations and coalitions'],
+    image: {
+      src: recapPhoto(800),
+      srcSet: `${recapPhoto(800)} 800w, ${recapPhoto(1600)} 1600w`,
+      alt: 'A small group gathers around a tablet as one participant points to the screen, working through the simulator.',
+    },
+    links: [
+      { label: 'Bring it to your group', to: '/intake?intent=partner' },
+      { label: 'See it at the convening', to: '/rural-health-convening#simulator' },
+    ],
+    // TrailHead has its own brand: its logo, drawn on its own forest green.
+    logo: trailheadLockup,
+    tone: '#2F4A3C',
+  },
+  {
+    id: 'community-connectors',
+    pathway: 'connect',
+    title: 'Community Connectors',
+    body: 'Neighbors people already trust, with the training and tools to help their communities get ready for hard days and recover from them. Born from what we heard after Helene.',
+    tags: ['With the American Red Cross and FWRD Transylvania'],
+    image: { src: connectorsWebp, alt: 'Community Connectors gathered around long tables, talking in small groups.', position: '50% 40%' },
+    links: [{ label: 'Meet the Connectors', to: '/community-connectors' }],
+  },
+  {
+    id: 'resilience-hub',
+    pathway: 'connect',
+    title: 'The Resilience Hub',
+    body: 'We’re about to start building out the Resilience Hub at 94 S. Caldwell Street in Brevard: a shared front door where residents, nonprofits, and partners will meet, learn, and find the help they need. Help us make it real.',
+    tags: ['Build-out starting soon', 'Brevard'],
+    image: {
+      src: hub800,
+      srcSet: `${hub800} 800w, ${hub1600} 1600w`,
+      alt: 'The brick front of the SparkPoint Resilience Hub, its sign over the entrance.',
+      // hub-day-*.webp is cropped from the left of the full render so the sign and
+      // door sit right of centre, clear of the words on the left of this card.
+    },
+    links: [
+      { label: 'Help build the Hub', to: '/donations' },
+      { label: 'See the plans', to: '/resilience-hub' },
+    ],
+    tone: '#7a2a20',
+  },
+];
 
-  if (typeof document === 'undefined') return null;
+// Each card pins a little lower than the last, so the earlier ones still show
+// their top edge (and their pathway colour) as the next one slides over.
+const STICKY_TOP = ['lg:top-24', 'lg:top-[7.25rem]', 'lg:top-[8.5rem]', 'lg:top-[9.75rem]'];
 
-  return createPortal(
-    <AnimatePresence>
-      {open ? (
-        <motion.div
-          className="fixed inset-0 z-[99999] flex items-center justify-center p-4"
-          style={{ isolation: 'isolate' }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          aria-hidden={!open}
-        >
-          {/* Overlay */}
-          <button
-            aria-label="Close dialog"
-            onClick={onClose}
-            className="absolute inset-0 bg-black/60"
-            style={{ cursor: 'default' }}
-          />
-
-          {/* Dialog */}
-          <motion.div
-            role="dialog"
-            aria-modal="true"
-            className="relative w-full max-w-2xl rounded-2xl border border-white/15 bg-[#0B0B10]/85 text-white shadow-2xl backdrop-blur-xl"
-            initial={{ y: 18, scale: 0.98, opacity: 0 }}
-            animate={{ y: 0, scale: 1, opacity: 1 }}
-            exit={{ y: 18, scale: 0.98, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 240, damping: 22 }}
+// Every card is the same size, the photo filling it. The words sit straight
+// on the photo over a wash of the pathway's colour that fades in from one
+// side (from the bottom on phones), the side swapping from card to card.
+function ProgramCard({ program, index }: { program: Program; index: number }) {
+  const pathway = PATHWAY[program.pathway];
+  const last = index === PROGRAMS.length - 1;
+  const side = index % 2 === 0 ? 'right' : 'left';
+  const tone = program.tone ?? pathway.deep;
+  const [primary, ...secondary] = program.links;
+  return (
+    <article
+      id={`program-${program.id}`}
+      data-program={program.id}
+      data-side={side}
+      aria-labelledby={`program-${program.id}-title`}
+      className={`home-program group relative flex h-[32rem] scroll-mt-28 overflow-hidden rounded-[1.75rem] bg-[var(--home-plum)] text-white sm:h-[31rem] lg:sticky lg:h-[min(72vh,33rem)] ${side === 'right' ? 'sm:justify-end' : ''} ${STICKY_TOP[index]} ${last ? '' : 'lg:mb-8'}`}
+      style={{ ['--tone' as string]: tone, boxShadow: '0 -18px 40px -22px rgba(20,8,24,0.6)' }}
+    >
+      <img
+        src={program.image.src}
+        srcSet={program.image.srcSet}
+        sizes="(min-width: 1024px) 62vw, 100vw"
+        alt={program.image.alt}
+        loading="lazy"
+        decoding="async"
+        className="home-program-photo absolute inset-0 h-full w-full object-cover"
+        style={program.image.position ? { objectPosition: program.image.position } : undefined}
+      />
+      <div aria-hidden="true" className="home-program-scrim pointer-events-none absolute inset-0" />
+      <div className="relative flex w-full flex-col justify-end p-6 sm:w-[52%] sm:justify-center md:p-9 lg:w-[50%]">
+        <h3 id={`program-${program.id}-title`} className="text-[1.75rem] font-extrabold leading-[1.08] tracking-[-0.01em] md:text-[2.1rem]" style={{ textWrap: 'balance' }}>
+          {program.logo ? (
+            <img src={program.logo} alt={program.title} className="h-11 w-auto max-w-full md:h-14" />
+          ) : (
+            program.title
+          )}
+        </h3>
+        <p className="mt-3 text-base leading-relaxed text-white/90">{program.body}</p>
+        <ul className="mt-5 hidden flex-wrap gap-2 sm:flex" aria-label="About this program">
+          <li className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-[0.8rem] font-bold" style={{ color: tone }}>
+            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: pathway.color }} aria-hidden="true" />
+            {pathway.label}
+          </li>
+          {program.tags.map((tag) => (
+            <li key={tag} className="rounded-full border border-white/40 px-3 py-1 text-[0.8rem] font-semibold text-white">
+              {tag}
+            </li>
+          ))}
+        </ul>
+        <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-1 md:mt-6">
+          <Link
+            to={primary.to}
+            className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-white px-5 text-base font-bold transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+            style={{ color: tone, ['--tw-ring-offset-color' as string]: tone }}
           >
-            <div className="p-6 md:p-8">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.18em] text-[#FDB515] font-semibold">
-                    {badge}
-                  </p>
-                  <h3 className="mt-2 text-2xl md:text-3xl font-bold leading-tight">
-                    {title}
-                  </h3>
-                  {subtitle ? (
-                    <p className="mt-2 text-white/70 leading-relaxed">{subtitle}</p>
-                  ) : null}
-                </div>
-
-                <button
-                  onClick={onClose}
-                  className="shrink-0 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-sm font-semibold text-white/85 hover:bg-white/10"
-                  aria-label="Close"
-                >
-                  Close
-                </button>
-              </div>
-
-              <p className="mt-6 text-white/80 leading-relaxed">{body}</p>
-
-              <div className="mt-6 rounded-xl border border-white/10 bg-black/20 p-5">
-                <p className="text-sm uppercase tracking-widest text-white/70 font-semibold mb-3">
-                  What this includes
-                </p>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-6">
-                  {highlights.map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-white/85">
-                      <span className="mt-2 inline-block h-1.5 w-1.5 rounded-full bg-[#FDB515]" />
-                      <span className="leading-relaxed">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  {badge === 'SparkPurpose' ? (
-                    <a
-                      href="/programs/purpose-workshops"
-                      className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white/85 hover:bg-white/10"
-                    >
-                      View Purpose Workshops
-                    </a>
-                  ) : null}
-                </div>
-
-                <button
-                  onClick={onClose}
-                  className="rounded-xl bg-[#FDB515] px-4 py-2 text-sm font-bold text-black hover:opacity-90"
-                >
-                  Back
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
-      ) : null}
-    </AnimatePresence>,
-    document.body
+            {primary.label} <ArrowRight size={16} aria-hidden="true" />
+          </Link>
+          {secondary.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className="inline-flex min-h-[44px] items-center gap-1.5 text-base font-bold text-white underline decoration-white/50 underline-offset-4 hover:decoration-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </article>
   );
 }
 
 export function ConnectionSection() {
-  const [openModal, setOpenModal] = useState<null | 'sparkpurpose' | 'vos'>(null);
-  const navigate = useNavigate();
-  return (
-    <section className="relative py-24 px-6 overflow-hidden bg-transparent">
-      <div className="max-w-7xl mx-auto">
-        <ProgramModal
-          open={openModal === 'sparkpurpose'}
-          onClose={() => setOpenModal(null)}
-          badge="SparkPurpose"
-          title="Purpose Workshops"
-          subtitle="Guided, welcoming sessions that help people clarify what matters and move forward with alignment."
-          body="SparkPurpose workshops create space for reflection, conversation, and practical next steps. They are designed to be accessible and community-centered — helping participants turn insight into momentum."
-          highlights={[
-            'Interactive group workshops (community + partner-hosted)',
-            'Personal reflection prompts that support real conversation',
-            'Facilitated discussion that builds trust and shared understanding',
-            'Clear next-step takeaways participants can act on'
-          ]}
-        />
+  const cardsRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(PROGRAMS[0].id);
 
-        <ProgramModal
-          open={openModal === 'vos'}
-          onClose={() => setOpenModal(null)}
-          badge="Voices of the Students"
-          title="Youth Voice & Belonging"
-          subtitle="Student-centered programming that builds connection, confidence, and leadership." 
-          body="Voices of the Students (VOS) creates consistent touchpoints for young people to connect, be heard, and participate in shaping a healthier school culture. It’s relationship-forward and built for real-world campus rhythms."
-          highlights={[
-            'Student-led, relationship-forward sessions',
-            'Campus-based activities that reduce barriers to participation',
-            'Belonging-focused programming that strengthens peer connection',
-            'Ongoing touchpoints that build trust over time'
-          ]}
-        />
-        {/* Section Header */}
-        <div className="max-w-3xl mb-16 rounded-2xl border border-white/10 bg-black/45 backdrop-blur-md p-6 md:p-8">
-          <h2
-            className="text-white text-4xl md:text-5xl font-bold leading-tight tracking-tight mb-4"
-            style={{ textShadow: '0 3px 18px rgba(0,0,0,0.55)' }}
-          >
-            Three Ways Connection Happens Here.
-          </h2>
-          <p
-            className="text-white/85 text-lg md:text-xl leading-relaxed"
-            style={{ textShadow: '0 2px 14px rgba(0,0,0,0.45)' }}
-          >
-            SparkPoint turns connection into momentum through three core programs — purpose,
-            story, and youth voice. Each one creates space for belonging, reflection, and
-            shared growth across Transylvania County & beyond.
-          </p>
+  // Light the list entry for the card on top of the stack: the last one whose
+  // top edge has come up past 40% of the view.
+  useEffect(() => {
+    const cards = Array.from(cardsRef.current?.querySelectorAll<HTMLElement>('[data-program]') ?? []);
+    if (!cards.length) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const line = window.innerHeight * 0.4;
+      let current = cards[0];
+      for (const card of cards) if (card.getBoundingClientRect().top <= line) current = card;
+      setActive(current.dataset.program!);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
+
+  return (
+    <section id="what-we-do" aria-labelledby="what-we-do-heading" className="relative scroll-mt-24 overflow-x-clip bg-white px-6 py-16 md:py-24">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-16 md:mb-24">
+          <LitSentence />
         </div>
 
-        {/* Program Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          
-          {/* SparkPurpose */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7 }}
-            className="group relative rounded-2xl overflow-hidden shadow-xl bg-white"
-          >
-            <div className="relative aspect-[4/3] overflow-hidden">
-              <picture>
-                <source srcSet={sparkpurposeWebp} type="image/webp" />
-                <img
-                  src={sparkpurposeJpg}
-                  alt="SparkPurpose workshop"
-                  width={2000}
-                  height={1333}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  loading="lazy"
-                />
-              </picture>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-            </div>
-            <div className="p-6">
-              <p className="text-sm uppercase tracking-widest text-[#FDB515] font-semibold mb-2">
-                SparkPurpose
-              </p>
-              <h3 className="text-2xl font-bold text-[#1A1A1A] mb-3">
-                Purpose Workshops
-              </h3>
-              <p className="text-[#555] leading-relaxed mb-6">
-                Guided sessions that help individuals and teams clarify values,
-                reflect deeply, and move forward with alignment and intention.
-              </p>
-              <button
-                type="button"
-                onClick={() => setOpenModal('sparkpurpose')}
-                className="inline-block text-sm font-semibold uppercase tracking-wide text-[#FDB515] hover:underline"
-              >
-                Learn More →
-              </button>
-            </div>
-          </motion.div>
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.6fr)] lg:gap-14">
+          {/* Heading and the pathway list; it stays in view beside the cards on large screens. */}
+          <div className="lg:sticky lg:top-24 lg:self-start">
+            <h2 id="what-we-do-heading" className="home-h2 text-[var(--home-ink)]">
+              From a story to a front door
+            </h2>
+            <p className="mt-5 max-w-md text-lg leading-relaxed text-[var(--home-muted)]">
+              Our programs follow four pathways: Listen, Learn, Lead, and Connect. This is
+              what&rsquo;s growing right now.
+            </p>
+            <ol className="mt-8 hidden space-y-1.5 lg:block" aria-label="Programs in this section">
+              {PROGRAMS.map((p) => {
+                const pathway = PATHWAY[p.pathway];
+                const on = p.id === active;
+                return (
+                  <li key={p.id}>
+                    <a
+                      href={`#program-${p.id}`}
+                      aria-current={on ? 'true' : undefined}
+                      className="home-path-step flex min-h-[44px] items-center gap-3 rounded-xl border px-3.5 py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--home-pink)]"
+                      style={{
+                        borderColor: on ? `${pathway.color}66` : 'rgba(0,0,0,0.06)',
+                        backgroundColor: on ? `${pathway.color}12` : '#fff',
+                      }}
+                    >
+                      <span
+                        className="h-2.5 w-2.5 shrink-0 rounded-full"
+                        style={{ backgroundColor: pathway.color, opacity: on ? 1 : 0.45 }}
+                        aria-hidden="true"
+                      />
+                      <span className={`min-w-0 flex-1 text-[0.95rem] ${on ? 'font-extrabold text-[var(--home-ink)]' : 'font-semibold text-[var(--home-muted)]'}`}>
+                        {p.title}
+                      </span>
+                      <span className="text-[0.8rem] font-semibold text-[var(--home-muted)]">{pathway.label}</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ol>
+            <p className="mt-8 text-base leading-relaxed text-[var(--home-muted)]">
+              <Link to="/programs" className="home-link inline-flex min-h-[44px] items-center gap-1.5 font-bold text-[var(--home-pink-deep)]">
+                All programs <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+              <span aria-hidden="true" className="mx-2">·</span>
+              <Link to="/mission" className="home-link inline-flex min-h-[44px] items-center font-bold text-[var(--home-pink-deep)]">
+                How we work
+              </Link>
+            </p>
+          </div>
 
-          {/* Story Collection */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="group relative rounded-2xl overflow-hidden shadow-xl bg-white"
-          >
-            <div className="relative aspect-[4/3] overflow-hidden">
-              <picture>
-                <source srcSet={storyWebp} type="image/webp" />
-                <img
-                  src={storyJpg}
-                  alt="Story collection interview"
-                  width={2000}
-                  height={1333}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  loading="lazy"
-                />
-              </picture>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-            </div>
-            <div className="p-6">
-              <p className="text-sm uppercase tracking-widest text-[#FDB515] font-semibold mb-2">
-                Story Collection
-              </p>
-              <h3 className="text-2xl font-bold text-[#1A1A1A] mb-3">
-                Story & Voice Infrastructure
-              </h3>
-              <p className="text-[#555] leading-relaxed mb-6">
-                We collect lived experience across the county so decisions,
-                partnerships, and programming reflect real community voices.
-              </p>
-              <button
-                type="button"
-                onClick={() => navigate('/stories')}
-                className="inline-block text-sm font-semibold uppercase tracking-wide text-[#FDB515] hover:underline"
-              >
-                Explore Stories →
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Voices of the Students */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="group relative rounded-2xl overflow-hidden shadow-xl bg-white"
-          >
-            <div className="relative aspect-[4/3] overflow-hidden">
-              <picture>
-                <source srcSet={vosWebp} type="image/webp" />
-                <img
-                  src={vosJpg}
-                  alt="Youth program engagement"
-                  width={2000}
-                  height={1333}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  loading="lazy"
-                />
-              </picture>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-            </div>
-            <div className="p-6">
-              <p className="text-sm uppercase tracking-widest text-[#FDB515] font-semibold mb-2">
-                Voices of the Students
-              </p>
-              <h3 className="text-2xl font-bold text-[#1A1A1A] mb-3">
-                Youth Voice & Belonging
-              </h3>
-              <p className="text-[#555] leading-relaxed mb-6">
-                Student-led programming that builds confidence, connection,
-                and civic participation across middle and high school campuses.
-              </p>
-              <button
-                type="button"
-                onClick={() => setOpenModal('vos')}
-                className="inline-block text-sm font-semibold uppercase tracking-wide text-[#FDB515] hover:underline"
-              >
-                See Youth Programs →
-              </button>
-            </div>
-          </motion.div>
-
+          <div ref={cardsRef} className="flex flex-col gap-8 lg:gap-0 lg:pb-6">
+            {PROGRAMS.map((p, i) => (
+              <ProgramCard key={p.id} program={p} index={i} />
+            ))}
+          </div>
         </div>
       </div>
     </section>

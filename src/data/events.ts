@@ -139,6 +139,13 @@ export function getUpcomingEvents(now = new Date()) {
   );
 }
 
+// The homepage hero's primary button points at the next gathering on the
+// calendar. Returns null when nothing is scheduled, so the hero falls back to
+// the Events hub.
+export function getNextGathering(now = new Date()) {
+  return getUpcomingEvents(now)[0] ?? null;
+}
+
 export function getPastEvents(now = new Date()) {
   return EVENTS.filter(
     (event) => !event.teaser && new Date(event.endDate ?? event.startDate) < now
