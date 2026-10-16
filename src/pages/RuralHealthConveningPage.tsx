@@ -390,7 +390,7 @@ export function RuralHealthConveningPage() {
             <span aria-hidden="true">presents</span>
             <img
               className="rh-event-mark"
-              src={ruralHealthAsset('NC Rural Health Convening trimmed.webp')}
+              src={ruralHealthAsset('NC Rural Health Convening trimmed-320.webp')}
               alt="2026 WNC Regional Rural Health Convening"
               width={2677}
               height={1494}
@@ -468,7 +468,10 @@ export function RuralHealthConveningPage() {
                   <span>Distance here is burden, not miles</span>
                 </div>
                 <img
-                  src={ruralHealthAsset('rural sim hero.webp')}
+                  src={ruralHealthAsset('rural sim hero-800.webp')}
+                  srcSet={`${ruralHealthAsset('rural sim hero-800.webp')} 800w, ${ruralHealthAsset('rural sim hero.webp')} 1536w`}
+                  sizes="(max-width: 900px) 100vw, 800px"
+                  fetchPriority="high"
                   alt="The Rural Health Field Simulator connection map, showing trusted doors, waiting gaps, warm handoffs, crisis points, and the Resilience Hub connected across a rural health system."
                   width={1536}
                   height={1024}
@@ -778,10 +781,12 @@ export function RuralHealthConveningPage() {
             <aside className="rh-ticket-panel rh-recap-panel" aria-label="Convening recap">
               <img
                 className="rh-ticket-event-mark"
-                src={ruralHealthAsset('NC Rural Health Convening copy.webp')}
+                src={ruralHealthAsset('NC Rural Health Convening copy-900.webp')}
                 alt=""
                 width={3300}
                 height={2550}
+                loading="lazy"
+                decoding="async"
               />
               <div className="rh-priority-note rh-recap-stamp">
                 <span>October 1, 2026</span>
@@ -850,10 +855,14 @@ export function RuralHealthConveningPage() {
               <figure className="rh-sim-shot rh-sim-shot-entry">
                 <div className="rh-sim-shot-frame">
                   <img
-                    src={ruralHealthAsset('simulator_screencap.webp')}
+                    src={ruralHealthAsset('simulator_screencap-1000.webp')}
+                    srcSet={`${ruralHealthAsset('simulator_screencap-1000.webp')} 1000w, ${ruralHealthAsset('simulator_screencap.webp')} 1896w`}
+                    sizes="(max-width: 900px) 100vw, 1400px"
                     alt="The Rural Health Field Simulator trailhead screen, where participants can begin a live simulation or enter demo mode."
                     width={1896}
                     height={1642}
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <figcaption>
@@ -865,10 +874,14 @@ export function RuralHealthConveningPage() {
               <figure className="rh-sim-shot rh-sim-shot-path">
                 <div className="rh-sim-shot-frame">
                   <img
-                    src={ruralHealthAsset('Screenshot 2026-07-27 at 2.21.02 PM.webp')}
+                    src={ruralHealthAsset('simulator-path-800.webp')}
+                    srcSet={`${ruralHealthAsset('simulator-path-800.webp')} 800w, ${ruralHealthAsset('Screenshot 2026-07-27 at 2.21.02 PM.webp')} 1146w`}
+                    sizes="(max-width: 900px) 100vw, 540px"
                     alt="A simulator journey screen directing a fictional household to a trusted first door at the county schools."
                     width={1146}
                     height={1558}
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <figcaption>
@@ -880,10 +893,14 @@ export function RuralHealthConveningPage() {
               <figure className="rh-sim-shot rh-sim-shot-results">
                 <div className="rh-sim-shot-frame">
                   <img
-                    src={ruralHealthAsset('Screenshot 2026-07-27 at 2.21.23 PM.webp')}
+                    src={ruralHealthAsset('simulator-results-1000.webp')}
+                    srcSet={`${ruralHealthAsset('simulator-results-1000.webp')} 1000w, ${ruralHealthAsset('Screenshot 2026-07-27 at 2.21.23 PM.webp')} 1720w`}
+                    sizes="(max-width: 900px) 100vw, 840px"
                     alt="The simulator results screen showing the combined cost, time, work hours, care delays, and human outcomes across completed journeys."
                     width={1720}
                     height={1584}
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <figcaption>
@@ -967,6 +984,8 @@ export function RuralHealthConveningPage() {
                         alt={sponsor.name}
                         width={sponsor.width}
                         height={sponsor.height}
+                        loading="lazy"
+                        decoding="async"
                       />
                     </a>,
                   ])}
@@ -996,6 +1015,8 @@ export function RuralHealthConveningPage() {
                           alt={sponsor.name}
                           width={sponsor.width}
                           height={sponsor.height}
+                          loading="lazy"
+                          decoding="async"
                         />
                       </a>
                     ))}
@@ -1021,6 +1042,8 @@ export function RuralHealthConveningPage() {
                           alt={sponsor.name}
                           width={sponsor.width}
                           height={sponsor.height}
+                          loading="lazy"
+                          decoding="async"
                         />
                       </a>
                     ))}
@@ -1057,6 +1080,8 @@ export function RuralHealthConveningPage() {
                           alt={sponsor.name}
                           width={sponsor.width}
                           height={sponsor.height}
+                          loading="lazy"
+                          decoding="async"
                         />
                       </a>
                     ))}
@@ -1082,6 +1107,8 @@ export function RuralHealthConveningPage() {
                           alt={sponsor.name}
                           width={sponsor.width}
                           height={sponsor.height}
+                          loading="lazy"
+                          decoding="async"
                         />
                       </a>
                     ))}
@@ -1099,6 +1126,8 @@ export function RuralHealthConveningPage() {
                       alt="SparkPoint"
                       width={839}
                       height={290}
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
                   <span aria-hidden="true" />
@@ -1115,6 +1144,8 @@ export function RuralHealthConveningPage() {
                       alt="North Carolina Rural Health Association"
                       width={2064}
                       height={331}
+                      loading="lazy"
+                      decoding="async"
                     />
                   </a>
                 </div>
@@ -1137,6 +1168,8 @@ export function RuralHealthConveningPage() {
                       alt="Foundation for Health Leadership and Innovation"
                       width={1600}
                       height={438}
+                      loading="lazy"
+                      decoding="async"
                     />
                   </a>
                   <a
@@ -1152,6 +1185,8 @@ export function RuralHealthConveningPage() {
                       alt="NC Department of Health and Human Services, Office of Rural Health"
                       width={480}
                       height={170}
+                      loading="lazy"
+                      decoding="async"
                     />
                   </a>
                 </div>
