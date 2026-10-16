@@ -9,6 +9,7 @@ import { TicketRedirect } from './components/TicketRedirect';
 import { HomePage } from './pages/HomePage';
 import { AccessibilityProvider } from './context/AccessibilityContext';
 import { MotionConfig } from 'motion/react';
+import { ShortLinkRedirect } from './components/backporch/ShortLinkRedirect';
 
 const MissionPage = lazy(() =>
   import('./pages/MissionPage').then((module) => ({ default: module.MissionPage }))
@@ -85,6 +86,18 @@ const InternalStatusPage = lazy(() => import('./pages/InternalStatusPage'));
 const InternalLoginPage = lazy(() => import('./pages/InternalLoginPage'));
 const InternalReportsHomePage = lazy(() => import('./pages/InternalReportsHomePage'));
 const InternalReportDashboardPage = lazy(() => import('./pages/InternalReportDashboardPage'));
+const BackPorchPage = lazy(() => import('./pages/backporch/BackPorchPage'));
+const BackPorchPostPage = lazy(() => import('./pages/backporch/BackPorchPostPage'));
+const InternalBackPorchPage = lazy(() => import('./pages/backporch/InternalBackPorchPage'));
+const InternalLabPage = lazy(() => import('./pages/backporch/InternalLabPage'));
+// Local demos of the editor and lab bench (sample posts, no sign-in, nothing saved).
+// Only routed when running the dev server; `import.meta.env.DEV` is false in every build.
+const InternalBackPorchDemoPage = lazy(() =>
+  import('./pages/backporch/InternalBackPorchPage').then((m) => ({ default: m.InternalBackPorchDemoPage })),
+);
+const InternalLabDemoPage = lazy(() =>
+  import('./pages/backporch/InternalLabPage').then((m) => ({ default: m.InternalLabDemoPage })),
+);
 const CommunityChampionsArticle = lazy(() => import('./pages/CommunityChampionsArticle'));
 const HeleneOneYearArticle = lazy(() => import('./pages/HeleneOneYearArticle'));
 const HEALTHCARE_STORY_FORM_URL =
@@ -225,6 +238,15 @@ function AppContent() {
         <Route path="/rural-health-convening" element={<RuralHealthConveningPage />} />
         {/* Unlisted photo-share page: reached by direct link only (see the page header). */}
         <Route path="/rural-health-convening/photos" element={<RuralHealthPhotoSharePage />} />
+        <Route path="/backporch" element={<BackPorchPage />} />
+        <Route path="/backporch/:slug" element={<BackPorchPostPage />} />
+        <Route path="/back-porch" element={<Navigate to="/backporch" replace />} />
+        {/* Short addresses for flyers, QR codes, and Facebook posts: /p/gala -> /backporch/gala */}
+        <Route path="/p/:slug" element={<ShortLinkRedirect />} />
+        <Route path="/internal/backporch" element={<InternalBackPorchPage />} />
+        <Route path="/internal/lab" element={<InternalLabPage />} />
+        {import.meta.env.DEV && <Route path="/internal/backporch/demo" element={<InternalBackPorchDemoPage />} />}
+        {import.meta.env.DEV && <Route path="/internal/lab/demo" element={<InternalLabDemoPage />} />}
         <Route path="/internal/status" element={<InternalStatusPage />} />
         <Route path="/internal/login" element={<InternalLoginPage />} />
         <Route path="/internal/reports" element={<InternalReportsHomePage />} />

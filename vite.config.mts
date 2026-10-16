@@ -2,6 +2,94 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
+import { lookup } from 'node:dns/promises';
+import { createHash } from 'node:crypto';
+import { mkdir, writeFile } from 'node:fs/promises';
+import type { Plugin } from 'vite';
+import { acceptableUrl, isPrivateAddress, parsePreview } from './supabase/functions/porch-unfurl/parse';
+
+/**
+ * Local-dev stand-in for the `porch-unfurl` edge function, so the BackPorch editor's
+ * demo (/internal/backporch/demo) can show link previews before the database and
+ * functions are live. Same rules as the real function: https only, private and
+ * loopback addresses refused at every redirect hop, size and time limits. The
+ * preview image is resized and saved under public/assets/backporch/dev-unfurl/
+ * (git-ignored). `apply: 'serve'` keeps it out of every build.
+ */
+function porchUnfurlDev(): Plugin {
+  const safeFetch = async (start: string, accept: string, max: number) => {
+    let current = start;
+    for (let hop = 0; hop < 5; hop++) {
+      const u = acceptableUrl(current);
+      if (!u) throw new Error("That address can't be previewed.");
+      const addrs = await lookup(u.hostname.replace(/^\[|\]$/g, ''), { all: true });
+      if (!addrs.length || addrs.some((a) => isPrivateAddress(a.address))) throw new Error("That address can't be previewed.");
+      const res = await fetch(u, {
+        redirect: 'manual',
+        headers: { Accept: accept, 'User-Agent': 'SparkPointBackPorch/1.0 (+https://yoursparkpoint.org/backporch)' },
+        signal: AbortSignal.timeout(8000),
+      });
+      if (res.status >= 300 && res.status < 400) {
+        const next = res.headers.get('location');
+        if (!next) throw new Error('That page redirects nowhere.');
+        current = new URL(next, u).toString();
+        continue;
+      }
+      if (!res.ok) throw new Error(`That page answered ${res.status}.`);
+      const buf = Buffer.from(await res.arrayBuffer());
+      if (buf.length > max && accept.startsWith('image')) throw new Error('That image is too large.');
+      return { url: u.toString(), type: res.headers.get('content-type') ?? '', body: buf.subarray(0, max) };
+    }
+    throw new Error('Too many redirects.');
+  };
+
+  return {
+    name: 'porch-unfurl-dev',
+    apply: 'serve',
+    configureServer(server) {
+      server.middlewares.use('/__dev/porch-unfurl', async (req, res) => {
+        const send = (status: number, body: unknown) => {
+          res.statusCode = status;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify(body));
+        };
+        if (req.method !== 'POST') return send(405, { error: 'POST only' });
+        let raw = '';
+        for await (const chunk of req) raw += chunk;
+        try {
+          const { url } = JSON.parse(raw || '{}') as { url?: string };
+          if (!url) return send(400, { error: 'send a url' });
+          const page = await safeFetch(url, 'text/html', 1024 * 1024);
+          const preview = /html/i.test(page.type)
+            ? parsePreview(page.body.toString('utf8'), page.url)
+            : { url: page.url, site: new URL(page.url).hostname };
+          let imagePath: string | undefined;
+          if (preview.image) {
+            try {
+              const img = await safeFetch(preview.image, 'image/*', 8 * 1024 * 1024);
+              if (/^image\//i.test(img.type)) {
+                const sharp = (await import('sharp')).default;
+                const id = createHash('sha1').update(preview.image).digest('hex').slice(0, 12);
+                const dir = path.resolve(__dirname, 'public/assets/backporch/dev-unfurl');
+                await mkdir(dir, { recursive: true });
+                for (const w of [480, 960, 1600]) {
+                  const out = await sharp(img.body).resize({ width: w, withoutEnlargement: true }).webp({ quality: 80 }).toBuffer();
+                  await writeFile(path.join(dir, `${id}-${w}.webp`), out);
+                }
+                imagePath = `/assets/backporch/dev-unfurl/${id}-960.webp`;
+              }
+            } catch {
+              /* a preview without its image is still useful */
+            }
+          }
+          send(200, { preview, imagePath });
+        } catch (err) {
+          send(422, { error: err instanceof Error ? err.message : 'Could not fetch that.' });
+        }
+      });
+    },
+  };
+}
 
 // Matches production. The site is served from the apex custom domain (see the CNAME
 // step in .github/workflows/deploy.yml), so every deployed build uses base '/'.
@@ -36,7 +124,7 @@ if (!process.env.VITE_SITE_ORIGIN) {
 export default defineConfig({
   base: process.env.PUBLIC_BASE ?? defaultBase,
 
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), porchUnfurlDev()],
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
     alias: {

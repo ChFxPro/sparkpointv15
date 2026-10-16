@@ -71,6 +71,35 @@ const REDIRECTS = {
   // here also drops it from the generated sitemap and skips prerendering it.
   '/stories/disaster-recovery/helene-one-year': `${ORIGIN}/stories/community-champions/helene-anniversary`,
 };
+// The BackPorch (docs/backporch/SPEC.md): every post baked for this build by
+// scripts/backporch/bake.mjs gets a prerendered /backporch/<slug> page and a
+// /p/<slug> short-address stub. The stub carries the post's own preview tags, so a
+// short address pasted into a text or a comment unfurls as the post itself.
+const PORCH_FILE = process.env.PORCH_FILE || 'src/data/backporch.generated.json';
+const PORCH_POSTS = existsSync(PORCH_FILE) ? JSON.parse(await readFile(PORCH_FILE, 'utf8')).posts || [] : [];
+const SHORT_META = {};
+REDIRECTS['/back-porch'] = `${ORIGIN}/backporch`;
+for (const post of PORCH_POSTS) {
+  REDIRECTS[`/p/${post.slug}`] = `${ORIGIN}/backporch/${post.slug}`;
+  SHORT_META[`/p/${post.slug}`] = post;
+}
+const escAttr = (v) => String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+function shortLinkMeta(post, target) {
+  const image = post.image_path
+    ? `https://suqtfbculwuetfdhdgdh.supabase.co/storage/v1/object/public/porch-media/${post.image_path.replace(/-\d+\.(webp|jpg)$/, '-1600.$1')}`
+    : `${ORIGIN}/og/default.jpg`;
+  return [
+    `<meta property="og:type" content="article">`,
+    `<meta property="og:site_name" content="SparkPoint">`,
+    `<meta property="og:title" content="${escAttr(post.title)}">`,
+    `<meta property="og:description" content="${escAttr(post.summary)}">`,
+    `<meta property="og:url" content="${escAttr(target)}">`,
+    `<meta property="og:image" content="${escAttr(image)}">`,
+    `<meta name="twitter:card" content="summary_large_image">`,
+    `<meta name="description" content="${escAttr(post.summary)}">`,
+  ].join('');
+}
+
 // Client-side redirect aliases with no static stub yet: leave to the SPA fallback.
 // (Empty for now — keep as a hook for any future alias that shouldn't get a stub,
 // e.g. a route intentionally left unindexable.)
@@ -79,7 +108,7 @@ const SKIP = new Set();
 // preview image instead of GitHub Pages' 404.html, but left out of sitemap.xml. They
 // must also set `noindex` themselves and must not be linked from any listed page.
 const UNLISTED = new Set(['/rural-health-convening/photos']);
-const STATIC = ['/', '/about', '/mission', '/impact', '/programs', '/programs/purpose-workshops',
+const STATIC = ['/', '/backporch', '/about', '/mission', '/impact', '/programs', '/programs/purpose-workshops',
   '/get-involved', '/community-connectors', '/partners', '/resilience-hub', '/directory', '/press', '/stories', '/events',
   '/trust', '/privacy', '/intake', '/resources/know-your-numbers', '/rural-health-convening',
   '/events/thrive-at-five', '/events/sparkpoint-gala',
@@ -120,6 +149,7 @@ async function deriveRoutes() {
   for (const rel of (press.releases || [])) routes.add('/press/' + rel.slug);
   const resData = await importData(RESOURCES_FILE);
   for (const r of (resData.RESOURCES || [])) routes.add('/directory/' + r.id);
+  for (const post of PORCH_POSTS) routes.add('/backporch/' + post.slug);
   return [...routes].map(norm).filter((r) => !SKIP.has(r) && !REDIRECTS[r]);
 }
 
@@ -265,7 +295,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     // Google drops the URL instead of passing the equity forward, which is the opposite
     // of what these stubs exist to do. These pages stay out of sitemap.xml (see below),
     // so they still won't be crawled as standalone content.
-    const stub = `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="canonical" href="${target}"><meta http-equiv="refresh" content="0;url=${target}"><title>Redirecting…</title><script>location.replace(${JSON.stringify(target)})</script></head><body><p>Redirecting to <a href="${target}">${target}</a>…</p></body></html>`;
+    const meta = SHORT_META[route] ? shortLinkMeta(SHORT_META[route], target) : '';
+    const title = SHORT_META[route] ? `${escAttr(SHORT_META[route].title)} | SparkPoint` : 'Redirecting…';
+    const stub = `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="canonical" href="${target}">${meta}<meta http-equiv="refresh" content="0;url=${target}"><title>${title}</title><script>location.replace(${JSON.stringify(target)})</script></head><body><p>Redirecting to <a href="${target}">${target}</a>…</p></body></html>`;
     await writeFile(file, stub);
     done.push(route);
   }

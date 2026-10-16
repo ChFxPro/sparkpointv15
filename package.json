@@ -72,12 +72,16 @@
   },
   "scripts": {
     "generate:press": "node scripts/generate-press-media-kits.js",
+    "backporch:bake": "node scripts/backporch/bake.mjs",
+    "porch:experiment": "node scripts/backporch/new-experiment.mjs",
+    "porch:samples": "BACKPORCH_FIXTURE=scripts/backporch/sample-posts.json node scripts/backporch/bake.mjs",
+    "dev:samples": "npm run generate:press && node scripts/behind-story-manifest.mjs && npm run porch:samples && vite",
     "photos:add": "node scripts/rural-health-photo-share.mjs add",
     "photos:check": "node scripts/rural-health-photo-share.mjs check",
     "photos:remove-zips": "node scripts/rural-health-photo-share.mjs remove-zips",
-    "predev": "npm run generate:press && node scripts/behind-story-manifest.mjs",
+    "predev": "npm run generate:press && node scripts/behind-story-manifest.mjs && npm run backporch:bake",
     "dev": "vite",
-    "prebuild": "npm run generate:press && node scripts/behind-story-manifest.mjs",
+    "prebuild": "npm run generate:press && node scripts/behind-story-manifest.mjs && npm run backporch:bake",
     "build": "vite build",
     "postbuild": "node scripts/replace-site-origin.js && node scripts/prerender.mjs"
   }
