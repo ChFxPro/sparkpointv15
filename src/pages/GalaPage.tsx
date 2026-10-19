@@ -1,11 +1,18 @@
 import '@fontsource-variable/fraunces';
 import { motion, useReducedMotion } from 'motion/react';
-import { ArrowRight, CalendarDays, Clock3, MapPin } from 'lucide-react';
+import { ArrowRight, CalendarDays, Clock3, MapPin, Ticket } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { Sparkmark } from '../components/Sparkmark';
-import { GALA_PARTNER_FORM_URL } from '../data/events';
+import {
+  GALA_PARTNER_FORM_URL,
+  GALA_TICKETS_URL,
+  GALA_TICKET_PRICE,
+  GALA_TICKET_PRICE_LABEL,
+  GALA_VENUE,
+} from '../data/events';
+import { canonicalUrl } from '../lib/siteOrigin';
 import { GalaBoardingPass } from './GalaBoardingPass';
 import { GalaDepartureBoard } from './GalaDepartureBoard';
 import { GalaPostcard } from './GalaPostcard';
@@ -62,6 +69,41 @@ const GIVES_BACK = [
   },
 ];
 
+// Now that the venue and price are set, the page carries schema.org Event
+// data so search engines can show it as an event.
+const galaEventJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: 'The SparkPoint Gala',
+  description:
+    'An evening of connection and a live auction of eight travel experiences, with a portion of every trip supporting the Transylvania Resilience Hub.',
+  startDate: '2026-12-11T18:00:00-05:00',
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  eventStatus: 'https://schema.org/EventScheduled',
+  image: [canonicalUrl('/assets/events/gala/gala-share.jpg')],
+  url: canonicalUrl(GALA_PATH),
+  location: {
+    '@type': 'Place',
+    name: GALA_VENUE.name,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: GALA_VENUE.street,
+      addressLocality: GALA_VENUE.city,
+      addressRegion: GALA_VENUE.region,
+      postalCode: GALA_VENUE.postalCode,
+      addressCountry: 'US',
+    },
+  },
+  offers: {
+    '@type': 'Offer',
+    price: String(GALA_TICKET_PRICE),
+    priceCurrency: 'USD',
+    availability: GALA_TICKETS_URL ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder',
+    ...(GALA_TICKETS_URL ? { url: GALA_TICKETS_URL } : {}),
+  },
+  organizer: { '@type': 'NGO', name: 'SparkPoint', url: canonicalUrl('/') },
+};
+
 function useReveal(delay = 0) {
   const reduceMotion = useReducedMotion();
   if (reduceMotion) return {};
@@ -104,13 +146,14 @@ export default function GalaPage() {
     <div className="gala-page">
       <SEOHead
         title="The SparkPoint Gala & Travel Auction | December 11, 2026"
-        description="See the world. Strengthen home. Join the SparkPoint Gala on Friday, December 11, 2026 at 6 p.m. and bid on eight travel experiences in a live auction that gives back to Transylvania County’s Resilience Hub."
+        description="See the world. Strengthen home. Join the SparkPoint Gala on Friday, December 11, 2026 at 6 p.m. at Connestee Falls Country Club, and bid on eight travel experiences in a live auction that gives back to Transylvania County’s Resilience Hub. Tickets $100."
         path={GALA_PATH}
         image="/assets/events/gala/gala-share.jpg"
         imageAlt="An airplane wing above a sea of golden clouds at sunset."
         imageType="image/jpeg"
         imageWidth={1200}
         imageHeight={630}
+        jsonLd={galaEventJsonLd}
         keywords={['SparkPoint Gala', 'travel auction', 'Resilience Hub', 'Transylvania County', 'Western North Carolina']}
       />
 
@@ -155,13 +198,36 @@ export default function GalaPage() {
               <div>
                 <MapPin aria-hidden="true" />
                 <dt className="sr-only">Location</dt>
-                <dd>Venue to be announced</dd>
+                <dd>
+                  <a href={GALA_VENUE.mapUrl} target="_blank" rel="noopener noreferrer">
+                    {GALA_VENUE.name}
+                  </a>
+                </dd>
+              </div>
+              <div>
+                <Ticket aria-hidden="true" />
+                <dt className="sr-only">Tickets</dt>
+                <dd>
+                  {GALA_TICKET_PRICE_LABEL}
+                  {GALA_TICKETS_URL ? null : <span className="gala-hero-soon"> · on sale soon</span>}
+                </dd>
               </div>
             </dl>
             <div className="gala-actions">
-              <Link className="gala-button gala-button-gold" to="/newsletter">
-                Get boarding updates <ArrowRight aria-hidden="true" />
-              </Link>
+              {GALA_TICKETS_URL ? (
+                <a
+                  className="gala-button gala-button-gold"
+                  href={GALA_TICKETS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Get tickets · ${GALA_TICKET_PRICE} <ArrowRight aria-hidden="true" />
+                </a>
+              ) : (
+                <Link className="gala-button gala-button-gold" to="/newsletter">
+                  Get boarding updates <ArrowRight aria-hidden="true" />
+                </Link>
+              )}
               <a className="gala-button gala-button-ghost" href="#passport">
                 How the auction works
               </a>
@@ -448,7 +514,9 @@ export default function GalaPage() {
       <section className="gala-close" aria-labelledby="close-title">
         <div className="gala-shell">
           <motion.div className="gala-section-head gala-section-head-center" {...reveal}>
-            <p className="gala-label">Venue, tickets, and destinations coming soon</p>
+            <p className="gala-label">
+              {GALA_VENUE.name} · {GALA_TICKETS_URL ? GALA_TICKET_PRICE_LABEL : 'Tickets on sale soon'}
+            </p>
             <h2 id="close-title">
               Your seat <em>is waiting.</em>
             </h2>
