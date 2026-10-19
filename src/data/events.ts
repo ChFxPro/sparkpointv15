@@ -15,6 +15,23 @@ export const COMMON_GROUND_PURCHASE_URL =
 export const GALA_PARTNER_FORM_URL =
   'https://forms.monday.com/forms/8bc904c73a179d5be96939ed2c05b62a';
 
+// SparkPoint Gala logistics, shared by the Gala page, the homepage card and
+// the Events listing. Tickets aren't on sale yet: set GALA_TICKETS_URL to the
+// purchase link and every ticket button switches from "on sale soon" to
+// "Get tickets".
+export const GALA_VENUE = {
+  name: 'Connestee Falls Country Club',
+  street: '98 Overlook Clubhouse Dr',
+  city: 'Brevard',
+  region: 'NC',
+  postalCode: '28712',
+  mapUrl:
+    'https://www.google.com/maps/search/?api=1&query=Connestee+Falls+Country+Club+98+Overlook+Clubhouse+Dr+Brevard+NC+28712',
+};
+export const GALA_TICKET_PRICE = 100;
+export const GALA_TICKET_PRICE_LABEL = `$${GALA_TICKET_PRICE} per person`;
+export const GALA_TICKETS_URL: string | null = null;
+
 export interface SparkPointEvent {
   id: string;
   title: string;
@@ -34,10 +51,10 @@ export interface SparkPointEvent {
   imageAlt?: string;
   featured?: boolean;
   partnerLine?: string;
-  // A save-the-date: announced before there is a venue or photo. The Events
-  // page gives it a typographic panel instead of the photo layout (linking to
+  // A save-the-date: an event without its own photo yet. The Events page gives
+  // it a typographic panel instead of the photo layout (linking to
   // `detailPath` when there is one), and it never lists under Past Gatherings.
-  // Drop this flag once the venue and a photo are in.
+  // Drop this flag once the event has a photo.
   teaser?: boolean;
 }
 
@@ -56,8 +73,8 @@ export const EVENTS: SparkPointEvent[] = [
     endDate: '2026-12-11T23:59:00-05:00',
     dateLabel: 'Friday, December 11, 2026',
     timeLabel: '6:00 p.m.',
-    locationName: 'Venue to be announced',
-    locationLabel: 'Tickets and details coming soon',
+    locationName: 'Connestee Falls Country Club',
+    locationLabel: '98 Overlook Clubhouse Dr, Brevard, NC 28712',
     summary:
       'See the world. Strengthen home. An evening of connection and a live auction of eight travel experiences, with a portion of every trip coming home to support the Transylvania Resilience Hub.',
     detailPath: '/events/sparkpoint-gala',
