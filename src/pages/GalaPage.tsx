@@ -74,7 +74,7 @@ const GIVES_BACK = [
 const galaEventJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Event',
-  name: 'The SparkPoint Gala',
+  name: 'An Atlas of Wonders: A SparkPoint Gala',
   description:
     'An evening of connection and a live auction of eight travel experiences, with a portion of every trip supporting the Transylvania Resilience Hub.',
   startDate: '2026-12-11T18:00:00-05:00',
@@ -145,8 +145,8 @@ export default function GalaPage() {
   return (
     <div className="gala-page">
       <SEOHead
-        title="The SparkPoint Gala & Travel Auction | December 11, 2026"
-        description="See the world. Strengthen home. Join the SparkPoint Gala on Friday, December 11, 2026 at 6 p.m. at Connestee Falls Country Club, and bid on eight travel experiences in a live auction that gives back to Transylvania County’s Resilience Hub. Tickets $100."
+        title="An Atlas of Wonders: A SparkPoint Gala & Travel Auction | December 11, 2026"
+        description="See the world. Strengthen home. Join us for An Atlas of Wonders, the SparkPoint Gala, on Friday, December 11, 2026 at 6 p.m. at Connestee Falls Country Club, and bid on eight travel experiences in a live auction that gives back to Transylvania County’s Resilience Hub. Tickets $100."
         path={GALA_PATH}
         image="/assets/events/gala/gala-share.jpg"
         imageAlt="An airplane wing above a sea of golden clouds at sunset."
@@ -154,7 +154,7 @@ export default function GalaPage() {
         imageWidth={1200}
         imageHeight={630}
         jsonLd={galaEventJsonLd}
-        keywords={['SparkPoint Gala', 'travel auction', 'Resilience Hub', 'Transylvania County', 'Western North Carolina']}
+        keywords={['An Atlas of Wonders', 'SparkPoint Gala', 'travel auction', 'Resilience Hub', 'Transylvania County', 'Western North Carolina']}
       />
 
       {/* 1 — Departures */}
@@ -172,14 +172,18 @@ export default function GalaPage() {
         <div className="gala-shell gala-hero-inner">
           <motion.div className="gala-hero-copy" {...reveal}>
             <p className="gala-kicker">
-              <span>The SparkPoint Gala</span>
+              <span>SparkPoint presents</span>
               <Sparkmark size="1.7em" />
               <span>Live travel auction</span>
             </p>
-            <h1 id="gala-title">
-              See the world.
-              <em>Strengthen home.</em>
+            <h1 id="gala-title" className="gala-wordmark" aria-label="An Atlas of Wonders: a SparkPoint Gala">
+              <span className="gala-wordmark-an" aria-hidden="true">An</span>
+              <span className="gala-wordmark-atlas" aria-hidden="true">Atlas</span>
+              <em className="gala-wordmark-wonders" aria-hidden="true">of Wonders</em>
             </h1>
+            <p className="gala-hero-tagline">
+              See the world. <em>Strengthen home.</em>
+            </p>
             <p className="gala-hero-lede">
               One evening, eight journeys around the world, and every one of them giving back
               to the place we call home.
