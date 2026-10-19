@@ -1,6 +1,6 @@
-# An Atlas of Wonders: A SparkPoint Gala invitation
+# An Atlas of Wonders invitation (the SparkPoint Gala)
 
-An email invitation for An Atlas of Wonders: A SparkPoint Gala (Friday,
+An email invitation for An Atlas of Wonders, the SparkPoint Gala (Friday,
 December 11, 2026, 6 p.m.),
 designed to match `/events/sparkpoint-gala`. It's a single image, because the
 places it goes (the Squarespace newsletter and Outlook) take images and buttons
@@ -101,13 +101,13 @@ built-in match:
 
 The two drafts:
 
-- **Attendees**: "You're invited: An Atlas of Wonders, a SparkPoint Gala". No
+- **Attendees**: "You're invited: An Atlas of Wonders, the SparkPoint Gala". No
   sponsor section. Uses the on-sale note below, with the preview "An Atlas of
-  Wonders, December 11 at Connestee Falls: tickets on sale, $100 per person. An
+  Wonders, the SparkPoint Gala, December 11 at Connestee Falls: tickets on sale, $100 per person. An
   evening of connection and a live travel auction that gives back to
   Transylvania County."
-- **Sponsor direct**: "An Atlas of Wonders: come aboard as a SparkPoint Gala
-  travel partner". Adds the
+- **Sponsor direct**: "Come aboard An Atlas of Wonders, the SparkPoint Gala,
+  as a travel partner". Adds the
   seat map and a "Request early boarding" button above the ticket button.
 
 The order, with each image's link (all on
@@ -145,10 +145,10 @@ settings change.
 
 **Alt text used**
 
-- Hero: You're invited to An Atlas of Wonders: A SparkPoint Gala, Friday,
+- Hero: You're invited to An Atlas of Wonders, the SparkPoint Gala, Friday,
   December 11, 2026. See the world. Strengthen home.
-- Boarding pass: SparkPoint invites you to join us for An Atlas of Wonders: A
-  SparkPoint Gala. A first-class boarding pass: Transylvania County to
+- Boarding pass: SparkPoint invites you to join us for An Atlas of Wonders,
+  the SparkPoint Gala. A first-class boarding pass: Transylvania County to
   Anywhere, Friday, December 11, 2026, boarding at 6 p.m., at Connestee Falls
   Country Club, Brevard, NC.
 - Departures: The travel auction: eight departures, one home base. A
@@ -172,15 +172,15 @@ Update the venue, board, and closing alt text along with the images.
 
 **Sponsor-direct copy**
 
-- Subject: An Atlas of Wonders: come aboard as a SparkPoint Gala travel partner
-- Preview: An Atlas of Wonders, December 11: put your brand on board for an
+- Subject: Come aboard An Atlas of Wonders, the SparkPoint Gala, as a travel partner
+- Preview: An Atlas of Wonders, the SparkPoint Gala, December 11: put your brand on board for an
   evening of connection and a live travel auction that gives back to
   Transylvania County.
 - Note:
 
   > Friends,
   >
-  > SparkPoint invites you to join us for An Atlas of Wonders: A SparkPoint
+  > SparkPoint invites you to join us for An Atlas of Wonders, the SparkPoint
   > Gala, on Friday, December 11, at 6 p.m. at Connestee Falls Country Club in
   > Brevard: an evening of connection and a live auction of eight travel
   > experiences, with a portion of every trip coming home to help bring the
@@ -194,20 +194,25 @@ The attendee draft uses the subject below and the on-sale note.
 
 ## The name
 
-The event is **An Atlas of Wonders: A SparkPoint Gala** (locked 2026-10-19).
-Use the full name on first mention, then "An Atlas of Wonders" or, casually,
-"the Atlas Gala". Invite people *for* it ("Join us for An Atlas of Wonders"),
-not "at" it. The tagline stays "See the world. Strengthen home." The invitation
-card shows the lockup from `assets/` (`…-for-light-backgrounds.png` on the
-ivory card; `…-for-dark-backgrounds.png` is there for midnight backgrounds).
-The ticket link stays `https://secure.yoursparkpoint.org/store/p/2026-sparkpoint-gala`
-exactly; it's on printed QR codes.
+The event is **An Atlas of Wonders**, with SparkPoint as a separate byline,
+"the SparkPoint Gala" (set 2026-10-19). Don't join them with a colon and "A".
+
+- In sentences: "Join us for An Atlas of Wonders, the SparkPoint Gala, on
+  Friday, December 11…", then just "An Atlas of Wonders". Invite people *for*
+  it, not "at" it.
+- As a kicker or label: "The SparkPoint Gala · Live travel auction".
+- The tagline stays "See the world. Strengthen home."
+- The invitation card shows the lockup from `assets/`, whose byline reads THE
+  SPARKPOINT GALA (`…-for-light-backgrounds.png` on the ivory card;
+  `…-for-dark-backgrounds.png` is there for midnight backgrounds).
+- The ticket link stays `https://secure.yoursparkpoint.org/store/p/2026-sparkpoint-gala`
+  exactly; it's on printed QR codes.
 
 ## Email copy
 
 **Subject lines** (pick one)
 
-- You're invited: An Atlas of Wonders, a SparkPoint Gala
+- You're invited: An Atlas of Wonders, the SparkPoint Gala
 - An Atlas of Wonders: see the world, strengthen home ✈️
 - Your seat is waiting: An Atlas of Wonders, December 11
 
@@ -216,15 +221,15 @@ copy is kept below for reference only.
 
 **Preview text**
 
-An Atlas of Wonders, December 11 at Connestee Falls: tickets on sale, $100 per
-person. An evening of connection and a live travel auction that gives back to
+An Atlas of Wonders, the SparkPoint Gala, December 11 at Connestee Falls:
+tickets on sale, $100 per person. An evening of connection and a live travel auction that gives back to
 Transylvania County.
 
 **Note above the image**
 
 > Friends,
 >
-> Join us for An Atlas of Wonders: A SparkPoint Gala, on Friday, December 11,
+> Join us for An Atlas of Wonders, the SparkPoint Gala, on Friday, December 11,
 > at 6 p.m. at Connestee Falls Country Club in Brevard. It's an evening of
 > connection and celebration, with a live auction of eight travel experiences,
 > and a portion of every trip comes home to help bring the Transylvania
@@ -236,7 +241,7 @@ Transylvania County.
 
 **Alt text for the image**
 
-You're invited to An Atlas of Wonders: A SparkPoint Gala, Friday, December
+You're invited to An Atlas of Wonders, the SparkPoint Gala, Friday, December
 11, 2026, at 6 p.m. at
 Connestee Falls Country Club: an evening of connection and a live auction of
 eight travel experiences that gives back to the Transylvania Resilience Hub.
