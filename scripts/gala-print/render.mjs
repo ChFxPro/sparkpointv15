@@ -150,7 +150,11 @@ for (const name of asked) {
 const run = asked.length ? order.filter((name) => asked.includes(name) || (name === 'logo' && asked.includes('share'))) : order;
 
 await mkdir(BUILD, { recursive: true });
-const browser = await puppeteer.launch({ args: ['--allow-file-access-from-files'] });
+// Chromium refuses to start as root without --no-sandbox (root-based dev or CI
+// containers); the templates are local files, so dropping the sandbox there is fine.
+const args = ['--allow-file-access-from-files'];
+if (process.getuid?.() === 0) args.push('--no-sandbox');
+const browser = await puppeteer.launch({ args });
 try {
   const page = await browser.newPage();
   for (const name of run) await groups[name](page);
