@@ -73,8 +73,8 @@ export const EVENTS: SparkPointEvent[] = [
     endDate: '2026-12-11T23:59:00-05:00',
     dateLabel: 'Friday, December 11, 2026',
     timeLabel: '6:00 p.m.',
-    locationName: 'Connestee Falls Country Club',
-    locationLabel: '98 Overlook Clubhouse Dr, Brevard, NC 28712',
+    locationName: GALA_VENUE.name,
+    locationLabel: `${GALA_VENUE.street}, ${GALA_VENUE.city}, ${GALA_VENUE.region} ${GALA_VENUE.postalCode}`,
     summary:
       'See the world. Strengthen home. An evening of connection and a live auction of eight travel experiences, with a portion of every trip coming home to support the Transylvania Resilience Hub.',
     detailPath: '/events/sparkpoint-gala',
