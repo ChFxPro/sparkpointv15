@@ -34,6 +34,11 @@ function usePost(slug: string) {
     const fallback = BAKED.find((p) => p.slug === slug) ?? null;
     setPost(fallback);
     setState(fallback ? 'ready' : 'loading');
+    // Local preview with sample posts: don't let the real database overrule them.
+    if ((bakedFull as { samples?: boolean }).samples) {
+      if (!fallback) setState('missing');
+      return;
+    }
     fetchPublishedPost(slug)
       .then((live) => {
         if (cancelled) return;

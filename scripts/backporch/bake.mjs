@@ -71,10 +71,13 @@ const listed = posts.filter(
 const generatedAt = new Date().toISOString();
 
 await mkdir(path.dirname(OUT_FULL), { recursive: true });
-await writeFile(OUT_FULL, JSON.stringify({ generatedAt, posts }, null, 1) + '\n');
+// `samples` marks a local preview bake: the pages then skip their live refresh, which
+// would otherwise replace the sample posts with whatever the real database holds.
+const samples = Boolean(fixture);
+await writeFile(OUT_FULL, JSON.stringify({ generatedAt, samples, posts }, null, 1) + '\n');
 await writeFile(
   OUT_INDEX,
-  JSON.stringify({ generatedAt, posts: posts.map(({ blocks, ...rest }) => rest) }, null, 1) + '\n',
+  JSON.stringify({ generatedAt, samples, posts: posts.map(({ blocks, ...rest }) => rest) }, null, 1) + '\n',
 );
 
 // ── Feeds ──

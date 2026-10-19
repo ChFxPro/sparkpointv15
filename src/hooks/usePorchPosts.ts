@@ -14,6 +14,8 @@ export function usePorchPosts(): PorchPost[] {
   const [posts, setPosts] = useState<PorchPost[]>(() => sortPosts(BAKED.filter((p) => isListed(p))));
 
   useEffect(() => {
+    // Local preview with sample posts (`npm run dev:samples`): keep them, skip the live list.
+    if ((bakedIndex as { samples?: boolean }).samples) return;
     let cancelled = false;
     fetchPublishedPosts()
       .then((live) => {
