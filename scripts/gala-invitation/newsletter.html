@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>An Atlas of Wonders · Newsletter sections</title>
+<!--
+  The Gala newsletter, cut into sections. render.mjs screenshots each
+  <section data-slice> on its own (600 CSS px wide, at 2x) so the newsletter
+  can interleave them with real text and buttons, each image linking to its
+  matching part of /events/sparkpoint-gala. Sections with data-anim become
+  animated GIFs: frame 0 is always the finished state, because desktop Outlook
+  shows only the first frame. Settings come from invitation.config.json via
+  window.__INVITE__, exactly as in template.html.
+-->
+<link rel="stylesheet" href="styles.css" />
+<style>
+  body { background: var(--midnight); }
+  .slice { position: relative; width: 600px; overflow: hidden; }
+  .pad { padding: 30px 22px 34px; }
+
+  /* 05 · Luggage tags */
+  .tags-wrap { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 26px; padding-top: 10px; }
+  .tags-wrap::before { content: ''; position: absolute; top: 0; left: -8px; right: -8px; height: 7px; border-radius: 999px; background: linear-gradient(180deg, #f6e2a8, #c9a24f 45%, #8a6a2a); box-shadow: 0 4px 8px rgba(60,44,20,.25); }
+  .tag { --leather: #8a4b25; --dark: #5f3016; --stitch: rgba(255,228,180,.55); display: grid; justify-items: center; transform: rotate(var(--t)); transform-origin: 50% 0; }
+  .tag.navy { --leather: #1f3152; --dark: #111c33; --stitch: rgba(241,217,160,.5); }
+  .tag.plum { --leather: #6b2348; --dark: #42132b; --stitch: rgba(255,200,225,.5); }
+  .tag.forest { --leather: #24463a; --dark: #142a22; --stitch: rgba(220,240,210,.45); }
+  .tag.tan { --leather: #b27c45; --dark: #7c522a; --stitch: rgba(255,240,210,.6); }
+  .strap { width: 10px; height: calc(var(--d) + 20px); margin: -14px 0 -18px; border-radius: 5px 5px 0 0; background: linear-gradient(90deg, rgba(0,0,0,.25), transparent 30%, transparent 70%, rgba(0,0,0,.3)), var(--dark); }
+  .tag-body { position: relative; width: 100%; display: grid; justify-items: center; gap: 6px; padding: 30px 6px 10px; border-radius: 28px 28px 9px 9px; color: #f7ecd6;
+    background: radial-gradient(ellipse at 30% 0%, rgba(255,255,255,.16), transparent 55%), linear-gradient(170deg, var(--leather), var(--dark));
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,.32), 0 10px 18px rgba(50,30,15,.3); }
+  .tag-body::before { content: ''; position: absolute; inset: 5px; border: 1.2px dashed var(--stitch); border-radius: 24px 24px 6px 6px; }
+  .rivet { position: absolute; top: 11px; left: 50%; width: 11px; height: 11px; border-radius: 50%; transform: translateX(-50%); background: radial-gradient(circle at 35% 30%, #fff4cf 0 1.5px, #e2c172 2px, #a47a2c 70%, #6f4f18); box-shadow: 0 1px 2px rgba(0,0,0,.45); }
+  .tag-card { position: relative; width: 100%; padding: 7px 5px 8px; border-radius: 4px; background: #fbf6ea; color: var(--ink); text-align: center; box-shadow: inset 0 2px 5px rgba(0,0,0,.2); }
+  .tag-card b { display: inline-block; padding: 1px 4px; border: 1.2px solid #8e2a5c; border-radius: 2px; color: #8e2a5c; font-family: var(--mono); font-size: 12px; font-weight: 800; letter-spacing: .06em; }
+  .tag-card strong { display: block; margin-top: 6px; font-family: var(--display); font-size: 13px; font-weight: 600; line-height: 1.1; }
+  .tag-brand { display: inline-flex; align-items: center; gap: 3px; color: #e8cf8d; font-family: var(--display); font-style: italic; font-size: 8.5px; }
+  .tag-brand .sparkmark { width: 9px; height: 9px; }
+
+  /* 07 · Travel partners seat map */
+  .partners { background: radial-gradient(circle at 90% 0%, rgba(217,181,106,.16), transparent 40%), var(--ivory); }
+  .seatmap { margin-top: 18px; padding: 10px; background:
+      linear-gradient(rgba(31,49,82,.05) 1px, transparent 1px) 0 0 / 16px 16px,
+      linear-gradient(90deg, rgba(31,49,82,.05) 1px, transparent 1px) 0 0 / 16px 16px, #f3ecdc;
+    border: 1px solid #e4d8bd; border-radius: 12px; }
+  .seatmap svg { width: 100%; height: auto; display: block; }
+  .legend { display: flex; gap: 16px; margin-top: 14px; color: var(--muted); font-size: 11.5px; font-weight: 700; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 11px; height: 11px; border-radius: 3px; }
+  .legend .soon { margin-left: auto; color: #8a7754; font-family: var(--mono); font-size: 8.5px; letter-spacing: .14em; text-transform: uppercase; }
+  .legend .soon::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--pink); }
+
+  /* 08 · Closing */
+  .close { text-align: center; padding: 44px 36px 30px; background: radial-gradient(ellipse at 50% 0%, rgba(217,181,106,.18), transparent 60%), var(--midnight); }
+  .close .rule { margin-bottom: 0; }
+</style>
+</head>
+<body>
+
+<!-- 01 · Hero -->
+<section class="slice" data-slice="01-hero">
+  <header class="hero lockup-hero">
+    <img src="../../public/assets/events/gala/hero-wing-1400.webp" alt="" />
+    <div class="hero-in">
+      <p class="kicker mono"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />You&rsquo;re invited &middot; Live travel auction</p>
+      <h1><img class="hero-lockup" src="assets/atlas-of-wonders-lockup-for-dark-backgrounds.png" alt="An Atlas of Wonders, the SparkPoint Gala" /></h1>
+      <p class="hero-sub">See the world. Strengthen home.</p>
+    </div>
+  </header>
+</section>
+
+<!-- 02 · Invitation card with the boarding pass (animated: the plane flies the route) -->
+<section class="slice" data-slice="02-boarding-pass" data-anim="plane" style="padding: 26px 0 30px;">
+  <main class="card">
+    <svg class="stamp" viewBox="0 0 100 100">
+      <defs><path id="ring" d="M50 50 m-36 0 a36 36 0 1 1 72 0 a36 36 0 1 1 -72 0" /></defs>
+      <circle cx="50" cy="50" r="46" /><circle cx="50" cy="50" r="28" />
+      <text class="ring"><textPath href="#ring" startOffset="33%">ATLAS GALA · ADMITTED ·</textPath></text>
+      <text x="50" y="49" class="day">DEC 11</text><text x="50" y="62" class="yr">2026</text>
+    </svg>
+    <p class="request">SparkPoint invites you to join us for</p>
+    <h2 class="lockup"><img src="assets/atlas-of-wonders-lockup-for-light-backgrounds.png" alt="An Atlas of Wonders, the SparkPoint Gala" /></h2>
+    <div class="pass">
+      <div class="pass-main">
+        <div class="band">
+          <span class="brand"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />An Atlas of Wonders</span>
+          <span class="cls"><small class="mono">Boarding pass</small><b>First class</b></span>
+        </div>
+        <div class="pass-body">
+          <div class="route">
+            <div><strong>TCN</strong><span class="mono">Transylvania County</span></div>
+            <svg viewBox="0 0 180 40">
+              <path class="arc" id="route" d="M6 34 Q90 -6 174 34" />
+              <circle cx="6" cy="34" r="3" /><circle cx="174" cy="34" r="3" />
+              <g id="plane"><g transform="rotate(45) scale(0.62) translate(-12 -12)"><path class="plane" d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" /></g></g>
+            </svg>
+            <div><strong>ANY</strong><span class="mono">Anywhere</span></div>
+          </div>
+          <dl class="fields">
+            <div><dt class="mono">Date</dt><dd>Fri 11 Dec 2026</dd></div>
+            <div><dt class="mono">Boarding</dt><dd>6:00 p.m.</dd></div>
+            <div><dt class="mono">Gate</dt><dd data-fill="gate">TBA</dd></div>
+            <div><dt class="mono">Seat</dt><dd>Yours</dd></div>
+          </dl>
+        </div>
+      </div>
+      <div class="pass-stub">
+        <div class="band band-stub mono">SPK 1211</div>
+        <div class="stub-body">
+          <p class="admit">Admit one <em>Live travel auction</em></p>
+          <img src="../../public/assets/events/gala/pass-pdf417.svg" alt="" />
+        </div>
+      </div>
+    </div>
+    <p class="where" data-fill="where"></p>
+  </main>
+</section>
+
+<!-- 03 · Departures board (animated: the letters flip into place) -->
+<section class="slice section" data-slice="03-departures" data-anim="flap">
+  <p class="eyebrow mono">The travel auction</p>
+  <h3>Eight departures. <em>One home base.</em></h3>
+  <p class="copy" data-fill="trips-copy"></p>
+  <div class="board">
+    <div class="board-title"><b>Departures</b><span class="mono">Transylvania County · Home base</span></div>
+    <div data-fill="board"></div>
+  </div>
+</section>
+
+<!-- 04 · Passport stamps -->
+<section class="slice section facts" data-slice="04-passport">
+  <p class="eyebrow mono">How the auction works</p>
+  <h3>Your passport to <em>the auction.</em></h3>
+  <div class="stamps">
+    <div class="st" style="--c:#b2245f; --r:-6deg"><strong>8</strong><span>Travel experiences</span></div>
+    <div class="st" style="--c:#1f4f7a; --r:5deg"><strong>3 yrs</strong><span>To travel</span></div>
+    <div class="st" style="--c:#2f6b4f; --r:-3deg"><strong>No</strong><span>Blackout dates</span></div>
+    <div class="st" style="--c:#b2245f; --r:6deg"><strong>Match</strong><span>The winning bid</span></div>
+  </div>
+</section>
+
+<!-- 05 · Luggage tags -->
+<section class="slice section facts" data-slice="05-luggage-tags">
+  <p class="eyebrow mono">Made for the moments that matter</p>
+  <h3>Where will yours <em>take you?</em></h3>
+  <div class="tags-wrap">
+    <div class="tag" style="--t:-3deg; --d:14px"><span class="strap"></span><div class="tag-body"><span class="rivet"></span><div class="tag-card"><b>ANV</b><strong>Anniversary</strong></div><span class="tag-brand"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />Gala</span></div></div>
+    <div class="tag navy" style="--t:2deg; --d:30px"><span class="strap"></span><div class="tag-body"><span class="rivet"></span><div class="tag-card"><b>BDY</b><strong>Milestone birthday</strong></div><span class="tag-brand"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />Gala</span></div></div>
+    <div class="tag plum" style="--t:-1.5deg; --d:8px"><span class="strap"></span><div class="tag-body"><span class="rivet"></span><div class="tag-card"><b>HNY</b><strong>Honeymoon</strong></div><span class="tag-brand"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />Gala</span></div></div>
+    <div class="tag forest" style="--t:3deg; --d:24px"><span class="strap"></span><div class="tag-body"><span class="rivet"></span><div class="tag-card"><b>FAM</b><strong>Family vacation</strong></div><span class="tag-brand"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />Gala</span></div></div>
+    <div class="tag tan" style="--t:-2.5deg; --d:12px"><span class="strap"></span><div class="tag-body"><span class="rivet"></span><div class="tag-card"><b>BKT</b><strong>Bucket list</strong></div><span class="tag-brand"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />Gala</span></div></div>
+  </div>
+</section>
+
+<!-- 06 · Postcard -->
+<section class="slice section gives" data-slice="06-postcard">
+  <p class="eyebrow mono">The return trip</p>
+  <h3>Travel that gives back <em>to our community.</em></h3>
+  <div class="postcard">
+    <figure>
+      <img src="../../public/assets/events/gala/hub-winter-postcard.webp" alt="" />
+      <figcaption><span>Greetings from</span><strong>HOME</strong></figcaption>
+    </figure>
+    <p>Every great trip ends with coming home. A portion of every travel package sold at the Gala supports SparkPoint, helping bring the Transylvania Resilience Hub to life.<small>Resilience Hub · concept rendering</small></p>
+  </div>
+</section>
+
+<!-- 07 · Travel partners (sponsor teaser) -->
+<section class="slice section partners" data-slice="07-travel-partners">
+  <p class="eyebrow mono" style="color: var(--plum)">Travel partners</p>
+  <h3 style="color: var(--midnight)">Your brand, cleared <em style="color: var(--plum)">for takeoff.</em></h3>
+  <div class="seatmap"><svg id="seatmap" viewBox="0 0 1200 900"></svg></div>
+  <div class="legend">
+    <span><i style="background:#c9a24f"></i>First Class</span>
+    <span><i style="background:#8e2a5c"></i>Business</span>
+    <span><i style="background:#1f3152"></i>Main Cabin</span>
+    <span class="soon">Seat map opening soon</span>
+  </div>
+</section>
+
+<!-- 08 · Closing heading (a real button follows it in the email) -->
+<section class="slice close" data-slice="08-your-seat">
+  <p class="eyebrow mono" data-fill="cta-eyebrow"></p>
+  <h3 style="margin-top: 8px; font-family: var(--display); font-weight: 400; font-size: 44px; color: var(--ivory);">Your seat <em style="color: var(--brass); font-style: italic;">is waiting.</em></h3>
+  <p class="price" data-fill="price" style="font-size: 15px;"></p>
+  <div class="rule"><span></span><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" /><span></span></div>
+</section>
+
+<script>
+  const cfg = window.__INVITE__ || { tickets: {}, venue: {}, trips: [], pageUrl: 'yoursparkpoint.org/events/sparkpoint-gala' };
+  const fill = (key, html) => document.querySelectorAll(`[data-fill="${key}"]`).forEach((el) => { el.innerHTML = html; });
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  // Venue / tickets (same rules as template.html).
+  const venueName = (cfg.venue.name || '').trim();
+  const venuePlace = (cfg.venue.place || '').trim();
+  const gate = (cfg.venue.short || venueName.split(/\s+/)[0] || '').slice(0, 10);
+  fill('gate', venueName ? esc(gate) : 'TBA');
+  fill('where', venueName ? `<b>${esc(venueName)}</b>${venuePlace ? ' · ' + esc(venuePlace) : ''}` : '<b>Venue to be announced</b> · Transylvania County, NC');
+  const live = Boolean(cfg.tickets && cfg.tickets.live);
+  fill('cta-eyebrow', live ? 'Tickets are on sale' : 'Venue, tickets &amp; destinations coming soon');
+  fill('price', live && cfg.tickets.price
+    ? `${esc(cfg.tickets.price)}${venueName ? ' · ' + esc(venueName) : ''}`
+    : '');
+
+  // Departures board.
+  const trips = (cfg.trips || []).slice(0, 8);
+  fill('trips-copy', trips.length >= 8
+    ? 'Eight journeys go up for bid with a professional live auctioneer. Pick your next adventure.'
+    : 'Eight journeys around the world go up for bid with a professional live auctioneer. The destinations are revealed soon.');
+  const pad = (text, n) => text.toUpperCase().slice(0, n).padEnd(n, ' ');
+  const rowsText = [['ATLAS OF WONDERS', 'DEC 11', 'gala']];
+  for (let i = 0; i < 8; i += 1) {
+    const trip = trips[i];
+    rowsText.push([trip ? (trip.board || trip.destination || '') : 'REVEALING SOON', 'AT AUCTION', '']);
+  }
+  const board = document.querySelector('[data-fill="board"]');
+  board.innerHTML = rowsText.map(([a, b, cls]) =>
+    `<div class="row ${cls}"><span class="tiles">${[...pad(a, 16)].map((c) => `<span class="tile" data-c="${esc(c)}"></span>`).join('')}</span>` +
+    `<span class="status"><span class="tiles">${[...pad(b, 10)].map((c) => `<span class="tile" data-c="${esc(c)}"></span>`).join('')}</span></span></div>`).join('');
+  const tilesEls = [...board.querySelectorAll('.tile')];
+
+  // Seeded scramble so every render is identical.
+  let seed = 1211;
+  const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const settleAt = tilesEls.map((el, i) => {
+    const row = Math.floor(i / 26), col = i % 26;
+    return el.dataset.c === ' ' ? 0 : 3 + col * 0.42 + row * 0.55 + rand() * 2.5;
+  });
+  const scrambled = tilesEls.map(() => Array.from({ length: 40 }, () => GLYPHS[Math.floor(rand() * GLYPHS.length)]));
+  const show = (el, c) => { el.innerHTML = c === ' ' ? '&nbsp;' : c; };
+
+  // Plane along the route.
+  const route = document.getElementById('route');
+  const planeEl = document.getElementById('plane');
+  const placePlane = (t) => {
+    const len = route.getTotalLength();
+    const p = route.getPointAtLength(len * t);
+    const q = route.getPointAtLength(Math.min(len, len * t + 1));
+    const angle = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI;
+    planeEl.setAttribute('transform', `translate(${p.x} ${p.y}) rotate(${angle})`);
+  };
+
+  // Frame control used by render.mjs. Frame 0 is the finished state.
+  window.__frames = { plane: 22, flap: 26 };
+  window.__setFrame = (anim, k) => {
+    if (anim === 'plane') {
+      const n = window.__frames.plane;
+      const t = k === 0 ? 1 : Math.min(1, (k - 1) / (n - 2));
+      const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      placePlane(0.02 + 0.86 * eased);
+    } else if (anim === 'flap') {
+      tilesEls.forEach((el, i) => show(el, k === 0 || k >= settleAt[i] ? el.dataset.c : scrambled[i][k % 40]));
+    }
+  };
+  window.__setFrame('plane', 0);
+  window.__setFrame('flap', 0);
+
+  // Seat map (same geometry as src/pages/GalaSeatMap.tsx, nose left).
+  (() => {
+    const H = 900;
+    const mirror = (path) => path.replace(/(-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)/g, (_, x, y) => `${x} ${H - Number(y)}`);
+    const FUSELAGE = 'M232 372 L1010 372 C1080 372 1138 410 1166 444 L1166 456 C1138 490 1080 528 1010 528 L232 528 C118 528 40 496 40 450 C40 404 118 372 232 372 Z';
+    const WING = 'M508 374 L846 48 L852 30 L888 30 L898 48 L816 196 L744 330 L740 374 Z';
+    const STAB = 'M1032 376 L1118 268 L1150 268 L1114 376 Z';
+    const FIN = 'M1018 450 L1150 445 L1168 450 L1150 455 Z';
+    const seats = [];
+    const add = (cabin, count, x0, pitch, ys, size) => { for (let r = 0; r < count; r += 1) ys.forEach((y) => seats.push({ cabin, x: x0 + r * pitch, y, size })); };
+    add('#b58b3a', 3, 236, 46, [412, 488], 30);
+    add('#8e2a5c', 4, 398, 40, [398, 425, 475, 502], 24);
+    add('#1f3152', 11, 592, 35, [393, 412, 431, 469, 488, 507], 17);
+    const metal = 'fill="url(#metal)" stroke="#b9a77f" stroke-width="1.5" stroke-linejoin="round"';
+    let svg = `<defs>
+      <linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6dece"/><stop offset=".2" stop-color="#fffdf7"/><stop offset=".55" stop-color="#fffdf7"/><stop offset="1" stop-color="#ded4c0"/></linearGradient>
+      <linearGradient id="metal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d6cab0"/><stop offset="1" stop-color="#ebe3d0"/></linearGradient></defs>`;
+    [252, H - 252 - 36].forEach((y) => { svg += `<rect x="552" y="${y}" width="150" height="36" rx="18" fill="url(#metal)" stroke="#a9966c" stroke-width="1.5"/><ellipse cx="559" cy="${y + 18}" rx="5" ry="13" fill="#2a3550" opacity=".75"/>`; });
+    [WING, mirror(WING), STAB, mirror(STAB)].forEach((d) => { svg += `<path d="${d}" ${metal}/>`; });
+    svg += `<path d="${FUSELAGE}" fill="url(#body)" stroke="#1f3152" stroke-width="2.5"/><path d="${FIN}" fill="#d6cab0" stroke="#1f3152" stroke-width="1.5"/>`;
+    svg += `<path d="M74 428 Q66 450 74 472 L92 466 Q86 450 92 434 Z" fill="#1f3152"/>`;
+    for (let x = 232; x < 1010; x += 30) svg += `<rect x="${x}" y="375.5" width="11" height="3.5" rx="1.75" fill="#9fb3cf"/><rect x="${x}" y="521" width="11" height="3.5" rx="1.75" fill="#9fb3cf"/>`;
+    svg += `<line x1="378" y1="384" x2="378" y2="516" stroke="#c9b994" stroke-dasharray="4 5" stroke-width="1.5"/><line x1="574" y1="384" x2="574" y2="516" stroke="#c9b994" stroke-dasharray="4 5" stroke-width="1.5"/>`;
+    seats.forEach((s) => {
+      const top = s.y - s.size / 2;
+      svg += `<g transform="translate(${s.x} ${top})"><rect width="${s.size * 0.8}" height="${s.size}" rx="${s.size * 0.22}" fill="${s.cabin}" fill-opacity=".22" stroke="${s.cabin}" stroke-width="1.6"/><rect x="${s.size * 0.66}" width="${s.size * 0.3}" height="${s.size}" rx="${s.size * 0.14}" fill="${s.cabin}" fill-opacity=".4" stroke="${s.cabin}" stroke-width="1.6"/></g>`;
+    });
+    document.getElementById('seatmap').innerHTML = svg;
+  })();
+</script>
+</body>
+</html>
