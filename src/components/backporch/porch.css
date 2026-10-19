@@ -453,6 +453,60 @@
   text-decoration-color: var(--bp-light);
 }
 
+/* Two or three pinned posts: the title and its line across the top, then the
+   pinned posts side by side, equal weight, in the order they were pinned. */
+@media (min-width: 900px) {
+  .porch-band-head .porch-scene {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: 'title sub' 'title actions';
+    column-gap: 3.25rem;
+    align-items: end;
+  }
+
+  .porch-band-head .porch-band-title {
+    grid-area: title;
+  }
+
+  .porch-band-head .porch-band-sub {
+    grid-area: sub;
+    margin-top: 0;
+  }
+
+  .porch-band-head .porch-band-actions {
+    grid-area: actions;
+  }
+}
+
+.porch-band-leads {
+  display: grid;
+  gap: 2.25rem;
+  margin: 2.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 720px) {
+  .porch-band-leads {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .porch-band-leads[data-count='3'] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.porch-band-leads[data-count='3'] .porch-lead h3 {
+  font-size: clamp(1.3rem, 1.8vw, 1.55rem);
+}
+
+.porch-band-leads[data-count='3'] .porch-lead .porch-img {
+  aspect-ratio: 4 / 3;
+}
+
 /* The next three posts, each under its blaze. */
 .porch-log {
   margin-top: 2.25rem;

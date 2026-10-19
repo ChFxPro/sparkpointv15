@@ -26,7 +26,7 @@ const OUT_INDEX = 'src/data/backporch.index.generated.json';
 const OUT_FEEDS = 'public/backporch';
 const FEED_SIZE = 50;
 const COLUMNS =
-  'id,slug,title,summary,blocks,presentation,kind,org,image_path,image_alt,link_url,link_label,event_start,event_end,event_place,pinned,status,published_at,expires_at,updated_at';
+  'id,slug,title,summary,blocks,presentation,kind,org,image_path,image_alt,link_url,link_label,event_start,event_end,event_place,pinned,pinned_at,status,published_at,expires_at,updated_at';
 
 const info = await readFile('src/utils/supabase/info.tsx', 'utf8');
 const projectId = /projectId\s*=\s*"([^"]+)"/.exec(info)?.[1];

@@ -13,11 +13,13 @@ import {
   isListed,
   KIND_LABELS,
   LIMITS,
+  MAX_PINS,
   porchImageUrl,
   postPath,
   shortAddress,
   shortDate,
   normalizePresentation,
+  sortPosts,
   type Mood,
   type PorchKind,
   type PorchPost,
@@ -308,6 +310,17 @@ function statusLabel(post: PorchPost): string {
   if (post.published_at && Date.parse(post.published_at) > Date.now()) return `Scheduled · ${shortDate(post.published_at)}`;
   if (post.expires_at && Date.parse(post.expires_at) <= Date.now()) return 'Expired';
   return 'Live';
+}
+
+/**
+ * Demo mode only (the database does this itself): pinning `post` keeps at most
+ * MAX_PINS pins, unpinning the one pinned longest ago.
+ */
+function keepPinLimit(list: PorchPost[], post: PorchPost): PorchPost[] {
+  if (!post.pinned) return list;
+  const others = sortPosts(list.filter((p) => p.pinned && p.id !== post.id));
+  const drop = new Set(others.slice(MAX_PINS - 1).map((p) => p.id));
+  return list.map((p) => (drop.has(p.id) ? { ...p, pinned: false, pinned_at: null } : p));
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -667,8 +680,8 @@ function Editor({
         <label className="pe-check">
           <input type="checkbox" checked={form.pinned} disabled={form.mode === 'draft'} onChange={(e) => set('pinned', e.target.checked)} />
           <span>
-            Pin to the top of the BackPorch and the homepage
-            {pinnedTitle && !initial.pinned && <small> (replaces “{pinnedTitle}”)</small>}
+            Pin to the top of the BackPorch and the homepage (up to {MAX_PINS} at once)
+            {pinnedTitle && !initial.pinned && <small> (replaces “{pinnedTitle}”, pinned longest ago)</small>}
           </span>
         </label>
 
@@ -747,7 +760,12 @@ function BackPorchAdmin({ demo = false }: { demo?: boolean }) {
     if (isEditor) void load();
   }, [isEditor, load]);
 
-  const pinned = posts?.find((p) => p.pinned) ?? null;
+  // With MAX_PINS already pinned, pinning another unpins the one pinned longest ago.
+  const pins = sortPosts((posts ?? []).filter((p) => p.pinned));
+  const replacedPin = (id: string | null) => {
+    const others = pins.filter((p) => p.id !== id);
+    return others.length >= MAX_PINS ? others[others.length - 1].title : null;
+  };
 
   const publishSite = async () => {
     if (demo) {
@@ -767,11 +785,8 @@ function BackPorchAdmin({ demo = false }: { demo?: boolean }) {
 
   const update = async (post: PorchPost, patch: Partial<PorchPost>, message: string) => {
     if (demo) {
-      setPosts((list) =>
-        (list ?? []).map((p) =>
-          p.id === post.id ? { ...p, ...patch } : patch.pinned ? { ...p, pinned: false } : p,
-        ),
-      );
+      const next = { ...post, ...patch, ...(patch.pinned !== undefined && { pinned_at: patch.pinned ? new Date().toISOString() : null }) };
+      setPosts((list) => keepPinLimit((list ?? []).map((p) => (p.id === post.id ? next : p)), next));
       setNotice(`Demo: ${message}`);
       return;
     }
@@ -811,14 +826,18 @@ function BackPorchAdmin({ demo = false }: { demo?: boolean }) {
         <Editor
           initial={editing}
           demo={demo}
-          pinnedTitle={pinned && pinned.id !== editing.id ? pinned.title : null}
+          pinnedTitle={replacedPin(editing.id)}
           onCancel={() => setEditing(null)}
           onSaved={(saved) => {
             setEditing(null);
             if (demo) {
               setPosts((list) => {
-                const rest = (list ?? []).filter((p) => p.id !== saved.id).map((p) => (saved.pinned ? { ...p, pinned: false } : p));
-                return [saved, ...rest];
+                const prev = (list ?? []).find((p) => p.id === saved.id);
+                const next = {
+                  ...saved,
+                  pinned_at: saved.pinned ? (prev?.pinned ? prev.pinned_at : new Date().toISOString()) : null,
+                };
+                return keepPinLimit([next, ...(list ?? []).filter((p) => p.id !== saved.id)], next);
               });
             }
             void load();

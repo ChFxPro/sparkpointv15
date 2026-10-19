@@ -119,7 +119,7 @@ sketched so phase 1's choices don't block them.
 
 **`/backporch`, the feed page**
 - Title: "The BackPorch". One line: news, gatherings, and asks from SparkPoint. Pull up a chair.
-- The pinned post first (at most one), then everything else newest first.
+- Pinned posts first (up to three, most recently pinned first), then everything else newest first.
 - Each post shows: organization logo and name, date, title, a short summary,
   an optional photo, and, for gatherings, a date chip.
 - Simple filter by kind: All, News, Gatherings, Asks, Stories.
@@ -137,7 +137,7 @@ sketched so phase 1's choices don't block them.
   static page that link-preview crawlers and QR scanners handle cleanly.
 
 **Homepage band**
-- "On the BackPorch", directly under the hero spotlight: the pinned post
+- "On the BackPorch", directly under the hero, and the homepage's only featured slot (the spotlight was folded into it on 2026-10-19): the pinned posts
   large, plus the three or four latest as compact items, and a link to the
   BackPorch.
 - Phase 2 adds a slim "From the neighbors" row beneath it: the latest partner
@@ -178,7 +178,8 @@ One Supabase table, `porch_posts`:
 | `image_alt` | required when there's an image |
 | `link_url`, `link_label` | optional outbound link ("Learn more") |
 | `event_start`, `event_end` | for gatherings; drives the date chip |
-| `pinned` | at most one pinned post at a time (enforced in the database) |
+| `pinned` | up to three pinned posts at a time; pinning a fourth unpins the one pinned longest ago (enforced in the database) |
+| `pinned_at` | when it was pinned, set by the trigger; the most recent pin leads |
 | `status` | `draft` · `published` · `archived` |
 | `published_at`, `expires_at` | scheduling; expired posts drop off the feed but keep their page |
 | `created_by`, `updated_at` | audit |

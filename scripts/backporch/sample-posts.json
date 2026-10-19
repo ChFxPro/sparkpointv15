@@ -1,5 +1,34 @@
 [
  {
+  "id": "f0",
+  "slug": "post-convening-session",
+  "title": "Keep the conversation moving",
+  "summary": "October 1 attendees: join the virtual post-convening session on Thursday, November 5, at 10 a.m., on Zoom.",
+  "kind": "gathering",
+  "org": "sparkpoint",
+  "image_path": "/assets/Rural%20Health/recap/highlights/across-the-table-1600.webp",
+  "image_alt": "Convening attendees in conversation across a table at Deerwoode Reserve.",
+  "link_url": "https://yoursparkpoint.org/rural-health-convening#post-convening",
+  "link_label": "Register for Nov 5",
+  "event_start": "2026-11-05T15:00:00Z",
+  "event_end": null,
+  "event_place": "Online, on Zoom",
+  "pinned": true,
+  "pinned_at": "2026-10-19T13:00:00Z",
+  "status": "published",
+  "published_at": "2026-10-19T13:00:00Z",
+  "expires_at": "2026-11-06T05:00:00Z",
+  "updated_at": "2026-10-19T13:00:00Z",
+  "blocks": [
+   {
+    "id": "n1",
+    "type": "text",
+    "text": "If you joined us on October 1, this is your invitation back. The virtual session is a chance to reconnect with other rural health stakeholders and carry forward the conversations and partnerships that started at Deerwoode Reserve."
+   }
+  ],
+  "presentation": {}
+ },
+ {
   "id": "f1",
   "slug": "gala",
   "title": "The SparkPoint Gala",
@@ -39,13 +68,14 @@
     "address": "Brevard, NC"
    }
   ],
-  "presentation": {}
+  "presentation": {},
+  "pinned_at": "2026-10-14T14:00:00Z"
  },
  {
   "id": "f2",
   "slug": "healthcare-story",
   "title": "Share your healthcare story",
-  "summary": "Tell us what getting care in Transylvania County is really like. It takes about five minutes, stays anonymous, and enters you to win a $100 gift card.",
+  "summary": "Tell us what getting care in Transylvania County is really like. It takes about five minutes and stays anonymous.",
   "kind": "ask",
   "org": "sparkpoint",
   "image_path": "https://suqtfbculwuetfdhdgdh.supabase.co/storage/v1/object/public/convening-photos/rural-health-2026/rhp-43-960.webp",
@@ -64,10 +94,11 @@
    {
     "id": "t1",
     "type": "text",
-    "text": "Tell us what getting care in Transylvania County is really like. It takes about five minutes, stays anonymous, and enters you to win a $100 gift card."
+    "text": "Tell us what getting care in Transylvania County is really like. It takes about five minutes and stays anonymous."
    }
   ],
-  "presentation": {}
+  "presentation": {},
+  "pinned_at": null
  },
  {
   "id": "f3",
@@ -131,7 +162,8 @@
     "note": "Photos, sponsors, and the Field Simulator."
    }
   ],
-  "presentation": {}
+  "presentation": {},
+  "pinned_at": null
  },
  {
   "id": "f4",
@@ -159,7 +191,8 @@
     "text": "Dr. Ora at the Transylvania County Library, with the Alzheimer's Association and NC Cooperative Extension."
    }
   ],
-  "presentation": {}
+  "presentation": {},
+  "pinned_at": null
  },
  {
   "id": "f5",
@@ -192,7 +225,8 @@
   "published_at": "2026-10-15T14:00:00Z",
   "expires_at": null,
   "updated_at": "2026-10-15T14:00:00Z",
-  "presentation": {}
+  "presentation": {},
+  "pinned_at": null
  },
  {
   "id": "f6",
@@ -338,6 +372,7 @@
   "status": "published",
   "published_at": "2026-10-15T16:00:00Z",
   "expires_at": null,
-  "updated_at": "2026-10-15T16:00:00Z"
+  "updated_at": "2026-10-15T16:00:00Z",
+  "pinned_at": null
  }
 ]

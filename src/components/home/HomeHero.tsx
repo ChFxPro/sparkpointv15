@@ -102,9 +102,9 @@ export function HomeHero() {
 
   return (
     <section className="home-hero relative isolate overflow-hidden text-white" aria-labelledby="home-hero-heading">
-      <div className="mx-auto grid max-w-[90rem] items-center gap-6 px-6 pb-36 pt-24 grid-cols-[minmax(0,1fr)] lg:min-h-[100svh] lg:grid-cols-[1.2fr_1fr] lg:gap-12 lg:pb-0 lg:pt-20">
+      <div className="mx-auto grid max-w-[90rem] items-center gap-6 px-6 pb-16 pt-24 grid-cols-[minmax(0,1fr)] lg:min-h-[100svh] lg:grid-cols-[1.2fr_1fr] lg:gap-12 lg:pb-0 lg:pt-20">
         {/* Words */}
-        <div className="relative z-10 max-w-3xl lg:py-24 lg:pb-44">
+        <div className="relative z-10 max-w-3xl lg:py-24">
           <h1 id="home-hero-heading" className="home-display" style={{ fontSize: 'clamp(2.6rem, 4.8vw, 5.25rem)' }}>
             <span className="home-rise"><span style={{ ['--i' as string]: 0 }}>Good things happen</span></span>
             <span className="home-rise"><span style={{ ['--i' as string]: 1 }}>when we&rsquo;re in</span></span>

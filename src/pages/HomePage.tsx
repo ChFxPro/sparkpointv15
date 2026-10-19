@@ -4,7 +4,6 @@ import { HomeRoomStory } from '../components/home/HomeRoomStory';
 import { HomeBackdrop } from '../components/home/HomeBackdrop';
 import { HomeRegion } from '../components/home/HomeRegion';
 import { HomePartners } from '../components/home/HomePartners';
-import { HomeSpotlight } from '../components/home/HomeSpotlight';
 import { HomeDoors } from '../components/HomeDoors';
 import { ConnectionSection } from '../components/ConnectionSection';
 import { ImpactSection } from '../components/ImpactSection';
@@ -12,11 +11,11 @@ import { CTAFinal } from '../components/CTAFinal';
 import { SEOHead } from '../components/SEOHead';
 import { BackPorchBand } from '../components/backporch/BackPorchBand';
 
-// "In the same room": arrive among real faces, see what's featured, choose a
-// door, zoom from home out to the region, see the programs, walk through a
-// gathering, trust it (the number, then the partners), then pull up a chair.
-// The county photo is pinned behind it all. What's featured lives in
-// src/data/homeSpotlight.ts; styles live in components/home/home.css.
+// "In the same room": arrive among real faces, see what's happening on the
+// BackPorch, choose a door, zoom from home out to the region, see the programs,
+// walk through a gathering, trust it (the number, then the partners), then pull
+// up a chair. The county photo is pinned behind it all. What's featured is
+// whatever is pinned on the BackPorch; styles live in components/home/home.css.
 export function HomePage() {
   return (
     <div className="home">
@@ -35,8 +34,7 @@ export function HomePage() {
 
       <HomeBackdrop />
       <HomeHero />
-      <HomeSpotlight />
-      {/* The BackPorch: SparkPoint's own feed, directly under the hero and its spotlight. */}
+      {/* The BackPorch: SparkPoint's own feed and what the homepage features (its pinned posts). */}
       <BackPorchBand />
       <HomeDoors />
       <HomeRegion />

@@ -48,9 +48,17 @@
 }
 
 /* ── Hero ── */
-.home-hero {
-  /* Plum tint over the pinned county photo. */
+/* Plum tint over the pinned county photo. Its last stretch fades out, so the
+   hero hands off to the county (and the BackPorch over it) without a hard edge. */
+.home-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: linear-gradient(90deg, rgba(42, 20, 48, 0.9) 0%, rgba(42, 20, 48, 0.78) 55%, rgba(42, 20, 48, 0.72) 100%);
+  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 12rem), transparent);
+  mask-image: linear-gradient(180deg, #000 calc(100% - 12rem), transparent);
+  pointer-events: none;
 }
 
 /* Headline lines rise out of a clip, one after another. */
@@ -378,11 +386,6 @@
   outline-offset: 3px;
 }
 
-/* The spotlight straddles the hero's bottom edge: plum above, white below. */
-.home-spotlight {
-  background: linear-gradient(180deg, transparent 6rem, #fff 6rem);
-}
-
 /* ── Doors: expanding photo panels ── */
 .home-panel-img {
   transition: transform 1s var(--home-ease);
@@ -519,3 +522,4 @@
 .home-program[data-side='bottom'] .home-program-scrim {
   background: linear-gradient(to top, var(--tone) 0%, var(--tone) 40%, color-mix(in srgb, var(--tone) 60%, transparent) 62%, transparent 85%);
 }
+

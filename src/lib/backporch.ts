@@ -49,6 +49,8 @@ export interface PorchPost {
   event_end: string | null;
   event_place: string | null;
   pinned: boolean;
+  /** When it was pinned (set by the database). The most recent pin leads. */
+  pinned_at?: string | null;
   status: PorchStatus;
   published_at: string | null;
   expires_at: string | null;
@@ -58,9 +60,9 @@ export interface PorchPost {
 // Columns the public pages need. created_by stays out of public reads.
 // Lists skip `blocks`, which can be large and lists never show.
 export const PORCH_LIST_COLUMNS =
-  'id, slug, title, summary, presentation, kind, org, image_path, image_alt, link_url, link_label, event_start, event_end, event_place, pinned, status, published_at, expires_at, updated_at';
+  'id, slug, title, summary, presentation, kind, org, image_path, image_alt, link_url, link_label, event_start, event_end, event_place, pinned, pinned_at, status, published_at, expires_at, updated_at';
 export const PORCH_PUBLIC_COLUMNS =
-  'id, slug, title, summary, blocks, presentation, kind, org, image_path, image_alt, link_url, link_label, event_start, event_end, event_place, pinned, status, published_at, expires_at, updated_at';
+  'id, slug, title, summary, blocks, presentation, kind, org, image_path, image_alt, link_url, link_label, event_start, event_end, event_place, pinned, pinned_at, status, published_at, expires_at, updated_at';
 
 export const PORCH_BUCKET = 'porch-media';
 export const IMAGE_WIDTHS = [480, 960, 1600] as const;
@@ -121,10 +123,17 @@ export function isListed(post: PorchPost, now = Date.now()): boolean {
   return true;
 }
 
-/** Pinned first, then newest first. */
+/** At most this many posts are pinned at once (enforced in the database). */
+export const MAX_PINS = 3;
+
+/** Pinned first, most recently pinned leading, then newest first. */
 export function sortPosts(posts: PorchPost[]): PorchPost[] {
   return [...posts].sort((a, b) => {
     if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+    if (a.pinned && b.pinned) {
+      const byPin = Date.parse(b.pinned_at ?? '') - Date.parse(a.pinned_at ?? '');
+      if (byPin) return byPin;
+    }
     return Date.parse(b.published_at ?? '') - Date.parse(a.published_at ?? '');
   });
 }

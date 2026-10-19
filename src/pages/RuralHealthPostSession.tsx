@@ -5,7 +5,7 @@ import { Sparkmark } from '../components/Sparkmark';
 // who attended on October 1. Registration is on Zoom. The band and the hero's "Up next"
 // link both retire on their own once the session day is over. The attendee photo page
 // reuses isPostSessionActive and the register URL from here. The homepage features the
-// session through its spotlight (src/data/homeSpotlight.ts), whose `until` must match
+// session as a pinned BackPorch post; give that post a "take off the lists" time matching
 // POST_SESSION_EXPIRES below.
 
 export const POST_SESSION_ID = 'post-convening';
