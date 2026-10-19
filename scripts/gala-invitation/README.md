@@ -31,6 +31,11 @@ Edit `invitation.config.json`, then run the command again.
   what the departures board shows: 16 characters max, capitals. Until all 8 are
   listed, the rest of the board says "REVEALING SOON".
 
+**Then update the email copy too.** The note, button, and alt text below come in
+a "save the date" version and an "on sale" version. Once tickets or the venue
+are announced, switch to the on-sale version (and fill in the venue), so the
+text around the image doesn't contradict it.
+
 To preview a change without touching the real settings:
 
 ```bash
@@ -79,7 +84,7 @@ tickets are on sale).
 An evening of connection and a live auction of eight travel experiences that
 give back to Transylvania County.
 
-**Note above the image**
+**Note above the image** (save the date: until tickets and venue are announced)
 
 > Friends,
 >
@@ -89,10 +94,27 @@ give back to Transylvania County.
 > Transylvania Resilience Hub to life. Venue and tickets are coming soon, and
 > we'd love for you to be there.
 
-**Button**: Get gala updates (later: Get your tickets)
+**Note above the image** (on sale: once tickets go live; fill in the venue)
 
-**Alt text for the image**
+> Friends,
+>
+> Tickets are now on sale for the SparkPoint Gala on Friday, December 11, at
+> 6 p.m. at [venue name]. It's an evening of connection and celebration, with a
+> live auction of eight travel experiences, and a portion of every trip comes
+> home to help bring the Transylvania Resilience Hub to life. Your seat is
+> waiting.
+
+**Button**: Get gala updates (save the date) · Get your tickets (on sale)
+
+**Alt text for the image** (save the date)
 
 You're invited to the SparkPoint Gala, Friday, December 11, 2026, at 6 p.m.:
 an evening of connection and a live auction of eight travel experiences that
 gives back to the Transylvania Resilience Hub. Venue and tickets coming soon.
+
+**Alt text for the image** (on sale; fill in the venue)
+
+You're invited to the SparkPoint Gala, Friday, December 11, 2026, at 6 p.m. at
+[venue name]: an evening of connection and a live auction of eight travel
+experiences that gives back to the Transylvania Resilience Hub. Tickets are on
+sale now.
