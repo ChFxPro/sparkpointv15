@@ -15,6 +15,7 @@ import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { RecapMedia, hasRecapMedia, hasRecapVideo, recapPhotoCount } from './RuralHealthRecap';
 import { SponsorFlyover } from './RuralHealthSponsorFlyover';
+import { PostSessionBand, PostSessionHeroLink } from './RuralHealthPostSession';
 import uncHealthPardeeLogo from '../assets/sponsors/unc_health.png';
 import pisgahHealthFoundationLogo from '../assets/sponsors/phf.png';
 import transylvaniaRegionalHospitalLogo from '../assets/sponsors/trh.webp';
@@ -409,6 +410,7 @@ export function RuralHealthConveningPage() {
         <section className="rh-hero" aria-labelledby="rh-hero-title">
           <div className="rh-shell rh-hero-grid">
             <div className="rh-hero-copy">
+              <PostSessionHeroLink />
               <p className="rh-past-kicker">
                 <span aria-hidden="true">✦</span>
                 October 1, 2026 · A full house
@@ -471,7 +473,8 @@ export function RuralHealthConveningPage() {
                   src={ruralHealthAsset('rural sim hero-800.webp')}
                   srcSet={`${ruralHealthAsset('rural sim hero-800.webp')} 800w, ${ruralHealthAsset('rural sim hero.webp')} 1536w`}
                   sizes="(max-width: 900px) 100vw, 800px"
-                  fetchPriority="high"
+                  // React 18 drops camelCase fetchPriority; the spread emits the real attribute.
+                  {...{ fetchpriority: 'high' }}
                   alt="The Rural Health Field Simulator connection map, showing trusted doors, waiting gaps, warm handoffs, crisis points, and the Resilience Hub connected across a rural health system."
                   width={1536}
                   height={1024}
@@ -615,6 +618,8 @@ export function RuralHealthConveningPage() {
             </div>
           </div>
         </section>
+
+        <PostSessionBand />
 
         {hasRecapMedia ? <RecapMedia /> : null}
 
