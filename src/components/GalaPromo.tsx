@@ -8,6 +8,7 @@ import { useReducedMotion } from 'motion/react';
 import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
 import { Sparkmark } from './Sparkmark';
+import { GALA_TICKETS_URL, GALA_TICKET_PRICE, GALA_VENUE } from '../data/events';
 
 // Homepage promo for the SparkPoint Gala (December 11, 2026), drawn as a
 // first-class boarding pass to match the Gala page: a navy foil header, a
@@ -34,7 +35,7 @@ export function isGalaPromoActive(now = new Date()) {
 const FIELDS = [
   ['Date', '11 Dec 2026'],
   ['Boarding', '6:00 p.m.'],
-  ['Gate', 'TBA'],
+  ['Fare', `$${GALA_TICKET_PRICE}`],
   ['Seat', 'Yours'],
 ];
 
@@ -162,11 +163,23 @@ export function GalaPromoCard() {
           </div>
 
           <div className="gpromo-stub">
-            <Link className="gpromo-button" to={GALA_PATH}>
-              Explore the gala <ArrowRight size={18} aria-hidden="true" />
-            </Link>
+            {GALA_TICKETS_URL ? (
+              <a className="gpromo-button" href={GALA_TICKETS_URL} target="_blank" rel="noopener noreferrer">
+                Get tickets · ${GALA_TICKET_PRICE} <ArrowRight size={18} aria-hidden="true" />
+              </a>
+            ) : (
+              <Link className="gpromo-button" to={GALA_PATH}>
+                Explore the gala <ArrowRight size={18} aria-hidden="true" />
+              </Link>
+            )}
             <img className="gpromo-code" src={`${ASSETS}pass-pdf417.svg`} alt="" loading="lazy" />
-            <p className="gpromo-note">Venue &amp; tickets announced soon</p>
+            {GALA_TICKETS_URL ? (
+              <p className="gpromo-note">
+                {GALA_VENUE.name} · <Link to={GALA_PATH}>Explore the gala</Link>
+              </p>
+            ) : (
+              <p className="gpromo-note">{GALA_VENUE.name} · Tickets on sale soon</p>
+            )}
           </div>
 
           <span className="gpromo-foil" aria-hidden="true" />
