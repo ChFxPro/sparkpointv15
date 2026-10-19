@@ -7,6 +7,7 @@ import { SEOHead } from '../components/SEOHead';
 import { canonicalUrl } from '../lib/siteOrigin';
 import { projectId } from '../utils/supabase/info';
 import { RuralHealthMasthead } from './RuralHealthMasthead';
+import { PostSessionRegisterLink } from './RuralHealthPostSession';
 import shareData from '../data/ruralHealthPhotoShare.json';
 import { conveningPartners, sponsorTiers } from '../data/ruralHealthConveningSponsors';
 import './ruralHealthConvening.css';
@@ -703,6 +704,7 @@ export function RuralHealthPhotoSharePage() {
         <section className="rhp-hero" aria-labelledby="rhp-title">
           <div className="rh-shell rhp-hero-grid">
             <div className="rhp-hero-copy">
+              <PostSessionRegisterLink />
               <p className="rh-past-kicker">
                 <span aria-hidden="true">✦</span>
                 October 1, 2026 · Photos from the day

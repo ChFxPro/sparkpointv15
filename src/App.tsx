@@ -104,12 +104,29 @@ const HEALTHCARE_STORY_FORM_URL =
 }(window.location));
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     document.documentElement.lang = 'en';
-  }, [pathname]);
+    // A link into a section (e.g. the homepage card's /rural-health-convening#post-convening)
+    // lands on that section, not the top. Route pages are lazy, so give the target a moment
+    // to mount; if it never appears, the page simply stays at the top.
+    window.scrollTo(0, 0);
+    const id = hash ? decodeURIComponent(hash.slice(1)) : '';
+    if (!id) return;
+    let tries = 0;
+    let timer: number | undefined;
+    const seek = () => {
+      const target = document.getElementById(id);
+      if (target) {
+        target.scrollIntoView();
+      } else if (tries++ < 20) {
+        timer = window.setTimeout(seek, 100);
+      }
+    };
+    seek();
+    return () => window.clearTimeout(timer);
+  }, [pathname]); // Not keyed on hash: an in-page hash change is the browser's (or the page's) job.
 
   return null;
 }
