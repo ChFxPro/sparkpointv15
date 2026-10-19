@@ -65,8 +65,8 @@ export interface SparkPointEvent {
 export const EVENTS: SparkPointEvent[] = [
   {
     id: 'sparkpoint-gala-2026',
-    title: 'The SparkPoint Gala',
-    shortTitle: 'SparkPoint Gala',
+    title: 'An Atlas of Wonders: A SparkPoint Gala',
+    shortTitle: 'An Atlas of Wonders',
     category: 'Fundraiser',
     startDate: '2026-12-11T18:00:00-05:00',
     // No end time announced yet; holding the whole evening keeps it upcoming
