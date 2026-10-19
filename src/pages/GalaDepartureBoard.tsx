@@ -24,7 +24,7 @@ interface Row {
 
 const GALA_ROW: Row = {
   flight: 'SPK1211',
-  destination: 'SPARKPOINT GALA',
+  destination: 'ATLAS OF WONDERS',
   time: 'DEC 11',
   status: 'ON TIME',
   highlight: true,
@@ -139,7 +139,7 @@ export function GalaDepartureBoard() {
   return (
     <div className="gala-board" ref={boardRef}>
       <p className="sr-only">
-        Departures board: the SparkPoint Gala, flight SPK 1211, departs December 11 and is on
+        Departures board: An Atlas of Wonders, the SparkPoint Gala, flight SPK 1211, departs December 11 and is on
         time. Eight travel experiences are listed, with destinations revealed soon, available
         anytime with no blackout dates, and sold at auction.
       </p>

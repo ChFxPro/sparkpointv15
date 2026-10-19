@@ -5,6 +5,7 @@ import type { CSSProperties } from 'react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { Sparkmark } from '../components/Sparkmark';
+import { GALA_BYLINE, GALA_NAME, GalaLockup } from '../components/GalaLockup';
 import {
   GALA_PARTNER_FORM_URL,
   GALA_TICKETS_URL,
@@ -74,13 +75,14 @@ const GIVES_BACK = [
 const galaEventJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Event',
-  name: 'The SparkPoint Gala',
+  name: GALA_NAME,
+  alternateName: GALA_BYLINE,
   description:
     'An evening of connection and a live auction of eight travel experiences, with a portion of every trip supporting the Transylvania Resilience Hub.',
   startDate: '2026-12-11T18:00:00-05:00',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
   eventStatus: 'https://schema.org/EventScheduled',
-  image: [canonicalUrl('/assets/events/gala/gala-share.jpg')],
+  image: [canonicalUrl('/assets/events/gala/gala-share-atlas.jpg')],
   url: canonicalUrl(GALA_PATH),
   location: {
     '@type': 'Place',
@@ -145,16 +147,16 @@ export default function GalaPage() {
   return (
     <div className="gala-page">
       <SEOHead
-        title="The SparkPoint Gala & Travel Auction | December 11, 2026"
-        description="See the world. Strengthen home. Join the SparkPoint Gala on Friday, December 11, 2026 at 6 p.m. at Connestee Falls Country Club, and bid on eight travel experiences in a live auction that gives back to Transylvania County’s Resilience Hub. Tickets $100."
+        title="An Atlas of Wonders · The SparkPoint Gala & Travel Auction | December 11, 2026"
+        description="See the world. Strengthen home. Join us for An Atlas of Wonders, the SparkPoint Gala, on Friday, December 11, 2026 at 6 p.m. at Connestee Falls Country Club, and bid on eight travel experiences in a live auction that gives back to Transylvania County’s Resilience Hub. Tickets $100."
         path={GALA_PATH}
-        image="/assets/events/gala/gala-share.jpg"
-        imageAlt="An airplane wing above a sea of golden clouds at sunset."
+        image="/assets/events/gala/gala-share-atlas.jpg"
+        imageAlt="An Atlas of Wonders, the SparkPoint Gala: the title over an airplane wing above golden clouds at sunset."
         imageType="image/jpeg"
         imageWidth={1200}
         imageHeight={630}
         jsonLd={galaEventJsonLd}
-        keywords={['SparkPoint Gala', 'travel auction', 'Resilience Hub', 'Transylvania County', 'Western North Carolina']}
+        keywords={['An Atlas of Wonders', 'SparkPoint Gala', 'travel auction', 'Resilience Hub', 'Transylvania County', 'Western North Carolina']}
       />
 
       {/* 1 — Departures */}
@@ -171,18 +173,23 @@ export default function GalaPage() {
         </div>
         <div className="gala-shell gala-hero-inner">
           <motion.div className="gala-hero-copy" {...reveal}>
-            <p className="gala-kicker">
-              <span>The SparkPoint Gala</span>
-              <Sparkmark size="1.7em" />
-              <span>Live travel auction</span>
+            <GalaLockup
+              headingId="gala-title"
+              className="gala-hero-lockup"
+              byline={
+                <>
+                  <span>{GALA_BYLINE}</span>
+                  <span className="gl-dot" aria-hidden="true">·</span>
+                  <span>Live travel auction</span>
+                </>
+              }
+            />
+            <p className="gala-hero-tagline">
+              See the world. <em>Strengthen home.</em>
             </p>
-            <h1 id="gala-title">
-              See the world.
-              <em>Strengthen home.</em>
-            </h1>
             <p className="gala-hero-lede">
-              One evening, eight journeys around the world, and every one of them giving back
-              to the place we call home.
+              One evening, eight journeys around the world, and a portion of every one of them
+              coming back to the place we call home.
             </p>
             <dl className="gala-hero-facts">
               <div>
@@ -278,7 +285,7 @@ export default function GalaPage() {
                   <Sparkmark variant="ink" size="58%" className="gala-passport-emblem-mark" />
                 </span>
                 <span className="gala-passport-title">
-                  <b>SparkPoint Gala</b>
+                  <b>Atlas of Wonders</b>
                   <small>Passport · Passeport · Pasaporte</small>
                 </span>
                 <dl className="gala-passport-codes">
@@ -428,7 +435,7 @@ export default function GalaPage() {
                     </div>
                     <span className="gala-tag-brand" aria-hidden="true">
                       <Sparkmark size="14px" />
-                      SparkPoint Gala
+                      Atlas of Wonders
                     </span>
                   </div>
                 </div>

@@ -90,7 +90,7 @@ export function GalaBoardingPass() {
           <header className="gala-pass-band">
             <span className="gala-pass-brand">
               <Sparkmark size="26px" />
-              SparkPoint Gala
+              Atlas of Wonders
             </span>
             <span className="gala-pass-class">
               <small>Boarding pass</small>

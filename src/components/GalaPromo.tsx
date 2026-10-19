@@ -8,13 +8,14 @@ import { useReducedMotion } from 'motion/react';
 import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
 import { Sparkmark } from './Sparkmark';
+import { GalaLockup } from './GalaLockup';
 import { GALA_TICKETS_URL, GALA_TICKET_PRICE, GALA_VENUE } from '../data/events';
 
-// Homepage promo for the SparkPoint Gala (December 11, 2026), drawn as a
-// first-class boarding pass to match the Gala page: a navy foil header, a
-// window-seat view of the hero photo, the TCN → ANY route with a plane that
-// flies it on scroll, the pass fields, a perforated tear line, and a stub with
-// the button and the real PDF417 code. With a mouse it tilts toward the
+// Homepage promo for An Atlas of Wonders, the SparkPoint Gala (December 11,
+// 2026), drawn as a first-class boarding pass to match the Gala page: a navy
+// foil header, a window-seat view of the hero photo, the TCN → ANY route with a
+// plane that flies it on scroll, the pass fields, a perforated tear line, and a
+// stub with the button and the real PDF417 code. With a mouse it tilts toward the
 // pointer under a foil sheen. It sits beside the Rural Health recap card and
 // keeps its overall height flexible so the two cards stay equal.
 export const GALA_PATH = '/events/sparkpoint-gala';
@@ -96,9 +97,9 @@ export function GalaPromoCard() {
       >
         <article className="gpromo-pass">
           <header className="gpromo-band">
-            <h2 className="gpromo-brand">
+            <h2 className="gpromo-brand" aria-label="An Atlas of Wonders, the SparkPoint Gala">
               <Sparkmark size="24px" />
-              The SparkPoint Gala
+              SparkPoint
             </h2>
             <p className="gpromo-class">
               <small>Boarding pass</small>
@@ -107,13 +108,16 @@ export function GalaPromoCard() {
           </header>
 
           <div className="gpromo-main">
+            <div className="gpromo-title">
+              <GalaLockup tone="light" className="gpromo-lockup" />
+            </div>
             <div className="gpromo-intro">
               <div className="gpromo-window" aria-hidden="true">
                 <img src={`${ASSETS}hero-wing-800.webp`} alt="" width={800} height={533} loading="lazy" />
                 <span className="gpromo-shade" />
               </div>
               <div>
-                <p className="gpromo-kicker">Save the date · Live travel auction</p>
+                <p className="gpromo-kicker">Live travel auction · Dec 11</p>
                 <p className="gpromo-headline">
                   See the world. <em>Strengthen home.</em>
                 </p>
@@ -194,8 +198,8 @@ export function GalaPromoCard() {
         <circle cx="50" cy="50" r="46" />
         <circle cx="50" cy="50" r="28" />
         <text className="is-ring">
-          <textPath href="#gpromo-stamp-ring" startOffset="25%">
-            SPARKPOINT GALA · ADMITTED ·
+          <textPath href="#gpromo-stamp-ring" startOffset="22%">
+            ATLAS OF WONDERS · ADMITTED ·
           </textPath>
         </text>
         <text x="50" y="49" className="is-day">DEC 11</text>
