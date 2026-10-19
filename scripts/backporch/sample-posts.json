@@ -32,16 +32,16 @@
   "id": "f1",
   "slug": "gala",
   "title": "The SparkPoint Gala",
-  "summary": "A live auction of travel experiences, with part of every trip supporting the Transylvania Resilience Hub. Venue and tickets coming soon.",
+  "summary": "A live auction of travel experiences at Connestee Falls Country Club, with part of every trip supporting the Transylvania Resilience Hub. Tickets are $100.",
   "kind": "gathering",
   "org": "sparkpoint",
   "image_path": "/assets/events/gala/hero-wing-1400.webp",
   "image_alt": "Sunset over the clouds seen past an airplane wing.",
-  "link_url": "https://yoursparkpoint.org/events/sparkpoint-gala",
-  "link_label": "Explore the gala",
+  "link_url": "https://secure.yoursparkpoint.org/store/p/2026-sparkpoint-gala",
+  "link_label": "Get tickets",
   "event_start": "2026-12-11T23:00:00Z",
   "event_end": null,
-  "event_place": "Venue to be announced",
+  "event_place": "Connestee Falls Country Club, Brevard",
   "pinned": true,
   "status": "published",
   "published_at": "2026-10-14T14:00:00Z",
@@ -64,8 +64,8 @@
    {
     "id": "g3",
     "type": "place",
-    "name": "Venue to be announced",
-    "address": "Brevard, NC"
+    "name": "Connestee Falls Country Club",
+    "address": "98 Overlook Clubhouse Dr, Brevard, NC 28712"
    }
   ],
   "presentation": {},
