@@ -163,13 +163,23 @@ export function GalaPromoCard() {
           </div>
 
           <div className="gpromo-stub">
-            <Link className="gpromo-button" to={GALA_PATH}>
-              Explore the gala <ArrowRight size={18} aria-hidden="true" />
-            </Link>
+            {GALA_TICKETS_URL ? (
+              <a className="gpromo-button" href={GALA_TICKETS_URL} target="_blank" rel="noopener noreferrer">
+                Get tickets · ${GALA_TICKET_PRICE} <ArrowRight size={18} aria-hidden="true" />
+              </a>
+            ) : (
+              <Link className="gpromo-button" to={GALA_PATH}>
+                Explore the gala <ArrowRight size={18} aria-hidden="true" />
+              </Link>
+            )}
             <img className="gpromo-code" src={`${ASSETS}pass-pdf417.svg`} alt="" loading="lazy" />
-            <p className="gpromo-note">
-              {GALA_VENUE.name} · {GALA_TICKETS_URL ? 'Tickets on sale now' : 'Tickets on sale soon'}
-            </p>
+            {GALA_TICKETS_URL ? (
+              <p className="gpromo-note">
+                {GALA_VENUE.name} · <Link to={GALA_PATH}>Explore the gala</Link>
+              </p>
+            ) : (
+              <p className="gpromo-note">{GALA_VENUE.name} · Tickets on sale soon</p>
+            )}
           </div>
 
           <span className="gpromo-foil" aria-hidden="true" />

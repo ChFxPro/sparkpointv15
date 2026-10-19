@@ -30,7 +30,8 @@ export const GALA_VENUE = {
 };
 export const GALA_TICKET_PRICE = 100;
 export const GALA_TICKET_PRICE_LABEL = `$${GALA_TICKET_PRICE} per person`;
-export const GALA_TICKETS_URL: string | null = null;
+export const GALA_TICKETS_URL: string | null =
+  'https://secure.yoursparkpoint.org/store/p/2026-sparkpoint-gala';
 
 export interface SparkPointEvent {
   id: string;

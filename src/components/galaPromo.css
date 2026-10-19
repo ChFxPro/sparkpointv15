@@ -328,6 +328,12 @@
   color: #a8956d;
 }
 
+.gpromo-note a {
+  color: var(--plum);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* Foil sheen that follows the pointer. */
 .gpromo-foil {
   position: absolute;
