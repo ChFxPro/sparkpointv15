@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
+import { useAccessibility } from '../context/AccessibilityContext';
 import { Link } from 'react-router';
 import {
   GraduationCap,
@@ -99,7 +100,11 @@ const POPOVER_CARD_CLASS =
   'w-72 rounded-2xl border border-white/15 p-4 shadow-2xl outline-none bg-[rgba(16,14,20,0.97)] backdrop-blur-xl';
 
 export function CommunityNetworkDiagram() {
-  const prefersReducedMotion = useReducedMotion();
+  // Honour both the OS setting and the site's own motion toggle; Motion's JS
+  // animations aren't stopped by the global reduce-motion CSS rule.
+  const systemReducedMotion = useReducedMotion();
+  const { motionPreference } = useAccessibility();
+  const prefersReducedMotion = Boolean(systemReducedMotion) || motionPreference === 'reduce';
   const [activePhase, setActivePhase] = useState<ListenLearnLeadPhase | null>(null);
   const [wncActive, setWncActive] = useState(false);
 
@@ -117,10 +122,10 @@ export function CommunityNetworkDiagram() {
           className="text-white mb-5 md:mb-6 leading-tight"
           style={{ fontSize: 'clamp(2rem, 7.5vw, 3rem)', fontWeight: '700', letterSpacing: '-0.02em', textShadow: '0 4px 12px rgba(0, 0, 0, 0.5)' }}
         >
-          Community Built in Transylvania County
+          Who&rsquo;s in the room
         </h3>
         <p className="max-w-2xl mx-auto" style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: 'clamp(1rem, 3.8vw, 1.25rem)', lineHeight: '1.6', textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)' }}>
-          Shaped through lived experience, sustained partnership, and an ongoing cycle of Listen • Learn • Lead. Tap a sector to meet who makes it happen.
+          Partners from every sector, with Transylvania County at the center and Western North Carolina around it. Tap a sector to meet who makes it happen.
         </p>
       </div>
 

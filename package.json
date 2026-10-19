@@ -83,6 +83,8 @@
     "dev": "vite",
     "prebuild": "npm run generate:press && node scripts/behind-story-manifest.mjs && npm run backporch:bake",
     "build": "vite build",
-    "postbuild": "node scripts/replace-site-origin.js && node scripts/prerender.mjs"
+    "postbuild": "node scripts/replace-site-origin.js && node scripts/prerender.mjs",
+    "logos:list": "node scripts/partner-logos/list.mjs",
+    "logos:ink-white": "node scripts/partner-logos/ink-white.mjs"
   }
 }

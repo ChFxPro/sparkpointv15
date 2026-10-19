@@ -145,7 +145,7 @@ export function Header() {
               size="sm"
               className="px-6 rounded-full transition-all hover:brightness-105 hover:scale-105 shadow-md hover:shadow-lg"
               style={{
-                backgroundColor: '#E03694',
+                backgroundColor: '#D42C8A',
                 color: 'white',
                 fontSize: '14px',
                 fontWeight: '600',
@@ -264,6 +264,15 @@ export function Header() {
             />
           </Link>
 
+          <div className="flex items-center gap-2">
+          <Link
+            to="/donations"
+            onClick={handleLinkClick}
+            className="inline-flex min-h-[44px] items-center rounded-full px-5 text-sm font-bold text-white"
+            style={{ backgroundColor: '#D42C8A' }}
+          >
+            Donate
+          </Link>
           <Button
             variant="ghost"
             size="sm"
@@ -274,6 +283,7 @@ export function Header() {
           >
             <Menu size={28} />
           </Button>
+          </div>
         </div>
       </motion.header>
 

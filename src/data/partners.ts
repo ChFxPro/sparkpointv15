@@ -74,7 +74,7 @@ export const PARTNER_SECTORS: PartnerSector[] = [
     partners: [
       { name: 'The Hunger Coalition', url: 'https://www.hungerfreetc.org/' },
       { name: 'Just Economics of Western North Carolina', url: 'https://www.justeconomicswnc.org/' },
-      { name: 'FWRD Transylvania (LTRG)' },
+      { name: 'FWRD Transylvania (LTRG)', url: 'https://gofwrd.org' },
       { name: 'Through the Trees' },
       { name: 'Housing Assistance', url: 'https://www.housing-assistance.com/' },
       { name: 'Camp Bluebird', url: 'https://www.campbluebirdwnc.org/' },
@@ -126,6 +126,10 @@ export const PARTNER_SECTORS: PartnerSector[] = [
       { name: 'TREND 2.0 - Mental Health', url: 'https://transylvaniahealth.org/' },
       { name: 'Hendersonville Pediatrics', url: 'https://www.hendersonvillepediatrics.com/' },
       { name: 'CARE Coalition' },
+      // Co-hosts of the 2026 WNC Regional Rural Health Convening.
+      { name: 'North Carolina Rural Health Association', url: 'https://www.ruralhealthnc.org' },
+      { name: 'Foundation for Health Leadership and Innovation', url: 'https://foundationhli.org' },
+      { name: 'NC DHHS Office of Rural Health', url: 'https://www.ncdhhs.gov/divisions/office-rural-health' },
     ],
   },
   {
@@ -159,6 +163,10 @@ export const PARTNER_SECTORS: PartnerSector[] = [
       { name: 'American Red Cross', url: 'https://www.redcross.org', logoKey: 'red-cross', featuredOrder: 4 },
       { name: 'St. Philips Episcopal Church', url: 'https://www.stphilipsbrevardnc.org/' },
       { name: 'Pisgah Health Foundation', url: 'https://pisgahhealthfoundation.org', logoKey: 'phf', featuredOrder: 2 },
+      // Sponsors of the 2026 WNC Regional Rural Health Convening (see ruralHealthConveningSponsors.ts).
+      { name: 'AdventHealth', url: 'https://www.adventhealth.com' },
+      { name: 'UnitedHealthcare', url: 'https://www.uhc.com' },
+      { name: 'First Citizens Bank', url: 'https://www.firstcitizens.com' },
     ],
   },
 ];

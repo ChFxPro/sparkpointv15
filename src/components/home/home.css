@@ -1,0 +1,521 @@
+/* Homepage system: "in the same room".
+   One family (Manrope) at committed weights, four brand surfaces (plum, pink,
+   gold, white), real photographs from SparkPoint's own gatherings, and the
+   county itself, pinned behind everything. */
+
+.home {
+  --home-plum: #2a1430;
+  --home-plum-2: #3b1d42;
+  --home-pink: #d42c8a;
+  --home-pink-deep: #b81f73;
+  --home-gold: #fdb515;
+  --home-ink: #1a1a1a;
+  --home-muted: #55555f;
+  --home-mist: #f6f3f4;
+  --home-ink-logo: #2a2a2a; /* all-white partner logos are drawn in this */
+  --home-display: 'Manrope', system-ui, sans-serif;
+  --home-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.home {
+  position: relative;
+  isolation: isolate;
+}
+
+/* ── Backdrop: the county, pinned behind the page ── */
+.home-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  height: 100lvh;
+  background: var(--home-plum);
+}
+
+.home-backdrop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 45%;
+  display: block;
+}
+
+.home-display {
+  font-family: var(--home-display);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  text-wrap: balance;
+}
+
+/* ── Hero ── */
+.home-hero {
+  /* Plum tint over the pinned county photo. */
+  background: linear-gradient(90deg, rgba(42, 20, 48, 0.9) 0%, rgba(42, 20, 48, 0.78) 55%, rgba(42, 20, 48, 0.72) 100%);
+}
+
+/* Headline lines rise out of a clip, one after another. */
+.home-rise {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.home-rise > span {
+  display: block;
+  animation: home-rise 0.9s var(--home-ease) both;
+  animation-delay: calc(var(--i, 0) * 110ms + 120ms);
+}
+
+@keyframes home-rise {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.home-fade-up {
+  animation: home-fade-up 0.8s var(--home-ease) both;
+  animation-delay: var(--d, 0ms);
+}
+
+@keyframes home-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* The wall: columns of faces drifting past, like walking through the room. */
+.home-wall {
+  mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+}
+
+.home-wall-col {
+  animation: home-drift-up var(--dur, 70s) linear infinite;
+  will-change: transform;
+}
+
+.home-wall-col[data-dir='down'] {
+  animation-name: home-drift-down;
+}
+
+.home-wall[data-paused='true'] .home-wall-col,
+.home-wall:hover .home-wall-col {
+  animation-play-state: paused;
+}
+
+@keyframes home-drift-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes home-drift-down {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Phones: the wall becomes two rows sliding sideways. */
+.home-ribbon {
+  mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+}
+
+.home-ribbon-row {
+  animation: home-slide-left var(--dur, 60s) linear infinite;
+  will-change: transform;
+}
+
+.home-ribbon-row[data-dir='right'] {
+  animation-name: home-slide-right;
+}
+
+.home-ribbon[data-paused='true'] .home-ribbon-row {
+  animation-play-state: paused;
+}
+
+@keyframes home-slide-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes home-slide-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.home-tile {
+  border-radius: 1rem;
+  overflow: hidden;
+  background: var(--home-plum-2);
+  flex: none;
+}
+
+.home-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Section headings: one size down from the H1, same family. */
+.home-h2 {
+  font-family: var(--home-display);
+  font-weight: 800;
+  font-size: clamp(2.1rem, 4.4vw, 3.6rem);
+  letter-spacing: -0.028em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+/* One button system for the page. */
+.home-btn {
+  display: inline-flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.75rem 1.75rem;
+  font-weight: 700;
+  font-size: 1.0625rem;
+  transition: background-color 0.2s var(--home-ease), border-color 0.2s var(--home-ease), color 0.2s var(--home-ease);
+}
+
+.home-btn:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
+
+.home-btn-pink {
+  background: var(--home-pink);
+  color: #fff;
+}
+
+.home-btn-pink:hover {
+  background: var(--home-pink-deep);
+}
+
+.home-btn-ghost {
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  color: #fff;
+}
+
+.home-btn-ghost:hover {
+  border-color: #fff;
+}
+
+.home-btn-white {
+  background: #fff;
+  color: var(--home-pink-deep);
+}
+
+.home-btn-white:hover {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.home-btn-plum {
+  background: var(--home-plum);
+  color: #fff;
+}
+
+.home-btn-plum:hover {
+  background: var(--home-plum-2);
+}
+
+.home-icon-btn {
+  display: inline-flex;
+  height: 44px;
+  width: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.home-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.home-icon-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.home-icon-btn-ink {
+  border-color: rgba(26, 26, 26, 0.2);
+  color: var(--home-ink);
+}
+
+.home-icon-btn-ink:hover {
+  background: rgba(26, 26, 26, 0.05);
+}
+
+.home-icon-btn-ink:focus-visible {
+  outline-color: var(--home-pink);
+}
+
+/* Participant voices: quotes share one grid cell and crossfade. */
+.home-voice {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.7s var(--home-ease), transform 0.8s var(--home-ease), visibility 0s linear 0.7s;
+}
+
+.home-voice[data-active='true'] {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.7s var(--home-ease) 0.15s, transform 0.8s var(--home-ease) 0.15s, visibility 0s;
+}
+
+.home-voice-name {
+  opacity: 0.55;
+  transition: opacity 0.3s var(--home-ease), background-color 0.3s var(--home-ease);
+}
+
+.home-voice-name:hover,
+.home-voice-name[data-active='true'] {
+  opacity: 1;
+}
+
+.home-voice-name[data-active='true'] {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+@media (min-width: 1024px) {
+  .home-voice-name[data-active='true'] {
+    background: transparent;
+  }
+}
+
+.home-voice-name:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.home-voice-timer {
+  animation: home-voice-timer linear both;
+}
+
+@keyframes home-voice-timer {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Partner logos: one slot at a time, a slow, still crossfade. */
+.home-logo-in {
+  animation: home-logo-in 2.2s ease-in-out both;
+}
+
+.home-logo-out {
+  animation: home-logo-out 2.2s ease-in-out both;
+}
+
+@keyframes home-logo-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes home-logo-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.home-link {
+  text-underline-offset: 4px;
+}
+
+.home-link:hover {
+  text-decoration: underline;
+}
+
+.home-door:hover .home-door-title,
+.home-door:focus-visible .home-door-title {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.home-door:focus-visible > div:first-child {
+  outline: 3px solid var(--home-pink);
+  outline-offset: 3px;
+}
+
+/* The spotlight straddles the hero's bottom edge: plum above, white below. */
+.home-spotlight {
+  background: linear-gradient(180deg, transparent 6rem, #fff 6rem);
+}
+
+/* ── Doors: expanding photo panels ── */
+.home-panel-img {
+  transition: transform 1s var(--home-ease);
+}
+
+.home-panel[data-active='true'] .home-panel-img {
+  transform: scale(1.04);
+}
+
+@media (min-width: 1024px) {
+  .home-panel {
+    flex: 1 1 0;
+    min-width: 0;
+    transition: flex-grow 0.7s var(--home-ease);
+  }
+
+  .home-panel[data-active='true'] {
+    flex-grow: 3.2;
+  }
+
+  .home-panel-copy,
+  .home-panel-arrow {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s var(--home-ease), transform 0.5s var(--home-ease);
+  }
+
+  .home-panel-copy {
+    max-height: 0;
+    margin-top: 0;
+  }
+
+  .home-panel[data-active='true'] .home-panel-copy,
+  .home-panel[data-active='true'] .home-panel-arrow {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.15s;
+  }
+
+  .home-panel[data-active='true'] .home-panel-copy {
+    max-height: 8rem;
+    margin-top: 0.75rem;
+  }
+}
+
+.home-room-frame img {
+  transition: transform 1.2s var(--home-ease);
+}
+
+.home-room-frame:hover img {
+  transform: scale(1.04);
+}
+
+/* ── Room story (pinned horizontal filmstrip) ── */
+.home-room {
+  background: var(--home-pink);
+  overflow-x: clip;
+}
+
+.home-room-scroller {
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.home-room-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.home-room-scroller > * {
+  scroll-snap-align: start;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-wall-col,
+  .home-ribbon-row {
+    animation: none;
+  }
+
+  .home-rise > span,
+  .home-fade-up,
+  .home-voice-timer,
+  .home-logo-in,
+  .home-logo-out {
+    animation: none;
+  }
+
+  .home-voice,
+  .home-voice-name,
+  .home-panel,
+  .home-panel-img,
+  .home-panel-copy,
+  .home-panel-arrow,
+  .home-room-frame img {
+    transition: none;
+  }
+}
+
+/* Programs list beside the stacking cards: the entry for the card in view lights in its pathway colour. */
+.home-path-step {
+  transition: background-color 0.4s var(--home-ease), border-color 0.4s var(--home-ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-path-step { transition: none; }
+}
+
+/* Program cards: the photo eases in a touch on hover. */
+.home-program-photo {
+  transition: transform 1.2s var(--home-ease);
+}
+.home-program:hover .home-program-photo {
+  transform: scale(1.04);
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-program-photo { transition: none; }
+  .home-program:hover .home-program-photo { transform: none; }
+}
+
+/* Program cards: a wash of the card's pathway colour (--tone) behind the
+   words, solid where the text sits and clear over the rest of the photo. */
+.home-program-scrim {
+  background: linear-gradient(to top, var(--tone) 0%, var(--tone) 52%, color-mix(in srgb, var(--tone) 55%, transparent) 70%, transparent 88%);
+}
+@media (min-width: 640px) {
+  .home-program[data-side='right'] .home-program-scrim {
+    background: linear-gradient(to left, var(--tone) 0%, var(--tone) 48%, color-mix(in srgb, var(--tone) 55%, transparent) 57%, transparent 70%);
+  }
+  .home-program[data-side='left'] .home-program-scrim {
+    background: linear-gradient(to right, var(--tone) 0%, var(--tone) 48%, color-mix(in srgb, var(--tone) 55%, transparent) 57%, transparent 70%);
+  }
+}
+
+/* Spotlight cards under the hero: the same card as the programs, with the
+   wash always rising from the bottom, since the cards are half width. */
+.home-program[data-side='bottom'] .home-program-scrim {
+  background: linear-gradient(to top, var(--tone) 0%, var(--tone) 40%, color-mix(in srgb, var(--tone) 60%, transparent) 62%, transparent 85%);
+}

@@ -3,9 +3,10 @@ import { Sparkmark } from '../components/Sparkmark';
 
 // The virtual post-convening session (Thursday, November 5, 2026, 10 a.m. ET) for people
 // who attended on October 1. Registration is on Zoom. The band and the hero's "Up next"
-// link both retire on their own once the session day is over. The homepage recap card
-// (src/components/RuralHealthPromo.tsx) and the attendee photo page reuse
-// isPostSessionActive and the register URL from here, so the date lives in one place.
+// link both retire on their own once the session day is over. The attendee photo page
+// reuses isPostSessionActive and the register URL from here. The homepage features the
+// session through its spotlight (src/data/homeSpotlight.ts), whose `until` must match
+// POST_SESSION_EXPIRES below.
 
 export const POST_SESSION_ID = 'post-convening';
 export const POST_SESSION_REGISTER_URL =

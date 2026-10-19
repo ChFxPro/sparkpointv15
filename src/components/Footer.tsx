@@ -491,7 +491,7 @@ export function Footer() {
                 letterSpacing: '0.25px',
               }}
             >
-              © 2025 <span translate="no">SparkPoint</span>. All rights reserved.
+              © {new Date().getFullYear()} <span translate="no">SparkPoint</span>. All rights reserved.
             </p>
             <div className="flex gap-6 flex-wrap justify-center">
               <Link

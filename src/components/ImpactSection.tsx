@@ -1,29 +1,12 @@
 'use client';
 
-import { motion, AnimatePresence, useInView, useReducedMotion } from 'motion/react';
-import { useRef, useEffect, useState } from 'react';
-import { Activity, Users, TrendingUp, Target, ChevronLeft, ChevronRight, GraduationCap, Mic, Heart, Sparkles } from 'lucide-react';
-import {
-  IMPACT_2025,
-  IMPACT_2025_ANCHOR_ATTENDANCE_TOTAL,
-  IMPACT_2025_NOVEMBER_SHARE_PERCENT,
-} from '../data/impact2025';
-import impactBg from '../assets/connection_happens/vos1.webp';
-
-// Shared glass card styles (keeps Impact section cohesive)
-const GLASS_CARD = {
-  background: 'linear-gradient(135deg, rgba(25, 25, 35, 0.65), rgba(15, 15, 25, 0.55))',
-  backdropFilter: 'blur(20px)',
-  WebkitBackdropFilter: 'blur(20px)',
-  border: '1px solid rgba(255, 255, 255, 0.28)',
-  boxShadow: '0 20px 70px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255,255,255,0.25)',
-} as const;
-
-const GLASS_CARD_STRONG = {
-  ...GLASS_CARD,
-  background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.78), rgba(20, 20, 20, 0.68))',
-  border: '1px solid rgba(255, 255, 255, 0.32)',
-} as const;
+import { useReducedMotion } from 'motion/react';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router';
+import { ArrowRight, Pause, Play } from 'lucide-react';
+import { IMPACT_2025 } from '../data/impact2025';
+import { DotField } from './home/DotField';
+import { useAccessibility } from '../context/AccessibilityContext';
 
 // Testimonials Data
 type TestimonialPhase = 'listen' | 'learn' | 'lead';
@@ -127,831 +110,163 @@ const longFormTestimonials: Testimonial[] = [
   },
 ];
 
-const carouselTestimonials: Testimonial[] = testimonials;
-
-function CountUp({
-  end,
-  duration = 2,
-  suffix = '',
-  start = false,
-}: {
-  end: number;
-  duration?: number;
-  suffix?: string;
-  start?: boolean;
-}) {
-  const [count, setCount] = useState(0);
-  const hasStarted = useRef(false);
-
-  useEffect(() => {
-    if (!start || hasStarted.current) return;
-    hasStarted.current = true;
-
-    let startTime: number | null = null;
-    let rafId = 0;
-    const animate = (currentTime: number) => {
-      if (!startTime) startTime = currentTime;
-      const progress = Math.min((currentTime - startTime) / (duration * 1000), 1);
-      
-      setCount(Math.floor(progress * end));
-      
-      if (progress < 1) {
-        rafId = requestAnimationFrame(animate);
-      }
-    };
-
-    rafId = requestAnimationFrame(animate);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-    };
-  }, [start, end, duration]);
-
-  return <span>{count.toLocaleString()}{suffix}</span>;
-}
+// The homepage shows four named voices; the full set stays in `testimonials`.
+const HOMEPAGE_VOICES = ['Karen Tilson Pearce', 'Marion Hawsey', 'Grace Champion', 'Vickie Baker'];
+const carouselTestimonials: Testimonial[] = HOMEPAGE_VOICES.map(
+  (name) => [...longFormTestimonials, ...testimonials].find((t) => t.author === name)!
+).filter(Boolean);
 
 
-function TestimonialCarousel({
-  items,
-  intervalMs = 7000,
-}: {
-  items: Testimonial[];
-  intervalMs?: number;
-}) {
-  const [index, setIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
-
-  const total = items.length;
-  const safeIndex = ((index % total) + total) % total;
-
-  const goTo = (next: number) => setIndex(((next % total) + total) % total);
-  const next = () => goTo(safeIndex + 1);
-  const prev = () => goTo(safeIndex - 1);
+// Participant voices: the quote on the left, the people on the right. All
+// quotes share one grid cell, so the block is always as tall as the longest
+// quote and nothing below it moves when the quote changes. It advances slowly
+// on its own (a gold line fills under the current name), stops on hover,
+// focus, or the pause button, and any name can be picked directly.
+function Voices({ items, intervalMs = 9000 }: { items: Testimonial[]; intervalMs?: number }) {
+  const systemReducedMotion = useReducedMotion();
+  const { motionPreference } = useAccessibility();
+  const reducedMotion = Boolean(systemReducedMotion) || motionPreference === 'reduce';
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [holding, setHolding] = useState(false);
+  const running = !reducedMotion && !paused && !holding && items.length > 1;
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
-    if (isPaused) return;
-    if (total <= 1) return;
-
-    const id = window.setInterval(() => {
-      setIndex((i) => (i + 1) % total);
-    }, intervalMs);
-
-    return () => window.clearInterval(id);
-  }, [intervalMs, isPaused, prefersReducedMotion, total]);
-
-  const current = items[safeIndex];
-  const phaseMeta = {
-    listen: {
-      label: 'Listen',
-      icon: Heart,
-      gold: 'rgba(253,181,21,0.92)',
-      tint: 'rgba(224,54,148,0.92)',
-    },
-    learn: {
-      label: 'Learn',
-      icon: Sparkles,
-      gold: 'rgba(253,181,21,0.92)',
-      tint: 'rgba(158,80,159,0.92)',
-    },
-    lead: {
-      label: 'Lead',
-      icon: Mic,
-      gold: 'rgba(253,181,21,0.92)',
-      tint: 'rgba(253,181,21,0.95)',
-    },
-  } as const;
-  const phaseLabel = phaseMeta[current.phase].label;
-  const PhaseIcon = phaseMeta[current.phase].icon;
-  const phaseTint = phaseMeta[current.phase].tint;
-
-  const seconds = Math.round(intervalMs / 1000);
-  const carouselHelp = prefersReducedMotion
-    ? 'Carousel. Use Previous and Next to navigate.'
-    : `Carousel. Advances every ${seconds} seconds. Hover or focus to pause.`;
-
-  const pointerStartX = useRef<number | null>(null);
-
-  const onPointerDown: React.PointerEventHandler<HTMLDivElement> = (e) => {
-    pointerStartX.current = e.clientX;
-  };
-
-  const onPointerUp: React.PointerEventHandler<HTMLDivElement> = (e) => {
-    const start = pointerStartX.current;
-    pointerStartX.current = null;
-    if (start == null) return;
-
-    const delta = e.clientX - start;
-    // Ignore tiny moves
-    if (Math.abs(delta) < 40) return;
-    if (delta < 0) next();
-    else prev();
-  };
+    if (!running) return;
+    const id = window.setTimeout(() => setActive((i) => (i + 1) % items.length), intervalMs);
+    return () => window.clearTimeout(id);
+  }, [running, active, intervalMs, items.length]);
 
   return (
     <div
-      className="relative max-w-5xl mx-auto"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onFocusCapture={() => setIsPaused(true)}
-      onBlurCapture={() => setIsPaused(false)}
-      onPointerDown={onPointerDown}
-      onPointerUp={onPointerUp}
-      style={{ touchAction: 'pan-y' }}
-      aria-roledescription="carousel"
-      aria-label="Testimonials"
-      aria-describedby="testimonial-carousel-help"
+      className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[1.6fr_1fr] lg:gap-16"
+      onMouseEnter={() => setHolding(true)}
+      onMouseLeave={() => setHolding(false)}
+      onFocusCapture={() => setHolding(true)}
+      onBlurCapture={() => setHolding(false)}
     >
-      <p id="testimonial-carousel-help" className="sr-only">
-        {carouselHelp}
-      </p>
-      <div
-        className="relative rounded-2xl p-7 md:p-10 overflow-hidden"
-        style={GLASS_CARD_STRONG}
-      >
-        {/* Phase badge (consistent anchor) */}
-        <div className="absolute left-5 top-5 z-20">
-          <div
-            className="inline-flex items-center gap-2 rounded-full px-3 py-1.5"
-            style={{
-              background: 'rgba(0,0,0,0.18)',
-              border: '1px solid rgba(255,255,255,0.18)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.25)',
-            }}
+      <div className="grid min-w-0 grid-cols-[minmax(0,1fr)]" aria-live={running ? 'off' : 'polite'}>
+        {items.map((t, i) => (
+          <figure
+            key={t.author}
+            className="home-voice col-start-1 row-start-1"
+            data-active={i === active ? 'true' : 'false'}
+            aria-hidden={i !== active || undefined}
           >
-            <span
-              className="inline-flex items-center justify-center rounded-full"
-              style={{
-                width: 30,
-                height: 30,
-                background: 'rgba(253,181,21,0.16)',
-                border: `1px solid ${phaseTint}`,
-                boxShadow: '0 0 18px rgba(253,181,21,0.18)',
-                color: phaseTint,
-              }}
-              aria-hidden="true"
-            >
-              <PhaseIcon className="w-4 h-4" />
+            <span aria-hidden="true" className="block text-7xl font-extrabold leading-none text-[#FDB515]" style={{ fontFamily: 'var(--home-display)' }}>
+              &ldquo;
             </span>
-            <span
+            <blockquote
+              className="mt-2 text-white"
               style={{
-                fontSize: '0.78rem',
-                fontWeight: 800 as any,
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.80)',
+                fontSize: t.quote.length > 220 ? 'clamp(1.2rem, 1.8vw, 1.5rem)' : 'clamp(1.5rem, 2.6vw, 2.25rem)',
+                lineHeight: t.quote.length > 220 ? 1.55 : 1.35,
+                fontWeight: 600,
+                maxWidth: '44ch',
               }}
             >
-              {phaseLabel}
-            </span>
-          </div>
-        </div>
-        {/* Progress line (quiet, calm) */}
-        {!prefersReducedMotion && total > 1 && (
-          <div className="absolute left-0 right-0 top-0 h-[3px] bg-white/10">
-            <motion.div
-              key={safeIndex}
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: intervalMs / 1000, ease: 'linear' }}
-              className="h-full w-full origin-left transform-gpu"
-              style={{ background: 'rgba(255, 255, 255, 0.45)', willChange: 'transform' }}
-            />
-          </div>
+              {t.quote}
+            </blockquote>
+            <figcaption className="mt-6 text-base">
+              <span className="font-bold text-white">{t.author}</span>
+              <span className="text-white/75"> · {t.affiliation}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+
+      <div className="min-w-0 lg:self-end">
+        <ul className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:gap-0 lg:overflow-visible lg:pb-0">
+          {items.map((t, i) => (
+            <li key={t.author} className="flex-none lg:border-t lg:border-white/15">
+              <button
+                type="button"
+                onClick={() => setActive(i)}
+                aria-pressed={i === active}
+                className="home-voice-name group relative block min-h-[44px] w-full rounded-full px-4 py-2 text-left lg:rounded-none lg:px-0 lg:py-4"
+                data-active={i === active ? 'true' : 'false'}
+              >
+                <span className="block font-bold text-white">{t.author}</span>
+                <span className="hidden text-sm text-white/70 lg:block">{t.affiliation}</span>
+                {i === active && running && (
+                  <span
+                    key={`${active}-${running}`}
+                    aria-hidden="true"
+                    className="home-voice-timer absolute bottom-0 left-0 hidden h-[2px] w-full origin-left bg-[#FDB515] lg:block"
+                    style={{ animationDuration: `${intervalMs}ms` }}
+                  />
+                )}
+              </button>
+            </li>
+          ))}
+        </ul>
+        {!reducedMotion && items.length > 1 && (
+          <button
+            type="button"
+            onClick={() => setPaused((p) => !p)}
+            aria-pressed={paused}
+            className="mt-4 inline-flex min-h-[44px] items-center gap-2 rounded text-sm font-semibold text-white/80 underline-offset-4 hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            {paused ? <Play size={14} aria-hidden="true" /> : <Pause size={14} aria-hidden="true" />}
+            {paused ? 'Play quotes' : 'Pause quotes'}
+          </button>
         )}
-
-        {/* Subtle gold grazing light (adds depth without noise) */}
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(800px 280px at 20% 22%, rgba(253,181,21,0.12), rgba(253,181,21,0) 62%), radial-gradient(900px 340px at 80% 72%, rgba(224,54,148,0.10), rgba(224,54,148,0) 64%)',
-          }}
-        />
-
-        {/* Watermark + subtle structure (consistent placement) */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          {/* Watermark word (consistent anchor + mostly readable) */}
-          <div
-            className="absolute select-none"
-            style={{
-              right: '-2%',
-              bottom: '-8%',
-              transform: 'rotate(-12deg)',
-              fontSize: 'clamp(130px, 16vw, 230px)',
-              fontWeight: 900,
-              letterSpacing: '0.10em',
-              lineHeight: 0.9,
-              whiteSpace: 'nowrap',
-              textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.12)',
-              textShadow: '0 18px 48px rgba(0,0,0,0.35)',
-            }}
-          >
-            {phaseLabel}
-          </div>
-
-          {/* Inner edge */}
-          <div
-            className="absolute inset-0 rounded-2xl"
-            style={{
-              border: '1px solid rgba(255,255,255,0.12)',
-              boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05)',
-            }}
-          />
-
-          {/* Soft corner glints */}
-          <div
-            className="absolute -top-10 -left-10 h-40 w-40 rounded-full"
-            style={{
-              background:
-                'radial-gradient(circle at 30% 30%, rgba(253,181,21,0.14), rgba(253,181,21,0) 66%)',
-              filter: 'blur(16px)',
-              opacity: 0.85,
-            }}
-          />
-          <div
-            className="absolute -bottom-12 -right-12 h-44 w-44 rounded-full"
-            style={{
-              background:
-                'radial-gradient(circle at 70% 70%, rgba(224,54,148,0.12), rgba(224,54,148,0) 68%)',
-              filter: 'blur(18px)',
-              opacity: 0.8,
-            }}
-          />
-        </div>
-
-        <div className="relative flex flex-col" style={{ minHeight: 'clamp(190px, 18vw, 240px)' }}>
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.figure
-              key={safeIndex}
-              initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 10 }}
-              animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-              exit={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: -8 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="text-left"
-            >
-              <blockquote
-                className="text-white/95"
-                style={{
-                  fontSize: 'clamp(1.1rem, 2.0vw, 1.55rem)',
-                  lineHeight: 1.65,
-                  fontWeight: 520 as any,
-                  maxWidth: '60ch',
-                  paddingTop: '56px',
-                  textShadow: '0 2px 12px rgba(0, 0, 0, 0.38)',
-                }}
-              >
-                <span className="sr-only">Quote: </span>
-                “{current.quote}”
-              </blockquote>
-
-              <figcaption className="mt-6">
-                {/* Name + affiliation lockup (baseline-aligned, all-caps, thick/thin) */}
-                <div
-                  className="inline-flex flex-wrap"
-                  style={{
-                    alignItems: 'center',
-                    gap: '0.55rem',
-                    rowGap: '0.35rem',
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: '1.16rem',
-                      fontWeight: 860 as any,
-                      color: 'rgba(255,255,255,0.98)',
-                      letterSpacing: '0.02em',
-                      lineHeight: 1.05,
-                      textShadow: '0 2px 10px rgba(0,0,0,0.35)',
-                      whiteSpace: 'nowrap',
-                      display: 'inline-block',
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    {current.author.toUpperCase()}
-                  </span>
-
-                  <span
-                    style={{
-                      fontSize: '1.16rem',
-                      fontWeight: 360 as any,
-                      letterSpacing: '0.30em',
-                      textTransform: 'uppercase',
-                      color: 'rgba(255,255,255,0.62)',
-                      lineHeight: 1.05,
-                      display: 'inline-block',
-                      whiteSpace: 'nowrap',
-                      // tiny optical nudge for consistent cap-height alignment across weights
-                      transform: 'translateY(0.02em)',
-                    }}
-                  >
-                    {current.affiliation.toUpperCase()}
-                  </span>
-                </div>
-              </figcaption>
-            </motion.figure>
-          </AnimatePresence>
-
-          {/* Controls */}
-          <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" style={{ marginTop: 'auto' }}>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={prev}
-                className="inline-flex items-center justify-center rounded-full px-3.5 py-2 text-sm text-white/80 hover:text-white transition-colors"
-                style={{ border: '1px solid rgba(255,255,255,0.22)', background: 'rgba(0,0,0,0.10)' }}
-                aria-label="Previous testimonial"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-
-              <button
-                type="button"
-                onClick={next}
-                className="inline-flex items-center justify-center rounded-full px-3.5 py-2 text-sm text-white/80 hover:text-white transition-colors"
-                style={{ border: '1px solid rgba(255,255,255,0.22)', background: 'rgba(0,0,0,0.10)' }}
-                aria-label="Next testimonial"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="flex items-center justify-center sm:justify-end gap-4" aria-label="Testimonial progress">
-              <div className="text-white/85" style={{ fontSize: '0.95rem', letterSpacing: '0.06em' }}>
-                {safeIndex + 1} <span className="text-white/35">/</span> {total}
-              </div>
-              <div className="h-[2px] w-40 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.14)' }}>
-                <div
-                  className="h-full"
-                  style={{
-                    width: `${((safeIndex + 1) / total) * 100}%`,
-                    background:
-                      'linear-gradient(90deg, rgba(253,181,21,0), rgba(253,181,21,0.85), rgba(253,181,21,0))',
-                    boxShadow: '0 0 14px rgba(253,181,21,0.22)',
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
 }
 
-import { CommunityNetworkDiagram } from './CommunityNetworkDiagram';
+const numberFormat = new Intl.NumberFormat('en-US');
 
+// The homepage proof band: one honest number in context, one participant
+// voice, and the partner network. The full 2025 breakdown lives on /impact.
 export function ImpactSection() {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-
-  const impactBreakdown = [
-    {
-      title: "Youth & Education",
-      icon: GraduationCap,
-      color: "#9E509F", // Purple
-      stats: [
-        "School and youth-centered sessions throughout 2025",
-        "Story and leadership activities for students countywide",
-        "Partnerships spanning schools, colleges, and youth programs"
-      ]
-    },
-    {
-      title: "Community & Adult Engagement",
-      icon: Users,
-      color: "#F15F48", // Coral
-      stats: [
-        "Community conversations and leadership gatherings",
-        "Community conversations, leadership talks, recovery events",
-        "Coalition and partner-hosted sessions included"
-      ]
-    },
-    {
-      title: "Education, Training & Capacity Building",
-      icon: Sparkles,
-      color: "#FDB515", // Gold
-      stats: [
-        "Training and facilitation for partner and community groups",
-        "LEAD, SupportEd, Y2Y, workforce-aligned trainings",
-        "College and community-based formats"
-      ]
-    },
-    {
-      title: "Story & Voice Infrastructure",
-      icon: Mic,
-      color: "#E03694", // Pink
-      stats: [
-        "Countywide story collection touchpoints",
-        "Resident interviews captured through story sessions",
-        "Countywide, multi-partner locations"
-      ]
-    }
-  ];
-
   return (
     <section
       id="impact"
-      ref={ref}
-      className="relative py-12 md:py-20 px-6 overflow-hidden"
+      aria-labelledby="impact-heading"
+      className="relative overflow-hidden px-6 py-16 md:py-24"
+      style={{ backgroundColor: '#2A1430' }}
     >
-      {/* Background with Parallax */}
-      <div className="absolute inset-0 z-0">
-        <motion.img
-          src={impactBg}
-          alt=""
-          className="w-full h-full object-cover opacity-30"
-          style={{ willChange: 'transform' }}
-          width={2000}
-          height={1333}
-          loading="lazy"
-          decoding="async"
-          initial={{ y: 0 }}
-          whileInView={{ y: -20 }}
-          viewport={{ once: false }}
-          transition={{ duration: 0.5, ease: [0.45, 0, 0.55, 1] }}
-        />
-        <div 
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(135deg, rgba(158, 80, 159, 0.92) 0%, rgba(224, 54, 148, 0.92) 50%, rgba(253, 181, 21, 0.88) 100%)'
-          }}
-        />
-      </div>
-      
-      <div className="relative z-10 max-w-7xl mx-auto">
-        {/* A. Hero Section */}
-        <div className="text-center mb-12 md:mb-20">
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-white mb-8 md:mb-12"
-            style={{
-              fontSize: 'clamp(2.2rem, 8.5vw, 3.5rem)',
-              lineHeight: '1.2',
-              letterSpacing: '-1px',
-              textShadow: '0px 4px 12px rgba(0, 0, 0, 0.8), 0px 2px 6px rgba(0, 0, 0, 0.6)'
-            }}
-          >
-            Trust built through visibility and shared success.
-          </motion.h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 md:gap-8 mb-12 md:mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.2, duration: 1.2 }}
-            className="p-6 md:p-8 rounded-xl"
-            style={GLASS_CARD_STRONG}
-          >
-              <div className="text-white mb-2" style={{ fontSize: 'clamp(2.6rem, 11vw, 4rem)', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
-                <CountUp end={IMPACT_2025.attendanceTotalRecordedMinimum} duration={1.5} suffix="+" start={isInView} />
-              </div>
-              <p className="text-white" style={{ fontSize: 'clamp(1rem, 3.7vw, 1.25rem)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
-                Recorded Attendance (2025 minimum)
-              </p>
-            </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.35, duration: 1.2 }}
-            className="p-6 md:p-8 rounded-xl"
-            style={GLASS_CARD_STRONG}
-          >
-              <div className="text-white mb-2" style={{ fontSize: 'clamp(2.6rem, 11vw, 4rem)', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
-                <CountUp end={IMPACT_2025.uniqueCollaboratingOrganizationCount} duration={1.5} start={isInView} />
-              </div>
-              <p className="text-white" style={{ fontSize: 'clamp(1rem, 3.7vw, 1.25rem)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
-                Collaborating Organizations (2025)
-              </p>
-            </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.5, duration: 1.2 }}
-            className="p-6 md:p-8 rounded-xl"
-            style={GLASS_CARD_STRONG}
-          >
-              <div className="text-white mb-2" style={{ fontSize: 'clamp(2.6rem, 11vw, 4rem)', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
-                <CountUp end={IMPACT_2025.monthsActiveProgramming} duration={1.5} start={isInView} />
-              </div>
-              <p className="text-white" style={{ fontSize: 'clamp(1rem, 3.7vw, 1.25rem)', textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' }}>
-                Months Active in 2025
-              </p>
-            </motion.div>
-          </div>
-
-          {/* Testimonial Carousel */}
-          <TestimonialCarousel items={carouselTestimonials} />
-        </div>
-
-        {/* B. Impact Overview (REPLACED SECTION) */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mb-16 md:mb-24"
-        >
-          {/* Header */}
-          <div className="text-center mb-12 md:mb-16 max-w-4xl mx-auto">
-            <h2 
-              className="text-white mb-6"
-              style={{
-                fontSize: 'clamp(2rem, 7.5vw, 3rem)',
-                lineHeight: '1.1',
-                fontWeight: '700',
-                letterSpacing: '-1px',
-                textShadow: '0px 4px 12px rgba(0, 0, 0, 0.6)'
-              }}
-            >
-              Community Impact, at County Scale
+      <div className="relative z-10 mx-auto max-w-7xl">
+        <div className="mb-16 grid gap-12 md:mb-20 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
+          <div>
+            <h2 id="impact-heading" className="home-h2 mb-8 text-white">
+              Our 2025, in one number
             </h2>
-            <p 
-              className="text-white/90"
-              style={{
-                fontSize: 'clamp(1rem, 3.8vw, 1.25rem)',
-                lineHeight: '1.6',
-                fontWeight: '400',
-                textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)'
-              }}
+            <p
+              className="text-white"
+              style={{ fontFamily: '"Manrope", sans-serif', fontSize: 'clamp(4rem, 12vw, 7.5rem)', fontWeight: 800, lineHeight: 0.95, letterSpacing: '-0.04em' }}
             >
-              In a rural county of approximately 33,000 residents, SparkPoint focuses on sustained presence, shared infrastructure, and meaningful connection across youth, families, and partners.
+              {numberFormat.format(IMPACT_2025.attendanceTotalRecordedMinimum)}
             </p>
+            <p className="mt-4 max-w-md text-2xl font-semibold leading-snug text-white">
+              times neighbors showed up to a SparkPoint gathering.
+            </p>
+            <p className="mt-5 max-w-md text-base leading-relaxed text-white/75">
+              Across {IMPACT_2025.eventsLogged} events in 2025, in a county of about 33,000 people.
+              That count is a floor: {IMPACT_2025.eventsMissingAttendance} events had no headcount.
+            </p>
+            <Link
+              to="/impact"
+              className="mt-8 inline-flex min-h-[44px] items-center gap-2 text-base font-bold text-white underline underline-offset-4 hover:text-[#FDB515]"
+            >
+              See the full 2025 impact <ArrowRight size={18} aria-hidden="true" />
+            </Link>
           </div>
 
-          {/* Impact At-A-Glance */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6 mb-12 md:mb-16">
-  {[
-    {
-      value: IMPACT_2025.eventsLogged,
-      label: "Total Events & Sessions (2025)",
-      note: "Canonical annual total from SparkPoint 2025 impact tracking",
-    },
-    {
-      value: IMPACT_2025.attendanceTotalRecordedMinimum,
-      label: "Verified Attendance Moments",
-      note: "Minimum recorded attendance across events with attendance data",
-    },
-    {
-      value: IMPACT_2025.uniqueCollaboratingOrganizationCount,
-      label: "Collaborating Organizations (2025)",
-      note: "Unique collaborating organization tokens in 2025 tracking data",
-    },
-    {
-      value: IMPACT_2025.monthsActiveProgramming,
-      label: "Months of Active Programming",
-      note: "January–December (full-year reporting)",
-    },
-  ].map((metric, index) => (
-    <motion.div
-      key={metric.label}
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="p-6 md:p-8 rounded-xl flex flex-col justify-between transform-gpu"
-      style={{ ...GLASS_CARD, willChange: 'transform, opacity' }}
-    >
-      <div className="mb-4">
-        <div
-          className="text-white mb-2"
-          style={{ fontSize: "clamp(2.4rem, 10.5vw, 3.5rem)", fontWeight: "700", lineHeight: 1 }}
-        >
-          <CountUp end={metric.value} duration={1.5} suffix={metric.suffix || ""} start={isInView} />
+          <figure>
+            <DotField total={IMPACT_2025.attendanceTotalRecordedMinimum} />
+            <figcaption className="mt-4 flex items-center gap-2 text-sm text-white/75">
+              <span className="inline-block h-2.5 w-2.5 rounded-full bg-[#FDB515]" aria-hidden="true" />
+              Each dot is 10 times someone showed up.
+            </figcaption>
+          </figure>
         </div>
-        <h3 className="text-white/90 font-bold text-lg leading-tight mb-2">
-          {metric.label}
-        </h3>
-      </div>
-      <p className="text-white/60 text-sm leading-snug">
-        {metric.note}
-      </p>
-    </motion.div>
-  ))}
-</div>
 
-
-          {/* Impact Breakdown Groups */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 md:gap-8 mb-12 md:mb-16">
-            {impactBreakdown.map((group, index) => (
-              <motion.div
-                key={group.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                className="p-6 md:p-8 rounded-xl h-full"
-                style={{
-                  ...GLASS_CARD,
-                  borderTop: `4px solid ${group.color}`,
-                }}
-              >
-                <div className="flex items-center gap-4 mb-4 md:mb-6">
-                  <div 
-                    className="p-3 rounded-full"
-                    style={{ backgroundColor: `${group.color}20`, color: group.color }}
-                  >
-                    <group.icon size={28} />
-                  </div>
-                  <h3 className="text-white text-xl font-bold">{group.title}</h3>
-                </div>
-                <ul className="space-y-3 md:space-y-4">
-                  {group.stats.map((stat, i) => (
-                    <li key={i} className="flex items-start gap-3 text-white/90">
-                      <span 
-                        className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0" 
-                        style={{ backgroundColor: group.color }} 
-                      />
-                      <span className="text-base leading-relaxed">{stat}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Anchor Moments */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="p-6 md:p-10 rounded-2xl mb-8 relative overflow-hidden"
-            style={{
-              ...GLASS_CARD,
-              background: 'linear-gradient(135deg, rgba(224, 54, 148, 0.14), rgba(253, 181, 21, 0.06))',
-            }}
-          >
-            <div className="relative z-10 flex flex-col lg:flex-row gap-6 sm:gap-8 lg:gap-16 items-start lg:items-center justify-between">
-              <div className="flex-1 w-full">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="p-3 rounded-xl bg-[#FDB515]/20 text-[#FDB515] border border-[#FDB515]/30">
-                    <Target size={28} />
-                  </div>
-                  <h3 className="text-white text-2xl md:text-3xl font-bold">Anchor Moments & Momentum</h3>
-                </div>
-                
-                <div className="bg-black/20 rounded-xl p-5 md:p-6 border border-white/10 backdrop-blur-sm">
-                  <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2 mb-4">
-                    <p className="text-[#FDB515] font-bold text-sm uppercase tracking-wider">
-                      3 Anchor Program Highlights
-                    </p>
-                    <p className="text-white/60 text-xs uppercase tracking-wider">
-                      2025 total attendance
-                    </p>
-                  </div>
-
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 md:gap-y-4 gap-x-8">
-                    <li className="text-white text-lg font-semibold flex items-start gap-3">
-                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#FDB515] flex-shrink-0" />
-                      <div className="flex flex-col">
-                        <span className="leading-snug">Helene: One Year of Healing</span>
-                        <span className="mt-1 inline-flex items-center gap-2 text-white/70 text-xs uppercase tracking-[0.18em]">
-                          <span className="inline-flex items-center justify-center rounded-full px-2 py-0.5"
-                            style={{ background: 'rgba(253,181,21,0.14)', border: '1px solid rgba(253,181,21,0.28)' }}
-                          >
-                            Attendance
-                          </span>
-                          <span className="text-white/90" style={{ letterSpacing: '0.06em' }}>
-                            {IMPACT_2025.anchorProgramAttendance.heleneOneYearOfHealing.toLocaleString()}
-                          </span>
-                        </span>
-                      </div>
-                    </li>
-
-                    <li className="text-white text-lg font-semibold flex items-start gap-3">
-                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#FDB515] flex-shrink-0" />
-                      <div className="flex flex-col">
-                        <span className="leading-snug">Dr. Ora Brain Health Talks</span>
-                        <span className="mt-1 inline-flex items-center gap-2 text-white/70 text-xs uppercase tracking-[0.18em]">
-                          <span className="inline-flex items-center justify-center rounded-full px-2 py-0.5"
-                            style={{ background: 'rgba(253,181,21,0.14)', border: '1px solid rgba(253,181,21,0.28)' }}
-                          >
-                            Attendance
-                          </span>
-                          <span className="text-white/90" style={{ letterSpacing: '0.06em' }}>
-                            {IMPACT_2025.anchorProgramAttendance.drOraBrainHealthSeries.toLocaleString()}
-                          </span>
-                        </span>
-                      </div>
-                    </li>
-
-                    <li className="text-white text-lg font-semibold flex items-start gap-3 sm:col-span-2">
-                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#FDB515] flex-shrink-0" />
-                      <div className="flex flex-col">
-                        <span className="leading-snug">VOS Events & Programming</span>
-                        <span className="mt-1 inline-flex items-center gap-2 text-white/70 text-xs uppercase tracking-[0.18em]">
-                          <span className="inline-flex items-center justify-center rounded-full px-2 py-0.5"
-                            style={{ background: 'rgba(253,181,21,0.14)', border: '1px solid rgba(253,181,21,0.28)' }}
-                          >
-                            Attendance
-                          </span>
-                          <span className="text-white/90" style={{ letterSpacing: '0.06em' }}>
-                            {IMPACT_2025.anchorProgramAttendance.vosEventsAndProgramming.toLocaleString()}
-                          </span>
-                        </span>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className="w-full lg:w-auto mt-4 lg:mt-0 pl-0 lg:pl-10 lg:border-l border-white/10">
-                <div className="rounded-xl p-5 md:p-6 bg-black/10 border border-white/10 backdrop-blur-sm">
-                  <div
-                    className="text-white tracking-tight"
-                    style={{ fontSize: 'clamp(3.2rem, 6vw, 4.6rem)', fontWeight: 800, lineHeight: 1, textShadow: '0 6px 22px rgba(0,0,0,0.45)' }}
-                  >
-                    {IMPACT_2025_ANCHOR_ATTENDANCE_TOTAL.toLocaleString()}
-                  </div>
-                  <div className="mt-3 text-white/80 font-semibold text-sm uppercase tracking-[0.16em] leading-snug">
-                    Total Anchor Attendance
-                  </div>
-                  <div className="mt-1 text-white/55 text-xs uppercase tracking-[0.18em]">
-                    2025 combined programs
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-        </motion.div>
-
-        {/* F. "Why It Matters" Panel (Retained) */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mb-12 md:mb-20"
-        >
-          <h3 className="text-white text-center mb-8 md:mb-12" style={{ fontSize: 'clamp(2rem, 7vw, 2.5rem)', fontWeight: '700', textShadow: '0 3px 8px rgba(0, 0, 0, 0.6)' }}>
-            Why It Matters
-          </h3>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="p-6 md:p-8 rounded-xl"
-              style={{
-                ...GLASS_CARD_STRONG,
-                background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.78), rgba(224, 54, 148, 0.22), rgba(158, 80, 159, 0.18))',
-                border: '1px solid rgba(224, 54, 148, 0.42)',
-                boxShadow: '0 18px 60px rgba(0, 0, 0, 0.55), 0 10px 26px rgba(224, 54, 148, 0.18), inset 0 1px 0 rgba(255,255,255,0.18)',
-              }}
-            >
-              <div style={{ fontSize: 'clamp(2.6rem, 11vw, 4rem)', fontWeight: '700', color: 'white', textShadow: '0 3px 8px rgba(0, 0, 0, 0.7)' }}>51%</div>
-              <p style={{ color: 'white', fontSize: '1.25rem', marginTop: '8px', textShadow: '0 2px 4px rgba(0, 0, 0, 0.6)' }}>
-                of residents report loneliness
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="p-6 md:p-8 rounded-xl"
-              style={{
-                ...GLASS_CARD_STRONG,
-                background: 'linear-gradient(135deg, rgba(10, 10, 10, 0.78), rgba(253, 181, 21, 0.18), rgba(241, 95, 72, 0.16))',
-                border: '1px solid rgba(253, 181, 21, 0.42)',
-                boxShadow: '0 18px 60px rgba(0, 0, 0, 0.55), 0 10px 26px rgba(253, 181, 21, 0.16), inset 0 1px 0 rgba(255,255,255,0.18)',
-              }}
-            >
-              <div style={{ fontSize: 'clamp(2.6rem, 11vw, 4rem)', fontWeight: '700', color: 'white', textShadow: '0 3px 8px rgba(0, 0, 0, 0.7)' }}>37%</div>
-              <p style={{ color: 'white', fontSize: '1.25rem', marginTop: '8px', textShadow: '0 2px 4px rgba(0, 0, 0, 0.6)' }}>
-                report anxiety or trauma
-              </p>
-            </motion.div>
-          </div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-center mt-6 md:mt-8"
-            style={{ color: 'white', fontSize: 'clamp(1rem, 3.4vw, 1.125rem)', lineHeight: '1.7', textShadow: '0 2px 6px rgba(0, 0, 0, 0.7)' }}
-          >
-            These challenges make our work more critical than ever. Through connection, 
-            preparedness, and wellness programs, SparkPoint is building a resilient, 
-            supported community where no one faces hardship alone.
-          </motion.p>
-        </motion.div>
-
-        {/* E/G merged — Community network diagram (map + Listen/Learn/Lead + partner sectors) */}
-        <CommunityNetworkDiagram />
+        <div className="border-t border-white/15 pt-14 md:pt-20">
+          <Voices items={carouselTestimonials} />
+        </div>
       </div>
     </section>
   );
