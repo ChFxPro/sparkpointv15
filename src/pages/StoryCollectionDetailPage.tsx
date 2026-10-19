@@ -107,7 +107,7 @@ export default function StoryCollectionDetailPage() {
               ) : null}
             </div>
 
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+            <div className={`grid grid-cols-1 gap-6 ${collection.flyerImage ? 'lg:grid-cols-[1.1fr_0.9fr]' : 'mx-auto w-full max-w-md'}`}>
               {collection.flyerImage ? (
                 <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-40px' }} transition={{ duration: 0.5 }}>
                   <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
