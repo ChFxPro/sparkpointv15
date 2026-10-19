@@ -10,6 +10,8 @@ import { Sparkmark } from './Sparkmark';
 // night-blue backgrounds. Size it with `font-size` on the wrapper (via
 // `className`); everything inside scales from it.
 //
+// `tone="light"` recolours it for cream or paper backgrounds.
+//
 // Pass `headingId` to make the name the page's h1 (the Gala page hero);
 // leave it out where a separate heading already names the event, and the
 // whole lockup is hidden from screen readers.
@@ -19,10 +21,12 @@ export const GALA_BYLINE = 'The SparkPoint Gala';
 export function GalaLockup({
   headingId,
   byline = GALA_BYLINE,
+  tone = 'dark',
   className = '',
 }: {
   headingId?: string;
   byline?: ReactNode;
+  tone?: 'dark' | 'light';
   className?: string;
 }) {
   const name = (
@@ -34,7 +38,7 @@ export function GalaLockup({
   );
 
   return (
-    <div className={`gl ${className}`} aria-hidden={headingId ? undefined : true}>
+    <div className={`gl ${tone === 'light' ? 'gl-light ' : ''}${className}`} aria-hidden={headingId ? undefined : true}>
       <svg className="gl-globe" viewBox="0 0 200 200" aria-hidden="true">
         <circle cx="100" cy="100" r="96" />
         <ellipse cx="100" cy="100" rx="64" ry="96" />

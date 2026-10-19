@@ -95,6 +95,28 @@
   text-transform: uppercase;
 }
 
+/* Light tone, for cream and paper backgrounds. */
+.gl-light {
+  color: #0b1322;
+}
+
+.gl-light .gl-globe {
+  stroke: rgba(27, 26, 31, 0.2);
+}
+
+.gl-light .gl-an,
+.gl-light .gl-wonders {
+  color: #8e2a5c;
+}
+
+.gl-light .gl-rule span {
+  background: rgba(138, 119, 84, 0.55);
+}
+
+.gl-light .gl-byline {
+  color: #8a7754;
+}
+
 /* On a phone a two-part byline takes two even lines instead of wrapping
    mid-phrase. */
 @media (max-width: 560px) {

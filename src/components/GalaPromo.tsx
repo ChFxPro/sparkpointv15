@@ -8,6 +8,7 @@ import { useReducedMotion } from 'motion/react';
 import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
 import { Sparkmark } from './Sparkmark';
+import { GalaLockup } from './GalaLockup';
 import { GALA_TICKETS_URL, GALA_TICKET_PRICE, GALA_VENUE } from '../data/events';
 
 // Homepage promo for An Atlas of Wonders, the SparkPoint Gala (December 11,
@@ -96,9 +97,9 @@ export function GalaPromoCard() {
       >
         <article className="gpromo-pass">
           <header className="gpromo-band">
-            <h2 className="gpromo-brand">
+            <h2 className="gpromo-brand" aria-label="An Atlas of Wonders, the SparkPoint Gala">
               <Sparkmark size="24px" />
-              An Atlas of Wonders
+              SparkPoint
             </h2>
             <p className="gpromo-class">
               <small>Boarding pass</small>
@@ -107,13 +108,16 @@ export function GalaPromoCard() {
           </header>
 
           <div className="gpromo-main">
+            <div className="gpromo-title">
+              <GalaLockup tone="light" className="gpromo-lockup" />
+            </div>
             <div className="gpromo-intro">
               <div className="gpromo-window" aria-hidden="true">
                 <img src={`${ASSETS}hero-wing-800.webp`} alt="" width={800} height={533} loading="lazy" />
                 <span className="gpromo-shade" />
               </div>
               <div>
-                <p className="gpromo-kicker">The SparkPoint Gala · Live travel auction</p>
+                <p className="gpromo-kicker">Live travel auction · Dec 11</p>
                 <p className="gpromo-headline">
                   See the world. <em>Strengthen home.</em>
                 </p>
