@@ -84,8 +84,21 @@ sale; before that it was `https://yoursparkpoint.org/events/sparkpoint-gala`).
 ## The newsletter (Squarespace)
 
 There are two drafts in Squarespace Email Campaigns, built from the same
-section images on a midnight background (Style → Email Background `#0B1322`,
-text blocks set to ivory `#F7F1E5`):
+section images on a midnight background (Style → Email Background `#0B1322`).
+Squarespace emails can't load Fraunces, so the live text uses the closest
+built-in match:
+
+- Style → Font Pack **Book Serif**, Font Sizes one step up from the default.
+- The note: "Friends," as an italic Medium Heading, body in soft ivory
+  `#E6DFD2`, side padding 35 px (lines up with the copy inside the images) and
+  bottom padding 23 px. A text block takes one color, so the greeting can't be
+  brass on its own.
+- The "Picture it…" bridge line: centered italic in soft brass `#E8D3A4`, to
+  echo the hero's "See the world. Strengthen home."
+- Buttons stay sans (brass `#D9B56A`, midnight text), like the buttons drawn in
+  the images.
+
+The two drafts:
 
 - **Attendees**: "You're invited: The SparkPoint Gala, December 11". No sponsor
   section. Uses the on-sale note below, with the preview "Tickets are on sale:
