@@ -196,14 +196,29 @@
   gap: 8px 14px;
 }
 
-.gala-hero h1 {
-  margin-top: 22px;
-  font-size: clamp(3.6rem, 9.5vw, 8rem);
-  line-height: 0.9;
+/* The evening's name, An Atlas of Wonders (GalaLockup). */
+.gala-hero-lockup {
+  margin-top: 6px;
+  font-size: clamp(3.4rem, 10vw, 8.4rem);
 }
 
-.gala-hero h1 em {
-  display: block;
+.gala-hero-tagline {
+  margin-top: 38px;
+  text-wrap: balance;
+  color: var(--gala-ivory);
+  font-family: var(--gala-display);
+  font-size: clamp(1.45rem, 2.6vw, 2rem);
+  font-style: italic;
+  font-variation-settings: 'opsz' 144, 'SOFT' 100;
+  text-shadow: 0 2px 24px rgba(11, 19, 34, 0.6);
+}
+
+.gala-hero-tagline em {
+  color: var(--gala-brass);
+}
+
+.gala-hero-tagline + .gala-hero-lede {
+  margin-top: 14px;
 }
 
 .gala-hero-lede {
