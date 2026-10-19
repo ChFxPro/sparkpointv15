@@ -4,6 +4,7 @@ import '@fontsource-variable/fraunces';
 
 import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
+import { POST_SESSION_ID, isPostSessionActive } from '../pages/RuralHealthPostSession';
 
 // Homepage promo for the 2026 WNC Regional Rural Health Convening — now a recap card
 // for the October 1 event, pointing at the convening page's past-event recap. The palette,
@@ -28,11 +29,13 @@ const PAPER_GRAIN =
 
 // The convening took place October 1, 2026. The card stays up as a recap for a month
 // afterward, then retires; move this date if the recap should run longer (for example
-// once photos or the video land on the convening page).
+// once photos or the video land on the convening page). While the Nov 5 virtual
+// post-convening session is still ahead, the card holds on until it is over, so its
+// registration link never disappears before the session.
 const PROMO_EXPIRES = new Date('2026-11-01T00:00:00-04:00');
 
 export function isRuralHealthPromoActive(now = new Date()) {
-  return now < PROMO_EXPIRES;
+  return now < PROMO_EXPIRES || isPostSessionActive(now);
 }
 
 const facts = [
@@ -42,6 +45,10 @@ const facts = [
 ];
 
 export function RuralHealthPromoCard() {
+  // While the Nov 5 virtual post-convening session is ahead, point attendees at its
+  // registration band on the recap page. It drops out on its own after Nov 5 ET.
+  const showPostSession = isPostSessionActive();
+
   return (
     <div className="group relative h-full pt-9 md:pt-11">
       <div
@@ -143,6 +150,28 @@ export function RuralHealthPromoCard() {
           </div>
 
           <div className="flex flex-col gap-3">
+            {showPostSession && (
+              <Link
+                to={`${RURAL_HEALTH_CONVENING_PATH}#${POST_SESSION_ID}`}
+                className="inline-flex flex-wrap items-center gap-x-2.5 gap-y-1 self-start px-2 py-1.5 text-[0.84rem] font-bold leading-snug transition-colors duration-150 hover:bg-[rgba(167,127,35,0.18)]"
+                style={{
+                  color: FOREST,
+                  border: '1px solid rgba(167, 127, 35, 0.55)',
+                  background: 'rgba(167, 127, 35, 0.1)',
+                }}
+              >
+                <span
+                  className="px-1.5 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.13em]"
+                  style={{ color: PAPER, background: FOREST }}
+                >
+                  Up next
+                </span>
+                <span>
+                  Attendees: register for the Nov 5 virtual session
+                  <ArrowRight size={15} aria-hidden="true" className="ml-1.5 inline align-[-2px]" />
+                </span>
+              </Link>
+            )}
             <Link
               to={RURAL_HEALTH_CONVENING_PATH}
               className="inline-flex min-h-[54px] w-full items-center justify-center gap-3 rounded-[1px] border-2 border-[#2f4a3c] bg-[#2f4a3c] px-8 text-[0.95rem] font-extrabold text-[#f5efdd] shadow-lg transition-[transform,background-color,box-shadow] duration-150 hover:-translate-y-0.5 hover:bg-[#20362c] hover:shadow-xl"

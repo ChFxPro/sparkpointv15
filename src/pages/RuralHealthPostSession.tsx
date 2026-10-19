@@ -3,10 +3,12 @@ import { Sparkmark } from '../components/Sparkmark';
 
 // The virtual post-convening session (Thursday, November 5, 2026, 10 a.m. ET) for people
 // who attended on October 1. Registration is on Zoom. The band and the hero's "Up next"
-// link both retire on their own once the session day is over.
+// link both retire on their own once the session day is over. The homepage recap card
+// (src/components/RuralHealthPromo.tsx) and the attendee photo page reuse
+// isPostSessionActive and the register URL from here, so the date lives in one place.
 
 export const POST_SESSION_ID = 'post-convening';
-const POST_SESSION_REGISTER_URL =
+export const POST_SESSION_REGISTER_URL =
   'https://us02web.zoom.us/meeting/register/06fVIHohSyCuvisOJLrSTg#/registration';
 const POST_SESSION_EXPIRES = new Date('2026-11-06T00:00:00-05:00');
 
@@ -29,6 +31,26 @@ export function PostSessionHeroLink() {
       <span className="rh-next-link-tag">Up next</span>
       <span>Virtual post-convening session · Thu, Nov 5</span>
       <ArrowRight aria-hidden="true" size={16} />
+    </a>
+  );
+}
+
+// A compact "Up next" link straight to Zoom registration, for pages that don't carry the
+// full band (the attendee photo page).
+export function PostSessionRegisterLink() {
+  if (!isPostSessionActive()) return null;
+
+  return (
+    <a
+      className="rh-next-link"
+      href={POST_SESSION_REGISTER_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <span className="rh-next-link-tag">Up next</span>
+      <span>Register for the Nov 5 virtual session</span>
+      <ExternalLink aria-hidden="true" size={15} />
+      <span className="sr-only">(opens Zoom registration in a new tab)</span>
     </a>
   );
 }
