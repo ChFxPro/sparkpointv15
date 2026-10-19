@@ -109,23 +109,32 @@ function ScrollToTop() {
   useEffect(() => {
     document.documentElement.lang = 'en';
     // A link into a section (e.g. the homepage card's /rural-health-convening#post-convening)
-    // lands on that section, not the top. Route pages are lazy, so give the target a moment
-    // to mount; if it never appears, the page simply stays at the top.
+    // lands on that section, not the top. Route pages are lazy, so watch for the target to
+    // mount (up to 10 s); if it never appears, the page simply stays at the top.
     window.scrollTo(0, 0);
-    const id = hash ? decodeURIComponent(hash.slice(1)) : '';
+    let id = hash.slice(1);
+    try {
+      id = decodeURIComponent(id);
+    } catch {
+      // A malformed escape (e.g. "#%") — look the raw fragment up instead.
+    }
     if (!id) return;
-    let tries = 0;
-    let timer: number | undefined;
     const seek = () => {
       const target = document.getElementById(id);
-      if (target) {
-        target.scrollIntoView();
-      } else if (tries++ < 20) {
-        timer = window.setTimeout(seek, 100);
-      }
+      if (target) target.scrollIntoView();
+      return Boolean(target);
     };
-    seek();
-    return () => window.clearTimeout(timer);
+    if (seek()) return;
+    const observer = new MutationObserver(() => {
+      if (seek()) stop();
+    });
+    const timer = window.setTimeout(() => stop(), 10000);
+    function stop() {
+      observer.disconnect();
+      window.clearTimeout(timer);
+    }
+    observer.observe(document.body, { childList: true, subtree: true });
+    return stop;
   }, [pathname]); // Not keyed on hash: an in-page hash change is the browser's (or the page's) job.
 
   return null;

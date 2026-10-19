@@ -29,11 +29,13 @@ const PAPER_GRAIN =
 
 // The convening took place October 1, 2026. The card stays up as a recap for a month
 // afterward, then retires; move this date if the recap should run longer (for example
-// once photos or the video land on the convening page).
+// once photos or the video land on the convening page). While the Nov 5 virtual
+// post-convening session is still ahead, the card holds on until it is over, so its
+// registration link never disappears before the session.
 const PROMO_EXPIRES = new Date('2026-11-01T00:00:00-04:00');
 
 export function isRuralHealthPromoActive(now = new Date()) {
-  return now < PROMO_EXPIRES;
+  return now < PROMO_EXPIRES || isPostSessionActive(now);
 }
 
 const facts = [
