@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Gala ticket</title>
+<style>
+  @font-face { font-family: 'Fraunces'; src: url('{{FRAUNCES}}/fraunces-latin-wght-normal.woff2') format('woff2'); font-weight: 100 900; font-style: normal; }
+  @font-face { font-family: 'Fraunces'; src: url('{{FRAUNCES}}/fraunces-latin-wght-italic.woff2') format('woff2'); font-weight: 100 900; font-style: italic; }
+  @font-face { font-family: 'Manrope'; src: url('{{MANROPE}}/manrope-latin-700-normal.woff2') format('woff2'); font-weight: 700; }
+  @font-face { font-family: 'Manrope'; src: url('{{MANROPE}}/manrope-latin-800-normal.woff2') format('woff2'); font-weight: 800; }
+
+  :root {
+    --midnight: #0b1322; --midnight-2: #14213a; --brass: #d9b56a; --brass-light: #f1d9a0;
+    --ivory: #f7f1e5; --paper: #fbf6ea; --ink: #1b1a1f; --label: #8a7754; --plum: #8e2a5c; --pink: #e03694;
+    --display: 'Fraunces', Georgia, serif; --sans: 'Manrope', system-ui, sans-serif; --mono: 'SF Mono', Menlo, ui-monospace, monospace;
+    --photo-h: 72%;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1080px; }
+  body { position: relative; overflow: hidden; color: var(--ivory); background: var(--midnight-2); font-family: var(--sans); }
+
+  .photo { position: absolute; inset: 0; overflow: hidden; }
+  .photo img { width: 100%; height: var(--photo-h); object-fit: cover; object-position: 72% 40%; }
+  .photo::after { content: ''; position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(11,19,34,.45) 0%, transparent 18%, transparent calc(var(--photo-h) * .55), rgba(20,33,58,.88) calc(var(--photo-h) * .9), var(--midnight-2) var(--photo-h), var(--midnight-2) 100%),
+      linear-gradient(90deg, rgba(11,19,34,.86) 0%, rgba(11,19,34,.5) 38%, rgba(11,19,34,.06) 70%, transparent 100%); }
+
+  .frame { position: absolute; inset: 56px; display: flex; flex-direction: column; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; color: var(--brass); font-family: var(--mono); font-size: 18px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
+  .topbar span { display: inline-flex; align-items: center; gap: .6em; }
+  .topbar img { width: 1.9em; height: 1.9em; }
+
+  .headline { margin-top: 40px; font-family: var(--display); font-weight: 400; font-size: 168px; line-height: .86; letter-spacing: -.02em; text-shadow: 0 4px 30px rgba(11,19,34,.5); }
+  .headline em { color: var(--brass); font-style: italic; }
+  .sub { margin-top: 22px; font-family: var(--display); font-size: 46px; font-weight: 500; }
+  .when { margin-top: 14px; font-size: 30px; font-weight: 800; }
+  .when b { color: var(--brass-light); }
+  .where { margin-top: 8px; font-size: 26px; font-weight: 700; color: rgba(247,241,229,.82); }
+  .spacer { flex: 1; }
+
+  .pass-wrap { position: relative; }
+  .pass { display: grid; grid-template-columns: 1fr 220px; color: var(--ink); filter: drop-shadow(0 30px 50px rgba(0,0,0,.45)); font-size: 19px; }
+  .pass-main, .pass-stub { background: repeating-radial-gradient(circle at 0% 100%, transparent 0 18px, rgba(122,96,52,.05) 18px 19px), var(--paper); }
+  .pass-main { border-radius: 22px 0 0 22px; -webkit-mask: radial-gradient(circle at 100% 0, transparent 16px, #000 17px) top / 100% 51% no-repeat, radial-gradient(circle at 100% 100%, transparent 16px, #000 17px) bottom / 100% 51% no-repeat; }
+  .pass-stub { display: grid; grid-template-rows: auto 1fr; border-left: 3px dashed #d3c39e; border-radius: 0 22px 22px 0; -webkit-mask: radial-gradient(circle at 0 0, transparent 16px, #000 17px) top / 100% 51% no-repeat, radial-gradient(circle at 0 100%, transparent 16px, #000 17px) bottom / 100% 51% no-repeat; }
+  .band { display: flex; align-items: center; justify-content: space-between; gap: 1em; padding: .85em 1.4em; min-height: 3.6em; color: var(--ivory); background: radial-gradient(ellipse at 15% 0%, rgba(217,181,106,.22), transparent 60%), linear-gradient(120deg, #1b2a48, var(--midnight)); }
+  .brand { display: inline-flex; align-items: center; gap: .55em; font-family: var(--display); font-size: 1.3em; font-weight: 500; }
+  .brand img { width: 1.25em; height: 1.25em; }
+  .cls { display: grid; justify-items: end; }
+  .cls small, .band-stub { color: rgba(247,241,229,.62); font-family: var(--mono); font-size: .55em; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+  .cls b { background: linear-gradient(100deg, #f6e2a8, #c9a24f 40%, #fff4d1 55%, #b58b3a 75%); -webkit-background-clip: text; color: transparent; font-family: var(--display); font-size: 1.15em; font-style: italic; font-weight: 600; }
+  .body { padding: 1.1em 1.4em; }
+  .route { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .8em; }
+  .route strong { display: block; color: var(--midnight); font-family: var(--display); font-size: 3.2em; font-weight: 600; line-height: .95; }
+  .route span, .fields dt, .gate { display: block; color: var(--label); font-family: var(--mono); font-size: .52em; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+  .route span { margin-top: .4em; }
+  .route div:last-child { text-align: right; }
+  .route svg { width: 100%; height: auto; overflow: visible; }
+  .arc { fill: none; stroke: var(--pink); stroke-dasharray: 3 6; stroke-linecap: round; stroke-width: 2; }
+  .route circle { fill: var(--pink); }
+  .plane { fill: var(--midnight); stroke: var(--midnight); stroke-linejoin: round; }
+  .fields { display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: .6em 1em; margin-top: 1em; padding-top: .9em; border-top: 1px solid #e4d8bd; }
+  .fields dd { margin-top: .25em; font-family: var(--mono); font-size: .95em; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
+  .gate { margin-top: 1em; padding-top: .8em; border-top: 1px dashed #e4d8bd; color: #a8956d; }
+  .band-stub { display: flex; justify-content: space-between; padding: 1.1em; }
+  .stub-body { display: grid; align-content: center; justify-items: center; gap: .7em; padding: .9em 1.1em; text-align: center; }
+  .admit { color: var(--midnight); font-family: var(--display); font-size: 1.5em; font-weight: 600; line-height: 1; }
+  .admit em { display: block; margin-top: .2em; color: var(--plum); font-size: .7em; }
+  .stub-body img { width: 100%; height: auto; opacity: .88; }
+
+  .stamp { position: absolute; z-index: 3; top: -82px; right: -30px; width: 136px; height: 136px; transform: rotate(-12deg); filter: drop-shadow(0 8px 14px rgba(0,0,0,.35)); overflow: visible; }
+  .stamp circle { fill: #f6e7c1; stroke: var(--plum); stroke-width: 2.4; }
+  .stamp circle + circle { fill: none; stroke-width: 1.4; }
+  .stamp text { fill: var(--plum); font-family: var(--mono); font-weight: 800; text-anchor: middle; }
+  .stamp .ring { font-size: 8px; letter-spacing: 1.2px; }
+  .stamp .day { font-family: var(--display); font-size: 14px; }
+  .stamp .yr { font-size: 9px; letter-spacing: 1.5px; }
+  .sub em { color: var(--brass); font-style: italic; font-weight: 400; }
+
+  /* An Atlas of Wonders lockup; --lk is the size of ATLAS. */
+  .lk { --lk: 42pt; position: relative; display: inline-grid; justify-items: center; font-size: var(--lk); line-height: 1; text-align: center; color: #f7f1e5; font-family: 'Fraunces', Georgia, serif; }
+  .lk > * { position: relative; margin: 0; }
+  .lk .lk-globe { position: absolute; top: 50%; left: 50%; height: 122%; aspect-ratio: 1; translate: -50% -50%; fill: none; stroke: rgba(241,217,160,.3); stroke-width: .7; }
+  .lk-an { color: #f1d9a0; font-size: .24em; font-style: italic; font-weight: 400; margin-bottom: .08em !important; }
+  .lk-atlas { margin-right: -.14em !important; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+  .lk-won { margin-top: .03em !important; color: #d9b56a; font-size: .62em; font-style: italic; font-weight: 400; letter-spacing: -.01em; }
+  .lk-rule { display: flex; align-items: center; gap: .7em; margin-top: .85em !important; font-size: .16em; }
+  .lk-rule i { width: 4.5em; height: 1px; background: rgba(241,217,160,.6); }
+  .lk-rule img { width: 1.3em; height: 1.3em; }
+  .lk-by { margin-top: .7em !important; color: #f1d9a0; font-family: 'Manrope', system-ui, sans-serif; font-size: max(.1em, var(--lk-by-min, 0px)); font-weight: 800; letter-spacing: .34em; margin-right: -.34em !important; text-transform: uppercase; }
+
+  :root { --head: 128px; --sub: 42px; --kicker: 19px; --head-gap: 26px; }
+  .copy { display: grid; justify-items: center; align-self: flex-start; text-align: center; margin-top: var(--head-gap); }
+  .copy .lk { --lk: calc(var(--head) * .9); --lk-by-min: calc(var(--kicker) * .85); }
+  .copy .cta { align-self: center; }
+  .msg { margin-top: calc(var(--head) * .3); color: var(--brass-light); font-family: var(--display); font-size: calc(var(--sub) * 1.15); font-style: italic; font-weight: 400; line-height: 1; }
+  .msg em { color: var(--brass); }
+</style>
+</head>
+<body>
+  <div class="photo"><img src="{{PUBLIC}}/assets/events/gala/hero-wing-2400.webp" alt="" /></div>
+  <div class="frame">
+    <div class="topbar">
+      <span><img src="{{PUBLIC}}/assets/brand/sparkmark-256.webp" alt="" />Your ticket</span>
+      <span>Live travel auction</span>
+    </div>
+    <div class="copy">
+    <div class="lk" role="img" aria-label="An Atlas of Wonders, the SparkPoint Gala"><svg class="lk-globe" viewBox="0 0 200 200"><circle cx="100" cy="100" r="96"/><ellipse cx="100" cy="100" rx="64" ry="96"/><ellipse cx="100" cy="100" rx="30" ry="96"/><ellipse cx="100" cy="100" rx="96" ry="40"/><path d="M100 4v192M4 100h192"/></svg><p class="lk-an">An</p><p class="lk-atlas">Atlas</p><p class="lk-won">of Wonders</p><p class="lk-rule"><i></i><img src="{{PUBLIC}}/assets/brand/sparkmark-256.webp" alt=""><i></i></p><p class="lk-by">The SparkPoint Gala</p></div>
+      <p class="msg">Admit <em>One</em></p>
+    <p class="when">Friday, December 11, 2026 <b>·</b> 6:00 p.m.</p>
+    <p class="where">Connestee Falls Country Club · Brevard, NC</p>
+    </div>
+    <div class="spacer"></div>
+
+    <div class="pass-wrap">
+      <div class="pass">
+        <div class="pass-main">
+          <div class="band">
+            <span class="brand"><img src="{{PUBLIC}}/assets/brand/sparkmark-256.webp" alt="" />An Atlas of Wonders</span>
+            <span class="cls"><small>Boarding pass</small><b>First class</b></span>
+          </div>
+          <div class="body">
+            <div class="route">
+              <div><strong>TCN</strong><span>Transylvania County</span></div>
+              <svg viewBox="0 0 180 40">
+                <path class="arc" d="M6 34 Q90 -6 174 34" />
+                <circle cx="6" cy="34" r="3" /><circle cx="174" cy="34" r="3" />
+                <g transform="translate(118 16) rotate(62) scale(0.62) translate(-12 -12)">
+                  <path class="plane" d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                </g>
+              </svg>
+              <div><strong>ANY</strong><span>Anywhere</span></div>
+            </div>
+            <dl class="fields">
+              <div><dt>Date</dt><dd>11 Dec 2026</dd></div>
+              <div><dt>Boarding</dt><dd>6:00 p.m.</dd></div>
+              <div><dt>Fare</dt><dd>$100</dd></div>
+              <div><dt>Seat</dt><dd>Yours</dd></div>
+            </dl>
+            <p class="gate">Gate: Connestee Falls Country Club · 98 Overlook Clubhouse Dr, Brevard</p>
+          </div>
+        </div>
+        <div class="pass-stub">
+          <div class="band band-stub"><span>SPK 1211</span></div>
+          <div class="stub-body">
+            <p class="admit">Admit one <em>Live travel auction</em></p>
+            <img src="{{PUBLIC}}/assets/events/gala/pass-pdf417.svg" alt="" />
+          </div>
+        </div>
+      </div>
+      <svg class="stamp" viewBox="0 0 100 100">
+        <defs><path id="ring" d="M50 50 m-36 0 a36 36 0 1 1 72 0 a36 36 0 1 1 -72 0" /></defs>
+        <circle cx="50" cy="50" r="46" /><circle cx="50" cy="50" r="28" />
+        <text class="ring"><textPath href="#ring" startOffset="22%">ATLAS OF WONDERS · ADMITTED ·</textPath></text>
+        <text x="50" y="49" class="day">DEC 11</text><text x="50" y="62" class="yr">2026</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>
