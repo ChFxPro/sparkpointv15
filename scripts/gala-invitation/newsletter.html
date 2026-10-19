@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>The SparkPoint Gala · Newsletter sections</title>
+<title>An Atlas of Wonders · Newsletter sections</title>
 <!--
   The Gala newsletter, cut into sections. render.mjs screenshots each
   <section data-slice> on its own (600 CSS px wide, at 2x) so the newsletter
@@ -63,14 +63,14 @@
   <header class="hero">
     <img src="../../public/assets/events/gala/hero-wing-1400.webp" alt="" />
     <div class="hero-in">
-      <p class="kicker mono"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />The SparkPoint Gala</p>
+      <p class="kicker mono"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />An Atlas of Wonders</p>
       <h1>You&rsquo;re <em>invited.</em></h1>
       <p class="hero-sub">See the world. Strengthen home.</p>
     </div>
     <svg class="stamp" viewBox="0 0 100 100" style="top: 26px; right: 28px; transform: rotate(-12deg);">
       <defs><path id="ring" d="M50 50 m-36 0 a36 36 0 1 1 72 0 a36 36 0 1 1 -72 0" /></defs>
       <circle cx="50" cy="50" r="46" /><circle cx="50" cy="50" r="28" />
-      <text class="ring"><textPath href="#ring" startOffset="25%">SPARKPOINT GALA · ADMITTED ·</textPath></text>
+      <text class="ring"><textPath href="#ring" startOffset="33%">ATLAS GALA · ADMITTED ·</textPath></text>
       <text x="50" y="49" class="day">DEC 11</text><text x="50" y="62" class="yr">2026</text>
     </svg>
   </header>
@@ -79,13 +79,12 @@
 <!-- 02 · Invitation card with the boarding pass (animated: the plane flies the route) -->
 <section class="slice" data-slice="02-boarding-pass" data-anim="plane" style="padding: 26px 0 30px;">
   <main class="card">
-    <p class="request">SparkPoint requests the pleasure of your company at</p>
-    <h2>The SparkPoint Gala</h2>
-    <div class="rule"><span></span><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" /><span></span></div>
+    <p class="request">SparkPoint invites you to join us for</p>
+    <h2 class="lockup"><img src="assets/atlas-of-wonders-lockup-for-light-backgrounds.png" alt="An Atlas of Wonders: A SparkPoint Gala" /></h2>
     <div class="pass">
       <div class="pass-main">
         <div class="band">
-          <span class="brand"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />The SparkPoint Gala</span>
+          <span class="brand"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />An Atlas of Wonders</span>
           <span class="cls"><small class="mono">Boarding pass</small><b>First class</b></span>
         </div>
         <div class="pass-body">
@@ -211,7 +210,7 @@
     ? 'Eight journeys go up for bid with a professional live auctioneer. Pick your next adventure.'
     : 'Eight journeys around the world go up for bid with a professional live auctioneer. The destinations are revealed soon.');
   const pad = (text, n) => text.toUpperCase().slice(0, n).padEnd(n, ' ');
-  const rowsText = [['SPARKPOINT GALA', 'DEC 11', 'gala']];
+  const rowsText = [['ATLAS OF WONDERS', 'DEC 11', 'gala']];
   for (let i = 0; i < 8; i += 1) {
     const trip = trips[i];
     rowsText.push([trip ? (trip.board || trip.destination || '') : 'REVEALING SOON', 'AT AUCTION', '']);

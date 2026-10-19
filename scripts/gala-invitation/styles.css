@@ -48,6 +48,9 @@
   .card::before { content: ''; position: absolute; inset: 9px; border: 1px solid #d9c9a3; border-radius: 3px; pointer-events: none; }
   .request { font-family: var(--display); font-style: italic; font-size: 19px; color: var(--plum); }
   .card h2 { margin-top: 6px; font-family: var(--display); font-size: 40px; font-weight: 600; letter-spacing: -.01em; color: var(--midnight); }
+  /* The event's name is the Atlas of Wonders lockup (transparent PNG, globe included). */
+  .card h2.lockup { display: flex; justify-content: center; margin: -10px -12px -14px; }
+  .card h2.lockup img { width: 500px; height: auto; }
   .card .lede { max-width: 440px; margin: 10px auto 0; font-size: 15px; line-height: 1.6; color: var(--muted); }
   .rule { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 22px auto 22px; width: 260px; }
   .rule span { flex: 1; height: 1px; background: #cdb98d; }
