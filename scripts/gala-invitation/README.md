@@ -9,10 +9,20 @@ but not coded HTML emails.
 npm run invite:gala
 ```
 
-That writes `output/gala-invitation/sparkpoint-gala-invitation-save-the-date.jpg`
-(or `…-tickets.jpg` once tickets are on sale): 1200 px wide, shown at 600 px in
-email so it stays sharp on phones, about 0.5 MB. `output/` is git-ignored, so
-re-run the command whenever you need the file.
+That writes two things into `output/gala-invitation/` (git-ignored, so re-run
+the command whenever you need the files):
+
+- `sparkpoint-gala-invitation-save-the-date.jpg` (or `…-tickets.jpg` once
+  tickets are on sale): the whole invitation as one image, 1200 px wide, shown
+  at 600 px, about 0.5 MB. Use it in Outlook and for online promotion.
+- `newsletter/`: the newsletter version (`newsletter.html`) cut into one image
+  per section, so the Squarespace email can link each one to its part of the
+  Gala page. Two are looping GIFs (the plane flies the boarding pass route; the
+  departures board's letters flip into place). Their first frame is the finished
+  picture, because desktop Outlook shows only that frame. About 0.7 MB in all;
+  the command warns if a GIF passes 1 MB or the set passes 2.5 MB.
+
+Both templates share `styles.css`.
 
 ## Updating it
 
@@ -70,6 +80,91 @@ tickets are on sale).
 3. Right-click the image → **Edit Alt Text** and paste the alt text below.
 4. If Outlook shows it oversized, right-click → **Size and Position** and set
    the width to 600 px (keep the aspect ratio locked).
+
+## The newsletter (Squarespace)
+
+There are two drafts in Squarespace Email Campaigns, built from the same
+section images on a midnight background (Style → Email Background `#0B1322`,
+text blocks set to ivory `#F7F1E5`):
+
+- **Attendees**: "You're invited: The SparkPoint Gala, December 11". No sponsor
+  section.
+- **Sponsor direct**: "Come aboard as a SparkPoint Gala travel partner". Adds the
+  seat map and a "Request early boarding" button.
+
+The order, with each image's link (all on
+`https://yoursparkpoint.org/events/sparkpoint-gala` unless noted):
+
+| Block | Images (link) | Version |
+| --- | --- | --- |
+| Text | The note (see below) | both, worded per version |
+| Images | `01-hero` (page), `02-boarding-pass.gif` (page) | both |
+| Text | "Picture it: a first-class evening at home in Transylvania County, and a live auction of eight trips around the world. Tap any part of this invitation to explore it on the Gala page." | both |
+| Images | `03-departures.gif` (`#routes-title`), `04-passport` (`#passport`), `05-luggage-tags` (`#tags-title`), `06-postcard` (`#return-title`) | both |
+| Images | `08-your-seat` (`#close-title`) | both |
+| Images | `07-travel-partners` (the Monday sponsor form) | sponsor only, under `08` |
+| Button | "Get gala updates" (page) / "Request early boarding" (Monday sponsor form) | attendees / sponsor |
+
+The Monday sponsor form is
+`https://forms.monday.com/forms/8bc904c73a179d5be96939ed2c05b62a`
+(`GALA_PARTNER_FORM_URL` in `src/data/events.ts`).
+
+Squarespace quirks worth knowing: an Images block holds at most four images;
+images inside one block stack with no gap, but blocks have padding, so the
+image blocks have their bottom padding set to 0 (Spacing → Padding between
+sections → custom); and each image's link and alt text sit behind the arrow
+next to it in the block's image list.
+
+**To update it** after changing `invitation.config.json`: re-run the command,
+then in each draft open the image's block → Manage images, add the new file,
+drag it into place, remove the old one, and re-enter its link and alt text.
+The board (`03`), boarding pass (`02`), and closing (`08`) are the ones the
+settings change.
+
+**Alt text used**
+
+- Hero: You're invited to the SparkPoint Gala, Friday, December 11, 2026. See
+  the world. Strengthen home.
+- Boarding pass: SparkPoint requests the pleasure of your company at The
+  SparkPoint Gala. A first-class boarding pass: Transylvania County to
+  Anywhere, Friday, December 11, 2026, boarding at 6 p.m. Venue to be
+  announced.
+- Departures: The travel auction: eight departures, one home base. A
+  departures board lists the SparkPoint Gala on December 11 and eight trips
+  going up for bid with a live auctioneer, destinations revealed soon.
+- Passport: Your passport to the auction: 8 travel experiences, 3 years to
+  travel, no blackout dates, and you can match the winning bid.
+- Luggage tags: Where will yours take you? Five leather luggage tags:
+  anniversary, milestone birthday, honeymoon, family vacation, bucket list.
+- Postcard: Travel that gives back to our community. A postcard reading
+  Greetings from HOME shows a concept rendering of the Transylvania Resilience
+  Hub, which a portion of every travel package sold at the Gala helps bring to
+  life.
+- Your seat: Your seat is waiting. Venue, tickets and destinations coming soon.
+- Travel partners: Travel partners: your brand, cleared for takeoff. A cabin
+  seat map with First Class, Business and Main Cabin sponsor seats. Seat map
+  opening soon.
+
+Update the venue, board, and closing alt text along with the images.
+
+**Sponsor-direct copy**
+
+- Subject: Come aboard as a SparkPoint Gala travel partner
+- Preview: Put your brand on board for December 11: an evening of connection
+  and a live travel auction that gives back to Transylvania County.
+- Note:
+
+  > Friends,
+  >
+  > On Friday, December 11, at 6 p.m., SparkPoint hosts the SparkPoint Gala:
+  > an evening of connection and a live auction of eight travel experiences,
+  > with a portion of every trip coming home to help bring the Transylvania
+  > Resilience Hub to life. We're inviting local businesses to come aboard as
+  > travel partners, through sponsorships and in-kind support for food, drink,
+  > and entertainment. Take a look at the evening below, then request early
+  > boarding and we'll find the seat that fits you.
+
+The attendee draft uses the subject, preview, and note below.
 
 ## Email copy
 

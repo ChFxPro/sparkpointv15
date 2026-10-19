@@ -41,6 +41,43 @@ try {
   const file = path.join(outDir, `sparkpoint-gala-invitation-${stamp}.jpg`);
   const info = await sharp(png).jpeg({ quality: 80, progressive: true, mozjpeg: true }).toFile(file);
   console.log(`✓ ${path.relative(root, file)}  ${info.width}×${info.height}  ${Math.round(info.size / 1024)} KB`);
+
+  // The newsletter: newsletter.html cut into one image per <section data-slice>,
+  // so the email can put real text and buttons between them. Sections marked
+  // data-anim become looping GIFs whose first frame is the finished picture
+  // (desktop Outlook shows only that frame).
+  const sliceDir = path.join(outDir, 'newsletter');
+  await mkdir(sliceDir, { recursive: true });
+  await page.goto('file://' + path.join(here, 'newsletter.html'), { waitUntil: 'networkidle0' });
+  await page.evaluate(() => document.fonts.ready);
+  const frameCounts = await page.evaluate(() => window.__frames);
+  let total = 0;
+  for (const el of await page.$$('[data-slice]')) {
+    const { name, anim } = await el.evaluate((node) => ({ name: node.dataset.slice, anim: node.dataset.anim }));
+    let out;
+    if (!anim) {
+      out = path.join(sliceDir, `${name}.jpg`);
+      await sharp(await el.screenshot({ type: 'png' })).jpeg({ quality: 80, progressive: true, mozjpeg: true }).toFile(out);
+    } else {
+      const n = frameCounts[anim];
+      const frames = [];
+      for (let k = 0; k < n; k += 1) {
+        await page.evaluate((a, i) => window.__setFrame(a, i), anim, k);
+        frames.push(await el.screenshot({ type: 'png' }));
+      }
+      await page.evaluate((a) => window.__setFrame(a, 0), anim);
+      // Hold the finished frame, run the animation, hold its last frame.
+      const delay = frames.map((_, i) => (i === 0 ? 2600 : i === n - 1 ? 2200 : anim === 'flap' ? 90 : 70));
+      out = path.join(sliceDir, `${name}.gif`);
+      await sharp(frames, { join: { animated: true } }).gif({ delay, loop: 0, colours: 128, effort: 10, dither: 0.6 }).toFile(out);
+    }
+    const meta = await sharp(out, { animated: true }).metadata();
+    const kb = Math.round((await readFile(out)).length / 1024);
+    total += kb;
+    const flag = anim && kb > 1024 ? '  ⚠ over 1 MB' : '';
+    console.log(`✓ ${path.relative(root, out)}  ${meta.width}×${meta.pageHeight || meta.height}${anim ? `  ${meta.pages} frames` : ''}  ${kb} KB${flag}`);
+  }
+  console.log(`  newsletter total ${Math.round(total / 102.4) / 10} MB${total > 2560 ? '  ⚠ over 2.5 MB' : ''}`);
 } finally {
   await browser.close();
 }
