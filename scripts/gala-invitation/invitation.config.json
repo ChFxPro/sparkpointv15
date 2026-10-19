@@ -1,0 +1,19 @@
+{
+  "_readme": "Edit this file, then run `npm run invite:gala`. Images land in output/gala-invitation/. See README.md in this folder.",
+
+  "tickets": {
+    "live": false,
+    "price": "",
+    "url": ""
+  },
+
+  "venue": {
+    "name": "",
+    "short": "",
+    "place": ""
+  },
+
+  "trips": [],
+
+  "pageUrl": "yoursparkpoint.org/events/sparkpoint-gala"
+}
