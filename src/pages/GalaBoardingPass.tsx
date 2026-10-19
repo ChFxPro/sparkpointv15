@@ -3,6 +3,7 @@ import { useReducedMotion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router';
 import { Sparkmark } from '../components/Sparkmark';
+import { GALA_TICKETS_URL, GALA_TICKET_PRICE, GALA_TICKET_PRICE_LABEL, GALA_VENUE } from '../data/events';
 
 // The closing call to action, styled as a first-class boarding pass. On a
 // mouse or trackpad the pass tilts toward the pointer with a moving foil
@@ -20,7 +21,7 @@ const FIELDS = [
   ['Flight', 'SPK 1211'],
   ['Date', '11 Dec 2026'],
   ['Boarding', '6:00 p.m.'],
-  ['Gate', 'TBA'],
+  ['Fare', `$${GALA_TICKET_PRICE}`],
   ['Seat', 'Yours'],
   ['Class', 'First'],
   ['Zone', 'Everyone'],
@@ -145,7 +146,7 @@ export function GalaBoardingPass() {
             </dl>
 
             <p className="gala-pass-note" aria-hidden="true">
-              Destinations revealed before boarding · No blackout dates · Travel that gives back
+              Gate: {GALA_VENUE.name} · {GALA_VENUE.street}, {GALA_VENUE.city}, {GALA_VENUE.region}
             </p>
           </div>
           <span className="gala-pass-foil" aria-hidden="true" />
@@ -162,10 +163,26 @@ export function GalaBoardingPass() {
               <span />
               <b>ANY</b>
             </p>
-            <p>Be first to know when tickets and destinations are announced.</p>
-            <Link className="gala-button gala-button-gold" to="/newsletter">
-              Get boarding updates <ArrowRight aria-hidden="true" />
-            </Link>
+            {GALA_TICKETS_URL ? (
+              <>
+                <p>{GALA_TICKET_PRICE_LABEL}. Destinations revealed before boarding.</p>
+                <a
+                  className="gala-button gala-button-gold"
+                  href={GALA_TICKETS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Get tickets <ArrowRight aria-hidden="true" />
+                </a>
+              </>
+            ) : (
+              <>
+                <p>Tickets are {GALA_TICKET_PRICE_LABEL}. Be first to know when they go on sale.</p>
+                <Link className="gala-button gala-button-gold" to="/newsletter">
+                  Get boarding updates <ArrowRight aria-hidden="true" />
+                </Link>
+              </>
+            )}
             <figure className="gala-pass-code">
               <img src={BARCODE} alt="" loading="lazy" />
               <figcaption>Scan to open this page</figcaption>

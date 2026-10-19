@@ -238,6 +238,22 @@
   font-weight: 700;
 }
 
+.gala-hero-facts dd a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(217, 181, 106, 0.6);
+  text-underline-offset: 4px;
+}
+
+.gala-hero-facts dd a:hover {
+  text-decoration-color: var(--gala-brass);
+}
+
+.gala-hero-soon {
+  color: var(--gala-brass-light);
+  font-weight: 600;
+}
+
 /* Split-flap board */
 .gala-board {
   padding: clamp(16px, 2.2vw, 30px);

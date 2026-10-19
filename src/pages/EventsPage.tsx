@@ -5,6 +5,8 @@ import { Link } from 'react-router';
 import heroImage from 'figma:asset/b7ea59b58a471ceacde60e41e5e3cd69fe78c66f.png';
 import { SEOHead } from '../components/SEOHead';
 import {
+  GALA_TICKETS_URL,
+  GALA_TICKET_PRICE_LABEL,
   eventAssetUrl,
   getPastEvents,
   getUpcomingEvents,
@@ -73,7 +75,9 @@ function SaveTheDate({ event }: { event: SparkPointEvent }) {
             <p className="sp-featured-summary">{event.summary}</p>
             <EventFacts event={event} />
             <p className="sp-event-partner-line">
-              Venue and tickets will be announced here first.
+              {GALA_TICKETS_URL
+                ? `Tickets are ${GALA_TICKET_PRICE_LABEL}.`
+                : `Tickets are ${GALA_TICKET_PRICE_LABEL}, on sale soon. Get updates to hear first.`}
             </p>
             <div className="sp-event-actions">
               {event.detailPath ? (
@@ -81,12 +85,23 @@ function SaveTheDate({ event }: { event: SparkPointEvent }) {
                   Explore the gala <ArrowRight aria-hidden="true" />
                 </Link>
               ) : null}
-              <Link
-                className={`sp-event-button ${event.detailPath ? 'sp-event-button-secondary' : 'sp-event-button-primary'}`}
-                to="/newsletter"
-              >
-                Get updates
-              </Link>
+              {GALA_TICKETS_URL ? (
+                <a
+                  className="sp-event-button sp-event-button-secondary"
+                  href={GALA_TICKETS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Get tickets
+                </a>
+              ) : (
+                <Link
+                  className={`sp-event-button ${event.detailPath ? 'sp-event-button-secondary' : 'sp-event-button-primary'}`}
+                  to="/newsletter"
+                >
+                  Get updates
+                </Link>
+              )}
             </div>
           </div>
         </motion.article>
