@@ -145,8 +145,8 @@ settings change.
 
 **Alt text used**
 
-- Hero: You're invited to An Atlas of Wonders, the SparkPoint Gala, Friday,
-  December 11, 2026. See the world. Strengthen home.
+- Hero: You're invited: An Atlas of Wonders, the SparkPoint Gala, a live travel
+  auction. See the world. Strengthen home.
 - Boarding pass: SparkPoint invites you to join us for An Atlas of Wonders,
   the SparkPoint Gala. A first-class boarding pass: Transylvania County to
   Anywhere, Friday, December 11, 2026, boarding at 6 p.m., at Connestee Falls
@@ -202,9 +202,14 @@ The event is **An Atlas of Wonders**, with SparkPoint as a separate byline,
   it, not "at" it.
 - As a kicker or label: "The SparkPoint Gala · Live travel auction".
 - The tagline stays "See the world. Strengthen home."
-- The invitation card shows the lockup from `assets/`, whose byline reads THE
-  SPARKPOINT GALA (`…-for-light-backgrounds.png` on the ivory card;
-  `…-for-dark-backgrounds.png` is there for midnight backgrounds).
+- The full lockup (globe included) is the title wherever the name appears as a
+  heading, never typed or stacked name text. The hero centers the
+  dark-background lockup under a small "You're invited · Live travel auction"
+  line, with the tagline beneath it; the invitation card uses the
+  light-background lockup. Both PNGs live in `assets/` and their byline reads
+  THE SPARKPOINT GALA.
+- The DEC 11 passport stamp sits on the invitation card's top corner, clear of
+  either title.
 - The ticket link stays `https://secure.yoursparkpoint.org/store/p/2026-sparkpoint-gala`
   exactly; it's on printed QR codes.
 

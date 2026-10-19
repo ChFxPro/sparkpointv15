@@ -33,6 +33,20 @@
   .hero h1 em { display: block; color: var(--brass); font-style: italic; }
   .hero-sub { margin-top: 14px; font-family: var(--display); font-style: italic; font-size: 21px; color: rgba(247,241,229,.92); }
 
+  /* The hero's title is the Atlas of Wonders lockup, centered, with the tagline under it. */
+  .lockup-hero { height: 470px; }
+  .lockup-hero::after { background:
+      radial-gradient(ellipse 70% 55% at 50% 46%, rgba(11,19,34,.62), transparent 75%),
+      linear-gradient(180deg, rgba(11,19,34,.55) 0%, rgba(11,19,34,.2) 35%, rgba(11,19,34,.45) 75%, var(--midnight) 100%); }
+  .lockup-hero .hero-in { align-items: center; justify-content: center; text-align: center; padding: 40px 36px 34px; }
+  .lockup-hero .kicker { position: absolute; top: 30px; left: 0; right: 0; justify-content: center; }
+  .lockup-hero h1 { margin-top: 18px; line-height: 0; text-shadow: none; }
+  .hero-lockup { width: 470px; height: auto; margin: -14px 0 -20px; filter: drop-shadow(0 4px 18px rgba(11,19,34,.6)); }
+  .lockup-hero .hero-sub { margin-top: 22px; }
+
+  /* The DEC 11 stamp, inked in the card's top corner, clear of the title. */
+  .card > .stamp { top: -18px; right: -12px; width: 88px; height: 88px; transform: rotate(-12deg); }
+
   .stamp { position: absolute; z-index: 2; width: 112px; height: 112px; overflow: visible; filter: drop-shadow(0 8px 14px rgba(0,0,0,.35)); }
   .stamp circle { fill: #f6e7c1; stroke: var(--plum); stroke-width: 2.4; }
   .stamp circle + circle { fill: none; stroke-width: 1.4; }
@@ -50,7 +64,8 @@
   .card h2 { margin-top: 6px; font-family: var(--display); font-size: 40px; font-weight: 600; letter-spacing: -.01em; color: var(--midnight); }
   /* The event's name is the Atlas of Wonders lockup (transparent PNG, globe included). */
   .card h2.lockup { display: flex; justify-content: center; margin: -10px -12px -14px; }
-  .card h2.lockup img { width: 500px; height: auto; }
+  .card h2.lockup img { width: 450px; height: auto; }
+  .card p.lede { margin-bottom: 24px; }
   .card .lede { max-width: 440px; margin: 10px auto 0; font-size: 15px; line-height: 1.6; color: var(--muted); }
   .rule { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 22px auto 22px; width: 260px; }
   .rule span { flex: 1; height: 1px; background: #cdb98d; }
