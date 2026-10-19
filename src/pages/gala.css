@@ -206,10 +206,36 @@
   display: block;
 }
 
-/* The evening's name, set as its wordmark: a small italic "An", ATLAS in
-   heavy spaced capitals, and "of Wonders" in the brass italic. */
+/* The evening's name, set as its wordmark on an atlas-cover lockup: a faint
+   globe behind a small italic "An", ATLAS in heavy spaced capitals, "of
+   Wonders" in the brass italic, a sparkmark rule, and the byline. */
+.gala-lockup {
+  position: relative;
+  display: inline-grid;
+  justify-items: center;
+  padding: 0.6rem 0.4rem 0;
+  text-align: center;
+}
+
+.gala-lockup-globe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 122%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  fill: none;
+  stroke: rgba(241, 217, 160, 0.26);
+  stroke-width: 0.7;
+  pointer-events: none;
+}
+
+.gala-lockup > :not(.gala-lockup-globe) {
+  position: relative;
+}
+
 .gala-hero h1.gala-wordmark {
-  margin-top: 26px;
+  margin-top: 0;
   font-size: clamp(3.4rem, 10vw, 8.4rem);
   line-height: 1;
 }
@@ -225,6 +251,8 @@
 
 .gala-wordmark-atlas {
   display: block;
+  /* The trailing letter-space would push the word off centre. */
+  margin-right: -0.14em;
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -238,8 +266,42 @@
   letter-spacing: -0.01em;
 }
 
+.gala-lockup-rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.gala-lockup-rule span {
+  width: clamp(48px, 7vw, 88px);
+  height: 1px;
+  background: rgba(241, 217, 160, 0.6);
+}
+
+.gala-lockup-byline {
+  justify-content: center;
+  gap: 4px 0.9em;
+  margin-top: 12px;
+  color: var(--gala-brass-light);
+  letter-spacing: 0.32em;
+}
+
+/* On a phone the byline takes two even lines instead of wrapping mid-phrase. */
+@media (max-width: 560px) {
+  .gala-lockup-byline {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .gala-lockup-dot {
+    display: none;
+  }
+}
+
 .gala-hero-tagline {
-  margin-top: 26px;
+  margin-top: 38px;
+  text-wrap: balance;
   color: var(--gala-ivory);
   font-family: var(--gala-display);
   font-size: clamp(1.45rem, 2.6vw, 2rem);

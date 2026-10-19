@@ -171,16 +171,31 @@ export default function GalaPage() {
         </div>
         <div className="gala-shell gala-hero-inner">
           <motion.div className="gala-hero-copy" {...reveal}>
-            <p className="gala-kicker">
-              <span>SparkPoint presents</span>
-              <Sparkmark size="1.7em" />
-              <span>Live travel auction</span>
-            </p>
-            <h1 id="gala-title" className="gala-wordmark" aria-label="An Atlas of Wonders: a SparkPoint Gala">
-              <span className="gala-wordmark-an" aria-hidden="true">An</span>
-              <span className="gala-wordmark-atlas" aria-hidden="true">Atlas</span>
-              <em className="gala-wordmark-wonders" aria-hidden="true">of Wonders</em>
-            </h1>
+            <div className="gala-lockup">
+              {/* A faint globe behind the name, as on an atlas cover. */}
+              <svg className="gala-lockup-globe" viewBox="0 0 200 200" aria-hidden="true">
+                <circle cx="100" cy="100" r="96" />
+                <ellipse cx="100" cy="100" rx="64" ry="96" />
+                <ellipse cx="100" cy="100" rx="30" ry="96" />
+                <ellipse cx="100" cy="100" rx="96" ry="40" />
+                <path d="M100 4v192M4 100h192" />
+              </svg>
+              <h1 id="gala-title" className="gala-wordmark" aria-label="An Atlas of Wonders: a SparkPoint Gala">
+                <span className="gala-wordmark-an" aria-hidden="true">An</span>
+                <span className="gala-wordmark-atlas" aria-hidden="true">Atlas</span>
+                <em className="gala-wordmark-wonders" aria-hidden="true">of Wonders</em>
+              </h1>
+              <p className="gala-lockup-rule" aria-hidden="true">
+                <span />
+                <Sparkmark size="1.25rem" />
+                <span />
+              </p>
+              <p className="gala-kicker gala-lockup-byline">
+                <span>A SparkPoint Gala</span>
+                <span className="gala-lockup-dot" aria-hidden="true">·</span>
+                <span>Live travel auction</span>
+              </p>
+            </div>
             <p className="gala-hero-tagline">
               See the world. <em>Strengthen home.</em>
             </p>
