@@ -58,9 +58,9 @@ bidding, the AmFund contact, and any unconfirmed giveback percentage.
 
 ## Sending it
 
-**Link to use for the image and the button**:
-`https://yoursparkpoint.org/events/sparkpoint-gala` (or the ticket link once
-tickets are on sale).
+**Link to use for the image and the button**: the ticket link,
+`https://secure.yoursparkpoint.org/store/p/2026-sparkpoint-gala` (tickets are on
+sale; before that it was `https://yoursparkpoint.org/events/sparkpoint-gala`).
 
 **Squarespace newsletter (Email Campaigns)**
 
@@ -88,9 +88,11 @@ section images on a midnight background (Style → Email Background `#0B1322`,
 text blocks set to ivory `#F7F1E5`):
 
 - **Attendees**: "You're invited: The SparkPoint Gala, December 11". No sponsor
-  section.
+  section. Uses the on-sale note below, with the preview "Tickets are on sale:
+  $100 per person. An evening of connection and a live auction of eight travel
+  experiences that give back to Transylvania County."
 - **Sponsor direct**: "Come aboard as a SparkPoint Gala travel partner". Adds the
-  seat map and a "Request early boarding" button.
+  seat map and a "Request early boarding" button above the ticket button.
 
 The order, with each image's link (all on
 `https://yoursparkpoint.org/events/sparkpoint-gala` unless noted):
@@ -101,9 +103,13 @@ The order, with each image's link (all on
 | Images | `01-hero` (page), `02-boarding-pass.gif` (page) | both |
 | Text | "Picture it: a first-class evening at home in Transylvania County, and a live auction of eight trips around the world. Tap any part of this invitation to explore it on the Gala page." | both |
 | Images | `03-departures.gif` (`#routes-title`), `04-passport` (`#passport`), `05-luggage-tags` (`#tags-title`), `06-postcard` (`#return-title`) | both |
-| Images | `08-your-seat` (`#close-title`) | both |
-| Images | `07-travel-partners` (the Monday sponsor form) | sponsor only, under `08` |
-| Button | "Get gala updates" (page) / "Request early boarding" (Monday sponsor form) | attendees / sponsor |
+| Images | `07-travel-partners` (the Monday sponsor form) | sponsor only, above `08` |
+| Images | `08-your-seat` (the ticket link) | both |
+| Button | "Request early boarding" (Monday sponsor form) | sponsor only |
+| Button | "Get tickets · $100" (the ticket link) | both |
+
+The ticket link is `https://secure.yoursparkpoint.org/store/p/2026-sparkpoint-gala`
+(tickets went on sale 2026-10-19 at $100 per person).
 
 The Monday sponsor form is
 `https://forms.monday.com/forms/8bc904c73a179d5be96939ed2c05b62a`
@@ -127,8 +133,8 @@ settings change.
   the world. Strengthen home.
 - Boarding pass: SparkPoint requests the pleasure of your company at The
   SparkPoint Gala. A first-class boarding pass: Transylvania County to
-  Anywhere, Friday, December 11, 2026, boarding at 6 p.m. Venue to be
-  announced.
+  Anywhere, Friday, December 11, 2026, boarding at 6 p.m., at Connestee Falls
+  Country Club, Brevard, NC.
 - Departures: The travel auction: eight departures, one home base. A
   departures board lists the SparkPoint Gala on December 11 and eight trips
   going up for bid with a live auctioneer, destinations revealed soon.
@@ -140,7 +146,8 @@ settings change.
   Greetings from HOME shows a concept rendering of the Transylvania Resilience
   Hub, which a portion of every travel package sold at the Gala helps bring to
   life.
-- Your seat: Your seat is waiting. Venue, tickets and destinations coming soon.
+- Your seat: Tickets are on sale. Your seat is waiting: $100 per person at
+  Connestee Falls Country Club.
 - Travel partners: Travel partners: your brand, cleared for takeoff. A cabin
   seat map with First Class, Business and Main Cabin sponsor seats. Seat map
   opening soon.
@@ -156,15 +163,16 @@ Update the venue, board, and closing alt text along with the images.
 
   > Friends,
   >
-  > On Friday, December 11, at 6 p.m., SparkPoint hosts the SparkPoint Gala:
-  > an evening of connection and a live auction of eight travel experiences,
-  > with a portion of every trip coming home to help bring the Transylvania
-  > Resilience Hub to life. We're inviting local businesses to come aboard as
+  > On Friday, December 11, at 6 p.m., SparkPoint hosts the SparkPoint Gala at
+  > Connestee Falls Country Club in Brevard: an evening of connection and a
+  > live auction of eight travel experiences, with a portion of every trip
+  > coming home to help bring the Transylvania Resilience Hub to life. Tickets
+  > are now on sale at $100 per person. We're inviting local businesses to come aboard as
   > travel partners, through sponsorships and in-kind support for food, drink,
   > and entertainment. Take a look at the evening below, then request early
   > boarding and we'll find the seat that fits you.
 
-The attendee draft uses the subject, preview, and note below.
+The attendee draft uses the subject below and the on-sale note.
 
 ## Email copy
 
@@ -174,42 +182,41 @@ The attendee draft uses the subject, preview, and note below.
 - See the world. Strengthen home. ✈️ Save the date
 - Your seat is waiting: The SparkPoint Gala
 
+Tickets are on sale (2026-10-19), so use the on-sale copy. The save-the-date
+copy is kept below for reference only.
+
 **Preview text**
 
-An evening of connection and a live auction of eight travel experiences that
-give back to Transylvania County.
+Tickets are on sale: $100 per person. An evening of connection and a live
+auction of eight travel experiences that give back to Transylvania County.
 
-**Note above the image** (save the date: until tickets and venue are announced)
-
-> Friends,
->
-> Please save the date for the SparkPoint Gala on Friday, December 11, at 6 p.m.
-> It's an evening of connection and celebration, with a live auction of eight
-> travel experiences, and a portion of every trip comes home to help bring the
-> Transylvania Resilience Hub to life. Venue and tickets are coming soon, and
-> we'd love for you to be there.
-
-**Note above the image** (on sale: once tickets go live; fill in the venue)
+**Note above the image**
 
 > Friends,
 >
 > Tickets are now on sale for the SparkPoint Gala on Friday, December 11, at
-> 6 p.m. at [venue name]. It's an evening of connection and celebration, with a
-> live auction of eight travel experiences, and a portion of every trip comes
-> home to help bring the Transylvania Resilience Hub to life. Your seat is
-> waiting.
+> 6 p.m. at Connestee Falls Country Club in Brevard. It's an evening of
+> connection and celebration, with a live auction of eight travel experiences,
+> and a portion of every trip comes home to help bring the Transylvania
+> Resilience Hub to life. Tickets are $100 per person. Your seat is waiting.
 
-**Button**: Get gala updates (save the date) · Get your tickets (on sale)
+**Button**: Get tickets · $100, linking to
+`https://secure.yoursparkpoint.org/store/p/2026-sparkpoint-gala`
 
-**Alt text for the image** (save the date)
-
-You're invited to the SparkPoint Gala, Friday, December 11, 2026, at 6 p.m.:
-an evening of connection and a live auction of eight travel experiences that
-gives back to the Transylvania Resilience Hub. Venue and tickets coming soon.
-
-**Alt text for the image** (on sale; fill in the venue)
+**Alt text for the image**
 
 You're invited to the SparkPoint Gala, Friday, December 11, 2026, at 6 p.m. at
-[venue name]: an evening of connection and a live auction of eight travel
-experiences that gives back to the Transylvania Resilience Hub. Tickets are on
-sale now.
+Connestee Falls Country Club: an evening of connection and a live auction of
+eight travel experiences that gives back to the Transylvania Resilience Hub.
+Tickets are on sale now, $100 per person.
+
+**Before tickets went on sale** (no longer used)
+
+- Preview: An evening of connection and a live auction of eight travel
+  experiences that give back to Transylvania County.
+- Note: Please save the date for the SparkPoint Gala on Friday, December 11, at
+  6 p.m. It's an evening of connection and celebration, with a live auction of
+  eight travel experiences, and a portion of every trip comes home to help
+  bring the Transylvania Resilience Hub to life. Venue and tickets are coming
+  soon, and we'd love for you to be there.
+- Button: Get gala updates, linking to the Gala page.

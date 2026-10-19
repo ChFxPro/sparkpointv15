@@ -184,6 +184,7 @@
 <section class="slice close" data-slice="08-your-seat">
   <p class="eyebrow mono" data-fill="cta-eyebrow"></p>
   <h3 style="margin-top: 8px; font-family: var(--display); font-weight: 400; font-size: 44px; color: var(--ivory);">Your seat <em style="color: var(--brass); font-style: italic;">is waiting.</em></h3>
+  <p class="price" data-fill="price" style="font-size: 15px;"></p>
   <div class="rule"><span></span><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" /><span></span></div>
 </section>
 
@@ -200,6 +201,9 @@
   fill('where', venueName ? `<b>${esc(venueName)}</b>${venuePlace ? ' · ' + esc(venuePlace) : ''}` : '<b>Venue to be announced</b> · Transylvania County, NC');
   const live = Boolean(cfg.tickets && cfg.tickets.live);
   fill('cta-eyebrow', live ? 'Tickets are on sale' : 'Venue, tickets &amp; destinations coming soon');
+  fill('price', live && cfg.tickets.price
+    ? `${esc(cfg.tickets.price)}${venueName ? ' · ' + esc(venueName) : ''}`
+    : '');
 
   // Departures board.
   const trips = (cfg.trips || []).slice(0, 8);
