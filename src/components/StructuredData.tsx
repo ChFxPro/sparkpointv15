@@ -17,7 +17,7 @@ const ROUTE_LABELS: Record<string, string> = {
   '/stories': 'Stories',
   '/events': 'Events',
   '/events/thrive-at-five': 'Thrive @ Five: Common Ground Release Party',
-  '/events/sparkpoint-gala': 'An Atlas of Wonders: A SparkPoint Gala',
+  '/events/sparkpoint-gala': 'An Atlas of Wonders',
   '/partners': 'Partners',
   '/resilience-hub': 'Resilience Hub',
   '/press': 'Newsroom',

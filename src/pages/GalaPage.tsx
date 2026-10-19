@@ -5,6 +5,7 @@ import type { CSSProperties } from 'react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { Sparkmark } from '../components/Sparkmark';
+import { GALA_BYLINE, GALA_NAME, GalaLockup } from '../components/GalaLockup';
 import {
   GALA_PARTNER_FORM_URL,
   GALA_TICKETS_URL,
@@ -74,7 +75,8 @@ const GIVES_BACK = [
 const galaEventJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Event',
-  name: 'An Atlas of Wonders: A SparkPoint Gala',
+  name: GALA_NAME,
+  alternateName: GALA_BYLINE,
   description:
     'An evening of connection and a live auction of eight travel experiences, with a portion of every trip supporting the Transylvania Resilience Hub.',
   startDate: '2026-12-11T18:00:00-05:00',
@@ -145,11 +147,11 @@ export default function GalaPage() {
   return (
     <div className="gala-page">
       <SEOHead
-        title="An Atlas of Wonders: A SparkPoint Gala & Travel Auction | December 11, 2026"
+        title="An Atlas of Wonders · The SparkPoint Gala & Travel Auction | December 11, 2026"
         description="See the world. Strengthen home. Join us for An Atlas of Wonders, the SparkPoint Gala, on Friday, December 11, 2026 at 6 p.m. at Connestee Falls Country Club, and bid on eight travel experiences in a live auction that gives back to Transylvania County’s Resilience Hub. Tickets $100."
         path={GALA_PATH}
         image="/assets/events/gala/gala-share-atlas.jpg"
-        imageAlt="An Atlas of Wonders, a SparkPoint Gala: the title over an airplane wing above golden clouds at sunset."
+        imageAlt="An Atlas of Wonders, the SparkPoint Gala: the title over an airplane wing above golden clouds at sunset."
         imageType="image/jpeg"
         imageWidth={1200}
         imageHeight={630}
@@ -171,31 +173,17 @@ export default function GalaPage() {
         </div>
         <div className="gala-shell gala-hero-inner">
           <motion.div className="gala-hero-copy" {...reveal}>
-            <div className="gala-lockup">
-              {/* A faint globe behind the name, as on an atlas cover. */}
-              <svg className="gala-lockup-globe" viewBox="0 0 200 200" aria-hidden="true">
-                <circle cx="100" cy="100" r="96" />
-                <ellipse cx="100" cy="100" rx="64" ry="96" />
-                <ellipse cx="100" cy="100" rx="30" ry="96" />
-                <ellipse cx="100" cy="100" rx="96" ry="40" />
-                <path d="M100 4v192M4 100h192" />
-              </svg>
-              <h1 id="gala-title" className="gala-wordmark" aria-label="An Atlas of Wonders: a SparkPoint Gala">
-                <span className="gala-wordmark-an" aria-hidden="true">An</span>
-                <span className="gala-wordmark-atlas" aria-hidden="true">Atlas</span>
-                <em className="gala-wordmark-wonders" aria-hidden="true">of Wonders</em>
-              </h1>
-              <p className="gala-lockup-rule" aria-hidden="true">
-                <span />
-                <Sparkmark size="1.25rem" />
-                <span />
-              </p>
-              <p className="gala-kicker gala-lockup-byline">
-                <span>A SparkPoint Gala</span>
-                <span className="gala-lockup-dot" aria-hidden="true">·</span>
-                <span>Live travel auction</span>
-              </p>
-            </div>
+            <GalaLockup
+              headingId="gala-title"
+              className="gala-hero-lockup"
+              byline={
+                <>
+                  <span>{GALA_BYLINE}</span>
+                  <span className="gl-dot" aria-hidden="true">·</span>
+                  <span>Live travel auction</span>
+                </>
+              }
+            />
             <p className="gala-hero-tagline">
               See the world. <em>Strengthen home.</em>
             </p>

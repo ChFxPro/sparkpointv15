@@ -1,0 +1,109 @@
+/* An Atlas of Wonders lockup (GalaLockup.tsx). The wrapper's font-size is the
+   size of ATLAS; every other part is sized from it, with floors so the small
+   pieces stay legible when the lockup is small. */
+.gl {
+  position: relative;
+  display: inline-grid;
+  justify-items: center;
+  padding: 0.07em 0.05em 0;
+  color: #f7f1e5;
+  font-family: 'Fraunces Variable', 'Fraunces', Georgia, serif;
+  line-height: 1;
+  text-align: center;
+}
+
+.gl-globe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 122%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  fill: none;
+  stroke: rgba(241, 217, 160, 0.26);
+  stroke-width: 0.7;
+  pointer-events: none;
+}
+
+.gl > :not(.gl-globe) {
+  position: relative;
+}
+
+.gl-name {
+  margin: 0;
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.gl-an {
+  display: block;
+  margin-bottom: 0.1em;
+  color: #f1d9a0;
+  font-size: max(0.22em, 1.1rem);
+  font-style: italic;
+  font-variation-settings: 'opsz' 144, 'SOFT' 100;
+}
+
+.gl-atlas {
+  display: block;
+  /* The trailing letter-space would push the word off centre. */
+  margin-right: -0.14em;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-variation-settings: 'opsz' 144, 'SOFT' 0;
+}
+
+.gl .gl-wonders {
+  display: block;
+  margin-top: 0.04em;
+  color: #d9b56a;
+  font-size: 0.62em;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
+}
+
+.gl-rule {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  margin: 0.9em 0 0;
+  font-size: max(0.15em, 0.9rem);
+}
+
+.gl-rule span {
+  width: 4.5em;
+  height: 1px;
+  background: rgba(241, 217, 160, 0.6);
+}
+
+.gl-byline {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 0.9em;
+  margin: 0.75em 0 0;
+  color: #f1d9a0;
+  /* The site's sans (see index.css). */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: max(0.09em, 0.72rem);
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+/* On a phone a two-part byline takes two even lines instead of wrapping
+   mid-phrase. */
+@media (max-width: 560px) {
+  .gl-byline {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .gl-byline .gl-dot {
+    display: none;
+  }
+}

@@ -52,6 +52,12 @@ export interface SparkPointEvent {
   imageAlt?: string;
   featured?: boolean;
   partnerLine?: string;
+  // Who puts the event on, shown as the line above its title on the Events
+  // page (e.g. "The SparkPoint Gala"). Falls back to the category.
+  presenter?: string;
+  // Show the Gala's An Atlas of Wonders lockup in the save-the-date panel in
+  // place of the big date.
+  galaLockup?: boolean;
   // A save-the-date: an event without its own photo yet. The Events page gives
   // it a typographic panel instead of the photo layout (linking to
   // `detailPath` when there is one), and it never lists under Past Gatherings.
@@ -65,8 +71,10 @@ export interface SparkPointEvent {
 export const EVENTS: SparkPointEvent[] = [
   {
     id: 'sparkpoint-gala-2026',
-    title: 'An Atlas of Wonders: A SparkPoint Gala',
+    title: 'An Atlas of Wonders',
     shortTitle: 'An Atlas of Wonders',
+    presenter: 'The SparkPoint Gala',
+    galaLockup: true,
     category: 'Fundraiser',
     startDate: '2026-12-11T18:00:00-05:00',
     // No end time announced yet; holding the whole evening keeps it upcoming

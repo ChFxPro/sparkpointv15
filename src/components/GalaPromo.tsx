@@ -113,7 +113,7 @@ export function GalaPromoCard() {
                 <span className="gpromo-shade" />
               </div>
               <div>
-                <p className="gpromo-kicker">A SparkPoint Gala · Live travel auction</p>
+                <p className="gpromo-kicker">The SparkPoint Gala · Live travel auction</p>
                 <p className="gpromo-headline">
                   See the world. <em>Strengthen home.</em>
                 </p>
