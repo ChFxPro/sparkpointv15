@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>An Atlas of Wonders · Invitation</title>
+<!--
+  Email invitation for An Atlas of Wonders, the SparkPoint Gala, laid out at 600 CSS px (the width
+  email clients show) and rendered at 2x by render.mjs. It mirrors the Gala
+  page (src/pages/GalaPage.tsx): midnight + brass, Fraunces, the sparkmark,
+  the boarding pass, the departures board, passport stamps, and the postcard.
+  Everything that changes (tickets, venue, trips) comes from
+  invitation.config.json via window.__INVITE__.
+-->
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- 1. Hero -->
+  <header class="hero lockup-hero">
+    <img src="../../public/assets/events/gala/hero-wing-1400.webp" alt="" />
+    <div class="hero-in">
+      <p class="kicker mono"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />You&rsquo;re invited &middot; Live travel auction</p>
+      <h1><img class="hero-lockup" src="assets/atlas-of-wonders-lockup-for-dark-backgrounds.png" alt="An Atlas of Wonders, the SparkPoint Gala" /></h1>
+      <p class="hero-sub">See the world. Strengthen home.</p>
+    </div>
+  </header>
+
+  <!-- 2. Invitation card -->
+  <main class="card">
+    <svg class="stamp" viewBox="0 0 100 100">
+      <defs><path id="ring" d="M50 50 m-36 0 a36 36 0 1 1 72 0 a36 36 0 1 1 -72 0" /></defs>
+      <circle cx="50" cy="50" r="46" /><circle cx="50" cy="50" r="28" />
+      <text class="ring"><textPath href="#ring" startOffset="33%">ATLAS GALA · ADMITTED ·</textPath></text>
+      <text x="50" y="49" class="day">DEC 11</text><text x="50" y="62" class="yr">2026</text>
+    </svg>
+    <p class="request">SparkPoint invites you to join us for</p>
+    <h2 class="lockup"><img src="assets/atlas-of-wonders-lockup-for-light-backgrounds.png" alt="An Atlas of Wonders, the SparkPoint Gala" /></h2>
+    <p class="lede">An evening of connection and celebration, with a live auction of eight travel experiences, and a portion of every trip coming home to the Transylvania Resilience Hub.</p>
+
+    <div class="pass">
+      <div class="pass-main">
+        <div class="band">
+          <span class="brand"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />An Atlas of Wonders</span>
+          <span class="cls"><small class="mono">Boarding pass</small><b>First class</b></span>
+        </div>
+        <div class="pass-body">
+          <div class="route">
+            <div><strong>TCN</strong><span class="mono">Transylvania County</span></div>
+            <svg viewBox="0 0 180 40">
+              <path class="arc" d="M6 34 Q90 -6 174 34" />
+              <circle cx="6" cy="34" r="3" /><circle cx="174" cy="34" r="3" />
+              <g transform="translate(118 16) rotate(62) scale(0.62) translate(-12 -12)"><path class="plane" d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" /></g>
+            </svg>
+            <div><strong>ANY</strong><span class="mono">Anywhere</span></div>
+          </div>
+          <dl class="fields">
+            <div><dt class="mono">Date</dt><dd>Fri 11 Dec 2026</dd></div>
+            <div><dt class="mono">Boarding</dt><dd>6:00 p.m.</dd></div>
+            <div><dt class="mono">Gate</dt><dd data-fill="gate">TBA</dd></div>
+            <div><dt class="mono">Seat</dt><dd>Yours</dd></div>
+          </dl>
+        </div>
+      </div>
+      <div class="pass-stub">
+        <div class="band band-stub mono">SPK 1211</div>
+        <div class="stub-body">
+          <p class="admit">Admit one <em>Live travel auction</em></p>
+          <img src="../../public/assets/events/gala/pass-pdf417.svg" alt="" />
+        </div>
+      </div>
+    </div>
+    <p class="where" data-fill="where"></p>
+  </main>
+
+  <!-- 3. Departures -->
+  <section class="section">
+    <p class="eyebrow mono">The travel auction</p>
+    <h3>Eight departures. <em>One home base.</em></h3>
+    <p class="copy" data-fill="trips-copy"></p>
+    <div class="board">
+      <div class="board-title"><b>Departures</b><span class="mono">Transylvania County · Home base</span></div>
+      <div data-fill="board"></div>
+    </div>
+  </section>
+
+  <!-- 4. How the auction works -->
+  <section class="section facts">
+    <p class="eyebrow mono">How the auction works</p>
+    <h3>Your passport to <em>the auction.</em></h3>
+    <div class="stamps">
+      <div class="st" style="--c:#b2245f; --r:-6deg"><strong>8</strong><span>Travel experiences</span></div>
+      <div class="st" style="--c:#1f4f7a; --r:5deg"><strong>3 yrs</strong><span>To travel</span></div>
+      <div class="st" style="--c:#2f6b4f; --r:-3deg"><strong>No</strong><span>Blackout dates</span></div>
+      <div class="st" style="--c:#b2245f; --r:6deg"><strong>Live</strong><span>Auctioneer</span></div>
+    </div>
+    <p class="match"><b>Match the winning bid.</b> Once a trip sells, any guest at the Gala can buy that same trip at the winning bid, and the Gala price stays locked in for up to a year after the event.</p>
+  </section>
+
+  <!-- 5. Travel that gives back -->
+  <section class="section gives">
+    <p class="eyebrow mono">The return trip</p>
+    <h3>Travel that gives back <em>to our community.</em></h3>
+    <div class="postcard">
+      <figure>
+        <img src="../../public/assets/events/gala/hub-winter-postcard.webp" alt="" />
+        <figcaption><span>Greetings from</span><strong>HOME</strong></figcaption>
+      </figure>
+      <p>Every great trip ends with coming home. A portion of every travel package sold at the Gala supports SparkPoint, helping bring the Transylvania Resilience Hub to life.<small>Resilience Hub · concept rendering</small></p>
+    </div>
+  </section>
+
+  <!-- 6. Call to action -->
+  <section class="section cta">
+    <p class="eyebrow mono" data-fill="cta-eyebrow"></p>
+    <h3>Your seat <em>is waiting.</em></h3>
+    <div class="button" data-fill="button"></div>
+    <p class="price" data-fill="price"></p>
+    <p class="url mono" data-fill="url"></p>
+    <p class="sponsor"><b>Want your business on board?</b> Sponsorships and in-kind support for food, drink, and entertainment are welcome. Find &ldquo;Travel partners&rdquo; on the Gala page.</p>
+  </section>
+
+  <footer class="footer mono">
+    <img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />
+    SparkPoint · Transylvania County, NC · yoursparkpoint.org
+  </footer>
+
+<script>
+  // Fills the variable parts from invitation.config.json (render.mjs sets window.__INVITE__).
+  const cfg = window.__INVITE__ || { tickets: {}, venue: {}, trips: [], pageUrl: 'yoursparkpoint.org/events/sparkpoint-gala' };
+  const fill = (key, html) => document.querySelectorAll(`[data-fill="${key}"]`).forEach((el) => { el.innerHTML = html; });
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  const venueName = (cfg.venue.name || '').trim();
+  const venuePlace = (cfg.venue.place || '').trim();
+  // The pass's Gate field needs something short: venue.short, else the venue's first word.
+  const gate = (cfg.venue.short || venueName.split(/\s+/)[0] || '').slice(0, 10);
+  fill('gate', venueName ? esc(gate) : 'TBA');
+  fill('where', venueName
+    ? `<b>${esc(venueName)}</b>${venuePlace ? ' · ' + esc(venuePlace) : ''}`
+    : '<b>Venue to be announced</b> · Transylvania County, NC');
+
+  // Departures board: the Gala, then the eight trips (or "REVEALING SOON").
+  const pad = (text, n) => text.toUpperCase().slice(0, n).padEnd(n, ' ');
+  const tiles = (text, n) => `<span class="tiles">${[...pad(text, n)].map((c) => `<span class="tile">${c === ' ' ? '&nbsp;' : esc(c)}</span>`).join('')}</span>`;
+  const trips = (cfg.trips || []).slice(0, 8);
+  const rows = [`<div class="row gala">${tiles('ATLAS OF WONDERS', 16)}<span class="status">${tiles('DEC 11', 10)}</span></div>`];
+  for (let i = 0; i < 8; i += 1) {
+    const trip = trips[i];
+    const label = trip ? (trip.board || trip.destination || '') : 'REVEALING SOON';
+    rows.push(`<div class="row">${tiles(label, 16)}<span class="status">${tiles('AT AUCTION', 10)}</span></div>`);
+  }
+  fill('board', rows.join(''));
+  fill('trips-copy', trips.length >= 8
+    ? 'Eight journeys go up for bid with a professional live auctioneer. Pick your next adventure.'
+    : 'Eight journeys around the world go up for bid with a professional live auctioneer. The destinations are revealed soon.');
+
+  const live = Boolean(cfg.tickets && cfg.tickets.live);
+  fill('cta-eyebrow', live ? 'Tickets are on sale' : 'Venue, tickets &amp; destinations coming soon');
+  fill('button', live ? 'Get your tickets &rarr;' : 'Get gala updates &rarr;');
+  fill('price', live && cfg.tickets.price ? esc(cfg.tickets.price) : '');
+  fill('url', esc(live && cfg.tickets.url ? cfg.tickets.url : cfg.pageUrl));
+</script>
+</body>
+</html>

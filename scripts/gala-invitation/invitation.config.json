@@ -1,0 +1,19 @@
+{
+  "_readme": "Edit this file, then run `npm run invite:gala`. Images land in output/gala-invitation/. See README.md in this folder.",
+
+  "tickets": {
+    "live": true,
+    "price": "$100 per person",
+    "url": "secure.yoursparkpoint.org/store/p/2026-sparkpoint-gala"
+  },
+
+  "venue": {
+    "name": "Connestee Falls Country Club",
+    "short": "CONNESTEE",
+    "place": "Brevard, NC"
+  },
+
+  "trips": [],
+
+  "pageUrl": "yoursparkpoint.org/events/sparkpoint-gala"
+}
