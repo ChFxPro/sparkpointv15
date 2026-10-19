@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>An Atlas of Wonders lockup</title>
+<style>
+  @font-face { font-family: 'Fraunces'; src: url('{{FRAUNCES}}/fraunces-latin-wght-normal.woff2') format('woff2'); font-weight: 100 900; }
+  @font-face { font-family: 'Fraunces'; src: url('{{FRAUNCES}}/fraunces-latin-wght-italic.woff2') format('woff2'); font-weight: 100 900; font-style: italic; }
+  @font-face { font-family: 'Manrope'; src: url('{{MANROPE}}/manrope-latin-700-normal.woff2') format('woff2'); font-weight: 700; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: transparent; }
+
+  /* Each version is screenshotted on its own, with a transparent background.
+     This is the master lockup the logo PNGs (and the email generator's copies in
+     scripts/gala-invitation/assets/) come from. */
+  .wrap { display: inline-block; padding: 70px 90px; }
+  #dark { color: #f7f1e5; --an: #f1d9a0; --won: #d9b56a; --by: #f1d9a0; --globe: rgba(241, 217, 160, 0.32); }
+  #light { color: #1b1a1f; --an: #8e2a5c; --won: #8e2a5c; --by: #8a7754; --globe: rgba(27, 26, 31, 0.18); }
+
+  .lockup { position: relative; padding: 40px 30px 10px; font-family: 'Fraunces', Georgia, serif; font-size: 150px; line-height: 1; text-align: center; }
+  .lockup > span { position: relative; display: block; line-height: normal; }
+  .globe { position: absolute; top: 50%; left: 50%; height: 122%; aspect-ratio: 1; translate: -50% -50%; fill: none; stroke: var(--globe); stroke-width: 0.7; }
+  .an { margin-bottom: 0.1em; color: var(--an); font-size: 0.2em; font-style: italic; font-weight: 400; }
+  .atlas { margin-right: -0.16em; font-weight: 800; letter-spacing: 0.16em; }
+  .wonders { margin-top: 0.02em; color: var(--won); font-size: 0.62em; font-style: italic; font-weight: 400; letter-spacing: -0.005em; }
+  .lockup > .by { display: flex; align-items: center; justify-content: center; gap: 0.6em; margin-top: 0.42em; color: var(--by); font: 700 0.12em 'Manrope', system-ui, sans-serif; letter-spacing: 0.46em; text-transform: uppercase; }
+  .lockup > .by + .by { margin-top: 0.5em; }
+  .by i { width: 3em; height: 1px; background: currentColor; opacity: 0.45; }
+  .by img { width: 1.6em; }
+</style>
+</head>
+<body>
+  <div id="dark" class="wrap"></div>
+  <div id="light" class="wrap"></div>
+  <template id="lockup">
+    <div class="lockup">
+      <svg class="globe" viewBox="0 0 200 200"><circle cx="100" cy="100" r="96"/><ellipse cx="100" cy="100" rx="64" ry="96"/><ellipse cx="100" cy="100" rx="30" ry="96"/><ellipse cx="100" cy="100" rx="96" ry="40"/><path d="M100 4v192M4 100h192"/></svg>
+      <span class="an">An</span>
+      <span class="atlas">ATLAS</span>
+      <span class="wonders">of Wonders</span>
+      <span class="by"><i></i><img src="{{PUBLIC}}/assets/brand/sparkmark-256.webp" alt=""><i></i></span>
+      <span class="by">The SparkPoint Gala</span>
+    </div>
+  </template>
+  <script>
+    for (const wrap of document.querySelectorAll('.wrap')) {
+      wrap.append(document.getElementById('lockup').content.cloneNode(true));
+    }
+  </script>
+</body>
+</html>
