@@ -4,6 +4,7 @@ import { ArrowRight, CalendarDays, Clock3, MapPin } from 'lucide-react';
 import { Link } from 'react-router';
 import heroImage from 'figma:asset/b7ea59b58a471ceacde60e41e5e3cd69fe78c66f.png';
 import { SEOHead } from '../components/SEOHead';
+import { GalaLockup } from '../components/GalaLockup';
 import {
   GALA_TICKETS_URL,
   GALA_TICKET_PRICE_LABEL,
@@ -62,15 +63,26 @@ function SaveTheDate({ event }: { event: SparkPointEvent }) {
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.55 }}
         >
-          <div className="sp-save-date-mark" aria-hidden="true">
-            <span className="sp-save-date-glow" />
-            <b>{eventMonth(event.startDate)}</b>
-            <strong>{eventDay(event.startDate)}</strong>
-            <small>{new Date(event.startDate).getFullYear()}</small>
-          </div>
+          {event.galaLockup ? (
+            <div className="sp-save-date-mark sp-save-date-lockup" aria-hidden="true">
+              <GalaLockup className="sp-save-date-gala" />
+              <span className="sp-save-date-chip">
+                {eventMonth(event.startDate)} {eventDay(event.startDate)} · {new Date(event.startDate).getFullYear()}
+              </span>
+            </div>
+          ) : (
+            <div className="sp-save-date-mark" aria-hidden="true">
+              <span className="sp-save-date-glow" />
+              <b>{eventMonth(event.startDate)}</b>
+              <strong>{eventDay(event.startDate)}</strong>
+              <small>{new Date(event.startDate).getFullYear()}</small>
+            </div>
+          )}
 
           <div className="sp-featured-event-copy">
-            <p className="sp-event-category">{event.category} · Live travel auction</p>
+            <p className="sp-event-category">
+              <span>{event.presenter ?? event.category} ·</span> <span>Live travel auction</span>
+            </p>
             <h2 id="featured-event-title">{event.title}</h2>
             <p className="sp-featured-summary">{event.summary}</p>
             <EventFacts event={event} />

@@ -682,11 +682,39 @@
   color: #d9b56a;
 }
 
+.sp-save-the-date .sp-event-category span {
+  white-space: nowrap;
+}
+
 .sp-save-the-date .sp-save-date-glow {
   border-color: rgba(217, 181, 106, 0.3);
   box-shadow:
     0 0 0 34px rgba(217, 181, 106, 0.05),
     0 0 0 70px rgba(217, 181, 106, 0.03);
+}
+
+/* The gala's panel shows its An Atlas of Wonders lockup over the world map,
+   with the date as a small chip beneath it. */
+.sp-save-the-date .sp-save-date-lockup {
+  gap: 30px;
+  padding: 72px 24px 56px;
+}
+
+.sp-save-date-gala {
+  font-size: clamp(3.2rem, 7.4vw, 6.4rem);
+}
+
+.sp-save-date-chip {
+  justify-self: center;
+  padding: 7px 16px;
+  border: 1px solid rgba(217, 181, 106, 0.4);
+  border-radius: 999px;
+  color: #f1d9a0;
+  background: rgba(11, 19, 34, 0.55);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
 }
 
 .sp-save-the-date .sp-event-button-primary {

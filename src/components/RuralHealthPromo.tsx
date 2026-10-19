@@ -3,8 +3,12 @@
 import '@fontsource-variable/fraunces';
 
 import { Link } from 'react-router';
-import { ArrowRight } from 'lucide-react';
-import { POST_SESSION_ID, isPostSessionActive } from '../pages/RuralHealthPostSession';
+import { ArrowRight, ExternalLink } from 'lucide-react';
+import {
+  POST_SESSION_ID,
+  POST_SESSION_REGISTER_URL,
+  isPostSessionActive,
+} from '../pages/RuralHealthPostSession';
 
 // Homepage promo for the 2026 WNC Regional Rural Health Convening — now a recap card
 // for the October 1 event, pointing at the convening page's past-event recap. The palette,
@@ -45,8 +49,10 @@ const facts = [
 ];
 
 export function RuralHealthPromoCard() {
-  // While the Nov 5 virtual post-convening session is ahead, point attendees at its
-  // registration band on the recap page. It drops out on its own after Nov 5 ET.
+  // While the Nov 5 virtual post-convening session is ahead, the card carries an
+  // "Up next" panel for it (date block, title linking to the recap page's band, and
+  // Zoom registration). It drops out on its own after Nov 5 ET; the card itself
+  // retires then too, so the panel is there whenever the card is.
   const showPostSession = isPostSessionActive();
 
   return (
@@ -151,26 +157,59 @@ export function RuralHealthPromoCard() {
 
           <div className="flex flex-col gap-3">
             {showPostSession && (
-              <Link
-                to={`${RURAL_HEALTH_CONVENING_PATH}#${POST_SESSION_ID}`}
-                className="inline-flex flex-wrap items-center gap-x-2.5 gap-y-1 self-start px-2 py-1.5 text-[0.84rem] font-bold leading-snug transition-colors duration-150 hover:bg-[rgba(167,127,35,0.18)]"
+              <section
+                aria-labelledby="rh-promo-next-title"
+                className="relative grid grid-cols-[auto_1fr] overflow-hidden"
                 style={{
-                  color: FOREST,
-                  border: '1px solid rgba(167, 127, 35, 0.55)',
-                  background: 'rgba(167, 127, 35, 0.1)',
+                  border: `1px solid ${FOREST}`,
+                  background: 'rgba(255, 253, 248, 0.55)',
+                  boxShadow: `inset 0 0 0 3px ${PAPER}, inset 0 0 0 4px rgba(47, 74, 60, 0.35)`,
                 }}
               >
-                <span
-                  className="px-1.5 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.13em]"
-                  style={{ color: PAPER, background: FOREST }}
+                <div
+                  className="grid w-[78px] content-center justify-items-center gap-0.5 px-2 py-4 text-center md:w-[88px]"
+                  style={{ background: FOREST, color: PAPER }}
+                  aria-hidden="true"
                 >
-                  Up next
-                </span>
-                <span>
-                  Attendees: register for the Nov 5 virtual session
-                  <ArrowRight size={15} aria-hidden="true" className="ml-1.5 inline align-[-2px]" />
-                </span>
-              </Link>
+                  <span className="text-[10px] font-extrabold uppercase tracking-[0.2em]" style={{ color: '#e3c77d' }}>
+                    Nov
+                  </span>
+                  <strong className="text-[2.4rem] font-semibold leading-none" style={{ fontFamily: DISPLAY_FONT }}>
+                    05
+                  </strong>
+                  <span className="text-[9px] font-bold uppercase tracking-[0.18em] opacity-80">Thursday</span>
+                </div>
+                <div className="grid gap-1.5 px-4 py-3.5 md:px-5">
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.16em]" style={{ color: CLAY }}>
+                    Up next &middot; For October 1 attendees
+                  </p>
+                  <h3
+                    id="rh-promo-next-title"
+                    className="text-[1.12rem] font-semibold leading-tight md:text-[1.2rem]"
+                    style={{ fontFamily: DISPLAY_FONT, color: FOREST, textWrap: 'balance' }}
+                  >
+                    <Link
+                      to={`${RURAL_HEALTH_CONVENING_PATH}#${POST_SESSION_ID}`}
+                      className="underline decoration-[rgba(167,127,35,0.5)] decoration-1 underline-offset-[5px] transition-colors hover:decoration-[#a77f23]"
+                    >
+                      Virtual Post&#8209;Convening Session
+                    </Link>
+                  </h3>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: CHESTNUT }}>
+                    10:00 a.m. ET &middot; Online on Zoom
+                  </p>
+                  <a
+                    href={POST_SESSION_REGISTER_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-1 inline-flex items-center gap-2 justify-self-start whitespace-nowrap rounded-[1px] border px-3 py-1.5 text-[0.84rem] font-extrabold transition-colors duration-150 hover:bg-[rgba(167,127,35,0.16)]"
+                    style={{ color: FOREST, borderColor: BRASS, background: 'rgba(167, 127, 35, 0.08)' }}
+                  >
+                    Register on Zoom <ExternalLink size={14} aria-hidden="true" />
+                    <span className="sr-only">(opens in a new tab)</span>
+                  </a>
+                </div>
+              </section>
             )}
             <Link
               to={RURAL_HEALTH_CONVENING_PATH}
