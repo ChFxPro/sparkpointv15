@@ -107,12 +107,14 @@ for slug in $DEPLOYED; do
     problems=$((problems+1)); continue
   fi
 
-  # -r recurses; .DS_Store is a Finder artifact, never a deployment input.
-  DIFF_OUT="$(diff -r -q -x '.DS_Store' "$dl_dir" "$ROOT/supabase/functions/$slug" 2>&1 || true)"
+  # -r recurses. Never deployment inputs, so never drift: .DS_Store (a Finder
+  # artifact) and *.test.ts(x) (Deno tests beside the code, e.g. porch-unfurl's
+  # parse.test.ts; the bundler only takes what index.ts imports).
+  DIFF_OUT="$(diff -r -q -x '.DS_Store' -x '*.test.ts' -x '*.test.tsx' "$dl_dir" "$ROOT/supabase/functions/$slug" 2>&1 || true)"
 
   if [[ -z "$DIFF_OUT" ]]; then
-    nfiles=$(find "$ROOT/supabase/functions/$slug" -type f ! -name '.DS_Store' | wc -l | tr -d ' ')
-    nbytes=$(find "$ROOT/supabase/functions/$slug" -type f ! -name '.DS_Store' -exec cat {} + | wc -c | tr -d ' ')
+    nfiles=$(find "$ROOT/supabase/functions/$slug" -type f ! -name '.DS_Store' ! -name '*.test.ts' ! -name '*.test.tsx' | wc -l | tr -d ' ')
+    nbytes=$(find "$ROOT/supabase/functions/$slug" -type f ! -name '.DS_Store' ! -name '*.test.ts' ! -name '*.test.tsx' -exec cat {} + | wc -c | tr -d ' ')
     printf '  %-24s match       %s file(s), %s bytes\n' "$slug" "$nfiles" "$nbytes"
   else
     printf '  %-24s DRIFT\n' "$slug"
