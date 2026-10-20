@@ -131,6 +131,8 @@ export default function BackPorchPostPage() {
     porchImageUrl(firstPhoto, 1600) ??
     (experimentId?.type === 'experiment' ? experimentMeta(experimentId.experiment)?.shareImage ?? null : null);
   const isGathering = post.kind === 'gathering' && post.event_start;
+  const asEvent = Boolean(isGathering && post.event_place);
+  const online = /\b(zoom|online|virtual|webinar)\b/i.test(post.event_place ?? '');
 
   return (
     <>
@@ -144,13 +146,22 @@ export default function BackPorchPostPage() {
         modifiedTime={post.updated_at}
         jsonLd={{
           '@context': 'https://schema.org',
-          '@type': isGathering ? 'Event' : 'Article',
-          ...(isGathering
+          // An Event needs a location to be valid, so a gathering with no place is an Article.
+          '@type': asEvent ? 'Event' : 'Article',
+          ...(asEvent
             ? {
                 name: post.title,
                 startDate: post.event_start,
                 ...(post.event_end ? { endDate: post.event_end } : {}),
-                ...(post.event_place ? { location: { '@type': 'Place', name: post.event_place } } : {}),
+                ...(online
+                  ? {
+                      eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+                      location: { '@type': 'VirtualLocation', url: post.link_url ?? canonicalUrl(postPath(post.slug)) },
+                    }
+                  : {
+                      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+                      location: { '@type': 'Place', name: post.event_place },
+                    }),
                 organizer: { '@type': 'Organization', name: 'SparkPoint', url: canonicalUrl('/') },
               }
             : {

@@ -17,6 +17,7 @@ import { EXPERIMENTS } from '../../experiments/backporch/registry';
 import { LAB_TOOLS, STAGE_LABELS, stageOf } from '../../lib/porchLab';
 import type { Frame } from '../../lib/porchBlocks';
 import { fetchLinkPreview } from './linkPreview';
+import { plainError } from './plainError';
 import { uploadPorchAudio, uploadPorchFile, uploadPorchImage, uploadPorchVideo } from './porchImages';
 
 const ADDABLE: { type: BlockType; hint: string }[] = [
@@ -120,7 +121,7 @@ export function BlockComposer({
     try {
       target.apply(await uploadPorchImage(file, slug || 'post'));
     } catch (err) {
-      onError(err instanceof Error ? err.message : 'The photo could not be uploaded.');
+      onError(plainError(err, 'Uploading the photo'));
     } finally {
       setBusyFor(target.key, null);
     }
@@ -176,7 +177,7 @@ export function BlockComposer({
           append({ id: newBlockId(), type: 'gallery', images: refs });
         }
       } catch (err) {
-        onError(err instanceof Error ? err.message : 'A photo could not be uploaded.');
+        onError(plainError(err, 'Uploading a photo'));
       } finally {
         setBusyFor(key, null);
       }
@@ -188,6 +189,13 @@ export function BlockComposer({
           setBusyFor(key, `Uploading ${f.name}…`);
           const v = await uploadPorchVideo(f, s);
           append({ id: newBlockId(), type: 'video', path: v.path, poster: v.poster, duration: v.duration });
+          // MP4 (H.264) plays everywhere. iPhone .mov files are often HEVC, which many
+          // browsers can't play, and WebM doesn't play on older iPhones: say so.
+          if (f.type !== 'video/mp4') {
+            onError(
+              `Heads up: ${f.name} isn't an MP4, so some people's browsers may not play it. If you can, export it as MP4 and replace it (on an iPhone: Settings, Camera, Formats, Most Compatible).`,
+            );
+          }
         } else if (f.type.startsWith('audio/')) {
           setBusyFor(key, `Uploading ${f.name}…`);
           const a = await uploadPorchAudio(f, s);
@@ -200,7 +208,7 @@ export function BlockComposer({
           onError(`${f.name} isn't a photo, video, audio file, or PDF.`);
         }
       } catch (err) {
-        onError(err instanceof Error ? err.message : `${f.name} could not be uploaded.`);
+        onError(plainError(err, `Uploading ${f.name}`));
       } finally {
         setBusyFor(key, null);
       }

@@ -55,7 +55,10 @@ function Gallery({ images }: { images: MediaRef[] }) {
         tabIndex={0}
         onScroll={(e) => {
           const el = e.currentTarget;
-          setIndex(Math.round(el.scrollLeft / Math.max(1, el.clientWidth)));
+          // One step is a slide plus the gap after it, measured rather than assumed.
+          const [first, second] = el.children as unknown as HTMLElement[];
+          const step = second && first ? second.offsetLeft - first.offsetLeft : el.clientWidth;
+          setIndex(Math.min(images.length - 1, Math.round(el.scrollLeft / Math.max(1, step))));
         }}
       >
         {images.map((img, i) => (

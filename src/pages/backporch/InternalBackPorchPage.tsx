@@ -28,9 +28,9 @@ import {
 } from '../../lib/backporch';
 import { LAB_FEATURES, STAGE_LABELS } from '../../lib/porchLab';
 import { PostView } from '../../components/backporch/PostView';
-import bakedForDemo from '../../data/backporch.generated.json';
 import { uploadPorchImage } from './porchImages';
 import { BlockComposer } from './BlockComposer';
+import { plainError } from './plainError';
 import { BLOCK_LIMITS, coverFallback, newBlockId, normalizeBlocks, type PorchBlock } from '../../lib/porchBlocks';
 import { FacebookKit } from './FacebookKit';
 import '../internalReports.css';
@@ -70,6 +70,8 @@ interface Form {
   expires_at: string; // datetime-local
   status: PorchPost['status'];
   published_at: string | null;
+  /** The row's updated_at when it was opened, so a save can tell if someone else changed it since. */
+  loaded_at: string | null;
 }
 
 const EMPTY: Form = {
@@ -94,17 +96,49 @@ const EMPTY: Form = {
   expires_at: '',
   status: 'draft',
   published_at: null,
+  loaded_at: null,
 };
 
-/** ISO -> value for <input type="datetime-local"> in the browser's own time zone. */
-function toLocalInput(iso: string | null): string {
-  if (!iso) return '';
-  const d = new Date(iso);
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+// Every time in the editor is Eastern (America/New_York), whatever the computer's
+// own zone: the BackPorch is about Transylvania County, and the site shows Eastern.
+const TZ = 'America/New_York';
+const ET_PARTS = new Intl.DateTimeFormat('en-US', {
+  timeZone: TZ,
+  hourCycle: 'h23',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+
+/** Eastern wall-clock fields of an instant. */
+function easternParts(ms: number) {
+  const p = Object.fromEntries(ET_PARTS.formatToParts(new Date(ms)).map((x) => [x.type, x.value]));
+  return { y: +p.year, mo: +p.month, d: +p.day, h: +p.hour, mi: +p.minute };
 }
 
-const fromLocalInput = (value: string) => (value ? new Date(value).toISOString() : null);
+/** ISO -> value for <input type="datetime-local">, in Eastern time. */
+function toLocalInput(iso: string | null): string {
+  if (!iso) return '';
+  const { y, mo, d, h, mi } = easternParts(Date.parse(iso));
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${y}-${pad(mo)}-${pad(d)}T${pad(h)}:${pad(mi)}`;
+}
+
+/** A datetime-local value read as Eastern time -> ISO. Handles the daylight-saving switch. */
+function fromLocalInput(value: string): string | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(value);
+  if (!m) return null;
+  const wall = Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]);
+  const offsetAt = (ms: number) => {
+    const e = easternParts(ms);
+    return Date.UTC(e.y, e.mo - 1, e.d, e.h, e.mi) - ms;
+  };
+  let t = wall - offsetAt(wall);
+  t = wall - offsetAt(t); // second pass settles times near the switch
+  return new Date(t).toISOString();
+}
 
 export function slugify(text: string): string {
   return text
@@ -143,6 +177,7 @@ function formFromPost(post: PorchPost): Form {
     expires_at: toLocalInput(post.expires_at),
     status: post.status,
     published_at: post.published_at,
+    loaded_at: post.updated_at,
   };
 }
 
@@ -424,7 +459,7 @@ function Editor({
       const path = await uploadPorchImage(file, form.slug || slugify(form.title));
       set('image_path', path);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'The photo could not be uploaded.');
+      setError(plainError(err, 'Uploading the photo'));
     } finally {
       setUploading(false);
     }
@@ -480,7 +515,8 @@ function Editor({
       event_start: gathering ? fromLocalInput(form.event_start) : null,
       event_end: gathering ? fromLocalInput(form.event_end) : null,
       event_place: gathering ? form.event_place.trim() || null : null,
-      pinned: status === 'published' && form.pinned,
+      // Only a post going up now can be pinned; a scheduled one is pinned once it's live.
+      pinned: status === 'published' && form.mode === 'now' && form.pinned,
       status,
       published_at,
       expires_at: fromLocalInput(form.expires_at),
@@ -496,18 +532,29 @@ function Editor({
       } as PorchPost);
       return;
     }
+    // An update only lands if the row is as it was when opened; otherwise someone
+    // (or another tab) saved it since, and this save would quietly undo their change.
     const query = form.id
-      ? supabase.from('porch_posts').update(row).eq('id', form.id).select('*').single()
+      ? (form.loaded_at
+          ? supabase.from('porch_posts').update(row).eq('id', form.id).eq('updated_at', form.loaded_at)
+          : supabase.from('porch_posts').update(row).eq('id', form.id)
+        )
+          .select('*')
+          .maybeSingle()
       : supabase.from('porch_posts').insert(row).select('*').single();
     const { data, error: saveError } = await query;
     setSaving(false);
+    if (!saveError && !data) {
+      setError(
+        'Someone changed this post since you opened it (maybe you, in another tab). Your version is kept here: copy anything you need, then cancel and reopen the post to see theirs.',
+      );
+      return;
+    }
     if (saveError) {
       setError(
         saveError.code === '23505'
           ? `Another post already uses the address ${shortAddress(form.slug)}. Pick a different one.`
-          : saveError.code === '42501'
-            ? "Your account isn't set up to post on the BackPorch."
-            : `Could not save: ${saveError.message}`,
+          : plainError(saveError, 'Saving'),
       );
       return;
     }
@@ -574,11 +621,11 @@ function Editor({
         {form.kind === 'gathering' && (
           <div className="pe-grid-3">
             <div className="pe-field">
-              <label className="pe-label" htmlFor="pe-start">Starts</label>
+              <label className="pe-label" htmlFor="pe-start">Starts <small>(Eastern time)</small></label>
               <input id="pe-start" type="datetime-local" className="ir-input" value={form.event_start} onChange={(e) => set('event_start', e.target.value)} />
             </div>
             <div className="pe-field">
-              <label className="pe-label" htmlFor="pe-end">Ends (optional)</label>
+              <label className="pe-label" htmlFor="pe-end">Ends (optional, Eastern time)</label>
               <input id="pe-end" type="datetime-local" className="ir-input" value={form.event_end} onChange={(e) => set('event_end', e.target.value)} />
             </div>
             <div className="pe-field">
@@ -725,20 +772,21 @@ function Editor({
             <label><input type="radio" name="mode" checked={form.mode === 'draft'} onChange={() => set('mode', 'draft')} /> {wasPublished ? 'Take down (back to draft)' : 'Save as draft'}</label>
           </div>
           {form.mode === 'schedule' && (
-            <input aria-label="Publish at" type="datetime-local" className="ir-input pe-inline-input" value={form.publish_at} onChange={(e) => set('publish_at', e.target.value)} />
+            <input aria-label="Publish at, Eastern time" type="datetime-local" className="ir-input pe-inline-input" value={form.publish_at} onChange={(e) => set('publish_at', e.target.value)} />
           )}
           <div className="pe-field" style={{ marginTop: 14 }}>
-            <label className="pe-label" htmlFor="pe-expires">Take it down after (optional)</label>
+            <label className="pe-label" htmlFor="pe-expires">Take it down after (optional, Eastern time)</label>
             <input id="pe-expires" type="datetime-local" className="ir-input pe-inline-input" value={form.expires_at} onChange={(e) => set('expires_at', e.target.value)} />
             <p className="pe-help">At this time the post comes off the site: the homepage, the BackPorch list, and its own page and short address.</p>
           </div>
         </fieldset>
 
         <label className="pe-check">
-          <input type="checkbox" checked={form.pinned} disabled={form.mode === 'draft'} onChange={(e) => set('pinned', e.target.checked)} />
+          <input type="checkbox" checked={form.pinned && form.mode === 'now'} disabled={form.mode !== 'now'} onChange={(e) => set('pinned', e.target.checked)} />
           <span>
             Pin to the top of the BackPorch and the homepage (up to {MAX_PINS} at once)
-            {pinnedTitle && !initial.pinned && <small> (replaces “{pinnedTitle}”, pinned longest ago)</small>}
+            {form.mode === 'schedule' && <small> (pin it once it's up; a scheduled post can't be pinned)</small>}
+            {form.mode === 'now' && pinnedTitle && !initial.pinned && <small> (replaces “{pinnedTitle}”, pinned longest ago)</small>}
           </span>
         </label>
 
@@ -795,7 +843,7 @@ function BackPorchAdmin({ demo = false }: { demo?: boolean }) {
   const { user, signOut } = useInternalAuth();
   const checked = useEditorCheck();
   const isEditor = demo ? true : checked;
-  const [posts, setPosts] = useState<PorchPost[] | null>(demo ? demoPosts() : null);
+  const [posts, setPosts] = useState<PorchPost[] | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [editing, setEditing] = useState<Form | null>(null);
   const [kitFor, setKitFor] = useState<PorchPost | null>(null);
@@ -803,7 +851,7 @@ function BackPorchAdmin({ demo = false }: { demo?: boolean }) {
   const [publishing, setPublishing] = useState(false);
 
   const load = useCallback(async () => {
-    if (demo) return; // demo posts live in this tab's state
+    if (demo) return; // demo posts live in this tab's state (loaded once, below)
     const { data, error } = await supabase
       .from('porch_posts')
       .select('*')
@@ -813,12 +861,18 @@ function BackPorchAdmin({ demo = false }: { demo?: boolean }) {
     else setPosts((data ?? []) as PorchPost[]);
   }, [demo]);
 
+  // The demo's sample posts load only in the demo, so the real editor doesn't carry them.
+  useEffect(() => {
+    if (demo) void demoPosts().then(setPosts);
+  }, [demo]);
+
   useEffect(() => {
     if (isEditor) void load();
   }, [isEditor, load]);
 
-  // With MAX_PINS already pinned, pinning another unpins the one pinned longest ago.
-  const pins = sortPosts((posts ?? []).filter((p) => p.pinned));
+  // With MAX_PINS live pins, pinning another unpins the one pinned longest ago.
+  // Only live posts count: an expired post's leftover pin isn't shown anywhere.
+  const pins = sortPosts((posts ?? []).filter((p) => p.pinned && isListed(p)));
   const replacedPin = (id: string | null) => {
     const others = pins.filter((p) => p.id !== id);
     return others.length >= MAX_PINS ? others[others.length - 1].title : null;
@@ -869,7 +923,7 @@ function BackPorchAdmin({ demo = false }: { demo?: boolean }) {
       return;
     }
     const { error } = await supabase.from('porch_posts').update(patch).eq('id', post.id);
-    if (error) setNotice(`Could not update: ${error.message}`);
+    if (error) setNotice(plainError(error, 'Updating the post'));
     else if (patch.status === 'archived') await afterTakeDown(post.title);
     else setNotice(message);
     void load();
@@ -883,7 +937,7 @@ function BackPorchAdmin({ demo = false }: { demo?: boolean }) {
       return;
     }
     const { error } = await supabase.from('porch_posts').delete().eq('id', post.id);
-    setNotice(error ? `Could not delete: ${error.message}` : 'Draft deleted.');
+    setNotice(error ? plainError(error, 'Deleting the draft') : 'Draft deleted.');
     void load();
   };
 
@@ -1062,6 +1116,7 @@ export function InternalBackPorchDemoPage() {
   return <EditorShell demo />;
 }
 
-function demoPosts(): PorchPost[] {
-  return (bakedForDemo.posts as unknown as PorchPost[]).map(withBlocks);
+async function demoPosts(): Promise<PorchPost[]> {
+  const baked = await import('../../data/backporch.generated.json');
+  return (baked.default.posts as unknown as PorchPost[]).map(withBlocks);
 }
