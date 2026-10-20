@@ -438,6 +438,52 @@ other sites' pages); the image is resized and stored in our bucket, so readers'
 browsers never contact the linked site. Needs `porch-unfurl` deployed; until then
 the link still works as a plain card. The local demo uses a dev-server stand-in.
 
+## The feed as a bulletin board (built 2026-10-20)
+
+`/backporch` gives each kind of post its own shape, so it reads like a porch
+bulletin board rather than a list of identical cards (owner-approved mock-up:
+https://claude.ai/artifact/4BpH6C8H5zqSY6m19vuHY6). Logic in `src/lib/porchFeed.ts`
+(`buildFeed`, `shapeOf`); components in `src/pages/backporch/feed/`; styles in
+`feed.css`.
+
+- **Coming up:** pinned posts, then upcoming gatherings, at most three. A gathering
+  is a ticket: the lead has its photo beside a gold date block, "In 16 days" /
+  "Tomorrow" / "Today" (Eastern), the time and place, its own link as the main
+  button, Add to calendar, and Copy link; the others are smaller tickets. A pinned
+  non-gathering keeps its own shape. The heading is "Coming up" when they're all
+  gatherings, else "On the porch now".
+- **Add to calendar:** a `<details>` menu (works without JavaScript) with an .ics
+  file as a `data:` link (title, start, end or an hour, place or the online link,
+  the post's URL) and a Google Calendar link.
+- **Copy link** replaces the printed short address on cards: an icon button with an
+  aria-label, a visible "Copied" status read out by aria-live, and a selected text
+  field if the clipboard isn't available.
+- **Months:** the rest, grouped by published month under gold italic Fraunces markers.
+- **Ask:** a full-width rose band, all text white (4.64:1), one paper button with
+  the post's link label, an optional "time to do it" line (`presentation.doIt`,
+  set in the editor), photo on the right. No live counts until there's real data.
+- **Story:** with a gallery, photo-led: the title over a bottom scrim (cream text
+  9:1 or better where the words sit) and a strip of the first three photos plus a
+  "See all N photos" tile. With a YouTube/Vimeo block, a big still with a play
+  button that loads the no-cookie player only when pressed (without JavaScript it
+  opens the post). Otherwise, and for news, a side-by-side spread.
+- **Gatherings that have happened** are compact rows ("Held Oct 1 · place"); in the
+  Gatherings filter they sit under "Gatherings we've held".
+- **Series:** posts with the same `presentation.series` (set in the editor as "Part
+  of a series") collapse into one cream card: name, date span, a quote if any post
+  has a quote block, the series' `about` line, and a list linking each part. Echoes
+  from the Community is the first. No database change: `presentation` is jsonb.
+- **Earlier on the porch:** posts older than about a year, as text rows.
+- **Filters:** the blaze buttons (Everything, Gatherings, News, Asks, Stories, with
+  counts and aria-pressed); an empty state if a filter has nothing.
+- **Not shipped:** porch reactions ("Pull up a chair") wait for a per-voter rate
+  limit; the Ask band has a comment where a live count would go.
+- **Static first:** the build bakes `hints` into the index (a gallery's first
+  photos, a video, a quote; `feedHints()` in porchFeed.ts, copied in bake.mjs), so
+  the prerendered page is the whole board; the live refresh keeps each post's baked
+  hints. The prerender sets `window.__PRERENDER__`, and relative words ("In 16
+  days") appear only in a visitor's browser, on the line that shows the date.
+
 ## Decisions (owner, 2026-10-15)
 
 1. **Name:** The BackPorch, one word. Partners are "neighbors".

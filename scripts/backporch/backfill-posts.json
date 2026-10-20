@@ -99,7 +99,14 @@
      "url": "https://yoursparkpoint.org/stories/community-voice/week-1",
      "label": "Read Week 1"
     }
-   ]
+   ],
+   "presentation": {
+    "series": {
+     "id": "echoes",
+     "name": "Echoes from the Community",
+     "about": "Weekly reflections gathered from conversations, circles, and shared meals across Transylvania County."
+    }
+   }
   },
   {
    "slug": "echoes-week-2",
@@ -121,7 +128,13 @@
      "url": "https://yoursparkpoint.org/stories/community-voice/week-2",
      "label": "Read Week 2"
     }
-   ]
+   ],
+   "presentation": {
+    "series": {
+     "id": "echoes",
+     "name": "Echoes from the Community"
+    }
+   }
   },
   {
    "slug": "echoes-week-3",
@@ -143,7 +156,13 @@
      "url": "https://yoursparkpoint.org/stories/community-voice/week-3",
      "label": "Read Week 3"
     }
-   ]
+   ],
+   "presentation": {
+    "series": {
+     "id": "echoes",
+     "name": "Echoes from the Community"
+    }
+   }
   },
   {
    "slug": "echoes-week-4",
@@ -165,7 +184,13 @@
      "url": "https://yoursparkpoint.org/stories/community-voice/week-4",
      "label": "Read Week 4"
     }
-   ]
+   ],
+   "presentation": {
+    "series": {
+     "id": "echoes",
+     "name": "Echoes from the Community"
+    }
+   }
   },
   {
    "slug": "echoes-week-5",
@@ -191,7 +216,13 @@
      "url": "https://yoursparkpoint.org/stories/community-voice/week-5",
      "label": "Read Week 5"
     }
-   ]
+   ],
+   "presentation": {
+    "series": {
+     "id": "echoes",
+     "name": "Echoes from the Community"
+    }
+   }
   },
   {
    "slug": "when-neighbors-become-leaders",
@@ -374,7 +405,10 @@
     }
    ],
    "link_url": "https://yoursparkpoint.org/healthcare-story",
-   "link_label": "Share your story"
+   "link_label": "Share your story",
+   "presentation": {
+    "doIt": "About five minutes · anonymous"
+   }
   },
   {
    "slug": "an-atlas-of-wonders",

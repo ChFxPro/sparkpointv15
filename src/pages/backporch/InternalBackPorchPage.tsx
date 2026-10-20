@@ -745,6 +745,42 @@ function Editor({
           </div>
         </div>
 
+        {/* How the post sits on the /backporch board (see src/lib/porchFeed.ts). */}
+        <div className="pe-grid-2">
+          {form.kind === 'ask' && (
+            <div className="pe-field">
+              <label className="pe-label" htmlFor="pe-doit">Time to do it (optional)</label>
+              <input
+                id="pe-doit"
+                className="ir-input"
+                placeholder="About five minutes · anonymous"
+                maxLength={80}
+                value={form.presentation.doIt ?? ''}
+                onChange={(e) => set('presentation', { ...form.presentation, doIt: e.target.value || undefined })}
+              />
+              <p className="pe-help">Shown beside the button on the ask's band.</p>
+            </div>
+          )}
+          <div className="pe-field">
+            <label className="pe-label" htmlFor="pe-series">Part of a series (optional)</label>
+            <input
+              id="pe-series"
+              className="ir-input"
+              placeholder="Echoes from the Community"
+              maxLength={80}
+              value={form.presentation.series?.name ?? ''}
+              onChange={(e) => {
+                const name = e.target.value;
+                set('presentation', {
+                  ...form.presentation,
+                  series: name.trim() ? { ...form.presentation.series, id: slugify(name).slice(0, 40), name } : undefined,
+                });
+              }}
+            />
+            <p className="pe-help">Posts with the same series name share one card on the BackPorch, listed in order.</p>
+          </div>
+        </div>
+
         <div className="pe-field">
           <label className="pe-label" htmlFor="pe-slug">Short address</label>
           <div className="pe-slug">
