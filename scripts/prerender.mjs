@@ -198,6 +198,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
       // so 'networkidle0' can never be reached on a route that has one. That is what
       // timed out /events/thrive-at-five once it gained an autoplay hero loop.
       // The <video>/<source> tags still serialize identically; only the bytes are skipped.
+      // Lets pages tell a build-time snapshot from a visitor, e.g. so "In 16 days"
+      // isn't frozen into the static HTML (the BackPorch feed shows the date instead).
+      await page.evaluateOnNewDocument(() => { window.__PRERENDER__ = true; });
       await page.setRequestInterception(true);
       page.on('request', (req) => {
         const isMedia = req.resourceType() === 'media'

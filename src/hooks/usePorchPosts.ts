@@ -19,7 +19,11 @@ export function usePorchPosts(): PorchPost[] {
     let cancelled = false;
     fetchPublishedPosts()
       .then((live) => {
-        if (!cancelled) setPosts(sortPosts(live.filter((p) => isListed(p))));
+        if (cancelled) return;
+        // The live list has no blocks, so each post keeps the feed hints baked for it
+        // (a post published since the build has none until the next build).
+        const hints = new Map(BAKED.map((p) => [p.id, p.hints]));
+        setPosts(sortPosts(live.filter((p) => isListed(p)).map((p) => ({ ...p, hints: hints.get(p.id) }))));
       })
       .catch(() => {
         /* keep the baked list */

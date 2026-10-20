@@ -79,9 +79,24 @@ await mkdir(path.dirname(OUT_FULL), { recursive: true });
 // would otherwise replace the sample posts with whatever the real database holds.
 const samples = Boolean(fixture);
 await writeFile(OUT_FULL, JSON.stringify({ generatedAt, samples, posts: listed }, null, 1) + '\n');
+// The index drops blocks but keeps a few feed hints from them (a gallery's first
+// photos, a video, a quote). A copy of feedHints() in src/lib/porchFeed.ts: keep in step.
+function feedHints(blocks) {
+  const list = Array.isArray(blocks) ? blocks : [];
+  const hints = {};
+  const gallery = list.find((b) => b?.type === 'gallery' && Array.isArray(b.images) && b.images.length);
+  if (gallery) {
+    hints.gallery = { images: gallery.images.slice(0, 3).map(({ path, alt }) => ({ path, alt: alt ?? '' })), total: gallery.images.length };
+  }
+  const embed = list.find((b) => b?.type === 'embed' && (b.provider === 'youtube' || b.provider === 'vimeo') && typeof b.videoId === 'string');
+  if (embed) hints.embed = { provider: embed.provider, videoId: embed.videoId, ...(embed.title ? { title: embed.title } : {}) };
+  const quote = list.find((b) => b?.type === 'quote' && typeof b.text === 'string' && b.text.trim());
+  if (quote) hints.quote = { text: quote.text.trim(), ...(quote.cite ? { cite: quote.cite } : {}) };
+  return hints;
+}
 await writeFile(
   OUT_INDEX,
-  JSON.stringify({ generatedAt, samples, posts: listed.map(({ blocks, ...rest }) => rest) }, null, 1) + '\n',
+  JSON.stringify({ generatedAt, samples, posts: listed.map(({ blocks, ...rest }) => ({ ...rest, hints: feedHints(blocks) })) }, null, 1) + '\n',
 );
 
 // ── Feeds ──

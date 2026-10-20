@@ -5,6 +5,7 @@
 // so pages prerender with real content; in the browser the same pages then
 // refresh from Supabase, so a post published a minute ago shows up before the
 // next deploy.
+import type { FeedHints } from './porchFeed';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { normalizeBlocks, type PorchBlock } from './porchBlocks';
 
@@ -19,7 +20,14 @@ export interface Presentation {
   reactions?: boolean;
   /** Set on save from a takeover's opening backdrop, so feed lists (which don't load blocks) can draw it. */
   scene?: 'sunrise' | 'fireflies' | 'ridges';
+  /** Posts sharing a series id collapse into one card in the feed (e.g. Echoes from the Community). */
+  series?: { id: string; name: string; about?: string };
+  /** An ask's "time to do it" line, e.g. "About five minutes · anonymous". */
+  doIt?: string;
 }
+
+const SERIES_ID = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+const text = (v: unknown, max: number) => (typeof v === 'string' && v.trim() ? v.trim().slice(0, max) : undefined);
 
 export function normalizePresentation(v: unknown): Presentation {
   const o = (v && typeof v === 'object' ? v : {}) as Record<string, unknown>;
@@ -28,6 +36,13 @@ export function normalizePresentation(v: unknown): Presentation {
     mood: o.mood === 'sunrise' || o.mood === 'forest' || o.mood === 'plum' ? o.mood : 'dusk',
     reactions: o.reactions === true,
     scene: o.scene === 'sunrise' || o.scene === 'fireflies' || o.scene === 'ridges' ? o.scene : undefined,
+    series: (() => {
+      const s = (o.series && typeof o.series === 'object' ? o.series : null) as Record<string, unknown> | null;
+      const id = typeof s?.id === 'string' && SERIES_ID.test(s.id) ? s.id.slice(0, 40) : undefined;
+      const name = text(s?.name, 80);
+      return id && name ? { id, name, about: text(s?.about, 200) } : undefined;
+    })(),
+    doIt: text(o.doIt, 80),
   };
 }
 
@@ -47,6 +62,8 @@ export interface PorchPost {
   event_start: string | null;
   event_end: string | null;
   event_place: string | null;
+  /** Feed summary of the blocks (gallery, video, quote), baked at build time; see porchFeed.ts. */
+  hints?: FeedHints;
   pinned: boolean;
   /** When it was pinned (set by the database). The most recent pin leads. */
   pinned_at?: string | null;
@@ -106,7 +123,8 @@ export function porchMediaUrl(path: string): string {
 }
 
 export function porchImageSrcSet(path: string | null): string | undefined {
-  if (!path || !SIZED.test(path)) return undefined;
+  // Site files (local preview posts) aren't stored as 480/960/1600 sets, so no srcset.
+  if (!path || path.startsWith('/') || !SIZED.test(path)) return undefined;
   return IMAGE_WIDTHS.map((w) => `${porchImageUrl(path, w)} ${w}w`).join(', ');
 }
 
