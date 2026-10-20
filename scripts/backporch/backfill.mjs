@@ -179,11 +179,18 @@ async function upload(slug, src) {
   for (const width of WIDTHS) {
     const body = await sharp(input).rotate().resize({ width: Math.min(width, natural), withoutEnlargement: true }).webp({ quality: 82 }).toBuffer();
     const objectPath = `backfill/${slug}/${name}-${width}.webp`;
-    const res = await fetch(`${BASE}/storage/v1/object/${BUCKET}/${objectPath}`, {
-      method: 'POST',
-      headers: { ...auth, 'Content-Type': 'image/webp', 'x-upsert': 'true', 'Cache-Control': 'max-age=31536000' },
-      body,
-    });
+    const send = (headers) =>
+      fetch(`${BASE}/storage/v1/object/${BUCKET}/${objectPath}`, {
+        method: 'POST',
+        headers: { ...headers, 'Content-Type': 'image/webp', 'x-upsert': 'true', 'Cache-Control': 'max-age=31536000' },
+        body,
+      });
+    let res = await send(auth);
+    // Replacing a file that's already there, Storage can insist on an Authorization
+    // header even for an sb_secret_ key, which otherwise goes on apikey alone.
+    if (res.status === 400 && /authorization/i.test(await res.clone().text())) {
+      res = await send({ ...auth, Authorization: `Bearer ${key}` });
+    }
     if (!res.ok) fail(`Upload failed for ${src} (${res.status}): ${(await res.text()).slice(0, 300)}`);
   }
   const main = `backfill/${slug}/${name}-960.webp`;
