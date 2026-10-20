@@ -50,7 +50,9 @@ for (const post of posts) {
   if (!post.title?.trim() || post.title.length > 90) problems.push(`${where}: title must be 1–90 characters (is ${post.title?.length ?? 0})`);
   if (!post.summary?.trim() || post.summary.length > 280) problems.push(`${where}: summary must be 1–280 characters (is ${post.summary?.length ?? 0})`);
   if (!KINDS.includes(post.kind)) problems.push(`${where}: kind must be one of ${KINDS.join(', ')}`);
-  if (Number.isNaN(Date.parse(post.published_at))) problems.push(`${where}: published_at is not a date`);
+  if (post.status && !['published', 'draft'].includes(post.status)) problems.push(`${where}: status must be published or draft`);
+  if (post.status === 'draft' && post.pinned) problems.push(`${where}: a draft can't be pinned (pin it when you publish)`);
+  if (post.status !== 'draft' && Number.isNaN(Date.parse(post.published_at))) problems.push(`${where}: published_at is not a date`);
   if (post.kind === 'gathering' && !post.event_start) problems.push(`${where}: a gathering needs event_start`);
   if (post.link_label && !post.link_url) problems.push(`${where}: link_label needs link_url`);
   for (const url of [post.link_url, ...post.blocks.filter((b) => b.type === 'link').map((b) => b.url)]) {
@@ -67,7 +69,7 @@ const ordered = [...posts.filter((p) => !p.pinned), ...posts.filter((p) => p.pin
 const imageCount = new Set(posts.flatMap((p) => imagesOf(p).map((i) => i.src))).size;
 console.log(`${posts.length} posts, ${imageCount} images, ${posts.filter((p) => p.pinned).length} pinned:\n`);
 for (const p of ordered) {
-  const date = new Date(p.published_at).toISOString().slice(0, 10);
+  const date = p.status === 'draft' ? 'draft     ' : new Date(p.published_at).toISOString().slice(0, 10);
   console.log(`  ${date}  ${p.kind.padEnd(9)} ${p.pinned ? '📌 ' : '   '}${p.title}  (/p/${p.slug})`);
 }
 
@@ -102,8 +104,9 @@ if (fixtureArg) {
     event_place: post.event_place ?? null,
     pinned: Boolean(post.pinned),
     pinned_at: post.pinned ? new Date(now + i).toISOString() : null,
+    // Drafts show in the local preview as if published now, so they can be read in place.
     status: 'published',
-    published_at: post.published_at,
+    published_at: post.status === 'draft' ? new Date(now).toISOString() : post.published_at,
     expires_at: post.expires_at ?? null,
     updated_at: new Date(now).toISOString(),
   }));
@@ -210,8 +213,9 @@ for (const post of ordered) {
     event_end: post.event_end ?? null,
     event_place: post.event_place ?? null,
     pinned: Boolean(post.pinned),
-    status: 'published',
-    published_at: post.published_at,
+    // A draft waits in the editor (/internal/backporch) until someone publishes it.
+    status: post.status === 'draft' ? 'draft' : 'published',
+    published_at: post.status === 'draft' ? null : post.published_at,
     expires_at: post.expires_at ?? null,
   };
   const res = await fetch(`${BASE}/rest/v1/porch_posts?on_conflict=slug`, {
@@ -223,4 +227,5 @@ for (const post of ordered) {
   process.stdout.write('saved');
 }
 
-console.log(`\n\nDone: ${ordered.length} posts are on the BackPorch. They show on the site after its next build.`);
+const drafts = ordered.filter((p) => p.status === 'draft').length;
+console.log(`\n\nDone: ${ordered.length - drafts} posts are on the BackPorch${drafts ? `, and ${drafts} draft${drafts > 1 ? 's wait' : ' waits'} in the editor` : ''}. They show on the site after its next build.`);

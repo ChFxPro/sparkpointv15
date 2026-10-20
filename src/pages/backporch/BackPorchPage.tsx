@@ -176,7 +176,7 @@ export default function BackPorchPage() {
           <p>
             Every community has a back porch: the place people stop by to catch up. This is SparkPoint's. We
             share our news, gatherings, asks, and stories here first, on our own site, and then pass them along.
-            No ads, no algorithm, and no tracking.
+            No ads, and no algorithm deciding what you see.
           </p>
           <p>
             Each post carries a trail blaze for its kind: a gathering, news, an ask, or a story. Follow along{' '}
