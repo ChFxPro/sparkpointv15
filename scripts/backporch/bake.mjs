@@ -33,19 +33,13 @@ const projectId = /projectId\s*=\s*"([^"]+)"/.exec(info)?.[1];
 const anonKey = /publicAnonKey\s*=\s*"([^"]+)"/.exec(info)?.[1];
 if (!projectId || !anonKey) throw new Error('Could not read the Supabase project id / anon key from src/utils/supabase/info.tsx');
 
-async function fetchPosts(columns = COLUMNS) {
+async function fetchPosts() {
   const url =
-    `https://${projectId}.supabase.co/rest/v1/porch_posts?select=${columns}` +
+    `https://${projectId}.supabase.co/rest/v1/porch_posts?select=${COLUMNS}` +
     `&status=eq.published&order=published_at.desc&limit=500`;
   const res = await fetch(url, { headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}` } });
   if (res.ok) return res.json();
   const text = await res.text();
-  // Until migration backporch_three_pins adds pinned_at: bake without it (pins
-  // then fall back to publish order) rather than failing the deploy.
-  if (columns === COLUMNS && /42703/.test(text) && /pinned_at/.test(text)) {
-    console.warn('backporch: porch_posts.pinned_at not found (migration backporch_three_pins not applied yet); baking without pin order.');
-    return fetchPosts(COLUMNS.replace(',pinned_at', ''));
-  }
   if (/PGRST205|42P01|porch_posts/.test(text) && res.status === 404) {
     console.warn('backporch: table porch_posts not found (migration not applied yet); baking no posts.');
     return [];

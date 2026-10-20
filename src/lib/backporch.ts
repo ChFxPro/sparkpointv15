@@ -183,11 +183,6 @@ export function bodyParagraphs(body: string): string[] {
   return body.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
 }
 
-// Until migration backporch_three_pins adds `pinned_at`, selecting it fails with
-// 42703 (undefined column); read without it, and pins fall back to publish order.
-const MISSING_COLUMN = '42703';
-const withoutPinOrder = (columns: string) => columns.replace(', pinned_at', '');
-
 export async function fetchPublishedPosts(): Promise<PorchPost[]> {
   const query = (columns: string) =>
     supabase
@@ -196,8 +191,7 @@ export async function fetchPublishedPosts(): Promise<PorchPost[]> {
       .eq('status', 'published')
       .order('published_at', { ascending: false })
       .limit(100);
-  let { data, error } = await query(PORCH_LIST_COLUMNS);
-  if (error?.code === MISSING_COLUMN) ({ data, error } = await query(withoutPinOrder(PORCH_LIST_COLUMNS)));
+  const { data, error } = await query(PORCH_LIST_COLUMNS);
   if (error) throw error;
   return ((data ?? []) as unknown as PorchPost[]).map(withBlocks);
 }
@@ -210,8 +204,7 @@ export function withBlocks(post: PorchPost): PorchPost {
 export async function fetchPublishedPost(slug: string): Promise<PorchPost | null> {
   const query = (columns: string) =>
     supabase.from('porch_posts').select(columns).eq('slug', slug).eq('status', 'published').maybeSingle();
-  let { data, error } = await query(PORCH_PUBLIC_COLUMNS);
-  if (error?.code === MISSING_COLUMN) ({ data, error } = await query(withoutPinOrder(PORCH_PUBLIC_COLUMNS)));
+  const { data, error } = await query(PORCH_PUBLIC_COLUMNS);
   if (error) throw error;
   return data ? withBlocks(data as unknown as PorchPost) : null;
 }
