@@ -957,6 +957,11 @@
   margin-top: 0.9rem;
 }
 
+/* The /backporch board is wider than the old list column. */
+.porch-shell-board {
+  max-width: 75rem;
+}
+
 /* "About the BackPorch": a short note under the list on /backporch. */
 .porch-about {
   max-width: 40rem;
