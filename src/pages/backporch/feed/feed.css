@@ -1049,3 +1049,20 @@ html.reduce-motion .pf-row:hover .pf-arrow {
 html.reduce-motion .pf-play:hover {
   transform: translate(-50%, -50%);
 }
+
+/* Wide screens: the lead ticket's photo gets the larger share, so a landscape photo
+   isn't cropped to a sliver (people at the edges of the frame stay in). */
+@media (min-width: 1040px) {
+  .pf-ticket-lead {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+
+  .pf-ticket-lead .pf-ticket-body {
+    padding: 2.25rem 2.25rem 2rem;
+  }
+}
+
+.pf-ticket-lead .pf-ticket-photo .pf-photo {
+  object-position: 50% 40%;
+}
