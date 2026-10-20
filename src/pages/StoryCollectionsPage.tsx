@@ -66,7 +66,11 @@ export default function StoryCollectionsPage() {
               <p className="mt-5 max-w-2xl text-lg leading-relaxed text-gray-600">
                 Story collections are the engine behind everything SparkPoint publishes — organized drives to listen to
                 our neighbors on a specific question, at a specific moment. Some are open right now. Others became the
-                films, talks, and columns already in the Story Hub.
+                films, talks, and columns already in the Story Hub. Each one is a StoryLab collection, part of
+                SparkPoint&rsquo;s listening practice.{' '}
+                <Link to="/programs/storylab" className="font-semibold text-[#5e2a63] underline underline-offset-4 hover:no-underline">
+                  About StoryLab
+                </Link>
               </p>
             </div>
             <motion.div

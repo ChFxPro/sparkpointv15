@@ -1,12 +1,13 @@
 .commconn-page {
-  --cc-cream: #fbf4e6;
+  /* Brand colours from the logo kit (Branding/CommunityConnectors); keep in step with src/components/communityConnectorsBrand.ts. */
+  --cc-cream: #f3ecdf;
   --cc-cream-light: #fffaf0;
-  --cc-evergreen: #174c36;
+  --cc-evergreen: #224a39;
   --cc-evergreen-dark: #0f3527;
-  --cc-teal: #5f9694;
+  --cc-teal: #538681;
   --cc-teal-dark: #356f70;
-  --cc-moss: #8b8d4a;
-  --cc-gold: #e6a72a;
+  --cc-moss: #838444;
+  --cc-gold: #e09c2c;
   --cc-ink: #15231d;
   --cc-muted: #53635b;
   --cc-border: rgba(23, 76, 54, 0.16);

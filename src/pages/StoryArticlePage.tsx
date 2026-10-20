@@ -30,7 +30,7 @@ interface RelatedLink {
 const RELATED_LINKS: Record<string, RelatedLink[]> = {
   'programs/when-neighbors-become-leaders': [
     {
-      to: '/programs/community-connectors',
+      to: '/community-connectors',
       kind: 'Program',
       title: 'Community Connectors',
       blurb: 'The ongoing initiative this story documents — trusted local people helping neighbors find resources and stay prepared.',
@@ -50,10 +50,10 @@ const RELATED_LINKS: Record<string, RelatedLink[]> = {
   ],
   'talks-lectures/dr-ora-brain-health': [
     {
-      to: '/programs/brain-stress-resilience',
-      kind: 'Program',
-      title: 'Brain, Stress & Resilience',
-      blurb: 'A SparkPoint workshop on what stress does in the brain — and how connection helps protect it.',
+      to: '/resources/know-your-numbers',
+      kind: 'Resource',
+      title: 'Know Your Numbers',
+      blurb: 'A metabolic health guide to go with Dr. Ora’s talk.',
     },
   ],
   'disaster-recovery/helene-one-year': [
@@ -64,7 +64,7 @@ const RELATED_LINKS: Record<string, RelatedLink[]> = {
       blurb: 'How this listening tour grew into the Community Connectors initiative.',
     },
     {
-      to: '/programs/community-connectors',
+      to: '/community-connectors',
       kind: 'Program',
       title: 'Community Connectors',
       blurb: 'The ongoing initiative this listening tour helped launch.',

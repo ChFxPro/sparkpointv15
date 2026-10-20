@@ -44,7 +44,7 @@ interface RelatedItem {
 const EXPLICIT_RELATED: Record<string, RelatedItem[]> = {
   'fwrd-long-term-recovery': [
     {
-      to: '/programs/community-connectors',
+      to: '/community-connectors',
       kind: 'Program',
       title: 'Community Connectors',
       blurb: 'The SparkPoint initiative FWRD helped launch after Hurricane Helene.',

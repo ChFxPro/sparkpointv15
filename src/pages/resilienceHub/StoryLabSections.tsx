@@ -17,7 +17,11 @@ import {
   Users,
   type LucideIcon,
 } from 'lucide-react';
+import { Link } from 'react-router';
 import { Sparkmark } from '../../components/Sparkmark';
+import storylabLogoReversed from '../../assets/storylab/storylab-logo-reversed.svg';
+import mediaNavigatorsLogo from '../../assets/medianavigators/medianavigators-lockup-night-reversed.svg';
+import mediaNavigatorsLogoSmall from '../../assets/medianavigators/medianavigators-lockup-night-small-reversed.svg';
 import studioSmall from '../../assets/hub/storylab-studio-960.webp';
 import studioLarge from '../../assets/hub/storylab-studio-1536.webp';
 import { RenderingNote } from './HubPlaceSections';
@@ -277,18 +281,24 @@ export function StoryLabSection({ reveal }: RevealProps) {
           viewport={{ once: true, amount: 0.3 }}
           transition={reveal}
         >
-          <Kicker>StoryLab at the Resilience Hub</Kicker>
           <h2 id="rh-storylab-title" className="rh-title rh-title--display">
+            {/* StoryLab's own logo (its kit in Branding/StoryLab) heads the section. */}
+            <img src={storylabLogoReversed} alt="StoryLab" className="rh-program-logo" />
+            <span className="sr-only">: </span>
             The stories were already here.{' '}
             <span className="rh-gradient-text">Now they&rsquo;re getting a home.</span>
           </h2>
           <p className="rh-lede">
-            StoryLab is SparkPoint&rsquo;s community media studio and listening process.
-            Residents, nonprofits, and local leaders record stories, oral histories, and
-            reflections in a respectful, professional setting. We review what people share for
-            patterns, then turn it into captioned video, archives, and public learning that
-            informs what the community does next.
+            StoryLab is SparkPoint&rsquo;s listening practice: community story collection, one
+            question at a time, grounded in Participatory Narrative Inquiry. It follows a
+            repeatable cycle: listen to lived experience, learn what it reveals, lead with what the
+            community needs, and return what was learned. Its next home is a StoryLab studio
+            planned for the Resilience Hub, for recording stories and oral histories and turning
+            them into captioned video and archives, with Media Navigators helping run it.
           </p>
+          <Link to="/programs/storylab" className="rh-text-link">
+            About StoryLab
+          </Link>
         </motion.div>
 
         <CycleRow steps={STORY_CYCLE} variant="dark" />
@@ -374,8 +384,13 @@ export function FellowshipSection({ reveal }: RevealProps) {
           viewport={{ once: true, amount: 0.3 }}
           transition={reveal}
         >
-          <p className="rh-kicker rh-kicker--plum">Media Navigator Fellowship</p>
           <h2 id="rh-fellowship-title" className="rh-title rh-title--display">
+            {/* Media Navigators' own logo (its kit in Branding/MediaNavigators); the step-down lockup on phones. */}
+            <picture>
+              <source media="(max-width: 400px)" srcSet={mediaNavigatorsLogoSmall} />
+              <img src={mediaNavigatorsLogo} alt="Media Navigators" className="rh-program-logo rh-program-logo--wide" />
+            </picture>
+            <span className="sr-only">: </span>
             Rural learning meets <span className="rh-plum-text">real-world work.</span>
           </h2>
           <p className="rh-lede">

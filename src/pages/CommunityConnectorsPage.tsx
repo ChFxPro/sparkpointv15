@@ -13,8 +13,10 @@ import {
   UsersRound,
 } from "lucide-react";
 import { SEOHead } from "../components/SEOHead";
-import commconnLogoDark from "../assets/commconn/logos/commconn_logo_dk.webp";
-import commconnBrandmarkDark from "../assets/commconn/logos/comcon_brandmark_comcon_bndmrk_dk_color.webp";
+import { COMMUNITY_CONNECTORS_BRAND } from "../components/communityConnectorsBrand";
+
+const commconnLogoDark = COMMUNITY_CONNECTORS_BRAND.logoDark;
+const commconnBrandmarkDark = COMMUNITY_CONNECTORS_BRAND.brandmark;
 import groupGathering from "../assets/commconn/imgs/comcon_group_elev.webp";
 import cathyCreekConversation from "../assets/commconn/imgs/comcon_cathycreek.webp";
 import attendeePortrait from "../assets/commconn/imgs/comcon_attendee.webp";
@@ -185,8 +187,8 @@ export function CommunityConnectorsPage() {
               src={commconnLogoDark}
               alt="Community Connectors"
               className="commconn-logo"
-              width={3098}
-              height={967}
+              width={3221}
+              height={1090}
             />
             <h1>Rooted in connection. Ready for what's next.</h1>
             <p className="commconn-hero-lede">
@@ -510,8 +512,8 @@ export function CommunityConnectorsPage() {
               src={commconnBrandmarkDark}
               alt=""
               className="commconn-brandmark"
-              width={1080}
-              height={1080}
+              width={831}
+              height={926}
               aria-hidden="true"
             />
             <h2 id="commconn-closing-title">Rooted in connection. Ready for what's next.</h2>

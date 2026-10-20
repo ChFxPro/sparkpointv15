@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
-import { LitSentence } from './home/LitSentence';
 import { STORY_COLLECTIONS } from '../data/storyCollections';
 
 import storyWebp from '../assets/connection_happens/story1.webp';
@@ -11,6 +10,8 @@ import hub1600 from '../assets/hub/hub-day-1600.webp';
 // TrailHead's own lockup (the double blaze and wordmark, cream for dark grounds),
 // from the logo kit in Branding/TrailHead; see that folder's README.
 import trailheadLockup from '../assets/trailhead/trailhead-lockup-horizontal-reversed.svg';
+import storylabLogoReversed from '../assets/storylab/storylab-logo-reversed.svg';
+import { COMMUNITY_CONNECTORS_BRAND as CC } from './communityConnectorsBrand';
 
 // What SparkPoint is building now, one program per pathway it belongs to,
 // in the program pages' pathway colours (Listen, Lead, Connect; see
@@ -50,16 +51,19 @@ type Program = {
   tone?: string;
   /** A program with its own brand shows its logo in place of the set title. */
   logo?: string;
+  /** A light card (dark words on a pale wash), for a brand whose logo is drawn for light grounds. */
+  light?: boolean;
 };
 
 const PROGRAMS: Program[] = [
   {
-    id: 'story-collection',
+    // StoryLab: SparkPoint's listening practice and, soon, its studio at the Hub.
+    id: 'storylab',
     pathway: 'listen',
-    title: 'Community Story Collection',
+    title: 'StoryLab',
     body: activeCollection
-      ? `We gather residents’ stories on one question at a time and take what we hear to the people making local decisions. Right now: ${activeCollection.title.toLowerCase()}.`
-      : 'We gather residents’ stories on one question at a time and take what we hear to the people making local decisions.',
+      ? `SparkPoint’s listening practice: we gather residents’ stories one question at a time and take what we hear to the people who can act on it. Right now: ${activeCollection.title.toLowerCase()}. A StoryLab studio is planned for the Resilience Hub.`
+      : 'SparkPoint’s listening practice: we gather residents’ stories one question at a time and take what we hear to the people who can act on it. A StoryLab studio is planned for the Resilience Hub.',
     tags: ['Open to every resident', 'Anonymous'],
     image: {
       src: storyWebp,
@@ -70,10 +74,14 @@ const PROGRAMS: Program[] = [
     links: activeCollection
       ? [
           { label: 'Share your story', to: `/stories/collections/${activeCollection.id}` },
-          { label: 'Read community stories', to: '/stories' },
+          { label: 'About StoryLab', to: '/programs/storylab' },
         ]
-      : [{ label: 'Read community stories', to: '/stories' }],
+      : [{ label: 'About StoryLab', to: '/programs/storylab' }],
+    // StoryLab's reversed logo on its own plum.
+    logo: storylabLogoReversed,
+    tone: '#3A1B40',
   },
+
   {
     id: 'simulator',
     pathway: 'lead',
@@ -101,6 +109,11 @@ const PROGRAMS: Program[] = [
     tags: ['With the American Red Cross and FWRD Transylvania'],
     image: { src: connectorsWebp, alt: 'Community Connectors gathered around long tables, talking in small groups.', position: '50% 40%' },
     links: [{ label: 'Meet the Connectors', to: '/community-connectors' }],
+    // Community Connectors' own lockup and cream, as on its own page. A light card, which
+    // also keeps it apart from TrailHead's green card just above it.
+    logo: CC.logoDark,
+    tone: CC.colors.cream,
+    light: true,
   },
   {
     id: 'resilience-hub',
@@ -136,14 +149,18 @@ function ProgramCard({ program, index }: { program: Program; index: number }) {
   const side = index % 2 === 0 ? 'right' : 'left';
   const tone = program.tone ?? pathway.deep;
   const [primary, ...secondary] = program.links;
+  // Light cards (Community Connectors) flip to dark words and a dark button.
+  const ink = program.light ? CC.colors.ink : '#fff';
+  const buttonBg = program.light ? CC.colors.evergreen : '#fff';
+  const buttonText = program.light ? '#fff' : tone;
   return (
     <article
       id={`program-${program.id}`}
       data-program={program.id}
       data-side={side}
       aria-labelledby={`program-${program.id}-title`}
-      className={`home-program group relative flex h-[32rem] scroll-mt-28 overflow-hidden rounded-[1.75rem] bg-[var(--home-plum)] text-white sm:h-[31rem] lg:sticky lg:h-[min(72vh,33rem)] ${side === 'right' ? 'sm:justify-end' : ''} ${STICKY_TOP[index]} ${last ? '' : 'lg:mb-8'}`}
-      style={{ ['--tone' as string]: tone, boxShadow: '0 -18px 40px -22px rgba(20,8,24,0.6)' }}
+      className={`home-program group relative flex h-[32rem] scroll-mt-28 overflow-hidden rounded-[1.75rem] bg-[var(--home-plum)] sm:h-[31rem] lg:sticky lg:h-[min(72vh,33rem)] ${side === 'right' ? 'sm:justify-end' : ''} ${STICKY_TOP[index]} ${last ? '' : 'lg:mb-8'}`}
+      style={{ ['--tone' as string]: tone, color: ink, boxShadow: '0 -18px 40px -22px rgba(20,8,24,0.6)' }}
     >
       <img
         src={program.image.src}
@@ -159,19 +176,19 @@ function ProgramCard({ program, index }: { program: Program; index: number }) {
       <div className="relative flex w-full flex-col justify-end p-6 sm:w-[52%] sm:justify-center md:p-9 lg:w-[50%]">
         <h3 id={`program-${program.id}-title`} className="text-[1.75rem] font-extrabold leading-[1.08] tracking-[-0.01em] md:text-[2.1rem]" style={{ textWrap: 'balance' }}>
           {program.logo ? (
-            <img src={program.logo} alt={program.title} className="h-11 w-auto max-w-full md:h-14" />
+            <img src={program.logo} alt={program.title} className={`w-auto max-w-full ${program.light ? 'h-14 md:h-[4.5rem]' : 'h-11 md:h-14'}`} />
           ) : (
             program.title
           )}
         </h3>
-        <p className="mt-3 text-base leading-relaxed text-white/90">{program.body}</p>
+        <p className="mt-3 text-base leading-relaxed" style={{ color: program.light ? CC.colors.muted : 'rgba(255,255,255,0.9)' }}>{program.body}</p>
         <ul className="mt-5 hidden flex-wrap gap-2 sm:flex" aria-label="About this program">
-          <li className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-[0.8rem] font-bold" style={{ color: tone }}>
+          <li className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.8rem] font-bold" style={{ backgroundColor: program.light ? CC.colors.evergreen : '#fff', color: program.light ? '#fff' : tone }}>
             <span className="h-2 w-2 rounded-full" style={{ backgroundColor: pathway.color }} aria-hidden="true" />
             {pathway.label}
           </li>
           {program.tags.map((tag) => (
-            <li key={tag} className="rounded-full border border-white/40 px-3 py-1 text-[0.8rem] font-semibold text-white">
+            <li key={tag} className="rounded-full border px-3 py-1 text-[0.8rem] font-semibold" style={{ borderColor: program.light ? 'rgba(23,76,54,0.3)' : 'rgba(255,255,255,0.4)' }}>
               {tag}
             </li>
           ))}
@@ -179,8 +196,8 @@ function ProgramCard({ program, index }: { program: Program; index: number }) {
         <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-1 md:mt-6">
           <Link
             to={primary.to}
-            className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full bg-white px-5 text-base font-bold transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
-            style={{ color: tone, ['--tw-ring-offset-color' as string]: tone }}
+            className="inline-flex min-h-[44px] items-center gap-2 whitespace-nowrap rounded-full px-5 text-base font-bold transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+            style={{ backgroundColor: buttonBg, color: buttonText, ['--tw-ring-color' as string]: ink, ['--tw-ring-offset-color' as string]: tone }}
           >
             {primary.label} <ArrowRight size={16} aria-hidden="true" />
           </Link>
@@ -188,7 +205,8 @@ function ProgramCard({ program, index }: { program: Program; index: number }) {
             <Link
               key={link.to}
               to={link.to}
-              className="inline-flex min-h-[44px] items-center gap-1.5 text-base font-bold text-white underline decoration-white/50 underline-offset-4 hover:decoration-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="inline-flex min-h-[44px] items-center gap-1.5 text-base font-bold underline decoration-current/50 underline-offset-4 focus-visible:outline-none focus-visible:ring-2"
+              style={{ color: ink }}
             >
               {link.label}
             </Link>
@@ -232,10 +250,6 @@ export function ConnectionSection() {
   return (
     <section id="what-we-do" aria-labelledby="what-we-do-heading" className="relative scroll-mt-24 overflow-x-clip bg-white px-6 py-16 md:py-24">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-16 md:mb-24">
-          <LitSentence />
-        </div>
-
         <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.6fr)] lg:gap-14">
           {/* Heading and the pathway list; it stays in view beside the cards on large screens. */}
           <div className="lg:sticky lg:top-24 lg:self-start">

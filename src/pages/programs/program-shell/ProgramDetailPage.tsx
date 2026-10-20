@@ -37,32 +37,25 @@ const EXPLICIT_RELATED: Record<string, RelatedProgramItem[]> = {
       blurb: "A Community Connectors launch partner and Hurricane Helene recovery resource.",
     },
   ],
-  "echoes-from-the-community": [
-    {
-      to: "/stories/community-voice/week-5",
-      kind: "Story",
-      title: "Echoes from the Community — Week 5",
-      blurb: "The latest entry in this bi-weekly column.",
-    },
-    {
-      to: "/stories/community-voice/week-4",
-      kind: "Story",
-      title: "Echoes from the Community — Week 4",
-      blurb: "Kindness after the storm, as told by residents.",
-    },
-  ],
-  "story-collection-projects": [
+  // StoryLab absorbed Story Collection Projects, the Echoes column and Community Story Collection.
+  storylab: [
     {
       to: "/stories/collections/rural-healthcare",
       kind: "Story collection",
       title: "Rural Health Care Stories",
-      blurb: "An active story collection project gathering healthcare experiences countywide.",
+      blurb: "The collection open now, gathering health care experiences across the county.",
     },
     {
       to: "/stories/collections/helene-recovery",
       kind: "Story collection",
       title: "Helene: One Year of Healing",
-      blurb: "A completed story collection project on recovery after Hurricane Helene.",
+      blurb: "A finished collection on recovery after Hurricane Helene.",
+    },
+    {
+      to: "/stories/community-voice/week-5",
+      kind: "Story",
+      title: "Echoes from the Community — Week 5",
+      blurb: "The latest entry in the column that grew out of story collection.",
     },
   ],
 };
