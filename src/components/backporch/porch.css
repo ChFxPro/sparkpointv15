@@ -1,5 +1,6 @@
 /* The BackPorch: shared look for the homepage band, the feed page, and post pages.
-   SparkPoint's own palette and type (plum, pink, Manrope, Fraunces for display),
+   SparkPoint's own palette and type (plum, pink, Manrope; Fraunces only for the
+   wordmark, a post's own title on its page, and pull quotes),
    with some warmth borrowed from the Rural Health Field Simulator: cream paper
    with a whisper of grain and faint contour lines, the porch plate with its one
    lantern glow, and trail blazes marking each kind of post. Nothing moves on
@@ -186,9 +187,10 @@
 }
 
 .porch-chip b {
-  font-family: var(--bp-serif);
-  font-size: 1.65rem;
-  font-weight: 700;
+  font-family: var(--bp-sans);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   margin-top: 0.12rem;
 }
 
@@ -431,11 +433,11 @@
 
 .porch-lead h3 {
   margin-top: 0.4rem;
-  font-family: var(--bp-serif);
-  font-weight: 600;
-  font-size: clamp(1.5rem, 2.5vw, 1.95rem);
-  line-height: 1.12;
-  letter-spacing: -0.012em;
+  font-family: var(--bp-sans);
+  font-weight: 800;
+  font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   color: var(--bp-heading);
   text-wrap: balance;
 }
@@ -552,10 +554,10 @@
 
 .porch-log-head h2,
 .porch-log-head h3 {
-  font-family: var(--bp-serif);
-  font-style: italic;
-  font-weight: 500;
-  font-size: 1.15rem;
+  font-family: var(--bp-sans);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
   color: var(--bp-chestnut);
   white-space: nowrap;
 }
@@ -613,10 +615,11 @@
 
 .porch-row h4 {
   margin-top: 0.3rem;
-  font-family: var(--bp-serif);
-  font-weight: 600;
-  font-size: 1.12rem;
-  line-height: 1.2;
+  font-family: var(--bp-sans);
+  font-weight: 700;
+  font-size: 1.02rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
   color: var(--bp-heading);
   text-wrap: balance;
 }
@@ -811,10 +814,10 @@
 }
 
 .porch-legend h2 {
-  font-family: var(--bp-serif);
-  font-style: italic;
-  font-weight: 500;
-  font-size: 1.05rem;
+  font-family: var(--bp-sans);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
   color: var(--bp-chestnut);
 }
 
@@ -914,11 +917,11 @@
 }
 
 .porch-entry h2 {
-  font-family: var(--bp-serif);
-  font-weight: 600;
-  font-size: clamp(1.5rem, 3vw, 1.9rem);
-  line-height: 1.12;
-  letter-spacing: -0.01em;
+  font-family: var(--bp-sans);
+  font-weight: 800;
+  font-size: clamp(1.3rem, 2.6vw, 1.65rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   text-wrap: balance;
 }
 
@@ -952,6 +955,35 @@
   margin-top: 0.9rem;
 }
 
+/* "About the BackPorch": a short note under the list on /backporch. */
+.porch-about {
+  max-width: 40rem;
+  margin: 3.5rem auto 0;
+  padding: 1.75rem 0 0;
+  border-top: 1px solid var(--bp-line);
+  color: var(--bp-muted);
+  line-height: 1.65;
+}
+
+.porch-about h2 {
+  font-family: var(--bp-sans);
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  color: var(--bp-heading);
+}
+
+.porch-about p {
+  margin-top: 0.7rem;
+}
+
+.porch-about a {
+  color: var(--bp-heading);
+  text-decoration: underline;
+  text-decoration-color: var(--bp-light);
+  text-underline-offset: 3px;
+}
+
 .porch-empty {
   padding: 2.5rem 1.5rem;
   text-align: center;
@@ -967,8 +999,10 @@
 
 .porch-empty strong {
   display: block;
-  font-family: var(--bp-serif);
-  font-size: 1.5rem;
+  font-family: var(--bp-sans);
+  font-weight: 800;
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
   color: var(--bp-heading);
   margin-bottom: 0.4rem;
 }
@@ -1463,9 +1497,9 @@
 }
 
 .pb-embed-title {
-  font-family: var(--bp-serif);
-  font-weight: 600;
-  font-size: 1.3rem;
+  font-family: var(--bp-sans);
+  font-weight: 700;
+  font-size: 1.15rem;
 }
 
 .pb-embed-play small {
@@ -1489,9 +1523,9 @@
 
 .pb-audio-head strong {
   display: block;
-  font-family: var(--bp-serif);
-  font-weight: 600;
-  font-size: 1.15rem;
+  font-family: var(--bp-sans);
+  font-weight: 700;
+  font-size: 1.05rem;
   color: var(--bp-heading);
 }
 
@@ -1679,10 +1713,11 @@ a.pb-card:hover {
 }
 
 .pb-unfurl-text strong {
-  font-family: var(--bp-serif);
-  font-weight: 600;
-  font-size: 1.2rem;
-  line-height: 1.25;
+  font-family: var(--bp-sans);
+  font-weight: 700;
+  font-size: 1.08rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
   color: var(--bp-heading);
 }
 

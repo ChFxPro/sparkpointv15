@@ -31,7 +31,9 @@ export function BackPorchBand({ edge = false }: { edge?: boolean } = {}) {
         <span className="porch-wordmark-the">On the</span>
         <span>BackPorch</span>
       </h2>
-      <p className="porch-band-sub">What's happening at SparkPoint, in our own words. Pull up a chair.</p>
+      <p className="porch-band-sub">
+        SparkPoint's news, gatherings, and stories, posted here first and in our own words. Pull up a chair.
+      </p>
       <div className="porch-band-actions">
         <Link className="porch-sign" to={PORCH_PATH}>
           Everything on the BackPorch <Waymark size={18} />

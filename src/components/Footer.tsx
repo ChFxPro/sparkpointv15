@@ -68,6 +68,7 @@ const quickLinks = [
   { label: 'Mission', href: '/mission' },
   { label: 'Stories', href: '/stories' },
   { label: 'Events', href: '/events' },
+  { label: 'The BackPorch', href: '/backporch' },
   { label: 'Impact', href: '/impact' },
   { label: 'Programs', href: '/programs' },
   { label: 'Newsroom', href: '/press' },

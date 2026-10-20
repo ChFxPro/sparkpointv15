@@ -30,6 +30,7 @@ const menuItems: MenuItem[] = [
   { label: 'Impact', href: '/impact' },
   { label: 'Programs', href: '/programs' },
   { label: 'Events', href: '/events' },
+  { label: 'The BackPorch', href: '/backporch' },
   { label: 'Newsroom', href: '/press' },
   { label: 'Get Involved', href: '/get-involved' },
   { label: 'About', href: '/about' },
@@ -407,7 +408,7 @@ export function Header() {
                  <div>
                    <h3 className="text-white/60 text-xs font-bold uppercase tracking-widest mb-6">Explore</h3>
                    <div className="grid gap-4">
-                     {['Mission', 'Stories', 'Impact', 'Programs', 'Events', 'Newsroom'].map(label => {
+                     {['Mission', 'Stories', 'Impact', 'Programs', 'Events', 'The BackPorch', 'Newsroom'].map(label => {
                         const item = menuItems.find(i => i.label === label);
                         return item ? (
                           <Link

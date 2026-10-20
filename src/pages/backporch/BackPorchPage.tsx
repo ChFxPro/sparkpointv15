@@ -60,7 +60,7 @@ export default function BackPorchPage() {
     <div className="porch porch-page porch-dusk">
       <SEOHead
         title="The BackPorch | SparkPoint"
-        description="News, gatherings, and asks from SparkPoint in Transylvania County, North Carolina. Pull up a chair."
+        description="SparkPoint's news, gatherings, asks, and stories from Transylvania County, North Carolina, posted here first. Pull up a chair."
         path={PORCH_PATH}
       />
       <Helmet>
@@ -75,7 +75,8 @@ export default function BackPorchPage() {
         <div className="porch-hero-inner">
           <PorchWordmark as="h1" />
           <p className="porch-hero-lede">
-            News, gatherings, and asks from SparkPoint, in our own words. Pull up a chair.
+            SparkPoint's news, gatherings, asks, and stories, in our own words. We post here first, so
+            you never have to scroll a social feed to find out what's happening. Pull up a chair.
           </p>
           <nav className="porch-feeds" aria-label="Follow the BackPorch">
             <a className="porch-sign" href={NEWSLETTER_URL}>
@@ -169,6 +170,19 @@ export default function BackPorchPage() {
             </ol>
           )}
         </div>
+
+        <section className="porch-about" aria-labelledby="porch-about-title">
+          <h2 id="porch-about-title">About the BackPorch</h2>
+          <p>
+            Every community has a back porch: the place people stop by to catch up. This is SparkPoint's. We
+            share our news, gatherings, asks, and stories here first, on our own site, and then pass them along.
+            No ads, no algorithm, and no tracking.
+          </p>
+          <p>
+            Each post carries a trail blaze for its kind: a gathering, news, an ask, or a story. Follow along{' '}
+            <a href={NEWSLETTER_URL}>by email</a> or with the <a href={FEED_RSS}>RSS feed</a>.
+          </p>
+        </section>
       </div>
     </div>
   );
