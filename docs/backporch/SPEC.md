@@ -348,7 +348,8 @@ Choices made while building:
   band are dark ("evening on the porch"). Post pages stay light for reading.
 - **Editors are an allowlist, not "anyone signed in".** This Supabase project's
   Auth is shared with other tools, so writes require the signed-in email to be
-  in `porch_editors`. Add Jeff and Maggie there (Dashboard → Table editor), and
+  in `porch_editors` and whose account email is confirmed (since migration
+  `backporch_live_pins_confirmed_editors`). Add Jeff and Maggie there (Dashboard → Table editor), and
   give Maggie an Auth account if she doesn't have one.
 - **Text is plain on purpose.** Body text is paragraphs and bare `https://`
   links only, so nothing pasted in can break the page or inject markup.

@@ -1,6 +1,6 @@
 -- The BackPorch: pins count only live posts, and editors need a confirmed email.
--- NOT YET APPLIED. To be applied by the PM session with Jeff (as migration
--- `backporch_live_pins_confirmed_editors`). Replaces porch_posts_before_write
+-- Applied to project suqtfbculwuetfdhdgdh on 2026-10-20 as migration
+-- `backporch_live_pins_confirmed_editors` (by the PM session, with Jeff's OK). Replaces porch_posts_before_write
 -- (last set by backporch_pin_clock) and is_porch_editor (from create_backporch).
 --
 -- 1. Pins. The three-pin cap counted every pinned row, including a post that had
