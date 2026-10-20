@@ -1,6 +1,7 @@
 // Renders the An Atlas of Wonders print and social files (the Gala's print
-// invitation, "Tickets on sale now" social set, Squarespace ticket images, the
-// transparent lockup PNGs, and the website's link-preview image) from the HTML
+// invitation, "Tickets on sale now" and "Save the date" social sets, Squarespace
+// ticket images, the transparent lockup PNGs, and the website's link-preview
+// image) from the HTML
 // templates in ./templates. See README.md.
 //
 //   npm run print:gala                 # everything
@@ -102,19 +103,26 @@ const groups = {
 
   async social(page) {
     await mkdir(join(OUT, 'social'), { recursive: true });
-    for (const [format, width, height, name] of [
-      ['portrait', 1080, 1350, 'sparkpoint-gala-tickets-on-sale-1080x1350.png'],
-      ['square', 1080, 1080, 'sparkpoint-gala-tickets-on-sale-1080x1080.png'],
-      ['story', 1080, 1920, 'sparkpoint-gala-tickets-on-sale-story-1080x1920.png'],
-      ['wide', 1920, 1005, 'sparkpoint-gala-tickets-on-sale-facebook-event-1920x1005.png'],
+    // One template, two versions: "Tickets on sale now" and "Save the date".
+    for (const [variant, prefix] of [
+      ['', 'sparkpoint-gala-tickets-on-sale'],
+      ['std', 'sparkpoint-gala-save-the-date'],
     ]) {
-      await open(page, 'social-on-sale.html', width, height, 1);
-      await page.evaluate((cls) => {
-        document.body.className = cls;
-      }, format);
-      await new Promise((resolve) => setTimeout(resolve, 200));
-      await page.screenshot({ path: join(OUT, 'social', name), type: 'png' });
-      console.log(`social/${name}`);
+      for (const [format, width, height, suffix] of [
+        ['portrait', 1080, 1350, '1080x1350'],
+        ['square', 1080, 1080, '1080x1080'],
+        ['story', 1080, 1920, 'story-1080x1920'],
+        ['wide', 1920, 1005, 'facebook-event-1920x1005'],
+      ]) {
+        const name = `${prefix}-${suffix}.png`;
+        await open(page, 'social-on-sale.html', width, height, 1);
+        await page.evaluate((cls) => {
+          document.body.className = cls;
+        }, `${format} ${variant}`.trim());
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        await page.screenshot({ path: join(OUT, 'social', name), type: 'png' });
+        console.log(`social/${name}`);
+      }
     }
   },
 

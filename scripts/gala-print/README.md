@@ -1,6 +1,6 @@
 # An Atlas of Wonders print and social files (the SparkPoint Gala)
 
-The print invitation, social graphics, Squarespace ticket images, logo PNGs and
+The print invitation, social graphics (Tickets on sale now and Save the date), Squarespace ticket images, logo PNGs and
 link-preview image for An Atlas of Wonders, the SparkPoint Gala (Friday,
 December 11, 2026, 6 p.m.). They match `/events/sparkpoint-gala`. The email
 invitation has its own generator in `scripts/gala-invitation/`.
@@ -18,7 +18,7 @@ Replace the Drive files after re-rendering.
 | --- | --- | --- |
 | `logo` | `lockup.html` | `logo/atlas-of-wonders-lockup-for-{dark,light}-backgrounds.png`, transparent, 1730×1202 |
 | `invite` | `invite.html` | `print/sparkpoint-gala-invitation-2up-11x8.5.pdf` (two per letter sheet) and `…-5.5x8.5.pdf` (one) |
-| `social` | `social-on-sale.html` | `social/…-1080x1350`, `…-1080x1080`, `…-story-1080x1920`, `…-facebook-event-1920x1005` PNGs |
+| `social` | `social-on-sale.html` | `social/sparkpoint-gala-tickets-on-sale-…` and `social/sparkpoint-gala-save-the-date-…` PNGs, each at 1080x1350, 1080x1080, story 1080x1920 and Facebook event 1920x1005. One template; body class `std` switches it to the Save the date wording |
 | `tickets` | `ticket-{square,wide,banner,story}.html` | `tickets/` PNGs at 2160², 3840×2160, 3600×1200 and 2160×3840 for the Squarespace ticket page |
 | `share` | `share.html` | `share/gala-share-atlas.jpg`, 1200×630; copy it to `public/assets/events/gala/` to update the site |
 
