@@ -153,7 +153,10 @@ let key = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_K
 if (!key) key = await askHidden('\nPaste your Supabase secret key (it stays hidden), then press Return: ');
 if (!key) fail('No key entered. Create one under Supabase Dashboard > Project Settings > API Keys (Secret keys).');
 if (key.startsWith('sb_publishable_')) fail('That is a publishable key, which cannot write. Use a secret key (sb_secret_…).');
-if (!/^(sb_secret_|eyJ)/.test(key)) fail('That does not look like a Supabase secret key. It should start with sb_secret_ (Dashboard > Project Settings > API Keys > Secret keys).');
+if (!/^(sb_secret_|eyJ)/.test(key)) {
+  // Say what arrived without echoing the key: its length and its first three characters.
+  fail(`That does not look like a Supabase secret key (got ${key.length} characters starting "${key.slice(0, 3)}…"). It should start with sb_secret_ (Dashboard > Project Settings > API Keys > Secret keys). If pasting into the prompt misbehaves, run: read -rs SUPABASE_SECRET_KEY && export SUPABASE_SECRET_KEY && npm run porch:backfill -- --apply; unset SUPABASE_SECRET_KEY`);
+}
 // sb_secret_ keys aren't JWTs: they go on `apikey` only. Legacy service-role JWTs need both.
 const auth = key.startsWith('sb_') ? { apikey: key } : { apikey: key, Authorization: `Bearer ${key}` };
 
