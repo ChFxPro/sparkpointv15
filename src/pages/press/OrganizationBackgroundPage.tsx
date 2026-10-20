@@ -166,7 +166,7 @@ const BOARD = [
 const FOCUS_AREAS = [
   {
     title: 'Storytelling & Community Voice',
-    body: 'Collecting and sharing community stories through Community Story Collection and, as it opens at the Resilience Hub, StoryLab, so lived experience shapes local decisions.',
+    body: 'Collecting and sharing community stories through StoryLab, SparkPoint’s listening practice and, as it opens at the Resilience Hub, its story studio, so lived experience shapes local decisions.',
   },
   {
     title: 'Wellness & Connection Programming',

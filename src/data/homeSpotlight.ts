@@ -58,7 +58,7 @@ export const SPOTLIGHT: SpotlightItem[] = [
             alt: 'A storyteller seated in a living room, his face on the recording monitor in front',
             position: '30% 25%',
           },
-          tone: '#5e2a63', // Listen purple, as on the Story Collection programs card
+          tone: '#5e2a63', // Listen purple, as on the StoryLab programs card
         },
       ]
     : []),

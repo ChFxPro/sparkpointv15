@@ -15,6 +15,7 @@ import {
 import {
   getFormatLabel,
   getOfferingTypeLabel,
+  DEEP,
   type Pathway,
   type Program,
 } from "./programsData";
@@ -301,6 +302,20 @@ export function PathwayModal({
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [activeAudience, setActiveAudience] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  // Text and active chips use the pathway's deep shade; the bright pathway colours
+  // (Learn's gold above all) are too light to read on white.
+  const ink = pathway ? DEEP[pathway.id] : "#1a1a1a";
+  // Return focus to whatever opened the modal once it closes.
+  const openerRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    if (pathway) {
+      if (!openerRef.current) openerRef.current = document.activeElement as HTMLElement | null;
+    } else if (openerRef.current) {
+      const opener = openerRef.current;
+      openerRef.current = null;
+      requestAnimationFrame(() => opener.focus?.());
+    }
+  }, [pathway]);
 
   useEffect(() => {
     onProgramChangeRef.current = onProgramChange;
@@ -451,15 +466,15 @@ export function PathwayModal({
               <div className="relative px-7 sm:px-8 pt-8 pb-5 flex-shrink-0">
                 <div
                   className="absolute inset-0 pointer-events-none"
-                  style={{ background: `linear-gradient(135deg, ${pathway.color}05 0%, transparent 60%)` }}
+                  style={{ background: `linear-gradient(135deg, ${ink}05 0%, transparent 60%)` }}
                 />
                 <div className="relative flex items-start justify-between gap-4">
                   <div>
                     <div className="flex items-center gap-2 mb-2.5">
-                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: pathway.color }} />
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: ink }} />
                       <span
                         className="text-[0.6875rem] uppercase tracking-[0.16em]"
-                        style={{ color: pathway.color, fontWeight: 600 }}
+                        style={{ color: ink, fontWeight: 600 }}
                       >
                         {pathway.label} Pathway
                       </span>
@@ -484,7 +499,7 @@ export function PathwayModal({
                 </div>
                 <div
                   className="mt-5 rounded-full"
-                  style={{ height: 1, background: `linear-gradient(90deg, ${pathway.color}25, transparent)` }}
+                  style={{ height: 1, background: `linear-gradient(90deg, ${ink}25, transparent)` }}
                 />
               </div>
 
@@ -511,14 +526,14 @@ export function PathwayModal({
                         onClick={() =>
                           setActiveAudience(activeAudience === tag ? null : tag)
                         }
-                        className={`px-3 py-1 rounded-full text-[0.75rem] border transition-all duration-200 cursor-pointer ${
+                        className={`inline-flex min-h-[44px] items-center px-3.5 rounded-full text-[0.8rem] border transition-all duration-200 cursor-pointer ${
                           activeAudience === tag
                             ? "text-white"
                             : "text-gray-500 hover:text-gray-700 bg-white"
                         }`}
                         style={{
-                          backgroundColor: activeAudience === tag ? pathway.color : undefined,
-                          borderColor: activeAudience === tag ? pathway.color : "rgba(0,0,0,0.08)",
+                          backgroundColor: activeAudience === tag ? ink : undefined,
+                          borderColor: activeAudience === tag ? ink : "rgba(0,0,0,0.08)",
                           fontWeight: 500,
                         }}
                       >
@@ -545,7 +560,7 @@ export function PathwayModal({
                       <ProgramCard
                         key={program.id}
                         program={program}
-                        color={pathway.color}
+                        color={ink}
                         index={idx}
                         onSelect={() => setDetailProgram(program)}
                       />
@@ -564,7 +579,7 @@ export function PathwayModal({
                         setSearchQuery("");
                       }}
                       className="mt-2 text-[0.8125rem] cursor-pointer transition-colors"
-                      style={{ color: pathway.color, fontWeight: 500 }}
+                      style={{ color: ink, fontWeight: 500 }}
                     >
                       Clear filters
                     </button>
@@ -608,7 +623,7 @@ export function PathwayModal({
                 >
                   <ProgramDetail
                     program={selectedProgram}
-                    color={pathway.color}
+                    color={ink}
                     onBack={handleBack}
                   />
                 </motion.div>

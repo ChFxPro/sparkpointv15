@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "motion/react";
 import type { Program } from "../../programsData";
-import { pathways, getFormatLabel } from "../../programsData";
+import { pathways, getFormatLabel, DEEP } from "../../programsData";
 
 interface ProgramHeroProps {
   program: Program;
@@ -8,16 +8,11 @@ interface ProgramHeroProps {
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-const pathwayColors: Record<string, string> = {
-  listen: "#9E509F",
-  learn: "#FDB515",
-  lead: "#E03694",
-};
-
 export function ProgramHero({ program }: ProgramHeroProps) {
   const prefersReduced = useReducedMotion();
   const pathway = pathways.find((p) => p.id === program.pathway);
-  const pathwayColor = pathwayColors[program.pathway] ?? "#1a1a1a";
+  // The deep shade, so the white chip text passes contrast (Learn's gold would not).
+  const pathwayColor = DEEP[program.pathway] ?? "#1a1a1a";
 
   const fadeUp = prefersReduced
     ? {}
@@ -68,7 +63,15 @@ export function ProgramHero({ program }: ProgramHeroProps) {
           {...fadeUp}
           transition={{ duration: 0.55, delay: prefersReduced ? 0 : 0.06, ease }}
         >
-          {program.title}
+          {program.logo ? (
+            // A program with its own brand shows its logo as the page heading.
+            <picture>
+              {program.logoSmall && <source media="(max-width: 400px)" srcSet={program.logoSmall} />}
+              <img src={program.logo} alt={program.title} className="block h-auto w-[min(420px,100%)]" />
+            </picture>
+          ) : (
+            program.title
+          )}
         </motion.h1>
 
         {/* Voice sample */}

@@ -13,6 +13,11 @@ export default function ProgramDetailRoute() {
     return <Navigate to={target ? `/programs/${target}` : "/programs"} replace />;
   }
 
+  // A program with its own page elsewhere (Community Connectors, Resource Lobby) goes there.
+  if (program?.detailPageHref?.startsWith("/") && program.detailPageHref !== `/programs/${program.slug}`) {
+    return <Navigate to={program.detailPageHref} replace />;
+  }
+
   if (!program) {
     return (
       <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4 px-6 py-20 text-center">

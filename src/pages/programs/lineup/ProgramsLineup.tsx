@@ -2,29 +2,21 @@ import { Link } from "react-router";
 import { ArrowRight } from "lucide-react";
 import {
   pathways,
-  initiatives,
   allPrograms,
   getFormatLabel,
   getOfferingTypeLabel,
+  DEEP,
   type Pathway,
   type Program,
 } from "../programsData";
-import trailheadLockupReversed from "../../../assets/trailhead/trailhead-lockup-horizontal-reversed.svg";
+import wrcBrandmarkWhite from "../../../assets/wrc/wrc-brandmark-white.svg";
+import { ProgramLogo } from "../ProgramLogo";
 import "./programsLineup.css";
 
-// The programs page, built on the 2026-10 lineup: twelve programs in four pathways
+// The programs page, built on the 2026-10 lineup: thirteen programs in four pathways
 // (Listen, Learn, Lead, Connect), the work SparkPoint leads with up front, then each
-// pathway in turn, then what's still being built. Same visual language as the
+// pathway in turn. Same visual language as the
 // homepage programs cards.
-
-// Darker shade of each pathway colour, for washes behind white text and for
-// coloured text on white (the bright pathway colours don't pass contrast there).
-const DEEP: Record<Pathway["id"], string> = {
-  listen: "#5e2a63",
-  learn: "#7a5a12",
-  lead: "#9c1a5e",
-  connect: "#a8392a",
-};
 
 // Event photography from the October 1 convening, in public/assets/Rural Health/recap/highlights/.
 const highlight = (name: string, width: 800 | 1600) =>
@@ -37,6 +29,8 @@ type Featured = {
   image: { src: string; srcSet: string; alt: string };
   tone: string;
   logo?: string;
+  /** Compact logo for narrow screens. */
+  logoSmall?: string;
   note: string;
 };
 
@@ -48,7 +42,10 @@ const FEATURED: Featured[] = [
       srcSet: `${highlight("across-the-table", 800)} 800w, ${highlight("across-the-table", 1600)} 1600w`,
       alt: "Two women in conversation across a table, one leaning in to listen as the other speaks.",
     },
-    tone: DEEP.connect,
+    // WRC's own Pisgah Slate, with its white logo.
+    tone: "#075079",
+    logo: byId("wellness-rooted-in-connection-collaborative-trcn").logoReversed,
+    logoSmall: wrcBrandmarkWhite,
     note: "Organizations across the county, listening together.",
   },
   {
@@ -59,7 +56,7 @@ const FEATURED: Featured[] = [
       alt: "A small group gathers around a tablet, working through TrailHead at the October 1 convening.",
     },
     tone: "#2F4A3C",
-    logo: trailheadLockupReversed,
+    logo: byId("trailhead").logoReversed,
     note: "Its first edition filled the room on October 1.",
   },
 ];
@@ -78,7 +75,14 @@ function FeaturedCard({ item, side, onOpen }: { item: Featured; side: "left" | "
       <div className="spl-feature-scrim" aria-hidden="true" />
       <div className="spl-feature-body">
         <h3 id={`feature-${program.id}`} className="spl-feature-title">
-          {item.logo ? <img src={item.logo} alt={program.title} className="spl-feature-logo" /> : program.title}
+          {item.logo ? (
+            <picture>
+              {item.logoSmall && <source media="(max-width: 400px)" srcSet={item.logoSmall} />}
+              <img src={item.logo} alt={program.title} className="spl-feature-logo" />
+            </picture>
+          ) : (
+            program.title
+          )}
         </h3>
         <p className="spl-feature-text">{program.shortDescription}</p>
         <p className="spl-feature-note">{item.note}</p>
@@ -109,15 +113,17 @@ function FeaturedCard({ item, side, onOpen }: { item: Featured; side: "left" | "
 }
 
 function ProgramTile({ program, pathway, onOpen }: { program: Program; pathway: Pathway; onOpen: (p: Program) => void }) {
-  // A program with its own brand (TrailHead, Community Connectors) uses its own colour.
+  // A program with its own brand uses its own colour.
   const deep = program.logo && program.brand.accent ? program.brand.accent : DEEP[pathway.id];
   const detailHref = program.detailPageHref ?? `/programs/${program.slug}`;
   const external = detailHref.startsWith("http");
+  // Resource Lobby's page is the Resource Directory, so say so.
+  const moreLabel = detailHref === "/directory" ? "Resource Directory" : "Program page";
   return (
     <article className="spl-tile" aria-labelledby={`tile-${program.id}`}>
       <span className="spl-tile-band" style={{ background: program.logo ? deep : pathway.color }} aria-hidden="true" />
       <h3 id={`tile-${program.id}`} className="spl-tile-title">
-        {program.logo ? <img src={program.logo} alt={program.title} className="spl-tile-logo" style={{ height: `${2.6 * (program.logoScale ?? 1)}rem` }} /> : program.title}
+        {program.logo ? <ProgramLogo program={program} className="spl-tile-logo" /> : program.title}
       </h3>
       <p className="spl-tile-text">{program.shortDescription}</p>
       <ul className="spl-chips" aria-label="About this program">
@@ -126,15 +132,15 @@ function ProgramTile({ program, pathway, onOpen }: { program: Program; pathway: 
       </ul>
       <div className="spl-tile-actions">
         <button type="button" className="spl-tile-peek" onClick={() => onOpen(program)} style={{ color: deep }}>
-          Quick look
+          Quick look<span className="sr-only"> at {program.title}</span>
         </button>
         {external ? (
           <a href={detailHref} className="spl-tile-more" style={{ color: deep }}>
-            Program page <ArrowRight size={15} aria-hidden="true" />
+            {moreLabel}<span className="sr-only"> for {program.title}</span> <ArrowRight size={15} aria-hidden="true" />
           </a>
         ) : (
           <Link to={detailHref} className="spl-tile-more" style={{ color: deep }}>
-            Program page <ArrowRight size={15} aria-hidden="true" />
+            {moreLabel}<span className="sr-only"> for {program.title}</span> <ArrowRight size={15} aria-hidden="true" />
           </Link>
         )}
       </div>
@@ -211,28 +217,6 @@ export function ProgramsLineup({ onOpenProgram }: { onOpenProgram: (pathway: Pat
           </div>
         </section>
       ))}
-
-      <section className="spl-section spl-initiatives" aria-labelledby="building-heading">
-        <div className="spl-wrap">
-          <h2 id="building-heading" className="spl-h2">Still being built</h2>
-          <div className="spl-init-list">
-            {initiatives.map((it) => (
-              <article key={it.id} className="spl-init">
-                <h3 className="spl-tile-title">
-                  {it.logo ? <img src={it.logo} alt={it.title} className="spl-init-logo" /> : it.title}
-                </h3>
-                <p className="spl-tile-text">{it.description}</p>
-                <p className="spl-count">{it.status}</p>
-                {it.href && (
-                  <Link to={it.href} className="spl-tile-more" style={{ color: it.logo ? "#3A1B40" : DEEP.connect }}>
-                    About the Resilience Hub <ArrowRight size={15} aria-hidden="true" />
-                  </Link>
-                )}
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
 
       <section className="spl-cta" aria-labelledby="cta-heading">
         <div className="spl-wrap spl-cta-inner">

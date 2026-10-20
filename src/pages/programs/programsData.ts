@@ -60,8 +60,12 @@ export interface Program {
   brand: ProgramBrand;
   /** The program's own logo, for light grounds, when it has a brand (files from its kit). */
   logo?: string;
-  /** Size the logo up or down from the default; a stacked two-line lockup needs more height. */
-  logoScale?: number;
+  /** The same logo for dark grounds. */
+  logoReversed?: string;
+  /** A compact version for narrow screens, where the full logo gets too small to read. */
+  logoSmall?: string;
+  /** The logo's width on a program tile, in px; each kit says how small its logo can go. */
+  logoWidth?: number;
 }
 
 export interface Pathway {
@@ -86,31 +90,60 @@ function createProgram(program: Omit<Program, "slug">): Program {
 }
 
 // StoryLab's logo, from its kit in Branding/StoryLab (draft identity, 2026-10-18).
-import storylabLogo from "../../assets/storylab/storylab-logo-plum.svg";
+// Program logos, copied from each program's kit in Code/sparkpoint/Branding/ (see each README).
+// StoryLab leads with ink on light grounds (2026-10-20).
+import storylabLogo from "../../assets/storylab/storylab-logo-ink.svg";
+import storylabLogoReversed from "../../assets/storylab/storylab-logo-reversed.svg";
+import storylabLogoSmall from "../../assets/storylab/storylab-logo-small-ink.svg";
 import trailheadLogo from "../../assets/trailhead/trailhead-lockup-horizontal-full.svg";
+import trailheadLogoReversed from "../../assets/trailhead/trailhead-lockup-horizontal-reversed.svg";
 import { COMMUNITY_CONNECTORS_BRAND } from "../../components/communityConnectorsBrand";
+import wrcLogo from "../../assets/wrc/wrc-logo-horizontal-full.svg";
+import wrcLogoWhite from "../../assets/wrc/wrc-logo-horizontal-white.svg";
+import wrcBrandmark from "../../assets/wrc/wrc-brandmark-full.svg";
+import mediaNavigatorsLogo from "../../assets/medianavigators/medianavigators-lockup-instrument.svg";
+import mediaNavigatorsLogoSmall from "../../assets/medianavigators/medianavigators-lockup-instrument-small.svg";
+import mediaNavigatorsLogoReversed from "../../assets/medianavigators/medianavigators-lockup-night-reversed.svg";
+import powherLogo from "../../assets/powher/powher-logo-full.svg";
+import powherLogoReversed from "../../assets/powher/powher-logo-reversed.svg";
+
+/**
+ * A darker shade of each pathway colour, for text on white and for washes behind white text.
+ * The pathway colours themselves (Learn #FDB515 especially) fail contrast as text.
+ */
+export const DEEP: Record<PathwayId, string> = {
+  listen: "#5e2a63",
+  learn: "#7a5a12",
+  lead: "#9c1a5e",
+  connect: "#a8392a",
+};
 
 // The program lineup, settled 2026-10-15 (Brain: 02-Areas/SparkPoint/SparkPoint Program
-// Lineup.md): 13 programs in four pathways, plus StoryLab as an initiative. Programs that
+// Lineup.md): 13 programs in four pathways. StoryLab, first listed as an initiative, became the
+// Listen program on 2026-10-20, absorbing Community Story Collection. Programs that
 // were retired or paused are listed in RETIRED_PROGRAM_SLUGS so their old links still land.
 
 const listenPrograms: Program[] = [
   createProgram({
-    id: "story-collection",
-    title: "Community Story Collection",
+    // StoryLab is the umbrella for both SparkPoint's community story collection and the
+    // studio planned for the Resilience Hub (Jeff, 2026-10-20). It was "Community Story
+    // Collection" until then; /programs/story-collection redirects here.
+    id: "storylab",
+    title: "StoryLab",
     pathway: "listen",
     shortDescription:
-      "We gather residents' stories on one question at a time and take what we hear to the people making local decisions.",
+      "SparkPoint's listening practice: we gather residents' stories on one question at a time and take what we hear to the people who can act on it.",
     longDescription:
-      "Each collection focuses on a topic shaping community well-being: health care access, food, recovery after Helene, what it's like to be a student here. Stories come in through interviews, short written prompts, and youth-led activities. SparkPoint reads across them for strengths, needs, and patterns, and shares a summary with the partners who can act on it.",
+      "Community story collection is StoryLab's core practice today. Each collection takes one question shaping community well-being, like health care access, food, recovery after Helene, or what it's like to be a student here. Stories come in through interviews, short written prompts, youth-led activities and listening sessions. StoryLab reads across them for strengths, needs and patterns, and the summary goes to the people who can act on it. Next comes the StoryLab studio, planned for the Resilience Hub: a place to record stories and oral histories and turn them into captioned video and archives, with Media Navigators helping run it.",
     whyItExists:
-      "Decisions about a community are better when they start from what its people are actually living. Story collection makes that experience visible and usable.",
+      "Decisions about a community are better when they start from what its people are actually living. StoryLab makes that experience visible, and useful to the people deciding what happens next.",
     tags: ["Community", "Individuals", "Partners", "Youth"],
     whoItsFor: ["Residents with a story to share", "Partners who want to understand a need", "Schools and youth groups", "Funders supporting community learning"],
     whatYoullExperience: [
       "Short, anonymous story prompts and recorded interviews",
-      "Community listening sessions",
+      "Community listening sessions and youth-led activities",
       "A plain-language summary of what was heard",
+      "Coming with the Hub: a studio for recording stories and oral histories",
     ],
     outcomes: [
       "A clearer picture of local strengths and needs",
@@ -118,14 +151,21 @@ const listenPrograms: Program[] = [
       "Residents who see their stories lead somewhere",
     ],
     idealPartners: ["Schools", "Nonprofits", "Health and county partners", "Neighborhood groups"],
-    format: { type: "project", cadence: "One topic at a time" },
+    format: { type: "project", cadence: "One question at a time" },
     offeringType: "community",
     contactCTA: { label: "See current collections", href: "/stories/collections" },
     brand: {
+      accent: "#1E1B1C",
+      accentSoft: "rgba(58, 27, 64, 0.08)",
       voice: "grounded",
       voiceSample: "Everyone has a story about this place. We ask, and we listen.",
       palette: "neutral",
     },
+    logo: storylabLogo,
+    logoReversed: storylabLogoReversed,
+    // The kit's small logo for anything under about 240 px wide.
+    logoSmall: storylabLogoSmall,
+    logoWidth: 210,
   }),
 ];
 
@@ -205,7 +245,12 @@ const learnPrograms: Program[] = [
     format: { type: "cohort", cadence: "Fellowship cohorts" },
     offeringType: "community",
     contactCTA: defaultContactCTA,
-    brand: { voice: "youth", voiceSample: "Learn the craft on work that matters here.", palette: "warm", typographicTone: "energetic" },
+    brand: { accent: "#16324F", accentSoft: "rgba(22, 50, 79, 0.1)", voice: "youth", voiceSample: "Learn the craft on work that matters here.", palette: "warm", typographicTone: "energetic" },
+    logo: mediaNavigatorsLogo,
+    logoReversed: mediaNavigatorsLogoReversed,
+    // The kit's step-down lockup for anything under about 400 px wide.
+    logoSmall: mediaNavigatorsLogoSmall,
+    logoWidth: 280,
   }),
 ];
 
@@ -247,6 +292,8 @@ const leadPrograms: Program[] = [
     contactCTA: { label: "Bring TrailHead to your group", href: "/intake?intent=partner" },
     brand: { accent: "#2F4A3C", accentSoft: "rgba(47, 74, 60, 0.1)", voice: "grounded", voiceSample: "Walk the system. Count what the journey costs.", palette: "cool", typographicTone: "structured" },
     logo: trailheadLogo,
+    logoReversed: trailheadLogoReversed,
+    logoWidth: 220,
   }),
 ];
 
@@ -267,7 +314,12 @@ const connectPrograms: Program[] = [
     format: { type: "collaborative", cadence: "Ongoing" },
     offeringType: "partner",
     contactCTA: defaultContactCTA,
-    brand: { voice: "coalition", voiceSample: "When organizations listen together, the community hears itself.", palette: "cool", typographicTone: "balanced" },
+    brand: { accent: "#075079", accentSoft: "rgba(7, 80, 121, 0.1)", voice: "coalition", voiceSample: "When organizations listen together, the community hears itself.", palette: "cool", typographicTone: "balanced" },
+    logo: wrcLogo,
+    logoReversed: wrcLogoWhite,
+    // The tagline stops reading under about 300 px; the letters alone carry it below that.
+    logoSmall: wrcBrandmark,
+    logoWidth: 300,
   }),
   createProgram({
     id: "community-connectors",
@@ -290,7 +342,9 @@ const connectPrograms: Program[] = [
     contactCTA: { label: "Fill out the interest form", href: "https://wkf.ms/4azGJiS" },
     brand: { accent: "#224a39", accentSoft: "rgba(83, 134, 129, 0.12)", voice: "coalition", voiceSample: "Rooted in connection. Ready for what's next.", palette: "cool", typographicTone: "structured" },
     logo: COMMUNITY_CONNECTORS_BRAND.logoDark,
-    logoScale: 1.4,
+    logoReversed: COMMUNITY_CONNECTORS_BRAND.logoLight,
+    // The lockup can't be read under about 240 px wide.
+    logoWidth: 250,
   }),
   createProgram({
     id: "powher",
@@ -308,7 +362,10 @@ const connectPrograms: Program[] = [
     format: { type: "event", cadence: "Monthly" },
     offeringType: "community",
     contactCTA: defaultContactCTA,
-    brand: { voice: "soft", voiceSample: "Bring yourself. Leave with a few more people in your corner.", palette: "warm" },
+    brand: { accent: "#ba2e93", accentSoft: "rgba(254, 43, 186, 0.1)", voice: "soft", voiceSample: "Bring yourself. Leave with a few more people in your corner.", palette: "warm" },
+    logo: powherLogo,
+    logoReversed: powherLogoReversed,
+    logoWidth: 220,
   }),
   createProgram({
     id: "nonprofit-partner-network-convening-space",
@@ -367,36 +424,14 @@ const connectPrograms: Program[] = [
   }),
 ];
 
-/** Something SparkPoint is building that isn't a program yet. */
-export interface Initiative {
-  id: string;
-  title: string;
-  description: string;
-  status: string;
-  href?: string;
-  /** The initiative's own logo, if it has a brand (files from its kit in Branding/). */
-  logo?: string;
-}
-
-export const initiatives: Initiative[] = [
-  {
-    id: "storylab",
-    title: "StoryLab",
-    description:
-      "SparkPoint's community media studio at the Resilience Hub, where people record stories and oral histories, and where what we hear becomes captioned video, archives, and public learning. Media Navigators help run it.",
-    status: "Planned for the Resilience Hub build-out",
-    href: "/resilience-hub",
-    logo: storylabLogo,
-  },
-];
-
 /**
  * Old program URLs, mapped to where they should land now: a program that absorbed them,
  * or null for the programs page. Keeps links from before the 2026-10 lineup working.
  */
 export const RETIRED_PROGRAM_SLUGS: Record<string, string | null> = {
-  "echoes-from-the-community": "story-collection",
-  "story-collection-projects": "story-collection",
+  "echoes-from-the-community": "storylab",
+  "story-collection-projects": "storylab",
+  "story-collection": "storylab",
   "story-lab-studios": "media-navigators",
   "ready-together-community-preparedness-resilience": "community-connectors",
   "emotional-intelligence-connective-leadership": "connected-leadership-culture",

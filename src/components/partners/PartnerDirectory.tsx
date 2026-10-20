@@ -26,7 +26,7 @@ export function PartnerDirectory() {
             const withLogo = sector.partners.filter((p) => partnerLogo(p.name));
             const without = sector.partners.filter((p) => !partnerLogo(p.name));
             return (
-              <div key={sector.id} aria-labelledby={`dir-${sector.id}`}>
+              <section key={sector.id} aria-labelledby={`dir-${sector.id}`}>
                 <h3 id={`dir-${sector.id}`} className="flex items-center gap-2.5 border-b border-black/10 pb-3 text-lg font-extrabold text-[#1A1A1A]">
                   <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ backgroundColor: sector.color }} aria-hidden="true" />
                   {sector.title}
@@ -55,17 +55,17 @@ export function PartnerDirectory() {
                     {without.map((p) => (
                       <li key={p.name}>
                         {p.url ? (
-                          <a href={p.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[36px] items-center rounded-full border border-black/10 px-3 text-sm font-semibold text-[#3d3d46] hover:border-black/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d42c8a]">
+                          <a href={p.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[44px] items-center rounded-full border border-black/10 px-3 text-sm font-semibold text-[#3d3d46] hover:border-black/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d42c8a]">
                             {p.name}
                           </a>
                         ) : (
-                          <span className="inline-flex min-h-[36px] items-center rounded-full border border-black/10 px-3 text-sm font-semibold text-[#3d3d46]">{p.name}</span>
+                          <span className="inline-flex min-h-[44px] items-center rounded-full border border-black/10 px-3 text-sm font-semibold text-[#3d3d46]">{p.name}</span>
                         )}
                       </li>
                     ))}
                   </ul>
                 )}
-              </div>
+              </section>
             );
           })}
         </div>

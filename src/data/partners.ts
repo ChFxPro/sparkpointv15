@@ -1,11 +1,10 @@
 // Canonical partner/sponsor directory — the single source both the homepage
 // "Community Built in Transylvania County" diagram and /partners read from.
 //
-// To add a real link for a partner once one is confirmed, add `url` and a
-// `logoKey` (a short slug of your choosing). Then, in whichever component
-// needs the logo image, add that same key to its local logo-asset map
-// (see SponsorsPage.tsx's PARTNER_LOGOS) — this file never imports binary
-// assets directly, so it stays a plain, portable data module.
+// To add a real link for a partner once one is confirmed, add `url`. Logos
+// aren't listed here: a file named after the partner in src/assets/partner-logos/
+// is picked up automatically (see src/components/partnerLogos.ts), so this file
+// never imports binary assets and stays a plain, portable data module.
 //
 // Icon names are lucide-react component names, resolved by each consumer via
 // a local `Record<string, LucideIcon>` map (mirrors the existing convention
@@ -15,10 +14,6 @@ export interface Partner {
   name: string;
   /** Only set for the small, confirmed set of orgs with a real external URL. Never fabricate. */
   url?: string;
-  /** Key into a consumer-local logo image map. Only set alongside `url`. */
-  logoKey?: string;
-  /** Sort priority for the curated featured-partners strip; only meaningful when `url` is set. */
-  featuredOrder?: number;
 }
 
 export interface PartnerSector {
@@ -60,7 +55,7 @@ export const PARTNER_SECTORS: PartnerSector[] = [
       { name: 'Smart Start of Transylvania County', url: 'https://www.smartstarttransylvania.org/' },
       { name: 'VISION Transylvania', url: 'https://www.visiontc.org/' },
       { name: 'Transylvania County Education Foundation', url: 'https://www.tcsef.org/' },
-      { name: 'Brevard Music Center', url: 'https://www.brevardmusic.org', logoKey: 'brevard-music-center', featuredOrder: 5 },
+      { name: 'Brevard Music Center', url: 'https://www.brevardmusic.org' },
     ],
   },
   {
@@ -87,7 +82,7 @@ export const PARTNER_SECTORS: PartnerSector[] = [
       { name: 'Center for Trauma Resilient Communities' },
       { name: "Jameson's Joy" },
       { name: 'Transylvania County Arts Council', url: 'https://www.tcarts.org/' },
-      { name: 'Transylvania County Tourism Development Authority', url: 'https://www.explorebrevard.com', logoKey: 'brevard-tcda', featuredOrder: 6 },
+      { name: 'Transylvania County Tourism Development Authority', url: 'https://www.explorebrevard.com' },
     ],
   },
   {
@@ -119,7 +114,7 @@ export const PARTNER_SECTORS: PartnerSector[] = [
     examples: ['Whole-person wellness collaboration', 'Community mental health support'],
     homePosition: { x: 90, y: 65 },
     partners: [
-      { name: 'UNC Health Pardee', url: 'https://www.pardeehospital.org', logoKey: 'unc-health', featuredOrder: 3 },
+      { name: 'UNC Health Pardee', url: 'https://www.pardeehospital.org' },
       { name: 'Transylvania Regional Hospital', url: 'https://www.missionhealth.org/locations/transylvania-regional-hospital' },
       { name: 'Transylvania Public Health Department', url: 'https://transylvaniahealth.org/' },
       // No distinct program site confirmed; links to parent Transylvania Public Health per verification notes.
@@ -143,8 +138,8 @@ export const PARTNER_SECTORS: PartnerSector[] = [
     partners: [
       { name: 'Alulua (formally TVS)' },
       { name: 'Schenck Job Corps Civilian Conservation Center', url: 'https://schenck.jobcorps.gov/' },
-      { name: 'Comporium', url: 'https://www.comporium.com', logoKey: 'comporium', featuredOrder: 7 },
-      { name: 'Self-Help Credit Union', url: 'https://www.self-help.org', logoKey: 'self-help', featuredOrder: 8 },
+      { name: 'Comporium', url: 'https://www.comporium.com' },
+      { name: 'Self-Help Credit Union', url: 'https://www.self-help.org' },
       // PowHer co-host with SparkPoint, Pisgah Health Foundation and the Chamber.
       { name: 'KL Creative' },
     ],
@@ -158,13 +153,13 @@ export const PARTNER_SECTORS: PartnerSector[] = [
     examples: ['Sustained funding partnerships', 'Strategic investment in resilience'],
     homePosition: { x: 75, y: 88 },
     partners: [
-      { name: 'Dogwood Health Trust', url: 'https://dogwoodhealthtrust.org', logoKey: 'dogwood', featuredOrder: 1 },
+      { name: 'Dogwood Health Trust', url: 'https://dogwoodhealthtrust.org' },
       { name: 'Lake Toxaway Charities', url: 'https://laketoxawaycharities.org/' },
       { name: 'WNC Bridge Foundation', url: 'https://wncbridge.org/' },
       { name: 'Vaya Health', url: 'https://www.vayahealth.com/' },
-      { name: 'American Red Cross', url: 'https://www.redcross.org', logoKey: 'red-cross', featuredOrder: 4 },
+      { name: 'American Red Cross', url: 'https://www.redcross.org' },
       { name: 'St. Philips Episcopal Church', url: 'https://www.stphilipsbrevardnc.org/' },
-      { name: 'Pisgah Health Foundation', url: 'https://pisgahhealthfoundation.org', logoKey: 'phf', featuredOrder: 2 },
+      { name: 'Pisgah Health Foundation', url: 'https://pisgahhealthfoundation.org' },
       // Sponsors of the 2026 WNC Regional Rural Health Convening (see ruralHealthConveningSponsors.ts).
       { name: 'AdventHealth', url: 'https://www.adventhealth.com' },
       { name: 'UnitedHealthcare', url: 'https://www.uhc.com' },
@@ -176,8 +171,3 @@ export const PARTNER_SECTORS: PartnerSector[] = [
 export const PARTNER_SECTOR_BY_ID: Record<string, PartnerSector> = Object.fromEntries(
   PARTNER_SECTORS.map((s) => [s.id, s])
 );
-
-export const FEATURED_PARTNERS: Array<Partner & { url: string; logoKey: string }> = PARTNER_SECTORS
-  .flatMap((s) => s.partners)
-  .filter((p): p is Partner & { url: string; logoKey: string } => Boolean(p.url && p.logoKey))
-  .sort((a, b) => (a.featuredOrder ?? 0) - (b.featuredOrder ?? 0));

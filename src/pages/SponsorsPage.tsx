@@ -162,8 +162,8 @@ export function SponsorsPage() {
           <div className="flex flex-wrap items-center justify-center gap-4" style={{ marginTop: 40 }}>
             {[
               { label: 'How We Partner', target: 'section-how' },
-              { label: 'Our Partners', target: 'section-directory' },
-              { label: 'Sponsors', target: 'section-sponsors' },
+              { label: 'In Our Programs', target: 'section-program-partners' },
+              { label: 'All Partners', target: 'section-directory' },
             ].map((btn) => (
               <button
                 key={btn.label}
@@ -171,7 +171,7 @@ export function SponsorsPage() {
                   const el = document.getElementById(btn.target);
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="px-6 py-2 text-white text-sm font-semibold transition-all"
+                className="inline-flex min-h-[44px] items-center px-6 py-2 text-white text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 style={{
                   borderRadius: 9999,
                   border: '1px solid rgba(255,255,255,0.20)',
@@ -389,12 +389,6 @@ export function SponsorsPage() {
           >
             <div className="lg:flex lg:items-end lg:justify-between lg:gap-10">
               <div className="max-w-2xl">
-                <p
-                  className="text-xs font-semibold uppercase"
-                  style={{ letterSpacing: '0.2em', color: '#FDB515', marginBottom: 16 }}
-                >
-                  Partnership Conversation
-                </p>
                 <h2
                   className="text-3xl font-bold tracking-tight"
                   style={{ color: '#111827', marginBottom: 16 }}

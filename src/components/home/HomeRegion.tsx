@@ -2,11 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform, type MotionValue } from 'motion/react';
 import { useAccessibility } from '../../context/AccessibilityContext';
 import { TRANSYLVANIA_TOWNS, WNC_COUNTIES, WNC_VIEWBOX } from '../../data/wncCounties';
+import { LitSentence } from './LitSentence';
 
 // Home, then the region, over the pinned county photo. On large screens the
 // section pins and scrolling pulls the map back from Transylvania County (its
-// towns lit) to the 18 counties of Western North Carolina. On phones and under
-// reduced motion it's one still band where pointing at a county names it.
+// towns lit) to the 18 counties of Western North Carolina; then the
+// "rooted in connection" sentence takes over the caption column beside the
+// finished map, using the end of the pin rather than leaving it idle. On phones and under reduced motion it's
+// one still band where pointing at a county names it, with the sentence below.
 const HOME = WNC_COUNTIES.find((c) => c.name === 'Transylvania')!;
 const OTHERS = WNC_COUNTIES.filter((c) => c.name !== 'Transylvania');
 const { width: VW, height: VH } = WNC_VIEWBOX;
@@ -120,23 +123,27 @@ function PinnedRegion() {
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
 
   useMotionValueEvent(scrollYProgress, 'change', (p) => {
-    const t = easeInOut(Math.min(1, Math.max(0, (p - 0.15) / 0.55)));
+    const t = easeInOut(Math.min(1, Math.max(0, (p - 0.06) / 0.4)));
     const box = START_BOX.map((v, i) => v + (END_BOX[i] - v) * t);
     svgRef.current?.setAttribute('viewBox', box.map((n) => n.toFixed(2)).join(' '));
   });
 
-  const othersOpacity = useTransform(scrollYProgress, [0.3, 0.6], [0, 1]);
-  const townsOpacity = useTransform(scrollYProgress, [0.25, 0.42], [1, 0]);
+  const othersOpacity = useTransform(scrollYProgress, [0.16, 0.36], [0, 1]);
+  const townsOpacity = useTransform(scrollYProgress, [0.12, 0.24], [1, 0]);
   // The two captions hand over with no empty middle: one fades as the other arrives.
-  const homeOpacity = useTransform(scrollYProgress, [0.36, 0.46], [1, 0]);
-  const homeY = useTransform(scrollYProgress, [0.36, 0.46], [0, -20]);
-  const regionOpacity = useTransform(scrollYProgress, [0.42, 0.52], [0, 1]);
-  const regionY = useTransform(scrollYProgress, [0.42, 0.52], [20, 0]);
+  const homeOpacity = useTransform(scrollYProgress, [0.2, 0.27], [1, 0]);
+  const homeY = useTransform(scrollYProgress, [0.2, 0.27], [0, -20]);
+  // Last beat: the region caption hands over to the sentence, which lights word by word beside the full map.
+  const regionOpacity = useTransform(scrollYProgress, [0.25, 0.32, 0.54, 0.6], [0, 1, 1, 0]);
+  const regionY = useTransform(scrollYProgress, [0.25, 0.32, 0.54, 0.6], [20, 0, 0, -20]);
+  const sentenceOpacity = useTransform(scrollYProgress, [0.58, 0.64], [0, 1]);
+  const sentenceY = useTransform(scrollYProgress, [0.58, 0.64], [20, 0]);
+  const sentenceProgress = useTransform(scrollYProgress, [0.62, 0.9], [0, 1]);
 
   return (
-    <div ref={sectionRef} style={{ height: '250vh' }}>
+    <div ref={sectionRef} style={{ height: '300vh' }}>
       <div className="sticky top-0 flex h-screen items-center overflow-hidden">
-        <div className="mx-auto grid h-full w-full max-w-7xl grid-cols-[0.85fr_1.15fr] items-center gap-12 px-6">
+        <div className="mx-auto grid h-full w-full max-w-7xl grid-cols-[0.8fr_1.2fr] items-center gap-10 px-6">
           <div className="relative min-h-[22rem]">
             <motion.div className="absolute inset-0 flex flex-col justify-center" style={{ opacity: homeOpacity, y: homeY }}>
               <HomeCopy />
@@ -144,8 +151,11 @@ function PinnedRegion() {
             <motion.div className="absolute inset-0 flex flex-col justify-center" style={{ opacity: regionOpacity, y: regionY }}>
               <RegionCopy />
             </motion.div>
+            <motion.div className="absolute inset-0 flex flex-col justify-center" style={{ opacity: sentenceOpacity, y: sentenceY }}>
+              <LitSentence onDark compact progress={sentenceProgress} />
+            </motion.div>
           </div>
-          <div className="h-[70vh] min-h-0 w-full">
+          <div className="h-[80vh] min-h-0 w-full">
             <RegionMap zoomable svgRef={svgRef} othersOpacity={othersOpacity} townsOpacity={townsOpacity} />
           </div>
         </div>
@@ -169,6 +179,9 @@ function StillRegion() {
             {caption ?? 'Transylvania County, inside the 18 counties of Western North Carolina'}
           </figcaption>
         </figure>
+      </div>
+      <div className="mx-auto mt-20 max-w-7xl md:mt-28">
+        <LitSentence onDark />
       </div>
     </div>
   );

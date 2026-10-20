@@ -36,5 +36,5 @@ export const GATHERINGS = {
   students: pair(students960, students1920, 'Voices of the Students'),
   quilt: pair(quilt960, quilt1920, 'A SparkPoint community gathering, 2025'),
   brainHealth: pair(brainHealth960, brainHealth1920, 'Brain Health talk with Dr. Ora Wells'),
-  mural: pair(mural960, mural1920, 'Community Story Collection, on location'),
+  mural: pair(mural960, mural1920, 'StoryLab, on location'),
 };

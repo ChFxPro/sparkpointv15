@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router';
 import { ArrowRight } from 'lucide-react';
-import { LitSentence } from './home/LitSentence';
 import { STORY_COLLECTIONS } from '../data/storyCollections';
 
 import storyWebp from '../assets/connection_happens/story1.webp';
@@ -11,6 +10,7 @@ import hub1600 from '../assets/hub/hub-day-1600.webp';
 // TrailHead's own lockup (the double blaze and wordmark, cream for dark grounds),
 // from the logo kit in Branding/TrailHead; see that folder's README.
 import trailheadLockup from '../assets/trailhead/trailhead-lockup-horizontal-reversed.svg';
+import storylabLogoReversed from '../assets/storylab/storylab-logo-reversed.svg';
 import { COMMUNITY_CONNECTORS_BRAND as CC } from './communityConnectorsBrand';
 
 // What SparkPoint is building now, one program per pathway it belongs to,
@@ -57,12 +57,13 @@ type Program = {
 
 const PROGRAMS: Program[] = [
   {
-    id: 'story-collection',
+    // StoryLab: SparkPoint's listening practice and, soon, its studio at the Hub.
+    id: 'storylab',
     pathway: 'listen',
-    title: 'Community Story Collection',
+    title: 'StoryLab',
     body: activeCollection
-      ? `We gather residents’ stories on one question at a time and take what we hear to the people making local decisions. Right now: ${activeCollection.title.toLowerCase()}.`
-      : 'We gather residents’ stories on one question at a time and take what we hear to the people making local decisions.',
+      ? `SparkPoint’s listening practice: we gather residents’ stories one question at a time and take what we hear to the people who can act on it. Right now: ${activeCollection.title.toLowerCase()}. A StoryLab studio is planned for the Resilience Hub.`
+      : 'SparkPoint’s listening practice: we gather residents’ stories one question at a time and take what we hear to the people who can act on it. A StoryLab studio is planned for the Resilience Hub.',
     tags: ['Open to every resident', 'Anonymous'],
     image: {
       src: storyWebp,
@@ -73,10 +74,14 @@ const PROGRAMS: Program[] = [
     links: activeCollection
       ? [
           { label: 'Share your story', to: `/stories/collections/${activeCollection.id}` },
-          { label: 'Read community stories', to: '/stories' },
+          { label: 'About StoryLab', to: '/programs/storylab' },
         ]
-      : [{ label: 'Read community stories', to: '/stories' }],
+      : [{ label: 'About StoryLab', to: '/programs/storylab' }],
+    // StoryLab's reversed logo on its own plum.
+    logo: storylabLogoReversed,
+    tone: '#3A1B40',
   },
+
   {
     id: 'simulator',
     pathway: 'lead',
@@ -245,10 +250,6 @@ export function ConnectionSection() {
   return (
     <section id="what-we-do" aria-labelledby="what-we-do-heading" className="relative scroll-mt-24 overflow-x-clip bg-white px-6 py-16 md:py-24">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-16 md:mb-24">
-          <LitSentence />
-        </div>
-
         <div className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.6fr)] lg:gap-14">
           {/* Heading and the pathway list; it stays in view beside the cards on large screens. */}
           <div className="lg:sticky lg:top-24 lg:self-start">

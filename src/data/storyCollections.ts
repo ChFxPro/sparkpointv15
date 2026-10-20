@@ -102,7 +102,7 @@ export const STORY_COLLECTIONS: StoryCollection[] = [
         text: "Hi! SparkPoint is collecting healthcare stories from folks across Transylvania County and I thought of you. It's anonymous, takes a few minutes, and you're entered to win a $100 gift card: https://yoursparkpoint.org/healthcare-story",
       },
     ],
-    seoTitle: 'Rural Health Care Stories | SparkPoint Story Collection',
+    seoTitle: 'Rural Health Care Stories | A StoryLab Collection | SparkPoint',
     seoDescription:
       'Share your experience accessing health care in Transylvania County. SparkPoint is collecting rural health care stories to identify barriers and strengthen support — anonymous, a few minutes, chance to win a $100 gift card.',
   },

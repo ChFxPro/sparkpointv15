@@ -1,6 +1,6 @@
-// Partner logos live in src/assets/partner-logos/ (used by the homepage wall and /partners),, one file
+// Partner logos live in src/assets/partner-logos/ (used by the homepage wall and /partners), one file
 // per partner, named after the partner's name in src/data/partners.ts
-// (lowercase, words joined by hyphens: "The Sharing House" -> the-sharing-house.png).
+// (lowercase, words joined by hyphens: "The Sharing House" -> the-sharing-house.webp).
 // A file ending in `-ink` (brevard-college-ink.svg) is an all-white logo: the
 // site draws its shape in near-black. `npm run logos:list` shows every partner's
 // expected file name and which are still missing. See the folder's README.

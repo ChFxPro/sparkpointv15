@@ -137,7 +137,8 @@ export function StoriesPage() {
                     <span className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#FDB515] mb-3">
                       <span className="w-2 h-2 rounded-full bg-[#25b06a] animate-pulse" /> {collection.statusLabel}
                     </span>
-                    <h2 className="text-white font-bold text-2xl md:text-3xl mb-3">{collection.title}</h2>
+                    <h2 className="text-white font-bold text-2xl md:text-3xl mb-1">{collection.title}</h2>
+                    <p className="mb-3 text-sm font-semibold text-white/70">A StoryLab collection</p>
                     <p className="text-white/70 max-w-xl leading-relaxed">{collection.summary}</p>
                     {collection.incentive ? (
                       <p className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white/60">

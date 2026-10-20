@@ -114,8 +114,15 @@ async function deriveRoutes() {
   routes.add('/stories/collections');
   for (const c of STORY_COLLECTIONS) routes.add('/stories/collections/' + c.id);
   const prog = await importData(PROGRAMS_FILE);
-  const progList = prog.programsWithDetailPages || prog.allPrograms || [];
-  for (const p of progList) routes.add('/programs/' + (p.slug || p.id));
+  // A program whose own page lives elsewhere (Community Connectors at /community-connectors,
+  // Resource Lobby at /directory) gets a redirect stub at /programs/<slug>, not a second,
+  // self-canonical copy of the generic detail page.
+  for (const p of prog.allPrograms || []) {
+    const slug = p.slug || p.id;
+    const own = p.detailPageHref;
+    if (own && own.startsWith('/') && own !== '/programs/' + slug) REDIRECTS['/programs/' + slug] = `${ORIGIN}${own}`;
+    else routes.add('/programs/' + slug);
+  }
   // Programs retired or folded into another in the 2026-10 lineup get a static redirect
   // stub, so an old link lands on the program that absorbed it (or /programs) instead
   // of the 404 page.

@@ -36,6 +36,8 @@ import { SEOHead } from '../components/SEOHead';
 import { Button } from '../components/ui/button';
 import { useAccessibility } from '../context/AccessibilityContext';
 import storylabLogoReversed from '../assets/storylab/storylab-logo-reversed.svg';
+import mediaNavigatorsLogo from '../assets/medianavigators/medianavigators-lockup-instrument.svg';
+import mediaNavigatorsLogoSmall from '../assets/medianavigators/medianavigators-lockup-instrument-small.svg';
 
 // ─── TYPES ───
 
@@ -942,28 +944,25 @@ export function ResilienceHubPage() {
             transition={reveal}
             className="max-w-3xl"
           >
-            {/* StoryLab's own logo (draft identity, 2026-10-18), from its kit in Branding/StoryLab. */}
-            <img
-              src={storylabLogoReversed}
-              alt="StoryLab"
-              className="h-16 w-auto md:h-20"
-              style={{ marginBottom: 24 }}
-            />
             <h2
               className="text-3xl font-bold tracking-tight text-white"
               style={{ marginBottom: 20 }}
             >
+              {/* StoryLab's own logo (from its kit in Branding/StoryLab) heads the section. */}
+              <img src={storylabLogoReversed} alt="StoryLab" className="mb-6 block h-16 w-auto md:h-20" />
+              <span className="sr-only">: </span>
               Where community voice becomes shared learning.
             </h2>
             <p
               className="text-lg leading-relaxed"
               style={{ color: 'rgba(255,255,255,0.65)' }}
             >
-              The Resilience Hub includes a dedicated StoryLab Studio &mdash; a space for
-              collecting, stewarding, and learning from community stories ethically. Grounded in
-              Participatory Narrative Inquiry, the StoryLab supports a repeatable cycle: listen to
-              lived experience, learn what it reveals, lead with what the community needs, and
-              return what was learned.
+              StoryLab is SparkPoint&rsquo;s listening practice: community story collection, one
+              question at a time, grounded in Participatory Narrative Inquiry. It follows a
+              repeatable cycle: listen to lived experience, learn what it reveals, lead with what the
+              community needs, and return what was learned. Its next home is a StoryLab studio
+              planned for the Resilience Hub, for recording stories and oral histories and turning
+              them into captioned video and archives, with Media Navigators helping run it.
             </p>
             <p
               className="text-sm leading-relaxed"
@@ -973,6 +972,12 @@ export function ResilienceHubPage() {
               convenings, and funding priorities &mdash; connecting what people share to what
               the community does next.
             </p>
+            <Link
+              to="/programs/storylab"
+              className="mt-4 inline-flex min-h-[44px] items-center gap-1.5 font-semibold text-white underline decoration-white/50 underline-offset-4 hover:decoration-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              About StoryLab
+            </Link>
           </motion.div>
 
           <style>{`@media (min-width: 768px) { .rh-storylab-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; } }`}</style>
@@ -1033,6 +1038,7 @@ export function ResilienceHubPage() {
 
       {/* ──── 5c. MEDIA NAVIGATORS (light glass) ──── */}
       <section
+        id="media-navigators"
         className="relative z-10 px-6"
         style={{
           backgroundColor: 'rgba(250, 250, 248, 0.88)',
@@ -1051,16 +1057,16 @@ export function ResilienceHubPage() {
             transition={reveal}
             className="max-w-3xl"
           >
-            <p
-              className="text-xs font-semibold uppercase"
-              style={{ letterSpacing: '0.22em', color: '#9E509F', marginBottom: 16 }}
-            >
-              Media Navigators
-            </p>
             <h2
               className="text-3xl font-bold tracking-tight"
               style={{ color: '#111827', marginBottom: 20 }}
             >
+              {/* Media Navigators' own logo (from its kit in Branding/MediaNavigators); the step-down lockup on phones. */}
+              <picture>
+                <source media="(max-width: 400px)" srcSet={mediaNavigatorsLogoSmall} />
+                <img src={mediaNavigatorsLogo} alt="Media Navigators" className="mb-6 block h-auto w-[min(360px,100%)]" />
+              </picture>
+              <span className="sr-only">: </span>
               Building practical skills through real community work.
             </h2>
             <p className="text-lg leading-relaxed" style={{ color: '#4B5563' }}>
