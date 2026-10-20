@@ -13,6 +13,13 @@ export function conveningPhotoUrl(id: string, size: ConveningPhotoSize = 960) {
   return `${PHOTO_BASE}/rhp-${id}-${size}.webp`;
 }
 
+// Small tiles (the homepage photo wall) use Supabase's on-the-fly resizing rather
+// than a third stored rendition: ~38 KB at 320px against ~95 KB for the 960.
+const RENDER_BASE = `${CONVENING_PHOTO_ORIGIN}/storage/v1/render/image/public/convening-photos/rural-health-2026`;
+export function conveningPhotoThumbSrcSet(id: string) {
+  return [320, 480, 640].map((w) => `${RENDER_BASE}/rhp-${id}-960.webp?width=${w}&quality=70 ${w}w`).join(', ');
+}
+
 export function conveningPhotoSrcSet(id: string) {
   return `${conveningPhotoUrl(id, 960)} 960w, ${conveningPhotoUrl(id, 1920)} 1920w`;
 }

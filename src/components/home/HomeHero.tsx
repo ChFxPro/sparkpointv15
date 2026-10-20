@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useReducedMotion } from 'motion/react';
 import { ArrowDown, Pause, Play } from 'lucide-react';
-import { conveningPhotoUrl } from '../../lib/conveningPhotos';
+import { conveningPhotoThumbSrcSet, conveningPhotoUrl } from '../../lib/conveningPhotos';
 import { useAccessibility } from '../../context/AccessibilityContext';
 import { PhotoViewer, type ViewerPhoto } from './PhotoViewer';
 import { GATHERINGS } from './gatherings';
@@ -10,7 +10,10 @@ import { GATHERINGS } from './gatherings';
 // row on phones). Any photo opens full size with its caption. Each column
 // repeats its list once and moves by exactly half its height, so the loop is
 // seamless; spacing is padding on every tile (not flex gap) for the same reason.
-type WallPhoto = ViewerPhoto & { ratio: string };
+type WallPhoto = ViewerPhoto & { ratio: string; thumbSrcSet?: string };
+
+// Wall tiles are about a seventh of a desktop screen wide; the phone ribbon's are 128px (176px from 640px).
+const TILE_SIZES = '(min-width: 1024px) 13vw, (min-width: 640px) 176px, 128px';
 
 const WALL: WallPhoto[][] = [
   [
@@ -71,7 +74,17 @@ function Tile({ photo, duplicate, eager, onOpen, className = '' }: {
       className={`home-tile group relative block w-full text-left focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[var(--home-gold)] ${className}`}
       style={{ aspectRatio: photo.ratio }}
     >
-      <img src={photo.src ?? conveningPhotoUrl(photo.id)} alt="" width={960} height={640} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+      {/* Tiles are small (about 130–190px wide), so they load small copies; the viewer loads full size. */}
+      <img
+        src={photo.src ?? conveningPhotoUrl(photo.id)}
+        srcSet={photo.thumbSrcSet ?? conveningPhotoThumbSrcSet(photo.id)}
+        sizes={TILE_SIZES}
+        alt=""
+        width={960}
+        height={640}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+      />
     </button>
   );
 }
@@ -143,7 +156,7 @@ export function HomeHero() {
                 >
                   {[...column, ...column].map((photo, i) => (
                     <div key={`${photo.id}-${i}`} className="pb-4">
-                      <Tile photo={photo} duplicate={i >= column.length} eager={i < 2} onOpen={setOpen} />
+                      <Tile photo={photo} duplicate={i >= column.length} eager={i === 0} onOpen={setOpen} />
                     </div>
                   ))}
                 </div>
@@ -160,7 +173,7 @@ export function HomeHero() {
               <div className="home-ribbon-row flex w-max" data-dir="left" style={{ ['--dur' as string]: '60s' }}>
                 {[...ribbon, ...ribbon].map((photo, i) => (
                   <div key={`${photo.id}-${i}`} className="w-32 pr-3 sm:w-44">
-                    <Tile photo={{ ...photo, ratio: '4 / 5' }} duplicate={i >= ribbon.length} eager={i < 3} onOpen={setOpen} />
+                    <Tile photo={{ ...photo, ratio: '4 / 5' }} duplicate={i >= ribbon.length} eager={i < 2} onOpen={setOpen} />
                   </div>
                 ))}
               </div>
