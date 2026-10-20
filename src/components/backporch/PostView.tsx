@@ -73,9 +73,12 @@ export function PostView({
             </Link>
             {header}
           </div>
-          <span className="pb-stage" data-stage={LAB_FEATURES.takeover.stage}>
-            {STAGE_LABELS[LAB_FEATURES.takeover.stage]}
-          </span>
+          {/* Stage tags are for editors (the editor preview and the lab bench), never the public. */}
+          {preview && (
+            <span className="pb-stage" data-stage={LAB_FEATURES.takeover.stage}>
+              {STAGE_LABELS[LAB_FEATURES.takeover.stage]}
+            </span>
+          )}
         </header>
       ) : (
         <figure className="porch-post-view">
@@ -115,13 +118,13 @@ export function PostView({
         {/* The cover leads unless the body already has that photo, or a takeover opened the post. */}
         {post.image_path && !coverInBody && !opener && (coverLink ? (
           <a className="porch-cover-link" href={coverLink.url} rel="noopener">
-            <PorchImage post={post} sizes="(min-width: 720px) 704px, 100vw" width={1600} eager />
+            <PorchImage post={post} className="porch-cover" sizes="(min-width: 720px) 704px, 100vw" width={1600} eager />
             <span className="porch-cover-link-tag">
               {coverLink.preview?.site ?? new URL(coverLink.url).hostname.replace(/^www\./, '')} <Waymark size={14} />
             </span>
           </a>
         ) : (
-          <PorchImage post={post} sizes="(min-width: 720px) 704px, 100vw" width={1600} eager />
+          <PorchImage post={post} className="porch-cover" sizes="(min-width: 720px) 704px, 100vw" width={1600} eager />
         ))}
 
         <PostBlocks

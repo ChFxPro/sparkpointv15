@@ -338,7 +338,8 @@ export function PostBlocks({
         const stage = stageOf(b.type);
         return (
           <div key={b.id} className="pb-frame" data-frame={b.frame ?? 'column'}>
-            {stage !== 'released' && (
+            {/* Stage tags are for editors only; the public never sees "Field test". */}
+            {preview && stage !== 'released' && (
               <span className="pb-stage" data-stage={stage}>
                 {STAGE_LABELS[stage]}
               </span>

@@ -2,7 +2,7 @@
 //
 //   lab       still being shaped. Editors can add it, preview it, and try it on the
 //             lab bench (/internal/lab); the public site never shows it.
-//   field     field test. Shows on published posts with a small "Field test" tag,
+//   field     field test. Shows on published posts; its "Field test" tag shows only to editors,
 //             so we learn from real readers.
 //   released  done. Listed with the regular blocks, no tag.
 //

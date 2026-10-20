@@ -418,7 +418,7 @@ Field-test tools may appear publicly with a tag.
   mood (dusk, sunrise, forest, plum) that recolours the page; in the feed a takeover
   breaks out of the list full width.
 - **Stages** (`src/lib/porchLab.ts`): Lab (previews and the bench only), Field test
-  (public, tagged), Released. Starting stages: polls and reactions are Lab until the
+  (public; its tag shows only to editors, owner 2026-10-20), Released. Starting stages: polls and reactions are Lab until the
   database is live and their spam limits are tested; everything else is Field test.
 - **Release checklist:** phone, keyboard and screen reader, no unpausable motion and
   respects reduced motion, no tracking, sensible RSS/Facebook fallback, tried on two

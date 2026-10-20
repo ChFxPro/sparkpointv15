@@ -24,8 +24,10 @@
   --bp-night: #1f1b26;
   --bp-plum: #2a1430;
   --bp-plum-2: #3b1d42;
-  --bp-rose: #e03694;
+  --bp-rose: #d42c8a; /* the homepage pink; white text on it is 4.6:1 */
   --bp-rose-deep: #b01f6f; /* AA on paper for small text */
+  /* Pressed/hover fill for pink buttons. Not themed: white text needs it dark on night too. */
+  --bp-rose-press: #b01f6f;
   --bp-light: #f2b632; /* the lantern */
   --bp-chestnut: #6b4226;
   --bp-line: rgba(107, 66, 38, 0.2);
@@ -241,8 +243,8 @@
 }
 
 .porch-sign:hover {
-  background: var(--bp-rose-deep);
-  border-color: var(--bp-rose-deep);
+  background: var(--bp-rose-press);
+  border-color: var(--bp-rose-press);
 }
 
 .porch-sign .fk-icon {
@@ -1152,7 +1154,8 @@
   color: var(--bp-muted);
 }
 
-.porch-article .porch-img {
+/* The post's cover only; in-body photos and related-post thumbnails keep their own shapes. */
+.porch-article .porch-img.porch-cover {
   margin-top: 2.25rem;
   aspect-ratio: 16 / 10;
   border-radius: 1.5rem;
