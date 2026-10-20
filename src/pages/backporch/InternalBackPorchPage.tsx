@@ -31,7 +31,7 @@ import { PostView } from '../../components/backporch/PostView';
 import bakedForDemo from '../../data/backporch.generated.json';
 import { uploadPorchImage } from './porchImages';
 import { BlockComposer } from './BlockComposer';
-import { coverFallback, newBlockId, normalizeBlocks, type PorchBlock } from '../../lib/porchBlocks';
+import { BLOCK_LIMITS, coverFallback, newBlockId, normalizeBlocks, type PorchBlock } from '../../lib/porchBlocks';
 import { FacebookKit } from './FacebookKit';
 import '../internalReports.css';
 import './internalBackporch.css';
@@ -172,7 +172,43 @@ function previewPost(form: Form): PorchPost {
   };
 }
 
-function validateBlocks(blocks: PorchBlock[]): string | null {
+/**
+ * Blocks as they'll be saved: a link or place block that was never filled in (the
+ * Event and Ask starters add one each) is left out rather than failing the save.
+ */
+function usedBlocks(blocks: PorchBlock[]): PorchBlock[] {
+  return blocks.filter(
+    (b) =>
+      !(b.type === 'link' && !b.url.trim() && !b.label.trim() && !b.note?.trim()) &&
+      !(b.type === 'place' && !b.name.trim() && !b.address?.trim()),
+  );
+}
+
+/** Text the save would cut short, or items it would drop: the first one found, in words. */
+function lostInSaving(original: unknown, saved: unknown): string | null {
+  if (typeof original === 'string' && typeof saved === 'string') {
+    return original.trim().length > saved.length ? `some text is too long (it can hold ${saved.length} characters).` : null;
+  }
+  if (Array.isArray(original) && Array.isArray(saved)) {
+    if (original.length > saved.length) return 'it has more items than it can hold, or one of them isn\u2019t finished.';
+    for (let i = 0; i < original.length; i++) {
+      const lost = lostInSaving(original[i], saved[i]);
+      if (lost) return lost;
+    }
+    return null;
+  }
+  if (original && saved && typeof original === 'object' && typeof saved === 'object') {
+    for (const [k, v] of Object.entries(original)) {
+      const lost = lostInSaving(v, (saved as Record<string, unknown>)[k]);
+      if (lost) return lost;
+    }
+  }
+  return null;
+}
+
+function validateBlocks(all: PorchBlock[]): string | null {
+  const blocks = usedBlocks(all);
+  if (blocks.length > BLOCK_LIMITS.blocks) return `A post can hold up to ${BLOCK_LIMITS.blocks} blocks. This one has ${blocks.length}.`;
   for (const [i, b] of blocks.entries()) {
     const n = `Block ${i + 1}`;
     if ((b.type === 'image' && !b.alt.trim()) || (b.type === 'gallery' && b.images.some((img) => !img.alt.trim()))) {
@@ -192,12 +228,23 @@ function validateBlocks(blocks: PorchBlock[]): string | null {
     if (b.type === 'timeline' && b.items.some((x) => !x.date.trim() || !x.title.trim())) return `${n}: every moment needs a when and a what.`;
     if (b.type === 'poll' && (!b.question.trim() || b.options.filter((o) => o.trim()).length < 2)) return `${n}: a poll needs a question and at least two choices.`;
   }
+  // Last, nothing may be cut short or dropped silently by the clean-up every page runs.
+  const saved = normalizeBlocks(blocks);
+  for (const [i, b] of blocks.entries()) {
+    const kept = saved.find((x) => x.id === b.id);
+    if (!kept) return `Block ${i + 1} isn't finished yet. Fill it in or remove it.`;
+    const lost = lostInSaving(b, kept);
+    if (lost) return `Block ${i + 1}: ${lost}`;
+  }
   return null;
 }
 
 function validate(form: Form): string | null {
   if (!form.title.trim()) return 'Add a title.';
+  if (form.title.trim().length > LIMITS.title) return `The title is ${form.title.trim().length} characters. Keep it to ${LIMITS.title}.`;
   if (!form.summary.trim()) return 'Add a summary. It shows in lists and link previews.';
+  if (form.summary.trim().length > LIMITS.summary) return `The summary is ${form.summary.trim().length} characters. Keep it to ${LIMITS.summary}.`;
+  if (form.image_alt.trim().length > LIMITS.imageAlt) return `The cover photo's description is too long. Keep it to ${LIMITS.imageAlt} characters.`;
   if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(form.slug) || form.slug.length < 2) {
     return 'The short address can use lowercase letters, numbers, and single dashes.';
   }
@@ -343,6 +390,9 @@ function Editor({
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  // Anything still uploading inside the post (photos, files, link previews).
+  const [composerBusy, setComposerBusy] = useState(false);
+  const stillUploading = uploading || composerBusy;
   const wasPublished = initial.status === 'published';
   const set = <K extends keyof Form>(key: K, value: Form[K]) => setForm((f) => ({ ...f, [key]: value }));
   const preview = useMemo(() => previewPost(form), [form]);
@@ -381,6 +431,10 @@ function Editor({
 
   const save = async (e: FormEvent) => {
     e.preventDefault();
+    if (stillUploading) {
+      setError('Hang on: something is still uploading. Save once it finishes.');
+      return;
+    }
     const problem = validate(form);
     if (problem) {
       setError(problem);
@@ -400,17 +454,18 @@ function Editor({
           : form.published_at;
     const gathering = form.kind === 'gathering';
     // No cover chosen: the first photo, or else the first link's preview image.
-    const cover = coverFallback(normalizeBlocks(form.blocks))?.img;
+    const blocks = normalizeBlocks(usedBlocks(form.blocks));
+    const cover = coverFallback(blocks)?.img;
     const row = {
       slug: form.slug,
       title: form.title.trim(),
       summary: form.summary.trim(),
-      blocks: normalizeBlocks(form.blocks),
+      blocks,
       presentation: {
         ...form.presentation,
         // Lists don't load blocks, so a takeover remembers its opening scene here.
         scene: (() => {
-          const first = normalizeBlocks(form.blocks)[0];
+          const first = blocks[0];
           return form.presentation.layout === 'takeover' && first?.type === 'backdrop' ? first.scene : undefined;
         })(),
       },
@@ -542,6 +597,7 @@ function Editor({
             onChange={(blocks) => set('blocks', blocks)}
             slug={form.slug || slugify(form.title)}
             onError={setError}
+            onBusyChange={setComposerBusy}
             demo={demo}
           />
         </section>
@@ -688,8 +744,8 @@ function Editor({
         {error && <p className="ir-error" role="alert">{error}</p>}
 
         <div className="pe-actions">
-          <button type="submit" className="pe-btn pe-btn-primary" disabled={saving || uploading}>
-            {saving ? 'Saving…' : form.mode === 'draft' ? 'Save draft' : form.mode === 'schedule' ? 'Schedule post' : wasPublished ? 'Save changes' : 'Publish'}
+          <button type="submit" className="pe-btn pe-btn-primary" disabled={saving || stillUploading}>
+            {saving ? 'Saving…' : stillUploading ? 'Waiting for uploads…' : form.mode === 'draft' ? 'Save draft' : form.mode === 'schedule' ? 'Schedule post' : wasPublished ? 'Save changes' : 'Publish'}
           </button>
           <button type="button" className="pe-btn" onClick={onCancel}>Cancel</button>
         </div>

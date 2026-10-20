@@ -83,16 +83,21 @@ export function BlockComposer({
   onChange,
   slug,
   onError,
+  onBusyChange,
   demo = false,
 }: {
   blocks: PorchBlock[];
   onChange: (next: PorchBlock[]) => void;
   slug: string;
   onError: (message: string | null) => void;
+  /** Told whether anything (a photo, a file, a link preview) is still uploading, so Save can wait. */
+  onBusyChange?: (busy: boolean) => void;
   /** Local demo: link previews come from the dev server instead of the edge function. */
   demo?: boolean;
 }) {
   const [busy, setBusy] = useState<Busy>({});
+  const anyBusy = Object.keys(busy).length > 0;
+  useEffect(() => onBusyChange?.(anyBusy), [anyBusy, onBusyChange]);
   const [dropping, setDropping] = useState(false);
   const [dragId, setDragId] = useState<string | null>(null);
   const picker = useRef<HTMLInputElement>(null);
@@ -355,6 +360,7 @@ export function BlockComposer({
               addMore={() => addMoreTo(b.id)}
               busy={busy[b.id]}
               busyMap={busy}
+              setBusyFor={setBusyFor}
               pickPhoto={pickPhoto}
               slug={slug}
               demo={demo}
@@ -458,6 +464,7 @@ function BlockFields({
   addMore,
   busy,
   busyMap,
+  setBusyFor,
   pickPhoto,
   slug,
   demo,
@@ -467,6 +474,7 @@ function BlockFields({
   addMore: () => void;
   busy?: string;
   busyMap: Busy;
+  setBusyFor: (key: string, label: string | null) => void;
   pickPhoto: (key: string, apply: (path: string) => void) => void;
   slug: string;
   demo: boolean;
@@ -560,7 +568,7 @@ function BlockFields({
         </>
       );
     case 'link':
-      return <LinkFields block={b} update={update} slug={slug} demo={demo} />;
+      return <LinkFields block={b} update={update} slug={slug} demo={demo} setBusyFor={setBusyFor} />;
     case 'place':
       return (
         <>
@@ -789,11 +797,13 @@ function LinkFields({
   update,
   slug,
   demo,
+  setBusyFor,
 }: {
   block: Extract<PorchBlock, { type: 'link' }>;
   update: (p: Partial<PorchBlock>) => void;
   slug: string;
   demo: boolean;
+  setBusyFor: (key: string, label: string | null) => void;
 }) {
   const [state, setState] = useState<'idle' | 'loading' | 'error'>('idle');
   const [problem, setProblem] = useState<string | null>(null);
@@ -803,6 +813,8 @@ function LinkFields({
     fetchedFor.current = url;
     setState('loading');
     setProblem(null);
+    // Counts as an upload: the preview's image is copied into our bucket, so Save waits.
+    setBusyFor(b.id, 'Fetching the link preview…');
     try {
       const got = await fetchLinkPreview(url, slug, demo);
       if (fetchedFor.current !== url) return; // the link changed while this was loading
@@ -815,6 +827,8 @@ function LinkFields({
       if (fetchedFor.current !== url) return;
       setProblem(err instanceof Error ? err.message : 'Could not fetch a preview for that link.');
       setState('error');
+    } finally {
+      setBusyFor(b.id, null);
     }
   };
 
