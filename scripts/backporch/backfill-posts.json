@@ -453,8 +453,8 @@
    "event_start": "2026-11-05T10:00:00-05:00",
    "event_place": "Online, on Zoom",
    "image": {
-    "src": "public/assets/Rural Health/recap/highlights/across-the-table-1600.webp",
-    "alt": "Convening attendees in conversation across a table at Deerwoode Reserve."
+    "src": "https://suqtfbculwuetfdhdgdh.supabase.co/storage/v1/object/public/convening-photos/rural-health-2026/rhp-69-1920.webp",
+    "alt": "Two attendees laugh together as they hold up a Connection to Action card at the October 1 convening."
    },
    "blocks": [
     {

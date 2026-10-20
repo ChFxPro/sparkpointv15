@@ -26,6 +26,9 @@ const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const apply = process.argv.includes('--apply');
 const root = process.cwd();
 const source = path.join(root, 'scripts/backporch/backfill-posts.json');
+// An image src is a file in this repo, or a photo already in this project's public
+// convening-photos bucket (the Oct 1 convening; see src/data/ruralHealthPhotoShare.json).
+const BUCKET_PHOTO = /^https:\/\/suqtfbculwuetfdhdgdh\.supabase\.co\/storage\/v1\/object\/public\/convening-photos\/[\w./-]+\.(webp|jpe?g)$/;
 
 function fail(message) {
   console.error(`\n${message}`);
@@ -60,7 +63,9 @@ for (const post of posts) {
   }
   for (const img of imagesOf(post)) {
     if (!img.alt?.trim()) problems.push(`${where}: every image needs alt text (${img.src})`);
-    if (!fs.existsSync(path.join(root, img.src ?? ''))) problems.push(`${where}: image not found: ${img.src}`);
+    if (/^https:/.test(img.src ?? '')) {
+      if (!BUCKET_PHOTO.test(img.src)) problems.push(`${where}: an image URL must be a convening-photos file in this project (${img.src})`);
+    } else if (!fs.existsSync(path.join(root, img.src ?? ''))) problems.push(`${where}: image not found: ${img.src}`);
   }
 }
 if (problems.length) fail(`Fix these in ${path.relative(root, source)} first:\n  ${problems.join('\n  ')}`);
@@ -78,7 +83,7 @@ for (const p of ordered) {
 const fixtureArg = process.argv.find((a) => a.startsWith('--fixture='));
 if (fixtureArg) {
   // Unencoded: block media paths may contain spaces but not %, and browsers handle both.
-  const url = (src) => (src.startsWith('public/') ? src.slice('public'.length) : `/${src}`);
+  const url = (src) => (/^https:/.test(src) ? src : src.startsWith('public/') ? src.slice('public'.length) : `/${src}`);
   const media = ({ src, alt, caption }) => ({ path: url(src), alt, ...(caption ? { caption } : {}) });
   const now = Date.now();
   const rows = ordered.map((post, i) => ({
@@ -167,7 +172,9 @@ const uploaded = new Map(); // src -> 960 path, so a shared image uploads once
 async function upload(slug, src) {
   if (uploaded.has(src)) return uploaded.get(src);
   const name = path.basename(src).replace(/\.[a-z]+$/i, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').replace(/-\d+$/, '');
-  const input = fs.readFileSync(path.join(root, src));
+  const input = BUCKET_PHOTO.test(src)
+    ? Buffer.from(await (await fetch(src)).arrayBuffer())
+    : fs.readFileSync(path.join(root, src));
   const { width: natural = 1600 } = await sharp(input).metadata();
   for (const width of WIDTHS) {
     const body = await sharp(input).rotate().resize({ width: Math.min(width, natural), withoutEnlargement: true }).webp({ quality: 82 }).toBuffer();
