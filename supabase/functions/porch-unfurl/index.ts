@@ -139,7 +139,8 @@ Deno.serve(async (req: Request) => {
       const got = await safeFetch(input.image, "image/*", IMAGE_BYTES);
       const type = got.type.split(";")[0].trim().toLowerCase();
       if (!/^image\/(jpeg|png|webp|gif|avif)$/.test(type)) return json(req, 415, { error: "That isn't an image." });
-      return new Response(got.body, { headers: { ...cors(req), "Content-Type": type, "Cache-Control": "no-store" } });
+      // A fresh ArrayBuffer copy: newer Deno types reject Uint8Array<ArrayBufferLike> as a body.
+      return new Response(new Uint8Array(got.body).buffer as ArrayBuffer, { headers: { ...cors(req), "Content-Type": type, "Cache-Control": "no-store" } });
     }
     if (typeof input.url === "string") {
       const got = await safeFetch(input.url, "text/html,application/xhtml+xml", PAGE_BYTES);
