@@ -173,12 +173,13 @@ function previewPost(form: Form): PorchPost {
 }
 
 /**
- * Blocks as they'll be saved: a link or place block that was never filled in (the
- * Event and Ask starters add one each) is left out rather than failing the save.
+ * Blocks as they'll be saved: a text, link, or place block that was never filled in
+ * (the starters add them) is left out rather than failing the save.
  */
 function usedBlocks(blocks: PorchBlock[]): PorchBlock[] {
   return blocks.filter(
     (b) =>
+      !(b.type === 'text' && !b.text.trim()) &&
       !(b.type === 'link' && !b.url.trim() && !b.label.trim() && !b.note?.trim()) &&
       !(b.type === 'place' && !b.name.trim() && !b.address?.trim()),
   );
