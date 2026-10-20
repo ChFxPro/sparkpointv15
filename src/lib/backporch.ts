@@ -5,8 +5,7 @@
 // so pages prerender with real content; in the browser the same pages then
 // refresh from Supabase, so a post published a minute ago shows up before the
 // next deploy.
-import { supabase } from './supabaseClient';
-import { projectId } from '../utils/supabase/info';
+import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { normalizeBlocks, type PorchBlock } from './porchBlocks';
 
 export type PorchKind = 'news' | 'gathering' | 'ask' | 'story';
@@ -183,17 +182,50 @@ export function bodyParagraphs(body: string): string[] {
   return body.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
 }
 
+// Public reads go straight to the database's REST API with the public key, rather
+// than through supabase-js, so the homepage and post pages don't ship that library.
+// The key only sees what RLS shows the public: published posts past their time.
+const REST = `https://${projectId}.supabase.co/rest/v1`;
+const PUBLIC_HEADERS = { apikey: publicAnonKey, Authorization: `Bearer ${publicAnonKey}` };
+
+async function rest<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(`${REST}/${path}`, { ...init, headers: { ...PUBLIC_HEADERS, ...init?.headers } });
+  if (!res.ok) throw new Error(`BackPorch read failed (${res.status})`);
+  return res.json() as Promise<T>;
+}
+
+/** A public database function (polls, reactions). Mirrors supabase.rpc's { data, error }. */
+export async function porchRpc<T>(name: string, args: Record<string, unknown>): Promise<{ data: T | null; error: Error | null }> {
+  try {
+    const data = await rest<T>(`rpc/${name}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(args),
+    });
+    return { data, error: null };
+  } catch (error) {
+    return { data: null, error: error as Error };
+  }
+}
+
+/** Only what the lists show: published, past its time, not expired. */
+const listedFilter = () => {
+  const now = new Date().toISOString();
+  return `status=eq.published&published_at=lte.${now}&or=(expires_at.is.null,expires_at.gt.${now})`;
+};
+
 export async function fetchPublishedPosts(): Promise<PorchPost[]> {
-  const query = (columns: string) =>
-    supabase
-      .from('porch_posts')
-      .select(columns)
-      .eq('status', 'published')
-      .order('published_at', { ascending: false })
-      .limit(100);
-  const { data, error } = await query(PORCH_LIST_COLUMNS);
-  if (error) throw error;
-  return ((data ?? []) as unknown as PorchPost[]).map(withBlocks);
+  const rows = await rest<PorchPost[]>(
+    `porch_posts?select=${PORCH_LIST_COLUMNS.replace(/\s+/g, '')}&${listedFilter()}&order=published_at.desc&limit=100`,
+  );
+  return rows.map(withBlocks);
+}
+
+export async function fetchPublishedPost(slug: string): Promise<PorchPost | null> {
+  const rows = await rest<PorchPost[]>(
+    `porch_posts?select=${PORCH_PUBLIC_COLUMNS.replace(/\s+/g, '')}&slug=eq.${encodeURIComponent(slug)}&${listedFilter()}&limit=1`,
+  );
+  return rows[0] ? withBlocks(rows[0]) : null;
 }
 
 /** Rows straight from the database or the bake: make sure blocks are safe to render. */
@@ -201,10 +233,3 @@ export function withBlocks(post: PorchPost): PorchPost {
   return { ...post, blocks: normalizeBlocks(post.blocks), presentation: normalizePresentation(post.presentation) };
 }
 
-export async function fetchPublishedPost(slug: string): Promise<PorchPost | null> {
-  const query = (columns: string) =>
-    supabase.from('porch_posts').select(columns).eq('slug', slug).eq('status', 'published').maybeSingle();
-  const { data, error } = await query(PORCH_PUBLIC_COLUMNS);
-  if (error) throw error;
-  return data ? withBlocks(data as unknown as PorchPost) : null;
-}

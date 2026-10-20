@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 // Bakes published BackPorch posts into the build (runs in predev and prebuild).
 //
-//   src/data/backporch.generated.json        every published post, full text (post pages)
+//   src/data/backporch.generated.json        every listed post, full text (post pages)
 //   src/data/backporch.index.generated.json  the same posts without their blocks (lists, homepage)
+//
+// Listed = published, past its publish time, and not expired. Scheduled and expired
+// posts are left out entirely, so the build makes no page, /p/ stub, or sitemap
+// entry for them; a taken-down or expired post's page disappears at the next build.
 //   public/backporch/feed.xml                RSS 2.0, newest 50 listed posts
 //   public/backporch/feed.json               JSON Feed 1.1, same posts
 //
@@ -74,10 +78,10 @@ await mkdir(path.dirname(OUT_FULL), { recursive: true });
 // `samples` marks a local preview bake: the pages then skip their live refresh, which
 // would otherwise replace the sample posts with whatever the real database holds.
 const samples = Boolean(fixture);
-await writeFile(OUT_FULL, JSON.stringify({ generatedAt, samples, posts }, null, 1) + '\n');
+await writeFile(OUT_FULL, JSON.stringify({ generatedAt, samples, posts: listed }, null, 1) + '\n');
 await writeFile(
   OUT_INDEX,
-  JSON.stringify({ generatedAt, samples, posts: posts.map(({ blocks, ...rest }) => rest) }, null, 1) + '\n',
+  JSON.stringify({ generatedAt, samples, posts: listed.map(({ blocks, ...rest }) => rest) }, null, 1) + '\n',
 );
 
 // ── Feeds ──

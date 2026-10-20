@@ -9,8 +9,11 @@ on:
   # Backstop rebuild so BackPorch posts (baked at build time by
   # scripts/backporch/bake.mjs) catch up on their own: scheduled posts go up,
   # expired ones come off the lists, and feeds and link previews refresh.
+  # The 05:05 UTC run lands just after midnight Eastern (EST; 1 a.m. under EDT),
+  # when date-based expiries such as "end of Nov 5" fall due.
   schedule:
     - cron: "17 */2 * * *"
+    - cron: "5 5 * * *"
 
 permissions:
   contents: read

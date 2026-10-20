@@ -671,9 +671,9 @@ function Editor({
             <input aria-label="Publish at" type="datetime-local" className="ir-input pe-inline-input" value={form.publish_at} onChange={(e) => set('publish_at', e.target.value)} />
           )}
           <div className="pe-field" style={{ marginTop: 14 }}>
-            <label className="pe-label" htmlFor="pe-expires">Take off the lists after (optional)</label>
+            <label className="pe-label" htmlFor="pe-expires">Take it down after (optional)</label>
             <input id="pe-expires" type="datetime-local" className="ir-input pe-inline-input" value={form.expires_at} onChange={(e) => set('expires_at', e.target.value)} />
-            <p className="pe-help">The post's own page keeps working after this; it just drops off the homepage and the BackPorch list.</p>
+            <p className="pe-help">At this time the post comes off the site: the homepage, the BackPorch list, and its own page and short address.</p>
           </div>
         </fieldset>
 
@@ -767,6 +767,27 @@ function BackPorchAdmin({ demo = false }: { demo?: boolean }) {
     return others.length >= MAX_PINS ? others[others.length - 1].title : null;
   };
 
+  // Starts a site rebuild (edge function backporch-publish). True if it started.
+  const startSiteUpdate = async () => {
+    const { error } = await supabase.functions.invoke('backporch-publish', { method: 'POST' });
+    return !error;
+  };
+
+  // A post that comes down leaves the lists at once, but its built page lingers until
+  // the next site update, so taking one down starts that update straight away.
+  const afterTakeDown = async (title: string) => {
+    if (demo) {
+      setNotice(`Demo: “${title}” taken down. On the live site this also starts a site update.`);
+      return;
+    }
+    const started = await startSiteUpdate();
+    setNotice(
+      started
+        ? `Taken down. “${title}” is off the homepage and the BackPorch now, and its page is gone everywhere within a few minutes.`
+        : `Taken down. “${title}” is off the homepage and the BackPorch now. Its page couldn't be cleared right away and will be gone at the next scheduled site update, within two hours.`,
+    );
+  };
+
   const publishSite = async () => {
     if (demo) {
       setNotice('Demo: on the live site, this starts a site update so link previews and feeds refresh.');
@@ -774,7 +795,7 @@ function BackPorchAdmin({ demo = false }: { demo?: boolean }) {
     }
     setPublishing(true);
     setNotice(null);
-    const { error } = await supabase.functions.invoke('backporch-publish', { method: 'POST' });
+    const error = !(await startSiteUpdate());
     setPublishing(false);
     setNotice(
       error
@@ -791,7 +812,9 @@ function BackPorchAdmin({ demo = false }: { demo?: boolean }) {
       return;
     }
     const { error } = await supabase.from('porch_posts').update(patch).eq('id', post.id);
-    setNotice(error ? `Could not update: ${error.message}` : message);
+    if (error) setNotice(`Could not update: ${error.message}`);
+    else if (patch.status === 'archived') await afterTakeDown(post.title);
+    else setNotice(message);
     void load();
   };
 
@@ -829,6 +852,7 @@ function BackPorchAdmin({ demo = false }: { demo?: boolean }) {
           pinnedTitle={replacedPin(editing.id)}
           onCancel={() => setEditing(null)}
           onSaved={(saved) => {
+            const tookDown = editing.status === 'published' && saved.status !== 'published';
             setEditing(null);
             if (demo) {
               setPosts((list) => {
@@ -848,7 +872,8 @@ function BackPorchAdmin({ demo = false }: { demo?: boolean }) {
                   ? `“${saved.title}” is live at ${shortAddress(saved.slug)}.`
                   : `“${saved.title}” is scheduled for ${shortDate(saved.published_at!)}.`,
               );
-            } else setNotice(`Saved “${saved.title}” as a draft.`);
+            } else if (tookDown) void afterTakeDown(saved.title);
+            else setNotice(`Saved “${saved.title}” as a draft.`);
           }}
         />
       </div>

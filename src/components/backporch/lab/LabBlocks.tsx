@@ -2,8 +2,7 @@
 // timeline, quick poll, and porch reactions. Each one works with a keyboard and a
 // screen reader, and under reduced motion shows its finished state with no motion.
 import { useEffect, useRef, useState } from 'react';
-import { supabase } from '../../../lib/supabaseClient';
-import { porchImageSrcSet, porchImageUrl } from '../../../lib/backporch';
+import { porchImageSrcSet, porchImageUrl, porchRpc } from '../../../lib/backporch';
 import type { CounterItem, MediaRef, ScrollyStep, TimelineItem } from '../../../lib/porchBlocks';
 import { remember, useCalm, useInView, voterToken } from './hooks';
 
@@ -268,7 +267,7 @@ export function Poll({ postId, blockId, question, options, live }: { postId: str
   const [problem, setProblem] = useState<string | null>(null);
 
   const load = async () => {
-    const { data, error } = await supabase.rpc('porch_poll_results', { p_post: postId, p_block: blockId });
+    const { data, error } = await porchRpc<{ option_index: number; votes: number }[]>('porch_poll_results', { p_post: postId, p_block: blockId });
     if (error) return;
     const next = options.map(() => 0);
     for (const row of (data ?? []) as { option_index: number; votes: number }[]) {
@@ -285,7 +284,7 @@ export function Poll({ postId, blockId, question, options, live }: { postId: str
   const vote = async (i: number) => {
     setBusy(true);
     setProblem(null);
-    const { data, error } = await supabase.rpc('porch_vote', { p_post: postId, p_block: blockId, p_option: i, p_voter: voterToken() });
+    const { data, error } = await porchRpc<boolean>('porch_vote', { p_post: postId, p_block: blockId, p_option: i, p_voter: voterToken() });
     setBusy(false);
     if (error || data !== true) {
       setProblem("Your vote didn't go through. Try again in a moment.");
@@ -350,7 +349,7 @@ export function Reactions({ postId, live }: { postId: string; live: boolean }) {
 
   useEffect(() => {
     if (!live) return;
-    void supabase.rpc('porch_reaction_counts', { p_post: postId }).then(({ data }) => {
+    void porchRpc<{ reaction: string; total: number }[]>('porch_reaction_counts', { p_post: postId }).then(({ data }) => {
       const next: Record<string, number> = {};
       for (const row of (data ?? []) as { reaction: string; total: number }[]) next[row.reaction] = Number(row.total);
       setCounts(next);
@@ -362,7 +361,7 @@ export function Reactions({ postId, live }: { postId: string; live: boolean }) {
     setMine((m) => ({ ...m, [id]: true }));
     setCounts((c) => ({ ...c, [id]: (c[id] ?? 0) + 1 }));
     remember(`porch-react:${postId}:${id}`, '1');
-    const { data, error } = await supabase.rpc('porch_react', { p_post: postId, p_reaction: id, p_voter: voterToken() });
+    const { data, error } = await porchRpc<boolean>('porch_react', { p_post: postId, p_reaction: id, p_voter: voterToken() });
     if (error || data !== true) {
       setMine((m) => ({ ...m, [id]: false }));
       setCounts((c) => ({ ...c, [id]: Math.max(0, (c[id] ?? 1) - 1) }));

@@ -8,6 +8,7 @@ import bakedFull from '../../data/backporch.generated.json';
 import {
   clockTime,
   fetchPublishedPost,
+  isListed,
   longDate,
   PORCH_PATH,
   porchImageUrl,
@@ -24,14 +25,18 @@ import { PorchView } from '../../components/backporch/PorchView';
 
 const BAKED = (bakedFull.posts as unknown as PorchPost[]).map(withBlocks);
 
+// Only a listed post has a page: a scheduled one isn't up yet, and a taken-down or
+// expired one is gone (the build drops it too; this covers the time until then).
+const bakedListed = (slug: string) => BAKED.find((p) => p.slug === slug && isListed(p)) ?? null;
+
 function usePost(slug: string) {
-  const baked = BAKED.find((p) => p.slug === slug) ?? null;
+  const baked = bakedListed(slug);
   const [post, setPost] = useState<PorchPost | null>(baked);
   const [state, setState] = useState<'ready' | 'loading' | 'missing'>(baked ? 'ready' : 'loading');
 
   useEffect(() => {
     let cancelled = false;
-    const fallback = BAKED.find((p) => p.slug === slug) ?? null;
+    const fallback = bakedListed(slug);
     setPost(fallback);
     setState(fallback ? 'ready' : 'loading');
     // Local preview with sample posts: don't let the real database overrule them.
@@ -42,12 +47,12 @@ function usePost(slug: string) {
     fetchPublishedPost(slug)
       .then((live) => {
         if (cancelled) return;
-        if (live) {
+        if (live && isListed(live)) {
           setPost(live);
           setState('ready');
         } else {
-          // Unpublished or never existed. (A baked copy of an unpublished post
-          // stays visible until the next build only if the live check fails.)
+          // Taken down, expired, or never existed. (A baked copy stays visible
+          // until the next build only if the live check itself fails.)
           setPost(null);
           setState('missing');
         }
