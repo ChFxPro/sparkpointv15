@@ -75,6 +75,8 @@
     "backporch:bake": "node scripts/backporch/bake.mjs",
     "porch:experiment": "node scripts/backporch/new-experiment.mjs",
     "porch:samples": "BACKPORCH_FIXTURE=scripts/backporch/sample-posts.json node scripts/backporch/bake.mjs",
+    "porch:backfill": "node scripts/backporch/backfill.mjs",
+    "porch:backfill:preview": "node scripts/backporch/backfill.mjs --fixture=.backfill-preview.json && BACKPORCH_FIXTURE=.backfill-preview.json node scripts/backporch/bake.mjs",
     "dev:samples": "npm run generate:press && node scripts/behind-story-manifest.mjs && npm run porch:samples && vite",
     "photos:add": "node scripts/rural-health-photo-share.mjs add",
     "photos:check": "node scripts/rural-health-photo-share.mjs check",

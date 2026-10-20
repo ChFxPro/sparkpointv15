@@ -46,3 +46,6 @@ src/data/backporch.generated.json
 src/data/backporch.index.generated.json
 public/backporch/
 public/assets/backporch/dev-unfurl/
+
+# BackPorch backfill local preview (npm run porch:backfill:preview)
+.backfill-preview.json

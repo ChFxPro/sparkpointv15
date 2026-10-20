@@ -16,6 +16,14 @@ Then open:
 - `localhost:3000/internal/backporch/demo` (the editor, no sign-in, nothing saved)
 - `localhost:3000/internal/lab/demo` (the Porch Lab bench)
 
+**Backfill (existing events, stories, and news as posts):** the 16 posts are in
+`scripts/backporch/backfill-posts.json` (edit titles, summaries, dates, images there).
+- `npm run porch:backfill` checks them and lists what would be written.
+- `npm run porch:backfill:preview` loads them into the local dev site (nothing written).
+- `npm run porch:backfill -- --apply` uploads the images to `porch-media/backfill/` and
+  writes the posts. It asks for a Supabase secret key (hidden). Safe to re-run: posts are
+  matched by slug and updated. Pinned posts are written last, so the last pinned one leads.
+
 Plain `npm run dev` bakes from the live database instead, which has no posts yet, so the
 BackPorch shows empty and the homepage band hides. Sample posts live in
 `scripts/backporch/sample-posts.json` (local only; the build refuses them in CI).
