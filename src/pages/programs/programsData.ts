@@ -1,4 +1,4 @@
-export type PathwayId = "listen" | "learn" | "lead";
+export type PathwayId = "listen" | "learn" | "lead" | "connect";
 
 export type ProgramFormatType =
   | "workshop"
@@ -58,11 +58,15 @@ export interface Program {
     href: string;
   };
   brand: ProgramBrand;
+  /** The program's own logo, for light grounds, when it has a brand (files from its kit). */
+  logo?: string;
+  /** Size the logo up or down from the default; a stacked two-line lockup needs more height. */
+  logoScale?: number;
 }
 
 export interface Pathway {
   id: PathwayId;
-  label: "Listen" | "Learn" | "Lead";
+  label: "Listen" | "Learn" | "Lead" | "Connect";
   color: string;
   colorLight: string;
   description: string;
@@ -81,744 +85,331 @@ function createProgram(program: Omit<Program, "slug">): Program {
   };
 }
 
+// StoryLab's logo, from its kit in Branding/StoryLab (draft identity, 2026-10-18).
+import storylabLogo from "../../assets/storylab/storylab-logo-plum.svg";
+import trailheadLogo from "../../assets/trailhead/trailhead-lockup-horizontal-full.svg";
+import { COMMUNITY_CONNECTORS_BRAND } from "../../components/communityConnectorsBrand";
+
+// The program lineup, settled 2026-10-15 (Brain: 02-Areas/SparkPoint/SparkPoint Program
+// Lineup.md): 13 programs in four pathways, plus StoryLab as an initiative. Programs that
+// were retired or paused are listed in RETIRED_PROGRAM_SLUGS so their old links still land.
+
 const listenPrograms: Program[] = [
   createProgram({
-    id: "echoes-from-the-community",
-    title: "Echoes from the Community",
+    id: "story-collection",
+    title: "Community Story Collection",
     pathway: "listen",
     shortDescription:
-      "A bi-weekly column sharing what SparkPoint is hearing across community conversations and story projects.",
+      "We gather residents' stories on one question at a time and take what we hear to the people making local decisions.",
     longDescription:
-      "Echoes from the Community runs in print and online, lifting local voices and connecting relationships, community conditions, and health. It translates ongoing story collection into practical insight people can use.",
-    tags: ["Community", "Individuals", "Educators"],
-    whoItsFor: ["Community members", "Individuals", "Educators"],
-    whatYoullExperience: [
-      "Local stories from residents and partners",
-      "Practical insights tied to real community conditions",
-      "Reflections that inform individual and collective action",
-    ],
-    outcomes: [
-      "Shared understanding of local realities",
-      "More informed community dialogue",
-      "Stronger connection between lived experience and action",
-    ],
-    idealPartners: ["Local media", "Storytellers", "Schools", "Community organizations"],
-    format: {
-      type: "ongoing",
-      cadence: "Bi-weekly",
-    },
-    offeringType: "community",
-    contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'grounded',
-      voiceSample: 'A bi-weekly column sharing what SparkPoint is hearing across community conversations and story projects.',
-      palette: 'neutral',
-    },
-  }),
-  createProgram({
-    id: "story-collection-projects",
-    title: "Story Collection Projects",
-    pathway: "listen",
-    shortDescription:
-      "Targeted story gathering around topics shaping community well-being and recovery.",
-    longDescription:
-      "These projects gather stories through interviews, written prompts, and youth-led activities on issues like youth mental health, food access, and recovery after Helene. SparkPoint synthesizes themes to guide programs and partnerships.",
+      "Each collection focuses on a topic shaping community well-being: health care access, food, recovery after Helene, what it's like to be a student here. Stories come in through interviews, short written prompts, and youth-led activities. SparkPoint reads across them for strengths, needs, and patterns, and shares a summary with the partners who can act on it.",
+    whyItExists:
+      "Decisions about a community are better when they start from what its people are actually living. Story collection makes that experience visible and usable.",
     tags: ["Community", "Individuals", "Partners", "Youth"],
-    whoItsFor: ["Community members", "Individuals", "Partners", "Youth"],
+    whoItsFor: ["Residents with a story to share", "Partners who want to understand a need", "Schools and youth groups", "Funders supporting community learning"],
     whatYoullExperience: [
-      "Story prompts and interviews",
+      "Short, anonymous story prompts and recorded interviews",
       "Community listening sessions",
-      "Theme synthesis and insight sharing",
+      "A plain-language summary of what was heard",
     ],
     outcomes: [
-      "Clearer understanding of needs and strengths",
-      "Data-informed program adaptation",
-      "Stronger partner alignment around community priorities",
+      "A clearer picture of local strengths and needs",
+      "Programs and partnerships shaped by lived experience",
+      "Residents who see their stories lead somewhere",
     ],
-    idealPartners: [
-      "Schools",
-      "Nonprofits",
-      "Neighborhood groups",
-      "Funders supporting learning and resilience",
-    ],
-    format: {
-      type: "project",
-      cadence: "Topic-based cycles",
-    },
-    offeringType: "partner",
-    contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'grounded',
-      voiceSample: 'Targeted story gathering around topics shaping community well-being and recovery.',
-      palette: 'neutral',
-    },
-  }),
-  createProgram({
-    id: "story-lab-studios",
-    title: "Story Lab Studios (Media Navigator Mentorships)",
-    pathway: "listen",
-    shortDescription:
-      "A story studio that mentors youth and community members in ethical media and narrative practice.",
-    longDescription:
-      "Story Lab Studios provides guided mentorship for youth, nonprofits, and community members to strengthen storytelling craft and confidence. Participants build media and narrative skills that support civic voice and local impact.",
-    tags: ["Youth", "Community", "Organizations"],
-    whoItsFor: ["Youth", "Community members", "Organizations"],
-    whatYoullExperience: [
-      "Mentorship and coaching",
-      "Media and storytelling skill-building",
-      "Narrative development for community impact",
-    ],
-    outcomes: [
-      "Increased storytelling confidence",
-      "Stronger youth leadership expression",
-      "Better communication capacity across partner groups",
-    ],
-    idealPartners: ["Schools", "Youth programs", "Nonprofits", "Local creatives"],
-    format: {
-      type: "cohort",
-      cadence: "Seasonal studio cycles",
-    },
-    offeringType: "partner",
-    contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'grounded',
-      voiceSample: 'A story studio that mentors youth and community members in ethical media and narrative practice.',
-      palette: 'neutral',
-    },
-  }),
-  createProgram({
-    id: "thrive-at-5",
-    title: "Thrive @ 5",
-    pathway: "listen",
-    shortDescription:
-      "Monthly community gatherings that create low-barrier connection across the county.",
-    longDescription:
-      "Thrive @ 5 hosts monthly meetups in Cedar Mountain, Brevard, and Rosman (Headwaters). The gatherings are designed for relationship-building, local conversation, and everyday belonging.",
-    tags: ["Individuals", "Community"],
-    whoItsFor: ["Individuals", "Community members"],
-    whatYoullExperience: [
-      "Low-barrier social connection",
-      "Facilitated and informal conversation",
-      "Local belonging in shared community space",
-    ],
-    outcomes: [
-      "Stronger neighborhood relationships",
-      "Increased social connectedness",
-      "Greater sense of belonging",
-    ],
-    idealPartners: ["Community hosts", "Local organizations", "Neighborhood connectors"],
-    format: {
-      type: "event",
-      cadence: "Monthly",
-    },
+    idealPartners: ["Schools", "Nonprofits", "Health and county partners", "Neighborhood groups"],
+    format: { type: "project", cadence: "One topic at a time" },
     offeringType: "community",
-    contactCTA: defaultContactCTA,
+    contactCTA: { label: "See current collections", href: "/stories/collections" },
     brand: {
-      voice: 'grounded',
-      voiceSample: 'Monthly community gatherings that create low-barrier connection across the county.',
-      palette: 'neutral',
+      voice: "grounded",
+      voiceSample: "Everyone has a story about this place. We ask, and we listen.",
+      palette: "neutral",
     },
   }),
 ];
 
 const learnPrograms: Program[] = [
   createProgram({
-    id: "social-health-101",
-    title: "Social Health 101: The Science of Connection",
+    id: "connected-leadership-culture",
+    title: "Connected Leadership",
     pathway: "learn",
     shortDescription:
-      "A foundational workshop on why relationships and belonging are central to health.",
+      "A yearlong series for workplaces that want a more connected culture, built around their own team.",
     longDescription:
-      "Social Health 101 explains how connection affects physical and mental well-being, then translates that science into habits people can use at home, work, and in community life.",
-    tags: ["Community", "Individuals", "Teams"],
-    whoItsFor: ["Community members", "Individuals", "Teams"],
+      "Connected Leadership starts with a look at how a team actually works together, then builds a practical roadmap across a series of sessions. It weaves leadership habits, emotional intelligence, and team practices together to support belonging and retention.",
+    tags: ["Organizations", "Leaders", "Teams"],
+    whoItsFor: ["Employers", "Leadership teams", "Nonprofits and agencies"],
     whatYoullExperience: [
-      "Simple science of connection and belonging",
-      "Practical reflection on current support patterns",
-      "Tools for building and sustaining supportive networks",
+      "A culture read of your team",
+      "Leadership and team practice sessions",
+      "A roadmap your team keeps using",
     ],
-    outcomes: [
-      "Greater relational awareness",
-      "Usable connection practices",
-      "Stronger day-to-day social support",
-    ],
-    idealPartners: ["Community groups", "Workplaces", "Schools"],
-    format: {
-      type: "workshop",
-      cadence: "Single session",
-    },
-    offeringType: "community",
-    contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'grounded',
-      voiceSample: 'A foundational workshop on why relationships and belonging are central to health.',
-      palette: 'neutral',
-    },
-  }),
-  createProgram({
-    id: "integrative-well-being-food-mood-movement",
-    title: "Integrative Well-Being: Food, Mood & Movement",
-    pathway: "learn",
-    shortDescription:
-      "Interactive learning on how daily rhythms shape mood, focus, and energy.",
-    longDescription:
-      "This workshop connects nutrition, movement, rest, and emotional health through practical examples. Depending on context, it may include shared meals, gentle movement, and mindfulness practices.",
-    tags: ["Individuals", "Community"],
-    whoItsFor: ["Individuals", "Community members"],
-    whatYoullExperience: [
-      "Practical well-being practices",
-      "An integrative mind-body lens",
-      "Gentle activities and reflection",
-    ],
-    outcomes: [
-      "Improved self-regulation habits",
-      "Better awareness of daily energy patterns",
-      "Clear next steps for sustainable well-being",
-    ],
-    idealPartners: ["Wellness organizations", "Food access organizations", "Community groups"],
-    format: {
-      type: "workshop",
-      cadence: "Single session or short series",
-    },
-    offeringType: "community",
-    contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'grounded',
-      voiceSample: 'Interactive learning on how daily rhythms shape mood, focus, and energy.',
-      palette: 'neutral',
-    },
-  }),
-  createProgram({
-    id: "brain-stress-resilience",
-    title: "Brain, Stress & Resilience",
-    pathway: "learn",
-    shortDescription:
-      "A practical workshop on stress response and relationship-based resilience.",
-    longDescription:
-      "Participants learn what stress does in the brain and body, and how connection buffers its impact. The workshop includes breathing, reframing, and trusted-connection practices.",
-    tags: ["Individuals", "Community", "Educators"],
-    whoItsFor: ["Individuals", "Community members", "Educators"],
-    whatYoullExperience: [
-      "Clear stress-response education",
-      "Breathing and grounding practices",
-      "Tools for supporting yourself and others",
-    ],
-    outcomes: [
-      "Improved stress navigation",
-      "Greater resilience capacity",
-      "More confidence in offering support to others",
-    ],
-    idealPartners: ["Schools", "Health organizations", "Community groups"],
-    format: {
-      type: "workshop",
-      cadence: "Single session",
-    },
-    offeringType: "community",
-    contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'grounded',
-      voiceSample: 'A practical workshop on stress response and relationship-based resilience.',
-      palette: 'neutral',
-    },
-  }),
-  createProgram({
-    id: "positive-culture-belonging",
-    title: "Positive Culture & Belonging",
-    pathway: "learn",
-    shortDescription:
-      "A workshop on belonging through everyday interactions, play, and trust.",
-    longDescription:
-      "This offering shows how low-stakes interaction and shared laughter build trust, creativity, and connection. Participants practice culture-building behaviors that strengthen relationships over time.",
-    tags: ["Community", "Teams", "Educators"],
-    whoItsFor: ["Community members", "Teams", "Educators"],
-    whatYoullExperience: [
-      "Playful and relational exercises",
-      "Belonging-building culture practices",
-      "Reflection on daily interaction patterns",
-    ],
-    outcomes: [
-      "Improved team trust",
-      "Stronger belonging culture",
-      "More human-centered group dynamics",
-    ],
-    idealPartners: ["Schools", "Workplaces", "Community organizations"],
-    format: {
-      type: "workshop",
-      cadence: "Single session or mini-series",
-    },
-    offeringType: "partner",
-    contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'grounded',
-      voiceSample: 'A workshop on belonging through everyday interactions, play, and trust.',
-      palette: 'neutral',
-    },
-  }),
-  createProgram({
-    id: "learn-connect-nights",
-    title: "Learn & Connect Nights (Community & Personal Growth Nights)",
-    pathway: "learn",
-    shortDescription:
-      "Evening gatherings where people learn, reflect, and build meaningful connection.",
-    longDescription:
-      "Learn & Connect Nights bring people across ages and backgrounds together around topics like resilience, boundaries, joy, and purpose. Each evening blends activity or guest input with conversation and relationship-building.",
-    tags: ["Community", "Individuals"],
-    whoItsFor: ["Community members", "Individuals"],
-    whatYoullExperience: [
-      "Guest speaker or guided activity",
-      "Facilitated group reflection",
-      "Connection-focused conversation",
-    ],
-    outcomes: [
-      "Increased community learning",
-      "Expanded social connection",
-      "More shared language around well-being",
-    ],
-    idealPartners: ["Libraries", "Community centers", "Local speakers"],
-    format: {
-      type: "event",
-      cadence: "Recurring evening gatherings",
-    },
-    offeringType: "community",
-    contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'grounded',
-      voiceSample: 'Evening gatherings where people learn, reflect, and build meaningful connection.',
-      palette: 'neutral',
-    },
-  }),
-  createProgram({
-    id: "supported-connected-classrooms",
-    title: "SupportEd: Connected Classrooms & Educator Well-Being",
-    pathway: "learn",
-    shortDescription:
-      "Professional learning and wellness support for educators and school teams.",
-    longDescription:
-      "SupportEd combines relationship-centered teaching strategies with practical educator well-being tools, including boundaries, peer support, play, and culture practices that help classrooms thrive.",
-    tags: ["Educators", "Schools"],
-    whoItsFor: ["Educators", "Schools"],
-    whatYoullExperience: [
-      "Applied educator training",
-      "Supportive well-being practices",
-      "Classroom and school culture tools",
-    ],
-    outcomes: [
-      "Stronger educator support capacity",
-      "Healthier school culture",
-      "More connected classrooms",
-    ],
-    idealPartners: ["School districts", "Colleges", "Educator support organizations"],
-    format: {
-      type: "series",
-      cadence: "Professional learning series",
-    },
-    offeringType: "partner",
-    contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'grounded',
-      voiceSample: 'Professional learning and wellness support for educators and school teams.',
-      palette: 'neutral',
-    },
-  }),
-  createProgram({
-    id: "purpose-workshops",
-    title: "Purpose Workshops",
-    pathway: "learn",
-    shortDescription:
-      "Guided workshops helping people and teams align strengths, goals, and purpose.",
-    longDescription:
-      "Purpose Workshops are adapted for businesses, schools, and community settings. Participants clarify strengths and aspirations, then connect that insight to practical decisions and shared direction.",
-    tags: ["Organizations", "Schools", "Community", "Individuals"],
-    whoItsFor: ["Organizations", "Schools", "Community members", "Individuals"],
-    whatYoullExperience: [
-      "Guided reflection and discovery",
-      "Practical purpose alignment exercises",
-      "Planning next steps for individual or team context",
-    ],
-    outcomes: [
-      "Clearer purpose alignment",
-      "Stronger motivation and cohesion",
-      "More intentional decision-making",
-    ],
-    idealPartners: ["Employers", "Schools", "Community organizations"],
-    format: {
-      type: "workshop",
-      cadence: "Single session or multi-session",
-    },
+    outcomes: ["A more connected workplace culture", "Better conditions for retention", "Leaders aligned on how they lead"],
+    idealPartners: ["Employers", "Nonprofits", "Public agencies"],
+    format: { type: "series", cadence: "Yearlong" },
     offeringType: "fee-based",
-    detailPageHref: "/programs/purpose-workshops",
     contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'soft',
-      voiceSample: 'We\'re more connected than ever. And still searching for what matters.',
-      palette: 'warm',
-      typographicTone: 'balanced',
-    },
+    brand: { voice: "corporate", voiceSample: "Culture is how a team treats each other on an ordinary Tuesday.", palette: "neutral", typographicTone: "structured" },
   }),
   createProgram({
     id: "leadership-well-being",
-    title: "Leadership Well-Being",
+    title: "Leadership Wellbeing",
     pathway: "learn",
     shortDescription:
-      "Sustainable leadership practices focused on self-awareness, boundaries, and connection.",
+      "A series for leaders on attention, boundaries, and leading in a way they can sustain.",
     longDescription:
-      "Designed for leaders in schools, nonprofits, and community organizations, this program helps leaders build healthier environments where people feel respected, connected, and supported.",
+      "Designed for leaders in schools, nonprofits, and community organizations, Leadership Wellbeing builds the habits that keep leaders steady: regulated attention, clear boundaries, and relationships that hold under pressure.",
     tags: ["Leaders", "Organizations", "Educators"],
-    whoItsFor: ["Leaders", "Organizations", "Educators"],
-    whatYoullExperience: [
-      "Practices for sustainable leadership",
-      "Boundary and self-awareness tools",
-      "Relational leadership reflection",
-    ],
-    outcomes: [
-      "Improved leadership sustainability",
-      "Healthier team norms",
-      "Reduced burnout pressure",
-    ],
+    whoItsFor: ["Executive directors and managers", "School leaders", "Community organization leaders"],
+    whatYoullExperience: ["Practices for sustainable leadership", "Tools for boundaries and self-awareness", "Reflection with other leaders"],
+    outcomes: ["Leadership that lasts", "Healthier team norms", "Less burnout pressure"],
     idealPartners: ["Nonprofits", "Schools", "Partner organizations"],
-    format: {
-      type: "series",
-      cadence: "Leadership development series",
-    },
+    format: { type: "series", cadence: "Leadership series" },
     offeringType: "partner",
     contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'corporate',
-      voiceSample: 'Strong leadership starts with well-regulated attention. We teach both.',
-      palette: 'neutral',
-      typographicTone: 'structured',
-    },
+    brand: { voice: "corporate", voiceSample: "Strong leadership starts with well-regulated attention. We teach both.", palette: "neutral", typographicTone: "structured" },
   }),
   createProgram({
-    id: "emotional-intelligence-connective-leadership",
-    title: "Emotional Intelligence for Connective Leadership",
+    id: "purpose-workshops",
+    title: "SparkPurpose Workshops",
     pathway: "learn",
     shortDescription:
-      "Practical EI and communication tools for trust-based leadership under stress.",
+      "Two-hour guided sessions where teams and individuals talk through what matters to them and leave with a next step.",
     longDescription:
-      "Participants strengthen empathy, regulation, feedback, and repair skills to improve communication and trust. The program focuses on habits leaders can use immediately in real team dynamics.",
-    tags: ["Leaders", "Teams", "Organizations"],
-    whoItsFor: ["Leaders", "Teams", "Organizations"],
-    whatYoullExperience: [
-      "Applied emotional intelligence tools",
-      "Communication and feedback habits",
-      "Repair and trust-building practices",
-    ],
-    outcomes: [
-      "Improved team communication",
-      "Higher trust during pressure",
-      "Stronger conflict recovery capacity",
-    ],
-    idealPartners: ["Workplaces", "Nonprofits", "Schools"],
-    format: {
-      type: "workshop",
-      cadence: "Single workshop or series",
-    },
+      "SparkPurpose workshops run for workplaces, schools, and community groups. A facilitator leads the group through reflection prompts and conversation, and everyone leaves with a written next step.",
+    tags: ["Organizations", "Schools", "Community", "Individuals"],
+    whoItsFor: ["Workplace teams", "Schools", "Community groups", "Individuals"],
+    whatYoullExperience: ["Guided reflection and conversation", "A facilitator keeping it open", "A written next step to take home"],
+    outcomes: ["Clearer sense of purpose", "Stronger team connection", "More intentional next steps"],
+    idealPartners: ["Employers", "Schools", "Community organizations"],
+    format: { type: "workshop", cadence: "Two hours" },
     offeringType: "fee-based",
+    detailPageHref: "/programs/purpose-workshops",
     contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'grounded',
-      voiceSample: 'Practical EI and communication tools for trust-based leadership under stress.',
-      palette: 'neutral',
-    },
+    brand: { voice: "soft", voiceSample: "We're more connected than ever. And still searching for what matters.", palette: "warm", typographicTone: "balanced" },
   }),
   createProgram({
-    id: "workplace-well-being-positive-culture",
-    title: "Workplace Well-Being & Positive Culture",
+    id: "media-navigators",
+    title: "Media Navigators",
     pathway: "learn",
     shortDescription:
-      "Team workshops on communication, recognition, trust, and belonging.",
+      "SparkPoint's mentorship fellowship, training media generalists in ethical storytelling, editing, design, and responsible AI tools.",
     longDescription:
-      "This offering helps teams strengthen morale and everyday relationships through practical culture tools. Sessions are built to be actionable and relevant to daily workplace realities.",
-    tags: ["Teams", "Organizations"],
-    whoItsFor: ["Teams", "Organizations"],
-    whatYoullExperience: [
-      "Team exercises and dialogue",
-      "Simple, repeatable culture tools",
-      "Recognition and trust-building practices",
-    ],
-    outcomes: [
-      "Better team morale",
-      "Improved workplace relationships",
-      "Stronger day-to-day culture habits",
-    ],
-    idealPartners: ["Employers", "Nonprofits", "Partner agencies"],
-    format: {
-      type: "workshop",
-      cadence: "Single session or short series",
-    },
-    offeringType: "fee-based",
+      "Media Navigators mentors young people and community members, including neurodivergent participants, in the media skills nonprofits, local government, and small businesses need: video and audio editing, graphics, captioning, and careful, human-checked use of AI tools. Navigators build a portfolio on real SparkPoint and partner projects, and help bring StoryLab to life as it opens.",
+    tags: ["Youth", "Individuals", "Organizations"],
+    whoItsFor: ["Young people and career changers", "Neurodivergent creators", "Nonprofits and agencies that need media help"],
+    whatYoullExperience: ["Mentorship from working media makers", "Real projects for real partners", "A portfolio and a path to placements"],
+    outcomes: ["Job-ready media skills", "A local pipeline of media talent", "Partners with the storytelling capacity they need"],
+    idealPartners: ["Nonprofits", "Local government", "Small businesses", "Workforce partners"],
+    format: { type: "cohort", cadence: "Fellowship cohorts" },
+    offeringType: "community",
     contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'grounded',
-      voiceSample: 'Team workshops on communication, recognition, trust, and belonging.',
-      palette: 'neutral',
-    },
-  }),
-  createProgram({
-    id: "connected-leadership-culture",
-    title: "Connected Leadership & Culture",
-    pathway: "learn",
-    shortDescription:
-      "A deeper multi-session program for culture change through a well-being lens.",
-    longDescription:
-      "Connected Leadership & Culture is a customizable engagement that analyzes team culture and develops a practical roadmap. It weaves emotional intelligence, leadership habits, and team strategies to support retention and belonging.",
-    tags: ["Organizations", "Leaders", "Teams"],
-    whoItsFor: ["Organizations", "Leaders", "Teams"],
-    whatYoullExperience: [
-      "Culture analysis and diagnosis",
-      "Leadership and team strategy work",
-      "A practical multi-session roadmap",
-    ],
-    outcomes: [
-      "More connected workplace culture",
-      "Improved retention conditions",
-      "Clearer leadership alignment",
-    ],
-    idealPartners: ["Employers", "Nonprofits", "Agencies"],
-    format: {
-      type: "series",
-      cadence: "Multi-session engagement",
-    },
-    offeringType: "partner",
-    contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'grounded',
-      voiceSample: 'A deeper multi-session program for culture change through a well-being lens.',
-      palette: 'neutral',
-    },
+    brand: { voice: "youth", voiceSample: "Learn the craft on work that matters here.", palette: "warm", typographicTone: "energetic" },
   }),
 ];
 
 const leadPrograms: Program[] = [
   createProgram({
-    id: "wellness-rooted-in-connection-collaborative-trcn",
-    title: "Wellness Rooted in Connection Collaborative (TRCN)",
+    id: "voice-of-the-students-youth-leadership",
+    title: "Voices of the Students (VOS)",
     pathway: "lead",
     shortDescription:
-      "A cross-sector collaborative strengthening mental wellness, social connection, and resilience.",
+      "Student-led sessions on middle and high school campuses, where students say what school is really like and help decide what changes.",
     longDescription:
-      "SparkPoint convenes as part of TRCN to align residents and partners across education, health, youth, and food access. The collaborative co-creates shared strategies for county-wide resilience in Transylvania.",
-    tags: ["Partners", "Organizations", "Community"],
-    whoItsFor: ["Partners", "Organizations", "Community"],
-    whatYoullExperience: [
-      "Cross-sector convening",
-      "Coordination and shared strategy design",
-      "Collaborative action planning",
-    ],
-    outcomes: [
-      "Stronger system alignment",
-      "Improved coordination around wellness priorities",
-      "More durable community resilience infrastructure",
-    ],
-    idealPartners: ["Cross-sector organizations", "Coalitions", "Public agencies"],
-    format: {
-      type: "collaborative",
-      cadence: "Ongoing",
-    },
+      "VOS meets students where they are, on campus and during the school day. Students lead the conversations, name what helps and what gets in the way, and turn it into action plans with their schools.",
+    tags: ["Youth", "Schools"],
+    whoItsFor: ["Middle and high school students", "School leaders and counselors"],
+    whatYoullExperience: ["Sessions led by students", "Time with peers from across the school", "Student-built action plans"],
+    outcomes: ["Student leadership and confidence", "School decisions informed by students", "A stronger sense of belonging"],
+    idealPartners: ["Schools", "Youth organizations", "Youth-serving partners"],
+    format: { type: "cohort", cadence: "Through the school year" },
     offeringType: "partner",
     contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'coalition',
-      voiceSample: 'When organizations listen together, the community hears itself.',
-      palette: 'cool',
-      typographicTone: 'balanced',
-    },
+    brand: { voice: "youth", voiceSample: "Your voice is already data. Here's what we do with it.", palette: "warm", typographicTone: "energetic" },
+  }),
+  createProgram({
+    id: "trailhead",
+    title: "TrailHead",
+    pathway: "lead",
+    shortDescription:
+      "A SparkPoint simulation that turns a room into a system: small groups carry a fictional family through its doors, delays, and handoffs, then read the map together.",
+    longDescription:
+      "TrailHead is a facilitated simulation. Each group carries a fictional family's story through a community system, making the choices that family would face, and the room sees what each path cost in time, money, and connection. Its first edition, TrailHead: Rural Health, filled the room at the October 1, 2026 Western NC Regional Rural Health Convening. New editions can be built around the system a group is working on.",
+    whyItExists: "Connection is easy to praise and hard to see. TrailHead makes the cost of a missing handoff something a room can feel, and talk about together.",
+    tags: ["Organizations", "Partners", "Leaders"],
+    whoItsFor: ["Health systems and agencies", "Coalitions and funders", "Organizations planning together"],
+    whatYoullExperience: ["A fictional family's story to carry", "Choices at every door", "A shared map of what the journeys took"],
+    outcomes: ["A shared picture of how the system really works", "Concrete places to strengthen handoffs", "Partners who've walked it together"],
+    idealPartners: ["Health systems", "Public agencies", "Coalitions", "Funders"],
+    format: { type: "event", cadence: "Facilitated session" },
+    offeringType: "fee-based",
+    contactCTA: { label: "Bring TrailHead to your group", href: "/intake?intent=partner" },
+    brand: { accent: "#2F4A3C", accentSoft: "rgba(47, 74, 60, 0.1)", voice: "grounded", voiceSample: "Walk the system. Count what the journey costs.", palette: "cool", typographicTone: "structured" },
+    logo: trailheadLogo,
+  }),
+];
+
+const connectPrograms: Program[] = [
+  createProgram({
+    id: "wellness-rooted-in-connection-collaborative-trcn",
+    title: "Wellness Rooted in Connection Collaborative",
+    pathway: "connect",
+    shortDescription:
+      "A community of practice where organizations listen together and strengthen mental wellness and resilience across the county.",
+    longDescription:
+      "The Wellness Rooted in Connection (WRC) collaborative brings residents and organizations from education, health, youth work, and food access into one room. Members share what they are hearing, align on priorities, and build shared strategies for wellness and resilience in Transylvania County.",
+    tags: ["Partners", "Organizations", "Community"],
+    whoItsFor: ["Community organizations", "Schools and health partners", "Residents who want a voice in local priorities"],
+    whatYoullExperience: ["Regular cross-sector gatherings", "Shared listening and planning", "Joint action on shared priorities"],
+    outcomes: ["Organizations working from the same picture", "Better-coordinated support", "Lasting connections across sectors"],
+    idealPartners: ["Cross-sector organizations", "Coalitions", "Public agencies"],
+    format: { type: "collaborative", cadence: "Ongoing" },
+    offeringType: "partner",
+    contactCTA: defaultContactCTA,
+    brand: { voice: "coalition", voiceSample: "When organizations listen together, the community hears itself.", palette: "cool", typographicTone: "balanced" },
   }),
   createProgram({
     id: "community-connectors",
     title: "Community Connectors",
-    pathway: "lead",
+    pathway: "connect",
     shortDescription:
-      "Trusted local people helping neighbors find information, resources, care, and preparedness across Transylvania County.",
+      "Neighbors people already trust, with the training and tools to help their communities get ready for hard days and recover from them.",
     longDescription:
-      "Community Connectors grew from SparkPoint's post-Helene listening work. The initiative strengthens the trusted people, relationships, and informal networks that already help neighbors navigate uncertainty, find resources, and stay connected before, during, and after hard moments.",
+      "Community Connectors grew from SparkPoint's listening after Hurricane Helene. With the American Red Cross and FWRD Transylvania, it strengthens the trusted people and informal networks that already help neighbors find information and resources before, during, and after hard moments.",
     whyItExists:
-      "After Hurricane Helene, residents repeatedly named the trusted people who knew who to call, where to go, what was changing, and how to help neighbors take the next step.",
+      "After Helene, residents kept naming the trusted people who knew who to call, where to go, and how to help a neighbor take the next step.",
     tags: ["Community", "Partners", "Preparedness", "Organizations"],
-    whoItsFor: [
-      "Community members others already turn to",
-      "Faith leaders and neighborhood hosts",
-      "Volunteers, business owners, educators, and local organizers",
-      "Partners strengthening disaster preparedness and community resilience",
-    ],
-    whatYoullExperience: [
-      "Connection with trusted people across Transylvania County",
-      "Listening circles and practical small-group conversations",
-      "Preparedness tools and resource-sharing relationships",
-      "Opportunities to identify local Connection Points",
-    ],
-    outcomes: [
-      "Stronger neighbor-to-neighbor support",
-      "Clearer paths to information, services, and community resources",
-      "More prepared and connected local communities",
-    ],
-    idealPartners: [
-      "FWRD Transylvania County",
-      "American Red Cross",
-      "Faith communities",
-      "Neighborhood groups",
-      "Local agencies and nonprofits",
-    ],
-    format: {
-      type: "collaborative",
-      cadence: "Ongoing gatherings and local connection-building",
-    },
+    whoItsFor: ["People others already turn to", "Faith leaders and neighborhood hosts", "Volunteers, business owners, and educators"],
+    whatYoullExperience: ["Training and practical small-group conversations", "Preparedness tools and resource sharing", "Identifying local Connection Points"],
+    outcomes: ["Stronger neighbor-to-neighbor support", "Clearer paths to information and resources", "Readier, better-connected communities"],
+    idealPartners: ["American Red Cross", "FWRD Transylvania", "Faith communities", "Neighborhood groups"],
+    format: { type: "collaborative", cadence: "Ongoing" },
     offeringType: "community",
     detailPageHref: "/community-connectors",
-    contactCTA: {
-      label: "Fill out the interest form",
-      href: "https://wkf.ms/4azGJiS",
-    },
-    brand: {
-      accent: "#174c36",
-      accentSoft: "rgba(95, 150, 148, 0.12)",
-      voice: 'coalition',
-      voiceSample: "Rooted in connection. Ready for what's next.",
-      palette: 'cool',
-      typographicTone: 'structured',
-    },
+    contactCTA: { label: "Fill out the interest form", href: "https://wkf.ms/4azGJiS" },
+    brand: { accent: "#224a39", accentSoft: "rgba(83, 134, 129, 0.12)", voice: "coalition", voiceSample: "Rooted in connection. Ready for what's next.", palette: "cool", typographicTone: "structured" },
+    logo: COMMUNITY_CONNECTORS_BRAND.logoDark,
+    logoScale: 1.4,
   }),
   createProgram({
-    id: "education-coalition-connected-communities-roundtable",
-    title: "Education Coalition / Connected Communities Roundtable",
-    pathway: "lead",
+    id: "powher",
+    title: "PowHer",
+    pathway: "connect",
     shortDescription:
-      "Recurring roundtable for coordinated support of students, families, and schools.",
+      "A monthly gathering of women for honest conversation, shared growth, leadership, and belonging.",
     longDescription:
-      "This recurring gathering builds shared understanding and joint planning among organizations that support youth and families. It helps partners coordinate actions instead of working in isolation.",
-    tags: ["Partners", "Educators", "Organizations"],
-    whoItsFor: ["Partners", "Educators", "Organizations"],
-    whatYoullExperience: [
-      "Roundtable collaboration",
-      "Joint planning and coordination",
-      "Shared problem-solving around youth support",
-    ],
-    outcomes: [
-      "More aligned youth-serving systems",
-      "Reduced duplication across organizations",
-      "Clearer partner accountability",
-    ],
-    idealPartners: ["Schools", "Youth organizations", "Family support organizations"],
-    format: {
-      type: "collaborative",
-      cadence: "Recurring",
-    },
-    offeringType: "partner",
+      "PowHer is a joint program of SparkPoint, Pisgah Health Foundation, the Brevard/Transylvania Chamber of Commerce, and KL Creative. Each month women from across the county gather to talk honestly, learn from each other, and build the relationships that carry into work and community life.",
+    tags: ["Community", "Individuals", "Leaders"],
+    whoItsFor: ["Women across Transylvania County", "Emerging and established leaders"],
+    whatYoullExperience: ["Monthly gatherings", "Honest, guided conversation", "Connections that last past the evening"],
+    outcomes: ["A stronger network of women leaders", "Shared growth and support", "A greater sense of belonging"],
+    idealPartners: ["Pisgah Health Foundation", "Brevard/Transylvania Chamber of Commerce", "KL Creative"],
+    format: { type: "event", cadence: "Monthly" },
+    offeringType: "community",
     contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'grounded',
-      voiceSample: 'Recurring roundtable for coordinated support of students, families, and schools.',
-      palette: 'neutral',
-    },
+    brand: { voice: "soft", voiceSample: "Bring yourself. Leave with a few more people in your corner.", palette: "warm" },
   }),
   createProgram({
     id: "nonprofit-partner-network-convening-space",
-    title: "Nonprofit Partner Network & Convening Space",
-    pathway: "lead",
+    title: "Nonprofit Partner Network",
+    pathway: "connect",
     shortDescription:
-      "Facilitated convening space for nonprofits and coalitions building shared solutions.",
+      "A facilitated space where local nonprofits and coalitions meet, coordinate, and track shared goals.",
     longDescription:
-      "SparkPoint offers facilitation and collaborative space where nonprofits and coalitions can connect, coordinate, and strengthen joint responses to community needs.",
+      "SparkPoint provides backbone support for local nonprofits and coalitions: organizing the meetings, facilitating the conversation, and keeping track of shared goals, so partners can spend their time on the work itself.",
     tags: ["Organizations", "Partners"],
-    whoItsFor: ["Organizations", "Partners"],
-    whatYoullExperience: [
-      "Convening and relationship-building",
-      "Facilitated collaboration",
-      "Shared solution development",
-    ],
-    outcomes: [
-      "Stronger partner network cohesion",
-      "Higher collaboration capacity",
-      "More coordinated community response",
-    ],
+    whoItsFor: ["Local nonprofits", "Coalitions and networks"],
+    whatYoullExperience: ["Facilitated convenings", "Backbone and meeting support", "Shared goal tracking"],
+    outcomes: ["A more connected nonprofit community", "Less duplicated effort", "More coordinated responses to community needs"],
     idealPartners: ["Nonprofits", "Coalitions", "Community initiatives"],
-    format: {
-      type: "collaborative",
-      cadence: "Ongoing convening",
-    },
+    format: { type: "collaborative", cadence: "Ongoing" },
     offeringType: "partner",
     contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'grounded',
-      voiceSample: 'Facilitated convening space for nonprofits and coalitions building shared solutions.',
-      palette: 'neutral',
-    },
+    brand: { voice: "grounded", voiceSample: "We hold the agenda so partners can hold the work.", palette: "neutral" },
   }),
   createProgram({
-    id: "voice-of-the-students-youth-leadership",
-    title: "Voice of the Students (VOS) & Youth Leadership",
-    pathway: "lead",
+    id: "resource-lobby",
+    title: "Resource Lobby",
+    pathway: "connect",
     shortDescription:
-      "Student-led projects focused on belonging, school culture, and mental health support.",
+      "A front door to local help at the Resilience Hub, with the same listings online in the Resource Directory.",
     longDescription:
-      "Youth participants design inclusive initiatives, strengthen leadership skills, and shape school culture through student-led action. The model centers youth voice in meaningful decision-making.",
-    tags: ["Youth", "Schools"],
-    whoItsFor: ["Youth", "Schools"],
-    whatYoullExperience: [
-      "Youth-led design and planning",
-      "Leadership skill development",
-      "Belonging-focused school culture work",
-    ],
-    outcomes: [
-      "Increased youth leadership confidence",
-      "Stronger school belonging practices",
-      "More student-informed school initiatives",
-    ],
-    idealPartners: ["Schools", "Youth organizations", "Mental health partners"],
-    format: {
-      type: "cohort",
-      cadence: "School-year cycles",
-    },
-    offeringType: "partner",
-    contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'youth',
-      voiceSample: 'Your voice is already data. Here\'s what we do with it.',
-      palette: 'warm',
-      typographicTone: 'energetic',
-    },
+      "The Resource Lobby is the welcoming entrance to the Resilience Hub at 94 S. Caldwell Street in Brevard, where people can find out what help exists locally and who to talk to. The same information lives online in SparkPoint's Resource Directory.",
+    tags: ["Community", "Individuals"],
+    whoItsFor: ["Residents looking for local help", "Partners who want to be easy to find"],
+    whatYoullExperience: ["A welcoming place to ask", "Up-to-date local listings", "A warm handoff to the right partner"],
+    outcomes: ["Easier paths to local help", "Partners who are easier to reach", "Fewer people left without a next step"],
+    idealPartners: ["Local service providers", "County and town offices", "Community organizations"],
+    format: { type: "ongoing", cadence: "At the Hub and online" },
+    offeringType: "community",
+    detailPageHref: "/directory",
+    contactCTA: { label: "Browse the Resource Directory", href: "/directory" },
+    brand: { voice: "grounded", voiceSample: "Not sure where to start? Start here.", palette: "neutral" },
   }),
   createProgram({
-    id: "ready-together-community-preparedness-resilience",
-    title: "Ready Together: Community Preparedness & Resilience",
-    pathway: "lead",
+    id: "family-parent-program",
+    title: "Family and Parent Program",
+    pathway: "connect",
     shortDescription:
-      "Preparedness workshops and neighborhood projects that combine logistics with emotional readiness.",
+      "A place for families to connect, learn, and get a warm handoff to the right support. Opening with the Resilience Hub build-out.",
     longDescription:
-      "Ready Together helps communities prepare before, during, and after crises through practical planning and neighbor-to-neighbor support practices. It integrates communication, coordination, and care-centered resilience.",
-    tags: ["Community", "Partners", "Organizations"],
-    whoItsFor: ["Community members", "Partners", "Organizations"],
-    whatYoullExperience: [
-      "Practical preparedness planning",
-      "Connection-based readiness practices",
-      "Coordination tools for local response",
-    ],
-    outcomes: [
-      "Improved neighborhood readiness",
-      "Stronger local response coordination",
-      "Greater emotional and practical resilience",
-    ],
-    idealPartners: [
-      "Emergency management",
-      "Neighborhood groups",
-      "Local agencies",
-      "Nonprofits",
-    ],
-    format: {
-      type: "series",
-      cadence: "Workshop series + neighborhood projects",
-    },
-    offeringType: "partner",
-    contactCTA: defaultContactCTA,
-    brand: {
-      voice: 'grounded',
-      voiceSample: 'Ready isn\'t a feeling. It\'s a set of small, specific habits.',
-      palette: 'neutral',
-      typographicTone: 'structured',
-    },
+      "Built on resource navigation, the Family and Parent Program will give parents and caregivers a place to connect with each other, learn together, and be introduced to the partners who can help. It is on hold until the Resilience Hub is funded and built out.",
+    tags: ["Families", "Community"],
+    whoItsFor: ["Parents and caregivers", "Family-serving partners"],
+    whatYoullExperience: ["A place to connect with other families", "Learning together", "Warm introductions to local partners"],
+    outcomes: ["Families with more connections", "Easier paths to support", "Stronger family-serving partnerships"],
+    idealPartners: ["Family-serving nonprofits", "Schools", "Health partners"],
+    format: { type: "ongoing", cadence: "Coming with the Hub" },
+    offeringType: "community",
+    contactCTA: { label: "Support the Hub build-out", href: "/resilience-hub" },
+    brand: { voice: "soft", voiceSample: "A place for families to land.", palette: "warm" },
   }),
 ];
+
+/** Something SparkPoint is building that isn't a program yet. */
+export interface Initiative {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  href?: string;
+  /** The initiative's own logo, if it has a brand (files from its kit in Branding/). */
+  logo?: string;
+}
+
+export const initiatives: Initiative[] = [
+  {
+    id: "storylab",
+    title: "StoryLab",
+    description:
+      "SparkPoint's community media studio at the Resilience Hub, where people record stories and oral histories, and where what we hear becomes captioned video, archives, and public learning. Media Navigators help run it.",
+    status: "Planned for the Resilience Hub build-out",
+    href: "/resilience-hub",
+    logo: storylabLogo,
+  },
+];
+
+/**
+ * Old program URLs, mapped to where they should land now: a program that absorbed them,
+ * or null for the programs page. Keeps links from before the 2026-10 lineup working.
+ */
+export const RETIRED_PROGRAM_SLUGS: Record<string, string | null> = {
+  "echoes-from-the-community": "story-collection",
+  "story-collection-projects": "story-collection",
+  "story-lab-studios": "media-navigators",
+  "ready-together-community-preparedness-resilience": "community-connectors",
+  "emotional-intelligence-connective-leadership": "connected-leadership-culture",
+  "workplace-well-being-positive-culture": "connected-leadership-culture",
+  "thrive-at-5": null,
+  "social-health-101": null,
+  "integrative-well-being-food-mood-movement": null,
+  "brain-stress-resilience": null,
+  "positive-culture-belonging": null,
+  "learn-connect-nights": null,
+  "supported-connected-classrooms": null,
+  "education-coalition-connected-communities-roundtable": null,
+};
 
 export const pathways: Pathway[] = [
   {
@@ -826,8 +417,7 @@ export const pathways: Pathway[] = [
     label: "Listen",
     color: "#9E509F",
     colorLight: "rgba(158, 80, 159, 0.08)",
-    description:
-      "Community insight infrastructure that captures lived experience and turns it into shared direction.",
+    description: "Hearing what the community is living, and making it visible to the people who can act on it.",
     programs: listenPrograms,
   },
   {
@@ -835,8 +425,7 @@ export const pathways: Pathway[] = [
     label: "Learn",
     color: "#FDB515",
     colorLight: "rgba(253, 181, 21, 0.08)",
-    description:
-      "Relational capacity building through practical education, reflection, and leadership growth.",
+    description: "Building the skills and habits that help people, teams, and leaders do their best work together.",
     programs: learnPrograms,
   },
   {
@@ -844,9 +433,16 @@ export const pathways: Pathway[] = [
     label: "Lead",
     color: "#E03694",
     colorLight: "rgba(224, 54, 148, 0.08)",
-    description:
-      "Cross-sector coordination that helps partners align strategy, action, and long-term resilience.",
+    description: "Putting students, and the room itself, in charge of seeing what needs to change.",
     programs: leadPrograms,
+  },
+  {
+    id: "connect",
+    label: "Connect",
+    color: "#F15F48",
+    colorLight: "rgba(241, 95, 72, 0.08)",
+    description: "Working alongside partners, and linking people to the help that already exists.",
+    programs: connectPrograms,
   },
 ];
 

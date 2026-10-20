@@ -166,7 +166,7 @@ const BOARD = [
 const FOCUS_AREAS = [
   {
     title: 'Storytelling & Community Voice',
-    body: 'Collecting and sharing community stories through projects like Echoes from the Community and Story Lab Studios, so lived experience shapes local decisions.',
+    body: 'Collecting and sharing community stories through Community Story Collection and, as it opens at the Resilience Hub, StoryLab, so lived experience shapes local decisions.',
   },
   {
     title: 'Wellness & Connection Programming',

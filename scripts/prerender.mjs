@@ -51,7 +51,7 @@ const REDIRECTS = {
   '/sparkpurpose': `${ORIGIN}/programs/purpose-workshops`,
   '/leadership-wellbeing': `${ORIGIN}/programs/leadership-well-being`,
   '/voice-of-the-students': `${ORIGIN}/programs/voice-of-the-students-youth-leadership`,
-  '/workforce-wellbeing': `${ORIGIN}/programs/workplace-well-being-positive-culture`,
+  '/workforce-wellbeing': `${ORIGIN}/programs/connected-leadership-culture`,
   '/wellness-rooted-in-connection': `${ORIGIN}/programs/wellness-rooted-in-connection-collaborative-trcn`,
   '/wellnessrootedinconnection': `${ORIGIN}/programs/wellness-rooted-in-connection-collaborative-trcn`,
   '/helene-one-year-of-healing': `${ORIGIN}/stories/community-champions/helene-anniversary`,
@@ -63,9 +63,9 @@ const REDIRECTS = {
   '/trauma-resilient-communities-partnership': `${ORIGIN}/programs/wellness-rooted-in-connection-collaborative-trcn`,
   '/cognitivehealthresources': `${ORIGIN}/resources/know-your-numbers`,
   // "/supported" is the retired Squarespace URL for SupportEd (Connected Classrooms &
-  // Educator Well-Being) — not a "supporters" page. Confirmed against the 2026 program
-  // inventory, which independently flagged this URL as a live 404 with a broken backlink.
-  '/supported': `${ORIGIN}/programs/supported-connected-classrooms`,
+  // Educator Well-Being) — not a "supporters" page. SupportEd itself was retired in the
+  // 2026-10 program lineup, so it now lands on the programs page.
+  '/supported': `${ORIGIN}/programs`,
   // Duplicate of the Helene one-year story. Both URLs were live and both were in the
   // sitemap; /stories/community-champions/helene-anniversary is canonical. Listing it
   // here also drops it from the generated sitemap and skips prerendering it.
@@ -116,6 +116,12 @@ async function deriveRoutes() {
   const prog = await importData(PROGRAMS_FILE);
   const progList = prog.programsWithDetailPages || prog.allPrograms || [];
   for (const p of progList) routes.add('/programs/' + (p.slug || p.id));
+  // Programs retired or folded into another in the 2026-10 lineup get a static redirect
+  // stub, so an old link lands on the program that absorbed it (or /programs) instead
+  // of the 404 page.
+  for (const [slug, target] of Object.entries(prog.RETIRED_PROGRAM_SLUGS || {})) {
+    REDIRECTS['/programs/' + slug] = target ? `${ORIGIN}/programs/${target}` : `${ORIGIN}/programs`;
+  }
   const press = JSON.parse(await readFile(PRESS_FILE, 'utf8'));
   for (const rel of (press.releases || [])) routes.add('/press/' + rel.slug);
   const resData = await importData(RESOURCES_FILE);

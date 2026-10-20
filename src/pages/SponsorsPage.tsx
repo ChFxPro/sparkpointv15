@@ -1,43 +1,17 @@
 'use client';
 
-import { useState } from 'react';
-import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'motion/react';
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { Link } from 'react-router';
-import {
-  GraduationCap,
-  HeartHandshake,
-  Landmark,
-  Stethoscope,
-  Handshake,
-  Sparkles,
-  Users,
-  ArrowRight,
-  ArrowUpRight,
-  X,
-  MessageCircle,
-  Shield,
-  type LucideIcon,
-} from 'lucide-react';
+import { Users, MessageCircle, Shield } from 'lucide-react';
 import sponsorHeroJpg from '../assets/sponsors/sponsor_hero.jpg';
 import sponsorHeroWebp from '../assets/sponsors/sponsor_hero.webp';
 import { CommunityNetworkDiagram } from '../components/CommunityNetworkDiagram';
 import { KeepExploringLinks } from '../components/KeepExploringLinks';
-import { PARTNER_LOGOS } from '../components/partnerLogos';
+import { ProgramPartners } from '../components/partners/ProgramPartners';
+import { PartnerDirectory } from '../components/partners/PartnerDirectory';
 import { SEOHead } from '../components/SEOHead';
 import { Button } from '../components/ui/button';
 import { useAccessibility } from '../context/AccessibilityContext';
-import { PARTNER_SECTORS, FEATURED_PARTNERS, type PartnerSector } from '../data/partners';
-
-// --- PARTNER ECOSYSTEM DATA — shared with the homepage diagram, see src/data/partners.ts ---
-
-const SECTOR_ICONS: Record<string, LucideIcon> = {
-  GraduationCap,
-  HeartHandshake,
-  Landmark,
-  Stethoscope,
-  Handshake,
-  Sparkles,
-};
 
 
 // --- HOW WE PARTNER ---
@@ -85,7 +59,6 @@ export function SponsorsPage() {
   const systemReducedMotion = useReducedMotion();
   const { motionPreference } = useAccessibility();
   const prefersReducedMotion = systemReducedMotion || motionPreference === 'reduce';
-  const [selectedSector, setSelectedSector] = useState<PartnerSector | null>(null);
   const { scrollY } = useScroll();
   const backgroundY = useTransform(scrollY, [0, 1000], [0, prefersReducedMotion ? 0 : 200]);
 
@@ -189,7 +162,7 @@ export function SponsorsPage() {
           <div className="flex flex-wrap items-center justify-center gap-4" style={{ marginTop: 40 }}>
             {[
               { label: 'How We Partner', target: 'section-how' },
-              { label: 'Our Partners', target: 'section-ecosystem' },
+              { label: 'Our Partners', target: 'section-directory' },
               { label: 'Sponsors', target: 'section-sponsors' },
             ].map((btn) => (
               <button
@@ -332,199 +305,9 @@ export function SponsorsPage() {
         </div>
       </section>
 
-      {/* ──── 3. PARTNER ECOSYSTEM (light glass — like Mission "In Practice" section) ──── */}
-      <section
-        id="section-ecosystem"
-        className="relative z-10 px-6"
-        style={{
-          backgroundColor: 'rgba(250, 250, 248, 0.85)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          borderTop: '1px solid rgba(255,255,255,0.50)',
-          paddingTop: 80,
-          paddingBottom: 80,
-        }}
-      >
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="text-center"
-            style={{ marginBottom: 48 }}
-          >
-            <h2
-              className="text-3xl font-bold tracking-tight"
-              style={{ color: '#111827', marginBottom: 16 }}
-            >
-              Working together across sectors
-            </h2>
-            <p
-              className="text-lg leading-relaxed max-w-3xl mx-auto"
-              style={{ color: '#4B5563' }}
-            >
-              These are the organizations and partners SparkPoint works alongside — grouped by
-              sector, not by rank. Each relationship reflects shared commitment to community well-being.
-            </p>
-          </motion.div>
-
-          <style>{`
-            @media (min-width: 640px) { .sp-sector-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
-            @media (min-width: 1280px) { .sp-sector-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; } }
-          `}</style>
-          <div className="sp-sector-grid grid grid-cols-1 gap-6">
-            {PARTNER_SECTORS.map((sector, index) => {
-              const Icon = SECTOR_ICONS[sector.icon] ?? Sparkles;
-              return (
-                <motion.div
-                  key={sector.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.08 }}
-                  className="group"
-                >
-                  <button
-                    onClick={() => setSelectedSector(sector)}
-                    className="w-full h-full text-left bg-white hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
-                    style={{ borderRadius: 16, border: '1px solid rgba(0,0,0,0.06)' }}
-                  >
-                    <div className="w-full" style={{ height: 3, backgroundColor: sector.color }} />
-                    <div className="p-6 flex-1 flex flex-col">
-                      <div
-                        className="flex items-center justify-center transition-transform duration-300"
-                        style={{
-                          width: 48,
-                          height: 48,
-                          borderRadius: 9999,
-                          backgroundColor: `${sector.color}15`,
-                          color: sector.color,
-                          marginBottom: 16,
-                        }}
-                      >
-                        <Icon size={24} strokeWidth={2.5} />
-                      </div>
-                      <h3
-                        className="text-lg font-bold leading-tight"
-                        style={{ color: '#111827', marginBottom: 8 }}
-                      >
-                        {sector.title}
-                      </h3>
-                      <p
-                        className="text-sm leading-relaxed flex-1"
-                        style={{ color: '#6B7280', marginBottom: 20 }}
-                      >
-                        {sector.description}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <span
-                          className="text-xs font-semibold px-2 py-1"
-                          style={{ borderRadius: 9999, backgroundColor: '#F3F4F6', color: '#6B7280' }}
-                        >
-                          {sector.partners.length} Partners
-                        </span>
-                        <span
-                          className="text-xs font-bold uppercase flex items-center gap-1"
-                          style={{ letterSpacing: '0.1em', color: sector.color }}
-                        >
-                          View <ArrowRight size={12} />
-                        </span>
-                      </div>
-                    </div>
-                  </button>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ──── 4. SPONSORS & FUNDERS (near-white glass — like Mission "Sectors" section) ──── */}
-      <section
-        id="section-sponsors"
-        className="relative z-10 px-6"
-        style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.95)',
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
-          borderTop: '1px solid rgba(0,0,0,0.06)',
-          paddingTop: 64,
-          paddingBottom: 64,
-        }}
-      >
-        <div className="max-w-5xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5 }}
-            style={{ marginBottom: 36 }}
-          >
-            <p
-              className="text-xs font-semibold uppercase"
-              style={{ letterSpacing: '0.2em', color: '#14B8A6', marginBottom: 12 }}
-            >
-              Financial &amp; Strategic Support
-            </p>
-            <h2
-              className="text-2xl font-bold tracking-tight"
-              style={{ color: '#111827', marginBottom: 12 }}
-            >
-              Sponsors &amp; Funders
-            </h2>
-            <p
-              className="text-base leading-relaxed max-w-2xl mx-auto"
-              style={{ color: '#6B7280' }}
-            >
-              These organizations provide financial and strategic support that helps sustain
-              SparkPoint&apos;s community-centered work over time.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ duration: 0.5 }}
-          >
-            <ul
-              aria-label="SparkPoint sponsors and funders"
-              className="flex flex-wrap items-center justify-center gap-x-6 gap-y-6"
-            >
-              {FEATURED_PARTNERS.map((sponsor) => (
-                <li key={sponsor.name}>
-                  <a
-                    href={sponsor.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Visit ${sponsor.name} website`}
-                    className="group inline-flex items-center justify-center transition duration-300 ease-out hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
-                    style={{
-                      borderRadius: 6,
-                      /* Fixed bounding box — equalizes visual weight across all aspect ratios */
-                      width: 140,
-                      height: 52,
-                    }}
-                  >
-                    <img
-                      src={PARTNER_LOGOS[sponsor.logoKey]}
-                      alt={sponsor.name}
-                      className="object-contain transition duration-300 ease-out"
-                      style={{
-                        maxWidth: '100%',
-                        maxHeight: '100%',
-                        opacity: 0.75,
-                      }}
-                      loading="lazy"
-                    />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        </div>
-      </section>
+      {/* ──── 4. PARTNERS IN OUR PROGRAMS, THEN EVERY PARTNER BY SECTOR ──── */}
+      <ProgramPartners />
+      <PartnerDirectory />
 
       {/* ──── 5. STEWARDSHIP BRIDGE (dark glass reveal — like Mission "Rooted" section) ──── */}
       <section
@@ -658,193 +441,6 @@ export function SponsorsPage() {
         />
       </div>
 
-      {/* ──── SECTOR DETAIL MODAL ──── */}
-      <AnimatePresence>
-        {selectedSector && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedSector(null)}
-              className="absolute inset-0 z-0"
-              style={{
-                backgroundColor: 'rgba(0,0,0,0.60)',
-                backdropFilter: 'blur(4px)',
-                WebkitBackdropFilter: 'blur(4px)',
-              }}
-            />
-
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="relative z-10 w-full bg-white overflow-hidden flex flex-col"
-              style={{
-                maxWidth: 640,
-                maxHeight: '85vh',
-                borderRadius: 24,
-                boxShadow: '0 24px 60px rgba(0,0,0,0.25)',
-              }}
-            >
-              <div
-                className="p-8 pb-6 relative overflow-hidden"
-                style={{ backgroundColor: `${selectedSector.color}10` }}
-              >
-                <button
-                  onClick={() => setSelectedSector(null)}
-                  className="absolute top-4 right-4 p-2 hover:bg-white transition-colors z-20"
-                  style={{ borderRadius: 9999, backgroundColor: 'rgba(255,255,255,0.5)' }}
-                >
-                  <X size={20} style={{ color: '#6B7280' }} />
-                </button>
-
-                <div className="flex items-center gap-4" style={{ marginBottom: 16 }}>
-                  <div
-                    className="p-3 bg-white"
-                    style={{
-                      borderRadius: 12,
-                      color: selectedSector.color,
-                      boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                    }}
-                  >
-                    {(() => {
-                      const ModalIcon = SECTOR_ICONS[selectedSector.icon] ?? Sparkles;
-                      return <ModalIcon size={32} />;
-                    })()}
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold" style={{ color: '#111827' }}>
-                      {selectedSector.title}
-                    </h3>
-                    <p
-                      className="text-sm font-medium uppercase"
-                      style={{
-                        letterSpacing: '0.1em',
-                        color: selectedSector.color,
-                        opacity: 0.7,
-                      }}
-                    >
-                      Sector Hub
-                    </p>
-                  </div>
-                </div>
-                <p className="text-lg" style={{ color: '#374151' }}>
-                  {selectedSector.description}
-                </p>
-
-                {/* Decorative glow */}
-                <div
-                  className="absolute -top-10 -right-10"
-                  style={{
-                    width: 160,
-                    height: 160,
-                    borderRadius: 9999,
-                    backgroundColor: selectedSector.color,
-                    opacity: 0.15,
-                    filter: 'blur(48px)',
-                  }}
-                />
-              </div>
-
-              <div className="p-8 pt-6 overflow-y-auto">
-                {selectedSector.examples && (
-                  <div
-                    className="p-6 border border-gray-100"
-                    style={{
-                      borderRadius: 12,
-                      backgroundColor: '#F9FAFB',
-                      marginBottom: 24,
-                    }}
-                  >
-                    <h4
-                      className="text-xs font-bold uppercase"
-                      style={{
-                        letterSpacing: '0.15em',
-                        color: '#9CA3AF',
-                        marginBottom: 12,
-                      }}
-                    >
-                      Examples of Collaboration
-                    </h4>
-                    <ul className="space-y-2">
-                      {selectedSector.examples.map((ex, i) => (
-                        <li
-                          key={i}
-                          className="flex items-start gap-2 text-sm font-medium"
-                          style={{ color: '#374151' }}
-                        >
-                          <span
-                            className="flex-shrink-0"
-                            style={{
-                              width: 6,
-                              height: 6,
-                              borderRadius: 9999,
-                              backgroundColor: selectedSector.color,
-                              marginTop: 7,
-                            }}
-                          />
-                          {ex}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                <h4
-                  className="text-xs font-bold uppercase"
-                  style={{
-                    letterSpacing: '0.15em',
-                    color: '#9CA3AF',
-                    marginBottom: 16,
-                  }}
-                >
-                  Active Partners
-                </h4>
-                <style>{`@media (min-width: 640px) { .sp-partner-list { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }`}</style>
-                <div className="sp-partner-list grid grid-cols-1 gap-3">
-                  {selectedSector.partners.map((partner) =>
-                    partner.url ? (
-                      <a
-                        key={partner.name}
-                        href={partner.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-3 border border-gray-100 hover:bg-gray-50 transition-colors text-sm font-medium flex items-center justify-between gap-2"
-                        style={{ borderRadius: 10, color: '#374151' }}
-                      >
-                        {partner.name}
-                        <ArrowUpRight size={14} style={{ color: selectedSector.color, flexShrink: 0 }} />
-                      </a>
-                    ) : (
-                      <div
-                        key={partner.name}
-                        className="p-3 border border-gray-100 hover:bg-gray-50 transition-colors text-sm font-medium"
-                        style={{ borderRadius: 10, color: '#374151' }}
-                      >
-                        {partner.name}
-                      </div>
-                    )
-                  )}
-                </div>
-              </div>
-
-              <div
-                className="p-4 text-center border-t border-gray-100"
-                style={{ backgroundColor: '#F9FAFB' }}
-              >
-                <Button
-                  onClick={() => setSelectedSector(null)}
-                  variant="ghost"
-                  className="text-gray-500 hover:text-gray-900"
-                >
-                  Close
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

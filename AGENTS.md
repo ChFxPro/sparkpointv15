@@ -27,6 +27,8 @@ Last updated: 2026-10-04
   500 instead of returning a 400. The form also carries an off-screen `website` honeypot; a tripped submission is
   answered with a normal-looking success and stored nowhere.
 - TrailHead (the simulator, formerly the Rural Health Field Simulator) has its own brand, separate from SparkPoint's: the logo kit is at `/Users/jeffbannister/Code/sparkpoint/Branding/TrailHead/` (outlined SVGs, PNGs, favicons, a README saying which file to use, and the brand sheet; also published at https://claude.ai/artifact/XvkZ4ak1doyP7VvLS8MYx1). Copy files from the kit into `src/assets/trailhead/` as needed rather than redrawing the mark or retyping the wordmark. Write it "TrailHead" in text and introduce it as "a SparkPoint simulation". The decision is in the Brain at `07-Decisions/2026-10-15-simulator-named-trailhead.md`.
+- StoryLab (SparkPoint's community media studio and listening process at the Resilience Hub) also has its own brand (draft, 2026-10-18): the logo kit is at `/Users/jeffbannister/Code/sparkpoint/Branding/StoryLab/` (outlined SVGs, PNGs, favicons, motion, README; brand sheet https://claude.ai/artifact/6EtVPGceEkirHZfVKUGobp; decision in the Brain at `07-Decisions/2026-10-18-storylab-identity.md`). Site copies live in `src/assets/storylab/`: the reversed logo heads the StoryLab section of `/resilience-hub`, and the plum logo marks StoryLab in the programs page's "Still being built". Write it "StoryLab"; amber `#EB941A` is for the lens ring and voice only, never text. Program wordmarks share one rule: first word in the font's heaviest weight, second word at 400.
+- Community Connectors has its own brand too (the "C" brandmark of two arcs around a compass star with a gold connection dot, and COMMUNITY in Heavitas over CONNECTORS in Metropolis Regular). The logo kit is at `/Users/jeffbannister/Code/sparkpoint/Branding/CommunityConnectors/` (built 2026-10-20 as exact vector conversions of the program's Illustrator masters: outlined SVGs in full, reversed and one-colour versions, icons, favicons, collateral, photos, README; brand sheet https://claude.ai/artifact/NohDRGGLVQpHcoPiXpmKhR). Site copies live in `src/assets/commconn/kit/`, and `src/components/communityConnectorsBrand.ts` holds the logos and the kit's palette (evergreen `#224A39`, teal `#538681`, olive `#838444`, gold `#E09C2C`, cream `#F3ECDF`), which `communityConnectors.css` mirrors. It's used on `/community-connectors`, the homepage programs card (a light cream card with the dark lockup and an evergreen button, which also keeps it apart from TrailHead's green card), the `/programs` tile, and the `/partners` collaboration card. The earlier "infinity" logos are retired. Link to `/community-connectors`, not `/programs/community-connectors`.
 - Brand stars: use `src/components/Sparkmark.tsx` (the official sparkmark, full colour or a one-colour `ink` mask) wherever a star or ✦ would appear, rather than a drawn or typed star.
 - SEO metadata is standardized through `src/components/SEOHead.tsx` across route pages.
 - Structured data now includes Organization/NGO, WebSite, WebPage, and BreadcrumbList globally, plus page-level Article/Event schema where applicable.
@@ -78,27 +80,30 @@ Last updated: 2026-10-04
 
 ## Programs Page
 ### Code Location
-- `src/pages/programs/ProgramsPage.tsx`
-- `src/pages/programs/ProgramsHero.tsx`
-- `src/pages/programs/EcosystemSection.tsx`
-- `src/pages/programs/AllProgramsSection.tsx`
-- `src/pages/programs/PathwayModal.tsx`
+- `src/pages/programs/ProgramsPage.tsx` (route, `?program=` deep link, modal state)
+- `src/pages/programs/lineup/ProgramsLineup.tsx` + `programsLineup.css` (the page itself, rebuilt 2026-10-16)
+- `src/pages/programs/PathwayModal.tsx` (Quick look)
+- `src/pages/programs/ProgramDetailRoute.tsx` + `program-shell/` (`/programs/:slug` detail pages)
 - `src/pages/programs/programsData.ts`
-- `src/pages/programs/programs.css`
+- Unused since the rebuild, kept for reference: `ProgramsHero.tsx`, `gallery/`, `EcosystemSection.tsx`, `AllProgramsSection.tsx`, `ProgramPagesSection.tsx`, `EngineSection.tsx`.
 
 ### Data Source
-- Canonical program content/model lives in `src/pages/programs/programsData.ts`.
-- Program schema includes `id`, `title`, `pathway`, `shortDescription`, `longDescription`, `tags`, `whatYoullExperience`, `idealPartners`, plus modal-support fields and CTA.
+- Canonical program content lives in `src/pages/programs/programsData.ts`, following the lineup settled 2026-10-15 (Brain: `02-Areas/SparkPoint/SparkPoint Program Lineup.md`): 13 programs in **four pathways**, Listen (#9E509F) · Learn (#FDB515) · Lead (#E03694) · Connect (#F15F48), plus StoryLab in `initiatives`.
+  - Listen: Community Story Collection.
+  - Learn: Connected Leadership, Leadership Wellbeing, SparkPurpose Workshops, Media Navigators.
+  - Lead: Voices of the Students, TrailHead.
+  - Connect: Wellness Rooted in Connection (WRC) Collaborative, Community Connectors, PowHer, Nonprofit Partner Network, Resource Lobby, Family and Parent Program (on hold until the Hub build-out).
+- Program schema: `id` (also the URL slug), `title`, `pathway`, `shortDescription`, `longDescription`, `whyItExists`, `tags`, `whoItsFor`, `whatYoullExperience`, `outcomes`, `idealPartners`, `format`, `offeringType`, `detailPageHref`, `contactCTA`, `brand`.
+- `RETIRED_PROGRAM_SLUGS` maps old program URLs to the program that absorbed them (or `null` for `/programs`). `ProgramDetailRoute` redirects them in the app, and `scripts/prerender.mjs` writes a static redirect stub for each. Add to it, never delete from it, when a program is retired.
 
 ### UX Behavior
-- Role switcher options in hero: `Community`, `Volunteer`, `Partner`.
-- Hero secondary CTA behavior:
-  - Community -> contact route
-  - Volunteer -> `/get-involved`
-  - Partner -> `/intake?intent=partner`
-- Listen/Learn/Lead explainer section is removed from Programs page composition (Mission page covers this).
-- Program cards are fully clickable and keyboard accessible (`button` semantics).
-- Modal detail renders real content sections (who it is for, experience, outcomes, ideal partners).
+- Order: plum hero ("{count} programs, four ways in") with four pathway tiles that jump to their sections; "What we're leading with" (the WRC collaborative and TrailHead as full-photo cards in the homepage programs-card style, TrailHead with its own lockup); one section per pathway (sticky heading on lg+, program tiles with Quick look and Program page); "Still being built" (StoryLab); plum CTA.
+- No eyebrow labels on this page, matching the homepage. The Quick look modal still has its older design.
+- Lead with the WRC collaborative under Connect (owner's call, 2026-10-15). TrailHead uses its kit files (`src/assets/trailhead/`), never retyped.
+
+## Partners Page
+- `/partners` (`src/pages/SponsorsPage.tsx`): hero, the `CommunityNetworkDiagram`, "How partnership works", then **Partners in our programs** (`src/components/partners/ProgramPartners.tsx`: WRC, Community Connectors with the American Red Cross and FWRD, PowHer with Pisgah Health Foundation, the Chamber and KL Creative, and TrailHead with the convening's co-hosts NCRHA, FHLI and NC DHHS ORH), then **every partner by sector** (`src/components/partners/PartnerDirectory.tsx`: logos where `src/assets/partner-logos/` has one, names otherwise; the count matches the homepage), stewardship, CTA.
+- Logos are drawn by `src/components/partners/PartnerLogoArt.tsx` (optical sizing, `-ink` files masked in near-black). Partner names in `ProgramPartners` must match `src/data/partners.ts` exactly for logos to resolve.
 
 ## Local Development
 - Install: `npm install`

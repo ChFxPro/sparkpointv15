@@ -145,6 +145,8 @@ export const PARTNER_SECTORS: PartnerSector[] = [
       { name: 'Schenck Job Corps Civilian Conservation Center', url: 'https://schenck.jobcorps.gov/' },
       { name: 'Comporium', url: 'https://www.comporium.com', logoKey: 'comporium', featuredOrder: 7 },
       { name: 'Self-Help Credit Union', url: 'https://www.self-help.org', logoKey: 'self-help', featuredOrder: 8 },
+      // PowHer co-host with SparkPoint, Pisgah Health Foundation and the Chamber.
+      { name: 'KL Creative' },
     ],
   },
   {

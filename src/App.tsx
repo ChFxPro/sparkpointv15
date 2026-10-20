@@ -167,7 +167,7 @@ function AppContent() {
         />
         <Route
           path="/workforce-wellbeing"
-          element={<Navigate to="/programs/workplace-well-being-positive-culture" replace />}
+          element={<Navigate to="/programs/connected-leadership-culture" replace />}
         />
         <Route
           path="/wellness-rooted-in-connection"
@@ -181,7 +181,7 @@ function AppContent() {
           path="/trauma-resilient-communities-partnership"
           element={<Navigate to="/programs/wellness-rooted-in-connection-collaborative-trcn" replace />}
         />
-        <Route path="/supported" element={<Navigate to="/programs/supported-connected-classrooms" replace />} />
+        <Route path="/supported" element={<Navigate to="/programs" replace />} />
         <Route path="/programs/:slug" element={<ProgramDetailRoute />} />
         <Route path="/community-connectors" element={<CommunityConnectorsPage />} />
         <Route path="/commconn" element={<Navigate to="/community-connectors" replace />} />

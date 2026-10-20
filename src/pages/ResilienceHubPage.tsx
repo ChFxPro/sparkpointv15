@@ -35,6 +35,7 @@ import { KeepExploringLinks } from '../components/KeepExploringLinks';
 import { SEOHead } from '../components/SEOHead';
 import { Button } from '../components/ui/button';
 import { useAccessibility } from '../context/AccessibilityContext';
+import storylabLogoReversed from '../assets/storylab/storylab-logo-reversed.svg';
 
 // ─── TYPES ───
 
@@ -941,12 +942,13 @@ export function ResilienceHubPage() {
             transition={reveal}
             className="max-w-3xl"
           >
-            <p
-              className="text-xs font-semibold uppercase"
-              style={{ letterSpacing: '0.22em', color: '#FDB515', marginBottom: 16 }}
-            >
-              StoryLab Studio
-            </p>
+            {/* StoryLab's own logo (draft identity, 2026-10-18), from its kit in Branding/StoryLab. */}
+            <img
+              src={storylabLogoReversed}
+              alt="StoryLab"
+              className="h-16 w-auto md:h-20"
+              style={{ marginBottom: 24 }}
+            />
             <h2
               className="text-3xl font-bold tracking-tight text-white"
               style={{ marginBottom: 20 }}
