@@ -453,6 +453,37 @@
   text-decoration-color: var(--bp-light);
 }
 
+/* Homepage: full width, the hero's bottom edge. The porch view drifts against its
+   frame as the page scrolls (--porch-drift, set by useHeroHandoff); it is scaled a
+   little so the drift never shows an edge. */
+.porch-band-wrap[data-edge] {
+  padding: 0;
+  z-index: 2;
+}
+
+.porch-band-wrap[data-edge] .porch-band {
+  max-width: none;
+  border-radius: 0;
+  box-shadow: 0 -28px 60px -20px rgba(10, 6, 14, 0.55);
+}
+
+.porch-band-wrap[data-edge] .porch-band-inner {
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.porch-band-wrap[data-edge] .porch-band-view .porch-view img {
+  transform: translate3d(0, var(--porch-drift, 0px), 0) scale(1.1);
+  will-change: transform;
+}
+
+@media (min-width: 900px) {
+  .porch-band-wrap[data-edge] .porch-band-view {
+    aspect-ratio: 3.2 / 1;
+  }
+}
+
 /* Two or three pinned posts: the title and its line across the top, then the
    pinned posts side by side, equal weight, in the order they were pinned. */
 @media (min-width: 900px) {

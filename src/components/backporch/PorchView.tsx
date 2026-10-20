@@ -1,6 +1,7 @@
 // The view from the porch: friends in rocking chairs at sunset, looking out over
 // layered Blue Ridge ridges. An illustrative, AI-generated image (owner, 2026-10-15),
-// not a photo of a real SparkPoint gathering, and the page says so.
+// not a photo of a real SparkPoint gathering. Post pages label it; the homepage band
+// and the /backporch header no longer do (owner, 2026-10-20).
 //
 // Three crops of the same scene, chosen by screen shape rather than squeezed:
 // wide (2.34:1) for desktop, square for tablets and the homepage band on phones,

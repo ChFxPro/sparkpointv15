@@ -48,17 +48,15 @@
 }
 
 /* ── Hero ── */
-/* Plum tint over the pinned county photo. Its last stretch fades out, so the
-   hero hands off to the county (and the BackPorch over it) without a hard edge. */
-.home-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
+.home-hero {
+  /* Plum tint over the pinned county photo. */
   background: linear-gradient(90deg, rgba(42, 20, 48, 0.9) 0%, rgba(42, 20, 48, 0.78) 55%, rgba(42, 20, 48, 0.72) 100%);
-  -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 12rem), transparent);
-  mask-image: linear-gradient(180deg, #000 calc(100% - 12rem), transparent);
-  pointer-events: none;
+}
+
+/* The hero's contents lag behind the scroll (useHeroHandoff), so the BackPorch band,
+   which is the hero's bottom edge, rises over them. */
+.home-hero-drift {
+  transform: translate3d(0, var(--hero-drift, 0px), 0);
 }
 
 /* Headline lines rise out of a clip, one after another. */

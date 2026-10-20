@@ -71,7 +71,6 @@ export default function BackPorchPage() {
       <header className="porch-hero">
         <figure className="porch-hero-view">
           <PorchView variant="hero" eager />
-          <figcaption>Illustrative image</figcaption>
         </figure>
         <div className="porch-hero-inner">
           <PorchWordmark as="h1" />

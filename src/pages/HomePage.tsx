@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import '../components/home/home.css';
 import { HomeHero } from '../components/home/HomeHero';
 import { HomeRoomStory } from '../components/home/HomeRoomStory';
@@ -10,6 +11,7 @@ import { ImpactSection } from '../components/ImpactSection';
 import { CTAFinal } from '../components/CTAFinal';
 import { SEOHead } from '../components/SEOHead';
 import { BackPorchBand } from '../components/backporch/BackPorchBand';
+import { useHeroHandoff } from '../components/home/useHeroHandoff';
 
 // "In the same room": arrive among real faces, see what's happening on the
 // BackPorch, choose a door, zoom from home out to the region, see the programs,
@@ -17,8 +19,10 @@ import { BackPorchBand } from '../components/backporch/BackPorchBand';
 // up a chair. The county photo is pinned behind it all. What's featured is
 // whatever is pinned on the BackPorch; styles live in components/home/home.css.
 export function HomePage() {
+  const root = useRef<HTMLDivElement>(null);
+  useHeroHandoff(root);
   return (
-    <div className="home">
+    <div className="home" ref={root}>
       <SEOHead
         title="SparkPoint | Building Connection Across Western North Carolina"
         description="SparkPoint builds community connection and resilience in Transylvania County and Western North Carolina through stories, programs, and local collaboration."
@@ -34,8 +38,9 @@ export function HomePage() {
 
       <HomeBackdrop />
       <HomeHero />
-      {/* The BackPorch: SparkPoint's own feed and what the homepage features (its pinned posts). */}
-      <BackPorchBand />
+      {/* The BackPorch: SparkPoint's own feed and what the homepage features (its pinned
+          posts). Full width, it is the hero's bottom edge, rising over it as the page scrolls. */}
+      <BackPorchBand edge />
       <HomeDoors />
       <HomeRegion />
       <ConnectionSection />

@@ -13,9 +13,10 @@ const ROWS = 3;
  * post when nothing is pinned, then the next three, each under its trail blaze.
  * One lead sits beside the title; two or three sit side by side under it.
  * Still by design: no rotation, no badges, and no empty state; with no posts the
- * band is simply not there.
+ * band is simply not there. `edge` (the homepage) makes it full width, the hero's
+ * bottom edge; the only movement is the scroll parallax set by useHeroHandoff.
  */
-export function BackPorchBand() {
+export function BackPorchBand({ edge = false }: { edge?: boolean } = {}) {
   const posts = usePorchPosts();
   if (posts.length === 0) return null;
 
@@ -40,12 +41,11 @@ export function BackPorchBand() {
   );
 
   return (
-    <section className="porch porch-band-wrap" aria-labelledby="porch-band-title">
+    <section className="porch porch-band-wrap" data-edge={edge || undefined} aria-labelledby="porch-band-title">
       <div className="porch-band porch-dusk">
         <ContourTerrain />
         <figure className="porch-band-view">
           <PorchView variant="band" />
-          <figcaption>Illustrative image</figcaption>
         </figure>
         <div className="porch-band-inner">
           {single ? (
