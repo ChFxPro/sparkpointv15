@@ -135,7 +135,9 @@ function askHidden(question) {
           stdin.pause();
           stdin.off('data', onData);
           process.stdout.write('\n');
-          resolve(value.trim());
+          // Terminals wrap pasted text in bracketed-paste markers (ESC[200~ … ESC[201~)
+          // when raw mode is on; drop them and any other control characters.
+          resolve(value.replace(/\x1b\[20[01]~/g, '').replace(/[\x00-\x1f\x7f]/g, '').trim());
           return;
         }
         if (ch === '\u0003') process.exit(130); // Ctrl-C
@@ -151,6 +153,7 @@ let key = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_K
 if (!key) key = await askHidden('\nPaste your Supabase secret key (it stays hidden), then press Return: ');
 if (!key) fail('No key entered. Create one under Supabase Dashboard > Project Settings > API Keys (Secret keys).');
 if (key.startsWith('sb_publishable_')) fail('That is a publishable key, which cannot write. Use a secret key (sb_secret_…).');
+if (!/^(sb_secret_|eyJ)/.test(key)) fail('That does not look like a Supabase secret key. It should start with sb_secret_ (Dashboard > Project Settings > API Keys > Secret keys).');
 // sb_secret_ keys aren't JWTs: they go on `apikey` only. Legacy service-role JWTs need both.
 const auth = key.startsWith('sb_') ? { apikey: key } : { apikey: key, Authorization: `Bearer ${key}` };
 
