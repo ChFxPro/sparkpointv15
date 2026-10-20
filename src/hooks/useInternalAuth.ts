@@ -32,7 +32,18 @@ export function useInternalAuth() {
   const signIn = (email: string, password: string) =>
     supabase.auth.signInWithPassword({ email, password });
 
-  const signOut = () => supabase.auth.signOut();
+  // Signing out also clears BackPorch drafts autosaved in this browser, so the next
+  // person at a shared computer doesn't find them.
+  const signOut = () => {
+    try {
+      for (const key of Object.keys(window.localStorage)) {
+        if (key.startsWith('backporch-draft:')) window.localStorage.removeItem(key);
+      }
+    } catch {
+      /* storage unavailable: nothing to clear */
+    }
+    return supabase.auth.signOut();
+  };
 
   const resetPassword = (email: string) =>
     supabase.auth.resetPasswordForEmail(email, {

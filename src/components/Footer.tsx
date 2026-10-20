@@ -68,6 +68,7 @@ const quickLinks = [
   { label: 'Mission', href: '/mission' },
   { label: 'Stories', href: '/stories' },
   { label: 'Events', href: '/events' },
+  { label: 'The BackPorch', href: '/backporch' },
   { label: 'Impact', href: '/impact' },
   { label: 'Programs', href: '/programs' },
   { label: 'Newsroom', href: '/press' },
@@ -491,7 +492,7 @@ export function Footer() {
                 letterSpacing: '0.25px',
               }}
             >
-              © 2025 <span translate="no">SparkPoint</span>. All rights reserved.
+              © {new Date().getFullYear()} <span translate="no">SparkPoint</span>. All rights reserved.
             </p>
             <div className="flex gap-6 flex-wrap justify-center">
               <Link
@@ -528,6 +529,21 @@ export function Footer() {
                 }}
               >
                 Accessibility
+              </Link>
+              {/* Deliberately quiet: the way in for staff who post on the BackPorch or read
+                  the internal reports. Signing in still needs an invited account. */}
+              <span style={{ color: 'rgba(255, 255, 255, 0.5)' }} aria-hidden="true">·</span>
+              <Link
+                to="/internal/login"
+                rel="nofollow"
+                className="transition-opacity hover:opacity-70"
+                style={{
+                  color: 'rgba(255, 255, 255, 0.85)',
+                  fontSize: '0.8rem',
+                  letterSpacing: '0.25px',
+                }}
+              >
+                Staff sign-in
               </Link>
             </div>
           </div>

@@ -51,7 +51,7 @@ const REDIRECTS = {
   '/sparkpurpose': `${ORIGIN}/programs/purpose-workshops`,
   '/leadership-wellbeing': `${ORIGIN}/programs/leadership-well-being`,
   '/voice-of-the-students': `${ORIGIN}/programs/voice-of-the-students-youth-leadership`,
-  '/workforce-wellbeing': `${ORIGIN}/programs/workplace-well-being-positive-culture`,
+  '/workforce-wellbeing': `${ORIGIN}/programs/connected-leadership-culture`,
   '/wellness-rooted-in-connection': `${ORIGIN}/programs/wellness-rooted-in-connection-collaborative-trcn`,
   '/wellnessrootedinconnection': `${ORIGIN}/programs/wellness-rooted-in-connection-collaborative-trcn`,
   '/helene-one-year-of-healing': `${ORIGIN}/stories/community-champions/helene-anniversary`,
@@ -63,14 +63,43 @@ const REDIRECTS = {
   '/trauma-resilient-communities-partnership': `${ORIGIN}/programs/wellness-rooted-in-connection-collaborative-trcn`,
   '/cognitivehealthresources': `${ORIGIN}/resources/know-your-numbers`,
   // "/supported" is the retired Squarespace URL for SupportEd (Connected Classrooms &
-  // Educator Well-Being) — not a "supporters" page. Confirmed against the 2026 program
-  // inventory, which independently flagged this URL as a live 404 with a broken backlink.
-  '/supported': `${ORIGIN}/programs/supported-connected-classrooms`,
+  // Educator Well-Being) — not a "supporters" page. SupportEd itself was retired in the
+  // 2026-10 program lineup, so it now lands on the programs page.
+  '/supported': `${ORIGIN}/programs`,
   // Duplicate of the Helene one-year story. Both URLs were live and both were in the
   // sitemap; /stories/community-champions/helene-anniversary is canonical. Listing it
   // here also drops it from the generated sitemap and skips prerendering it.
   '/stories/disaster-recovery/helene-one-year': `${ORIGIN}/stories/community-champions/helene-anniversary`,
 };
+// The BackPorch (docs/backporch/SPEC.md): every post baked for this build by
+// scripts/backporch/bake.mjs gets a prerendered /backporch/<slug> page and a
+// /p/<slug> short-address stub. The stub carries the post's own preview tags, so a
+// short address pasted into a text or a comment unfurls as the post itself.
+const PORCH_FILE = process.env.PORCH_FILE || 'src/data/backporch.generated.json';
+const PORCH_POSTS = existsSync(PORCH_FILE) ? JSON.parse(await readFile(PORCH_FILE, 'utf8')).posts || [] : [];
+const SHORT_META = {};
+REDIRECTS['/back-porch'] = `${ORIGIN}/backporch`;
+for (const post of PORCH_POSTS) {
+  REDIRECTS[`/p/${post.slug}`] = `${ORIGIN}/backporch/${post.slug}`;
+  SHORT_META[`/p/${post.slug}`] = post;
+}
+const escAttr = (v) => String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+function shortLinkMeta(post, target) {
+  const image = post.image_path
+    ? `https://suqtfbculwuetfdhdgdh.supabase.co/storage/v1/object/public/porch-media/${post.image_path.replace(/-\d+\.(webp|jpg)$/, '-1600.$1')}`
+    : `${ORIGIN}/og/default.jpg`;
+  return [
+    `<meta property="og:type" content="article">`,
+    `<meta property="og:site_name" content="SparkPoint">`,
+    `<meta property="og:title" content="${escAttr(post.title)}">`,
+    `<meta property="og:description" content="${escAttr(post.summary)}">`,
+    `<meta property="og:url" content="${escAttr(target)}">`,
+    `<meta property="og:image" content="${escAttr(image)}">`,
+    `<meta name="twitter:card" content="summary_large_image">`,
+    `<meta name="description" content="${escAttr(post.summary)}">`,
+  ].join('');
+}
+
 // Client-side redirect aliases with no static stub yet: leave to the SPA fallback.
 // (Empty for now — keep as a hook for any future alias that shouldn't get a stub,
 // e.g. a route intentionally left unindexable.)
@@ -79,7 +108,7 @@ const SKIP = new Set();
 // preview image instead of GitHub Pages' 404.html, but left out of sitemap.xml. They
 // must also set `noindex` themselves and must not be linked from any listed page.
 const UNLISTED = new Set(['/rural-health-convening/photos']);
-const STATIC = ['/', '/about', '/mission', '/impact', '/programs', '/programs/purpose-workshops',
+const STATIC = ['/', '/backporch', '/about', '/mission', '/impact', '/programs', '/programs/purpose-workshops',
   '/get-involved', '/community-connectors', '/partners', '/resilience-hub', '/directory', '/press', '/stories', '/events',
   '/trust', '/privacy', '/intake', '/resources/know-your-numbers', '/rural-health-convening',
   '/events/thrive-at-five', '/events/sparkpoint-gala',
@@ -114,12 +143,26 @@ async function deriveRoutes() {
   routes.add('/stories/collections');
   for (const c of STORY_COLLECTIONS) routes.add('/stories/collections/' + c.id);
   const prog = await importData(PROGRAMS_FILE);
-  const progList = prog.programsWithDetailPages || prog.allPrograms || [];
-  for (const p of progList) routes.add('/programs/' + (p.slug || p.id));
+  // A program whose own page lives elsewhere (Community Connectors at /community-connectors,
+  // Resource Lobby at /directory) gets a redirect stub at /programs/<slug>, not a second,
+  // self-canonical copy of the generic detail page.
+  for (const p of prog.allPrograms || []) {
+    const slug = p.slug || p.id;
+    const own = p.detailPageHref;
+    if (own && own.startsWith('/') && own !== '/programs/' + slug) REDIRECTS['/programs/' + slug] = `${ORIGIN}${own}`;
+    else routes.add('/programs/' + slug);
+  }
+  // Programs retired or folded into another in the 2026-10 lineup get a static redirect
+  // stub, so an old link lands on the program that absorbed it (or /programs) instead
+  // of the 404 page.
+  for (const [slug, target] of Object.entries(prog.RETIRED_PROGRAM_SLUGS || {})) {
+    REDIRECTS['/programs/' + slug] = target ? `${ORIGIN}/programs/${target}` : `${ORIGIN}/programs`;
+  }
   const press = JSON.parse(await readFile(PRESS_FILE, 'utf8'));
   for (const rel of (press.releases || [])) routes.add('/press/' + rel.slug);
   const resData = await importData(RESOURCES_FILE);
   for (const r of (resData.RESOURCES || [])) routes.add('/directory/' + r.id);
+  for (const post of PORCH_POSTS) routes.add('/backporch/' + post.slug);
   return [...routes].map(norm).filter((r) => !SKIP.has(r) && !REDIRECTS[r]);
 }
 
@@ -168,6 +211,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
       // so 'networkidle0' can never be reached on a route that has one. That is what
       // timed out /events/thrive-at-five once it gained an autoplay hero loop.
       // The <video>/<source> tags still serialize identically; only the bytes are skipped.
+      // Lets pages tell a build-time snapshot from a visitor, e.g. so "In 16 days"
+      // isn't frozen into the static HTML (the BackPorch feed shows the date instead).
+      await page.evaluateOnNewDocument(() => { window.__PRERENDER__ = true; });
       await page.setRequestInterception(true);
       page.on('request', (req) => {
         const isMedia = req.resourceType() === 'media'
@@ -265,7 +311,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     // Google drops the URL instead of passing the equity forward, which is the opposite
     // of what these stubs exist to do. These pages stay out of sitemap.xml (see below),
     // so they still won't be crawled as standalone content.
-    const stub = `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="canonical" href="${target}"><meta http-equiv="refresh" content="0;url=${target}"><title>Redirecting…</title><script>location.replace(${JSON.stringify(target)})</script></head><body><p>Redirecting to <a href="${target}">${target}</a>…</p></body></html>`;
+    const meta = SHORT_META[route] ? shortLinkMeta(SHORT_META[route], target) : '';
+    const title = SHORT_META[route] ? `${escAttr(SHORT_META[route].title)} | SparkPoint` : 'Redirecting…';
+    const stub = `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="canonical" href="${target}">${meta}<meta http-equiv="refresh" content="0;url=${target}"><title>${title}</title><script>location.replace(${JSON.stringify(target)})</script></head><body><p>Redirecting to <a href="${target}">${target}</a>…</p></body></html>`;
     await writeFile(file, stub);
     done.push(route);
   }

@@ -337,23 +337,30 @@
   transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
+.sp-programs .sp-prog-cta-button {
+  min-height: 44px;
+}
+
+/* Deep pink: white text on the brighter #E03694 falls short of AA at this size. */
 .sp-programs .sp-prog-cta-button-primary {
   color: #fff;
-  background-color: #e03694;
+  background-color: #b81f73;
 }
 
 .sp-programs .sp-prog-cta-button-primary:hover {
   transform: translateY(-1px);
-  background-color: #ef4aa3;
+  background-color: #a01a64;
 }
 
+/* For light grounds (the Quick look panel): dark text and border. */
 .sp-programs .sp-prog-cta-button-secondary {
-  color: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #1a1a1a;
+  background-color: #fff;
+  border: 1px solid rgba(26, 26, 26, 0.3);
 }
 
 .sp-programs .sp-prog-cta-button-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(26, 26, 26, 0.6);
 }
 
 .sp-programs .sp-prog-search-input {

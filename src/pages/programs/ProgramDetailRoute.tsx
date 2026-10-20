@@ -1,11 +1,22 @@
-import { useParams, Link } from "react-router";
-import { getProgramBySlug } from "./programsData";
+import { useParams, Link, Navigate } from "react-router";
+import { getProgramBySlug, RETIRED_PROGRAM_SLUGS } from "./programsData";
 import { SEOHead } from "../../components/SEOHead";
 import { ProgramDetailPage } from "./program-shell/ProgramDetailPage";
 
 export default function ProgramDetailRoute() {
   const { slug } = useParams<{ slug: string }>();
   const program = slug ? getProgramBySlug(slug) : undefined;
+
+  // A program retired or folded into another in the 2026-10 lineup: send its old link on.
+  if (!program && slug && slug in RETIRED_PROGRAM_SLUGS) {
+    const target = RETIRED_PROGRAM_SLUGS[slug];
+    return <Navigate to={target ? `/programs/${target}` : "/programs"} replace />;
+  }
+
+  // A program with its own page elsewhere (Community Connectors, Resource Lobby) goes there.
+  if (program?.detailPageHref?.startsWith("/") && program.detailPageHref !== `/programs/${program.slug}`) {
+    return <Navigate to={program.detailPageHref} replace />;
+  }
 
   if (!program) {
     return (

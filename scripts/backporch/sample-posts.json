@@ -1,0 +1,378 @@
+[
+ {
+  "id": "f0",
+  "slug": "post-convening-session",
+  "title": "Keep the conversation moving",
+  "summary": "October 1 attendees: join the virtual post-convening session on Thursday, November 5, at 10 a.m., on Zoom.",
+  "kind": "gathering",
+  "org": "sparkpoint",
+  "image_path": "/assets/Rural%20Health/recap/highlights/across-the-table-1600.webp",
+  "image_alt": "Convening attendees in conversation across a table at Deerwoode Reserve.",
+  "link_url": "https://yoursparkpoint.org/rural-health-convening#post-convening",
+  "link_label": "Register for Nov 5",
+  "event_start": "2026-11-05T15:00:00Z",
+  "event_end": null,
+  "event_place": "Online, on Zoom",
+  "pinned": true,
+  "pinned_at": "2026-10-19T13:00:00Z",
+  "status": "published",
+  "published_at": "2026-10-19T13:00:00Z",
+  "expires_at": "2026-11-06T05:00:00Z",
+  "updated_at": "2026-10-19T13:00:00Z",
+  "blocks": [
+   {
+    "id": "n1",
+    "type": "text",
+    "text": "If you joined us on October 1, this is your invitation back. The virtual session is a chance to reconnect with other rural health stakeholders and carry forward the conversations and partnerships that started at Deerwoode Reserve."
+   }
+  ],
+  "presentation": {}
+ },
+ {
+  "id": "f1",
+  "slug": "gala",
+  "title": "An Atlas of Wonders",
+  "summary": "The SparkPoint Gala: a live auction of travel experiences at Connestee Falls Country Club, with part of every trip supporting the Transylvania Resilience Hub. Tickets are $100.",
+  "kind": "gathering",
+  "org": "sparkpoint",
+  "image_path": "/assets/events/gala/hero-wing-1400.webp",
+  "image_alt": "Sunset over the clouds seen past an airplane wing.",
+  "link_url": "https://secure.yoursparkpoint.org/store/p/2026-sparkpoint-gala",
+  "link_label": "Get tickets",
+  "event_start": "2026-12-11T23:00:00Z",
+  "event_end": null,
+  "event_place": "Connestee Falls Country Club, Brevard",
+  "pinned": true,
+  "status": "published",
+  "published_at": "2026-10-14T14:00:00Z",
+  "expires_at": null,
+  "updated_at": "2026-10-14T14:00:00Z",
+  "blocks": [
+   {
+    "id": "g1",
+    "type": "text",
+    "text": "See the world. Strengthen home.\n\nSave Friday, December 11 for an evening of travel stories and a live auction. Details at https://yoursparkpoint.org/events/sparkpoint-gala"
+   },
+   {
+    "id": "g2",
+    "type": "embed",
+    "provider": "youtube",
+    "videoId": "aqz-KE-bpKQ",
+    "title": "Sample video (placeholder)",
+    "caption": "Sample YouTube block. Nothing loads from YouTube until you press play."
+   },
+   {
+    "id": "g3",
+    "type": "place",
+    "name": "Connestee Falls Country Club",
+    "address": "98 Overlook Clubhouse Dr, Brevard, NC 28712"
+   }
+  ],
+  "presentation": {},
+  "pinned_at": "2026-10-14T14:00:00Z"
+ },
+ {
+  "id": "f2",
+  "slug": "healthcare-story",
+  "title": "Share your healthcare story",
+  "summary": "Tell us what getting care in Transylvania County is really like. It takes about five minutes and stays anonymous.",
+  "kind": "ask",
+  "org": "sparkpoint",
+  "image_path": "https://suqtfbculwuetfdhdgdh.supabase.co/storage/v1/object/public/convening-photos/rural-health-2026/rhp-43-960.webp",
+  "image_alt": "Two women smiling and holding a certificate at the convening.",
+  "link_url": null,
+  "link_label": null,
+  "event_start": null,
+  "event_end": null,
+  "event_place": null,
+  "pinned": false,
+  "status": "published",
+  "published_at": "2026-10-10T14:00:00Z",
+  "expires_at": null,
+  "updated_at": "2026-10-10T14:00:00Z",
+  "blocks": [
+   {
+    "id": "t1",
+    "type": "text",
+    "text": "Tell us what getting care in Transylvania County is really like. It takes about five minutes and stays anonymous."
+   }
+  ],
+  "presentation": {},
+  "pinned_at": null
+ },
+ {
+  "id": "f3",
+  "slug": "convening",
+  "title": "A full house at Deerwoode Reserve",
+  "summary": "Rural health leaders from across Western North Carolina spent the day in Brevard at the 2026 WNC Regional Rural Health Convening.",
+  "kind": "story",
+  "org": "sparkpoint",
+  "image_path": "https://suqtfbculwuetfdhdgdh.supabase.co/storage/v1/object/public/convening-photos/rural-health-2026/rhp-01-960.webp",
+  "image_alt": "A packed room of attendees at round tables under chandeliers.",
+  "link_url": null,
+  "link_label": null,
+  "event_start": null,
+  "event_end": null,
+  "event_place": null,
+  "pinned": false,
+  "status": "published",
+  "published_at": "2026-10-02T14:00:00Z",
+  "expires_at": null,
+  "updated_at": "2026-10-02T14:00:00Z",
+  "blocks": [
+   {
+    "id": "c1",
+    "type": "text",
+    "text": "Rural health leaders from across Western North Carolina spent the day in Brevard. Here's what the room looked like."
+   },
+   {
+    "id": "c2",
+    "type": "gallery",
+    "images": [
+     {
+      "path": "/assets/Rural Health/recap/rhc-2026-01-1600.webp",
+      "alt": "Attendees at round tables during the convening.",
+      "caption": "The full room at Deerwoode Reserve."
+     },
+     {
+      "path": "/assets/Rural Health/recap/rhc-2026-02-1600.webp",
+      "alt": "People talking in small groups."
+     },
+     {
+      "path": "/assets/Rural Health/recap/rhc-2026-03-1600.webp",
+      "alt": "A speaker addressing the room."
+     },
+     {
+      "path": "/assets/Rural Health/recap/rhc-2026-04-1600.webp",
+      "alt": "Participants reviewing materials."
+     }
+    ]
+   },
+   {
+    "id": "c3",
+    "type": "quote",
+    "text": "I met three people today I should have known for years.",
+    "cite": "A convening participant (sample quote)"
+   },
+   {
+    "id": "c4",
+    "type": "link",
+    "url": "https://yoursparkpoint.org/rural-health-convening",
+    "label": "See the full recap",
+    "note": "Photos, sponsors, and the Field Simulator."
+   }
+  ],
+  "presentation": {},
+  "pinned_at": null
+ },
+ {
+  "id": "f4",
+  "slug": "brain-habits",
+  "title": "Building Healthy Brain Habits",
+  "summary": "Dr. Ora at the Transylvania County Library, with the Alzheimer's Association and NC Cooperative Extension.",
+  "kind": "story",
+  "org": "sparkpoint",
+  "image_path": "/assets/dr_ora_brain_img/drora_crowd1.webp",
+  "image_alt": "An audience listening to a talk in the library.",
+  "link_url": null,
+  "link_label": null,
+  "event_start": null,
+  "event_end": null,
+  "event_place": null,
+  "pinned": false,
+  "status": "published",
+  "published_at": "2026-08-11T14:00:00Z",
+  "expires_at": null,
+  "updated_at": "2026-08-11T14:00:00Z",
+  "blocks": [
+   {
+    "id": "t1",
+    "type": "text",
+    "text": "Dr. Ora at the Transylvania County Library, with the Alzheimer's Association and NC Cooperative Extension."
+   }
+  ],
+  "presentation": {},
+  "pinned_at": null
+ },
+ {
+  "id": "f5",
+  "slug": "porch-light",
+  "title": "Porch Light",
+  "summary": "An experiment: drag the evening from late afternoon to nightfall over the ridges.",
+  "blocks": [
+   {
+    "id": "e1",
+    "type": "text",
+    "text": "A small coded piece to show what the BackPorch can hold. Drag the slider."
+   },
+   {
+    "id": "e2",
+    "type": "experiment",
+    "experiment": "porch-light"
+   }
+  ],
+  "kind": "story",
+  "org": "sparkpoint",
+  "image_path": null,
+  "image_alt": null,
+  "link_url": null,
+  "link_label": null,
+  "event_start": null,
+  "event_end": null,
+  "event_place": null,
+  "pinned": false,
+  "status": "published",
+  "published_at": "2026-10-15T14:00:00Z",
+  "expires_at": null,
+  "updated_at": "2026-10-15T14:00:00Z",
+  "presentation": {},
+  "pinned_at": null
+ },
+ {
+  "id": "f6",
+  "slug": "morning-on-the-porch",
+  "title": "Morning on the porch",
+  "summary": "A Porch Lab sampler: a living sunrise, words that light up, numbers that count, a before-and-after, a scrolly story, and a timeline.",
+  "presentation": {
+   "layout": "takeover",
+   "mood": "sunrise",
+   "reactions": true,
+   "scene": "sunrise"
+  },
+  "blocks": [
+   {
+    "id": "m0",
+    "type": "backdrop",
+    "scene": "sunrise",
+    "frame": "bleed"
+   },
+   {
+    "id": "m1",
+    "type": "motionText",
+    "text": "Resilience is built through relationships, one porch at a time.",
+    "effect": "light",
+    "size": "huge",
+    "frame": "wide"
+   },
+   {
+    "id": "m2",
+    "type": "text",
+    "text": "This is a sample post made of Porch Lab tools, so we can see how they feel together on a real page."
+   },
+   {
+    "id": "m3",
+    "type": "counter",
+    "frame": "wide",
+    "items": [
+     {
+      "value": 71,
+      "suffix": "%",
+      "label": "of rural U.S. adults use Facebook (Pew, 2025)"
+     },
+     {
+      "value": 150,
+      "label": "seats at the convening"
+     },
+     {
+      "value": 4,
+      "label": "sample number"
+     }
+    ]
+   },
+   {
+    "id": "m4",
+    "type": "beforeAfter",
+    "frame": "wide",
+    "before": {
+     "path": "/assets/Rural Health/recap/rhc-2026-01-1600.webp",
+     "alt": "The convening room in the morning."
+    },
+    "after": {
+     "path": "/assets/Rural Health/recap/rhc-2026-02-1600.webp",
+     "alt": "Small groups talking later in the day."
+    },
+    "beforeLabel": "Morning",
+    "afterLabel": "Afternoon"
+   },
+   {
+    "id": "m5",
+    "type": "scrolly",
+    "frame": "wide",
+    "steps": [
+     {
+      "text": "Morning: the room fills up. Rural health leaders from across Western North Carolina find their tables.",
+      "image": {
+       "path": "/assets/Rural Health/recap/rhc-2026-01-1600.webp",
+       "alt": "A full room at round tables."
+      }
+     },
+     {
+      "text": "The program starts. A keynote frames the day around cooperation.",
+      "image": {
+       "path": "/assets/Rural Health/recap/rhc-2026-03-1600.webp",
+       "alt": "A speaker at the front of the room."
+      }
+     },
+     {
+      "text": "Then the real work: small groups, side conversations, numbers traded.",
+      "image": {
+       "path": "/assets/Rural Health/recap/rhc-2026-02-1600.webp",
+       "alt": "People talking in small groups."
+      }
+     },
+     {
+      "text": "By the afternoon, plans are being written down.",
+      "image": {
+       "path": "/assets/Rural Health/recap/rhc-2026-04-1600.webp",
+       "alt": "Participants reviewing materials."
+      }
+     }
+    ]
+   },
+   {
+    "id": "m6",
+    "type": "timeline",
+    "items": [
+     {
+      "date": "Sept 2024",
+      "title": "Hurricane Helene",
+      "text": "The county begins a long recovery."
+     },
+     {
+      "date": "Oct 1, 2026",
+      "title": "A full house at Deerwoode Reserve"
+     },
+     {
+      "date": "Dec 11, 2026",
+      "title": "The SparkPoint Gala"
+     }
+    ]
+   },
+   {
+    "id": "m7",
+    "type": "poll",
+    "question": "What should the next Porch Talk be about?",
+    "options": [
+     "Brain health",
+     "Caregiving",
+     "Local food"
+    ]
+   }
+  ],
+  "kind": "story",
+  "org": "sparkpoint",
+  "image_path": null,
+  "image_alt": null,
+  "link_url": null,
+  "link_label": null,
+  "event_start": null,
+  "event_end": null,
+  "event_place": null,
+  "pinned": false,
+  "status": "published",
+  "published_at": "2026-10-15T16:00:00Z",
+  "expires_at": null,
+  "updated_at": "2026-10-15T16:00:00Z",
+  "pinned_at": null
+ }
+]

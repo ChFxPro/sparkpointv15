@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router";
-import { ProgramsHero } from "./ProgramsHero";
+import { useSearchParams } from "react-router";
 import { PathwayModal } from "./PathwayModal";
-import { ProgramsGallerySection } from "./gallery";
+import { ProgramsLineup } from "./lineup/ProgramsLineup";
 import { getProgramBySlug, pathways, type Pathway, type Program } from "./programsData";
 import { SEOHead } from "../../components/SEOHead";
 import "./programs.css";
@@ -68,43 +67,11 @@ export default function ProgramsPage() {
     <div className="sp-programs">
       <SEOHead
         title="Programs | SparkPoint"
-        description="Explore SparkPoint programs that turn listening into action for volunteers, residents, and partners across Transylvania County and Western North Carolina."
+        description="SparkPoint's programs, in four pathways: Listen, Learn, Lead, and Connect. Story collection, leadership and workplace series, youth voice, the TrailHead simulation, and collaborations with partners across Transylvania County and Western North Carolina."
         path="/programs"
       />
 
-      <ProgramsHero />
-
-      <ProgramsGallerySection
-        onQuickPeek={(program) => {
-          const pathway = pathways.find((p) => p.id === program.pathway)!;
-          handleOpenProgram(pathway, program);
-        }}
-      />
-
-      <section id="cta" className="sp-scroll-offset sp-prog-cta">
-        <div className="max-w-5xl mx-auto px-5 sm:px-8 text-center">
-          <h2 className="sp-prog-cta-title">
-            Ready to Build With Us?
-          </h2>
-          <p className="sp-prog-cta-body">
-            Tell us what you are working on, what support you need, and how SparkPoint programs can align.
-          </p>
-          <div className="sp-prog-cta-actions">
-            <Link
-              to="/intake?intent=contact"
-              className="sp-prog-cta-button sp-prog-cta-button-primary"
-            >
-              Talk With Us
-            </Link>
-            <Link
-              to="/get-involved"
-              className="sp-prog-cta-button sp-prog-cta-button-secondary"
-            >
-              Get Involved
-            </Link>
-          </div>
-        </div>
-      </section>
+      <ProgramsLineup onOpenProgram={handleOpenProgram} />
 
       <PathwayModal
         pathway={modalOpen ? activePathway : null}

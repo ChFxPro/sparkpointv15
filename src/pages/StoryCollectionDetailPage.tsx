@@ -38,7 +38,7 @@ export default function StoryCollectionDetailPage() {
   return (
     <div className="min-h-screen bg-[#FDFDFD]">
       <SEOHead
-        title={collection.seoTitle ?? `${collection.title} | SparkPoint Story Collection`}
+        title={collection.seoTitle ?? `${collection.title} | A StoryLab Collection | SparkPoint`}
         description={collection.seoDescription ?? collection.summary}
         path={`/stories/collections/${collection.id}`}
         image={collection.image}
@@ -64,6 +64,12 @@ export default function StoryCollectionDetailPage() {
           <h1 className="mt-5 font-bold text-[#1A1A1A]" style={{ fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', lineHeight: '1.08', letterSpacing: '-0.02em' }}>
             {collection.title}
           </h1>
+          <p className="mt-3 text-sm font-semibold text-gray-600">
+            A StoryLab collection.{' '}
+            <Link to="/programs/storylab" className="inline-flex min-h-[44px] items-center text-[#5e2a63] underline underline-offset-4 hover:no-underline">
+              About StoryLab
+            </Link>
+          </p>
           <p className="mt-4 max-w-2xl font-serif italic text-lg text-gray-500">{collection.tagline}</p>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-gray-600">{collection.description}</p>
 

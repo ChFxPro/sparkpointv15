@@ -1,0 +1,509 @@
+{
+ "_about": "The BackPorch backfill: existing SparkPoint events, stories, and news as porch posts, dated when they happened. Read and edit freely, then run `npm run porch:backfill` (preview) and `npm run porch:backfill -- --apply` (writes). Re-running updates posts by slug; it never duplicates them. `image.src` and block `src` are files in this repo; the script resizes and uploads them to porch-media. Pinned posts are written last, in list order, so the last one here leads. A post with \"status\": \"draft\" is written as a draft (no date needed): it waits in the editor at /internal/backporch until someone publishes it.",
+ "posts": [
+  {
+   "slug": "community-champions",
+   "title": "Community Champions",
+   "summary": "Behind every SparkPoint story are the people who show up: volunteers who give their time, partners who share resources, and neighbors who open doors.",
+   "kind": "story",
+   "published_at": "2024-08-15T12:00:00-04:00",
+   "image": {
+    "src": "src/assets/compd/20c2a905251c86d5a4f9333b83199204b6928c7d.webp",
+    "alt": "Four students and an adult volunteer at a Voice of the Students sign-up table."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "Behind every success story at SparkPoint are the champions who show up: the volunteers who give their time, the partners who share resources, and the community leaders who open doors. They turn compassion into action, and they remind us what we can do together."
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/stories/volunteer-impact/community-champions",
+     "label": "Read the story"
+    }
+   ]
+  },
+  {
+   "slug": "protecting-cognitive-health",
+   "title": "Protecting Cognitive Health",
+   "summary": "SparkPoint Board President Dr. Ora Wells on what the latest science says about protecting memory and brain health as we age, with a library of books, talks, and resources.",
+   "kind": "story",
+   "published_at": "2025-03-01T12:00:00-05:00",
+   "image": {
+    "src": "src/assets/moments_impact/ora1.webp",
+    "alt": "Dr. Ora Wells delivering SparkPoint's Brain Health keynote at Brevard College."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "Dr. Ora Wells, SparkPoint's board president, gave our Brain Health keynote at Brevard College on reducing the risk of cognitive decline. Watch the talk here, and find the full library of books, videos, studies, and organizations on the story page."
+    },
+    {
+     "type": "embed",
+     "provider": "youtube",
+     "videoId": "so4sCSxIgHA",
+     "title": "Protecting Cognitive Health, with Dr. Ora Wells"
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/stories/talks-lectures/dr-ora-brain-health",
+     "label": "The talk and resource library"
+    }
+   ]
+  },
+  {
+   "slug": "helene-one-year-of-healing",
+   "title": "Helene: One Year of Healing",
+   "summary": "A community tribute film made from interviews with more than 140 residents across Transylvania County, a year after Hurricane Helene.",
+   "kind": "story",
+   "published_at": "2025-09-27T12:00:00-04:00",
+   "image": {
+    "src": "src/assets/home/gatherings/helene-full-house-1920.webp",
+    "alt": "An audience fills an open-air auditorium as a resident's story plays on the big screen at Helene: One Year of Healing."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "In the year after Hurricane Helene, SparkPoint set out to listen. Our team interviewed more than 140 residents, volunteers, partners, and community leaders with one question: what has this year been like for you?\n\nWhat came back was not one story but many: loss and exhaustion, generosity and resilience, and neighbors who kept showing up long after the lights came back on. This film is a tribute to those voices, and a reminder that healing happens together."
+    },
+    {
+     "type": "embed",
+     "provider": "youtube",
+     "videoId": "lHiXHz7N8Qc",
+     "title": "Helene: One Year of Healing"
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/stories/community-champions/helene-anniversary",
+     "label": "About the film"
+    }
+   ]
+  },
+  {
+   "slug": "echoes-week-1",
+   "title": "Echoes from the Community, Week 1",
+   "summary": "Despite the loss and hardship of the storm, many residents described feeling more connected than ever. \"Together we can get through anything,\" one person said.",
+   "kind": "story",
+   "published_at": "2025-10-23T12:00:00-04:00",
+   "image": {
+    "src": "src/assets/compd/e4e8c9f59f3a2b2ee1533f1f427ca4a4cb3693a5.webp",
+    "alt": "Echoes from the Community, SparkPoint's column of residents' stories."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "Echoes from the Community shares what residents across Transylvania County are telling SparkPoint through their stories. In the first column: what connection looked like after the storm."
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/stories/community-voice/week-1",
+     "label": "Read Week 1"
+    }
+   ],
+   "presentation": {
+    "series": {
+     "id": "echoes",
+     "name": "Echoes from the Community",
+     "about": "Weekly reflections gathered from conversations, circles, and shared meals across Transylvania County."
+    }
+   }
+  },
+  {
+   "slug": "echoes-week-2",
+   "title": "Echoes from the Community, Week 2",
+   "summary": "The hurricane led many to realize they are craving deeper, more meaningful relationships, not only during disasters but every day.",
+   "kind": "story",
+   "published_at": "2025-11-13T12:00:00-05:00",
+   "image": {
+    "src": "src/assets/compd/e4e8c9f59f3a2b2ee1533f1f427ca4a4cb3693a5.webp",
+    "alt": "Echoes from the Community, SparkPoint's column of residents' stories."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "This week's column listens to what neighbors want more of: relationships that go deeper than small talk, and that last past the emergency."
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/stories/community-voice/week-2",
+     "label": "Read Week 2"
+    }
+   ],
+   "presentation": {
+    "series": {
+     "id": "echoes",
+     "name": "Echoes from the Community"
+    }
+   }
+  },
+  {
+   "slug": "echoes-week-3",
+   "title": "Echoes from the Community, Week 3",
+   "summary": "Looking back on Hurricane Helene, many community members said they miss the time they spent device-free.",
+   "kind": "story",
+   "published_at": "2025-11-27T12:00:00-05:00",
+   "image": {
+    "src": "src/assets/compd/e4e8c9f59f3a2b2ee1533f1f427ca4a4cb3693a5.webp",
+    "alt": "Echoes from the Community, SparkPoint's column of residents' stories."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "Many residents told us they miss the time they spent device-free after the storm. This week's column asks what we might keep from those weeks."
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/stories/community-voice/week-3",
+     "label": "Read Week 3"
+    }
+   ],
+   "presentation": {
+    "series": {
+     "id": "echoes",
+     "name": "Echoes from the Community"
+    }
+   }
+  },
+  {
+   "slug": "echoes-week-4",
+   "title": "Echoes from the Community, Week 4",
+   "summary": "What comes after the storm, more than anything else, is kindness. Residents share stories of being seen, understood, and met with gentleness.",
+   "kind": "story",
+   "published_at": "2025-12-11T12:00:00-05:00",
+   "image": {
+    "src": "src/assets/compd/e4e8c9f59f3a2b2ee1533f1f427ca4a4cb3693a5.webp",
+    "alt": "Echoes from the Community, SparkPoint's column of residents' stories."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "This week's column gathers the small kindnesses residents remember most: being seen, being understood, being met gently."
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/stories/community-voice/week-4",
+     "label": "Read Week 4"
+    }
+   ],
+   "presentation": {
+    "series": {
+     "id": "echoes",
+     "name": "Echoes from the Community"
+    }
+   }
+  },
+  {
+   "slug": "echoes-week-5",
+   "title": "Echoes from the Community, Week 5",
+   "summary": "As the new year begins, echoes from across Transylvania County invite us to treat connection as something we build every day.",
+   "kind": "story",
+   "published_at": "2026-01-15T12:00:00-05:00",
+   "image": {
+    "src": "src/assets/compd/e4e8c9f59f3a2b2ee1533f1f427ca4a4cb3693a5.webp",
+    "alt": "Echoes from the Community, SparkPoint's column of residents' stories."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "Neighbors from Brevard, Rosman, Cedar Mountain, Pisgah Forest, Connestee Falls, Little River, and Schenck Job Corps have shared their stories. Some feel deeply connected; others feel isolated or unheard. Together they describe a community that values connection, and is still learning to practice it."
+    },
+    {
+     "type": "quote",
+     "text": "When was the last time you felt genuinely connected to someone, and why did it happen?"
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/stories/community-voice/week-5",
+     "label": "Read Week 5"
+    }
+   ],
+   "presentation": {
+    "series": {
+     "id": "echoes",
+     "name": "Echoes from the Community"
+    }
+   }
+  },
+  {
+   "slug": "when-neighbors-become-leaders",
+   "title": "When neighbors become leaders",
+   "summary": "Inside the first Community Connectors gathering, where SparkPoint, FWRD, and the American Red Cross listened to residents, and connectors stepped up to lead.",
+   "kind": "story",
+   "published_at": "2026-05-26T12:00:00-04:00",
+   "image": {
+    "src": "src/assets/commconn/imgs/comcon_maggie_yesica.webp",
+    "alt": "Community Connectors participants seated around tables during a facilitated listening session."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "The first Community Connectors gathering began with a simple premise: before planning anything new, listen to the trusted people who already know their communities best. On May 26, SparkPoint, FWRD Transylvania County, and the American Red Cross sat down with residents, and community connectors stepped up to lead."
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/stories/programs/when-neighbors-become-leaders",
+     "label": "Read the field notes"
+    }
+   ]
+  },
+  {
+   "slug": "common-ground-resilience-roast",
+   "title": "Common Ground Resilience Roast",
+   "summary": "Our third coffee collaboration with Pisgah Coffee Roasters, with a release party July 31. Half of August's profits went to the new Resilience Hub.",
+   "kind": "gathering",
+   "published_at": "2026-07-17T09:00:00-04:00",
+   "event_start": "2026-07-31T17:00:00-04:00",
+   "event_end": "2026-07-31T19:00:00-04:00",
+   "event_place": "Pisgah Coffee Roasters, Pisgah Forest",
+   "image": {
+    "src": "public/assets/events/pisgah_coffee_fundraiser/Sparkpoint Photos-2.webp",
+    "alt": "Two bags of Common Ground Resilience Roast and a cup of coffee arranged over a map of Transylvania County."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "SparkPoint and Pisgah Coffee Roasters released Common Ground Resilience Roast at Thrive @ Five on July 31, with live music from Mark and Sally Wingate, food, drinks, and friends. Pisgah Coffee Roasters gave 50% of profits from August sales to SparkPoint's new Resilience Hub. Thank you to everyone who raised a cup."
+    },
+    {
+     "type": "place",
+     "name": "Pisgah Coffee Roasters",
+     "address": "6283 Asheville Highway, Pisgah Forest, NC"
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/events/thrive-at-five",
+     "label": "Thrive @ Five"
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/press/common-ground-resilience-roast",
+     "label": "The press release"
+    }
+   ],
+   "link_url": "https://yoursparkpoint.org/events/thrive-at-five",
+   "link_label": "See the event"
+  },
+  {
+   "slug": "building-healthy-brain-habits",
+   "title": "Building Healthy Brain Habits",
+   "summary": "Dr. Ora Wells joined the Alzheimer's Association and NC Cooperative Extension for an interactive workshop on brain health, nutrition, and wellness.",
+   "kind": "gathering",
+   "published_at": "2026-07-27T09:00:00-04:00",
+   "event_start": "2026-08-10T18:00:00-04:00",
+   "event_end": "2026-08-10T19:30:00-04:00",
+   "event_place": "Transylvania County Library, Brevard",
+   "image": {
+    "src": "public/assets/dr_ora_brain_img/drora_crowd1.webp",
+    "alt": "Dr. Ora Wells speaking to a full room at a Brain Health talk."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "A community health talk from SparkPoint Board President Dr. Ora Wells, with the Alzheimer's Association and NC Cooperative Extension: brain health prevention, cognitive reserve, nutrition, and wellness activities for everyone."
+    },
+    {
+     "type": "place",
+     "name": "Transylvania County Library, Rogow Family Community Room",
+     "address": "212 S Gaston St, Brevard, NC"
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/stories/talks-lectures/dr-ora-brain-health",
+     "label": "More from Dr. Wells"
+    }
+   ]
+  },
+  {
+   "slug": "rural-health-convening",
+   "title": "2026 WNC Regional Rural Health Convening",
+   "summary": "Rural health leaders from across Western North Carolina, in one room at Deerwoode Reserve on October 1, and on the Rural Health Field Simulator together.",
+   "kind": "gathering",
+   "published_at": "2026-09-01T09:00:00-04:00",
+   "event_start": "2026-10-01T08:30:00-04:00",
+   "event_end": "2026-10-01T15:00:00-04:00",
+   "event_place": "Deerwoode Reserve, Brevard",
+   "image": {
+    "src": "public/assets/Rural Health/recap/highlights/morning-program-1600.webp",
+    "alt": "The morning program at the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "SparkPoint hosted the 2026 WNC Regional Rural Health Convening in partnership with the North Carolina Rural Health Association: a day for rural health leaders working across Western North Carolina to connect, collaborate, and walk the Rural Health Field Simulator together."
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/rural-health-convening",
+     "label": "The convening"
+    }
+   ],
+   "link_url": "https://yoursparkpoint.org/rural-health-convening",
+   "link_label": "See the recap"
+  },
+  {
+   "slug": "a-full-house-at-deerwoode",
+   "title": "A full house at Deerwoode Reserve",
+   "summary": "Thank you to everyone who filled the room on October 1. A few moments from the day, and the full recap.",
+   "kind": "story",
+   "published_at": "2026-10-05T09:00:00-04:00",
+   "image": {
+    "src": "public/assets/Rural Health/recap/highlights/across-the-table-1600.webp",
+    "alt": "Convening attendees in conversation across a table at Deerwoode Reserve."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "The 2026 WNC Regional Rural Health Convening filled Deerwoode Reserve on October 1. People who rarely sit at the same table compared notes, walked the system together on the Field Simulator, and left with next steps on the Connection to Action wall."
+    },
+    {
+     "type": "gallery",
+     "images": [
+      {
+       "src": "public/assets/Rural Health/recap/highlights/across-the-table-1600.webp",
+       "alt": "Convening attendees in conversation across a table."
+      },
+      {
+       "src": "public/assets/Rural Health/recap/highlights/simulator-tablet-1600.webp",
+       "alt": "Attendees working through the Rural Health Field Simulator on a tablet."
+      },
+      {
+       "src": "public/assets/Rural Health/recap/highlights/action-cards-1600.webp",
+       "alt": "The Connection to Action wall of attendee cards."
+      },
+      {
+       "src": "public/assets/Rural Health/recap/highlights/every-connection-tent-1600.webp",
+       "alt": "The SparkPoint tent at Deerwoode Reserve."
+      }
+     ]
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/rural-health-convening",
+     "label": "The full recap"
+    }
+   ]
+  },
+  {
+   "slug": "share-your-healthcare-story",
+   "title": "Share your healthcare story",
+   "summary": "Tell us what getting care in Transylvania County is really like. It takes about five minutes and stays anonymous.",
+   "kind": "ask",
+   "published_at": "2026-10-10T09:00:00-04:00",
+   "image": {
+    "src": "public/assets/behind_story/IMG_0199.webp",
+    "alt": "A storyteller seated in a living room, his face on the recording monitor in front."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "SparkPoint is collecting real experiences of getting health care across Transylvania County: the wins, the barriers, and everything in between. Your answers are anonymous and combined with others to show what's working, what isn't, and where connection and support are needed most."
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/healthcare-story",
+     "label": "Share your story"
+    }
+   ],
+   "link_url": "https://yoursparkpoint.org/healthcare-story",
+   "link_label": "Share your story",
+   "presentation": {
+    "doIt": "About five minutes · anonymous"
+   }
+  },
+  {
+   "slug": "welcome-to-the-backporch",
+   "title": "Welcome to the BackPorch",
+   "summary": "We made a place on our own website to share what's happening at SparkPoint: gatherings, stories, and the times we could use a hand. Come sit a while.",
+   "kind": "news",
+   "image": {
+    "src": "src/assets/home/gatherings/connectors-circle-1920.webp",
+    "alt": "A Community Connectors participant speaks with neighbors in a listening circle."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "Around here, a lot of the real news gets shared on somebody's back porch. A neighbor stops by, someone pours the coffee, and before long you know who's doing what and who could use a hand.\n\nWe wanted SparkPoint to have a place like that, so we made one, right here on our own website."
+    },
+    {
+     "type": "text",
+     "text": "This is where we'll share what's going on: gatherings coming up, stories from neighbors, what we're learning, and the times we need your help. It all lands here first. You don't need an account or an app to read it, and you don't have to hope a social media feed decides to show it to you."
+    },
+    {
+     "type": "text",
+     "text": "To get things started, we've brought some of the past year onto the porch, from Helene: One Year of Healing to the full house at Deerwoode Reserve on October 1. Have a look around.\n\nYou'll mostly hear from Jeff and Maggie here. And if you know of something that belongs on the porch, whether it's a gathering, a story, or a neighbor worth knowing, tell us. That's what a porch is for."
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/intake?intent=contact",
+     "label": "Tell us what belongs on the porch"
+    },
+    {
+     "type": "link",
+     "url": "https://secure.yoursparkpoint.org/newsletter",
+     "label": "Get updates by email"
+    }
+   ],
+   "published_at": "2026-10-20T15:41:07.621Z"
+  },
+  {
+   "slug": "an-atlas-of-wonders",
+   "title": "An Atlas of Wonders",
+   "summary": "The SparkPoint Gala, Friday, December 11, at Connestee Falls Country Club: a live auction of travel experiences, with part of every trip supporting the Resilience Hub.",
+   "kind": "gathering",
+   "pinned": true,
+   "published_at": "2026-10-14T09:00:00-04:00",
+   "event_start": "2026-12-11T18:00:00-05:00",
+   "event_place": "Connestee Falls Country Club, Brevard",
+   "image": {
+    "src": "public/assets/events/gala/hero-wing-2400.webp",
+    "alt": "Sunset over the clouds from an airplane window, the wing in silhouette."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "See the world. Strengthen home. Join us for an evening of connection and a live auction of eight travel experiences, with a portion of every trip coming home to support the Transylvania Resilience Hub. Tickets are $100 per person."
+    },
+    {
+     "type": "place",
+     "name": "Connestee Falls Country Club",
+     "address": "98 Overlook Clubhouse Dr, Brevard, NC 28712"
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/events/sparkpoint-gala",
+     "label": "Explore the gala"
+    }
+   ],
+   "link_url": "https://secure.yoursparkpoint.org/store/p/2026-sparkpoint-gala",
+   "link_label": "Get tickets"
+  },
+  {
+   "slug": "post-convening-session",
+   "title": "Keep the conversation moving",
+   "summary": "October 1 attendees: join the virtual post-convening session on Thursday, November 5, at 10 a.m., on Zoom.",
+   "kind": "gathering",
+   "pinned": true,
+   "published_at": "2026-10-19T09:00:00-04:00",
+   "expires_at": "2026-11-06T00:00:00-05:00",
+   "event_start": "2026-11-05T10:00:00-05:00",
+   "event_place": "Online, on Zoom",
+   "image": {
+    "src": "https://suqtfbculwuetfdhdgdh.supabase.co/storage/v1/object/public/convening-photos/rural-health-2026/rhp-69-1920.webp",
+    "alt": "Two attendees laugh together as they hold up a Connection to Action card at the October 1 convening."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "If you joined us on October 1, this is your invitation back. The WNC Regional Rural Health Virtual Post-Convening Session is a chance to reconnect with other rural health stakeholders and carry forward the conversations and partnerships that started at Deerwoode Reserve.\n\nYou'll hear about upcoming events, opportunities, and resources from the North Carolina Rural Health Association, the NC DHHS Office of Rural Health, Impact Health, and the WNC Health Policy Initiative."
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/rural-health-convening#post-convening",
+     "label": "Session details"
+    }
+   ],
+   "link_url": "https://us02web.zoom.us/meeting/register/06fVIHohSyCuvisOJLrSTg#/registration",
+   "link_label": "Register on Zoom"
+  }
+ ]
+}

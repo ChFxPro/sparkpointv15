@@ -1,0 +1,1791 @@
+/* The BackPorch: shared look for the homepage band, the feed page, and post pages.
+   SparkPoint's own palette and type (plum, pink, Manrope; Fraunces only for the
+   wordmark, a post's own title on its page, and pull quotes),
+   with some warmth borrowed from the Rural Health Field Simulator: cream paper
+   with a whisper of grain and faint contour lines, the porch plate with its one
+   lantern glow, and trail blazes marking each kind of post. Nothing moves on
+   its own. */
+
+.porch {
+  --bp-ink: #22171f;
+  --bp-muted: #5c5258;
+  --bp-paper: #fbf6ea;
+  --bp-paper-2: #f3ead6;
+  /* Semantic roles, so the dusk theme below can flip them. */
+  --bp-heading: var(--bp-plum);
+  --bp-surface: rgba(255, 255, 255, 0.6);
+  --bp-surface-hover: #fff;
+  --bp-surface-solid: #fff;
+  --bp-chip-bg: var(--bp-plum);
+  --bp-pressed-bg: var(--bp-plum);
+  --bp-pressed-fg: #fff;
+  /* Night: the deep ridge dusk sampled from the porch view (its far ridges sit
+     around #545461), darkened so the image's light can sink into it. */
+  --bp-night: #1f1b26;
+  --bp-plum: #2a1430;
+  --bp-plum-2: #3b1d42;
+  --bp-rose: #d42c8a; /* the homepage pink; white text on it is 4.6:1 */
+  --bp-rose-deep: #b01f6f; /* AA on paper for small text */
+  /* Pressed/hover fill for pink buttons. Not themed: white text needs it dark on night too. */
+  --bp-rose-press: #b01f6f;
+  --bp-light: #f2b632; /* the lantern */
+  --bp-chestnut: #6b4226;
+  --bp-line: rgba(107, 66, 38, 0.2);
+  --bp-serif: 'Fraunces Variable', 'Fraunces', Georgia, serif;
+  --bp-sans: 'Manrope', system-ui, sans-serif;
+  --bp-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --bp-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.045'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  color: var(--bp-ink);
+  font-family: var(--bp-sans);
+}
+
+.porch *,
+.porch *::before,
+.porch *::after {
+  box-sizing: border-box;
+}
+
+.porch :where(h1, h2, h3, h4, p, figure, ol, ul) {
+  margin: 0;
+}
+
+.porch a:focus-visible,
+.porch button:focus-visible {
+  outline: 3px solid var(--bp-rose);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ── Kit pieces ─────────────────────────────────────────────── */
+.fk-blaze,
+.fk-icon {
+  display: inline-block;
+  flex: none;
+}
+
+.fk-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  font-weight: 800;
+  font-size: 0.8rem;
+  color: var(--bp-heading);
+}
+
+.fk-terrain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.fk-porch {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.fk-rule {
+  height: 22px;
+  background-repeat: repeat-x;
+  background-position: center;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='22' viewBox='0 0 240 22'%3E%3Cg fill='none' stroke='%236B4226' stroke-opacity='0.28' stroke-width='1'%3E%3Cpath d='M0 16 C 30 6, 60 20, 90 12 S 150 4, 180 12 S 230 18, 240 10'/%3E%3Cpath d='M0 10 C 40 2, 70 16, 110 8 S 170 14, 200 6 S 232 12, 240 4'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.fk-rule-1 {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='22' viewBox='0 0 180 22'%3E%3Cg fill='none' stroke='%236B4226' stroke-opacity='0.26' stroke-width='1'%3E%3Cpath d='M0 15 C 15 9, 30 18, 45 13 S 75 7, 95 13 S 140 18, 180 11'/%3E%3Cpath d='M0 11 C 20 5, 40 14, 60 9 S 100 4, 125 9 S 160 13, 180 7'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.fk-rule-2 {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='22' viewBox='0 0 320 22'%3E%3Cg fill='none' stroke='%232A1430' stroke-opacity='0.22' stroke-width='1.1'%3E%3Cpath d='M0 16 C 50 15, 90 6, 130 5 C 150 4.6, 165 7, 190 11 C 230 17, 280 15, 320 12'/%3E%3C/g%3E%3Ccircle cx='134' cy='4.6' r='1.6' fill='%23F2B632'/%3E%3C/svg%3E");
+}
+
+/* The porch plate with its lantern light spilling onto the paper. */
+.porch-scene-art {
+  position: relative;
+  max-width: 30rem;
+}
+
+.porch-scene-art::before {
+  content: '';
+  position: absolute;
+  left: 49%;
+  top: 33%;
+  width: 72%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(242, 182, 50, 0.32), rgba(242, 182, 50, 0.1) 55%, transparent);
+  pointer-events: none;
+}
+
+/* ── Wordmark ────────────────────────────────────────────────── */
+.porch-wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 0.22em;
+  font-family: var(--bp-serif);
+  font-weight: 600;
+  font-variation-settings: 'SOFT' 100, 'WONK' 1;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
+  color: var(--bp-heading);
+}
+
+.porch-wordmark-the {
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.56em;
+  color: var(--bp-rose-deep);
+}
+
+/* ── Photos ──────────────────────────────────────────────────── */
+.porch-img {
+  position: relative;
+  overflow: hidden;
+  background: var(--bp-paper-2);
+  border-radius: 1rem;
+  /* A thin warm keyline so photos sit on the paper rather than float. */
+  box-shadow: inset 0 0 0 1px rgba(107, 66, 38, 0.18);
+}
+
+.porch-img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: sepia(0.08) saturate(0.96);
+}
+
+.porch-img-blank {
+  background:
+    repeating-linear-gradient(115deg, transparent 0 9px, rgba(107, 66, 38, 0.08) 9px 10px),
+    var(--bp-paper-2);
+}
+
+/* ── Date chip for gatherings ───────────────────────────────── */
+.porch-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.4rem;
+  padding: 0.4rem 0.55rem 0.45rem;
+  border-radius: 0.75rem;
+  background: var(--bp-chip-bg);
+  color: #fff;
+  line-height: 1;
+  flex: none;
+}
+
+.porch-chip small {
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bp-light);
+}
+
+.porch-chip b {
+  font-family: var(--bp-sans);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-top: 0.12rem;
+}
+
+.porch-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.8rem;
+}
+
+.porch-date {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--bp-muted);
+}
+
+.porch-short {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+  color: var(--bp-heading);
+}
+
+.porch-short .fk-icon {
+  color: var(--bp-chestnut);
+}
+
+/* Buttons: the site's own pills. */
+.porch-sign {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 0.65rem 1.4rem;
+  border-radius: 999px;
+  border: 2px solid var(--bp-rose);
+  background: var(--bp-rose);
+  color: #fff;
+  font-family: var(--bp-sans);
+  font-weight: 800;
+  font-size: 0.98rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s var(--bp-ease), border-color 0.2s var(--bp-ease);
+}
+
+.porch-sign:hover {
+  background: var(--bp-rose-press);
+  border-color: var(--bp-rose-press);
+}
+
+.porch-sign .fk-icon {
+  transition: transform 0.25s var(--bp-ease);
+}
+
+.porch-sign:hover .fk-icon {
+  transform: translateX(2px);
+}
+
+.porch-sign-quiet {
+  background: transparent;
+  color: var(--bp-heading);
+  border-color: rgba(42, 20, 48, 0.25);
+}
+
+.porch-sign-quiet:hover {
+  background: rgba(42, 20, 48, 0.05);
+  border-color: var(--bp-heading);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Homepage band: "On the BackPorch"
+   A sheet of warm paper laid over the hero's mountain photo: the porch and
+   its lantern on one side, the lead post on the other, and the next three
+   below, each under its trail blaze.
+   ════════════════════════════════════════════════════════════════ */
+.porch-band-wrap {
+  position: relative;
+  z-index: 1;
+  padding: 2rem 0.75rem 0;
+}
+
+@media (min-width: 768px) {
+  .porch-band-wrap {
+    padding: 3rem 1.5rem 0;
+  }
+}
+
+.porch-band {
+  position: relative;
+  overflow: hidden;
+  max-width: 72rem; /* matches the promo row below (max-w-6xl) */
+  margin: 0 auto;
+  background-color: var(--bp-paper);
+  background-image: var(--bp-grain);
+  border-radius: 1.75rem;
+  box-shadow: 0 30px 60px -30px rgba(20, 8, 24, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+@media (min-width: 768px) {
+  .porch-band {
+    border-radius: 2.5rem;
+  }
+}
+
+.porch-band .fk-terrain {
+  opacity: 0.55;
+}
+
+/* The view from the porch across the top of the sheet: a wide, calm window. */
+.porch-band-view {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+@media (min-width: 900px) {
+  .porch-band-view {
+    aspect-ratio: 3.6 / 1;
+  }
+}
+
+.porch-band-view .porch-view {
+  height: 100%;
+}
+
+.porch-band-view .porch-view img {
+  object-position: 50% 72%;
+}
+
+.porch-band-view {
+  isolation: isolate;
+}
+
+/* Two passes so the image's brightness sinks into the night colour rather than
+   fading to a flat sheet: a multiply wash darkens and tints the lower image in
+   the ridge dusk, then a short normal fade finishes on the exact solid. */
+.porch-band-view::before,
+.porch-band-view::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px; /* overlap the image's last row so no seam shows */
+  pointer-events: none;
+}
+
+.porch-band-view::before {
+  height: 70%;
+  background: linear-gradient(180deg, rgba(31, 27, 38, 0) 0%, rgba(31, 27, 38, 0.55) 55%, var(--bp-night) 100%);
+  mix-blend-mode: multiply;
+}
+
+.porch-band-view::after {
+  height: 46%;
+  background: linear-gradient(180deg, rgba(31, 27, 38, 0) 0%, rgba(31, 27, 38, 0.7) 55%, var(--bp-night) 92%);
+}
+
+.porch-band .porch-band-view figcaption {
+  top: 0.8rem;
+  bottom: auto;
+}
+
+.porch-band-inner {
+  position: relative;
+  margin-top: -1.5rem;
+  padding: 0 1.25rem 2.25rem;
+}
+
+@media (min-width: 768px) {
+  .porch-band-inner {
+    margin-top: -2.5rem;
+    padding: 0 3rem 3rem;
+  }
+}
+
+.porch-band-top {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .porch-band-top {
+    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    gap: 3.25rem;
+  }
+}
+
+.porch-band-title {
+  font-size: clamp(2.4rem, 5vw, 3.5rem);
+}
+
+.porch-band-sub {
+  margin-top: 0.7rem;
+  max-width: 28rem;
+  font-size: 1.06rem;
+  line-height: 1.6;
+  color: var(--bp-muted);
+}
+
+.porch-band-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.4rem;
+}
+
+/* The lead post: photo, then its caption on the paper. */
+.porch-lead {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.porch-lead .porch-img {
+  aspect-ratio: 16 / 9;
+  border-radius: 1.25rem;
+  box-shadow: inset 0 0 0 1px rgba(107, 66, 38, 0.18), 0 22px 40px -28px rgba(42, 20, 48, 0.6);
+}
+
+.porch-lead .porch-img img {
+  transition: transform 1.2s var(--bp-ease);
+}
+
+.porch-lead:hover .porch-img img {
+  transform: scale(1.03);
+}
+
+.porch-lead-cap {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-top: 1.1rem;
+}
+
+.porch-lead h3 {
+  margin-top: 0.4rem;
+  font-family: var(--bp-sans);
+  font-weight: 800;
+  font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--bp-heading);
+  text-wrap: balance;
+}
+
+.porch-lead .porch-lead-summary {
+  margin-top: 0.45rem;
+  line-height: 1.6;
+  color: var(--bp-muted);
+}
+
+.porch-lead:hover h3 {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+  text-decoration-color: var(--bp-light);
+}
+
+/* Homepage: full width, the hero's bottom edge. The porch view drifts against its
+   frame as the page scrolls (--porch-drift, set by useHeroHandoff); it is scaled a
+   little so the drift never shows an edge. */
+.porch-band-wrap[data-edge] {
+  padding: 0;
+  z-index: 2;
+}
+
+.porch-band-wrap[data-edge] .porch-band {
+  max-width: none;
+  border-radius: 0;
+  box-shadow: 0 -28px 60px -20px rgba(10, 6, 14, 0.55);
+}
+
+.porch-band-wrap[data-edge] .porch-band-inner {
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.porch-band-wrap[data-edge] .porch-band-view .porch-view img {
+  transform: translate3d(0, var(--porch-drift, 0px), 0) scale(1.1);
+  will-change: transform;
+}
+
+@media (min-width: 900px) {
+  .porch-band-wrap[data-edge] .porch-band-view {
+    aspect-ratio: 3.2 / 1;
+  }
+}
+
+/* Two or three pinned posts: the title and its line across the top, then the
+   pinned posts side by side, equal weight, in the order they were pinned. */
+@media (min-width: 900px) {
+  .porch-band-head .porch-scene {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: 'title sub' 'title actions';
+    column-gap: 3.25rem;
+    align-items: end;
+  }
+
+  .porch-band-head .porch-band-title {
+    grid-area: title;
+  }
+
+  .porch-band-head .porch-band-sub {
+    grid-area: sub;
+    margin-top: 0;
+  }
+
+  .porch-band-head .porch-band-actions {
+    grid-area: actions;
+  }
+}
+
+.porch-band-leads {
+  display: grid;
+  gap: 2.25rem;
+  margin: 2.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 720px) {
+  .porch-band-leads {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .porch-band-leads[data-count='3'] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.porch-band-leads[data-count='3'] .porch-lead h3 {
+  font-size: clamp(1.3rem, 1.8vw, 1.55rem);
+}
+
+.porch-band-leads[data-count='3'] .porch-lead .porch-img {
+  aspect-ratio: 4 / 3;
+}
+
+/* The next three posts, each under its blaze. */
+.porch-log {
+  margin-top: 2.25rem;
+}
+
+.porch-log-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.porch-log-head h2,
+.porch-log-head h3 {
+  font-family: var(--bp-sans);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  color: var(--bp-chestnut);
+  white-space: nowrap;
+}
+
+.porch-log-head .fk-rule {
+  flex: 1;
+}
+
+.porch-log-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+}
+
+@media (min-width: 900px) {
+  .porch-log-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0 1.5rem;
+  }
+}
+
+.porch-row {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: start;
+  padding: 0.9rem 0.7rem;
+  margin: 0 -0.7rem;
+  border-radius: 1rem;
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 0.25s var(--bp-ease);
+}
+
+.porch-log-list > li + li .porch-row {
+  border-top: 1px dashed var(--bp-line);
+  border-radius: 0 0 1rem 1rem;
+}
+
+@media (min-width: 900px) {
+  .porch-log-list > li + li .porch-row {
+    border-top: 0;
+    border-radius: 1rem;
+  }
+}
+
+.porch-row:hover {
+  background: rgba(243, 234, 214, 0.85);
+}
+
+.porch-row .porch-img {
+  aspect-ratio: 1;
+  border-radius: 0.8rem;
+}
+
+.porch-row h4 {
+  margin-top: 0.3rem;
+  font-family: var(--bp-sans);
+  font-weight: 700;
+  font-size: 1.02rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--bp-heading);
+  text-wrap: balance;
+}
+
+.porch-row:hover h4 {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--bp-light);
+}
+
+.porch-row .porch-row-summary {
+  margin-top: 0.3rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--bp-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   /backporch
+   ════════════════════════════════════════════════════════════════ */
+.porch-page {
+  position: relative;
+  background-color: var(--bp-paper);
+  background-image: var(--bp-grain);
+  min-height: 70vh;
+}
+
+.porch-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+/* The view runs edge to edge under the fixed site header and settles into the
+   paper at its foot, so the page reads as stepping out onto the porch. */
+.porch-view,
+.porch-view img {
+  display: block;
+  width: 100%;
+}
+
+.porch-view img {
+  height: 100%;
+  object-fit: cover;
+}
+
+.porch-hero-view {
+  position: relative;
+  margin: 0;
+  height: min(92vh, 177.7vw); /* phones: the tall crop, nearly full screen */
+  background: #2a1f24;
+}
+
+@media (min-width: 560px) {
+  .porch-hero-view {
+    height: min(86vh, 100vw); /* tablets: the square crop */
+  }
+}
+
+@media (min-width: 900px) {
+  .porch-hero-view {
+    height: min(88vh, 42.7vw); /* desktop: the wide crop at its own shape */
+    min-height: 34rem;
+  }
+}
+
+.porch-hero-view .porch-view {
+  height: 100%;
+}
+
+.porch-hero-view .porch-view img {
+  object-position: 50% 70%;
+}
+
+.porch-hero-view {
+  isolation: isolate;
+}
+
+/* Two passes so the image's brightness sinks into the night colour rather than
+   fading to a flat sheet: a multiply wash darkens and tints the lower image in
+   the ridge dusk, then a short normal fade finishes on the exact solid. */
+.porch-hero-view::before,
+.porch-hero-view::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px; /* overlap the image's last row so no seam shows */
+  pointer-events: none;
+}
+
+.porch-hero-view::before {
+  height: 70%;
+  background: linear-gradient(180deg, rgba(31, 27, 38, 0) 0%, rgba(31, 27, 38, 0.55) 55%, var(--bp-night) 100%);
+  mix-blend-mode: multiply;
+}
+
+.porch-hero-view::after {
+  height: 34%;
+  background: linear-gradient(180deg, rgba(31, 27, 38, 0) 0%, rgba(31, 27, 38, 0.7) 55%, var(--bp-night) 92%);
+}
+
+.porch-hero-view figcaption,
+.porch-band-view figcaption {
+  position: absolute;
+  right: 0.9rem;
+  bottom: 0.7rem;
+  z-index: 1;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(34, 23, 31, 0.55);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.porch-hero-view figcaption {
+  bottom: calc(18% + 0.5rem);
+}
+
+.porch-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 68rem;
+  margin: -2.5rem auto 0;
+  padding: 0 1.25rem 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .porch-hero-inner {
+    margin-top: -4rem;
+    padding: 0 2rem 3rem;
+  }
+}
+
+.porch-hero-terrain {
+  top: auto;
+  height: 60%;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+.porch-hero h1 {
+  font-size: clamp(3.2rem, 9vw, 6rem);
+}
+
+.porch-hero-lede {
+  margin-top: 1rem;
+  max-width: 34rem;
+  font-size: 1.2rem;
+  line-height: 1.55;
+  color: var(--bp-muted);
+}
+
+.porch-feeds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.6rem;
+}
+
+.porch-shell {
+  position: relative;
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 4rem;
+}
+
+@media (min-width: 768px) {
+  .porch-shell {
+    padding: 1.5rem 2rem 5rem;
+  }
+}
+
+.porch-sheet {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 52rem;
+  margin: 0 auto;
+}
+
+/* The blazes double as filters, like a map legend. */
+.porch-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+
+.porch-legend h2 {
+  font-family: var(--bp-sans);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  color: var(--bp-chestnut);
+}
+
+.porch-legend ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.porch-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0 0.95rem;
+  border: 1px solid var(--bp-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--bp-ink);
+  font-family: var(--bp-sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s var(--bp-ease);
+}
+
+.porch-filter:hover {
+  background: rgba(243, 234, 214, 0.9);
+}
+
+.porch-filter[aria-pressed='true'] {
+  background: var(--bp-pressed-bg);
+  color: var(--bp-pressed-fg);
+}
+
+.porch-filter small {
+  margin-left: auto;
+  padding-left: 0.5rem;
+  font-weight: 600;
+  opacity: 0.6;
+}
+
+/* Entries */
+.porch-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.porch-entry {
+  position: relative;
+  display: grid;
+  gap: 1.25rem;
+  padding: 1.4rem 1.25rem;
+  border-radius: 1.5rem;
+  background: var(--bp-surface);
+  box-shadow: inset 0 0 0 1px var(--bp-line);
+  transition: background-color 0.25s var(--bp-ease), box-shadow 0.25s var(--bp-ease);
+}
+
+.porch-entry:hover {
+  background: var(--bp-surface-hover);
+  box-shadow: inset 0 0 0 1px var(--bp-line), 0 18px 36px -26px rgba(42, 20, 48, 0.45);
+}
+
+@media (min-width: 720px) {
+  .porch-entry {
+    padding: 1.6rem 1.75rem;
+  }
+  .porch-entry[data-has-image='true'] {
+    grid-template-columns: minmax(0, 1fr) 14rem;
+    gap: 2rem;
+  }
+}
+
+.porch-entry .porch-img {
+  aspect-ratio: 4 / 3;
+  order: -1;
+}
+
+@media (min-width: 720px) {
+  .porch-entry .porch-img {
+    order: 0;
+    align-self: start;
+  }
+}
+
+.porch-entry-head {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-top: 0.65rem;
+}
+
+.porch-entry h2 {
+  font-family: var(--bp-sans);
+  font-weight: 800;
+  font-size: clamp(1.3rem, 2.6vw, 1.65rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.porch-entry h2 a {
+  color: var(--bp-heading);
+  text-decoration: none;
+}
+
+/* The whole card is clickable; only the title is the link. */
+.porch-entry h2 a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.porch-entry:hover h2 a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--bp-light);
+}
+
+.porch-entry-summary {
+  margin-top: 0.55rem;
+  max-width: 40rem;
+  line-height: 1.65;
+  color: var(--bp-muted);
+}
+
+.porch-entry-foot {
+  margin-top: 0.9rem;
+}
+
+/* The /backporch board is wider than the old list column. */
+.porch-shell-board {
+  max-width: 75rem;
+}
+
+/* "About the BackPorch": a short note under the list on /backporch. */
+.porch-about {
+  max-width: 40rem;
+  margin: 3.5rem auto 0;
+  padding: 1.75rem 0 0;
+  border-top: 1px solid var(--bp-line);
+  color: var(--bp-muted);
+  line-height: 1.65;
+}
+
+.porch-about h2 {
+  font-family: var(--bp-sans);
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  color: var(--bp-heading);
+}
+
+.porch-about p {
+  margin-top: 0.7rem;
+}
+
+.porch-about a {
+  color: var(--bp-heading);
+  text-decoration: underline;
+  text-decoration-color: var(--bp-light);
+  text-underline-offset: 3px;
+}
+
+.porch-empty {
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  color: var(--bp-muted);
+  border-radius: 1.5rem;
+  border: 1px dashed var(--bp-line);
+}
+
+.porch-empty-art {
+  max-width: 18rem;
+  margin: 0 auto 1rem;
+}
+
+.porch-empty strong {
+  display: block;
+  font-family: var(--bp-sans);
+  font-weight: 800;
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
+  color: var(--bp-heading);
+  margin-bottom: 0.4rem;
+}
+
+.porch-empty a {
+  color: var(--bp-rose-deep);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Post page
+   ════════════════════════════════════════════════════════════════ */
+/* Post pages: a short strip of the same view, so every page starts on the porch. */
+.porch-post-view {
+  position: relative;
+  margin: 0;
+  height: clamp(13rem, 30vw, 22rem);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.porch-post-view .porch-view {
+  height: 100%;
+}
+
+.porch-post-view .porch-view img {
+  object-position: 50% 62%;
+}
+
+.porch-post-view::before,
+.porch-post-view::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  pointer-events: none;
+}
+
+.porch-post-view::before {
+  height: 60%;
+  background: linear-gradient(180deg, rgba(31, 27, 38, 0) 0%, rgba(31, 27, 38, 0.45) 55%, var(--bp-night) 100%);
+  mix-blend-mode: multiply;
+}
+
+.porch-post-view::after {
+  height: 40%;
+  background: linear-gradient(180deg, rgba(31, 27, 38, 0) 0%, rgba(31, 27, 38, 0.75) 55%, var(--bp-night) 92%);
+}
+
+.porch-post-view figcaption {
+  position: absolute;
+  right: 0.9rem;
+  top: calc(5rem + 0.6rem);
+  z-index: 1;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(34, 23, 31, 0.55);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.porch-article-wrap {
+  position: relative;
+  /* clip, not hidden: hidden would make this a scroll container and stop
+     sticky pieces (the scrolly story) from sticking. */
+  overflow-x: clip;
+}
+
+.porch-article-wrap > .fk-terrain {
+  top: clamp(13rem, 30vw, 22rem);
+  height: 34rem;
+  bottom: auto;
+}
+
+.porch-article {
+  position: relative;
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: calc(5rem + 2rem) 1.25rem 5rem; /* clears the fixed 5rem site header */
+}
+
+/* When the view strip is above it, the article rises into the strip's fade. */
+.porch-post-view ~ .porch-article {
+  margin-top: -5rem;
+  padding-top: 0;
+}
+
+.porch-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  gap: 0.45rem;
+  font-weight: 800;
+  color: var(--bp-rose-deep);
+  text-decoration: none;
+}
+
+.porch-back:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.porch-article > .porch-meta {
+  margin-top: 1.5rem;
+}
+
+.porch-article h1 {
+  margin-top: 0.75rem;
+  font-family: var(--bp-serif);
+  font-weight: 600;
+  font-size: clamp(2.3rem, 6.5vw, 3.7rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--bp-heading);
+  text-wrap: balance;
+}
+
+.porch-article-lede {
+  margin-top: 1.1rem;
+  font-size: 1.22rem;
+  line-height: 1.55;
+}
+
+.porch-when {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1.75rem;
+  padding: 1rem 1.15rem;
+  border-radius: 1.25rem;
+  background: var(--bp-surface);
+  box-shadow: inset 0 0 0 1px var(--bp-line);
+}
+
+.porch-when p {
+  font-weight: 800;
+  color: var(--bp-heading);
+  line-height: 1.4;
+}
+
+.porch-when p + p {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+  color: var(--bp-muted);
+}
+
+/* The post's cover only; in-body photos and related-post thumbnails keep their own shapes. */
+.porch-article .porch-img.porch-cover {
+  margin-top: 2.25rem;
+  aspect-ratio: 16 / 10;
+  border-radius: 1.5rem;
+}
+
+.porch-body {
+  margin-top: 2.25rem;
+  font-size: 1.08rem;
+  line-height: 1.75;
+}
+
+.porch-body p + p {
+  margin-top: 1.1rem;
+}
+
+.porch-body a {
+  color: var(--bp-rose-deep);
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+
+.porch-article .porch-sign {
+  margin-top: 2rem;
+}
+
+.porch-share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-top: 2.5rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: 1.25rem;
+  border: 1px dashed var(--bp-line);
+  color: var(--bp-muted);
+}
+
+.porch-share .porch-short {
+  font-size: 0.9rem;
+}
+
+.porch-copy {
+  min-height: 44px;
+  padding: 0 1.1rem;
+  margin-left: auto;
+  border-radius: 999px;
+  border: 1px solid rgba(42, 20, 48, 0.25);
+  background: var(--bp-surface-solid);
+  color: var(--bp-heading);
+  font-family: var(--bp-sans);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.porch-copy:hover {
+  border-color: var(--bp-heading);
+}
+
+.porch-related {
+  margin-top: 3.5rem;
+}
+
+.porch-related .porch-log-list {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.porch-related .porch-log-list > li + li .porch-row {
+  border-top: 1px dashed var(--bp-line);
+  border-radius: 0 0 1rem 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .porch-lead .porch-img img,
+  .porch-row,
+  .porch-entry,
+  .porch-sign,
+  .porch-sign .fk-icon,
+  .porch-filter {
+    transition: none;
+  }
+  .porch-lead:hover .porch-img img,
+  .porch-sign:hover .fk-icon {
+    transform: none;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Dusk theme: the BackPorch page and the homepage band sit in the
+   evening light of the porch view. Post pages stay on paper for reading.
+   ════════════════════════════════════════════════════════════════ */
+.porch-dusk {
+  --bp-paper: var(--bp-night);
+  --bp-paper-2: #2b2533;
+  --bp-ink: #f4ecdf;
+  --bp-muted: #c9bdb0; /* 9.4:1 on night */
+  --bp-heading: #f6efe3;
+  --bp-rose-deep: #f38cc1; /* pink lightened for small text on night (7.9:1) */
+  --bp-chestnut: #e5a878; /* the sunset's amber, for quiet accents */
+  --bp-line: rgba(246, 230, 205, 0.16);
+  --bp-surface: rgba(255, 246, 232, 0.05);
+  --bp-surface-hover: rgba(255, 246, 232, 0.09);
+  --bp-surface-solid: rgba(255, 246, 232, 0.08);
+  --bp-chip-bg: #3a2f45;
+  --bp-pressed-bg: #f6efe3;
+  --bp-pressed-fg: #1f1b26;
+  background-color: var(--bp-night);
+  color: var(--bp-ink);
+}
+
+/* Grain lightens rather than darkens on night. */
+.porch-dusk.porch-page,
+.porch-dusk.porch-band {
+  background-image: none;
+}
+
+/* Contour terrain drawn in pale lines on the dark. */
+.porch-dusk .fk-terrain {
+  filter: invert(1) sepia(0.4) brightness(1.1);
+  opacity: 0.3;
+}
+
+.porch-dusk .porch-row:hover {
+  background: var(--bp-surface-hover);
+}
+
+.porch-dusk .porch-sign-quiet {
+  border-color: rgba(246, 230, 205, 0.35);
+}
+
+.porch-dusk .porch-sign-quiet:hover {
+  background: rgba(246, 230, 205, 0.08);
+  border-color: var(--bp-heading);
+}
+
+.porch-dusk .porch-img {
+  box-shadow: inset 0 0 0 1px rgba(246, 230, 205, 0.12);
+}
+
+.porch-dusk .porch-lead .porch-img {
+  box-shadow: inset 0 0 0 1px rgba(246, 230, 205, 0.12), 0 24px 44px -26px rgba(0, 0, 0, 0.8);
+}
+
+.porch-dusk .porch-lead:hover h3,
+.porch-dusk .porch-row:hover h4,
+.porch-dusk .porch-entry:hover h2 a {
+  text-decoration-color: var(--bp-light);
+}
+
+.porch-dusk .porch-entry:hover {
+  box-shadow: inset 0 0 0 1px var(--bp-line), 0 22px 40px -28px rgba(0, 0, 0, 0.75);
+}
+
+.porch-dusk a:focus-visible,
+.porch-dusk button:focus-visible {
+  outline-color: var(--bp-light);
+}
+
+.porch-dusk .fk-rule,
+.porch-dusk .fk-rule-1,
+.porch-dusk .fk-rule-2 {
+  filter: invert(1) sepia(0.5);
+  opacity: 0.7;
+}
+
+.porch-dusk .porch-band-wrap,
+.porch-band.porch-dusk {
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(246, 230, 205, 0.08);
+}
+
+/* Blazes on night: the darker inks (green, blue) sink into the dark, so each
+   mark gets a fine pale edge, like paint catching the last light. */
+.porch-dusk .fk-blaze {
+  filter: drop-shadow(0 0 0.5px rgba(246, 239, 227, 0.95)) drop-shadow(0 0 0.5px rgba(246, 239, 227, 0.95));
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Post blocks (src/components/backporch/PostBlocks.tsx)
+   ════════════════════════════════════════════════════════════════ */
+.pb {
+  display: grid;
+  gap: 2rem;
+  margin-top: 2.25rem;
+}
+
+.pb figure {
+  margin: 0;
+}
+
+.pb figcaption {
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--bp-muted);
+}
+
+.pb-text {
+  font-size: 1.08rem;
+  line-height: 1.75;
+}
+
+.pb-text p + p {
+  margin-top: 1.1rem;
+}
+
+.pb-text a {
+  color: var(--bp-rose-deep);
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+
+.pb-image .porch-img,
+.pb-slide .porch-img {
+  border-radius: 1.25rem;
+}
+
+.pb-image .porch-img img {
+  height: auto;
+}
+
+/* Gallery: swipe on phones, arrows elsewhere; no autoplay. */
+.pb-gallery-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-radius: 1.25rem;
+}
+
+.pb-gallery-track::-webkit-scrollbar {
+  display: none;
+}
+
+.pb-gallery-track:focus-visible {
+  outline: 3px solid var(--bp-light);
+  outline-offset: 3px;
+}
+
+.pb-slide {
+  scroll-snap-align: start;
+}
+
+.pb-slide .porch-img {
+  aspect-ratio: 3 / 2;
+}
+
+.pb-gallery-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--bp-muted);
+}
+
+.pb-gallery-nav button {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--bp-line);
+  background: var(--bp-surface);
+  color: var(--bp-heading);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.pb-gallery-nav button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.pb-video video {
+  display: block;
+  width: 100%;
+  max-height: 80vh;
+  border-radius: 1.25rem;
+  background: #000;
+}
+
+.pb-embed-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background: #120f16;
+}
+
+.pb-embed-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.pb-embed-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1.5rem;
+  border: 0;
+  background:
+    radial-gradient(60% 80% at 50% 40%, rgba(242, 182, 50, 0.16), transparent 70%),
+    #120f16;
+  color: #f4ecdf;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.pb-play {
+  width: 4.25rem;
+  height: 4.25rem;
+  border-radius: 999px;
+  background: var(--bp-rose);
+  position: relative;
+  transition: transform 0.25s var(--bp-ease);
+}
+
+.pb-play::after {
+  content: '';
+  position: absolute;
+  left: 54%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-style: solid;
+  border-width: 0.7rem 0 0.7rem 1.15rem;
+  border-color: transparent transparent transparent #fff;
+}
+
+.pb-embed-play:hover .pb-play {
+  transform: scale(1.06);
+}
+
+.pb-embed-title {
+  font-family: var(--bp-sans);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.pb-embed-play small {
+  font-size: 0.78rem;
+  opacity: 0.7;
+}
+
+.pb-audio {
+  padding: 1.1rem 1.2rem;
+  border-radius: 1.25rem;
+  background: var(--bp-surface);
+  box-shadow: inset 0 0 0 1px var(--bp-line);
+}
+
+.pb-audio-head {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.pb-audio-head strong {
+  display: block;
+  font-family: var(--bp-sans);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--bp-heading);
+}
+
+.pb-audio-head small {
+  color: var(--bp-muted);
+  font-weight: 700;
+}
+
+/* A still sound-wave mark: nothing animates. */
+.pb-wave {
+  width: 2.6rem;
+  height: 2.6rem;
+  flex: none;
+  border-radius: 999px;
+  background:
+    linear-gradient(var(--bp-light), var(--bp-light)) 30% 50% / 3px 40% no-repeat,
+    linear-gradient(var(--bp-light), var(--bp-light)) 43% 50% / 3px 70% no-repeat,
+    linear-gradient(var(--bp-light), var(--bp-light)) 57% 50% / 3px 50% no-repeat,
+    linear-gradient(var(--bp-light), var(--bp-light)) 70% 50% / 3px 30% no-repeat,
+    var(--bp-chip-bg);
+}
+
+.pb-audio audio {
+  width: 100%;
+}
+
+.pb-quote {
+  margin: 0;
+  padding: 0.5rem 0 0.5rem 1.4rem;
+  border-left: 3px solid var(--bp-light);
+}
+
+.pb-quote p {
+  font-family: var(--bp-serif);
+  font-style: italic;
+  font-size: clamp(1.4rem, 3vw, 1.75rem);
+  line-height: 1.35;
+  color: var(--bp-heading);
+}
+
+.pb-quote footer {
+  margin-top: 0.6rem;
+  font-weight: 700;
+  color: var(--bp-chestnut);
+}
+
+.pb-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.15rem;
+  border-radius: 1.25rem;
+  background: var(--bp-surface);
+  box-shadow: inset 0 0 0 1px var(--bp-line);
+  color: var(--bp-ink);
+  text-decoration: none;
+  transition: background-color 0.2s var(--bp-ease);
+}
+
+.pb-card > span:not(.pb-file-icon):not(.pb-file-get) {
+  display: grid;
+  gap: 0.15rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.pb-card strong {
+  color: var(--bp-heading);
+  font-weight: 800;
+}
+
+.pb-card small {
+  color: var(--bp-muted);
+  font-weight: 600;
+}
+
+a.pb-card:hover {
+  background: var(--bp-surface-hover);
+}
+
+.pb-card .fk-icon {
+  color: var(--bp-chestnut);
+}
+
+.pb-place a {
+  font-weight: 800;
+  color: var(--bp-rose-deep);
+  white-space: nowrap;
+}
+
+.pb-file-icon {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 3.2rem;
+  border-radius: 0.4rem;
+  background: var(--bp-chip-bg);
+  color: var(--bp-light);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  flex: none;
+}
+
+.pb-file-get {
+  font-weight: 800;
+  color: var(--bp-rose-deep);
+}
+
+.pb-experiment {
+  border-radius: 1.25rem;
+}
+
+.pb-note {
+  color: var(--bp-muted);
+  font-style: italic;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pb-play,
+  .pb-card {
+    transition: none;
+  }
+  .pb-gallery-track {
+    scroll-behavior: auto;
+  }
+}
+
+/* Link with its page's own preview (fetched when the link was added). */
+.pb-unfurl {
+  display: grid;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  background: var(--bp-surface);
+  box-shadow: inset 0 0 0 1px var(--bp-line);
+  color: var(--bp-ink);
+  text-decoration: none;
+  transition: background-color 0.2s var(--bp-ease);
+}
+
+.pb-unfurl:hover {
+  background: var(--bp-surface-hover);
+}
+
+@media (min-width: 640px) {
+  .pb-unfurl[data-has-image='true'] {
+    grid-template-columns: 15rem minmax(0, 1fr);
+  }
+}
+
+.pb-unfurl-img {
+  display: block;
+  aspect-ratio: 1.91 / 1; /* the shape most sites make their preview images */
+  background: var(--bp-paper-2);
+}
+
+@media (min-width: 640px) {
+  .pb-unfurl-img {
+    aspect-ratio: auto;
+    min-height: 100%;
+  }
+}
+
+.pb-unfurl-img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pb-unfurl-text {
+  display: grid;
+  gap: 0.3rem;
+  align-content: center;
+  padding: 1rem 1.15rem 1.1rem;
+  min-width: 0;
+}
+
+.pb-unfurl-text small {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--bp-chestnut);
+}
+
+.pb-unfurl-text strong {
+  font-family: var(--bp-sans);
+  font-weight: 700;
+  font-size: 1.08rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--bp-heading);
+}
+
+.pb-unfurl-text > span {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--bp-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pb-unfurl-text em {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.3rem;
+  font-style: normal;
+  font-weight: 800;
+  color: var(--bp-rose-deep);
+}
+
+.pb-unfurl:hover strong {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--bp-light);
+}
+
+/* A post image that came from a link's preview opens that link. */
+.porch-cover-link {
+  position: relative;
+  display: block;
+  border-radius: 1.5rem;
+}
+
+.porch-cover-link .porch-img img {
+  transition: transform 1.2s var(--bp-ease);
+}
+
+.porch-cover-link:hover .porch-img img {
+  transform: scale(1.02);
+}
+
+.porch-cover-link-tag {
+  position: absolute;
+  right: 0.85rem;
+  bottom: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(23, 20, 28, 0.72);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.porch-cover-link:focus-visible {
+  outline: 3px solid var(--bp-light);
+  outline-offset: 3px;
+}

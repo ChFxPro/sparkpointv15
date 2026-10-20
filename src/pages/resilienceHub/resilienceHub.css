@@ -1030,3 +1030,43 @@
 .rh-note--dark {
   color: rgba(255, 255, 255, 0.6);
 }
+
+/* A program's own logo heading its band (StoryLab, Media Navigators). */
+.rh-program-logo {
+  display: block;
+  height: 4rem;
+  width: auto;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .rh-program-logo {
+    height: 5rem;
+  }
+}
+
+.rh-program-logo--wide {
+  height: auto;
+  width: min(360px, 100%);
+}
+
+.rh-text-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.5);
+  text-underline-offset: 4px;
+}
+
+.rh-text-link:hover {
+  text-decoration-color: #fff;
+}
+
+.rh-text-link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
