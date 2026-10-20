@@ -411,6 +411,41 @@
    }
   },
   {
+   "slug": "welcome-to-the-backporch",
+   "title": "Welcome to the BackPorch",
+   "summary": "We made a place on our own website to share what's happening at SparkPoint: gatherings, stories, and the times we could use a hand. Come sit a while.",
+   "kind": "news",
+   "image": {
+    "src": "src/assets/home/gatherings/connectors-circle-1920.webp",
+    "alt": "A Community Connectors participant speaks with neighbors in a listening circle."
+   },
+   "blocks": [
+    {
+     "type": "text",
+     "text": "Around here, a lot of the real news gets shared on somebody's back porch. A neighbor stops by, someone pours the coffee, and before long you know who's doing what and who could use a hand.\n\nWe wanted SparkPoint to have a place like that, so we made one, right here on our own website."
+    },
+    {
+     "type": "text",
+     "text": "This is where we'll share what's going on: gatherings coming up, stories from neighbors, what we're learning, and the times we need your help. It all lands here first. You don't need an account or an app to read it, and you don't have to hope a social media feed decides to show it to you."
+    },
+    {
+     "type": "text",
+     "text": "To get things started, we've brought some of the past year onto the porch, from Helene: One Year of Healing to the full house at Deerwoode Reserve on October 1. Have a look around.\n\nYou'll mostly hear from Jeff and Maggie here. And if you know of something that belongs on the porch, whether it's a gathering, a story, or a neighbor worth knowing, tell us. That's what a porch is for."
+    },
+    {
+     "type": "link",
+     "url": "https://yoursparkpoint.org/intake?intent=contact",
+     "label": "Tell us what belongs on the porch"
+    },
+    {
+     "type": "link",
+     "url": "https://secure.yoursparkpoint.org/newsletter",
+     "label": "Get updates by email"
+    }
+   ],
+   "published_at": "2026-10-20T15:41:07.621Z"
+  },
+  {
    "slug": "an-atlas-of-wonders",
    "title": "An Atlas of Wonders",
    "summary": "The SparkPoint Gala, Friday, December 11, at Connestee Falls Country Club: a live auction of travel experiences, with part of every trip supporting the Resilience Hub.",
@@ -469,41 +504,6 @@
    ],
    "link_url": "https://us02web.zoom.us/meeting/register/06fVIHohSyCuvisOJLrSTg#/registration",
    "link_label": "Register on Zoom"
-  },
-  {
-   "slug": "welcome-to-the-backporch",
-   "title": "Welcome to the BackPorch",
-   "summary": "We made a place on our own website to share what's happening at SparkPoint: gatherings, stories, and the times we could use a hand. Come sit a while.",
-   "kind": "news",
-   "status": "draft",
-   "image": {
-    "src": "src/assets/home/gatherings/connectors-circle-1920.webp",
-    "alt": "A Community Connectors participant speaks with neighbors in a listening circle."
-   },
-   "blocks": [
-    {
-     "type": "text",
-     "text": "Around here, a lot of the real news gets shared on somebody's back porch. A neighbor stops by, someone pours the coffee, and before long you know who's doing what and who could use a hand.\n\nWe wanted SparkPoint to have a place like that, so we made one, right here on our own website."
-    },
-    {
-     "type": "text",
-     "text": "This is where we'll share what's going on: gatherings coming up, stories from neighbors, what we're learning, and the times we need your help. It all lands here first. You don't need an account or an app to read it, and you don't have to hope a social media feed decides to show it to you."
-    },
-    {
-     "type": "text",
-     "text": "To get things started, we've brought some of the past year onto the porch, from Helene: One Year of Healing to the full house at Deerwoode Reserve on October 1. Have a look around.\n\nYou'll mostly hear from Jeff and Maggie here. And if you know of something that belongs on the porch, whether it's a gathering, a story, or a neighbor worth knowing, tell us. That's what a porch is for."
-    },
-    {
-     "type": "link",
-     "url": "https://yoursparkpoint.org/intake?intent=contact",
-     "label": "Tell us what belongs on the porch"
-    },
-    {
-     "type": "link",
-     "url": "https://secure.yoursparkpoint.org/newsletter",
-     "label": "Get updates by email"
-    }
-   ]
   }
  ]
 }
