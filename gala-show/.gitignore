@@ -1,0 +1,7 @@
+node_modules/
+src/generated/
+# Video and photos are large: keep them in the SP Gala 26 Drive folder, not in git.
+show/media/*
+!show/media/README.txt
+show/backups/
+.impeccable/
