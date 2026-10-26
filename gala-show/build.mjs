@@ -51,10 +51,24 @@ const options = {
   logLevel: 'info',
 };
 
+// The background renderer for the template kit (kit/make-kit.mjs). It stays
+// out of show/ so the show folder holds only what the night needs.
+const plateOptions = {
+  ...options,
+  entryPoints: { plate: resolve(here, 'src/plate.js') },
+  outdir: resolve(here, 'kit/.build'),
+};
+mkdirSync(plateOptions.outdir, { recursive: true });
+writeFileSync(
+  resolve(plateOptions.outdir, 'plate.html'),
+  '<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="plate.css"></head><body style="margin:0;overflow:hidden"><script src="plate.js"></script></body></html>\n'
+);
+
 if (process.argv.includes('--watch')) {
   const ctx = await esbuild.context(options);
   await ctx.watch();
 } else {
   await esbuild.build(options);
+  await esbuild.build(plateOptions);
   console.log(`land dots: ${coords.length / 2}`);
 }

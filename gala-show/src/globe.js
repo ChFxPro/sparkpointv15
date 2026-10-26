@@ -42,7 +42,7 @@ function fromVec(v) {
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const wrap = (d) => ((((d + 180) % 360) + 360) % 360) - 180;
 
-export function createGlobe(canvas, { reducedMotion = false } = {}) {
+export function createGlobe(canvas, { reducedMotion = false, clear = false } = {}) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setClearColor(0x000000, 0);
   const scene = new THREE.Scene();
@@ -93,7 +93,9 @@ export function createGlobe(canvas, { reducedMotion = false } = {}) {
         uniforms: { uOpacity: { value: 1 }, uColor: { value: BRASS } },
         side: THREE.BackSide,
         depthWrite: false,
-        blending: THREE.AdditiveBlending,
+        // Additive glow needs a ground to add to; on a transparent cut-out it
+        // turns into a solid ring, so blend normally there.
+        blending: clear ? THREE.NormalBlending : THREE.AdditiveBlending,
         vertexShader: `varying vec3 vN; varying vec3 vV;
           void main(){ vec4 mv = modelViewMatrix*vec4(position,1.); vN = normalize(normalMatrix*normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix*mv; }`,
         fragmentShader: `uniform float uOpacity; uniform vec3 uColor; varying vec3 vN; varying vec3 vV;

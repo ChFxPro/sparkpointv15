@@ -5,3 +5,4 @@ show/media/*
 !show/media/README.txt
 show/backups/
 .impeccable/
+kit/.build/

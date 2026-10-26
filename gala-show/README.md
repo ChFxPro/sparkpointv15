@@ -52,6 +52,21 @@ west and south are negative).
 
 `content.js` is plain JavaScript and can be edited by hand too.
 
+## Slide template kit (Keynote, PowerPoint, Canva)
+
+For anyone who'd rather build slides in the app they know, `npm run kit` writes
+`output/gala-show-kit/`: a PowerPoint template (opens in Keynote and imports into
+Canva) with eleven layouts matching the deck's page types, filled with the current
+`content.js`; every background rendered from the live globe (trips with a
+destination get their route); transparent globe cut-outs; the lockup, sparkmark and
+giving QR code; installable Fraunces and Manrope; and a README for each app. Re-run
+it after the trips are set. It needs Chrome, and Python with `fonttools` and
+`brotli` for the fonts (`FONT_PYTHON=/path/to/python npm run kit`).
+
+`src/plate.js` (built to `kit/.build/`) renders a page's background with no words;
+`kit/make-kit.mjs` screenshots those and builds the template; `kit/fonts.py` cuts
+static fonts at the deck's settings.
+
 ## Building
 
 The code lives in `src/`; `npm run build` bundles it into `show/deck.js` and
