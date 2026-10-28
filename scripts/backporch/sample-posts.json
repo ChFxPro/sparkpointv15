@@ -31,7 +31,7 @@
  {
   "id": "f1",
   "slug": "gala",
-  "title": "An Atlas of Wonders",
+  "title": "A World of Connections",
   "summary": "The SparkPoint Gala: a live auction of travel experiences at Connestee Falls Country Club, with part of every trip supporting the Transylvania Resilience Hub. Tickets are $100.",
   "kind": "gathering",
   "org": "sparkpoint",
@@ -51,7 +51,7 @@
    {
     "id": "g1",
     "type": "text",
-    "text": "See the world. Strengthen home.\n\nSave Friday, December 11 for an evening of travel stories and a live auction. Details at https://yoursparkpoint.org/events/sparkpoint-gala"
+    "text": "Every journey connects back home.\n\nSave Friday, December 11 for an evening of travel stories and a live auction. Details at https://yoursparkpoint.org/events/sparkpoint-gala"
    },
    {
     "id": "g2",

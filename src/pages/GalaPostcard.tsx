@@ -66,7 +66,7 @@ export function GalaPostcard() {
           </div>
 
           <span className="gala-postcard-divider" aria-hidden="true">
-            An Atlas of Wonders · Travel that gives back · Transylvania County, NC
+            A World of Connections · Travel that gives back · Transylvania County, NC
           </span>
 
           <div className="gala-postcard-address">

@@ -5,8 +5,9 @@ import { useReducedMotion } from 'motion/react';
 // before settling on its letter, staggered left to right, and every few
 // seconds one destination row "re-checks" itself so the board feels live.
 //
-// When the trip lineup is announced, put each destination in `DEPARTURES`
-// (16 characters max) — the board needs no other change.
+// The trips are numbered as connections. When the lineup is announced, put
+// each destination in `DEPARTURES` in place of its number (16 characters max,
+// e.g. 'KYOTO'); the board needs no other change.
 
 const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
@@ -24,7 +25,7 @@ interface Row {
 
 const GALA_ROW: Row = {
   flight: 'SPK1211',
-  destination: 'ATLAS OF WONDERS',
+  destination: 'SPARKPOINT GALA',
   time: 'DEC 11',
   status: 'ON TIME',
   highlight: true,
@@ -32,7 +33,7 @@ const GALA_ROW: Row = {
 
 const DEPARTURES: Row[] = Array.from({ length: 8 }, (_, index) => ({
   flight: `SPK10${index + 1}`,
-  destination: 'REVEALING SOON',
+  destination: `CONNECTION 0${index + 1}`,
   time: 'ANYTIME',
   status: 'AT AUCTION',
 }));
@@ -139,8 +140,8 @@ export function GalaDepartureBoard() {
   return (
     <div className="gala-board" ref={boardRef}>
       <p className="sr-only">
-        Departures board: An Atlas of Wonders, the SparkPoint Gala, flight SPK 1211, departs December 11 and is on
-        time. Eight travel experiences are listed, with destinations revealed soon, available
+        Departures board: A World of Connections, the SparkPoint Gala, flight SPK 1211, departs December 11 and is on
+        time. Eight travel experiences are listed as connections 01 to 08, with destinations revealed soon, available
         anytime with no blackout dates, and sold at auction.
       </p>
       <div className="gala-board-inner" aria-hidden="true">

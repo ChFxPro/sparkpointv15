@@ -118,7 +118,7 @@ export function GalaRouteMap() {
       <div className="gala-map-legend">
         <span><i className="is-out" /> The trips go out</span>
         <span><i className="is-home" /> The giveback comes home</span>
-        <span className="gala-map-note">Routes are illustrative. The eight destinations are announced before the Gala.</span>
+        <span className="gala-map-note">Routes are illustrative. The eight connections are announced before the Gala.</span>
       </div>
     </div>
   );

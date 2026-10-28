@@ -1,131 +1,187 @@
-/* An Atlas of Wonders lockup (GalaLockup.tsx). The wrapper's font-size is the
-   size of ATLAS; every other part is sized from it, with floors so the small
-   pieces stay legible when the lockup is small. */
+/* A World of Connections lockup (GalaLockup.tsx), ported value for value from
+   the approved kit: /Users/jeffbannister/Code/sparkpoint/Branding/Gala/
+   WorldOfConnections/lockup.html. The wrapper's font-size is the cap size of
+   WORLD; every other part is sized in em from it. The only additions are
+   pixel floors on the small lines, which only take effect when the lockup is
+   set small (under about 120px), so the byline stays legible on phones. */
 .gl {
+  --face: #f7f1e5;
+  --gap: #0b1322;
+  --edge: #d9b56a;
+  --acc: #d9b56a;
+  --by: #f1d9a0;
+  --line: rgba(241, 217, 160, 0.26);
+  --ray: rgba(217, 181, 106, 0.24);
+  --route: rgba(241, 217, 160, 0.85);
+
   position: relative;
   display: inline-grid;
   justify-items: center;
-  padding: 0.07em 0.05em 0;
-  color: #f7f1e5;
-  font-family: 'Fraunces Variable', 'Fraunces', Georgia, serif;
+  padding: 0.34em 0.3em 0;
+  font-family: 'Josefin Sans Variable', 'Josefin Sans', sans-serif;
   line-height: 1;
   text-align: center;
 }
 
-.gl-globe {
+.gl-light {
+  --face: #0b1322;
+  --gap: #f7f1e5;
+  --edge: #c25a8e;
+  --acc: #8e2a5c;
+  --by: #8a7754;
+  --line: rgba(27, 26, 31, 0.15);
+  --ray: rgba(138, 119, 84, 0.24);
+  --route: rgba(142, 42, 92, 0.72);
+}
+
+.gl > :not(.gl-art) {
+  position: relative;
+  display: block;
+}
+
+/* Art behind: globe, sunburst, and the three routes meeting at home. */
+.gl-art {
   position: absolute;
-  top: 50%;
+  top: 44%;
   left: 50%;
-  height: 122%;
+  height: 150%;
   aspect-ratio: 1;
   translate: -50% -50%;
+  overflow: visible;
   fill: none;
-  stroke: rgba(241, 217, 160, 0.26);
-  stroke-width: 0.7;
   pointer-events: none;
 }
 
-.gl > :not(.gl-globe) {
-  position: relative;
+.gl-art .gl-rays line {
+  stroke: var(--ray);
+  stroke-width: 0.6;
 }
 
-.gl-name {
+.gl-art .gl-globe * {
+  stroke: var(--line);
+  stroke-width: 0.6;
+}
+
+.gl-art .gl-route {
+  stroke: var(--route);
+  stroke-width: 1;
+  stroke-dasharray: 2.6 2.8;
+}
+
+.gl-art .gl-node {
+  fill: var(--route);
+}
+
+.gl-art .gl-home {
+  stroke: var(--route);
+  stroke-width: 0.9;
+}
+
+.gl .gl-name {
   margin: 0;
+  display: grid;
+  justify-items: center;
   font-size: 1em;
   font-weight: 400;
   line-height: 1;
 }
 
-.gl-an {
+.gl-name > span {
   display: block;
-  margin-bottom: 0.1em;
-  color: #f1d9a0;
-  font-size: max(0.22em, 1.1rem);
-  font-style: italic;
-  font-variation-settings: 'opsz' 144, 'SOFT' 100;
 }
 
-.gl-atlas {
-  display: block;
+/* Small italic "A". */
+.gl .gl-a {
+  margin-bottom: 0.2em;
+  color: var(--acc);
+  font-size: max(0.22em, 12px);
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+}
+
+/* WORLD: the dimensional letter = face, a thin gap line, then the offset edge. */
+.gl .gl-world {
   /* The trailing letter-space would push the word off centre. */
-  margin-right: -0.14em;
-  font-weight: 800;
-  letter-spacing: 0.14em;
+  margin-right: -0.26em;
+  color: var(--face);
+  font-size: 1em;
+  font-weight: 700;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
-  font-variation-settings: 'opsz' 144, 'SOFT' 0;
+  text-shadow:
+    0.045em 0.045em 0 var(--gap),
+    0.07em 0.07em 0 var(--edge);
 }
 
-.gl .gl-wonders {
-  display: block;
-  margin-top: 0.04em;
-  color: #d9b56a;
-  font-size: 0.62em;
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
-}
-
-.gl-rule {
+/* — OF CONNECTIONS — in spaced capitals between bars. */
+.gl .gl-conn {
   display: flex;
   align-items: center;
-  gap: 0.75em;
-  margin: 0.9em 0 0;
-  font-size: max(0.15em, 0.9rem);
-}
-
-.gl-rule span {
-  width: 4.5em;
-  height: 1px;
-  background: rgba(241, 217, 160, 0.6);
-}
-
-.gl-byline {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 4px 0.9em;
-  margin: 0.75em 0 0;
-  color: #f1d9a0;
-  /* The site's sans (see index.css). */
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: max(0.09em, 0.72rem);
-  font-weight: 800;
-  letter-spacing: 0.32em;
+  gap: 0.6em;
+  margin-top: 0.28em;
+  margin-right: -0.62em;
+  color: var(--acc);
+  font-size: max(0.2em, 11px);
+  font-weight: 400;
+  letter-spacing: 0.62em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
-/* Light tone, for cream and paper backgrounds. */
-.gl-light {
-  color: #0b1322;
+.gl .gl-conn::before,
+.gl .gl-conn::after {
+  content: '';
+  width: 2.6em;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.7;
 }
 
-.gl-light .gl-globe {
-  stroke: rgba(27, 26, 31, 0.2);
+/* Double-hairline rule, diamond stops, sparkmark. */
+.gl .gl-rule {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  margin-top: 0.55em;
+  font-size: max(0.13em, 8px);
 }
 
-.gl-light .gl-an,
-.gl-light .gl-wonders {
-  color: #8e2a5c;
+.gl-rule i {
+  width: 5em;
+  height: 5px;
+  border-top: 1px solid var(--by);
+  border-bottom: 1px solid var(--by);
+  opacity: 0.6;
 }
 
-.gl-light .gl-rule span {
-  background: rgba(138, 119, 84, 0.55);
+.gl-rule b {
+  width: 0.5em;
+  height: 0.5em;
+  rotate: 45deg;
+  border: 1px solid var(--by);
+  opacity: 0.7;
 }
 
-.gl-light .gl-byline {
-  color: #8a7754;
+.gl .gl-by {
+  margin-top: 0.6em;
+  margin-right: -0.44em;
+  color: var(--by);
+  font-size: max(0.1em, 12px);
+  font-weight: 600;
+  letter-spacing: 0.44em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
-/* On a phone a two-part byline takes two even lines instead of wrapping
-   mid-phrase. */
-@media (max-width: 560px) {
-  .gl-byline {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .gl-byline .gl-dot {
-    display: none;
-  }
+.gl .gl-by2 {
+  margin-top: 0.75em;
+  margin-right: -0.38em;
+  color: var(--by);
+  opacity: 0.85;
+  font-size: max(0.08em, 11px);
+  font-weight: 400;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }

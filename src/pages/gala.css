@@ -1,6 +1,7 @@
-/* The SparkPoint Gala — "See the world. Strengthen home."
-   Midnight + brass for the journey, ivory paper for travel documents,
-   evergreen for home. SparkPoint pink marks the giveback. */
+/* A World of Connections, the SparkPoint Gala — "Every journey connects back home."
+   Art Deco, all in Josefin Sans (kit: Branding/Gala/WorldOfConnections). Midnight +
+   brass for the journey, ivory paper for travel documents, evergreen for home.
+   SparkPoint pink marks the giveback and the buttons. No Fraunces on the Gala. */
 
 .gala-page {
   --gala-midnight: #0b1322;
@@ -14,7 +15,7 @@
   --gala-pink: #e03694;
   --gala-coral: #f15f48;
   --gala-evergreen: #10241d;
-  --gala-display: 'Fraunces Variable', 'Fraunces', Georgia, serif;
+  --gala-display: 'Josefin Sans Variable', 'Josefin Sans', sans-serif;
   --gala-mono: ui-monospace, 'SF Mono', 'Menlo', 'Consolas', monospace;
   color: var(--gala-ink);
   background: var(--gala-ivory);
@@ -30,24 +31,25 @@
 .gala-page h2 {
   text-wrap: balance;
   font-family: var(--gala-display);
-  font-weight: 400;
-  font-variation-settings: 'opsz' 144, 'SOFT' 50;
-  letter-spacing: -0.02em;
+  font-weight: 300;
+  letter-spacing: 0.02em;
 }
 
+/* As in the kit's tagline: the stressed words in Josefin 600 brass, upright. */
 .gala-page h1 em,
 .gala-page h2 em {
-  font-style: italic;
-  font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
+  font-style: normal;
+  font-weight: 600;
   color: var(--gala-brass);
 }
 
 .gala-label,
 .gala-kicker {
   color: var(--gala-brass);
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.22em;
+  font-family: var(--gala-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
 }
 
@@ -85,12 +87,15 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 13px 24px;
-  border: 1px solid transparent;
-  border-radius: 999px;
+  /* Deco buttons (kit): square corners, 1px brass border, Josefin 600 caps. */
+  padding: 15px 28px 13px;
+  border: 1px solid var(--gala-brass);
+  border-radius: 0;
+  font-family: var(--gala-display);
   font-size: 0.9rem;
-  font-weight: 760;
-  letter-spacing: 0.01em;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   text-decoration: none;
   transition:
     transform 180ms ease,
@@ -107,16 +112,17 @@
   height: 17px;
 }
 
+/* The primary button. (Class name kept from the Atlas build; it's pink now.) */
 .gala-button-gold {
-  color: var(--gala-midnight);
-  background: linear-gradient(135deg, var(--gala-brass-light), var(--gala-brass));
-  box-shadow: 0 12px 30px rgba(217, 181, 106, 0.28);
+  color: #fff;
+  background: var(--gala-pink);
+  box-shadow: 0 12px 30px rgba(224, 54, 148, 0.24);
 }
 
 .gala-button-ghost {
   color: var(--gala-ivory);
-  border-color: rgba(241, 217, 160, 0.38);
-  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(217, 181, 106, 0.6);
+  background: rgba(11, 19, 34, 0.25);
 }
 
 .gala-button-ghost:hover {
@@ -133,6 +139,29 @@
   background:
     radial-gradient(ellipse at 0% 100%, rgba(224, 54, 148, 0.14), transparent 45%),
     var(--gala-midnight-2);
+}
+
+/* Deco double-hairline frame (kit): inset 22px, a 6px outline offset, brass
+   at 50% and 28%. Reused on the closing section. */
+.gala-hero::after,
+.gala-close::after {
+  position: absolute;
+  inset: 22px;
+  z-index: 1;
+  content: '';
+  border: 1px solid rgba(217, 181, 106, 0.5);
+  outline: 1px solid rgba(217, 181, 106, 0.28);
+  outline-offset: 6px;
+  pointer-events: none;
+}
+
+/* On phones the frame moves out to the screen edge so it clears the text. */
+@media (max-width: 640px) {
+  .gala-hero::after,
+  .gala-close::after {
+    inset: 8px;
+    outline-offset: 4px;
+  }
 }
 
 .gala-hero-copy h1,
@@ -196,7 +225,7 @@
   gap: 8px 14px;
 }
 
-/* The evening's name, An Atlas of Wonders (GalaLockup). */
+/* The evening's name, A World of Connections (GalaLockup). */
 .gala-hero-lockup {
   margin-top: 6px;
   font-size: clamp(3.4rem, 10vw, 8.4rem);
@@ -208,12 +237,15 @@
   color: var(--gala-ivory);
   font-family: var(--gala-display);
   font-size: clamp(1.45rem, 2.6vw, 2rem);
-  font-style: italic;
-  font-variation-settings: 'opsz' 144, 'SOFT' 100;
+  font-weight: 300;
+  letter-spacing: 0.06em;
   text-shadow: 0 2px 24px rgba(11, 19, 34, 0.6);
 }
 
+/* Kit: "connects back home." in Josefin 600 brass. */
 .gala-hero-tagline em {
+  font-style: normal;
+  font-weight: 600;
   color: var(--gala-brass);
 }
 
@@ -851,7 +883,6 @@
   font-family: var(--gala-display);
   font-size: 1.9rem;
   font-style: italic;
-  font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
   transform: rotate(-4deg);
   transform-origin: left bottom;
 }
@@ -1481,7 +1512,6 @@
   font-family: var(--gala-display);
   font-size: 1.12rem;
   font-style: italic;
-  font-variation-settings: 'opsz' 36, 'SOFT' 100;
   line-height: 1.6;
 }
 
@@ -1500,7 +1530,6 @@
   align-items: center;
   gap: 8px;
   font-size: 1.5rem;
-  font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
   transform: rotate(-3deg);
   transform-origin: left center;
 }
@@ -1679,6 +1708,7 @@
 
 /* 6 — Boarding pass */
 .gala-close {
+  position: relative;
   padding: 110px 0 120px;
   color: var(--gala-ivory);
   background:
@@ -1738,8 +1768,8 @@
 
 .gala-button-plum {
   color: white;
-  background: linear-gradient(135deg, var(--gala-pink), #8e2a5c);
-  box-shadow: 0 12px 26px rgba(142, 42, 92, 0.25);
+  background: var(--gala-pink);
+  box-shadow: 0 12px 26px rgba(142, 42, 92, 0.22);
 }
 
 .gala-seatmap-legend {
