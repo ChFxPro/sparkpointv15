@@ -657,6 +657,7 @@
 /* The gala's save-the-date borrows its page's night-flight palette. */
 .sp-save-the-date {
   background: linear-gradient(160deg, #0b1322, #14213a);
+  font-family: 'Josefin Sans Variable', 'Josefin Sans', sans-serif;
 }
 
 .sp-save-the-date::before {

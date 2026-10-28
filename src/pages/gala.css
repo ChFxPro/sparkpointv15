@@ -16,9 +16,12 @@
   --gala-coral: #f15f48;
   --gala-evergreen: #10241d;
   --gala-display: 'Josefin Sans Variable', 'Josefin Sans', sans-serif;
-  --gala-mono: ui-monospace, 'SF Mono', 'Menlo', 'Consolas', monospace;
+  /* Machine type, kept only where the page imitates a machine: the split-flap
+     tiles and the passport's machine-readable line. Everything else is Josefin. */
+  --gala-machine: ui-monospace, 'SF Mono', 'Menlo', 'Consolas', monospace;
   color: var(--gala-ink);
   background: var(--gala-ivory);
+  font-family: var(--gala-display);
   overflow-x: clip;
 }
 
@@ -338,7 +341,7 @@
 .gala-board-clock {
   align-self: end;
   color: rgba(247, 241, 229, 0.72);
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 0.78rem;
   font-style: normal;
   letter-spacing: 0.14em;
@@ -354,7 +357,7 @@
 
 .gala-board-head {
   color: rgba(247, 241, 229, 0.75);
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -389,7 +392,7 @@
   background: linear-gradient(180deg, #0c0f16 0 49%, #07090e 51% 100%);
   border-radius: 3px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  font-family: var(--gala-mono);
+  font-family: var(--gala-machine);
   font-size: calc(var(--cell) * 0.8);
   font-weight: 700;
   line-height: 1;
@@ -498,7 +501,7 @@
 
 .gala-map-num {
   fill: var(--gala-brass-light);
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -737,7 +740,7 @@
 .gala-passport-fields dt,
 .gala-passport-sign small {
   color: #8a7754;
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -753,7 +756,7 @@
 .gala-passport-codes dd {
   margin-top: 2px;
   color: #2d2618;
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 0.86rem;
   font-weight: 700;
 }
@@ -825,7 +828,7 @@
 
 .gala-passport-seal text {
   fill: #8e2a5c;
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 8px;
   font-weight: 700;
   letter-spacing: 0.9px;
@@ -908,7 +911,7 @@
   padding: 12px 0 0;
   border-top: 1px solid #d8c7a1;
   color: #4d4433;
-  font-family: var(--gala-mono);
+  font-family: var(--gala-machine);
   font-size: clamp(0.6rem, 1.15vw, 0.82rem);
   letter-spacing: 0.12em;
   line-height: 1.7;
@@ -919,7 +922,7 @@
   position: absolute;
   bottom: 12px;
   color: #a8956d;
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 0.66rem;
   letter-spacing: 0.12em;
 }
@@ -1246,7 +1249,7 @@
 .gala-tag-card-head small,
 .gala-tag-route span {
   color: #8a7754;
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 0.58rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -1258,7 +1261,7 @@
   border: 1.5px solid currentColor;
   border-radius: 3px;
   color: #8e2a5c;
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 1.45rem;
   font-weight: 800;
   letter-spacing: 0.06em;
@@ -1465,7 +1468,7 @@
 .gala-postcard-place {
   margin-top: 10px;
   color: rgba(255, 248, 230, 0.85);
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.2em;
@@ -1541,7 +1544,7 @@
   padding-left: 6px;
   border-left: 1px solid #ddd0b4;
   color: #b3a07a;
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 0.52rem;
   letter-spacing: 0.2em;
   text-align: center;
@@ -1598,7 +1601,7 @@
 }
 
 .gala-postcard-stamp small {
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 0.48rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -1628,7 +1631,7 @@
 
 .gala-postcard-postmark text {
   fill: #2a2a33;
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 7.5px;
   font-weight: 700;
   letter-spacing: 0.8px;
@@ -1655,7 +1658,7 @@
 
 .gala-postcard-to span {
   color: #8a7754;
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 0.66rem;
   font-style: normal;
   letter-spacing: 0.12em;
@@ -1685,7 +1688,7 @@
 
 .gala-gives span {
   color: var(--gala-pink);
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -1754,7 +1757,7 @@
 
 .gala-partners-cta-label {
   color: #8e2a5c;
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 0.66rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -1811,7 +1814,7 @@
 .gala-seatmap-legend .is-status {
   margin-left: auto;
   color: #8a7754;
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 0.7rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -2054,7 +2057,7 @@
 .gala-pass-class small,
 .gala-pass-band-stub {
   color: rgba(247, 241, 229, 0.62);
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -2104,7 +2107,7 @@
 .gala-pass-note {
   display: block;
   color: #8a7754;
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -2178,7 +2181,7 @@
 
 .gala-pass-fields dd {
   margin-top: 4px;
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 1.02rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -2252,7 +2255,7 @@
 
 .gala-pass-code figcaption {
   color: #a8956d;
-  font-family: var(--gala-mono);
+  font-family: var(--gala-display);
   font-size: 0.58rem;
   font-weight: 700;
   letter-spacing: 0.16em;
