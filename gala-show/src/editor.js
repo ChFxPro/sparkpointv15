@@ -245,6 +245,8 @@ export function createEditor({ show, getIndex, go, rerender, relayout, flash }) 
     }
     const results = await Promise.all(rows.map(async (r) => ({ ...r, ok: await probe(r.file, r.kind) })));
     const bad = results.filter((r) => !r.ok);
+    // The loop renders still carry the old name until the new title is rendered.
+    const oldLoop = results.filter((r) => r.ok && /atlas-of-wonders/i.test(r.file));
     const trips = show.slides.filter((s) => s.type === 'trip' && !s.hidden);
     const noPlace = trips.filter((s) => !Number.isFinite(parseFloat(s.lat)) || !Number.isFinite(parseFloat(s.lon)));
     report.replaceChildren(
@@ -255,6 +257,7 @@ export function createEditor({ show, getIndex, go, rerender, relayout, flash }) 
           {},
           bad.map((r) => h('li', {}, h('button', { class: 'ed-link', onclick: () => go(r.i, { instant: true }) }, `Page ${r.i + 1}`), ` ${r.file}`))
         ),
+      oldLoop.length > 0 && h('p', { class: 'is-bad' }, `${oldLoop.length} loop file(s) still show the old name, An Atlas of Wonders. Swap in the World of Connections renders when they land.`),
       noPlace.length > 0 && h('p', { class: 'is-bad' }, `${noPlace.length} trip page(s) have no map location yet, so the globe won’t draw a route.`)
     );
   }

@@ -1,24 +1,13 @@
 // The show runner: loads the content from show/content.js, draws the current
 // page over the live globe, and handles the keys a presenter needs.
 import './deck.css';
-import frauncesNormal from '../../node_modules/@fontsource-variable/fraunces/files/fraunces-latin-full-normal.woff2';
-import frauncesItalic from '../../node_modules/@fontsource-variable/fraunces/files/fraunces-latin-full-italic.woff2';
-import manrope400 from '../../node_modules/@fontsource/manrope/files/manrope-latin-400-normal.woff2';
-import manrope600 from '../../node_modules/@fontsource/manrope/files/manrope-latin-600-normal.woff2';
-import manrope800 from '../../node_modules/@fontsource/manrope/files/manrope-latin-800-normal.woff2';
+import { injectFonts } from './fonts.js';
 import { createGlobe } from './globe.js';
 import { render, h, SPARKMARK } from './slides.js';
 import { TYPES, slideName } from './schema.js';
 import { createEditor } from './editor.js';
 
-// Fonts are inlined so the folder works offline and from file://.
-const fontCss = `
-@font-face{font-family:'Fraunces Show';src:url(${frauncesNormal}) format('woff2');font-weight:100 900;font-style:normal;font-display:block}
-@font-face{font-family:'Fraunces Show';src:url(${frauncesItalic}) format('woff2');font-weight:100 900;font-style:italic;font-display:block}
-@font-face{font-family:'Manrope Show';src:url(${manrope400}) format('woff2');font-weight:400;font-display:block}
-@font-face{font-family:'Manrope Show';src:url(${manrope600}) format('woff2');font-weight:600;font-display:block}
-@font-face{font-family:'Manrope Show';src:url(${manrope800}) format('woff2');font-weight:800;font-display:block}`;
-document.head.append(h('style', {}, fontCss));
+injectFonts();
 const favicon = h('link', { rel: 'icon', href: SPARKMARK });
 document.head.append(favicon);
 
@@ -34,7 +23,8 @@ const canvas = h('canvas', { class: 'globe' });
 const pages = h('div', { class: 'pages' });
 const blackout = h('div', { class: 'blackout' });
 const hint = h('div', { class: 'hint' });
-stage.append(canvas, pages);
+const frame = h('div', { class: 'frame' });
+stage.append(canvas, pages, frame);
 viewport.append(stage, blackout, hint);
 document.body.append(viewport);
 
@@ -93,6 +83,7 @@ function go(i, { fromBack = false, instant = false } = {}) {
     page.enter({ fromBack, reducedMotion });
   });
   globe.setPose(page.pose, { instant, route: page.route });
+  stage.classList.toggle('bare', slide.type === 'loop' || slide.type === 'video');
   editor.selected(i);
   try {
     sessionStorage.setItem('gala-show-index', String(i));

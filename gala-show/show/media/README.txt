@@ -11,4 +11,8 @@ The three Atlas files are in the "SP Gala 26" drive folder, under
 "Logo loop Render /delivery". Use the .mp4 files: Chrome can't play the
 ProRes .mov masters.
 
+Until the 3D loop is re-rendered with the new title, these files still say
+An Atlas of Wonders. When the A World of Connections renders land, copy them
+here and change the three file names on the loop page in the editor (E).
+
 In the editor, "Check media files" lists anything the show can't find.

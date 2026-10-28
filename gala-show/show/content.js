@@ -14,7 +14,7 @@ window.SHOW = {
       "id": "w499kso",
       "type": "title",
       "kicker": "Welcome to",
-      "tagline": "See the world. Strengthen home.",
+      "tagline": "Every journey *connects back home.*",
       "footer": "Connestee Falls · December 11, 2026"
     },
     {
@@ -109,8 +109,8 @@ window.SHOW = {
       "id": "whi3ui6",
       "type": "auction",
       "title": "The live travel auction",
-      "body": "Eight journeys tonight. Every one is travel that gives back to the Transylvania Resilience Hub.",
-      "footer": "See the world. Strengthen home."
+      "body": "Eight connections, one evening. Every one is travel that gives back to the Transylvania Resilience Hub.",
+      "footer": "Every journey connects back home."
     },
     {
       "id": "84ifqbi",

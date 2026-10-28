@@ -1,19 +1,17 @@
 """Make installable .ttf fonts for the template kit.
 
 Keynote, PowerPoint and Canva need ordinary installed fonts, and handle
-variable fonts badly. This cuts static fonts from the same Fraunces and
-Manrope files the deck uses, at the settings the deck uses, named so each
-family has Regular / Italic / Bold / Bold Italic the apps understand:
+variable fonts badly. This cuts static Josefin Sans (the Gala's one face)
+from the same variable file the deck uses, named so each family has the
+Regular / Italic / Bold / Bold Italic the apps understand:
 
-  Fraunces  Regular      weight 500, optical size 144, soft 50  (titles)
-            Italic       weight 400, optical size 144, soft 100, wonky ("of Wonders")
-            Bold         weight 700, optical size 144, soft 0   (big numbers)
-            Bold Italic  weight 700, optical size 144, soft 100
-  Manrope   Regular 400, Bold 800 (small capitals labels); Manrope SemiBold 600
+  Josefin Sans           Regular 400, Italic 400, Bold 700, Bold Italic 700
+  Josefin Sans Light     Regular 300, Italic 300   (the tagline, quotes)
+  Josefin Sans SemiBold  Regular 600, Italic 600   (titles, labels, figures)
 
-Both are SIL Open Font License fonts with no reserved names.
+Open Font License, no reserved names.
 
-Usage: python fonts.py <repo root> <output dir>   (needs fonttools and brotli)
+Usage: python fonts.py <gala-show dir> <output dir>   (needs fonttools and brotli)
 """
 import sys
 from pathlib import Path
@@ -21,12 +19,13 @@ from pathlib import Path
 from fontTools.ttLib import TTFont
 from fontTools.varLib.instancer import instantiateVariableFont
 
-repo = Path(sys.argv[1])
+app = Path(sys.argv[1])
 out = Path(sys.argv[2])
 out.mkdir(parents=True, exist_ok=True)
 
-FR = repo / "node_modules/@fontsource-variable/fraunces/files"
-MR = repo / "node_modules/@fontsource/manrope/files"
+JS = app / "node_modules/@fontsource-variable/josefin-sans"
+NORMAL = JS / "files/josefin-sans-latin-wght-normal.woff2"
+ITALIC = JS / "files/josefin-sans-latin-wght-italic.woff2"
 
 
 def name(font, family, style, weight, italic, bold):
@@ -52,28 +51,23 @@ def name(font, family, style, weight, italic, bold):
         del font["STAT"]
 
 
-def cut(src, axes, family, style, weight, italic, bold):
+def cut(src, wght, family, style, weight, italic, bold):
     font = TTFont(src)
     font.flavor = None
-    if "fvar" in font:
-        present = {a.axisTag for a in font["fvar"].axes}
-        font = instantiateVariableFont(font, {k: v for k, v in axes.items() if k in present})
+    font = instantiateVariableFont(font, {"wght": wght})
     name(font, family, style, weight, italic, bold)
     path = out / f"{family.replace(' ', '')}-{style.replace(' ', '')}.ttf"
     font.save(path)
     print(path.name)
 
 
-cut(FR / "fraunces-latin-full-normal.woff2", {"wght": 500, "opsz": 144, "SOFT": 50, "WONK": 0}, "Fraunces", "Regular", 400, False, False)
-cut(FR / "fraunces-latin-full-italic.woff2", {"wght": 400, "opsz": 144, "SOFT": 100, "WONK": 1}, "Fraunces", "Italic", 400, True, False)
-cut(FR / "fraunces-latin-full-normal.woff2", {"wght": 700, "opsz": 144, "SOFT": 0, "WONK": 0}, "Fraunces", "Bold", 700, False, True)
-cut(FR / "fraunces-latin-full-italic.woff2", {"wght": 700, "opsz": 144, "SOFT": 100, "WONK": 1}, "Fraunces", "Bold Italic", 700, True, True)
-cut(MR / "manrope-latin-400-normal.woff2", {}, "Manrope", "Regular", 400, False, False)
-cut(MR / "manrope-latin-800-normal.woff2", {}, "Manrope", "Bold", 700, False, True)
-cut(MR / "manrope-latin-600-normal.woff2", {}, "Manrope SemiBold", "Regular", 400, False, False)
+cut(NORMAL, 400, "Josefin Sans", "Regular", 400, False, False)
+cut(ITALIC, 400, "Josefin Sans", "Italic", 400, True, False)
+cut(NORMAL, 700, "Josefin Sans", "Bold", 700, False, True)
+cut(ITALIC, 700, "Josefin Sans", "Bold Italic", 700, True, True)
+cut(NORMAL, 300, "Josefin Sans Light", "Regular", 300, False, False)
+cut(ITALIC, 300, "Josefin Sans Light", "Italic", 300, True, False)
+cut(NORMAL, 600, "Josefin Sans SemiBold", "Regular", 600, False, False)
+cut(ITALIC, 600, "Josefin Sans SemiBold", "Italic", 600, True, False)
 
-(out / "OFL.txt").write_text(
-    (repo / "node_modules/@fontsource-variable/fraunces/LICENSE").read_text()
-    + "\n\n"
-    + (repo / "node_modules/@fontsource/manrope/LICENSE").read_text()
-)
+(out / "OFL.txt").write_text((JS / "LICENSE").read_text())

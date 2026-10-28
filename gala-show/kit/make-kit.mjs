@@ -2,11 +2,11 @@
 // Keynote, PowerPoint or Canva that match the show deck.
 //
 //   output/gala-show-kit/
-//     Atlas of Wonders - Show Template.pptx   layouts + the current run of show
+//     A World of Connections - Show Template.pptx   layouts + the current run of show
 //     Backgrounds/      every page's background, rendered from the live globe
 //     Globe cut-outs/   the globe alone, transparent, three sides of the world
 //     Logos/            the lockup for dark and light grounds, the sparkmark
-//     Fonts/            Fraunces and Manrope, to install (OFL)
+//     Fonts/            Josefin Sans, to install (OFL)
 //     QR code/          the giving QR code
 //     README.txt        how to use it in each app
 //
@@ -100,12 +100,12 @@ for (const [name, lon] of [
 await browser.close();
 
 // --- 2. Logos, QR code, fonts ---------------------------------------------------
-copyFileSync(resolve(repo, 'scripts/gala-invitation/assets/atlas-of-wonders-lockup-for-dark-backgrounds.png'), resolve(LOGOS, 'Atlas of Wonders lockup - for dark backgrounds.png'));
-copyFileSync(resolve(repo, 'scripts/gala-invitation/assets/atlas-of-wonders-lockup-for-light-backgrounds.png'), resolve(LOGOS, 'Atlas of Wonders lockup - for light backgrounds.png'));
+// From Branding/Gala/WorldOfConnections/logo (copied into kit/assets).
+copyFileSync(resolve(here, 'assets/world-of-connections-lockup-for-dark-backgrounds.png'), resolve(LOGOS, 'A World of Connections lockup - for dark backgrounds.png'));
+copyFileSync(resolve(here, 'assets/world-of-connections-lockup-for-light-backgrounds.png'), resolve(LOGOS, 'A World of Connections lockup - for cream backgrounds only.png'));
 const sharp = require(resolve(repo, 'node_modules/sharp'));
 const SPARK = resolve(LOGOS, 'SparkPoint sparkmark.png');
 await sharp(resolve(repo, 'public/assets/brand/sparkmark-256.webp')).png().toFile(SPARK);
-const LOCKUP = resolve(LOGOS, 'Atlas of Wonders lockup - for dark backgrounds.png');
 
 const thanks = SHOW.slides.find((s) => s.type === 'thanks');
 const qrUrl = (thanks && thanks.qrUrl) || 'https://yoursparkpoint.org/donations';
@@ -115,7 +115,7 @@ writeFileSync(resolve(QR, 'Giving QR code.svg'), await QRCode.toString(qrUrl, { 
 writeFileSync(resolve(QR, 'Where it goes.txt'), `${qrUrl}\n`);
 
 try {
-  execFileSync(process.env.FONT_PYTHON || 'python3', [resolve(here, 'fonts.py'), repo, FONTS], { stdio: 'inherit' });
+  execFileSync(process.env.FONT_PYTHON || 'python3', [resolve(here, 'fonts.py'), app, FONTS], { stdio: 'inherit' });
 } catch {
   console.warn('\n! Fonts skipped: needs Python with fonttools and brotli (pip install fonttools brotli), or set FONT_PYTHON.\n');
 }
@@ -138,46 +138,70 @@ const COL = {
   plum: '8E2A5C',
   rule: '8A8067', // brass-light at 55% over night
 };
-const HEAD = 'Fraunces';
-const BODY = 'Manrope';
+// One face, Josefin Sans, in three installed families (kit/fonts.py).
+const HEAD = 'Josefin Sans SemiBold'; // titles (spaced capitals), labels, figures
+const BODY = 'Josefin Sans'; // reading text
+const LIGHT = 'Josefin Sans Light'; // the tagline, quotes
 
 const pres = new PptxGenJS();
 pres.layout = 'LAYOUT_WIDE';
-pres.title = 'An Atlas of Wonders — Show Template';
+pres.title = 'A World of Connections — Show Template';
 pres.author = 'SparkPoint';
 pres.company = 'SparkPoint';
 pres.theme = { headFontFace: HEAD, bodyFontFace: BODY };
 
-// The sparkmark rule under titles: line, star, line.
+// The Gala's rule: a double hairline, a diamond, the sparkmark, a diamond,
+// a double hairline (as in the deck and the lockup).
 function rule(cx, y, { align = 'center' } = {}) {
-  const star = 0.24;
+  const star = 0.25;
   const len = px(120);
-  const gap = px(22);
-  let x0;
-  if (align === 'left') x0 = cx;
-  else x0 = cx - (len * 2 + gap * 2 + star) / 2;
-  return [
-    { line: { x: x0, y: y + star / 2, w: len, h: 0, line: { color: COL.rule, width: 0.75 } } },
-    { image: { x: x0 + len + gap, y, w: star, h: star, path: SPARK } },
-    { line: { x: x0 + len + gap * 2 + star, y: y + star / 2, w: len, h: 0, line: { color: COL.rule, width: 0.75 } } },
+  const gap = px(17);
+  const dia = 0.085;
+  const total = len * 2 + gap * 4 + dia * 2 + star;
+  const x0 = align === 'left' ? cx : cx - total / 2;
+  const mid = y + star / 2;
+  const hair = (x) => [
+    { line: { x, y: mid - 0.017, w: len, h: 0, line: { color: COL.rule, width: 0.6 } } },
+    { line: { x, y: mid + 0.017, w: len, h: 0, line: { color: COL.rule, width: 0.6 } } },
   ];
+  const diamond = (x) => ({ rect: { x, y: mid - dia / 2, w: dia, h: dia, rotate: 45, fill: { type: 'none' }, line: { color: COL.rule, width: 0.6 } } });
+  let x = x0;
+  const out = [...hair(x)];
+  x += len + gap;
+  out.push(diamond(x));
+  x += dia + gap;
+  out.push({ image: { x, y, w: star, h: star, path: SPARK } });
+  x += star + gap;
+  out.push(diamond(x));
+  x += dia + gap;
+  out.push(...hair(x));
+  return out;
 }
+
+// The Deco double frame the deck draws round every page but the loop and videos.
+const FRAME = [
+  { rect: { x: px(30), y: px(30), w: W - px(60), h: 7.5 - px(60), fill: { type: 'none' }, line: { color: COL.brass, width: 0.75, transparency: 50 } } },
+  { rect: { x: px(21), y: px(21), w: W - px(42), h: 7.5 - px(42), fill: { type: 'none' }, line: { color: COL.brass, width: 0.75, transparency: 72 } } },
+];
 
 const ph = (name, type, x, y, w, h, opts, prompt) => ({
   placeholder: { options: { name, type, x, y, w, h, margin: 0, color: COL.ivory, fontFace: BODY, ...opts }, text: prompt },
 });
-const label = { fontFace: BODY, bold: true, color: COL.brass, charSpacing: 3 };
-const title = (size) => ({ fontFace: HEAD, fontSize: size, color: COL.ivory, align: 'left', valign: 'bottom', lineSpacingMultiple: 0.95 });
+const label = { fontFace: HEAD, color: COL.brass, charSpacing: 4 };
+// Titles are spaced capitals like WORLD; the fill code passes them in capitals.
+const title = (size) => ({ fontFace: HEAD, fontSize: size, color: COL.ivory, align: 'left', valign: 'bottom', charSpacing: Math.round(size * 0.12), lineSpacingMultiple: 1.0 });
 const bg = (key) => ({ path: bgFile[key] });
 
+// The cover's background already carries the lockup with the globe behind it
+// (rendered from the deck), so only the words around it are editable.
 pres.defineSlideMaster({
   title: 'Cover',
   background: bg('cover'),
   objects: [
-    { image: { x: (W - 6.2) / 2, y: 0.95, w: 6.2, h: 6.2 * (1202 / 1730), path: LOCKUP } },
-    ph('kicker', 'body', 1, 0.62, W - 2, 0.4, { ...label, fontSize: 15, color: COL.brassLight, align: 'center', charSpacing: 4 }, 'LINE ABOVE (OPTIONAL)'),
-    ph('tagline', 'body', 1, 5.35, W - 2, 0.6, { fontFace: HEAD, italic: true, fontSize: 27, align: 'center' }, 'Tagline'),
-    ph('footer', 'body', 1, 6.65, W - 2, 0.4, { ...label, fontSize: 13, color: COL.brassLight, align: 'center' }, 'LINE ALONG THE BOTTOM (OPTIONAL)'),
+    ...FRAME,
+    ph('kicker', 'body', 1, 0.95, W - 2, 0.4, { ...label, fontSize: 15, color: COL.brassLight, align: 'center', charSpacing: 5 }, 'LINE ABOVE (OPTIONAL)'),
+    ph('tagline', 'body', 1, 5.5, W - 2, 0.65, { fontFace: LIGHT, fontSize: 26, align: 'center', charSpacing: 1.5 }, 'Tagline'),
+    ph('footer', 'body', 1, 6.7, W - 2, 0.4, { ...label, fontSize: 13, color: COL.brassLight, align: 'center', charSpacing: 4 }, 'LINE ALONG THE BOTTOM (OPTIONAL)'),
   ],
 });
 
@@ -185,10 +209,11 @@ pres.defineSlideMaster({
   title: 'Section',
   background: bg('divider'),
   objects: [
-    ph('number', 'body', px(140), 1.0, 6, 0.45, { fontFace: HEAD, italic: true, fontSize: 22, color: COL.brass }, 'One'),
-    ph('title', 'title', px(140), 1.55, 5.6, 2.7, { ...title(54), valign: 'top' }, 'Section title'),
-    ...rule(px(140), 4.4, { align: 'left' }),
-    ph('subtitle', 'body', px(140), 4.9, 5.5, 1.6, { fontSize: 18, color: COL.brassLight, valign: 'top' }, 'Subtitle (optional)'),
+    ...FRAME,
+    ph('number', 'body', px(140), 1.0, 6, 0.45, { ...label, fontSize: 15, charSpacing: 6 }, 'ONE'),
+    ph('title', 'title', px(140), 1.55, 5.6, 2.7, { ...title(46), valign: 'top' }, 'SECTION TITLE'),
+    ...rule(px(140), 4.0, { align: 'left' }),
+    ph('subtitle', 'body', px(140), 4.5, 5.5, 1.6, { fontSize: 18, color: COL.brassLight, valign: 'top' }, 'Subtitle (optional)'),
   ],
 });
 
@@ -196,9 +221,10 @@ pres.defineSlideMaster({
   title: 'List',
   background: bg('programme'),
   objects: [
-    ph('title', 'title', px(140), 0.55, 8, 0.95, title(46), 'Title'),
+    ...FRAME,
+    ph('title', 'title', px(140), 0.55, 8, 0.95, title(33), 'TITLE'),
     ...rule(px(140), 1.68, { align: 'left' }),
-    ph('body', 'body', px(140), 2.15, 8.2, 4.7, { fontSize: 22, valign: 'top', paraSpaceAfter: 10 }, 'Items'),
+    ph('body', 'body', px(140), 2.15, 8.2, 4.7, { fontSize: 23, valign: 'top', paraSpaceAfter: 10 }, 'Items'),
   ],
 });
 
@@ -206,7 +232,8 @@ pres.defineSlideMaster({
   title: 'Numbers',
   background: bg('numbers'),
   objects: [
-    ph('title', 'title', 1, 0.55, W - 2, 0.95, { ...title(46), align: 'center' }, 'Title'),
+    ...FRAME,
+    ph('title', 'title', 1, 0.55, W - 2, 0.95, { ...title(33), align: 'center' }, 'TITLE'),
     ...rule(W / 2, 1.68),
     ph('footer', 'body', 1, 6.75, W - 2, 0.35, { ...label, fontSize: 12, color: COL.brassLight, align: 'center' }, 'FOOTNOTE (OPTIONAL)'),
   ],
@@ -216,8 +243,9 @@ pres.defineSlideMaster({
   title: 'People',
   background: bg('content'),
   objects: [
-    ph('title', 'title', 1, 0.55, W - 2, 0.95, { ...title(46), align: 'center' }, 'Title'),
-    ph('subtitle', 'body', 1, 1.5, W - 2, 0.4, { fontSize: 16, bold: true, color: COL.brassLight, align: 'center' }, 'Line under the title (optional)'),
+    ...FRAME,
+    ph('title', 'title', 1, 0.55, W - 2, 0.95, { ...title(33), align: 'center' }, 'TITLE'),
+    ph('subtitle', 'body', 1, 1.5, W - 2, 0.4, { fontFace: HEAD, fontSize: 16, color: COL.brassLight, align: 'center' }, 'Line under the title (optional)'),
     ...rule(W / 2, 2.0),
   ],
 });
@@ -226,7 +254,8 @@ pres.defineSlideMaster({
   title: 'Auction',
   background: bg('auction'),
   objects: [
-    ph('title', 'title', 1, 1.6, W - 2, 2.1, { ...title(70), align: 'center' }, 'Title'),
+    ...FRAME,
+    ph('title', 'title', 1, 1.6, W - 2, 2.1, { ...title(50), align: 'center' }, 'TITLE'),
     ...rule(W / 2, 3.95),
     ph('body', 'body', 2, 4.45, W - 4, 1.6, { fontSize: 20, align: 'center', valign: 'top' }, 'Text'),
     ph('footer', 'body', 1, 6.65, W - 2, 0.4, { ...label, fontSize: 13, color: COL.brassLight, align: 'center' }, 'LINE ALONG THE BOTTOM (OPTIONAL)'),
@@ -237,12 +266,13 @@ pres.defineSlideMaster({
   title: 'Trip',
   background: bg('trip'),
   objects: [
-    ph('lot', 'body', px(120), 0.62, 6.3, 0.35, { ...label, fontSize: 14 }, 'LOT 1  —  DESTINATION'),
-    ph('title', 'title', px(120), 1.0, 6.3, 1.75, title(52), 'Trip name'),
+    ...FRAME,
+    ph('lot', 'body', px(120), 0.62, 6.3, 0.35, { ...label, fontSize: 14, charSpacing: 5 }, 'CONNECTION 01  —  DESTINATION'),
+    ph('title', 'title', px(120), 1.0, 6.3, 1.75, title(40), 'TRIP NAME'),
     ...rule(px(120), 2.95, { align: 'left' }),
-    ph('body', 'body', px(120), 3.4, 6.3, 2.55, { fontSize: 16, valign: 'top', paraSpaceAfter: 6 }, 'Short description, then what’s included'),
-    ph('value', 'body', px(120), 6.1, 3, 0.75, { fontFace: HEAD, bold: true, fontSize: 24, valign: 'bottom' }, 'Value'),
-    ph('opening', 'body', px(120) + 3.1, 6.1, 3, 0.75, { fontFace: HEAD, bold: true, fontSize: 24, valign: 'bottom' }, 'Opening bid'),
+    ph('body', 'body', px(120), 3.4, 6.3, 2.55, { fontSize: 17, valign: 'top', paraSpaceAfter: 6 }, 'Short description, then what’s included'),
+    ph('value', 'body', px(120), 6.1, 3, 0.75, { fontFace: HEAD, fontSize: 24, valign: 'bottom' }, 'Value'),
+    ph('opening', 'body', px(120) + 3.1, 6.1, 3, 0.75, { fontFace: HEAD, fontSize: 24, valign: 'bottom' }, 'Opening bid'),
   ],
 });
 
@@ -250,7 +280,8 @@ pres.defineSlideMaster({
   title: 'Words',
   background: bg('content'),
   objects: [
-    ph('title', 'title', 1, 0.9, W - 2, 2.4, { ...title(60), align: 'center' }, 'Heading'),
+    ...FRAME,
+    ph('title', 'title', 1, 0.9, W - 2, 2.4, { ...title(43), align: 'center' }, 'HEADING'),
     ...rule(W / 2, 3.55),
     ph('body', 'body', 2, 4.05, W - 4, 1.7, { fontSize: 20, align: 'center', valign: 'top' }, 'Text (optional)'),
     ph('attribution', 'body', 1, 5.85, W - 2, 0.4, { ...label, fontSize: 14, color: COL.brassLight, align: 'center' }, 'ATTRIBUTION (OPTIONAL)'),
@@ -261,7 +292,8 @@ pres.defineSlideMaster({
   title: 'Thank you',
   background: bg('thanks'),
   objects: [
-    ph('title', 'title', 6.55, 0.85, 6.1, 1.5, title(64), 'Thank you'),
+    ...FRAME,
+    ph('title', 'title', 6.55, 0.85, 6.1, 1.5, title(52), 'THANK YOU'),
     ...rule(6.55, 2.6, { align: 'left' }),
     ph('body', 'body', 6.55, 3.05, 6.1, 1.4, { fontSize: 19, valign: 'top' }, 'Text'),
   ],
@@ -270,14 +302,15 @@ pres.defineSlideMaster({
 pres.defineSlideMaster({
   title: 'Video',
   background: { color: '000000' },
-  objects: [ph('title', 'title', 1, 3.2, W - 2, 1, { ...title(40), align: 'center', valign: 'middle', color: COL.brassLight }, 'Video title (cover it with the video)')],
+  objects: [ph('title', 'title', 1, 3.2, W - 2, 1, { ...title(30), align: 'center', valign: 'middle', color: COL.brassLight }, 'VIDEO TITLE (COVER IT WITH THE VIDEO)')],
 });
 
 pres.defineSlideMaster({
   title: 'Plain',
   background: bg('plain'),
   objects: [
-    ph('title', 'title', px(140), 0.55, W - 2 * px(140), 0.95, title(46), 'Title'),
+    ...FRAME,
+    ph('title', 'title', px(140), 0.55, W - 2 * px(140), 0.95, title(33), 'TITLE'),
     ...rule(px(140), 1.68, { align: 'left' }),
     ph('body', 'body', px(140), 2.15, W - 2 * px(140), 4.7, { fontSize: 20, valign: 'top' }, 'Text'),
   ],
@@ -290,6 +323,18 @@ const put = (slide, name, text, opts = {}) => {
 };
 // Labels are spaced capitals, as in the deck (which sets them with CSS).
 const caps = (t) => (t ? String(t).toUpperCase() : t);
+// "Connection 01": trips are numbered as connections (as in the deck).
+const connection = (lot) => {
+  const n = String(lot ?? '').trim();
+  return n ? `Connection ${/^\d$/.test(n) ? `0${n}` : n}` : 'Connection';
+};
+// *Stars* in the tagline set that phrase in SemiBold brass, as on the title page.
+const tagline = (t) =>
+  t &&
+  String(t)
+    .split(/\*([^*]+)\*/)
+    .filter((part) => part)
+    .map((part) => (String(t).includes(`*${part}*`) ? { text: part, options: { fontFace: HEAD, color: COL.brass } } : { text: part }));
 const paras = (t) => String(t || '').split(/\n+/).map((p) => p.trim()).filter(Boolean);
 
 const LOOP_NOTE = (s) =>
@@ -324,23 +369,23 @@ for (const s of SHOW.slides) {
   } else if (s.type === 'title') {
     const slide = add('Cover');
     put(slide, 'kicker', caps(s.kicker));
-    put(slide, 'tagline', s.tagline);
+    put(slide, 'tagline', tagline(s.tagline));
     put(slide, 'footer', caps(s.footer));
   } else if (s.type === 'divider') {
     const slide = add('Section');
-    put(slide, 'number', s.number);
-    put(slide, 'title', s.title);
+    put(slide, 'number', caps(s.number));
+    put(slide, 'title', caps(s.title));
     put(slide, 'subtitle', s.subtitle);
   } else if (s.type === 'programme') {
     const slide = add('List');
-    put(slide, 'title', s.title);
+    put(slide, 'title', caps(s.title));
     const rows = lines(s.items).map((l) => {
       const [time, what] = parts(l);
       const t = what === undefined ? '' : time;
       const w = what === undefined ? time : what;
       return [
-        { text: t, options: { fontFace: HEAD, italic: true, color: COL.brass, fontSize: 22 } },
-        { text: w, options: { fontFace: BODY, bold: true, color: COL.ivory, fontSize: 22 } },
+        { text: t, options: { fontFace: HEAD, color: COL.brass, fontSize: 23, charSpacing: 1 } },
+        { text: w, options: { fontFace: BODY, color: COL.ivory, fontSize: 23 } },
       ];
     });
     if (rows.length)
@@ -357,7 +402,7 @@ for (const s of SHOW.slides) {
       });
   } else if (s.type === 'numbers') {
     const slide = add('Numbers');
-    put(slide, 'title', s.title);
+    put(slide, 'title', caps(s.title));
     put(slide, 'footer', caps(s.note));
     const stats = lines(s.stats).slice(0, 6);
     const cols = stats.length === 4 || stats.length === 2 ? 2 : Math.min(3, stats.length);
@@ -369,16 +414,16 @@ for (const s of SHOW.slides) {
       const [num, lab] = parts(l);
       const x = (W - gridW) / 2 + (i % cols) * cellW;
       const y = top + Math.floor(i / cols) * 2.05;
-      slide.addText(num, { x, y, w: cellW, h: 1.05, margin: 0, align: 'center', valign: 'bottom', fontFace: HEAD, bold: true, fontSize: stats.length > 4 ? 52 : 60, color: COL.brassLight, isTextBox: true, objectName: `Figure ${i + 1}` });
-      slide.addText(lab || '', { x, y: y + 1.1, w: cellW, h: 0.6, margin: 0, align: 'center', valign: 'top', fontFace: BODY, bold: true, fontSize: 15, color: COL.ivory, isTextBox: true, objectName: `Figure ${i + 1} label` });
+      slide.addText(num, { x, y, w: cellW, h: 1.05, margin: 0, align: 'center', valign: 'bottom', fontFace: HEAD, fontSize: stats.length > 4 ? 52 : 60, color: COL.brassLight, isTextBox: true, objectName: `Figure ${i + 1}` });
+      slide.addText(lab || '', { x, y: y + 1.1, w: cellW, h: 0.6, margin: 0, align: 'center', valign: 'top', fontFace: BODY, fontSize: 16, color: COL.ivory, isTextBox: true, objectName: `Figure ${i + 1} label` });
     });
   } else if (s.type === 'video') {
     const slide = add('Video');
-    put(slide, 'title', s.title);
+    put(slide, 'title', caps(s.title));
     slide.addNotes(`VIDEO. Insert > Video, choose ${s.video || 'the video file'}, make it fill the slide (it covers the title), and set it to play automatically.`);
   } else if (s.type === 'people' || s.type === 'sponsors') {
     const slide = add('People');
-    put(slide, 'title', s.title);
+    put(slide, 'title', caps(s.title));
     put(slide, 'subtitle', s.subtitle);
     const list = lines(s.type === 'people' ? s.people : s.sponsors);
     const cols = list.length > 12 ? 4 : list.length > 6 ? 3 : list.length > 3 ? 2 : 1;
@@ -390,25 +435,25 @@ for (const s of SHOW.slides) {
       const inRow = Math.min(cols, list.length - row * cols);
       const x = (W - inRow * cellW) / 2 + (i % cols) * cellW;
       const y = 2.5 + row * rowH;
-      const runs = [{ text: name, options: { fontFace: HEAD, fontSize: list.length > 12 ? 20 : 24, color: COL.ivory, breakLine: Boolean(role && s.type === 'people') } }];
-      if (role && s.type === 'people') runs.push({ text: role, options: { fontFace: BODY, bold: true, fontSize: 13, color: COL.brassLight } });
+      const runs = [{ text: name, options: { fontFace: HEAD, fontSize: list.length > 12 ? 19 : 22, color: COL.ivory, breakLine: Boolean(role && s.type === 'people') } }];
+      if (role && s.type === 'people') runs.push({ text: role, options: { fontFace: BODY, fontSize: 13, color: COL.brassLight } });
       slide.addText(runs, { x, y, w: cellW, h: rowH - 0.1, margin: 0, align: 'center', valign: 'top', isTextBox: true, objectName: name });
     });
     if (s.type === 'sponsors')
       slide.addNotes('SPONSORS. Hidden until sponsors are confirmed: right-click the slide and choose Show Slide (Keynote: uncheck Skip Slide). Logos can go in place of names.');
   } else if (s.type === 'auction') {
     const slide = add('Auction');
-    put(slide, 'title', s.title);
+    put(slide, 'title', caps(s.title));
     put(slide, 'body', s.body);
     put(slide, 'footer', caps(s.footer));
   } else if (s.type === 'trip') {
     const slide = add('Trip');
     if (hasPlace(s)) slide.background = { path: bgFile[`trip:${s.id}`] };
-    put(slide, 'lot', [s.lot ? `LOT ${s.lot}` : 'LOT', s.place ? `  —  ${s.place.toUpperCase()}` : ''].join(''));
-    put(slide, 'title', s.title);
+    put(slide, 'lot', [connection(s.lot).toUpperCase(), s.place ? `  —  ${s.place.toUpperCase()}` : ''].join(''));
+    put(slide, 'title', caps(s.title));
     const body = [
       ...paras(s.blurb).map((p, i, a) => ({ text: p, options: { breakLine: true, paraSpaceAfter: 8 } })),
-      ...lines(s.details).map((d) => ({ text: d, options: { bullet: { indent: 16 }, bold: true, breakLine: true } })),
+      ...lines(s.details).map((d) => ({ text: d, options: { bullet: { indent: 16 }, breakLine: true } })),
     ];
     if (body.length) {
       delete body[body.length - 1].options.breakLine;
@@ -418,7 +463,7 @@ for (const s of SHOW.slides) {
     if (s.opening) slide.addText([{ text: 'OPENING BID', options: { ...label, fontSize: 11, breakLine: true } }, { text: s.opening }], { placeholder: 'opening' });
     const missing = [!s.title && 'trip name', !hasPlace(s) && 'latitude and longitude'].filter(Boolean);
     slide.addNotes(
-      `TRIP${s.lot ? ` — LOT ${s.lot}` : ''}.` +
+      `TRIP — ${connection(s.lot).toUpperCase()}${s.lot ? ` (lot ${s.lot})` : ''}.` +
         (hasPlace(s) ? ' The background shows the route from Brevard.' : ' The background is the plain trip globe; once the destination is set, re-run the kit for a background with its route, or use the deck.') +
         (missing.length ? ` Still needed: ${missing.join(', ')}.` : '') +
         (s.donor ? ` Donated by ${s.donor}.` : '') +
@@ -426,26 +471,28 @@ for (const s of SHOW.slides) {
     );
   } else if (s.type === 'text') {
     const slide = add('Words');
-    put(slide, 'title', s.title, s.attribution ? { italic: true } : {});
+    // A quote is light italic in its own words; a heading is spaced capitals.
+    if (s.attribution) put(slide, 'title', s.title, { fontFace: LIGHT, italic: true, charSpacing: 0 });
+    else put(slide, 'title', caps(s.title));
     put(slide, 'body', s.body);
     put(slide, 'attribution', caps(s.attribution));
   } else if (s.type === 'thanks') {
     const slide = add('Thank you');
-    put(slide, 'title', s.title);
+    put(slide, 'title', caps(s.title));
     put(slide, 'body', s.body);
     if (s.qrUrl) {
       const y = 4.65;
-      slide.addShape(pres.ShapeType.roundRect, { x: 6.55, y, w: 5.6, h: 1.95, rectRadius: 0.12, fill: { color: COL.ivory }, line: { type: 'none' }, objectName: 'QR card' });
+      slide.addShape(pres.ShapeType.rect, { x: 6.55, y, w: 5.6, h: 1.95, fill: { color: COL.ivory }, line: { type: 'none' }, objectName: 'QR card' });
       slide.addImage({ path: QR_PNG, x: 6.55 + 0.2, y: y + 0.2, w: 1.55, h: 1.55, altText: `QR code for ${s.qrUrl}`, objectName: 'QR code' });
       // A long address breaks after its last slash rather than mid-word.
       const addr = String(s.qrLabel || s.qrUrl);
       const cut = addr.length > 26 ? addr.lastIndexOf('/') + 1 : 0;
-      slide.addText(cut ? [{ text: addr.slice(0, cut), options: { breakLine: true } }, { text: addr.slice(cut) }] : addr, { x: 6.55 + 1.95, y: y + 0.2, w: 3.45, h: 1.55, margin: 0, valign: 'middle', fontFace: BODY, bold: true, fontSize: 17, color: COL.night, isTextBox: true, objectName: 'QR address' });
+      slide.addText(cut ? [{ text: addr.slice(0, cut), options: { breakLine: true } }, { text: addr.slice(cut) }] : addr, { x: 6.55 + 1.95, y: y + 0.2, w: 3.45, h: 1.55, margin: 0, valign: 'middle', fontFace: HEAD, fontSize: 17, color: COL.night, isTextBox: true, objectName: 'QR address' });
     }
   }
 }
 
-const PPTX = resolve(OUT, 'Atlas of Wonders - Show Template.pptx');
+const PPTX = resolve(OUT, 'A World of Connections - Show Template.pptx');
 await pres.writeFile({ fileName: PPTX });
 
 // pptxgenjs can't write theme colours; set them, so the apps' colour pickers
@@ -456,12 +503,12 @@ let theme = await zip.file(themePath).async('string');
 const clr = (n, hex) => `<a:${n}><a:srgbClr val="${hex}"/></a:${n}>`;
 theme = theme.replace(
   /<a:clrScheme [^>]*>[\s\S]*?<\/a:clrScheme>/,
-  `<a:clrScheme name="An Atlas of Wonders">${clr('dk1', COL.night)}${clr('lt1', COL.ivory)}${clr('dk2', COL.night2)}${clr('lt2', COL.brassLight)}${clr('accent1', COL.brass)}${clr('accent2', COL.pink)}${clr('accent3', COL.coral)}${clr('accent4', COL.plum)}${clr('accent5', '5F5A52')}${clr('accent6', 'EFE5CF')}${clr('hlink', COL.brass)}${clr('folHlink', COL.brassLight)}</a:clrScheme>`
+  `<a:clrScheme name="A World of Connections">${clr('dk1', COL.night)}${clr('lt1', COL.ivory)}${clr('dk2', COL.night2)}${clr('lt2', COL.brassLight)}${clr('accent1', COL.brass)}${clr('accent2', COL.pink)}${clr('accent3', COL.coral)}${clr('accent4', COL.plum)}${clr('accent5', '5F5A52')}${clr('accent6', 'EFE5CF')}${clr('hlink', COL.brass)}${clr('folHlink', COL.brassLight)}</a:clrScheme>`
 );
-theme = theme.replace(/<a:theme ([^>]*)name="[^"]*"/, '<a:theme $1name="An Atlas of Wonders"');
+theme = theme.replace(/<a:theme ([^>]*)name="[^"]*"/, '<a:theme $1name="A World of Connections"');
 zip.file(themePath, theme);
 writeFileSync(PPTX, await zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' }));
 
 copyFileSync(resolve(here, 'README.txt'), resolve(OUT, 'README.txt'));
 console.log(`\nKit written to ${OUT}`);
-if (!existsSync(resolve(FONTS, 'Fraunces-Regular.ttf'))) console.log('(without fonts — see the warning above)');
+if (!existsSync(resolve(FONTS, 'JosefinSans-Regular.ttf'))) console.log('(without fonts — see the warning above)');

@@ -1,6 +1,11 @@
 # Gala show deck
 
-The on-screen deck for **An Atlas of Wonders, the SparkPoint Gala** (December 11, 2026).
+The on-screen deck for **A World of Connections, the SparkPoint Gala** (December 11, 2026).
+Its look follows the Gala brand kit in `Branding/Gala/WorldOfConnections/` (README and
+`lockup.html`): everything in Josefin Sans, Art Deco, the lockup ported from `lockup.html`
+(with the live globe lined up behind its drawn one, Brevard on the home node), the
+double-hairline rule, a double frame round each page, and trips numbered as
+connections ("Connection 01").
 It runs the room: the holding loop, the welcome, the year in review, staff and board
 recognition, the live travel auction (one page per trip, with a gold globe that turns to
 each destination and draws the route from Brevard), and the thank-you with a QR code
@@ -59,7 +64,7 @@ For anyone who'd rather build slides in the app they know, `npm run kit` writes
 Canva) with eleven layouts matching the deck's page types, filled with the current
 `content.js`; every background rendered from the live globe (trips with a
 destination get their route); transparent globe cut-outs; the lockup, sparkmark and
-giving QR code; installable Fraunces and Manrope; and a README for each app. Re-run
+giving QR code; installable Josefin Sans; and a README for each app. Re-run
 it after the trips are set. It needs Chrome, and Python with `fonttools` and
 `brotli` for the fonts (`FONT_PYTHON=/path/to/python npm run kit`).
 

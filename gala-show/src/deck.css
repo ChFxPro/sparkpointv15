@@ -1,4 +1,4 @@
-/* An Atlas of Wonders — show deck. The stage is a fixed 1920×1080 frame,
+/* A World of Connections — show deck. The stage is a fixed 1920×1080 frame,
    scaled to the screen, so every size below is in projector pixels. Colours
    follow the Gala page (src/pages/gala.css). */
 :root {
@@ -8,8 +8,10 @@
   --brass-light: #f1d9a0;
   --ivory: #f7f1e5;
   --pink: #e03694;
-  --display: 'Fraunces Show', Georgia, serif;
-  --sans: 'Manrope Show', 'Avenir Next', 'Segoe UI', sans-serif;
+  /* Everything is Josefin Sans (the Gala's one face). */
+  --display: 'Josefin Show', 'Avenir Next', sans-serif;
+  --sans: 'Josefin Show', 'Avenir Next', sans-serif;
+  --plum: #8e2a5c;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -110,17 +112,29 @@ body.editing {
 .rule {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 0.7em;
   margin: 34px 0;
+  font-size: 24px;
+  --by: #f1d9a0;
 }
-.rule span {
-  width: 120px;
-  height: 1px;
-  background: rgba(241, 217, 160, 0.55);
+/* A double hairline, a diamond, the sparkmark, a diamond, a double hairline. */
+.rule i {
+  width: 5em;
+  height: 5px;
+  border-top: 1px solid var(--by);
+  border-bottom: 1px solid var(--by);
+  opacity: 0.6;
+}
+.rule b {
+  width: 0.5em;
+  height: 0.5em;
+  rotate: 45deg;
+  border: 1px solid var(--by);
+  opacity: 0.7;
 }
 .rule img {
-  width: 34px;
-  height: 34px;
+  width: 1.5em;
+  height: 1.5em;
 }
 .page-title {
   margin: 0;
@@ -129,7 +143,6 @@ body.editing {
   font-weight: 500;
   line-height: 1.02;
   letter-spacing: -0.01em;
-  font-variation-settings: 'opsz' 144, 'SOFT' 50;
 }
 .page-sub {
   margin: 18px 0 0;
@@ -151,64 +164,120 @@ body.editing {
   text-transform: uppercase;
 }
 
-/* --- Lockup (matches src/components/GalaLockup.tsx) --- */
+/* --- Lockup (ported from Branding/Gala/WorldOfConnections/lockup.html) ---
+   Sized in em from .lockup's font-size, which is the cap size of WORLD. */
 .lockup {
-  display: grid;
+  position: relative;
+  display: inline-grid;
   justify-items: center;
+  padding: 0.34em 0.3em 0;
   font-family: var(--display);
   line-height: 1;
   text-align: center;
+  --face: #f7f1e5;
+  --gap: #0b1322;
+  --edge: #d9b56a;
+  --acc: #d9b56a;
+  --by: #f1d9a0;
+  --line: rgba(241, 217, 160, 0.26);
+  --ray: rgba(217, 181, 106, 0.24);
+  --route: rgba(241, 217, 160, 0.85);
 }
-.lk-name {
-  margin: 0;
-  font-size: 1em;
-}
-.lk-an {
+.lockup > :not(svg) {
+  position: relative;
   display: block;
-  margin-bottom: 0.1em;
-  color: var(--brass-light);
-  font-size: 0.22em;
-  font-style: italic;
-  font-variation-settings: 'opsz' 144, 'SOFT' 100;
 }
-.lk-atlas {
-  display: block;
-  margin-right: -0.14em;
-  font-weight: 800;
-  letter-spacing: 0.14em;
+.lk-art {
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  height: 150%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  overflow: visible;
+  fill: none;
+}
+.lk-art .rays line {
+  stroke: var(--ray);
+  stroke-width: 0.6;
+}
+.lk-art .globe * {
+  stroke: var(--line);
+  stroke-width: 0.6;
+}
+/* Where the live globe stands in for the drawn one. */
+.lockup.on-globe .lk-art .globe {
+  display: none;
+}
+.lk-art .route {
+  stroke: var(--route);
+  stroke-width: 1;
+  stroke-dasharray: 2.6 2.8;
+}
+.lk-art .node {
+  fill: var(--route);
+}
+.lk-art .home {
+  stroke: var(--route);
+  stroke-width: 0.9;
+}
+.lk-a {
+  margin-bottom: 0.2em;
+  color: var(--acc);
+  font: italic 300 0.22em var(--display);
+  letter-spacing: 0.1em;
+}
+/* The dimensional letter: face, a thin gap line, then the offset edge line. */
+.lk-world {
+  margin-right: -0.26em;
+  color: var(--face);
+  font: 700 1em var(--display);
+  letter-spacing: 0.26em;
   text-transform: uppercase;
-  font-variation-settings: 'opsz' 144, 'SOFT' 0;
+  text-shadow:
+    0.045em 0.045em 0 var(--gap),
+    0.07em 0.07em 0 var(--edge);
 }
-.lk-wonders {
-  display: block;
-  margin-top: 0.04em;
-  color: var(--brass);
-  font-size: 0.62em;
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  font-variation-settings: 'opsz' 144, 'SOFT' 100, 'WONK' 1;
+.lk-conn {
+  display: flex !important;
+  align-items: center;
+  gap: 0.6em;
+  margin-top: 0.28em;
+  margin-right: -0.62em;
+  color: var(--acc);
+  font: 400 0.2em var(--display);
+  letter-spacing: 0.62em;
+  text-transform: uppercase;
+}
+.lk-conn::before,
+.lk-conn::after {
+  content: '';
+  width: 2.6em;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.7;
 }
 .lockup .rule {
   margin: 0.55em 0 0;
-  font-size: 0.15em;
-  gap: 0.75em;
+  font-size: 0.13em;
+  gap: 0.7em;
+  --by: #f1d9a0;
 }
-.lockup .rule span {
-  width: 4.5em;
+.lk-by {
+  margin-top: 0.6em;
+  margin-right: -0.44em;
+  color: var(--by);
+  font: 600 0.1em var(--display);
+  letter-spacing: 0.44em;
+  text-transform: uppercase;
 }
-.lockup .rule img {
-  width: 1.25em;
-  height: 1.25em;
-}
-.lk-byline {
-  margin: 0.62em 0 0;
-  color: var(--brass-light);
-  font-family: var(--sans);
-  font-size: 0.09em;
-  font-weight: 800;
-  letter-spacing: 0.32em;
-  margin-right: -0.32em;
+.lk-by2 {
+  margin-top: 0.75em;
+  margin-right: -0.38em;
+  color: var(--by);
+  opacity: 0.85;
+  font: 400 0.08em var(--display);
+  letter-spacing: 0.38em;
   text-transform: uppercase;
 }
 
@@ -220,7 +289,7 @@ body.editing {
   text-align: center;
 }
 .lockup-title {
-  font-size: 210px;
+  font-size: 150px;
 }
 .title-kicker {
   margin: 0 0 40px;
@@ -237,7 +306,6 @@ body.editing {
   font-style: italic;
   font-weight: 400;
   color: var(--ivory);
-  font-variation-settings: 'opsz' 144, 'SOFT' 100;
 }
 
 /* --- Loop --- */
@@ -272,7 +340,7 @@ body.editing {
   display: grid;
 }
 .lockup-loop {
-  font-size: 190px;
+  font-size: 160px;
 }
 .loop-caption {
   position: absolute;
@@ -313,7 +381,6 @@ body.editing {
   font-weight: 500;
   line-height: 1;
   letter-spacing: -0.015em;
-  font-variation-settings: 'opsz' 144, 'SOFT' 50;
 }
 .divider-sub p {
   margin: 0 0 14px;
@@ -430,7 +497,6 @@ body.editing {
   font-weight: 600;
   line-height: 1;
   font-variant-numeric: lining-nums tabular-nums;
-  font-variation-settings: 'opsz' 144, 'SOFT' 0;
 }
 .stats-5 .stat-num,
 .stats-6 .stat-num {
@@ -479,7 +545,6 @@ body.editing {
   margin: 0;
   font-family: var(--display);
   font-weight: 500;
-  font-variation-settings: 'opsz' 72, 'SOFT' 50;
 }
 .person-role {
   margin: 0.25em 0 0;
@@ -554,7 +619,6 @@ body.editing {
   font-weight: 500;
   line-height: 1;
   text-shadow: 0 4px 60px rgba(11, 19, 34, 0.9);
-  font-variation-settings: 'opsz' 144, 'SOFT' 50;
 }
 .auction-body {
   max-width: 1200px;
@@ -613,7 +677,6 @@ body.editing {
   font-weight: 500;
   line-height: 1.02;
   letter-spacing: -0.012em;
-  font-variation-settings: 'opsz' 144, 'SOFT' 50;
 }
 .page-trip .rule {
   margin: 0.8em 0;
@@ -748,13 +811,11 @@ body.editing {
   font-size: 120px;
   font-weight: 500;
   line-height: 1.04;
-  font-variation-settings: 'opsz' 144, 'SOFT' 50;
 }
 .is-quote .text-title {
   font-style: italic;
   font-weight: 400;
   font-size: 84px;
-  font-variation-settings: 'opsz' 144, 'SOFT' 100;
 }
 .text-body {
   max-width: 1300px;
@@ -788,7 +849,6 @@ body.editing {
   font-size: 130px;
   font-weight: 500;
   line-height: 1;
-  font-variation-settings: 'opsz' 144, 'SOFT' 50;
 }
 .thanks-body p {
   margin: 0 0 14px;
@@ -1210,4 +1270,197 @@ body.editing .editor {
 :focus-visible {
   outline: 3px solid var(--brass);
   outline-offset: 2px;
+}
+
+
+/* --- Deco type (A World of Connections) ---------------------------------
+   One face, Josefin Sans. Titles are spaced capitals at 600, like WORLD;
+   reading text is Josefin at 400; labels are small spaced capitals; a quote
+   is light italic. Later rules here override the sizes above. */
+.page-title,
+.divider-title,
+.auction-title,
+.trip-title,
+.text-title,
+.thanks-title {
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.12;
+  text-transform: uppercase;
+}
+.page-title {
+  font-size: 66px;
+}
+.divider-title {
+  font-size: 92px;
+}
+.auction-title {
+  font-size: 100px;
+}
+.trip-title {
+  font-size: 2.5em;
+}
+.text-title {
+  font-size: 86px;
+}
+.thanks-title {
+  font-size: 104px;
+}
+/* Centred capitals: cancel the trailing letter-space. */
+.page-numbers .page-title,
+.page-people .page-title,
+.page-sponsors .page-title,
+.page-video .page-title,
+.auction-title,
+.text-title {
+  margin-right: -0.12em;
+}
+.is-quote .text-title {
+  font-size: 72px;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  text-transform: none;
+  margin-right: 0;
+}
+.title-tagline {
+  font-family: var(--display);
+  font-size: 50px;
+  font-style: normal;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+}
+.title-tagline em {
+  color: var(--brass);
+  font-style: normal;
+  font-weight: 600;
+}
+.title-kicker,
+.page-footer,
+.loop-caption,
+.text-attr,
+.trip-lot,
+.trip-meta dt {
+  font-weight: 600;
+}
+.divider-number {
+  margin-bottom: 30px;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+}
+.prog-time {
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.prog-what {
+  font-weight: 400;
+}
+.prog-list {
+  font-size: 46px;
+}
+.stat-num {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.stat-label {
+  font-weight: 400;
+  font-size: 32px;
+}
+.person-name,
+.sponsor-name {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.person-role {
+  font-weight: 400;
+  letter-spacing: 0.08em;
+}
+.trip-copy {
+  font-size: 34px;
+}
+.trip-details li {
+  font-weight: 400;
+}
+.trip-meta dd {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.trip-donor {
+  font-style: italic;
+  font-weight: 300;
+}
+.stamp-word {
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+.divider-sub p,
+.auction-body p,
+.text-body p,
+.thanks-body p {
+  font-weight: 400;
+}
+.ov-num {
+  font-style: normal;
+  font-weight: 600;
+}
+.ov-name,
+.help h2 {
+  font-weight: 600;
+}
+/* The editor panel is a working tool: the system face reads better small. */
+.editor {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+.ed-head h2 {
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* The Deco double frame (as on the Gala's panels), on every page but the
+   loop and full-screen videos. */
+.frame {
+  position: absolute;
+  inset: 30px;
+  border: 1px solid rgba(217, 181, 106, 0.5);
+  outline: 1px solid rgba(217, 181, 106, 0.28);
+  outline-offset: 8px;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+.stage.bare .frame {
+  opacity: 0;
+}
+
+/* Fixes after the first look. */
+.lockup .rule {
+  display: flex !important; /* .lockup > * is block */
+}
+.lockup-title {
+  font-size: 172px;
+}
+.title-kicker {
+  margin-bottom: 110px; /* clear the lockup's art, which rises above it */
+}
+.title-tagline {
+  margin-top: 70px;
+}
+.trip-details li::before {
+  top: 0.5em;
+}
+.person-role {
+  letter-spacing: 0.03em;
+}
+.people {
+  font-size: 44px;
+}
+.qr-card {
+  border-radius: 2px;
 }

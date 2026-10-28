@@ -5,11 +5,14 @@
 //
 //   plate.html?type=divider              the divider background
 //   plate.html?type=trip&lat=41.9&lon=12.5   a trip with its route from Brevard
+//   plate.html?type=cover                the title page's lockup with the globe behind it
 //   plate.html?type=cover&clear=1        the globe alone on a transparent ground
 //   plate.html?type=cover&clear=1&view=20   …turned to face longitude 20 (Europe/Africa)
 import './deck.css';
 import { createGlobe } from './globe.js';
 import { TYPES } from './schema.js';
+import { injectFonts } from './fonts.js';
+import { lockup, globeBehind } from './slides.js';
 
 const q = new URLSearchParams(location.search);
 const type = q.get('type') || 'divider';
@@ -53,6 +56,25 @@ const pose = { lat: 20, lon: -60, ...(POSES[type] || POSES.divider), spin: 0 };
 if (clear) Object.assign(pose, { x: 960, y: 540, r: 440, opacity: 1 });
 // view=<longitude> turns that longitude to face the room.
 if (q.get('view') !== null) pose.lon = Number(q.get('view'));
-globe.setPose(pose, { instant: true, route });
+// The cover carries the lockup itself (it is never edited), centred where
+// the template leaves room for a line above and the tagline below.
+const COVER_LOCKUP_Y = 500; // stage px; kit/make-kit.mjs places the cover's words around it
+const fontsReady = injectFonts();
+let lk = null;
+if (type === 'cover' && !clear) {
+  lk = lockup('lockup-title');
+  const holder = document.createElement('div');
+  holder.style.cssText = 'position:absolute;left:0;right:0;display:grid;justify-items:center';
+  holder.append(lk);
+  stage.append(holder);
+}
 
-requestAnimationFrame(() => requestAnimationFrame(() => (window.__plateReady = true)));
+fontsReady.then(() => {
+  if (lk) {
+    // Offsets ignore transforms, so centre it by its measured height.
+    lk.parentElement.style.top = `${COVER_LOCKUP_Y - lk.offsetHeight / 2}px`;
+    Object.assign(pose, globeBehind(lk, 0.55));
+  }
+  globe.setPose(pose, { instant: true, route });
+  requestAnimationFrame(() => requestAnimationFrame(() => (window.__plateReady = true)));
+});

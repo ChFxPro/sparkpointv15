@@ -1,4 +1,4 @@
-AN ATLAS OF WONDERS — SLIDE TEMPLATE KIT
+A WORLD OF CONNECTIONS — SLIDE TEMPLATE KIT
 For making Gala slides in Keynote, PowerPoint or Canva that match the show deck.
 
 The show itself runs from the show deck (the "show" folder: open index.html in
@@ -9,7 +9,7 @@ backgrounds, globe, colours and type.
 
 WHAT'S IN HERE
 
-  Atlas of Wonders - Show Template.pptx
+  A World of Connections - Show Template.pptx
       Opens in PowerPoint, Keynote and Canva. Eleven layouts (Cover, Section,
       List, Numbers, People, Auction, Trip, Words, Thank you, Video, Plain),
       already filled with the current run of show. Notes under each slide say
@@ -17,9 +17,9 @@ WHAT'S IN HERE
   Backgrounds/        every layout's background, 2560 x 1440 (16:9)
   Globe cut-outs/     the gold globe on a transparent ground, three sides of
                       the world, to place on anything
-  Logos/              the Atlas of Wonders lockup (dark and light grounds) and
-                      the SparkPoint sparkmark
-  Fonts/              Fraunces and Manrope (free, Open Font License)
+  Logos/              the A World of Connections lockup (for dark grounds,
+                      and one for cream only) and the SparkPoint sparkmark
+  Fonts/              Josefin Sans (free, Open Font License)
   QR code/            the giving QR code, PNG and SVG
 
 
@@ -30,8 +30,10 @@ FIRST: INSTALL THE FONTS (Keynote and PowerPoint)
   Then quit and reopen Keynote or PowerPoint.
 
   Without them the apps swap in another font and titles won't match.
-  These are cut to the deck's exact settings; if you already have Google's
-  Fraunces or Manrope installed, Font Book may flag duplicates. Keep these.
+  Three families: Josefin Sans (reading text), Josefin Sans SemiBold
+  (titles, labels, figures) and Josefin Sans Light (the tagline, quotes).
+  If you already have Google's Josefin Sans installed, Font Book may flag
+  duplicates; either copy is fine.
 
 
 POWERPOINT
@@ -51,9 +53,9 @@ KEYNOTE
 CANVA
 
   Upload the .pptx (Create a design > Import file). Each slide becomes a Canva
-  page with editable text. Canva may swap the fonts: select the text and pick
-  Fraunces (titles) or Manrope (everything else) from Canva's font list; on
-  Canva Pro you can upload the Fonts folder to your Brand Kit instead.
+  page with editable text. Canva has Josefin Sans in its font list: if it
+  swaps a font on import, select the text and pick Josefin Sans (titles
+  Semi-Bold, text Regular, the tagline Light).
   Or start fresh: a 1920 x 1080 Presentation, a background from Backgrounds,
   the lockup from Logos, a globe from Globe cut-outs.
 
@@ -61,7 +63,9 @@ CANVA
 VIDEO
 
   The loop and highlight videos are too big for the kit. They're in the
-  SP Gala 26 drive ("Logo loop Render /delivery" for the loop). Insert >
+  SP Gala 26 drive ("Logo loop Render /delivery" for the loop). Until the
+  loop is re-rendered with the new title, those loop files still say An
+  Atlas of Wonders: don't use them in public slides yet. Insert >
   Video, make it fill the slide, set it to play automatically (and loop, for
   the holding loop). Use the .mp4 files.
 
@@ -69,22 +73,29 @@ VIDEO
 THE LOOK, IF YOU'RE BUILDING FROM SCRATCH
 
   Night       #0B1322   backgrounds
-  Ivory       #F7F1E5   titles and body text
-  Brass       #D9B56A   labels, numbers, rules
-  Brass light #F1D9A0   subtitles, figures
-  Pink        #E03694   Brevard's pin and the SOLD stamp only
+  Cream       #F7F1E5   titles and body text
+  Brass       #D9B56A   labels, numbers, rules, frames
+  Light brass #F1D9A0   subtitles, figures
+  Plum        #8E2A5C   the accent on cream
+  Pink        #E03694   buttons, Brevard's pin and the SOLD stamp only
 
-  Titles: Fraunces. Body and labels: Manrope; labels in spaced capitals.
+  All type is Josefin Sans, Art Deco style. Titles in spaced capitals
+  (Semi-Bold); text in Josefin Sans; labels in small spaced capitals.
   The name is always the lockup image, never typed out. Write it
-  "An Atlas of Wonders"; "The SparkPoint Gala" is the byline, never joined
-  to the name with a colon.
-  Under a title: the sparkmark rule (a short line, the sparkmark, a short
-  line), as on the template. Use the sparkmark image, never a typed star.
+  "A World of Connections"; in a sentence, "Join us for A World of
+  Connections, the SparkPoint Gala." The full form is "A World of
+  Connections: SparkPoint Gala & Travel Auction". Tagline: "Every journey
+  connects back home."
+  Under a title: the Gala rule (a double hairline, a diamond, the
+  sparkmark, a diamond, a double hairline), as on the template. Use the
+  sparkmark image, never a typed star. Pages sit in a thin double frame
+  in brass.
+  Trips are numbered as connections: "Connection 01 · Kyoto".
 
 
 TRIPS
 
-  Each trip's background shows its route from Brevard once the trip has a
+  Each trip ("Connection 01" and on) gets a background with its route from Brevard once the trip has a
   destination in the show deck (latitude and longitude). Until then the Trip
   layout uses the plain globe. When the trips are set, ask for the kit to be
   rebuilt (gala-show/kit in the website repo: npm run kit).

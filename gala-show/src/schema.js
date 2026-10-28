@@ -8,7 +8,7 @@
 export const TYPES = {
   loop: {
     label: 'Holding loop',
-    help: 'Plays the Atlas loop while people arrive or during a break. Build-in plays once first; build-out plays when you move on.',
+    help: 'Plays the Gala loop while people arrive or during a break. Build-in plays once first; build-out plays when you move on. The current loop files still show the old name, An Atlas of Wonders: swap in the World of Connections files once they are rendered.',
     fields: [
       { key: 'video', label: 'Loop video', kind: 'media' },
       { key: 'intro', label: 'Build-in video (plays once, optional)', kind: 'media' },
@@ -19,7 +19,7 @@ export const TYPES = {
   },
   title: {
     label: 'Title',
-    help: 'The Atlas of Wonders lockup over the globe.',
+    help: 'The A World of Connections lockup over the globe. Put *stars* around words in the tagline to set them in brass.',
     fields: [
       { key: 'kicker', label: 'Line above (optional)', kind: 'text' },
       { key: 'tagline', label: 'Tagline', kind: 'text' },
@@ -98,9 +98,9 @@ export const TYPES = {
   },
   trip: {
     label: 'Trip',
-    help: 'One auction lot. The globe turns to the destination and draws the route from Brevard. Press S during the show to stamp it SOLD.',
+    help: 'One auction lot, numbered as a connection (Connection 01). The globe turns to the destination and draws the route from Brevard. Press S during the show to stamp it SOLD.',
     fields: [
-      { key: 'lot', label: 'Lot number', kind: 'text' },
+      { key: 'lot', label: 'Connection number (the lot number, e.g. 1)', kind: 'text' },
       { key: 'title', label: 'Trip name', kind: 'text' },
       { key: 'place', label: 'Destination (as it should read)', kind: 'text' },
       { key: 'lat', label: 'Latitude (e.g. 41.9 for Rome)', kind: 'number' },
@@ -154,7 +154,7 @@ export function newId() {
 /** Display name for a page in lists. */
 export function slideName(s) {
   const t = TYPES[s.type];
-  if (s.type === 'trip') return [s.lot && `Lot ${s.lot}`, s.title || s.place || 'Untitled trip'].filter(Boolean).join(' · ');
+  if (s.type === 'trip') return [s.lot && `Connection ${/^\d$/.test(String(s.lot)) ? `0${s.lot}` : s.lot}`, s.title || s.place || 'Untitled trip'].filter(Boolean).join(' · ');
   if (s.type === 'loop') return s.caption ? `Loop · ${s.caption}` : 'Holding loop';
   if (s.type === 'title') return 'Title';
   return s.title || (t ? t.label : s.type);

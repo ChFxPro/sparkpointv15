@@ -51,17 +51,103 @@ export function fit(el, min = 24) {
 }
 
 function rule() {
-  return h('div', { class: 'rule' }, h('span'), h('img', { src: sparkmark, alt: '' }), h('span'));
+  return h('div', { class: 'rule' }, h('i'), h('b'), h('img', { src: sparkmark, alt: '' }), h('b'), h('i'));
+}
+
+const SVG = 'http://www.w3.org/2000/svg';
+function svg(tag, attrs = {}) {
+  const el = document.createElementNS(SVG, tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+}
+
+// The lockup's art: a faint globe, a 25-ray sunburst fanning up from below
+// the name, and three dashed flight routes meeting at a ringed home node.
+// Same geometry as Branding/Gala/WorldOfConnections/lockup.html.
+function lockupArt() {
+  const art = svg('svg', { class: 'lk-art', viewBox: '0 0 200 200', 'aria-hidden': 'true' });
+  const rays = svg('g', { class: 'rays' });
+  for (let i = 0; i <= 24; i++) {
+    const a = Math.PI * (i / 24);
+    const r2 = i % 2 ? 98 : 112;
+    rays.append(svg('line', { x1: 100 - Math.cos(a) * 20, y1: 132 - Math.sin(a) * 20, x2: 100 - Math.cos(a) * r2, y2: 132 - Math.sin(a) * r2 }));
+  }
+  const globe = svg('g', { class: 'globe' });
+  globe.append(
+    svg('circle', { cx: 100, cy: 100, r: 78 }),
+    svg('ellipse', { cx: 100, cy: 100, rx: 52, ry: 78 }),
+    svg('ellipse', { cx: 100, cy: 100, rx: 24, ry: 78 }),
+    svg('ellipse', { cx: 100, cy: 100, rx: 78, ry: 32 }),
+    svg('path', { d: 'M100 22v156M22 100h156' })
+  );
+  art.append(
+    rays,
+    globe,
+    svg('path', { class: 'route', d: 'M38 62 Q 62 32 100 30' }),
+    svg('path', { class: 'route', d: 'M100 30 Q 138 32 162 62' }),
+    svg('path', { class: 'route', d: 'M100 30 Q 124 16 142 40' }),
+    svg('circle', { class: 'node', cx: 38, cy: 62, r: 1.8 }),
+    svg('circle', { class: 'node', cx: 162, cy: 62, r: 1.8 }),
+    svg('circle', { class: 'node', cx: 142, cy: 40, r: 1.8 }),
+    svg('circle', { class: 'home', cx: 100, cy: 30, r: 3.6 }),
+    svg('circle', { class: 'node', cx: 100, cy: 30, r: 1.6 })
+  );
+  return art;
 }
 
 export function lockup(cls = '') {
   return h(
     'div',
-    { class: `lockup ${cls}` },
-    h('p', { class: 'lk-name' }, h('span', { class: 'lk-an' }, 'An'), h('span', { class: 'lk-atlas' }, 'Atlas'), h('em', { class: 'lk-wonders' }, 'of Wonders')),
+    { class: `lockup ${cls}`, role: 'img', 'aria-label': 'A World of Connections, the SparkPoint Gala' },
+    lockupArt(),
+    h('span', { class: 'lk-a', 'aria-hidden': 'true' }, 'A'),
+    h('span', { class: 'lk-world', 'aria-hidden': 'true' }, 'World'),
+    h('span', { class: 'lk-conn', 'aria-hidden': 'true' }, 'of Connections'),
     rule(),
-    h('p', { class: 'lk-byline' }, 'The SparkPoint Gala')
+    h('span', { class: 'lk-by', 'aria-hidden': 'true' }, 'The SparkPoint Gala'),
+    h('span', { class: 'lk-by2', 'aria-hidden': 'true' }, 'Live travel auction')
   );
+}
+
+/**
+ * Line up the live globe with the lockup's drawn one (which it then hides),
+ * with Brevard's pin on the drawn home node where the dashed routes meet.
+ * Measured from layout offsets (stage pixels), so entrance motion and the
+ * stage's scaling don't skew it. Returns a globe pose.
+ */
+const HOME_UP = 70 / 78; // the home node sits this far up the drawn globe's radius
+export function globeBehind(lk, opacity) {
+  let x = lk.offsetLeft;
+  let y = lk.offsetTop;
+  for (let el = lk.offsetParent; el && !el.classList.contains('page'); el = el.offsetParent) {
+    x += el.offsetLeft;
+    y += el.offsetTop;
+  }
+  const artH = 1.5 * lk.offsetHeight; // .lk-art is 150% of the lockup, centred 44% down
+  lk.classList.add('on-globe');
+  return {
+    x: x + lk.offsetWidth / 2,
+    y: y + 0.44 * lk.offsetHeight,
+    r: (78 / 200) * artH,
+    opacity,
+    lat: 35.23 - (Math.asin(HOME_UP) * 180) / Math.PI,
+    lon: -82.73,
+    spin: 0,
+  };
+}
+
+/** Text with *stars* around a phrase sets that phrase in brass, as the tagline does. */
+function emphasis(text) {
+  return String(text)
+    .split(/\*([^*]+)\*/)
+    .map((part, i) => (i % 2 ? h('em', {}, part) : part));
+}
+
+/** "Connection 01": trips are numbered as connections. */
+export function connectionLabel(lot) {
+  const n = String(lot ?? '').trim();
+  if (!n) return 'Connection';
+  return `Connection ${/^\d$/.test(n) ? `0${n}` : n}`;
 }
 
 function missing(label, file) {
@@ -85,7 +171,8 @@ R.loop = (s, ctx) => {
   const introV = s.intro ? video(s.intro, { muted: true }) : null;
   const outroV = s.outro ? video(s.outro, { muted: true }) : null;
   // Fallback when the loop file isn't in the folder: the live globe and lockup.
-  const fallback = h('div', { class: 'loop-fallback' }, lockup('lockup-loop'));
+  const loopLk = lockup('lockup-loop');
+  const fallback = h('div', { class: 'loop-fallback' }, loopLk);
   const stack = h('div', { class: 'loop-stack' }, loopV, introV, outroV);
   root.append(fallback, stack);
   if (s.caption) root.append(h('p', { class: 'loop-caption' }, s.caption));
@@ -95,7 +182,8 @@ R.loop = (s, ctx) => {
   loopV.addEventListener('error', () => {
     failed = true;
     root.classList.add('is-fallback');
-    ctx.setGlobe({ x: 960, y: 540, r: 430, opacity: 0.45, lat: 18, spin: 6 });
+    // Once it's showing, put the live globe behind the fallback lockup.
+    requestAnimationFrame(() => ctx.setGlobe(globeBehind(loopLk, 0.55)));
   });
   const show = (v) => [loopV, introV, outroV].forEach((x) => x && (x.style.opacity = x === v ? 1 : 0));
 
@@ -140,16 +228,17 @@ R.loop = (s, ctx) => {
   };
 };
 
-R.title = (s) => {
+R.title = (s, ctx) => {
+  const lk = lockup('lockup-title');
   const root = h(
     'section',
     { class: 'page page-cover' },
     s.kicker && h('p', { class: 'title-kicker' }, s.kicker),
-    lockup('lockup-title'),
-    s.tagline && h('p', { class: 'title-tagline' }, s.tagline),
+    lk,
+    s.tagline && h('p', { class: 'title-tagline' }, emphasis(s.tagline)),
     s.footer && h('p', { class: 'page-footer' }, s.footer)
   );
-  return { root };
+  return { root, enter: () => ctx.setGlobe(globeBehind(lk, 0.55)) };
 };
 
 R.divider = (s) => {
@@ -312,7 +401,7 @@ R.trip = (s, ctx) => {
   const copy = h(
     'div',
     { class: 'trip-copy' },
-    h('p', { class: 'trip-lot' }, s.lot ? `Lot ${s.lot}` : 'Lot', s.place && h('span', { class: 'trip-place' }, s.place)),
+    h('p', { class: 'trip-lot' }, connectionLabel(s.lot), s.place && h('span', { class: 'trip-place' }, s.place)),
     title,
     rule(),
     s.blurb && h('div', { class: 'trip-blurb' }, paras(s.blurb)),
