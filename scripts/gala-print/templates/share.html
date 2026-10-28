@@ -1,9 +1,19 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><title>An Atlas of Wonders link preview</title>
+<html lang="en"><head><meta charset="utf-8"><title>A World of Connections link preview</title>
 <style>
-  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+  {{INCLUDE:shared/lockup.css}}
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #0b1322; font-family: 'Josefin Sans', sans-serif; }
   .bg { position: absolute; inset: 0; background: url('{{ASSETS}}/share-background.jpg') center / cover; }
-  .bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11,19,34,.9) 0%, rgba(11,19,34,.72) 38%, rgba(11,19,34,.15) 66%, transparent 85%); }
-  img.lockup { position: absolute; left: 28px; top: 50%; width: 640px; translate: 0 -50%; }
+  .bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11,19,34,.92) 0%, rgba(11,19,34,.76) 40%, rgba(11,19,34,.15) 68%, transparent 86%); }
+  .copy { position: absolute; left: 34px; top: 50%; width: 620px; translate: 0 -50%; display: grid; justify-items: center; text-align: center; }
+  .copy img { width: 600px; display: block; }
+  .tag { margin-top: 4px; color: #f7f1e5; font-size: 27px; font-weight: 300; letter-spacing: .06em; }
+  .tag em { font-style: normal; font-weight: 600; color: #d9b56a; }
+  .meta { margin-top: 14px; color: #f1d9a0; font-size: 13px; font-weight: 600; letter-spacing: .26em; margin-right: -.26em; text-transform: uppercase; }
 </style></head>
-<body><div class="bg"></div><img class="lockup" src="{{OUTPUT}}/logo/atlas-of-wonders-lockup-for-dark-backgrounds.png" alt=""></body></html>
+<body><div class="bg"></div><div class="deco-frame"></div>
+<div class="copy">
+  <img src="{{OUTPUT}}/logo/world-of-connections-lockup-for-dark-backgrounds.png" alt="">
+  <p class="tag">Every journey <em>connects back home.</em></p>
+  <p class="meta">Friday, December 11 · 6 p.m. · Brevard, NC</p>
+</div></body></html>
