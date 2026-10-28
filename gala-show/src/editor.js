@@ -94,7 +94,10 @@ export function createEditor({ show, getIndex, go, rerender, relayout, flash }) 
     saveBtn.disabled = !dirty;
   }
 
+  // Counts edits, so a save only clears "unsaved" if nothing changed while it ran.
+  let revision = 0;
   function changed() {
+    revision++;
     dirty = true;
     setStatus();
     drawList();
@@ -152,7 +155,15 @@ export function createEditor({ show, getIndex, go, rerender, relayout, flash }) 
     await w.close();
   }
 
+  // Clear the unsaved state only if no edits came in while the save was waiting.
+  function saved(rev, message) {
+    dirty = revision !== rev;
+    setStatus();
+    flash(dirty ? `${message} — but you changed things since, so save again` : message);
+  }
+
   async function save() {
+    const rev = revision;
     const text = serialize(show);
     if (canWrite) {
       const dir = await ensureFolder();
@@ -163,9 +174,7 @@ export function createEditor({ show, getIndex, go, rerender, relayout, flash }) 
           const backups = await dir.getDirectoryHandle('backups', { create: true });
           await writeFile(backups, `content-${stamp()}.js`, prev);
           await writeFile(dir, 'content.js', text);
-          dirty = false;
-          setStatus();
-          flash('Saved');
+          saved(rev, 'Saved');
           return;
         } catch (err) {
           flash(`Couldn’t save to the folder (${err.message}) — downloading instead`);
@@ -174,9 +183,7 @@ export function createEditor({ show, getIndex, go, rerender, relayout, flash }) 
     }
     const a = h('a', { href: URL.createObjectURL(new Blob([text], { type: 'text/javascript' })), download: 'content.js' });
     a.click();
-    dirty = false;
-    setStatus();
-    flash('Downloaded content.js — put it in the show folder, replacing the old one');
+    saved(rev, 'Downloaded content.js — put it in the show folder, replacing the old one');
   }
 
   // Put a picked file into show/media (when the folder is connected).

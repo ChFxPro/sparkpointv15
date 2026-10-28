@@ -94,7 +94,9 @@ function step(dir) {
   const list = visible().map(([, i]) => i);
   if (!list.length) return;
   const pos = list.indexOf(index);
-  const target = pos === -1 ? list.find((i) => (dir > 0 ? i > index : i < index)) : list[pos + dir];
+  // From a hidden page (opened in the overview or editor), step to the nearest
+  // visible page in that direction, not the first or last one.
+  const target = pos === -1 ? (dir > 0 ? list.find((i) => i > index) : list.findLast((i) => i < index)) : list[pos + dir];
   if (target !== undefined) go(target, { fromBack: dir < 0 });
 }
 

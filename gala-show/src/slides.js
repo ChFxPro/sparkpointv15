@@ -216,6 +216,11 @@ R.loop = (s, ctx) => {
       if (outroV && !failed && state !== 'outro') {
         state = 'outro';
         loopV.pause();
+        // A build-in still playing must not hand back to the loop when it ends.
+        if (introV) {
+          introV.onended = introV.onerror = null;
+          introV.pause();
+        }
         show(outroV);
         outroV.currentTime = 0;
         outroV.onended = advance;
