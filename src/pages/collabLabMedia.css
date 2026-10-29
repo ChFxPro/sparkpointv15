@@ -8,13 +8,15 @@
   --rh-paper: #f6f5f0;
   --rh-paper-deep: #e3ebe9;
   --rh-ink: #1d2a2d;
-  --rh-forest: #0d5f69;
-  --rh-forest-deep: #093f46;
+  /* Teal, gold, and the bright stripe are sampled from PHF's Collaboration Lab promo. */
+  --rh-forest: #08768a;
+  --rh-forest-deep: #095965;
   --rh-chestnut: #7a560c;
-  --rh-brass: #d39f2a;
-  --rh-line: rgba(13, 95, 105, 0.28);
+  --rh-brass: #d6a025;
+  --rh-line: rgba(8, 118, 138, 0.28);
   --rh-display: 'Manrope', 'Avenir Next', 'Segoe UI', sans-serif;
-  --clb-gold: #d39f2a;
+  --clb-gold: #d6a025;
+  --clb-stripe: #12a8b7;
   --clb-gold-ink: #7a560c;
   --clb-card: #ffffff;
 }
@@ -51,8 +53,11 @@
 .clb-masthead::before {
   content: '';
   display: block;
-  height: 6px;
-  background: linear-gradient(90deg, var(--rh-forest) 0 72%, var(--clb-gold) 72%);
+  height: 12px;
+  /* The promo's dark teal band over its bright stripe. */
+  background:
+    linear-gradient(var(--clb-stripe), var(--clb-stripe)) bottom / 100% 4px no-repeat,
+    linear-gradient(90deg, var(--rh-forest), var(--rh-forest-deep));
 }
 
 .clb-masthead-inner {
@@ -98,21 +103,46 @@
 
 /* ── Hero ── */
 
+.clb-lockup {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 1.6vw, 18px);
+  margin-bottom: 18px !important;
+}
+
+.clb-lockup-icon {
+  flex: none;
+  width: clamp(52px, 5.2vw, 72px);
+  height: auto;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(8, 118, 138, 0.18), 0 6px 16px -10px rgba(9, 89, 101, 0.6);
+}
+
+.clb-lockup-wordmark {
+  display: block;
+  width: min(100%, 380px);
+  min-width: 0;
+  height: auto;
+}
+
+.clb-closing-mark {
+  display: block;
+  width: min(100%, 260px);
+  height: auto;
+  margin-bottom: 18px;
+  opacity: 0.95;
+}
+
 .clb-kicker {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 22px !important;
+  margin-bottom: 20px !important;
   color: var(--clb-gold-ink);
   font-size: 0.76rem;
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-}
-
-.clb-kicker-mark {
-  color: var(--clb-gold);
-  font-size: 1.15em;
 }
 
 .clb-page .rhp-hero h1 {

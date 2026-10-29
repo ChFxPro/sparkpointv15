@@ -3,10 +3,14 @@ import { ArrowDown, ArrowLeft, Clapperboard, Download, HardDrive, Mail, Play } f
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { PartnerLogoArt } from '../components/partners/PartnerLogoArt';
-import { Sparkmark } from '../components/Sparkmark';
 import { projectId } from '../utils/supabase/info';
 import { CopyButton, photoLabel, storageDownload, usePhotoGallery, webp, type Gallery } from '../components/photoShare/photoShareKit';
 import media from '../data/collabLabMedia.json';
+// The Collaboration Lab mark is Pisgah Health Foundation's, cut from their event promo
+// (scripts/collab-lab-extract-mark.py). Swap in their vector files if they send them.
+import collabIcon from '../assets/collab-lab/collab-lab-icon.webp';
+import collabWordmark from '../assets/collab-lab/collab-lab-wordmark.webp';
+import collabWordmarkReversed from '../assets/collab-lab/collab-lab-wordmark-reversed.webp';
 import './ruralHealthConvening.css';
 import './ruralHealthPhotoShare.css';
 import './collabLabMedia.css';
@@ -171,10 +175,17 @@ export function CollabLabMediaPage() {
         <section className="rhp-hero clb-hero" aria-labelledby="clb-title">
           <div className="rh-shell rhp-hero-grid">
             <div className="rhp-hero-copy">
-              <p className="clb-kicker">
-                <Sparkmark className="clb-kicker-mark" variant="ink" />
-                Collaboration Lab · Photos &amp; video
+              <p className="clb-lockup">
+                <img className="clb-lockup-icon" src={collabIcon} alt="" width={215} height={215} />
+                <img
+                  className="clb-lockup-wordmark"
+                  src={collabWordmark}
+                  alt="Collaboration: connect, share, create"
+                  width={935}
+                  height={120}
+                />
               </p>
+              <p className="clb-kicker">Collaboration Lab · Photos &amp; video</p>
               <h1 id="clb-title">
                 <span>Building partnerships</span>
                 <span className="clb-title-accent">that last.</span>
@@ -315,6 +326,7 @@ export function CollabLabMediaPage() {
         <section className="rhp-closing" aria-label="Send us your photos">
           <div className="rh-shell rhp-closing-inner">
             <div>
+              <img className="clb-closing-mark" src={collabWordmarkReversed} alt="" width={935} height={120} loading="lazy" />
               <h2>Were you there with a camera?</h2>
               <p>We'd love to see the morning from where you sat.</p>
             </div>
