@@ -220,12 +220,7 @@
       "duration": 3600,
       "width": 1920,
       "height": 1080,
-      "bytes": 0,
-      "original": {
-        "label": "4K camera original",
-        "bytes": 54492880484,
-        "url": ""
-      }
+      "bytes": 2169903469
     },
     {
       "id": "program-2",
@@ -238,25 +233,20 @@
       "duration": 1336,
       "width": 1920,
       "height": 1080,
-      "bytes": 0,
-      "original": {
-        "label": "4K camera original",
-        "bytes": 20216718984,
-        "url": ""
-      }
+      "bytes": 0
     },
     {
       "id": "broll-01",
       "kind": "broll",
       "title": "The room fills in",
       "note": "People settling in at the tables before the program.",
-      "source": "treated/b-roll/crowd_pre-event_1.MP4",
-      "file": "SparkPoint-Collaboration-Lab-2026-B-roll-01-4K.mp4",
+      "source": "share-copies/SparkPoint-Collaboration-Lab-2026-B-roll-01-1080p.mp4",
+      "file": "SparkPoint-Collaboration-Lab-2026-B-roll-01.mp4",
       "poster": "clb-broll-01-poster.jpg",
       "preview": "clb-broll-01-preview.mp4",
       "duration": 115,
-      "width": 3840,
-      "height": 2160,
+      "width": 1920,
+      "height": 1080,
       "bytes": 0
     },
     {
@@ -264,13 +254,13 @@
       "kind": "broll",
       "title": "By the stage",
       "note": "Conversations up front before things got started.",
-      "source": "treated/b-roll/crowd_pre-event_2.MP4",
-      "file": "SparkPoint-Collaboration-Lab-2026-B-roll-02-4K.mp4",
+      "source": "share-copies/SparkPoint-Collaboration-Lab-2026-B-roll-02-1080p.mp4",
+      "file": "SparkPoint-Collaboration-Lab-2026-B-roll-02.mp4",
       "poster": "clb-broll-02-poster.jpg",
       "preview": "clb-broll-02-preview.mp4",
       "duration": 101,
-      "width": 3840,
-      "height": 2160,
+      "width": 1920,
+      "height": 1080,
       "bytes": 0
     },
     {
@@ -279,7 +269,7 @@
       "title": "Around the tables",
       "note": "Small groups in conversation, shot at 60 frames per second.",
       "source": "treated/b-roll/crowd_pre-event_3.MP4",
-      "file": "SparkPoint-Collaboration-Lab-2026-B-roll-03-1080p60.mp4",
+      "file": "SparkPoint-Collaboration-Lab-2026-B-roll-03.mp4",
       "poster": "clb-broll-03-poster.jpg",
       "preview": "clb-broll-03-preview.mp4",
       "duration": 162,
@@ -293,7 +283,7 @@
       "title": "Slow motion at the tables",
       "note": "A short slow-motion pan across a table mid-laugh. No sound.",
       "source": "treated/b-roll/slomo-pan.mp4",
-      "file": "SparkPoint-Collaboration-Lab-2026-B-roll-04-1080p.mp4",
+      "file": "SparkPoint-Collaboration-Lab-2026-B-roll-04.mp4",
       "poster": "clb-broll-04-poster.jpg",
       "preview": "clb-broll-04-preview.mp4",
       "duration": 15,
@@ -307,7 +297,7 @@
       "title": "Slow motion, longer",
       "note": "A longer slow-motion pan through the tables. No sound.",
       "source": "treated/b-roll/Slomo_pan2.MP4",
-      "file": "SparkPoint-Collaboration-Lab-2026-B-roll-05-1080p.mp4",
+      "file": "SparkPoint-Collaboration-Lab-2026-B-roll-05.mp4",
       "poster": "clb-broll-05-poster.jpg",
       "preview": "clb-broll-05-preview.mp4",
       "duration": 40,

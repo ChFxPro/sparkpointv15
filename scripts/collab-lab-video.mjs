@@ -14,9 +14,8 @@
 // bucket at the same size is skipped. Needs a Supabase secret key (sb_secret_…), read
 // from SUPABASE_SECRET_KEY or asked for, the same as `npm run photos:add`.
 //
-// The 4K camera originals of the program (51 GB and 19 GB) are not uploaded: they're
-// kept on the NAS and shared from there on request. Paste a NAS share link into an
-// entry's `original.url` to show it on the page.
+// Everything uploaded is 1080p. The 4K camera originals are not uploaded and the page
+// doesn't mention them (owner's call); they stay on the owner's drive and the NAS.
 import fs from 'node:fs';
 import path from 'node:path';
 import readline from 'node:readline/promises';

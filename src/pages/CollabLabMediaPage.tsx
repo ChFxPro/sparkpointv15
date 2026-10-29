@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { ArrowDown, ArrowLeft, Clapperboard, Download, HardDrive, Mail, Play } from 'lucide-react';
+import { ArrowDown, ArrowLeft, Clapperboard, Download, Mail, Play } from 'lucide-react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { PartnerLogoArt } from '../components/partners/PartnerLogoArt';
@@ -25,14 +25,14 @@ import './collabLabMedia.css';
 // src/components/photoShare/photoShareKit.tsx): `npm run collab:photos` resizes and
 // uploads them and records them in src/data/collabLabMedia.json. Video is the
 // `videos` array there, uploaded with `npm run collab:video`: the two program
-// recordings as 1080p copies, and the b-roll clips as their camera originals with small
-// silent previews to play on the page. The 4K program originals (51 GB and 19 GB) stay
-// on the NAS; paste a share link into `original.url` to offer one here, otherwise the
-// page offers them by email. Everything lives in the public-read `event-media` bucket
+// recordings and the b-roll clips, all as 1080p files, with small silent previews of the
+// b-roll to play on the page. The page deliberately never mentions the 4K camera
+// originals (owner's call, 2026-10-29); they stay on the owner's drive and the NAS.
+// Everything lives in the public-read `event-media` bucket
 // under collaboration-lab-2026/. The page borrows the convening photo page's layout
 // and retints it with the event's teal and gold (collabLabMedia.css).
 
-type Video = (typeof media.videos)[number] & { preview?: string; original?: { label: string; bytes: number; url: string } };
+type Video = (typeof media.videos)[number] & { preview?: string };
 
 const PAGE_PATH = '/collaboration-lab/media';
 const BASE = `https://${projectId}.supabase.co/storage/v1/object/public/event-media/collaboration-lab-2026`;
@@ -64,9 +64,6 @@ const PARTNERS = ['Pisgah Health Foundation', 'Dogwood Health Trust', 'FWRD Tran
 const size = (bytes: number) => (bytes >= 1e9 ? `${(bytes / 1e9).toFixed(1)} GB` : `${Math.max(1, Math.round(bytes / 1e6))} MB`);
 const length = (seconds: number) =>
   seconds >= 60 * 50 ? `${Math.round(seconds / 60)} min` : seconds >= 90 ? `${Math.round(seconds / 60)} min` : `${seconds} sec`;
-const quality = (v: Video) => (v.width >= 3840 ? '4K' : `${v.height}p`);
-const mailOriginal = (v: Video) =>
-  `mailto:${contactEmail}?subject=${encodeURIComponent(`Collaboration Lab video: ${v.title} (4K original)`)}`;
 
 function VideoCard({ video, wide = false }: { video: Video; wide?: boolean }) {
   const [playing, setPlaying] = useState(false);
@@ -106,7 +103,7 @@ function VideoCard({ video, wide = false }: { video: Video; wide?: boolean }) {
       </div>
       <div className="clb-video-body">
         <p className="clb-video-meta">
-          {length(video.duration)} · {quality(video)}
+          {length(video.duration)}
           {video.preview ? ' · preview plays here' : ''}
         </p>
         <h3 id={titleId}>{video.title}</h3>
@@ -115,23 +112,11 @@ function VideoCard({ video, wide = false }: { video: Video; wide?: boolean }) {
           {uploaded ? (
             <a className="rhp-action rhp-action-solid" href={storageDownload(`${BASE}/${video.file}`, video.file)}>
               <Download aria-hidden="true" size={17} />
-              Download {quality(video)} · {size(video.bytes)}
+              Download · {size(video.bytes)}
             </a>
           ) : (
             <span className="clb-video-soon">Download coming soon</span>
           )}
-          {video.original &&
-            (video.original.url ? (
-              <a className="rhp-action" href={video.original.url} target="_blank" rel="noreferrer">
-                <HardDrive aria-hidden="true" size={17} />
-                {video.original.label} · {size(video.original.bytes)}
-              </a>
-            ) : (
-              <a className="rhp-action" href={mailOriginal(video)}>
-                <Mail aria-hidden="true" size={17} />
-                Ask for the {video.original.label} ({size(video.original.bytes)})
-              </a>
-            ))}
         </div>
       </div>
     </li>
@@ -246,11 +231,11 @@ export function CollabLabMediaPage() {
           <div className="rh-shell">
             <div className="rhp-gallery-head">
               <div>
-                <p className="rhp-eyebrow">Video · full resolution</p>
+                <p className="rhp-eyebrow">Video</p>
                 <h2 id="clb-video-title">The program, and footage from the room</h2>
                 <p className="clb-videos-lede">
-                  These are large files, so download them over Wi‑Fi. The program recordings are 1080p copies that
-                  are easy to edit. If you need the 4K camera originals, ask and we'll send a link.
+                  These are large files, so download them over Wi‑Fi. Use them in your own videos, reports, and
+                  posts.
                 </p>
               </div>
             </div>
@@ -264,8 +249,8 @@ export function CollabLabMediaPage() {
 
             <h3 className="clb-videos-subhead">B-roll</h3>
             <p className="clb-videos-note">
-              Short clips straight from the camera, for your own videos and posts. Tap one to watch a preview; the
-              download is the full-resolution original.
+              Short clips for your own videos and posts. Tap one to watch a preview; the download is the
+              full-quality file.
             </p>
             <ul className="clb-video-list">
               {broll.map((video) => (
