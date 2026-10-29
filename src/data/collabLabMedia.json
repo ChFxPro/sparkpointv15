@@ -233,7 +233,7 @@
       "duration": 1336,
       "width": 1920,
       "height": 1080,
-      "bytes": 0
+      "bytes": 807406599
     },
     {
       "id": "broll-01",
@@ -247,7 +247,7 @@
       "duration": 115,
       "width": 1920,
       "height": 1080,
-      "bytes": 0
+      "bytes": 178249596
     },
     {
       "id": "broll-02",
@@ -261,7 +261,7 @@
       "duration": 101,
       "width": 1920,
       "height": 1080,
-      "bytes": 0
+      "bytes": 154329260
     },
     {
       "id": "broll-03",
@@ -275,7 +275,7 @@
       "duration": 162,
       "width": 1920,
       "height": 1080,
-      "bytes": 0
+      "bytes": 1222481287
     },
     {
       "id": "broll-04",
@@ -289,7 +289,7 @@
       "duration": 15,
       "width": 1920,
       "height": 1080,
-      "bytes": 0
+      "bytes": 56314868
     },
     {
       "id": "broll-05",
@@ -303,7 +303,7 @@
       "duration": 40,
       "width": 1920,
       "height": 1080,
-      "bytes": 0
+      "bytes": 153017236
     }
   ]
 }

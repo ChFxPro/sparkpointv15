@@ -1,16 +1,17 @@
 import { useRef, useState } from 'react';
-import { ArrowDown, ArrowLeft, Clapperboard, Download, Mail, Play } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Download, Mail, Play, Quote } from 'lucide-react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { PartnerLogoArt } from '../components/partners/PartnerLogoArt';
 import { projectId } from '../utils/supabase/info';
-import { CopyButton, photoLabel, storageDownload, usePhotoGallery, webp, type Gallery } from '../components/photoShare/photoShareKit';
+import { CopyButton, photoLabel, storageDownload, usePhotoGallery, webp, type Gallery, type SharePhoto } from '../components/photoShare/photoShareKit';
 import media from '../data/collabLabMedia.json';
+import program from '../data/collabLabProgram.json';
 // The Collaboration Lab mark is Pisgah Health Foundation's, cut from their event promo
 // (scripts/collab-lab-extract-mark.py). Swap in their vector files if they send them.
-import collabIcon from '../assets/collab-lab/collab-lab-icon.webp';
-import collabWordmark from '../assets/collab-lab/collab-lab-wordmark.webp';
 import collabWordmarkReversed from '../assets/collab-lab/collab-lab-wordmark-reversed.webp';
+import { CollabLabHero } from './collabLab/CollabLabHero';
+import { ProgramPlayer, formatTime, momentHash, type ProgramPart } from './collabLab/ProgramPlayer';
 import './ruralHealthConvening.css';
 import './ruralHealthPhotoShare.css';
 import './collabLabMedia.css';
@@ -21,26 +22,51 @@ import './collabLabMedia.css';
 // direct link only — noindex, kept out of the sitemap (UNLISTED in prerender.mjs), and
 // linked from nowhere on the site — but prerendered so a shared link unfurls.
 //
+// It tells the morning in the event's own three words. Connect: the room, in a photo
+// sequence and a clip. Share: the featured collaboration and the program recordings,
+// with chapters, captions, a searchable transcript, and pull quotes that open the
+// recording at their moment (src/pages/collabLab/ProgramPlayer.tsx, data in
+// src/data/collabLabProgram.json). Create: everything to make something with — the
+// photo gallery, b-roll, credit, and caption — plus an outcomes slot that shows once
+// `outcomes` in collabLabMedia.json has entries (none are invented here).
+//
 // Photos work exactly like the convening photo page (the shared kit in
-// src/components/photoShare/photoShareKit.tsx): `npm run collab:photos` resizes and
-// uploads them and records them in src/data/collabLabMedia.json. Video is the
-// `videos` array there, uploaded with `npm run collab:video`: the two program
-// recordings and the b-roll clips, all as 1080p files, with small silent previews of the
-// b-roll to play on the page. The page deliberately never mentions the 4K camera
-// originals (owner's call, 2026-10-29); they stay on the owner's drive and the NAS.
-// Everything lives in the public-read `event-media` bucket
-// under collaboration-lab-2026/. The page borrows the convening photo page's layout
-// and retints it with the event's teal and gold (collabLabMedia.css).
+// src/components/photoShare/photoShareKit.tsx): `npm run collab:photos`. Video is the
+// `videos` array in collabLabMedia.json, uploaded with `npm run collab:video`: all 1080p,
+// with small silent previews of the b-roll. The page deliberately never mentions the 4K
+// camera originals (owner's call, 2026-10-29). Everything lives in the public-read
+// `event-media` bucket under collaboration-lab-2026/. Layout borrows the convening photo
+// page's; collabLabMedia.css retints it with the event's teal and gold.
 
 type Video = (typeof media.videos)[number] & { preview?: string };
+type Quote = { part: number; t: number; text: string; speaker: string; org?: string };
 
 const PAGE_PATH = '/collaboration-lab/media';
 const BASE = `https://${projectId}.supabase.co/storage/v1/object/public/event-media/collaboration-lab-2026`;
 const SPARKPOINT_LOGO = `${import.meta.env.BASE_URL}logo-wordmark.webp`;
 const { creditLine, contactEmail } = media;
 const videos = media.videos as Video[];
-const programs = videos.filter((v) => v.kind === 'program');
 const broll = videos.filter((v) => v.kind === 'broll');
+const byId = (id: string) => videos.find((v) => v.id === id)!;
+const outcomes = ((media as { outcomes?: { figure: string; label: string }[] }).outcomes ?? []).filter((o) => o.figure);
+const quotes = program.quotes as Quote[];
+
+const parts: ProgramPart[] = program.parts.map((p) => {
+  const v = byId(p.video);
+  return {
+    id: p.video,
+    label: p.label,
+    title: p.title,
+    src: `${BASE}/${v.file}`,
+    poster: `${BASE}/${v.poster}`,
+    captions: `${import.meta.env.BASE_URL}${p.captions.replace(/^\//, '')}`,
+    transcript: `${import.meta.env.BASE_URL}${p.transcript.replace(/^\//, '')}`,
+    duration: v.duration,
+    bytes: v.bytes,
+    download: storageDownload(`${BASE}/${v.file}`, v.file),
+    chapters: p.chapters,
+  };
+});
 
 // In a participant's voice, about the morning; no credit line (it travels with whatever
 // is picked) and no thanks to SparkPoint.
@@ -57,29 +83,36 @@ const gallery: Gallery = {
   zipNote: `Collaboration Lab: Building Partnerships That Last · October 23, 2026 · Brevard, NC\n\n${creditLine}.\n\n${media.usage.map((line) => `- ${line}`).join('\n')}\n`,
 };
 const { photos } = gallery;
-const featured = photos[0];
+const photo = (id: string) => photos.find((p) => p.id === id);
+
+// The Connect sequence: the room filling up, in roughly the order of the morning.
+const CONNECT_STORY: { id: string; caption: string }[] = [
+  { id: '10', caption: 'The room filled early.' },
+  { id: '02', caption: 'Introductions and catching up.' },
+  { id: '08', caption: 'Catching up by the windows.' },
+  { id: '05', caption: 'At the tables, ideas went up on sticky notes.' },
+  { id: '06', caption: 'Listening as much as talking.' },
+  { id: '16', caption: 'And plenty of laughing.' },
+];
 
 const PARTNERS = ['Pisgah Health Foundation', 'Dogwood Health Trust', 'FWRD Transylvania (LTRG)'];
 
 const size = (bytes: number) => (bytes >= 1e9 ? `${(bytes / 1e9).toFixed(1)} GB` : `${Math.max(1, Math.round(bytes / 1e6))} MB`);
-const length = (seconds: number) =>
-  seconds >= 60 * 50 ? `${Math.round(seconds / 60)} min` : seconds >= 90 ? `${Math.round(seconds / 60)} min` : `${seconds} sec`;
+const length = (seconds: number) => (seconds >= 90 ? `${Math.round(seconds / 60)} min` : `${seconds} sec`);
 
-function VideoCard({ video, wide = false }: { video: Video; wide?: boolean }) {
+function VideoCard({ video }: { video: Video }) {
   const [playing, setPlaying] = useState(false);
   const ref = useRef<HTMLVideoElement>(null);
   const uploaded = video.bytes > 0;
-  // Programs stream the 1080p download itself; b-roll plays its small silent preview.
-  const playSrc = `${BASE}/${video.preview ?? video.file}`;
   const titleId = `clb-video-${video.id}`;
 
   return (
-    <li className={`clb-video${wide ? ' clb-video-wide' : ''}`} aria-labelledby={titleId}>
+    <li className="clb-video" aria-labelledby={titleId}>
       <div className="clb-video-frame">
         {playing ? (
           <video
             ref={ref}
-            src={playSrc}
+            src={`${BASE}/${video.preview ?? video.file}`}
             poster={`${BASE}/${video.poster}`}
             controls
             autoPlay
@@ -90,22 +123,17 @@ function VideoCard({ video, wide = false }: { video: Video; wide?: boolean }) {
             aria-label={video.title}
           />
         ) : (
-          <button type="button" className="clb-video-play" onClick={() => setPlaying(true)} disabled={!uploaded}>
+          <button type="button" className="clb-video-play" onClick={() => setPlaying(true)}>
             <img src={`${BASE}/${video.poster}`} alt="" width={1280} height={720} loading="lazy" decoding="async" />
             <span className="clb-video-play-icon" aria-hidden="true">
               <Play size={26} fill="currentColor" />
             </span>
-            <span className="sr-only">
-              {video.preview ? `Play a preview of ${video.title}` : `Play ${video.title}`}
-            </span>
+            <span className="sr-only">Play a preview of {video.title}</span>
           </button>
         )}
       </div>
       <div className="clb-video-body">
-        <p className="clb-video-meta">
-          {length(video.duration)}
-          {video.preview ? ' · preview plays here' : ''}
-        </p>
+        <p className="clb-video-meta">{length(video.duration)} · preview plays here</p>
         <h3 id={titleId}>{video.title}</h3>
         <p className="clb-video-note">{video.note}</p>
         <div className="clb-video-actions">
@@ -123,8 +151,47 @@ function VideoCard({ video, wide = false }: { video: Video; wide?: boolean }) {
   );
 }
 
+function ActHead({ number, word, title, children }: { number: string; word: string; title: string; children?: React.ReactNode }) {
+  return (
+    <header className="clb-act-head">
+      <p className="clb-act-label">
+        <span>{number}</span>
+        {word}
+      </p>
+      <h2>{title}</h2>
+      {children && <div className="clb-act-intro">{children}</div>}
+    </header>
+  );
+}
+
+function StoryPhoto({ photo: p, caption, onOpen }: { photo: SharePhoto; caption: string; onOpen: () => void }) {
+  return (
+    <figure className="clb-story-photo">
+      <button type="button" onClick={onOpen} aria-label={`Open ${photoLabel(p)}`}>
+        <img
+          src={webp(gallery, p, 960)}
+          srcSet={`${webp(gallery, p, 960)} 960w, ${webp(gallery, p, 1920)} 1920w`}
+          sizes="(max-width: 760px) 100vw, 50vw"
+          alt={p.alt}
+          width={p.width}
+          height={p.height}
+          loading="lazy"
+          decoding="async"
+        />
+      </button>
+      <figcaption>{caption}</figcaption>
+    </figure>
+  );
+}
+
 export function CollabLabMediaPage() {
   const { grid, overlays, openPhoto, hasSelection } = usePhotoGallery(gallery);
+  const story = CONNECT_STORY.map((s) => ({ ...s, photo: photo(s.id) })).filter(
+    (s): s is { id: string; caption: string; photo: SharePhoto } => Boolean(s.photo),
+  );
+  const connectClip = byId('broll-03');
+  const featuredPoster = `${BASE}/${byId('program-2').poster}`;
+  const loop = byId('broll-05');
 
   return (
     <div className={`rh-page rhp-page clb-page${hasSelection ? ' has-tray' : ''}`}>
@@ -133,15 +200,15 @@ export function CollabLabMediaPage() {
         description="Photos and video from the Collaboration Lab: Building Partnerships That Last, October 23, 2026 in Brevard, NC. Free to download and share with credit."
         path={PAGE_PATH}
         image="/assets/collab-lab/media-og.jpg"
-        imageAlt={featured?.alt ?? 'The Collaboration Lab in Brevard, NC'}
+        imageAlt={photos[0]?.alt ?? 'The Collaboration Lab in Brevard, NC'}
         imageType="image/jpeg"
         imageWidth={1200}
         imageHeight={630}
         noindex
       />
 
-      <a className="rh-skip-link" href="#photos">
-        Skip to the photos
+      <a className="rh-skip-link" href="#create">
+        Skip to the photos and downloads
       </a>
 
       <header className="clb-masthead">
@@ -157,106 +224,137 @@ export function CollabLabMediaPage() {
       </header>
 
       <main id="main-content">
-        <section className="rhp-hero clb-hero" aria-labelledby="clb-title">
-          <div className="rh-shell rhp-hero-grid">
-            <div className="rhp-hero-copy">
-              <p className="clb-lockup">
-                <img className="clb-lockup-icon" src={collabIcon} alt="" width={215} height={215} />
-                <img
-                  className="clb-lockup-wordmark"
-                  src={collabWordmark}
-                  alt="Collaboration: connect, share, create"
-                  width={935}
-                  height={120}
-                />
+        <CollabLabHero loopSrc={`${BASE}/${loop.preview}`} posterSrc={`${BASE}/${loop.poster}`} />
+
+        {/* ── 01 Connect ── */}
+        <section id="connect" className="clb-act clb-act-connect" aria-labelledby="clb-connect-title">
+          <div className="rh-shell">
+            <ActHead number="01" word="Connect" title="Before anyone took the stage, the room was already at work.">
+              <p>
+                People from nonprofits across Transylvania County caught up, made introductions, and got to work at
+                the tables.
               </p>
-              <p className="clb-kicker">Collaboration Lab · Photos &amp; video</p>
-              <h1 id="clb-title">
-                <span>Building partnerships</span>
-                <span className="clb-title-accent">that last.</span>
-              </h1>
-              <p className="rhp-lede">
-                Nonprofits from across Transylvania County spent the morning trading practical tools and local
-                success stories, and heard from the people behind Wellness Rooted in Connection and Community
-                Connectors. These are the photos and video from that morning. Share them, and use them in your own
-                work.
-              </p>
-              <div className="rh-actions clb-hero-actions">
-                <a className="rh-button rh-button-primary" href="#photos">
-                  See the photos
-                  <ArrowDown aria-hidden="true" size={19} />
-                </a>
-                <a className="rh-button rh-button-secondary" href="#video">
-                  Get the video
-                  <Clapperboard aria-hidden="true" size={19} />
-                </a>
-              </div>
+            </ActHead>
+
+            <div className="clb-story">
+              {story.map((s) => (
+                <StoryPhoto key={s.id} photo={s.photo} caption={s.caption} onOpen={() => openPhoto(s.photo)} />
+              ))}
             </div>
 
-            {featured && (
-              <figure className="rhp-hero-plate">
-                <button type="button" onClick={() => openPhoto(featured)} aria-label={`Open ${photoLabel(featured)}`}>
-                  <img
-                    src={webp(gallery, featured, 1920)}
-                    srcSet={`${webp(gallery, featured, 960)} 960w, ${webp(gallery, featured, 1920)} 1920w`}
-                    sizes="(max-width: 960px) 100vw, 56vw"
-                    alt={featured.alt}
-                    width={featured.width}
-                    height={featured.height}
-                  />
-                </button>
-                <figcaption>
-                  <span>No. {featured.id}{featured.title ? ` · ${featured.title}` : ''}</span>
-                  <span>Tap to view larger</span>
-                </figcaption>
+            <div className="clb-connect-clip">
+              <ul className="clb-video-list clb-video-list-single">
+                <VideoCard video={connectClip} />
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 02 Share ── */}
+        <section id="share" className="clb-act clb-act-share" aria-labelledby="clb-share-title">
+          <div className="rh-shell">
+            <ActHead number="02" word="Share" title="A collaboration, told by the people doing it.">
+              <p>
+                The featured collaboration: Sarah Hankey of SparkPoint and Keagan Monteith of FWRD Transylvania on
+                Wellness Rooted in Connection and Community Connectors.
+              </p>
+            </ActHead>
+
+            <div className="clb-feature">
+              <figure className="clb-feature-image">
+                <img src={featuredPoster} alt="Keagan Monteith and Sarah Hankey in conversation on stage, the audience in the foreground." width={1280} height={720} loading="lazy" />
               </figure>
+              <div className="clb-feature-copy">
+                <div className="clb-feature-program">
+                  <h3>Wellness Rooted in Connection</h3>
+                  <p>
+                    A community of practice where organizations listen together and strengthen mental wellness and
+                    resilience across the county.
+                  </p>
+                </div>
+                <div className="clb-feature-program">
+                  <h3>Community Connectors</h3>
+                  <p>
+                    Neighbors people already trust, with the training and tools to help their communities get ready
+                    for hard days and recover from them.
+                  </p>
+                </div>
+                <a className="rh-button rh-button-primary" href={momentHash(0, 2705)}>
+                  <Play aria-hidden="true" size={17} />
+                  Watch their conversation
+                </a>
+              </div>
+            </div>
+
+            {quotes.length > 0 && (
+              <ul className="clb-quotes">
+                {quotes.map((q) => (
+                  <li key={`${q.part}-${q.t}`}>
+                    <blockquote>
+                      <Quote aria-hidden="true" size={22} className="clb-quote-mark" />
+                      <p>{q.text}</p>
+                    </blockquote>
+                    <p className="clb-quote-by">
+                      <strong>{q.speaker}</strong>
+                      {q.org ? `, ${q.org}` : ''}
+                    </p>
+                    <a className="clb-quote-watch" href={momentHash(q.part, q.t)}>
+                      Watch this moment · {parts[q.part]?.label} at {formatTime(q.t)}
+                      <ArrowRight aria-hidden="true" size={15} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
             )}
+
+            <div className="clb-program">
+              <h3 className="clb-program-title">The full program</h3>
+              <p className="clb-program-note">
+                Jump to any chapter or line of the transcript, or copy a link to a moment to share it.
+              </p>
+              <ProgramPlayer parts={parts} />
+            </div>
           </div>
         </section>
 
-        <section id="photos" className="rhp-gallery" aria-labelledby="clb-gallery-title">
+        {/* ── 03 Create ── */}
+        <section id="create" className="clb-act clb-act-create" aria-labelledby="clb-create-title">
           <div className="rh-shell">
-            <div className="rhp-gallery-head">
-              <div>
-                <p className="rhp-eyebrow">The gallery · {photos.length} photos</p>
-                <h2 id="clb-gallery-title">Photos from the morning</h2>
-                <p className="rhp-source">{creditLine}.</p>
-              </div>
+            <ActHead number="03" word="Create" title="Your turn. Make something with it.">
+              <p>
+                Every photo and clip from the morning is here for your newsletter, your report, your next grant
+                application, or your feed. {creditLine}.
+              </p>
+            </ActHead>
+
+            {outcomes.length > 0 && (
+              <ul className="clb-outcomes" aria-label="What came out of the morning">
+                {outcomes.map((o) => (
+                  <li key={o.label}>
+                    <strong>{o.figure}</strong>
+                    <span>{o.label}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <div id="photos" className="clb-create-block">
+              <h3 className="clb-videos-subhead">Photos · {photos.length}</h3>
+              {photos.length ? grid : <p className="rhp-filter-note">The photos are on their way.</p>}
             </div>
-            {photos.length ? grid : <p className="rhp-filter-note">The photos are on their way.</p>}
-          </div>
-        </section>
 
-        <section id="video" className="clb-videos" aria-labelledby="clb-video-title">
-          <div className="rh-shell">
-            <div className="rhp-gallery-head">
-              <div>
-                <p className="rhp-eyebrow">Video</p>
-                <h2 id="clb-video-title">The program, and footage from the room</h2>
-                <p className="clb-videos-lede">
-                  These are large files, so download them over Wi‑Fi. Use them in your own videos, reports, and
-                  posts.
-                </p>
-              </div>
+            <div id="video" className="clb-create-block">
+              <h3 className="clb-videos-subhead">B-roll</h3>
+              <p className="clb-videos-note">
+                Short clips for your own videos and posts. Tap one to watch a preview; the download is the full-quality
+                file. The program recordings download from the player above.
+              </p>
+              <ul className="clb-video-list">
+                {broll.map((video) => (
+                  <VideoCard key={video.id} video={video} />
+                ))}
+              </ul>
             </div>
-
-            <h3 className="clb-videos-subhead">The program</h3>
-            <ul className="clb-video-list clb-video-list-programs">
-              {programs.map((video) => (
-                <VideoCard key={video.id} video={video} wide />
-              ))}
-            </ul>
-
-            <h3 className="clb-videos-subhead">B-roll</h3>
-            <p className="clb-videos-note">
-              Short clips for your own videos and posts. Tap one to watch a preview; the download is the
-              full-quality file.
-            </p>
-            <ul className="clb-video-list">
-              {broll.map((video) => (
-                <VideoCard key={video.id} video={video} />
-              ))}
-            </ul>
           </div>
         </section>
 
