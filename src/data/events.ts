@@ -55,7 +55,7 @@ export interface SparkPointEvent {
   // Who puts the event on, shown as the line above its title on the Events
   // page (e.g. "The SparkPoint Gala"). Falls back to the category.
   presenter?: string;
-  // Show the Gala's An Atlas of Wonders lockup in the save-the-date panel in
+  // Show the Gala's A World of Connections lockup in the save-the-date panel in
   // place of the big date.
   galaLockup?: boolean;
   // A save-the-date: an event without its own photo yet. The Events page gives
@@ -71,8 +71,8 @@ export interface SparkPointEvent {
 export const EVENTS: SparkPointEvent[] = [
   {
     id: 'sparkpoint-gala-2026',
-    title: 'An Atlas of Wonders',
-    shortTitle: 'An Atlas of Wonders',
+    title: 'A World of Connections',
+    shortTitle: 'A World of Connections',
     presenter: 'The SparkPoint Gala',
     galaLockup: true,
     category: 'Fundraiser',
@@ -85,7 +85,7 @@ export const EVENTS: SparkPointEvent[] = [
     locationName: GALA_VENUE.name,
     locationLabel: `${GALA_VENUE.street}, ${GALA_VENUE.city}, ${GALA_VENUE.region} ${GALA_VENUE.postalCode}`,
     summary:
-      'See the world. Strengthen home. An evening of connection and a live auction of eight travel experiences, with a portion of every trip coming home to support the Transylvania Resilience Hub.',
+      'Every journey connects back home. An evening of connection and a live auction of eight travel experiences, with a portion of every trip coming home to support the Transylvania Resilience Hub.',
     detailPath: '/events/sparkpoint-gala',
     featured: true,
     teaser: true,

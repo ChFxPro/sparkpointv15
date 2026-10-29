@@ -1,11 +1,12 @@
-import '@fontsource-variable/fraunces';
+import '@fontsource-variable/josefin-sans';
+import '@fontsource-variable/josefin-sans/wght-italic.css';
 import { motion, useReducedMotion } from 'motion/react';
 import { ArrowRight, CalendarDays, Clock3, MapPin, Ticket } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { Sparkmark } from '../components/Sparkmark';
-import { GALA_BYLINE, GALA_NAME, GalaLockup } from '../components/GalaLockup';
+import { GALA_BYLINE, GALA_FULL_TITLE, GALA_NAME, GalaLockup } from '../components/GalaLockup';
 import {
   GALA_PARTNER_FORM_URL,
   GALA_TICKETS_URL,
@@ -23,6 +24,8 @@ import './gala.css';
 
 const BASE = import.meta.env.BASE_URL;
 const GALA_PATH = '/events/sparkpoint-gala';
+// Rendered by scripts/gala-print (the print session's PR), 1200×630.
+const GALA_SHARE_IMAGE = '/assets/events/gala/gala-share-world-of-connections.jpg';
 // Hero photo: Astra Liu on Unsplash (photo-1539612793508, Unsplash License), with a
 // faint airline emblem on the winglet retouched out.
 const heroPhoto = (width: number) => `${BASE}assets/events/gala/hero-wing-${width}.webp`;
@@ -82,7 +85,7 @@ const galaEventJsonLd = {
   startDate: '2026-12-11T18:00:00-05:00',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
   eventStatus: 'https://schema.org/EventScheduled',
-  image: [canonicalUrl('/assets/events/gala/gala-share-atlas.jpg')],
+  image: [canonicalUrl(GALA_SHARE_IMAGE)],
   url: canonicalUrl(GALA_PATH),
   location: {
     '@type': 'Place',
@@ -147,16 +150,16 @@ export default function GalaPage() {
   return (
     <div className="gala-page">
       <SEOHead
-        title="An Atlas of Wonders · The SparkPoint Gala & Travel Auction | December 11, 2026"
-        description="See the world. Strengthen home. Join us for An Atlas of Wonders, the SparkPoint Gala, on Friday, December 11, 2026 at 6 p.m. at Connestee Falls Country Club, and bid on eight travel experiences in a live auction that gives back to Transylvania County’s Resilience Hub. Tickets $100."
+        title={`${GALA_FULL_TITLE} | December 11, 2026`}
+        description="Every journey connects back home. Join us for A World of Connections, the SparkPoint Gala, on Friday, December 11, 2026 at 6 p.m. at Connestee Falls Country Club, and bid on eight travel experiences in a live auction that gives back to Transylvania County’s Resilience Hub. Tickets $100."
         path={GALA_PATH}
-        image="/assets/events/gala/gala-share-atlas.jpg"
-        imageAlt="An Atlas of Wonders, the SparkPoint Gala: the title over an airplane wing above golden clouds at sunset."
+        image={GALA_SHARE_IMAGE}
+        imageAlt="A World of Connections, the SparkPoint Gala: the title over an airplane wing above golden clouds at sunset."
         imageType="image/jpeg"
         imageWidth={1200}
         imageHeight={630}
         jsonLd={galaEventJsonLd}
-        keywords={['An Atlas of Wonders', 'SparkPoint Gala', 'travel auction', 'Resilience Hub', 'Transylvania County', 'Western North Carolina']}
+        keywords={['A World of Connections', 'SparkPoint Gala', 'travel auction', 'Resilience Hub', 'Transylvania County', 'Western North Carolina']}
       />
 
       {/* 1 — Departures */}
@@ -173,19 +176,9 @@ export default function GalaPage() {
         </div>
         <div className="gala-shell gala-hero-inner">
           <motion.div className="gala-hero-copy" {...reveal}>
-            <GalaLockup
-              headingId="gala-title"
-              className="gala-hero-lockup"
-              byline={
-                <>
-                  <span>{GALA_BYLINE}</span>
-                  <span className="gl-dot" aria-hidden="true">·</span>
-                  <span>Live travel auction</span>
-                </>
-              }
-            />
+            <GalaLockup headingId="gala-title" className="gala-hero-lockup" />
             <p className="gala-hero-tagline">
-              See the world. <em>Strengthen home.</em>
+              Every journey <em>connects back home.</em>
             </p>
             <p className="gala-hero-lede">
               One evening, eight journeys around the world, and a portion of every one of them
@@ -252,7 +245,7 @@ export default function GalaPage() {
           <motion.div className="gala-routes-head" {...reveal}>
             <p className="gala-label">Your next adventure could change lives</p>
             <h2 id="routes-title">
-              Eight departures. <em>One home base.</em>
+              Eight connections. <em>One home base.</em>
             </h2>
             <p>
               Every trip auctioned at the Gala leaves from here. And a portion of every
@@ -285,7 +278,7 @@ export default function GalaPage() {
                   <Sparkmark variant="ink" size="58%" className="gala-passport-emblem-mark" />
                 </span>
                 <span className="gala-passport-title">
-                  <b>Atlas of Wonders</b>
+                  <b>World of Connections</b>
                   <small>Passport · Passeport · Pasaporte</small>
                 </span>
                 <dl className="gala-passport-codes">
@@ -359,7 +352,7 @@ export default function GalaPage() {
               <p className="gala-passport-mrz" aria-hidden="true">
                 P&lt;SPK&lt;&lt;GALA&lt;&lt;DEC&lt;11&lt;2026&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
                 <br />
-                SEE&lt;THE&lt;WORLD&lt;&lt;STRENGTHEN&lt;HOME&lt;&lt;
+                EVERY&lt;JOURNEY&lt;CONNECTS&lt;BACK&lt;HOME&lt;&lt;
               </p>
               <span className="gala-passport-folio" aria-hidden="true">02</span>
             </div>
@@ -435,7 +428,7 @@ export default function GalaPage() {
                     </div>
                     <span className="gala-tag-brand" aria-hidden="true">
                       <Sparkmark size="14px" />
-                      Atlas of Wonders
+                      World of Connections
                     </span>
                   </div>
                 </div>
