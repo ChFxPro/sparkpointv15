@@ -657,10 +657,24 @@
 /* The gala's save-the-date borrows its page's night-flight palette. */
 .sp-save-the-date {
   background: linear-gradient(160deg, #0b1322, #14213a);
+  font-family: 'Josefin Sans Variable', 'Josefin Sans', sans-serif;
 }
 
 .sp-save-the-date::before {
   background: linear-gradient(90deg, #f1d9a0, #d9b56a, var(--events-pink));
+}
+
+/* A World of Connections: Art Deco, all in Josefin Sans (the Gala's kit,
+   Branding/Gala/WorldOfConnections). No Fraunces on the Gala. */
+/* Deco double-hairline frame: inset 22px, 6px outline offset, brass at 50% / 28%. */
+.sp-save-the-date .sp-save-date-lockup::after {
+  position: absolute;
+  inset: 22px;
+  content: '';
+  border: 1px solid rgba(217, 181, 106, 0.5);
+  outline: 1px solid rgba(217, 181, 106, 0.28);
+  outline-offset: 6px;
+  pointer-events: none;
 }
 
 .sp-save-the-date .sp-save-date-mark {
@@ -673,13 +687,20 @@
 
 .sp-save-the-date .sp-save-date-mark strong,
 .sp-save-the-date h2 {
-  font-family: 'Fraunces Variable', 'Fraunces', Georgia, serif;
-  font-weight: 500;
+  font-family: 'Josefin Sans Variable', 'Josefin Sans', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.02em;
 }
 
 .sp-save-the-date .sp-save-date-mark b,
 .sp-save-the-date .sp-event-category {
   color: #d9b56a;
+}
+
+.sp-save-the-date .sp-event-category {
+  font-family: 'Josefin Sans Variable', 'Josefin Sans', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.26em;
 }
 
 .sp-save-the-date .sp-event-category span {
@@ -693,7 +714,7 @@
     0 0 0 70px rgba(217, 181, 106, 0.03);
 }
 
-/* The gala's panel shows its An Atlas of Wonders lockup over the world map,
+/* The gala's panel shows its A World of Connections lockup over the world map,
    with the date as a small chip beneath it. */
 .sp-save-the-date .sp-save-date-lockup {
   gap: 30px;
@@ -708,17 +729,28 @@
   justify-self: center;
   padding: 7px 16px;
   border: 1px solid rgba(217, 181, 106, 0.4);
-  border-radius: 999px;
+  border-radius: 0;
   color: #f1d9a0;
   background: rgba(11, 19, 34, 0.55);
-  font-size: 0.74rem;
-  font-weight: 800;
-  letter-spacing: 0.28em;
+  font-family: 'Josefin Sans Variable', 'Josefin Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+/* Deco buttons: square corners, 1px brass border, Josefin 600 caps; pink primary. */
+.sp-save-the-date .sp-event-button {
+  border: 1px solid #d9b56a;
+  border-radius: 0;
+  font-family: 'Josefin Sans Variable', 'Josefin Sans', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
 }
 
 .sp-save-the-date .sp-event-button-primary {
-  color: #0b1322;
-  background: linear-gradient(135deg, #f1d9a0, #d9b56a);
-  box-shadow: 0 10px 24px rgba(217, 181, 106, 0.25);
+  color: #fff;
+  background: #e03694;
+  box-shadow: 0 10px 24px rgba(224, 54, 148, 0.22);
 }

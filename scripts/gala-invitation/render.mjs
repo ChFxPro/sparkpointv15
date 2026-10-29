@@ -33,7 +33,7 @@ try {
   await page.evaluateOnNewDocument((cfg) => { window.__INVITE__ = cfg; }, config);
   await page.goto('file://' + path.join(here, 'template.html'), { waitUntil: 'networkidle0' });
   await page.evaluate(() => document.fonts.ready);
-  const fontsOk = await page.evaluate(() => document.fonts.check('400 40px Fraunces') && document.fonts.check('800 16px Manrope'));
+  const fontsOk = await page.evaluate(() => document.fonts.check('700 40px "Josefin Sans"') && document.fonts.check('300 16px "Josefin Sans"'));
   if (!fontsOk) throw new Error('Fonts failed to load; run `npm install` first.');
 
   const png = await page.screenshot({ fullPage: true, type: 'png' });
