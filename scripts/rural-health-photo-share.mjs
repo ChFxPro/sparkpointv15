@@ -138,7 +138,9 @@ function askHidden(question) {
           stdin.pause();
           stdin.off('data', onData);
           process.stdout.write('\n');
-          resolve(value.trim());
+          // Terminals wrap a paste in bracketed-paste markers (ESC[200~ … ESC[201~) while in
+          // raw mode; drop them and any other control characters so only the key remains.
+          resolve(value.replace(/\u001b\[20[01]~/g, '').replace(/[\u0000-\u001f\u007f]/g, '').trim());
           return;
         }
         if (ch === '\u0003') process.exit(130); // Ctrl-C
