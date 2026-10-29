@@ -212,11 +212,27 @@ async function uploadLarge(key, file, name, size) {
   writeState(next);
 }
 
+// Supabase's resumable endpoint answers 409 "already exists" when replacing an object,
+// x-upsert or not, so a changed file's old copy is removed before the new one goes up.
+async function remove(key, name) {
+  const res = await fetch(`${STORAGE}/object/${BUCKET}`, {
+    method: 'DELETE',
+    headers: { ...authHeaders(key), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prefixes: [objectName(name)] }),
+  });
+  if (!res.ok) refused(res, await res.text(), name);
+}
+
 async function put(key, file, name) {
   const size = fs.statSync(file).size;
-  if ((await sizeInBucket(name)) === size) {
+  const existing = await sizeInBucket(name);
+  if (existing === size) {
     console.log(`  = ${name} (${gb(size)}) already uploaded`);
     return size;
+  }
+  if (existing !== null) {
+    console.log(`  × ${name}: replacing the copy in storage (${gb(existing)})`);
+    await remove(key, name);
   }
   console.log(`  ↑ ${name} (${gb(size)})`);
   if (size > CHUNK) await uploadLarge(key, file, name, size);
