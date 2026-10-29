@@ -1,0 +1,344 @@
+/* Collaboration Lab media page (/collaboration-lab/media). It reuses the convening
+   photo page's layout (.rh-* and .rhp-* rules) and retints it here: the teal and gold
+   of the event's own promo, Manrope throughout instead of the convening's Fraunces,
+   and cooler paper. Everything new is prefixed .clb-, and every override is scoped to
+   .clb-page, so nothing here reaches the convening pages. */
+
+.clb-page {
+  --rh-paper: #f6f5f0;
+  --rh-paper-deep: #e3ebe9;
+  --rh-ink: #1d2a2d;
+  --rh-forest: #0d5f69;
+  --rh-forest-deep: #093f46;
+  --rh-chestnut: #7a560c;
+  --rh-brass: #d39f2a;
+  --rh-line: rgba(13, 95, 105, 0.28);
+  --rh-display: 'Manrope', 'Avenir Next', 'Segoe UI', sans-serif;
+  --clb-gold: #d39f2a;
+  --clb-gold-ink: #7a560c;
+  --clb-card: #ffffff;
+}
+
+.clb-page :where(h1, h2, h3) {
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+/* Hairlines and plate frames in teal rather than the convening's forest. */
+.clb-page :is(.rhp-hero-plate, .rhp-tiers, .rhp-guide-card, .rhp-filters button, .rhp-tile, .rhp-action, .rhp-copy) {
+  border-color: rgba(13, 95, 105, 0.4);
+}
+
+.clb-page .rhp-hero-plate {
+  box-shadow: 0 26px 50px -34px rgba(9, 63, 70, 0.75);
+}
+
+.clb-page .rhp-gallery {
+  background: var(--rh-paper-deep);
+}
+
+.clb-page .rhp-closing p {
+  color: rgba(246, 245, 240, 0.86);
+}
+
+/* ── Masthead ── */
+
+.clb-masthead {
+  border-bottom: 1px solid var(--rh-line);
+  background: var(--rh-paper);
+}
+
+.clb-masthead::before {
+  content: '';
+  display: block;
+  height: 6px;
+  background: linear-gradient(90deg, var(--rh-forest) 0 72%, var(--clb-gold) 72%);
+}
+
+.clb-masthead-inner {
+  min-height: 76px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 28px;
+  padding-block: 12px;
+}
+
+.clb-masthead-logo {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+
+.clb-masthead-logo img {
+  display: block;
+  width: 132px;
+  height: auto;
+}
+
+.clb-masthead-date {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  color: var(--rh-forest);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.clb-masthead-date strong {
+  color: var(--clb-gold-ink);
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── Hero ── */
+
+.clb-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px !important;
+  color: var(--clb-gold-ink);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.clb-kicker-mark {
+  color: var(--clb-gold);
+  font-size: 1.15em;
+}
+
+.clb-page .rhp-hero h1 {
+  font-size: clamp(2.7rem, 4.8vw, 5.1rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+}
+
+.clb-title-accent {
+  /* The promo's gold reads at only ~2:1 on this paper, so the heading uses a deeper
+     gold that clears 3:1 for large text. The bright gold stays decorative. */
+  color: #a3740c;
+  font-style: italic;
+}
+
+.clb-page .rhp-lede {
+  margin-top: 26px;
+}
+
+.clb-hero-actions {
+  flex-wrap: wrap;
+}
+
+/* ── Video ── */
+
+.clb-videos {
+  padding: clamp(48px, 5vw, 80px) 0 clamp(56px, 6vw, 96px);
+  scroll-margin-top: 0;
+}
+
+.clb-videos-lede,
+.clb-videos-note {
+  max-width: 680px;
+  margin-top: 12px !important;
+  color: rgba(29, 42, 45, 0.82);
+  line-height: 1.6;
+}
+
+.clb-videos-subhead {
+  margin-top: clamp(32px, 4vw, 48px) !important;
+  padding-top: 18px;
+  border-top: 1px solid var(--rh-line);
+  font-size: clamp(1.3rem, 2vw, 1.6rem);
+}
+
+.clb-video-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 22px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.clb-video-list-programs {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
+}
+
+.clb-video {
+  display: flex;
+  flex-direction: column;
+  background: var(--clb-card);
+  border: 1px solid rgba(13, 95, 105, 0.22);
+  box-shadow: 0 16px 30px -26px rgba(9, 63, 70, 0.7);
+}
+
+.clb-video-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--rh-forest-deep);
+}
+
+.clb-video-frame video,
+.clb-video-play img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.clb-video-frame video {
+  object-fit: contain;
+  background: #000;
+}
+
+.clb-video-play {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.clb-video-play:disabled {
+  cursor: default;
+}
+
+.clb-video-play-icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  padding-left: 4px;
+  color: var(--rh-forest-deep);
+  background: rgba(246, 245, 240, 0.94);
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  transform: translate(-50%, -50%);
+  transition: transform 160ms ease, background-color 160ms ease;
+}
+
+.clb-video-play:hover .clb-video-play-icon,
+.clb-video-play:focus-visible .clb-video-play-icon {
+  background: var(--clb-gold);
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.clb-video-play:disabled .clb-video-play-icon {
+  opacity: 0.55;
+}
+
+.clb-video-play:focus-visible {
+  outline: 3px solid var(--clb-gold);
+  outline-offset: -3px;
+}
+
+.clb-video-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 18px 20px 20px;
+}
+
+.clb-video-meta {
+  color: var(--clb-gold-ink);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.clb-video h3 {
+  margin-top: 6px !important;
+  font-size: 1.2rem;
+  line-height: 1.2;
+}
+
+.clb-video-wide h3 {
+  font-size: 1.45rem;
+}
+
+.clb-video-note {
+  margin-top: 8px !important;
+  color: rgba(29, 42, 45, 0.8);
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.clb-video-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+.clb-video-actions .rhp-action {
+  min-height: 44px;
+}
+
+.clb-page .clb-video-actions .rhp-action-solid {
+  color: var(--rh-paper);
+  background: var(--rh-forest);
+  border-color: var(--rh-forest);
+}
+
+.clb-page .clb-video-actions .rhp-action-solid:hover {
+  background: var(--rh-forest-deep);
+  border-color: var(--rh-forest-deep);
+}
+
+.clb-video-soon {
+  color: rgba(29, 42, 45, 0.62);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+/* ── Partners ── */
+
+.clb-partner-logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 24px clamp(36px, 6vw, 80px);
+  max-width: 900px;
+  margin: clamp(28px, 4vw, 44px) auto 0;
+  padding: clamp(24px, 3vw, 36px);
+  list-style: none;
+  background: var(--clb-card);
+  border: 1px solid rgba(13, 95, 105, 0.22);
+}
+
+@media (max-width: 640px) {
+  .clb-masthead-inner {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .clb-masthead-date {
+    justify-content: center;
+  }
+
+  .clb-video-play-icon {
+    width: 54px;
+    height: 54px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clb-video-play-icon {
+    transition: none;
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "creditLine": "Photos and video by SparkPoint",
+  "usage": [
+    "Share them about the Collaboration Lab — on social media, in newsletters, reports, presentations, and news coverage.",
+    "Credit SparkPoint when you post.",
+    "Please don't alter them in ways that change the moment, or use them in advertising."
+  ],
+  "contactEmail": "info@yoursparkpoint.org",
+  "downloadPrefix": "SparkPoint-Collaboration-Lab-2026",
+  "sets": [
+    {
+      "id": "day",
+      "title": "The morning",
+      "note": ""
+    }
+  ],
+  "photos": [],
+  "videos": [
+    {
+      "id": "program-1",
+      "kind": "program",
+      "title": "The program, part 1",
+      "note": "The welcome and the morning's first featured collaboration, recorded straight through from the back of the room.",
+      "source": "share-copies/SparkPoint-Collaboration-Lab-2026-Program-Part-1-1080p.mp4",
+      "file": "SparkPoint-Collaboration-Lab-2026-Program-Part-1-1080p.mp4",
+      "poster": "clb-program-01-poster.jpg",
+      "duration": 3600,
+      "width": 1920,
+      "height": 1080,
+      "bytes": 0,
+      "original": {
+        "label": "4K camera original",
+        "bytes": 54492880484,
+        "url": ""
+      }
+    },
+    {
+      "id": "program-2",
+      "kind": "program",
+      "title": "The program, part 2",
+      "note": "Sarah Hankey of SparkPoint and Keagan Monteith of FWRD Transylvania on Wellness Rooted in Connection and Community Connectors, then questions from the room.",
+      "source": "share-copies/SparkPoint-Collaboration-Lab-2026-Program-Part-2-1080p.mp4",
+      "file": "SparkPoint-Collaboration-Lab-2026-Program-Part-2-1080p.mp4",
+      "poster": "clb-program-02-poster.jpg",
+      "duration": 1336,
+      "width": 1920,
+      "height": 1080,
+      "bytes": 0,
+      "original": {
+        "label": "4K camera original",
+        "bytes": 20216718984,
+        "url": ""
+      }
+    },
+    {
+      "id": "broll-01",
+      "kind": "broll",
+      "title": "The room fills in",
+      "note": "People settling in at the tables before the program.",
+      "source": "treated/b-roll/crowd_pre-event_1.MP4",
+      "file": "SparkPoint-Collaboration-Lab-2026-B-roll-01-4K.mp4",
+      "poster": "clb-broll-01-poster.jpg",
+      "preview": "clb-broll-01-preview.mp4",
+      "duration": 115,
+      "width": 3840,
+      "height": 2160,
+      "bytes": 0
+    },
+    {
+      "id": "broll-02",
+      "kind": "broll",
+      "title": "By the stage",
+      "note": "Conversations up front before things got started.",
+      "source": "treated/b-roll/crowd_pre-event_2.MP4",
+      "file": "SparkPoint-Collaboration-Lab-2026-B-roll-02-4K.mp4",
+      "poster": "clb-broll-02-poster.jpg",
+      "preview": "clb-broll-02-preview.mp4",
+      "duration": 101,
+      "width": 3840,
+      "height": 2160,
+      "bytes": 0
+    },
+    {
+      "id": "broll-03",
+      "kind": "broll",
+      "title": "Around the tables",
+      "note": "Small groups in conversation, shot at 60 frames per second.",
+      "source": "treated/b-roll/crowd_pre-event_3.MP4",
+      "file": "SparkPoint-Collaboration-Lab-2026-B-roll-03-1080p60.mp4",
+      "poster": "clb-broll-03-poster.jpg",
+      "preview": "clb-broll-03-preview.mp4",
+      "duration": 162,
+      "width": 1920,
+      "height": 1080,
+      "bytes": 0
+    },
+    {
+      "id": "broll-04",
+      "kind": "broll",
+      "title": "Slow motion at the tables",
+      "note": "A short slow-motion pan across a table mid-laugh. No sound.",
+      "source": "treated/b-roll/slomo-pan.mp4",
+      "file": "SparkPoint-Collaboration-Lab-2026-B-roll-04-1080p.mp4",
+      "poster": "clb-broll-04-poster.jpg",
+      "preview": "clb-broll-04-preview.mp4",
+      "duration": 15,
+      "width": 1920,
+      "height": 1080,
+      "bytes": 0
+    },
+    {
+      "id": "broll-05",
+      "kind": "broll",
+      "title": "Slow motion, longer",
+      "note": "A longer slow-motion pan through the tables. No sound.",
+      "source": "treated/b-roll/Slomo_pan2.MP4",
+      "file": "SparkPoint-Collaboration-Lab-2026-B-roll-05-1080p.mp4",
+      "poster": "clb-broll-05-poster.jpg",
+      "preview": "clb-broll-05-preview.mp4",
+      "duration": 40,
+      "width": 1920,
+      "height": 1080,
+      "bytes": 0
+    }
+  ]
+}

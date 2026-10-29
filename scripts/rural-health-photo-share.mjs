@@ -1,4 +1,9 @@
-// Photos for the unlisted convening photo-share page (/rural-health-convening/photos).
+// Photos for the unlisted photo-share pages: the convening (/rural-health-convening/photos,
+// the default) and, with `--gallery collab-lab`, the Collaboration Lab
+// (/collaboration-lab/media; `npm run collab:photos`). Each gallery has its own bucket
+// folder, JSON, and file prefix in GALLERIES below; everything else works the same.
+//
+// For the convening:
 //
 // The image files are NOT in this repo. They live in the public-read Supabase Storage
 // bucket `convening-photos` (under rural-health-2026/), so the gallery can grow to
@@ -56,18 +61,48 @@ import readline from 'node:readline/promises';
 import { execFileSync } from 'node:child_process';
 
 const PROJECT_ID = 'suqtfbculwuetfdhdgdh';
-const BUCKET = 'convening-photos';
-const PREFIX = 'rural-health-2026';
 const STORAGE = `https://${PROJECT_ID}.supabase.co/storage/v1/object`;
 
+const GALLERIES = {
+  'rural-health': {
+    bucket: 'convening-photos',
+    prefix: 'rural-health-2026',
+    data: 'src/data/ruralHealthPhotoShare.json',
+    filePrefix: 'rhp',
+    cache: '.photo-share-cache',
+    defaultAlt: 'A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.',
+  },
+  'collab-lab': {
+    bucket: 'event-media',
+    prefix: 'collaboration-lab-2026',
+    data: 'src/data/collabLabMedia.json',
+    filePrefix: 'clb',
+    cache: '.photo-share-cache/collab-lab',
+    defaultAlt: 'A moment from the Collaboration Lab at the Mary C. Jenkins Community & Cultural Center in Brevard, NC.',
+  },
+};
+
+// `--gallery <name>` picks the gallery; it's taken out of the arguments here so the
+// commands below only see their own.
+const argv = process.argv.slice(2);
+const galleryFlag = argv.indexOf('--gallery');
+const galleryName = galleryFlag >= 0 ? argv[galleryFlag + 1] : 'rural-health';
+if (galleryFlag >= 0) argv.splice(galleryFlag, 2);
+const GALLERY = GALLERIES[galleryName];
+if (!GALLERY) {
+  console.error(`Unknown gallery "${galleryName}". Galleries: ${Object.keys(GALLERIES).join(', ')}`);
+  process.exit(1);
+}
+const { bucket: BUCKET, prefix: PREFIX, filePrefix: FILE_PREFIX } = GALLERY;
+
 const root = process.cwd();
-const dataPath = path.join(root, 'src/data/ruralHealthPhotoShare.json');
-const cacheDir = path.join(root, '.photo-share-cache');
+const dataPath = path.join(root, GALLERY.data);
+const cacheDir = path.join(root, GALLERY.cache);
 
 const readData = () => JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 const writeData = (data) => fs.writeFileSync(dataPath, `${JSON.stringify(data, null, 2)}\n`);
 const downloadName = (data, photo) => `${data.downloadPrefix}-${photo.id}.jpg`;
-const DEFAULT_ALT = 'A moment from the 2026 WNC Regional Rural Health Convening at Deerwoode Reserve in Brevard, NC.';
+const DEFAULT_ALT = GALLERY.defaultAlt;
 const IMAGE_EXT = /\.(jpe?g|png|webp|tiff?)$/i;
 const MIME = { '.webp': 'image/webp', '.jpg': 'image/jpeg' };
 const mb = (bytes) => `${(bytes / 1e6).toFixed(1)} MB`;
@@ -160,7 +195,7 @@ async function backfillFingerprints(sharp, data) {
   let changed = false;
   for (const photo of data.photos) {
     if (photo.hash?.length === 64) continue; // also replaces any older, shorter hash
-    photo.hash = await fingerprint(sharp, await cached(`rhp-${photo.id}-960.webp`));
+    photo.hash = await fingerprint(sharp, await cached(`${FILE_PREFIX}-${photo.id}-960.webp`));
     changed = true;
   }
   if (changed) writeData(data);
@@ -236,7 +271,7 @@ async function cached(name) {
   const file = path.join(cacheDir, name);
   if (!fs.existsSync(file)) {
     const res = await fetch(`${STORAGE}/public/${BUCKET}/${PREFIX}/${encodeURIComponent(name)}`);
-    if (!res.ok) throw new Error(`${name} is neither cached nor in the bucket (${res.status}) — re-run photos:add with its folder.`);
+    if (!res.ok) throw new Error(`${name} is neither cached nor in the bucket (${res.status}) — re-run the add command with its folder.`);
     fs.mkdirSync(cacheDir, { recursive: true });
     fs.writeFileSync(file, Buffer.from(await res.arrayBuffer()));
   }
@@ -379,8 +414,8 @@ async function add(args) {
     }
 
     const outputs = [
-      [`rhp-${photo.id}-960.webp`, (img) => img.resize(960, 960, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 78 })],
-      [`rhp-${photo.id}-1920.webp`, (img) => img.resize(1920, 1920, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 80 })],
+      [`${FILE_PREFIX}-${photo.id}-960.webp`, (img) => img.resize(960, 960, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 78 })],
+      [`${FILE_PREFIX}-${photo.id}-1920.webp`, (img) => img.resize(1920, 1920, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 80 })],
       [
         downloadName(data, photo),
         (img) =>
@@ -437,7 +472,7 @@ async function add(args) {
     }
     console.log(
       `\nNext: the photos are uploaded, and the page will show them once the updated\n` +
-        `src/data/ruralHealthPhotoShare.json is merged — commit it through a pull request\n` +
+        `${GALLERY.data} is merged — commit it through a pull request\n` +
         `(or ask Claude to). Optional: give any photo a "title" or a better "alt" there.` +
         (branch === 'main' ? `\nYou're on main: create a branch before committing.` : ''),
     );
@@ -465,12 +500,12 @@ async function removeZips() {
 
 // ── Entry ──
 
-const [command, ...rest] = process.argv.slice(2);
+const [command, ...rest] = argv;
 if (command === 'add' || command === 'ingest') {
   await add(rest);
 } else if (command === 'check') {
   await check(rest);
-} else if (command === 'remove-zips') {
+} else if (command === 'remove-zips' && galleryName === 'rural-health') {
   await removeZips();
 } else {
   fail('Usage: npm run photos:add [-- "<folder>" --set <group-id> --force]   |   npm run photos:check -- "<folder>"   |   npm run photos:remove-zips');

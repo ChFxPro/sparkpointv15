@@ -82,6 +82,7 @@ const KnowYourNumbersPage = lazy(() =>
 );
 const RuralHealthConveningPage = lazy(() => import('./pages/RuralHealthConveningPage'));
 const RuralHealthPhotoSharePage = lazy(() => import('./pages/RuralHealthPhotoSharePage'));
+const CollabLabMediaPage = lazy(() => import('./pages/CollabLabMediaPage'));
 const InternalStatusPage = lazy(() => import('./pages/InternalStatusPage'));
 const InternalLoginPage = lazy(() => import('./pages/InternalLoginPage'));
 const InternalReportsHomePage = lazy(() => import('./pages/InternalReportsHomePage'));
@@ -264,6 +265,8 @@ function AppContent() {
         <Route path="/rural-health-convening" element={<RuralHealthConveningPage />} />
         {/* Unlisted photo-share page: reached by direct link only (see the page header). */}
         <Route path="/rural-health-convening/photos" element={<RuralHealthPhotoSharePage />} />
+        {/* Unlisted photo + video page for the Oct 23 Collaboration Lab: direct link only. */}
+        <Route path="/collaboration-lab/media" element={<CollabLabMediaPage />} />
         <Route path="/backporch" element={<BackPorchPage />} />
         <Route path="/backporch/:slug" element={<BackPorchPostPage />} />
         <Route path="/back-porch" element={<Navigate to="/backporch" replace />} />
