@@ -1,0 +1,40 @@
+/* A World of Connections: fonts and the lockup, shared by every template in
+   scripts/gala-print/templates/. Values are ported exactly from the brand kit's
+   master, Branding/Gala/WorldOfConnections/lockup.html. Everything in .lk is
+   sized in em from its font-size: the cap size of WORLD. Don't eyeball changes;
+   change the kit first. render.mjs inlines this file where a template says
+   {{INCLUDE:shared/lockup.css}}. */
+@font-face { font-family: 'Josefin Sans'; src: url('{{JOSEFIN}}/josefin-sans-latin-wght-normal.woff2') format('woff2'); font-weight: 100 700; font-style: normal; }
+@font-face { font-family: 'Josefin Sans'; src: url('{{JOSEFIN}}/josefin-sans-latin-wght-italic.woff2') format('woff2'); font-weight: 100 700; font-style: italic; }
+
+.lk { position: relative; display: inline-grid; justify-items: center; line-height: 1; padding: .34em .3em 0; text-align: center;
+      font-size: 136px;
+      --face: #f7f1e5; --gap: #0b1322; --edge: #d9b56a; --acc: #d9b56a; --by: #f1d9a0;
+      --line: rgba(241,217,160,.26); --ray: rgba(217,181,106,.24); --route: rgba(241,217,160,.85); }
+.lk.light { --face: #0b1322; --gap: #f7f1e5; --edge: #c25a8e; --acc: #8e2a5c; --by: #8a7754;
+            --line: rgba(27,26,31,.15); --ray: rgba(138,119,84,.24); --route: rgba(142,42,92,.72); }
+.lk > :not(svg) { position: relative; display: block; margin: 0; }
+.lk .art { position: absolute; top: 44%; left: 50%; height: 150%; aspect-ratio: 1; translate: -50% -50%; overflow: visible; fill: none; }
+.lk .art .rays line { stroke: var(--ray); stroke-width: .6; }
+.lk .art .globe * { stroke: var(--line); stroke-width: .6; }
+.lk .art .route { stroke: var(--route); stroke-width: 1; stroke-dasharray: 2.6 2.8; }
+.lk .art .node { fill: var(--route); }
+.lk .art .home { stroke: var(--route); stroke-width: .9; }
+.lk .a { margin-bottom: .2em; color: var(--acc); font: italic 300 .22em 'Josefin Sans'; letter-spacing: .1em; }
+.lk .world { color: var(--face); font: 700 1em 'Josefin Sans'; text-transform: uppercase; letter-spacing: .26em; margin-right: -.26em;
+             text-shadow: .045em .045em 0 var(--gap), .07em .07em 0 var(--edge); }
+.lk .conn { display: flex; align-items: center; gap: .6em; margin-top: .28em; color: var(--acc);
+            font: 400 .2em 'Josefin Sans'; letter-spacing: .62em; margin-right: -.62em; text-transform: uppercase; }
+.lk .conn::before, .lk .conn::after { content: ''; width: 2.6em; height: 1px; background: currentColor; opacity: .7; }
+.lk .rule { display: flex; align-items: center; gap: .7em; margin-top: .55em; font-size: .13em; }
+.lk .rule i { width: 5em; height: 5px; border-top: 1px solid var(--by); border-bottom: 1px solid var(--by); opacity: .6; }
+.lk .rule b { width: .5em; height: .5em; rotate: 45deg; border: 1px solid var(--by); opacity: .7; }
+.lk .rule img { width: 1.5em; }
+.lk .by { margin-top: .6em; color: var(--by); font: 600 .1em 'Josefin Sans'; letter-spacing: .44em; margin-right: -.44em; text-transform: uppercase; }
+/* The kit's floor is 11px on screen; --by2-min lets print set it in pt. */
+.lk .by2 { margin-top: .75em; color: var(--by); opacity: .85; font: 400 max(.08em, var(--by2-min, 11px)) 'Josefin Sans'; letter-spacing: .38em; margin-right: -.38em; text-transform: uppercase; }
+.lk.no-by2 .by2 { display: none; }
+
+/* Deco details from the kit: double-hairline frame and the square pink button. */
+.deco-frame { position: absolute; inset: var(--frame-inset, 22px); border: 1px solid var(--frame, rgba(217,181,106,.5)); outline: 1px solid var(--frame2, rgba(217,181,106,.28)); outline-offset: 6px; pointer-events: none; z-index: 5; }
+.deco-btn { display: inline-block; padding: .9em 2.2em .78em; border: 1px solid #d9b56a; background: #e03694; color: #fff; font: 600 1em 'Josefin Sans'; letter-spacing: .2em; margin-right: -.2em; text-transform: uppercase; border-radius: 0; }

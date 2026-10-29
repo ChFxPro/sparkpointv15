@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>An Atlas of Wonders · Invitation</title>
+<title>A World of Connections · Invitation</title>
 <!--
-  Email invitation for An Atlas of Wonders, the SparkPoint Gala, laid out at 600 CSS px (the width
+  Email invitation for A World of Connections, the SparkPoint Gala, laid out at 600 CSS px (the width
   email clients show) and rendered at 2x by render.mjs. It mirrors the Gala
-  page (src/pages/GalaPage.tsx): midnight + brass, Fraunces, the sparkmark,
+  page (src/pages/GalaPage.tsx): midnight + brass, Josefin Sans, the sparkmark,
   the boarding pass, the departures board, passport stamps, and the postcard.
   Everything that changes (tickets, venue, trips) comes from
   invitation.config.json via window.__INVITE__.
@@ -18,9 +18,9 @@
   <header class="hero lockup-hero">
     <img src="../../public/assets/events/gala/hero-wing-1400.webp" alt="" />
     <div class="hero-in">
-      <p class="kicker mono"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />You&rsquo;re invited &middot; Live travel auction</p>
-      <h1><img class="hero-lockup" src="assets/atlas-of-wonders-lockup-for-dark-backgrounds.png" alt="An Atlas of Wonders, the SparkPoint Gala" /></h1>
-      <p class="hero-sub">See the world. Strengthen home.</p>
+      <p class="kicker mono"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />You&rsquo;re invited</p>
+      <h1><img class="hero-lockup" src="assets/world-of-connections-lockup-for-dark-backgrounds.png" alt="A World of Connections, the SparkPoint Gala" /></h1>
+      <p class="hero-sub">Every journey <em>connects back home.</em></p>
     </div>
   </header>
 
@@ -29,17 +29,17 @@
     <svg class="stamp" viewBox="0 0 100 100">
       <defs><path id="ring" d="M50 50 m-36 0 a36 36 0 1 1 72 0 a36 36 0 1 1 -72 0" /></defs>
       <circle cx="50" cy="50" r="46" /><circle cx="50" cy="50" r="28" />
-      <text class="ring"><textPath href="#ring" startOffset="33%">ATLAS GALA · ADMITTED ·</textPath></text>
+      <text class="ring" style="text-anchor: start"><textPath href="#ring" startOffset="0" textLength="222" lengthAdjust="spacing">A WORLD OF CONNECTIONS · ADMITTED ·</textPath></text>
       <text x="50" y="49" class="day">DEC 11</text><text x="50" y="62" class="yr">2026</text>
     </svg>
     <p class="request">SparkPoint invites you to join us for</p>
-    <h2 class="lockup"><img src="assets/atlas-of-wonders-lockup-for-light-backgrounds.png" alt="An Atlas of Wonders, the SparkPoint Gala" /></h2>
+    <h2 class="lockup"><img src="assets/world-of-connections-lockup-for-light-backgrounds.png" alt="A World of Connections, the SparkPoint Gala" /></h2>
     <p class="lede">An evening of connection and celebration, with a live auction of eight travel experiences, and a portion of every trip coming home to the Transylvania Resilience Hub.</p>
 
     <div class="pass">
       <div class="pass-main">
         <div class="band">
-          <span class="brand"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />An Atlas of Wonders</span>
+          <span class="brand"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />A World of Connections</span>
           <span class="cls"><small class="mono">Boarding pass</small><b>First class</b></span>
         </div>
         <div class="pass-body">
@@ -74,7 +74,7 @@
   <!-- 3. Departures -->
   <section class="section">
     <p class="eyebrow mono">The travel auction</p>
-    <h3>Eight departures. <em>One home base.</em></h3>
+    <h3>Eight connections. <em>One home base.</em></h3>
     <p class="copy" data-fill="trips-copy"></p>
     <div class="board">
       <div class="board-title"><b>Departures</b><span class="mono">Transylvania County · Home base</span></div>
@@ -142,7 +142,7 @@
   const pad = (text, n) => text.toUpperCase().slice(0, n).padEnd(n, ' ');
   const tiles = (text, n) => `<span class="tiles">${[...pad(text, n)].map((c) => `<span class="tile">${c === ' ' ? '&nbsp;' : esc(c)}</span>`).join('')}</span>`;
   const trips = (cfg.trips || []).slice(0, 8);
-  const rows = [`<div class="row gala">${tiles('ATLAS OF WONDERS', 16)}<span class="status">${tiles('DEC 11', 10)}</span></div>`];
+  const rows = [`<div class="row gala">${tiles('SPARKPOINT GALA', 16)}<span class="status">${tiles('DEC 11', 10)}</span></div>`];
   for (let i = 0; i < 8; i += 1) {
     const trip = trips[i];
     const label = trip ? (trip.board || trip.destination || '') : 'REVEALING SOON';

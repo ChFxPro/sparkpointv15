@@ -1,4 +1,4 @@
-// Renders the An Atlas of Wonders print and social files (the Gala's print
+// Renders the A World of Connections print and social files (the Gala's print
 // invitation, "Tickets on sale now" and "Save the date" social sets, Squarespace
 // ticket images, the transparent lockup PNGs, and the website's link-preview
 // image) from the HTML
@@ -24,10 +24,11 @@ const OUT = join(root, 'output', 'gala-print');
 const BUILD = join(OUT, '.build');
 
 // Templates use {{…}} placeholders instead of fixed paths, so they render from
-// any checkout. Fonts come from the site's own @fontsource packages.
+// any checkout. Josefin Sans (the Gala's only typeface) comes from the site's
+// own @fontsource package. {{INCLUDE:shared/…}} inlines a shared file (the
+// lockup's CSS and script), whose own placeholders are then filled too.
 const placeholders = {
-  FRAUNCES: pathToFileURL(join(dirname(require.resolve('@fontsource-variable/fraunces/package.json')), 'files')).href,
-  MANROPE: pathToFileURL(join(dirname(require.resolve('@fontsource/manrope/package.json')), 'files')).href,
+  JOSEFIN: pathToFileURL(join(dirname(require.resolve('@fontsource-variable/josefin-sans/package.json')), 'files')).href,
   PUBLIC: pathToFileURL(join(root, 'public')).href,
   ASSETS: pathToFileURL(join(here, 'assets')).href,
   OUTPUT: pathToFileURL(OUT).href,
@@ -35,6 +36,11 @@ const placeholders = {
 
 async function prepare(template) {
   let html = await readFile(join(here, 'templates', template), 'utf8');
+  const includes = [...html.matchAll(/\{\{INCLUDE:([\w./-]+)\}\}/g)].map((m) => m[1]);
+  for (const name of new Set(includes)) {
+    const text = await readFile(join(here, 'templates', name), 'utf8');
+    html = html.split(`{{INCLUDE:${name}}}`).join(text);
+  }
   html = html.replace(/\{\{(\w+)\}\}/g, (match, key) => {
     if (!(key in placeholders)) throw new Error(`Unknown placeholder ${match} in ${template}`);
     return placeholders[key];
@@ -48,8 +54,8 @@ async function open(page, template, width, height, scale) {
   await page.setViewport({ width, height, deviceScaleFactor: scale });
   await page.goto(await prepare(template), { waitUntil: 'networkidle0' });
   await page.evaluate(() => document.fonts.ready);
-  const fontsOk = await page.evaluate(() => document.fonts.check('400 40px Fraunces'));
-  if (!fontsOk) throw new Error(`Fraunces did not load for ${template}`);
+  const fontsOk = await page.evaluate(() => document.fonts.check('700 40px "Josefin Sans"') && document.fonts.check('italic 300 40px "Josefin Sans"'));
+  if (!fontsOk) throw new Error(`Josefin Sans did not load for ${template}; run npm install`);
   await new Promise((resolve) => setTimeout(resolve, 300));
 }
 
@@ -58,12 +64,19 @@ const TICKET_URL = 'https://secure.yoursparkpoint.org/store/p/2026-sparkpoint-ga
 const groups = {
   async logo(page) {
     await mkdir(join(OUT, 'logo'), { recursive: true });
-    await open(page, 'lockup.html', 1600, 1200, 2);
+    await open(page, 'lockup.html', 1200, 1600, 2);
     for (const [id, name] of [
-      ['dark', 'atlas-of-wonders-lockup-for-dark-backgrounds.png'],
-      ['light', 'atlas-of-wonders-lockup-for-light-backgrounds.png'],
+      ['dark', 'world-of-connections-lockup-for-dark-backgrounds.png'],
+      ['light', 'world-of-connections-lockup-for-light-backgrounds.png'],
     ]) {
-      await (await page.$(`#${id}`)).screenshot({ path: join(OUT, 'logo', name), omitBackground: true });
+      // Clip to the lockup plus its globe and routes, which spill past its box.
+      const clip = await page.evaluate((sel) => {
+        const rects = [document.querySelector(sel), document.querySelector(`${sel} .art`)].map((el) => el.getBoundingClientRect());
+        const pad = 24;
+        const x = Math.min(...rects.map((r) => r.left)) - pad, y = Math.min(...rects.map((r) => r.top)) - pad;
+        return { x, y, width: Math.max(...rects.map((r) => r.right)) + pad - x, height: Math.max(...rects.map((r) => r.bottom)) + pad - y };
+      }, `#${id}`);
+      await page.screenshot({ path: join(OUT, 'logo', name), omitBackground: true, clip, captureBeyondViewport: true });
       console.log(`logo/${name}`);
     }
   },
@@ -144,8 +157,8 @@ const groups = {
   async share(page) {
     await mkdir(join(OUT, 'share'), { recursive: true });
     await open(page, 'share.html', 1200, 630, 1);
-    await page.screenshot({ path: join(OUT, 'share', 'gala-share-atlas.jpg'), type: 'jpeg', quality: 86 });
-    console.log('share/gala-share-atlas.jpg  (copy to public/assets/events/gala/ to update the site)');
+    await page.screenshot({ path: join(OUT, 'share', 'gala-share-world-of-connections.jpg'), type: 'jpeg', quality: 86 });
+    console.log('share/gala-share-world-of-connections.jpg  (copy to public/assets/events/gala/ to update the site)');
   },
 };
 

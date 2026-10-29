@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>An Atlas of Wonders · Newsletter sections</title>
+<title>A World of Connections · Newsletter sections</title>
 <!--
   The Gala newsletter, cut into sections. render.mjs screenshots each
   <section data-slice> on its own (600 CSS px wide, at 2x) so the newsletter
@@ -33,9 +33,9 @@
   .tag-body::before { content: ''; position: absolute; inset: 5px; border: 1.2px dashed var(--stitch); border-radius: 24px 24px 6px 6px; }
   .rivet { position: absolute; top: 11px; left: 50%; width: 11px; height: 11px; border-radius: 50%; transform: translateX(-50%); background: radial-gradient(circle at 35% 30%, #fff4cf 0 1.5px, #e2c172 2px, #a47a2c 70%, #6f4f18); box-shadow: 0 1px 2px rgba(0,0,0,.45); }
   .tag-card { position: relative; width: 100%; padding: 7px 5px 8px; border-radius: 4px; background: #fbf6ea; color: var(--ink); text-align: center; box-shadow: inset 0 2px 5px rgba(0,0,0,.2); }
-  .tag-card b { display: inline-block; padding: 1px 4px; border: 1.2px solid #8e2a5c; border-radius: 2px; color: #8e2a5c; font-family: var(--mono); font-size: 12px; font-weight: 800; letter-spacing: .06em; }
+  .tag-card b { display: inline-block; padding: 1px 4px; border: 1.2px solid #8e2a5c; border-radius: 2px; color: #8e2a5c; font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .06em; }
   .tag-card strong { display: block; margin-top: 6px; font-family: var(--display); font-size: 13px; font-weight: 600; line-height: 1.1; }
-  .tag-brand { display: inline-flex; align-items: center; gap: 3px; color: #e8cf8d; font-family: var(--display); font-style: italic; font-size: 8.5px; }
+  .tag-brand { display: inline-flex; align-items: center; gap: 3px; color: #e8cf8d; font-family: var(--display); font-style: normal; font-size: 8.5px; }
   .tag-brand .sparkmark { width: 9px; height: 9px; }
 
   /* 07 · Travel partners seat map */
@@ -63,9 +63,9 @@
   <header class="hero lockup-hero">
     <img src="../../public/assets/events/gala/hero-wing-1400.webp" alt="" />
     <div class="hero-in">
-      <p class="kicker mono"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />You&rsquo;re invited &middot; Live travel auction</p>
-      <h1><img class="hero-lockup" src="assets/atlas-of-wonders-lockup-for-dark-backgrounds.png" alt="An Atlas of Wonders, the SparkPoint Gala" /></h1>
-      <p class="hero-sub">See the world. Strengthen home.</p>
+      <p class="kicker mono"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />You&rsquo;re invited</p>
+      <h1><img class="hero-lockup" src="assets/world-of-connections-lockup-for-dark-backgrounds.png" alt="A World of Connections, the SparkPoint Gala" /></h1>
+      <p class="hero-sub">Every journey <em>connects back home.</em></p>
     </div>
   </header>
 </section>
@@ -76,15 +76,15 @@
     <svg class="stamp" viewBox="0 0 100 100">
       <defs><path id="ring" d="M50 50 m-36 0 a36 36 0 1 1 72 0 a36 36 0 1 1 -72 0" /></defs>
       <circle cx="50" cy="50" r="46" /><circle cx="50" cy="50" r="28" />
-      <text class="ring"><textPath href="#ring" startOffset="33%">ATLAS GALA · ADMITTED ·</textPath></text>
+      <text class="ring" style="text-anchor: start"><textPath href="#ring" startOffset="0" textLength="222" lengthAdjust="spacing">A WORLD OF CONNECTIONS · ADMITTED ·</textPath></text>
       <text x="50" y="49" class="day">DEC 11</text><text x="50" y="62" class="yr">2026</text>
     </svg>
     <p class="request">SparkPoint invites you to join us for</p>
-    <h2 class="lockup"><img src="assets/atlas-of-wonders-lockup-for-light-backgrounds.png" alt="An Atlas of Wonders, the SparkPoint Gala" /></h2>
+    <h2 class="lockup"><img src="assets/world-of-connections-lockup-for-light-backgrounds.png" alt="A World of Connections, the SparkPoint Gala" /></h2>
     <div class="pass">
       <div class="pass-main">
         <div class="band">
-          <span class="brand"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />An Atlas of Wonders</span>
+          <span class="brand"><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" />A World of Connections</span>
           <span class="cls"><small class="mono">Boarding pass</small><b>First class</b></span>
         </div>
         <div class="pass-body">
@@ -120,7 +120,7 @@
 <!-- 03 · Departures board (animated: the letters flip into place) -->
 <section class="slice section" data-slice="03-departures" data-anim="flap">
   <p class="eyebrow mono">The travel auction</p>
-  <h3>Eight departures. <em>One home base.</em></h3>
+  <h3>Eight connections. <em>One home base.</em></h3>
   <p class="copy" data-fill="trips-copy"></p>
   <div class="board">
     <div class="board-title"><b>Departures</b><span class="mono">Transylvania County · Home base</span></div>
@@ -182,7 +182,7 @@
 <!-- 08 · Closing heading (a real button follows it in the email) -->
 <section class="slice close" data-slice="08-your-seat">
   <p class="eyebrow mono" data-fill="cta-eyebrow"></p>
-  <h3 style="margin-top: 8px; font-family: var(--display); font-weight: 400; font-size: 44px; color: var(--ivory);">Your seat <em style="color: var(--brass); font-style: italic;">is waiting.</em></h3>
+  <h3 style="margin-top: 8px; font-family: var(--display); font-weight: 400; font-size: 44px; color: var(--ivory);">Your seat <em style="color: var(--brass); font-style: normal;">is waiting.</em></h3>
   <p class="price" data-fill="price" style="font-size: 15px;"></p>
   <div class="rule"><span></span><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" /><span></span></div>
 </section>
@@ -210,7 +210,7 @@
     ? 'Eight journeys go up for bid with a professional live auctioneer. Pick your next adventure.'
     : 'Eight journeys around the world go up for bid with a professional live auctioneer. The destinations are revealed soon.');
   const pad = (text, n) => text.toUpperCase().slice(0, n).padEnd(n, ' ');
-  const rowsText = [['ATLAS OF WONDERS', 'DEC 11', 'gala']];
+  const rowsText = [['SPARKPOINT GALA', 'DEC 11', 'gala']];
   for (let i = 0; i < 8; i += 1) {
     const trip = trips[i];
     rowsText.push([trip ? (trip.board || trip.destination || '') : 'REVEALING SOON', 'AT AUCTION', '']);
