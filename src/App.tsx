@@ -165,8 +165,8 @@ function RouteLoading() {
 // Flagship program routes that render as immersive, chromeless landing pages.
 // These skip the site-wide <Header /> and wrapping <main> so the program's own
 // hero can occupy the full viewport without colliding with site chrome.
-const CHROMELESS_PATH_PREFIXES = ['/programs/purpose-workshops', '/rural-health-convening', '/internal'];
-const CUSTOM_FOOTER_PATH_PREFIXES = ['/rural-health-convening', '/internal'];
+const CHROMELESS_PATH_PREFIXES = ['/programs/purpose-workshops', '/rural-health-convening', '/collaboration-lab', '/internal'];
+const CUSTOM_FOOTER_PATH_PREFIXES = ['/rural-health-convening', '/collaboration-lab', '/internal'];
 
 function isChromelessPath(pathname: string): boolean {
   return CHROMELESS_PATH_PREFIXES.some(
