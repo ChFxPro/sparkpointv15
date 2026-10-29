@@ -172,27 +172,35 @@ async function uploadLarge(key, file, name, size) {
   const started = Date.now();
   const startOffset = offset;
   try {
+    let failures = 0;
     while (offset < size) {
+      // Read at the current offset on every attempt: after a failed PATCH the server may
+      // already hold that chunk (its reply was lost), so the next one starts elsewhere.
       const { bytesRead } = await handle.read(buffer, 0, Math.min(CHUNK, size - offset), offset);
       let res;
-      for (let attempt = 1; ; attempt += 1) {
-        try {
-          res = await fetch(location, {
-            method: 'PATCH',
-            headers: { ...tus, 'Upload-Offset': String(offset), 'Content-Type': 'application/offset+octet-stream' },
-            body: buffer.subarray(0, bytesRead),
-          });
-          if (res.ok || attempt >= 5 || (res.status >= 400 && res.status < 500 && res.status !== 409)) break;
-        } catch (error) {
-          if (attempt >= 5) throw error;
-        }
-        await new Promise((r) => setTimeout(r, 2000 * attempt));
-        // Ask the server where it got to before retrying.
+      try {
+        res = await fetch(location, {
+          method: 'PATCH',
+          headers: { ...tus, 'Upload-Offset': String(offset), 'Content-Type': 'application/offset+octet-stream' },
+          body: buffer.subarray(0, bytesRead),
+        });
+      } catch (error) {
+        if (++failures >= 5) throw error;
+      }
+      if (res && !res.ok && (failures + 1 >= 5 || (res.status >= 400 && res.status < 500 && res.status !== 409))) {
+        refused(res, await res.text(), name);
+      }
+      if (res?.ok) {
+        failures = 0;
+        offset = Number(res.headers.get('upload-offset') ?? offset + bytesRead);
+      } else {
+        if (res) failures += 1;
+        await new Promise((r) => setTimeout(r, 2000 * failures));
+        // Ask the server where it got to, then go round again from there.
         const head = await fetch(location, { method: 'HEAD', headers: tus });
         if (head.ok) offset = Number(head.headers.get('upload-offset') ?? offset);
+        continue;
       }
-      if (!res.ok) refused(res, await res.text(), name);
-      offset = Number(res.headers.get('upload-offset') ?? offset + bytesRead);
       const rate = (offset - startOffset) / Math.max(1, (Date.now() - started) / 1000);
       process.stdout.write(`\r    ${gb(offset)} of ${gb(size)}  (${(rate / 1e6).toFixed(1)} MB/s)      `);
     }
