@@ -1,9 +1,7 @@
-import { useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, Download, Mail, Play, Quote } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Mail, Play, Quote } from 'lucide-react';
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { PartnerLogoArt } from '../components/partners/PartnerLogoArt';
-import { projectId } from '../utils/supabase/info';
 import { CopyButton, photoLabel, storageDownload, usePhotoGallery, webp, type Gallery, type SharePhoto } from '../components/photoShare/photoShareKit';
 import media from '../data/collabLabMedia.json';
 import program from '../data/collabLabProgram.json';
@@ -12,6 +10,7 @@ import program from '../data/collabLabProgram.json';
 import collabWordmarkReversed from '../assets/collab-lab/collab-lab-wordmark-reversed.webp';
 import { CollabLabHero } from './collabLab/CollabLabHero';
 import { ProgramPlayer, formatTime, momentHash, type ProgramPart } from './collabLab/ProgramPlayer';
+import { BASE, VideoCard, byId } from './collabLab/VideoCard';
 import './ruralHealthConvening.css';
 import './ruralHealthPhotoShare.css';
 import './collabLabMedia.css';
@@ -27,8 +26,13 @@ import './collabLabMedia.css';
 // with chapters, captions, a searchable transcript, and pull quotes that open the
 // recording at their moment (src/pages/collabLab/ProgramPlayer.tsx, data in
 // src/data/collabLabProgram.json). Create: everything to make something with — the
-// photo gallery, b-roll, credit, and caption — plus an outcomes slot that shows once
+// photo gallery, credit, and caption — plus an outcomes slot that shows once
 // `outcomes` in collabLabMedia.json has entries (none are invented here).
+//
+// B-roll downloads are not on this page: they're for editors (mainly PHF's), so they
+// live on their own unlisted page, /collaboration-lab/media/b-roll (CollabLabBrollPage),
+// which this page doesn't link to. Here b-roll only plays: the hero loop and the
+// watch-only clip in Connect.
 //
 // Photos work exactly like the convening photo page (the shared kit in
 // src/components/photoShare/photoShareKit.tsx): `npm run collab:photos`. Video is the
@@ -38,16 +42,11 @@ import './collabLabMedia.css';
 // `event-media` bucket under collaboration-lab-2026/. Layout borrows the convening photo
 // page's; collabLabMedia.css retints it with the event's teal and gold.
 
-type Video = (typeof media.videos)[number] & { preview?: string };
 type Quote = { part: number; t: number; text: string; speaker: string; org?: string };
 
 const PAGE_PATH = '/collaboration-lab/media';
-const BASE = `https://${projectId}.supabase.co/storage/v1/object/public/event-media/collaboration-lab-2026`;
 const SPARKPOINT_LOGO = `${import.meta.env.BASE_URL}logo-wordmark.webp`;
 const { creditLine, contactEmail } = media;
-const videos = media.videos as Video[];
-const broll = videos.filter((v) => v.kind === 'broll');
-const byId = (id: string) => videos.find((v) => v.id === id)!;
 const outcomes = ((media as { outcomes?: { figure: string; label: string }[] }).outcomes ?? []).filter((o) => o.figure);
 const quotes = program.quotes as Quote[];
 
@@ -96,60 +95,6 @@ const CONNECT_STORY: { id: string; caption: string }[] = [
 ];
 
 const PARTNERS = ['Pisgah Health Foundation', 'Dogwood Health Trust', 'FWRD Transylvania (LTRG)'];
-
-const size = (bytes: number) => (bytes >= 1e9 ? `${(bytes / 1e9).toFixed(1)} GB` : `${Math.max(1, Math.round(bytes / 1e6))} MB`);
-const length = (seconds: number) => (seconds >= 90 ? `${Math.round(seconds / 60)} min` : `${seconds} sec`);
-
-function VideoCard({ video }: { video: Video }) {
-  const [playing, setPlaying] = useState(false);
-  const ref = useRef<HTMLVideoElement>(null);
-  const uploaded = video.bytes > 0;
-  const titleId = `clb-video-${video.id}`;
-
-  return (
-    <li className="clb-video" aria-labelledby={titleId}>
-      <div className="clb-video-frame">
-        {playing ? (
-          <video
-            ref={ref}
-            src={`${BASE}/${video.preview ?? video.file}`}
-            poster={`${BASE}/${video.poster}`}
-            controls
-            autoPlay
-            playsInline
-            preload="metadata"
-            width={video.width}
-            height={video.height}
-            aria-label={video.title}
-          />
-        ) : (
-          <button type="button" className="clb-video-play" onClick={() => setPlaying(true)}>
-            <img src={`${BASE}/${video.poster}`} alt="" width={1280} height={720} loading="lazy" decoding="async" />
-            <span className="clb-video-play-icon" aria-hidden="true">
-              <Play size={26} fill="currentColor" />
-            </span>
-            <span className="sr-only">Play a preview of {video.title}</span>
-          </button>
-        )}
-      </div>
-      <div className="clb-video-body">
-        <p className="clb-video-meta">{length(video.duration)} · preview plays here</p>
-        <h3 id={titleId}>{video.title}</h3>
-        <p className="clb-video-note">{video.note}</p>
-        <div className="clb-video-actions">
-          {uploaded ? (
-            <a className="rhp-action rhp-action-solid" href={storageDownload(`${BASE}/${video.file}`, video.file)}>
-              <Download aria-hidden="true" size={17} />
-              Download · {size(video.bytes)}
-            </a>
-          ) : (
-            <span className="clb-video-soon">Download coming soon</span>
-          )}
-        </div>
-      </div>
-    </li>
-  );
-}
 
 function ActHead({ number, word, title, children }: { number: string; word: string; title: string; children?: React.ReactNode }) {
   return (
@@ -208,7 +153,7 @@ export function CollabLabMediaPage() {
       />
 
       <a className="rh-skip-link" href="#create">
-        Skip to the photos and downloads
+        Skip to the photos
       </a>
 
       <header className="clb-masthead">
@@ -322,8 +267,8 @@ export function CollabLabMediaPage() {
           <div className="rh-shell">
             <ActHead number="03" word="Create" title="Your turn. Make something with it.">
               <p>
-                Every photo and clip from the morning is here for your newsletter, your report, your next grant
-                application, or your feed. {creditLine}.
+                Every photo from the morning is here for your newsletter, your report, your next grant application,
+                or your feed. {creditLine}.
               </p>
             </ActHead>
 
@@ -341,19 +286,6 @@ export function CollabLabMediaPage() {
             <div id="photos" className="clb-create-block">
               <h3 className="clb-videos-subhead">Photos · {photos.length}</h3>
               {photos.length ? grid : <p className="rhp-filter-note">The photos are on their way.</p>}
-            </div>
-
-            <div id="video" className="clb-create-block">
-              <h3 className="clb-videos-subhead">B-roll</h3>
-              <p className="clb-videos-note">
-                Short clips for your own videos and posts. Tap one to watch a preview; the download is the full-quality
-                file. The program recordings download from the player above.
-              </p>
-              <ul className="clb-video-list">
-                {broll.map((video) => (
-                  <VideoCard key={video.id} video={video} />
-                ))}
-              </ul>
             </div>
           </div>
         </section>

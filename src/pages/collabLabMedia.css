@@ -311,6 +311,7 @@
   border-radius: 50%;
 }
 
+.clb-act-head h1,
 .clb-act-head h2 {
   margin-top: 16px !important;
   font-size: clamp(2rem, 4vw, 3.4rem);

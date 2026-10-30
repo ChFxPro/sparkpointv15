@@ -83,6 +83,7 @@ const KnowYourNumbersPage = lazy(() =>
 const RuralHealthConveningPage = lazy(() => import('./pages/RuralHealthConveningPage'));
 const RuralHealthPhotoSharePage = lazy(() => import('./pages/RuralHealthPhotoSharePage'));
 const CollabLabMediaPage = lazy(() => import('./pages/CollabLabMediaPage'));
+const CollabLabBrollPage = lazy(() => import('./pages/CollabLabBrollPage'));
 const InternalStatusPage = lazy(() => import('./pages/InternalStatusPage'));
 const InternalLoginPage = lazy(() => import('./pages/InternalLoginPage'));
 const InternalReportsHomePage = lazy(() => import('./pages/InternalReportsHomePage'));
@@ -267,6 +268,8 @@ function AppContent() {
         <Route path="/rural-health-convening/photos" element={<RuralHealthPhotoSharePage />} />
         {/* Unlisted photo + video page for the Oct 23 Collaboration Lab: direct link only. */}
         <Route path="/collaboration-lab/media" element={<CollabLabMediaPage />} />
+        {/* Its b-roll downloads, for editors (mainly PHF's): also direct link only. */}
+        <Route path="/collaboration-lab/media/b-roll" element={<CollabLabBrollPage />} />
         <Route path="/backporch" element={<BackPorchPage />} />
         <Route path="/backporch/:slug" element={<BackPorchPostPage />} />
         <Route path="/back-porch" element={<Navigate to="/backporch" replace />} />
