@@ -137,6 +137,7 @@ function LabShell({ demo = false }: { demo?: boolean }) {
           <Link className="ir-back-link" to={demo ? '/internal/backporch/demo' : '/internal/backporch'}>
             ← BackPorch editor
           </Link>
+          {!demo && <Link className="ir-back-link" to="/internal">Staff portal</Link>}
         </header>
         <div className="pe-hero">
           <div className="pe-hero-inner">

@@ -1135,7 +1135,7 @@ function EditorShell({ demo = false }: { demo?: boolean }) {
           <Link className="ir-back-link" to="/">
             <img src={LOGO} alt="SparkPoint" style={{ height: 22 }} />
           </Link>
-          <Link className="ir-back-link" to="/internal/reports">Internal reports</Link>
+          {!demo && <Link className="ir-back-link" to="/internal">Staff portal</Link>}
         </header>
         <div className="pe-hero">
           <div className="pe-hero-inner">

@@ -87,6 +87,10 @@ const CollabLabMediaPage = lazy(() => import('./pages/CollabLabMediaPage'));
 const CollabLabBrollPage = lazy(() => import('./pages/CollabLabBrollPage'));
 const InternalStatusPage = lazy(() => import('./pages/InternalStatusPage'));
 const InternalLoginPage = lazy(() => import('./pages/InternalLoginPage'));
+const InternalPortalPage = lazy(() => import('./pages/InternalPortalPage'));
+const InternalPortalDemoPage = lazy(() =>
+  import('./pages/InternalPortalPage').then((m) => ({ default: m.InternalPortalDemoPage })),
+);
 const InternalReportsHomePage = lazy(() => import('./pages/InternalReportsHomePage'));
 const InternalReportDashboardPage = lazy(() => import('./pages/InternalReportDashboardPage'));
 const BackPorchPage = lazy(() => import('./pages/backporch/BackPorchPage'));
@@ -282,6 +286,9 @@ function AppContent() {
         {import.meta.env.DEV && <Route path="/internal/backporch/demo" element={<InternalBackPorchDemoPage />} />}
         {import.meta.env.DEV && <Route path="/internal/lab/demo" element={<InternalLabDemoPage />} />}
         <Route path="/internal/status" element={<InternalStatusPage />} />
+        {/* Staff portal: where staff sign-in lands; links to every internal tool. */}
+        <Route path="/internal" element={<InternalPortalPage />} />
+        {import.meta.env.DEV && <Route path="/internal/demo" element={<InternalPortalDemoPage />} />}
         <Route path="/internal/login" element={<InternalLoginPage />} />
         <Route path="/internal/reports" element={<InternalReportsHomePage />} />
         <Route path="/internal/reports/:reportType/:period" element={<InternalReportDashboardPage />} />

@@ -11,7 +11,8 @@ const SPARKPOINT_LOGO = `${BASE}logo-wordmark.webp`;
 export default function InternalLoginPage() {
   const { user, loading, signIn, resetPassword } = useInternalAuth();
   const location = useLocation();
-  const from = (location.state as { from?: string } | null)?.from || '/internal/reports';
+  // Straight back to the tool they were headed for, or else the staff portal.
+  const from = (location.state as { from?: string } | null)?.from || '/internal';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -57,8 +58,8 @@ export default function InternalLoginPage() {
   return (
     <div className="ir-page">
       <SEOHead
-        title="Internal Reports Login — SparkPoint"
-        description="Sign in to the SparkPoint internal reports portal."
+        title="Staff sign-in — SparkPoint"
+        description="Sign in to SparkPoint's staff tools."
         path={PAGE_PATH}
         noindex
       />
@@ -67,7 +68,7 @@ export default function InternalLoginPage() {
         <Link className="ir-back-link" to="/">
           <img src={SPARKPOINT_LOGO} alt="SparkPoint" style={{ height: 22 }} />
         </Link>
-        <span className="ir-masthead-tag">Internal reports</span>
+        <span className="ir-masthead-tag">Staff sign-in</span>
       </header>
 
       <div className="ir-hero-band">
