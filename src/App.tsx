@@ -266,7 +266,7 @@ function AppContent() {
         <Route path="/rural-health-convening" element={<RuralHealthConveningPage />} />
         {/* Unlisted photo-share page: reached by direct link only (see the page header). */}
         <Route path="/rural-health-convening/photos" element={<RuralHealthPhotoSharePage />} />
-        {/* Unlisted photo + video page for the Oct 23 Collaboration Lab: direct link only. */}
+        {/* Photo + video page for the Oct 23 Collaboration Lab; its Events entry links here. */}
         <Route path="/collaboration-lab/media" element={<CollabLabMediaPage />} />
         {/* Its b-roll downloads, for editors (mainly PHF's): also direct link only. */}
         <Route path="/collaboration-lab/media/b-roll" element={<CollabLabBrollPage />} />

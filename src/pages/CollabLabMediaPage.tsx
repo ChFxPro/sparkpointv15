@@ -15,11 +15,11 @@ import './ruralHealthConvening.css';
 import './ruralHealthPhotoShare.css';
 import './collabLabMedia.css';
 
-// Unlisted media page for the Collaboration Lab: Building Partnerships That Last
+// The public page for the Collaboration Lab: Building Partnerships That Last
 // (October 23, 2026, Mary C. Jenkins Community & Cultural Center, Brevard), with
-// Pisgah Health Foundation, Dogwood Health Trust, and FWRD Transylvania. Reached by
-// direct link only — noindex, kept out of the sitemap (UNLISTED in prerender.mjs), and
-// linked from nowhere on the site — but prerendered so a shared link unfurls.
+// Pisgah Health Foundation, Dogwood Health Trust, and FWRD Transylvania. It is the
+// event's page in the Events hub (detailPath in src/data/events.ts), indexed and in the
+// sitemap (STATIC in prerender.mjs) since the owner approved it on 2026-10-30.
 //
 // It tells the morning in the event's own three words. Connect: the room, in a photo
 // sequence. Share: the featured collaboration and the program recordings,
@@ -148,7 +148,6 @@ export function CollabLabMediaPage() {
         imageType="image/jpeg"
         imageWidth={1200}
         imageHeight={630}
-        noindex
       />
 
       <a className="rh-skip-link" href="#create">
