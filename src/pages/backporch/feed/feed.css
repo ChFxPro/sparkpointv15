@@ -1093,3 +1093,90 @@ html.reduce-motion .pf-play:hover {
 .pf-ticket-lead .pf-ticket-photo .pf-photo {
   object-position: 50% 40%;
 }
+
+/* ── Poster cards ──────────────────────────────────────────────
+   A cover set to "show the whole image" (isPoster in FeedParts.tsx) is a flyer or
+   poster: the card shows it at its own shape in a column beside the words, never
+   cropped or blurred. Each card switches by its own width (container query), so a
+   wide lead and a narrow side ticket each get what fits; narrow, the poster sits
+   centred above the words. */
+.pf-poster {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.6rem;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+}
+
+[data-cover='poster'] {
+  container-type: inline-size;
+}
+
+.pf-ticket[data-cover='poster'],
+.pf-ticket-lead[data-cover='poster'] {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.pf-ticket[data-cover='poster'] .pf-ticket-photo,
+.pf-ask[data-cover='poster'] .pf-ask-photo {
+  position: static;
+  flex: 0 0 clamp(10rem, 34%, 19rem);
+  height: auto;
+  min-height: 0;
+  padding: 1.75rem;
+}
+
+.pf-ticket[data-cover='poster'] .pf-ticket-photo {
+  padding-right: 0;
+}
+
+.pf-ask[data-cover='poster'] {
+  align-items: center;
+}
+
+.pf-ask[data-cover='poster'] .pf-ask-photo {
+  padding-left: 0;
+}
+
+.pf-ticket-small[data-cover='poster'] .pf-ticket-body {
+  padding: 1.75rem;
+}
+
+/* The date leads the words here instead of overlapping the photo. */
+.pf-ticket-small[data-cover='poster'] .pf-date {
+  position: static;
+  box-shadow: none;
+}
+
+.pf-spread[data-cover='poster'] > .pf-poster {
+  flex: 0 0 clamp(10rem, 32%, 18rem);
+  min-width: 0;
+}
+
+@container (max-width: 34rem) {
+  .pf-ticket[data-cover='poster'] .pf-ticket-photo,
+  .pf-ask[data-cover='poster'] .pf-ask-photo {
+    flex: 1 1 100%;
+    padding: 1.5rem 1.5rem 0;
+  }
+
+  .pf-ask[data-cover='poster'] .pf-ask-photo {
+    padding: 0 1.5rem 1.5rem;
+  }
+
+  [data-cover='poster'] .pf-poster {
+    max-width: 15rem;
+    margin-inline: auto;
+  }
+
+  .pf-spread[data-cover='poster'] > .pf-poster {
+    flex: 1 1 100%;
+  }
+
+  .pf-ticket-small[data-cover='poster'] .pf-ticket-body {
+    padding: 1.5rem;
+  }
+}

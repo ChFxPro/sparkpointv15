@@ -139,6 +139,7 @@
 
 | Date | Update |
 | --- | --- |
+| 2026-10-30 | BackPorch covers: `porch:cover` sets a cover from the command line through a BackPorch-only bot login (PR #220); each cover can fill around a focal point or show the whole image (PR #221); in the feed, a whole-image cover is laid out as a poster beside the words (PR #224). Recovers from a stale tab after a deploy instead of a white screen (PR #222). |
 | 2026-10-30 | Staff portal (REPORTS-002): `/internal` lists every internal tool and is where staff sign-in lands; tool headers link back; sign-in page renamed Staff sign-in. PR #223. |
 | 2026-10-29 | Collaboration Lab media page (EVENT-010): unlisted `/collaboration-lab/media` with the photo gallery shared with the convening page through a new kit, plus program recordings and b-roll for download; new `event-media` bucket. |
 | 2026-10-28 | Gala rebrand to A World of Connections on the website (EVENT-009): Art Deco lockup in Josefin Sans from the approved kit, no Fraunces on the Gala, new tagline "Every journey connects back home.", trips numbered as connections. In review; ships with the print session's link-preview image. |
