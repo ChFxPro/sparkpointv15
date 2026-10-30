@@ -33,6 +33,7 @@ import { BlockComposer } from './BlockComposer';
 import { plainError } from './plainError';
 import { BLOCK_LIMITS, coverFallback, newBlockId, normalizeBlocks, type PorchBlock } from '../../lib/porchBlocks';
 import { FacebookKit } from './FacebookKit';
+import { CoverFraming } from './CoverFraming';
 import '../internalReports.css';
 import './internalBackporch.css';
 
@@ -732,6 +733,19 @@ function Editor({
               </label>
             </div>
           )}
+          {(() => {
+            const cover = form.image_path
+              ? { path: form.image_path, alt: form.image_alt }
+              : coverFallback(normalizeBlocks(form.blocks))?.img;
+            return cover?.path ? (
+              <CoverFraming
+                path={cover.path}
+                alt={cover.alt ?? ''}
+                frame={form.presentation.cover}
+                onChange={(cover) => set('presentation', { ...form.presentation, cover })}
+              />
+            ) : null;
+          })()}
         </div>
 
         <div className="pe-grid-2">

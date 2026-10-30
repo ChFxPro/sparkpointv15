@@ -517,6 +517,29 @@ To revoke it, delete the row from `porch_editors` (or the Auth user) and the Key
 shared with other tools, so the bot can also read whatever any signed-in user can (for
 example the internal reports); it's a staff-level login, not a public one.
 
+## Cover framing (built 2026-10-30)
+
+Lists and the post page draw a cover in fixed-shape frames (16:10 on the post page, 4:3
+and wider in the feed, small squares in rows), so a portrait flyer lost most of itself
+to the centred crop. Each post now keeps a framing in `presentation.cover`
+(`CoverFrame` in `src/lib/backporch.ts`; absent means fill, centred):
+
+- **Fill the frame** with a focal point (`{ fit: 'fill', x, y }`, percent of the photo):
+  the crop centres there (`object-position`).
+- **Show the whole image** (`{ fit: 'whole' }`): the photo fits inside every frame over
+  a blurred copy of itself, so nothing is cropped. On the post's own page the frame
+  takes the photo's own shape, up to most of the screen's height, so a flyer can be read.
+
+It applies wherever the cover shows: the feed (`Photo` in `feed/FeedParts.tsx`, given
+`frame`), the homepage band, rows and the post page (`PorchImage` in `PorchParts.tsx`),
+the takeover breakout (focal point only), and the Facebook kit's share image. The editor
+sets it under the cover photo (`CoverFraming.tsx`): pick Fill or Whole, click the photo
+(or use the arrow keys) to place the focal point, and see the post-page, feed and square
+crops before saving. From the command line: `npm run porch:cover -- <slug> --whole`,
+`--focus 50,20`, or `--fill`, with or without a new photo.
+
+Photo blocks inside a post are unaffected: they already show at their own shape.
+
 ## Decisions (owner, 2026-10-15)
 
 1. **Name:** The BackPorch, one word. Partners are "neighbors".

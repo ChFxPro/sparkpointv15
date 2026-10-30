@@ -1,7 +1,8 @@
 // Small shared pieces of the /backporch feed: the copy-link button, Add to
 // calendar, the gold date block, month markers, photos, and the after-mount clock.
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { dateChip, porchImageSrcSet, porchImageUrl, postPath, shortAddress, type PorchPost } from '../../../lib/backporch';
+import { coverImgStyle, dateChip, porchImageSrcSet, porchImageUrl, postPath, shortAddress, type CoverFrame, type PorchPost } from '../../../lib/backporch';
+import { WholeBackdrop } from '../../../components/backporch/PorchParts';
 import { canonicalUrl } from '../../../lib/siteOrigin';
 import { googleCalendarUrl, icsDataUrl, timeUntil } from '../../../lib/porchFeed';
 
@@ -43,25 +44,37 @@ export function Photo({
   sizes,
   eager = false,
   className = '',
+  frame,
 }: {
   path: string | null;
   alt: string;
   sizes: string;
   eager?: boolean;
   className?: string;
+  /** The post's cover framing, when this photo is its cover. */
+  frame?: CoverFrame;
 }) {
   const src = porchImageUrl(path, 960);
   if (!src) return <div className={`pf-photo pf-photo-blank ${className}`} aria-hidden="true" />;
-  return (
+  const img = (
     <img
-      className={`pf-photo ${className}`}
+      className={frame?.fit === 'whole' ? 'pf-photo-main' : `pf-photo ${className}`}
       src={src}
       srcSet={porchImageSrcSet(path)}
       sizes={sizes}
       alt={alt}
       loading={eager ? 'eager' : 'lazy'}
       decoding="async"
+      style={coverImgStyle(frame)}
     />
+  );
+  if (frame?.fit !== 'whole') return img;
+  // Shown whole: the wrapper takes the photo's place in the layout.
+  return (
+    <span className={`pf-photo pf-photo-whole ${className}`}>
+      <WholeBackdrop path={path} className="pf-photo-backdrop" />
+      {img}
+    </span>
   );
 }
 
