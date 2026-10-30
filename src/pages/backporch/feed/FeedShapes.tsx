@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { PostMarks } from '../../../components/backporch/PorchParts';
 import { Backdrop } from '../../../components/backporch/lab/Backdrop';
-import { postPath, porchImageSrcSet, porchImageUrl, type PorchPost } from '../../../lib/backporch';
+import { coverImgStyle, postPath, porchImageSrcSet, porchImageUrl, type PorchPost } from '../../../lib/backporch';
 import { monthDay, shortMonthYear, shapeOf, weekdayAndTime } from '../../../lib/porchFeed';
 import { AddToCalendar, CopyLink, DateBlock, Photo, WhenLine } from './FeedParts';
 
@@ -52,7 +52,7 @@ export function LeadTicket({ post }: { post: PorchPost }) {
   return (
     <article className="pf-ticket pf-ticket-lead">
       <div className="pf-ticket-photo">
-        <Photo path={post.image_path} alt={post.image_alt ?? ''} sizes={SIZES_HALF} eager />
+        <Photo path={post.image_path} frame={post.presentation?.cover} alt={post.image_alt ?? ''} sizes={SIZES_HALF} eager />
       </div>
       <div className="pf-ticket-body">
         <div className="pf-ticket-when">
@@ -82,7 +82,7 @@ export function SmallTicket({ post }: { post: PorchPost }) {
   return (
     <article className="pf-ticket pf-ticket-small">
       <div className="pf-ticket-photo">
-        <Photo path={post.image_path} alt={post.image_alt ?? ''} sizes={SIZES_THIRD} />
+        <Photo path={post.image_path} frame={post.presentation?.cover} alt={post.image_alt ?? ''} sizes={SIZES_THIRD} />
         <DateBlock iso={start} size="small" />
       </div>
       <div className="pf-ticket-body">
@@ -126,7 +126,7 @@ export function AskBand({ post }: { post: PorchPost }) {
       </div>
       {post.image_path && (
         <div className="pf-ask-photo">
-          <Photo path={post.image_path} alt={post.image_alt ?? ''} sizes={SIZES_HALF} />
+          <Photo path={post.image_path} frame={post.presentation?.cover} alt={post.image_alt ?? ''} sizes={SIZES_HALF} />
         </div>
       )}
     </article>
@@ -142,7 +142,7 @@ export function PhotoStory({ post }: { post: PorchPost }) {
   return (
     <article className="pf-photo-story">
       <div className="pf-photo-hero">
-        <Photo path={post.image_path} alt={post.image_alt ?? ''} sizes={SIZES_FULL} />
+        <Photo path={post.image_path} frame={post.presentation?.cover} alt={post.image_alt ?? ''} sizes={SIZES_FULL} />
         <div className="pf-photo-text">
           <PostMarks post={post} />
           <Title post={post} />
@@ -190,7 +190,7 @@ export function FilmStory({ post }: { post: PorchPost }) {
           <iframe src={src} title={embed.title ?? post.title} allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowFullScreen />
         ) : (
           <>
-            <Photo path={post.image_path} alt={post.image_alt ?? ''} sizes={SIZES_FULL} />
+            <Photo path={post.image_path} frame={post.presentation?.cover} alt={post.image_alt ?? ''} sizes={SIZES_FULL} />
             <a
               className="pf-play"
               href={postPath(post.slug)}
@@ -226,7 +226,7 @@ export function FilmStory({ post }: { post: PorchPost }) {
 export function Spread({ post }: { post: PorchPost }) {
   return (
     <article className="pf-spread" data-has-photo={Boolean(post.image_path)}>
-      {post.image_path && <Photo path={post.image_path} alt={post.image_alt ?? ''} sizes={SIZES_HALF} />}
+      {post.image_path && <Photo path={post.image_path} frame={post.presentation?.cover} alt={post.image_alt ?? ''} sizes={SIZES_HALF} />}
       <div className="pf-spread-text">
         <PostMarks post={post} />
         <Title post={post} />
@@ -250,7 +250,7 @@ export function Breakout({ post }: { post: PorchPost }) {
       {scene ? (
         <Backdrop scene={scene} still />
       ) : post.image_path ? (
-        <img src={porchImageUrl(post.image_path, 1600) ?? ''} srcSet={porchImageSrcSet(post.image_path)} sizes="100vw" alt="" loading="lazy" />
+        <img src={porchImageUrl(post.image_path, 1600) ?? ''} srcSet={porchImageSrcSet(post.image_path)} sizes="100vw" alt="" loading="lazy" style={coverImgStyle(post.presentation.cover)} />
       ) : (
         <Backdrop scene="ridges" still />
       )}
@@ -269,7 +269,7 @@ export function Breakout({ post }: { post: PorchPost }) {
 export function HeldRow({ post }: { post: PorchPost }) {
   return (
     <article className="pf-row pf-held">
-      <Photo path={post.image_path} alt="" sizes="120px" className="pf-row-thumb" />
+      <Photo path={post.image_path} frame={post.presentation?.cover} alt="" sizes="120px" className="pf-row-thumb" />
       <div className="pf-row-text">
         <p className="pf-row-meta">
           Held {monthDay(post.event_start!)}

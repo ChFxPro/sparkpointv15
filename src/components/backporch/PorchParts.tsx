@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { dateChip, porchImageSrcSet, porchImageUrl, postPath, shortDate, type PorchPost } from '../../lib/backporch';
+import { coverImgStyle, dateChip, porchImageSrcSet, porchImageUrl, postPath, shortDate, type PorchPost } from '../../lib/backporch';
 import { BlazeTag, KIND_BLAZE, PINNED_BLAZE } from './fieldKit';
 import '@fontsource-variable/fraunces';
 import './porch.css';
@@ -28,8 +28,10 @@ export function PorchImage({
 }) {
   const src = porchImageUrl(post.image_path, width);
   if (!src) return <div className={`porch-img porch-img-blank ${className}`} aria-hidden="true" />;
+  const frame = post.presentation?.cover;
   return (
-    <div className={`porch-img ${className}`}>
+    <div className={`porch-img ${className}`} data-fit={frame?.fit === 'whole' ? 'whole' : undefined}>
+      {frame?.fit === 'whole' && <WholeBackdrop path={post.image_path} className="porch-img-backdrop" />}
       <img
         src={src}
         srcSet={porchImageSrcSet(post.image_path)}
@@ -37,9 +39,19 @@ export function PorchImage({
         alt={post.image_alt ?? ''}
         loading={eager ? 'eager' : 'lazy'}
         decoding="async"
+        style={coverImgStyle(frame)}
       />
     </div>
   );
+}
+
+/**
+ * Behind a cover shown whole: the same photo, small, filling the frame and blurred,
+ * so the bands beside a portrait flyer carry its colours instead of empty paper.
+ */
+export function WholeBackdrop({ path, className }: { path: string | null; className: string }) {
+  const src = porchImageUrl(path, 480);
+  return src ? <img className={className} src={src} alt="" aria-hidden="true" loading="lazy" decoding="async" /> : null;
 }
 
 export function DateChip({ iso }: { iso: string }) {

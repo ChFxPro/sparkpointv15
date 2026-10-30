@@ -99,10 +99,33 @@ async function drawShareImage(canvas: HTMLCanvasElement, post: PorchPost) {
   if (photoUrl) {
     try {
       const img = await loadImage(photoUrl);
-      const scale = Math.max(W / img.naturalWidth, PHOTO_H / img.naturalHeight);
-      const dw = img.naturalWidth * scale;
-      const dh = img.naturalHeight * scale;
-      ctx.drawImage(img, (W - dw) / 2, (PHOTO_H - dh) / 2, dw, dh);
+      const frame = post.presentation?.cover;
+      const fill = Math.max(W / img.naturalWidth, PHOTO_H / img.naturalHeight);
+      // Crop around the cover's focal point (centred unless one was set).
+      const fx = (frame?.fit === 'fill' ? frame.x : 50) / 100;
+      const fy = (frame?.fit === 'fill' ? frame.y : 50) / 100;
+      const dw = img.naturalWidth * fill;
+      const dh = img.naturalHeight * fill;
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(0, 0, W, PHOTO_H);
+      ctx.clip();
+      if (frame?.fit !== 'whole') {
+        ctx.drawImage(img, (W - dw) * fx, (PHOTO_H - dh) * fy, dw, dh);
+      } else {
+        // Shown whole: a filled copy, blurred and dimmed, then the full photo on it.
+        // (Canvas blur is skipped where unsupported; the dim still sets the photo apart.)
+        ctx.filter = 'blur(28px) brightness(0.8)';
+        ctx.drawImage(img, (W - dw) / 2, (PHOTO_H - dh) / 2, dw, dh);
+        ctx.filter = 'none';
+        ctx.fillStyle = 'rgba(0,0,0,0.12)';
+        ctx.fillRect(0, 0, W, PHOTO_H);
+        const fit = Math.min(W / img.naturalWidth, PHOTO_H / img.naturalHeight);
+        const ww = img.naturalWidth * fit;
+        const wh = img.naturalHeight * fit;
+        ctx.drawImage(img, (W - ww) / 2, (PHOTO_H - wh) / 2, ww, wh);
+      }
+      ctx.restore();
     } catch {
       /* leave the plum */
     }
