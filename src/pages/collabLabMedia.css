@@ -393,15 +393,6 @@
   font-weight: 600;
 }
 
-.clb-connect-clip {
-  max-width: 860px;
-  margin: clamp(32px, 4vw, 56px) auto 0;
-}
-
-.clb-video-list-single {
-  grid-template-columns: 1fr;
-}
-
 /* Share: the featured collaboration. */
 .clb-feature {
   display: grid;

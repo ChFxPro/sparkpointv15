@@ -10,7 +10,7 @@ import program from '../data/collabLabProgram.json';
 import collabWordmarkReversed from '../assets/collab-lab/collab-lab-wordmark-reversed.webp';
 import { CollabLabHero } from './collabLab/CollabLabHero';
 import { ProgramPlayer, formatTime, momentHash, type ProgramPart } from './collabLab/ProgramPlayer';
-import { BASE, VideoCard, byId } from './collabLab/VideoCard';
+import { BASE, byId } from './collabLab/VideoCard';
 import './ruralHealthConvening.css';
 import './ruralHealthPhotoShare.css';
 import './collabLabMedia.css';
@@ -22,7 +22,7 @@ import './collabLabMedia.css';
 // linked from nowhere on the site — but prerendered so a shared link unfurls.
 //
 // It tells the morning in the event's own three words. Connect: the room, in a photo
-// sequence and a clip. Share: the featured collaboration and the program recordings,
+// sequence. Share: the featured collaboration and the program recordings,
 // with chapters, captions, a searchable transcript, and pull quotes that open the
 // recording at their moment (src/pages/collabLab/ProgramPlayer.tsx, data in
 // src/data/collabLabProgram.json). Create: everything to make something with — the
@@ -31,8 +31,8 @@ import './collabLabMedia.css';
 //
 // B-roll downloads are not on this page: they're for editors (mainly PHF's), so they
 // live on their own unlisted page, /collaboration-lab/media/b-roll (CollabLabBrollPage),
-// which this page doesn't link to. Here b-roll only plays: the hero loop and the
-// watch-only clip in Connect.
+// which this page doesn't link to. The only b-roll here is the silent loop
+// behind the title (owner's call, 2026-10-29: b-roll isn't something to sit and watch).
 //
 // Photos work exactly like the convening photo page (the shared kit in
 // src/components/photoShare/photoShareKit.tsx): `npm run collab:photos`. Video is the
@@ -134,7 +134,6 @@ export function CollabLabMediaPage() {
   const story = CONNECT_STORY.map((s) => ({ ...s, photo: photo(s.id) })).filter(
     (s): s is { id: string; caption: string; photo: SharePhoto } => Boolean(s.photo),
   );
-  const connectClip = byId('broll-03');
   const featuredPoster = `${BASE}/${byId('program-2').poster}`;
   const loop = byId('broll-05');
 
@@ -185,12 +184,6 @@ export function CollabLabMediaPage() {
               {story.map((s) => (
                 <StoryPhoto key={s.id} photo={s.photo} caption={s.caption} onOpen={() => openPhoto(s.photo)} />
               ))}
-            </div>
-
-            <div className="clb-connect-clip">
-              <ul className="clb-video-list clb-video-list-single">
-                <VideoCard video={connectClip} />
-              </ul>
             </div>
           </div>
         </section>
