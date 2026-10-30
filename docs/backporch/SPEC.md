@@ -484,6 +484,39 @@ https://claude.ai/artifact/4BpH6C8H5zqSY6m19vuHY6). Logic in `src/lib/porchFeed.
   hints. The prerender sets `window.__PRERENDER__`, and relative words ("In 16
   days") appear only in a visitor's browser, on the line that shows the date.
 
+## Cover photos from the command line (built 2026-10-30)
+
+So a post's cover can be set without the editor (a flyer from an email, a photo from an
+event gallery), `npm run porch:cover` resizes a photo to 480/960/1600 WebP, uploads it to
+`porch-media` as `posts/<slug>-<stamp>-<width>.webp` (the editor's own naming), and sets
+it as the post's `image_path` with its alt text. Drafts and published posts both work.
+
+```
+npm run porch:cover -- <slug> <photo> --alt "What the photo shows"
+npm run porch:cover -- <slug> <photo> --alt "…" --dry-run    resize only, nothing sent
+```
+
+`<photo>` is a file on disk, or a photo in this project's public `event-media` or
+`convening-photos` bucket (other URLs are refused: save them to disk first).
+
+It signs in as the **BackPorch bot**, an ordinary Auth user whose email is in
+`porch_editors`, so Row Level Security limits its writes to BackPorch posts and photos.
+No secret key is stored. Its login lives in the macOS Keychain and is read at run time.
+One-time setup (owner's choice, 2026-10-30):
+
+1. Supabase Dashboard > Authentication > Users > Add user > Create new user. Email
+   `backporch-bot@yoursparkpoint.org` (it needn't be a real inbox), a long generated
+   password, and **Auto Confirm User** ticked (`is_porch_editor()` requires a confirmed email).
+2. Add it to the allowlist:
+   `insert into porch_editors (email, name) values ('backporch-bot@yoursparkpoint.org', 'BackPorch bot');`
+3. Save the login in the Keychain (it asks for the password, hidden):
+   `security add-generic-password -s sparkpoint-backporch-bot -a backporch-bot@yoursparkpoint.org -w`
+
+To revoke it, delete the row from `porch_editors` (or the Auth user) and the Keychain item
+(`security delete-generic-password -s sparkpoint-backporch-bot`). The project's Auth is
+shared with other tools, so the bot can also read whatever any signed-in user can (for
+example the internal reports); it's a staff-level login, not a public one.
+
 ## Decisions (owner, 2026-10-15)
 
 1. **Name:** The BackPorch, one word. Partners are "neighbors".
