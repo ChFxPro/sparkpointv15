@@ -82,6 +82,8 @@ const KnowYourNumbersPage = lazy(() =>
 );
 const RuralHealthConveningPage = lazy(() => import('./pages/RuralHealthConveningPage'));
 const RuralHealthPhotoSharePage = lazy(() => import('./pages/RuralHealthPhotoSharePage'));
+const CollabLabMediaPage = lazy(() => import('./pages/CollabLabMediaPage'));
+const CollabLabBrollPage = lazy(() => import('./pages/CollabLabBrollPage'));
 const InternalStatusPage = lazy(() => import('./pages/InternalStatusPage'));
 const InternalLoginPage = lazy(() => import('./pages/InternalLoginPage'));
 const InternalReportsHomePage = lazy(() => import('./pages/InternalReportsHomePage'));
@@ -164,8 +166,8 @@ function RouteLoading() {
 // Flagship program routes that render as immersive, chromeless landing pages.
 // These skip the site-wide <Header /> and wrapping <main> so the program's own
 // hero can occupy the full viewport without colliding with site chrome.
-const CHROMELESS_PATH_PREFIXES = ['/programs/purpose-workshops', '/rural-health-convening', '/internal'];
-const CUSTOM_FOOTER_PATH_PREFIXES = ['/rural-health-convening', '/internal'];
+const CHROMELESS_PATH_PREFIXES = ['/programs/purpose-workshops', '/rural-health-convening', '/collaboration-lab', '/internal'];
+const CUSTOM_FOOTER_PATH_PREFIXES = ['/rural-health-convening', '/collaboration-lab', '/internal'];
 
 function isChromelessPath(pathname: string): boolean {
   return CHROMELESS_PATH_PREFIXES.some(
@@ -264,6 +266,10 @@ function AppContent() {
         <Route path="/rural-health-convening" element={<RuralHealthConveningPage />} />
         {/* Unlisted photo-share page: reached by direct link only (see the page header). */}
         <Route path="/rural-health-convening/photos" element={<RuralHealthPhotoSharePage />} />
+        {/* Unlisted photo + video page for the Oct 23 Collaboration Lab: direct link only. */}
+        <Route path="/collaboration-lab/media" element={<CollabLabMediaPage />} />
+        {/* Its b-roll downloads, for editors (mainly PHF's): also direct link only. */}
+        <Route path="/collaboration-lab/media/b-roll" element={<CollabLabBrollPage />} />
         <Route path="/backporch" element={<BackPorchPage />} />
         <Route path="/backporch/:slug" element={<BackPorchPostPage />} />
         <Route path="/back-porch" element={<Navigate to="/backporch" replace />} />

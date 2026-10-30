@@ -1,0 +1,125 @@
+{
+  "_review": "Chapters and quotes come from the Whisper transcript (2026-10-29). Quotes are verbatim apart from dropped filler words; have the speakers or PHF approve them before this goes wide.",
+  "parts": [
+    {
+      "video": "program-1",
+      "label": "Part 1",
+      "title": "Dogwood Health Trust, then SparkPoint",
+      "captions": "/assets/collab-lab/program-1.vtt",
+      "transcript": "/assets/collab-lab/program-1.json",
+      "chapters": [
+        {
+          "t": 0,
+          "title": "Welcome: what makes collaboration work"
+        },
+        {
+          "t": 309,
+          "title": "Dogwood Health Trust on collaboration and innovation"
+        },
+        {
+          "t": 713,
+          "title": "Hubs: people, expertise, and resources"
+        },
+        {
+          "t": 1334,
+          "title": "Inside the grant review"
+        },
+        {
+          "t": 1647,
+          "title": "“Is there smoke?”"
+        },
+        {
+          "t": 1748,
+          "title": "Questions from the room"
+        },
+        {
+          "t": 2705,
+          "title": "Two local collaborations"
+        },
+        {
+          "t": 2753,
+          "title": "Sarah Hankey, SparkPoint: Wellness Rooted in Connection"
+        },
+        {
+          "t": 3275,
+          "title": "How Community Connectors began"
+        },
+        {
+          "t": 3516,
+          "title": "Keagan Monteith, FWRD Transylvania"
+        }
+      ]
+    },
+    {
+      "video": "program-2",
+      "label": "Part 2",
+      "title": "FWRD Transylvania, partners, and questions",
+      "captions": "/assets/collab-lab/program-2.vtt",
+      "transcript": "/assets/collab-lab/program-2.json",
+      "chapters": [
+        {
+          "t": 0,
+          "title": "Keagan Monteith: lessons from Helene"
+        },
+        {
+          "t": 111,
+          "title": "Getting ready for the next one"
+        },
+        {
+          "t": 294,
+          "title": "What a community site could look like"
+        },
+        {
+          "t": 418,
+          "title": "The collaboration nobody planned"
+        },
+        {
+          "t": 520,
+          "title": "Partners in the room"
+        },
+        {
+          "t": 672,
+          "title": "The hard parts: boards, funding, capacity, risk"
+        },
+        {
+          "t": 903,
+          "title": "Questions from the room"
+        },
+        {
+          "t": 1226,
+          "title": "What's coming next"
+        }
+      ]
+    }
+  ],
+  "quotes": [
+    {
+      "part": 0,
+      "t": 3053,
+      "text": "If you're looking to start a collaboration, first look at starting relationships.",
+      "speaker": "Sarah Hankey",
+      "org": "SparkPoint"
+    },
+    {
+      "part": 1,
+      "t": 7,
+      "text": "Typically when somebody's in uniform, they think you have the answers. And unfortunately, I did not.",
+      "speaker": "Keagan Monteith",
+      "org": "FWRD Transylvania"
+    },
+    {
+      "part": 1,
+      "t": 728,
+      "text": "We very rarely write a grant just for us. Even if it's small, even if it's a $10,000 grant, we say, who can we do this with?",
+      "speaker": "Sarah Hankey",
+      "org": "SparkPoint"
+    },
+    {
+      "part": 0,
+      "t": 1686,
+      "text": "Once we see that smoke, that is y'all's fire. That is not Dogwood's fire.",
+      "speaker": "Jerry Kenney",
+      "org": "Dogwood Health Trust"
+    }
+  ]
+}
