@@ -153,6 +153,25 @@ export const EVENTS: SparkPointEvent[] = [
     partnerLine:
       'Hosted by SparkPoint in partnership with the North Carolina Rural Health Association.',
   },
+  {
+    id: 'collaboration-lab-2026',
+    title: 'Collaboration Lab: Building Partnerships That Last',
+    shortTitle: 'Collaboration Lab',
+    category: 'Learning',
+    startDate: '2026-10-23T09:00:00-04:00',
+    endDate: '2026-10-23T12:00:00-04:00',
+    dateLabel: 'Friday, October 23, 2026',
+    timeLabel: '9:00 a.m.–12:00 p.m.',
+    locationName: 'Mary C. Jenkins Community & Cultural Center',
+    locationLabel: 'Brevard, North Carolina',
+    summary:
+      'Nonprofit and community leaders from across Transylvania County spent a morning on what makes partnerships work, with SparkPoint and FWRD Transylvania sharing Wellness Rooted in Connection and Community Connectors. Watch the program and download the photos.',
+    detailPath: '/collaboration-lab/media',
+    imagePath: 'assets/collab-lab/collab-lab-tables-1920.webp',
+    imageAlt: 'Attendees at a round table write on sticky notes during a small-group exercise.',
+    partnerLine:
+      'Hosted by Pisgah Health Foundation in partnership with Dogwood Health Trust, with SparkPoint and FWRD Transylvania.',
+  },
 ];
 
 export function eventAssetUrl(event: SparkPointEvent) {

@@ -107,11 +107,11 @@ const SKIP = new Set();
 // Unlisted pages: prerendered, so a shared direct link gets a real 200 with its own
 // preview image instead of GitHub Pages' 404.html, but left out of sitemap.xml. They
 // must also set `noindex` themselves and must not be linked from any listed page.
-const UNLISTED = new Set(['/rural-health-convening/photos', '/collaboration-lab/media', '/collaboration-lab/media/b-roll']);
+const UNLISTED = new Set(['/rural-health-convening/photos', '/collaboration-lab/media/b-roll']);
 const STATIC = ['/', '/backporch', '/about', '/mission', '/impact', '/programs', '/programs/purpose-workshops',
   '/get-involved', '/community-connectors', '/partners', '/resilience-hub', '/directory', '/press', '/stories', '/events',
   '/trust', '/privacy', '/intake', '/resources/know-your-numbers', '/rural-health-convening',
-  '/events/thrive-at-five', '/events/sparkpoint-gala',
+  '/events/thrive-at-five', '/events/sparkpoint-gala', '/collaboration-lab/media',
   // Hand-written route in App.tsx (HeleneOneYearArticle) rather than a stories.ts entry,
   // so route derivation never picked it up and it had no build output — meaning the
   // /helene-one-year-of-healing redirect had been pointing at a hard 404 this whole time.

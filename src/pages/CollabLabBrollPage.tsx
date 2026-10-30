@@ -11,8 +11,8 @@ import './collabLabMedia.css';
 // Editors' b-roll page for the Collaboration Lab (/collaboration-lab/media/b-roll).
 // The clips are for the people cutting their own videos, mainly Pisgah Health
 // Foundation's editors, so they live here rather than on the public media page.
-// Unlisted like that page: noindex, in UNLISTED in scripts/prerender.mjs, and linked
-// from nowhere; share the address directly. Files are 1080p in the `event-media`
+// Unlisted: noindex, in UNLISTED in scripts/prerender.mjs, and linked from nowhere (the
+// public media page included); share the address directly. Files are 1080p in the `event-media`
 // bucket (`npm run collab:video`); never mention 4K here (owner's call, 2026-10-29).
 
 const PAGE_PATH = '/collaboration-lab/media/b-roll';
