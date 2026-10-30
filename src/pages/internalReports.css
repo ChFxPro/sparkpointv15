@@ -1005,3 +1005,45 @@
     border-color: var(--ir-ink);
   }
 }
+
+/* ── Staff portal (/internal, InternalPortalPage.tsx) ─────────── */
+.ir-portal-user {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.ir-portal-email {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.85rem;
+  color: var(--ir-muted, #5c5258);
+}
+
+.ir-portal-grid {
+  list-style: none;
+  padding: 0;
+}
+
+.ir-portal-grid > li {
+  display: flex;
+}
+
+.ir-portal-card {
+  flex: 1;
+}
+
+.ir-portal-note {
+  margin-top: 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ir-purple);
+}
+
+@media (max-width: 520px) {
+  .ir-portal-email {
+    display: none;
+  }
+}
