@@ -66,9 +66,12 @@ function ReportsHomeContent() {
         <Link className="ir-back-link" to="/">
           <img src={SPARKPOINT_LOGO} alt="SparkPoint" style={{ height: 22 }} />
         </Link>
-        <button type="button" className="ir-forgot-link" style={{ marginTop: 0 }} onClick={() => void signOut()}>
-          Sign out
-        </button>
+        <span className="ir-portal-user">
+          <Link className="ir-back-link" to="/internal">Staff portal</Link>
+          <button type="button" className="ir-forgot-link" style={{ marginTop: 0 }} onClick={() => void signOut()}>
+            Sign out
+          </button>
+        </span>
       </header>
 
       <div className="ir-hero-band">
