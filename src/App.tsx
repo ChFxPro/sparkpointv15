@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router';
 import { useEffect, lazy, Suspense } from 'react';
+import { RouteErrorBoundary } from './components/RouteErrorBoundary';
 import { HelmetProvider } from 'react-helmet-async';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -183,6 +184,7 @@ function AppContent() {
   );
 
   const routes = (
+    <RouteErrorBoundary resetKey={location.pathname}>
     <Suspense fallback={<RouteLoading />}>
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -308,6 +310,7 @@ function AppContent() {
         <Route path="*" element={<HomePage />} />
       </Routes>
     </Suspense>
+    </RouteErrorBoundary>
   );
 
   return (
