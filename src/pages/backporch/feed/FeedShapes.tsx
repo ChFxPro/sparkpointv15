@@ -9,11 +9,13 @@ import { PostMarks } from '../../../components/backporch/PorchParts';
 import { Backdrop } from '../../../components/backporch/lab/Backdrop';
 import { coverImgStyle, postPath, porchImageSrcSet, porchImageUrl, type PorchPost } from '../../../lib/backporch';
 import { monthDay, shortMonthYear, shapeOf, weekdayAndTime } from '../../../lib/porchFeed';
-import { AddToCalendar, CopyLink, DateBlock, Photo, WhenLine } from './FeedParts';
+import { AddToCalendar, CopyLink, DateBlock, isPoster, Photo, Poster, WhenLine } from './FeedParts';
 
 const SIZES_HALF = '(min-width: 1040px) 520px, 100vw';
 const SIZES_FULL = '(min-width: 1240px) 1152px, 100vw';
 const SIZES_THIRD = '(min-width: 1040px) 380px, 100vw';
+// A poster column is narrow: about a third of a card, at most 20rem.
+const SIZES_POSTER = '(min-width: 1040px) 320px, (min-width: 640px) 240px, 60vw';
 
 /** The post's own call to action: its link and label, else its page. */
 function primary(post: PorchPost, fallback: string) {
@@ -49,10 +51,15 @@ const fullDate = (iso: string) => new Date(iso).toLocaleDateString('en-US', { ti
 
 export function LeadTicket({ post }: { post: PorchPost }) {
   const start = post.event_start!;
+  const poster = isPoster(post);
   return (
-    <article className="pf-ticket pf-ticket-lead">
+    <article className="pf-ticket pf-ticket-lead" data-cover={poster ? 'poster' : undefined}>
       <div className="pf-ticket-photo">
-        <Photo path={post.image_path} frame={post.presentation?.cover} alt={post.image_alt ?? ''} sizes={SIZES_HALF} eager />
+        {poster ? (
+          <Poster post={post} sizes={SIZES_POSTER} eager />
+        ) : (
+          <Photo path={post.image_path} frame={post.presentation?.cover} alt={post.image_alt ?? ''} sizes={SIZES_HALF} eager />
+        )}
       </div>
       <div className="pf-ticket-body">
         <div className="pf-ticket-when">
@@ -79,17 +86,41 @@ export function LeadTicket({ post }: { post: PorchPost }) {
 
 export function SmallTicket({ post }: { post: PorchPost }) {
   const start = post.event_start!;
+  const poster = isPoster(post);
+  const line = (
+    <p className="pf-ticket-line">
+      <WhenLine post={post} fallback={fullDate(start)} />
+      <span> · {weekdayAndTime(start).split(' · ')[1]}</span>
+    </p>
+  );
   return (
-    <article className="pf-ticket pf-ticket-small">
+    <article className="pf-ticket pf-ticket-small" data-cover={poster ? 'poster' : undefined}>
       <div className="pf-ticket-photo">
-        <Photo path={post.image_path} frame={post.presentation?.cover} alt={post.image_alt ?? ''} sizes={SIZES_THIRD} />
-        <DateBlock iso={start} size="small" />
+        {poster ? (
+          <Poster post={post} sizes={SIZES_POSTER} />
+        ) : (
+          <>
+            <Photo path={post.image_path} frame={post.presentation?.cover} alt={post.image_alt ?? ''} sizes={SIZES_THIRD} />
+            <DateBlock iso={start} size="small" />
+          </>
+        )}
       </div>
       <div className="pf-ticket-body">
-        <p className="pf-ticket-line">
-          <WhenLine post={post} fallback={fullDate(start)} />
-          <span> · {weekdayAndTime(start).split(' · ')[1]}</span>
-        </p>
+        {poster ? (
+          // Beside a poster the date can't overlap the photo, so it leads the words.
+          <div className="pf-ticket-when">
+            <DateBlock iso={start} size="small" />
+            <p>
+              <WhenLine post={post} fallback={fullDate(start)} />
+              <span>
+                {weekdayAndTime(start)}
+                {post.event_place ? ` · ${post.event_place}` : ''}
+              </span>
+            </p>
+          </div>
+        ) : (
+          line
+        )}
         <Title post={post} />
         <p className="pf-summary">{post.summary}</p>
         <div className="pf-actions">
@@ -106,7 +137,7 @@ export function SmallTicket({ post }: { post: PorchPost }) {
 
 export function AskBand({ post }: { post: PorchPost }) {
   return (
-    <article className="pf-ask">
+    <article className="pf-ask" data-cover={isPoster(post) ? 'poster' : undefined}>
       <div className="pf-ask-body">
         <p className="pf-ask-kicker">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -126,7 +157,11 @@ export function AskBand({ post }: { post: PorchPost }) {
       </div>
       {post.image_path && (
         <div className="pf-ask-photo">
-          <Photo path={post.image_path} frame={post.presentation?.cover} alt={post.image_alt ?? ''} sizes={SIZES_HALF} />
+          {isPoster(post) ? (
+            <Poster post={post} sizes={SIZES_POSTER} />
+          ) : (
+            <Photo path={post.image_path} frame={post.presentation?.cover} alt={post.image_alt ?? ''} sizes={SIZES_HALF} />
+          )}
         </div>
       )}
     </article>
@@ -225,8 +260,13 @@ export function FilmStory({ post }: { post: PorchPost }) {
 /** Side by side: photo on one side, words on the other. News, and stories without a gallery. */
 export function Spread({ post }: { post: PorchPost }) {
   return (
-    <article className="pf-spread" data-has-photo={Boolean(post.image_path)}>
-      {post.image_path && <Photo path={post.image_path} frame={post.presentation?.cover} alt={post.image_alt ?? ''} sizes={SIZES_HALF} />}
+    <article className="pf-spread" data-has-photo={Boolean(post.image_path)} data-cover={isPoster(post) ? 'poster' : undefined}>
+      {post.image_path &&
+        (isPoster(post) ? (
+          <Poster post={post} sizes={SIZES_POSTER} />
+        ) : (
+          <Photo path={post.image_path} frame={post.presentation?.cover} alt={post.image_alt ?? ''} sizes={SIZES_HALF} />
+        ))}
       <div className="pf-spread-text">
         <PostMarks post={post} />
         <Title post={post} />

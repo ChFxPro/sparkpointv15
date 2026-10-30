@@ -540,6 +540,17 @@ crops before saving. From the command line: `npm run porch:cover -- <slug> --who
 
 Photo blocks inside a post are unaffected: they already show at their own shape.
 
+**Poster cards (2026-10-30).** In the feed, "show the whole image" means the cover is a
+poster or flyer, so the card is laid out around it instead of fitting it into a photo
+slot: the gathering tickets (lead and small), the ask band and the side-by-side story
+card put the poster at its own shape in a column beside the words (`Poster` /
+`isPoster` in `feed/FeedParts.tsx`, `data-cover="poster"`, styles at the end of
+`feed/feed.css`), with no crop and no blur. A small ticket's date block then leads the
+words instead of overlapping the photo. Cards switch by their own width (a container
+query): narrow, the poster sits centred above the words. A gallery story with a poster
+cover takes the side-by-side shape (`shapeOf`), since its title can't sit over a flyer.
+Other places (homepage band, rows, post page) keep the blurred-backdrop fit above.
+
 ## Decisions (owner, 2026-10-15)
 
 1. **Name:** The BackPorch, one word. Partners are "neighbors".

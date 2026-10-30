@@ -38,6 +38,27 @@ export function WhenLine({ post, fallback }: { post: PorchPost; fallback: string
 
 export const pageUrl = (post: PorchPost) => canonicalUrl(postPath(post.slug));
 
+/**
+ * A cover set to "show the whole image" is a poster or flyer: cards then show it at
+ * its own shape beside the words (data-cover="poster"), never cropped or blurred.
+ */
+export const isPoster = (post: PorchPost) => post.presentation?.cover?.fit === 'whole' && Boolean(post.image_path);
+
+/** The cover at its own shape, for poster cards. */
+export function Poster({ post, sizes, eager = false }: { post: PorchPost; sizes: string; eager?: boolean }) {
+  return (
+    <img
+      className="pf-poster"
+      src={porchImageUrl(post.image_path, 960) ?? ''}
+      srcSet={porchImageSrcSet(post.image_path)}
+      sizes={sizes}
+      alt={post.image_alt ?? ''}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+    />
+  );
+}
+
 export function Photo({
   path,
   alt,

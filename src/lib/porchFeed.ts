@@ -172,7 +172,8 @@ export function shapeOf(post: PorchPost, now = Date.now()): PostShape {
   if (post.kind === 'gathering') return isPast(post, now) ? 'held' : 'ticket';
   if (post.kind === 'ask') return 'ask';
   if (post.hints?.embed) return 'film';
-  if (post.kind === 'story' && post.hints?.gallery && post.image_path) return 'photo';
+  // A poster cover (shown whole) can't carry a title over it: it goes side by side.
+  if (post.kind === 'story' && post.hints?.gallery && post.image_path && post.presentation?.cover?.fit !== 'whole') return 'photo';
   return 'spread';
 }
 
