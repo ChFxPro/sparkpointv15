@@ -18,6 +18,18 @@
         "dev:samples"
       ],
       "port": 3000
+    },
+    {
+      "name": "gala-show",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4317",
+        "--directory",
+        "gala-show/show"
+      ],
+      "port": 4317
     }
   ]
 }
