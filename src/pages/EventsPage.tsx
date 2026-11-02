@@ -147,12 +147,22 @@ function EventCard({ event }: { event: SparkPointEvent }) {
 
   return (
     <article className="sp-event-card">
-      <Link className="sp-event-card-image" to={event.detailPath} aria-label={`View ${event.title}`}>
+      <Link
+        className="sp-event-card-image"
+        to={event.detailPath}
+        aria-label={event.host ? `View ${event.title}, hosted by ${event.host.name}` : `View ${event.title}`}
+      >
         <img src={eventAssetUrl(event)} alt={event.imageAlt} loading="lazy" />
         <span className="sp-event-date-stamp" aria-hidden="true">
           <b>{eventMonth(event.startDate)}</b>
           <strong>{eventDay(event.startDate)}</strong>
         </span>
+        {event.host ? (
+          <span className="sp-event-host" aria-hidden="true">
+            <b>Hosted by</b>
+            <img src={`${import.meta.env.BASE_URL}${event.host.logoPath}`} alt="" width={720} height={266} />
+          </span>
+        ) : null}
       </Link>
       <div className="sp-event-card-copy">
         <p className="sp-event-category">{event.category}</p>
