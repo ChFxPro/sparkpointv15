@@ -147,51 +147,74 @@
   max-width: 640px;
 }
 
-/* "Presented by" PHF, first thing in the hero. The logo keeps its own colours on a
-   white plate; the line beside it is white on the dark overlay. Stacks on phones. */
-.clb-presenter {
+/* The event's mark and its presenter, one row: the Collaboration lockup leads, then a
+   hairline and a quieter "Presented by" with PHF's white logo. On phones the credit
+   drops under the lockup. */
+.clb-cobrand {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 14px 18px;
-  margin-bottom: clamp(24px, 3vw, 34px) !important;
-  padding-bottom: clamp(18px, 2.4vw, 24px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
-}
-
-.clb-presenter-plate {
-  flex: none;
-  display: block;
-  padding: 10px 14px;
-  background: #fff;
-  box-shadow: 0 8px 22px -12px rgba(0, 0, 0, 0.6);
-}
-
-.clb-presenter-plate img {
-  display: block;
-  width: clamp(132px, 13vw, 168px);
-  height: auto;
-}
-
-.clb-presenter p {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.92);
-  font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1.45;
-}
-
-@media (max-width: 520px) {
-  .clb-presenter {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+  gap: 16px 0;
+  max-width: none !important;
+  margin-bottom: clamp(22px, 2.6vw, 30px) !important;
 }
 
 .clb-lockup {
   display: flex;
+  flex: 0 1 auto;
   align-items: center;
   gap: clamp(12px, 1.6vw, 18px);
-  margin-bottom: 22px !important;
+  min-width: 0;
+}
+
+.clb-presenter {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 7px;
+  margin-left: clamp(20px, 2.4vw, 30px) !important;
+  padding-left: clamp(20px, 2.4vw, 30px);
+  border-left: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.clb-presenter-label {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.clb-presenter img {
+  display: block;
+  width: clamp(124px, 12vw, 156px);
+  height: auto;
+}
+
+/* A fixed width, not a percentage: inside the flex row a percentage resolves against
+   the wordmark's 935px intrinsic width and pushes the credit onto its own line. */
+.clb-cobrand .clb-lockup-wordmark {
+  width: clamp(250px, 30vw, 380px);
+}
+
+@media (max-width: 760px) {
+  .clb-cobrand .clb-lockup {
+    flex-basis: 100%;
+  }
+
+  .clb-cobrand .clb-lockup-wordmark {
+    width: min(100%, 380px);
+  }
+
+  .clb-presenter {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    margin-left: 0 !important;
+    padding-left: 0;
+    border-left: 0;
+  }
 }
 
 .clb-lockup-icon {
