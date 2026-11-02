@@ -206,6 +206,20 @@
   opacity: 0.95;
 }
 
+/* PHF's presenter line above the title, in sentence case: too long for the caps kicker. */
+.clb-presented {
+  margin-bottom: 18px !important;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.clb-presented strong {
+  color: var(--clb-gold-bright);
+  font-weight: 800;
+}
+
 .clb-kicker {
   margin-bottom: 16px !important;
   color: var(--clb-gold-bright);

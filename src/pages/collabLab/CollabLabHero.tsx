@@ -94,7 +94,11 @@ export function CollabLabHero({ loopSrc, posterSrc }: { loopSrc: string; posterS
             height={120}
           />
         </p>
-        <p className="clb-kicker">Presented by Pisgah Health Foundation</p>
+        {/* PHF's own wording (Cara Bradshaw, 2026-11-02). Keep it as written. */}
+        <p className="clb-presented">
+          <strong>Presented by Pisgah Health Foundation,</strong> bringing together nonprofit and community leaders
+          from across Haywood, Madison, and Transylvania counties.
+        </p>
         <h1 id="clb-title">
           <span>Building partnerships</span>
           <span className="clb-title-accent">that last.</span>
