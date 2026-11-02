@@ -165,12 +165,12 @@ export const EVENTS: SparkPointEvent[] = [
     locationName: 'Mary C. Jenkins Community & Cultural Center',
     locationLabel: 'Brevard, North Carolina',
     summary:
-      'Nonprofit and community leaders from across Transylvania County spent a morning on what makes partnerships work, with SparkPoint and FWRD Transylvania sharing Wellness Rooted in Connection and Community Connectors. Watch the program and download the photos.',
+      'Pisgah Health Foundation brought together nonprofit and community leaders from across Haywood, Madison, and Transylvania counties for a morning on what makes partnerships work, with SparkPoint and FWRD Transylvania sharing Wellness Rooted in Connection and Community Connectors. Watch the program and download the photos.',
     detailPath: '/collaboration-lab/media',
     imagePath: 'assets/collab-lab/collab-lab-tables-1920.webp',
     imageAlt: 'Attendees at a round table write on sticky notes during a small-group exercise.',
     partnerLine:
-      'Hosted by Pisgah Health Foundation in partnership with Dogwood Health Trust, with SparkPoint and FWRD Transylvania.',
+      'Hosted by Pisgah Health Foundation, in partnership with Dogwood Health Trust, SparkPoint, and FWRD Transylvania.',
   },
 ];
 
