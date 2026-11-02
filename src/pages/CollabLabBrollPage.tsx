@@ -4,6 +4,7 @@ import { SEOHead } from '../components/SEOHead';
 import { CopyButton } from '../components/photoShare/photoShareKit';
 import media from '../data/collabLabMedia.json';
 import { VideoCard, broll } from './collabLab/VideoCard';
+import { CollabLabMasthead } from './collabLab/CollabLabMasthead';
 import './ruralHealthConvening.css';
 import './ruralHealthPhotoShare.css';
 import './collabLabMedia.css';
@@ -16,7 +17,6 @@ import './collabLabMedia.css';
 // bucket (`npm run collab:video`); never mention 4K here (owner's call, 2026-10-29).
 
 const PAGE_PATH = '/collaboration-lab/media/b-roll';
-const SPARKPOINT_LOGO = `${import.meta.env.BASE_URL}logo-wordmark.webp`;
 const { creditLine, contactEmail } = media;
 
 export function CollabLabBrollPage() {
@@ -34,17 +34,7 @@ export function CollabLabBrollPage() {
         noindex
       />
 
-      <header className="clb-masthead">
-        <div className="rh-shell clb-masthead-inner">
-          <Link to="/" className="clb-masthead-logo" aria-label="SparkPoint home">
-            <img src={SPARKPOINT_LOGO} alt="SparkPoint" width={839} height={290} />
-          </Link>
-          <p className="clb-masthead-date">
-            <strong>October 23, 2026</strong>
-            <span>Mary C. Jenkins Community &amp; Cultural Center · Brevard, NC</span>
-          </p>
-        </div>
-      </header>
+      <CollabLabMasthead />
 
       <main id="main-content">
         <section className="clb-act clb-act-create" aria-labelledby="clb-broll-title">

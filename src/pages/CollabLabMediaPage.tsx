@@ -9,6 +9,7 @@ import program from '../data/collabLabProgram.json';
 // (scripts/collab-lab-extract-mark.py). Swap in their vector files if they send them.
 import collabWordmarkReversed from '../assets/collab-lab/collab-lab-wordmark-reversed.webp';
 import { CollabLabHero } from './collabLab/CollabLabHero';
+import { CollabLabMasthead } from './collabLab/CollabLabMasthead';
 import { ProgramPlayer, formatTime, momentHash, type ProgramPart } from './collabLab/ProgramPlayer';
 import { BASE, byId } from './collabLab/VideoCard';
 import './ruralHealthConvening.css';
@@ -45,7 +46,6 @@ import './collabLabMedia.css';
 type Quote = { part: number; t: number; text: string; speaker: string; org?: string };
 
 const PAGE_PATH = '/collaboration-lab/media';
-const SPARKPOINT_LOGO = `${import.meta.env.BASE_URL}logo-wordmark.webp`;
 const { creditLine, contactEmail } = media;
 const outcomes = ((media as { outcomes?: { figure: string; label: string }[] }).outcomes ?? []).filter((o) => o.figure);
 const quotes = program.quotes as Quote[];
@@ -154,17 +154,7 @@ export function CollabLabMediaPage() {
         Skip to the photos
       </a>
 
-      <header className="clb-masthead">
-        <div className="rh-shell clb-masthead-inner">
-          <Link to="/" className="clb-masthead-logo" aria-label="SparkPoint home">
-            <img src={SPARKPOINT_LOGO} alt="SparkPoint" width={839} height={290} />
-          </Link>
-          <p className="clb-masthead-date">
-            <strong>October 23, 2026</strong>
-            <span>Mary C. Jenkins Community &amp; Cultural Center · Brevard, NC</span>
-          </p>
-        </div>
-      </header>
+      <CollabLabMasthead />
 
       <main id="main-content">
         <CollabLabHero loopSrc={`${BASE}/${loop.preview}`} posterSrc={`${BASE}/${loop.poster}`} />

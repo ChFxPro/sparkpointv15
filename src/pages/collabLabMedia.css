@@ -62,44 +62,73 @@
 }
 
 .clb-masthead-inner {
-  min-height: 76px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 10px 28px;
-  padding-block: 12px;
+  gap: 12px 28px;
+  padding-block: clamp(14px, 1.8vw, 20px);
 }
 
-.clb-masthead-logo {
+/* PHF's program, so PHF's logo leads, in its own colours on the paper. */
+.clb-masthead-host {
   display: inline-flex;
   min-height: 44px;
   align-items: center;
 }
 
-.clb-masthead-logo img {
+.clb-masthead-host img {
   display: block;
-  width: 132px;
+  width: clamp(170px, 19vw, 230px);
   height: auto;
 }
 
-.clb-masthead-date {
+/* SparkPoint as the maker of the page: a credit, not a header. */
+.clb-masthead-credit {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 14px;
-  color: var(--rh-forest);
-  font-size: 0.78rem;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  color: rgba(29, 42, 45, 0.72);
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
 }
 
-.clb-masthead-date strong {
-  color: var(--clb-gold-ink);
-  font-size: 0.86rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+.clb-masthead-credit a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+
+.clb-masthead-credit img {
+  display: block;
+  width: 78px;
+  height: auto;
+}
+
+@media (max-width: 420px) {
+  .clb-masthead-inner {
+    column-gap: 14px;
+  }
+
+  .clb-masthead-host img {
+    width: 164px;
+  }
+
+  .clb-masthead-credit {
+    gap: 7px;
+    font-size: 0.66rem;
+  }
+
+  .clb-masthead-credit span {
+    max-width: 5.5em;
+    line-height: 1.25;
+  }
+
+  .clb-masthead-credit img {
+    width: 62px;
+  }
 }
 
 /* ── Hero: the room, moving, behind the title ── */
@@ -147,42 +176,11 @@
   max-width: 640px;
 }
 
-/* The presenter first, then the event's mark: "Presented by" over PHF's white logo,
-   then the Collaboration lockup. Stacked at every width. */
-.clb-cobrand {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: clamp(20px, 2.4vw, 28px);
-  margin-bottom: clamp(22px, 2.6vw, 30px) !important;
-}
-
 .clb-lockup {
   display: flex;
   align-items: center;
   gap: clamp(12px, 1.6vw, 18px);
-  max-width: 100%;
-}
-
-.clb-presenter {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.clb-presenter-label {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.clb-presenter img {
-  display: block;
-  width: clamp(200px, 22vw, 270px);
-  height: auto;
+  margin-bottom: 22px !important;
 }
 
 .clb-lockup-icon {
@@ -240,6 +238,13 @@
   color: rgba(255, 255, 255, 0.9);
   font-size: clamp(1rem, 1.3vw, 1.15rem);
   line-height: 1.6;
+}
+
+.clb-hero-meta {
+  margin-top: 14px !important;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.86rem;
+  font-weight: 600;
 }
 
 .clb-acts-nav {
@@ -1047,15 +1052,6 @@
 }
 
 @media (max-width: 640px) {
-  .clb-masthead-inner {
-    justify-content: center;
-    text-align: center;
-  }
-
-  .clb-masthead-date {
-    justify-content: center;
-  }
-
   .clb-video-play-icon {
     width: 54px;
     height: 54px;

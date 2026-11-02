@@ -4,7 +4,6 @@ import { Pause, Play } from 'lucide-react';
 import { useAccessibility } from '../../context/AccessibilityContext';
 import collabIcon from '../../assets/collab-lab/collab-lab-icon.webp';
 import collabWordmarkReversed from '../../assets/collab-lab/collab-lab-wordmark-reversed.webp';
-import phfLogoWhite from '../../assets/collab-lab/phf-logo-white.webp';
 
 // The hero: a silent slow-motion pan of the room, looping behind the title. The loop is
 // a ~3 MB 1280px preview, so it costs little; it plays only while the hero is on
@@ -85,27 +84,17 @@ export function CollabLabHero({ loopSrc, posterSrc }: { loopSrc: string; posterS
       </div>
 
       <div className="rh-shell clb-hero-inner">
-        {/* The presenter first, then the event's mark. PHF hosted the event and asked to be
-            credited here (Cara Bradshaw, 2026-11-02), so the page doesn't read as a
-            SparkPoint event when it's opened on its own. The white logo is made from
-            their colour file; swap in PHF's own white logo if they send the file. */}
-        <div className="clb-cobrand">
-          <p className="clb-presenter">
-            <span className="clb-presenter-label">Presented by</span>
-            <img src={phfLogoWhite} alt="Pisgah Health Foundation" width={720} height={266} />
-          </p>
-          <p className="clb-lockup clb-lockup-reversed">
-            <img className="clb-lockup-icon" src={collabIcon} alt="" width={215} height={215} />
-            <img
-              className="clb-lockup-wordmark"
-              src={collabWordmarkReversed}
-              alt="Collaboration: connect, share, create"
-              width={935}
-              height={120}
-            />
-          </p>
-        </div>
-        <p className="clb-kicker">Collaboration Lab · October 23, 2026</p>
+        <p className="clb-lockup clb-lockup-reversed">
+          <img className="clb-lockup-icon" src={collabIcon} alt="" width={215} height={215} />
+          <img
+            className="clb-lockup-wordmark"
+            src={collabWordmarkReversed}
+            alt="Collaboration: connect, share, create"
+            width={935}
+            height={120}
+          />
+        </p>
+        <p className="clb-kicker">Presented by Pisgah Health Foundation</p>
         <h1 id="clb-title">
           <span>Building partnerships</span>
           <span className="clb-title-accent">that last.</span>
@@ -114,6 +103,9 @@ export function CollabLabHero({ loopSrc, posterSrc }: { loopSrc: string; posterS
           Pisgah Health Foundation&rsquo;s Collaboration Lab brought together nonprofit and community leaders from
           across our three-county region to explore practical approaches to partnership, innovation, and collective
           impact. This is that morning, told in three parts, with every photo and clip ready for you to use.
+        </p>
+        <p className="clb-hero-meta">
+          October 23, 2026 · Mary C. Jenkins Community &amp; Cultural Center, Brevard, NC
         </p>
 
         <nav className="clb-acts-nav" aria-label="The morning in three parts">
