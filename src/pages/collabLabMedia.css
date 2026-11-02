@@ -147,6 +147,46 @@
   max-width: 640px;
 }
 
+/* "Presented by" PHF, first thing in the hero. The logo keeps its own colours on a
+   white plate; the line beside it is white on the dark overlay. Stacks on phones. */
+.clb-presenter {
+  display: flex;
+  align-items: center;
+  gap: 14px 18px;
+  margin-bottom: clamp(24px, 3vw, 34px) !important;
+  padding-bottom: clamp(18px, 2.4vw, 24px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.clb-presenter-plate {
+  flex: none;
+  display: block;
+  padding: 10px 14px;
+  background: #fff;
+  box-shadow: 0 8px 22px -12px rgba(0, 0, 0, 0.6);
+}
+
+.clb-presenter-plate img {
+  display: block;
+  width: clamp(132px, 13vw, 168px);
+  height: auto;
+}
+
+.clb-presenter p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+@media (max-width: 520px) {
+  .clb-presenter {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
 .clb-lockup {
   display: flex;
   align-items: center;

@@ -4,6 +4,7 @@ import { Pause, Play } from 'lucide-react';
 import { useAccessibility } from '../../context/AccessibilityContext';
 import collabIcon from '../../assets/collab-lab/collab-lab-icon.webp';
 import collabWordmarkReversed from '../../assets/collab-lab/collab-lab-wordmark-reversed.webp';
+import phfLogo from '../../assets/collab-lab/phf-logo.webp';
 
 // The hero: a silent slow-motion pan of the room, looping behind the title. The loop is
 // a ~3 MB 1280px preview, so it costs little; it plays only while the hero is on
@@ -84,6 +85,18 @@ export function CollabLabHero({ loopSrc, posterSrc }: { loopSrc: string; posterS
       </div>
 
       <div className="rh-shell clb-hero-inner">
+        {/* PHF hosted the event. Their wording (Cara Bradshaw, 2026-11-02), so the page
+            doesn't read as a SparkPoint event when it's opened on its own. Their
+            full-colour logo sits on a white plate rather than being recoloured. */}
+        <div className="clb-presenter">
+          <span className="clb-presenter-plate">
+            <img src={phfLogo} alt="Pisgah Health Foundation" width={720} height={266} />
+          </span>
+          <p>
+            Presented by Pisgah Health Foundation, bringing together nonprofit and community leaders from across
+            Haywood, Madison, and Transylvania counties.
+          </p>
+        </div>
         <p className="clb-lockup clb-lockup-reversed">
           <img className="clb-lockup-icon" src={collabIcon} alt="" width={215} height={215} />
           <img
@@ -100,8 +113,9 @@ export function CollabLabHero({ loopSrc, posterSrc }: { loopSrc: string; posterS
           <span className="clb-title-accent">that last.</span>
         </h1>
         <p className="clb-hero-lede">
-          Nonprofits from across Transylvania County spent a morning trading practical tools and local success
-          stories. This is that morning, told in three parts, with every photo and clip ready for you to use.
+          Pisgah Health Foundation&rsquo;s Collaboration Lab brought together nonprofit and community leaders from
+          across our three-county region to explore practical approaches to partnership, innovation, and collective
+          impact. This is that morning, told in three parts, with every photo and clip ready for you to use.
         </p>
 
         <nav className="clb-acts-nav" aria-label="The morning in three parts">

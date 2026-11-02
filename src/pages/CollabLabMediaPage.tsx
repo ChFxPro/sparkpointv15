@@ -70,7 +70,7 @@ const parts: ProgramPart[] = program.parts.map((p) => {
 // In a participant's voice, about the morning; no credit line (it travels with whatever
 // is picked) and no thanks to SparkPoint.
 const SUGGESTED_CAPTION =
-  'Spent the morning at the Collaboration Lab in Brevard with nonprofit leaders from across Transylvania County: practical tools, local success stories, and a room full of people building partnerships that last.';
+  'Spent the morning at the Collaboration Lab in Brevard with nonprofit leaders from across Haywood, Madison, and Transylvania counties: practical tools, local success stories, and a room full of people building partnerships that last.';
 
 const gallery: Gallery = {
   photos: media.photos,
@@ -141,7 +141,7 @@ export function CollabLabMediaPage() {
     <div className={`rh-page rhp-page clb-page${hasSelection ? ' has-tray' : ''}`}>
       <SEOHead
         title="Photos & video · Collaboration Lab | SparkPoint"
-        description="Photos and video from the Collaboration Lab: Building Partnerships That Last, October 23, 2026 in Brevard, NC. Free to download and share with credit."
+        description="Photos and video from Pisgah Health Foundation's Collaboration Lab: Building Partnerships That Last, October 23, 2026 in Brevard, NC. Free to download and share with credit."
         path={PAGE_PATH}
         image="/assets/collab-lab/media-og.jpg"
         imageAlt={photos[0]?.alt ?? 'The Collaboration Lab in Brevard, NC'}
@@ -174,8 +174,8 @@ export function CollabLabMediaPage() {
           <div className="rh-shell">
             <ActHead number="01" word="Connect" title="Before anyone took the stage, the room was already at work.">
               <p>
-                People from nonprofits across Transylvania County caught up, made introductions, and got to work at
-                the tables.
+                Nonprofit and community leaders from across Haywood, Madison, and Transylvania counties caught up, made
+                introductions, and got to work at the tables.
               </p>
             </ActHead>
 
@@ -318,7 +318,10 @@ export function CollabLabMediaPage() {
             <div className="rhp-section-head rhp-section-head-center">
               <p className="rhp-eyebrow">With gratitude</p>
               <h2 id="clb-partners-title">Built together</h2>
-              <p>Thank you to the partners who made the morning happen. Tag them when you share.</p>
+              <p>
+                Hosted by Pisgah Health Foundation, in partnership with Dogwood Health Trust, SparkPoint, and FWRD
+                Transylvania. Tag them when you share.
+              </p>
             </div>
             <ul className="clb-partner-logos">
               {PARTNERS.map((name) => (
