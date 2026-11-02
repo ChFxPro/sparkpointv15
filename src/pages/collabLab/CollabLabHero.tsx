@@ -85,11 +85,15 @@ export function CollabLabHero({ loopSrc, posterSrc }: { loopSrc: string; posterS
       </div>
 
       <div className="rh-shell clb-hero-inner">
-        {/* The event's mark, then its presenter. PHF hosted the event and asked to be
+        {/* The presenter first, then the event's mark. PHF hosted the event and asked to be
             credited here (Cara Bradshaw, 2026-11-02), so the page doesn't read as a
             SparkPoint event when it's opened on its own. The white logo is made from
             their colour file; swap in PHF's own white logo if they send the file. */}
         <div className="clb-cobrand">
+          <p className="clb-presenter">
+            <span className="clb-presenter-label">Presented by</span>
+            <img src={phfLogoWhite} alt="Pisgah Health Foundation" width={720} height={266} />
+          </p>
           <p className="clb-lockup clb-lockup-reversed">
             <img className="clb-lockup-icon" src={collabIcon} alt="" width={215} height={215} />
             <img
@@ -99,10 +103,6 @@ export function CollabLabHero({ loopSrc, posterSrc }: { loopSrc: string; posterS
               width={935}
               height={120}
             />
-          </p>
-          <p className="clb-presenter">
-            <span className="clb-presenter-label">Presented by</span>
-            <img src={phfLogoWhite} alt="Pisgah Health Foundation" width={720} height={266} />
           </p>
         </div>
         <p className="clb-kicker">Collaboration Lab · October 23, 2026</p>
