@@ -52,6 +52,9 @@ export interface SparkPointEvent {
   imageAlt?: string;
   featured?: boolean;
   partnerLine?: string;
+  // The organization that hosted it, when that isn't SparkPoint. Its logo (a public
+  // path, like imagePath) sits in a "Hosted by" chip on the card's photo.
+  host?: { name: string; logoPath: string };
   // Who puts the event on, shown as the line above its title on the Events
   // page (e.g. "The SparkPoint Gala"). Falls back to the category.
   presenter?: string;
@@ -167,6 +170,7 @@ export const EVENTS: SparkPointEvent[] = [
     summary:
       'Pisgah Health Foundation brought together nonprofit and community leaders from across Haywood, Madison, and Transylvania counties for a morning on what makes partnerships work, with SparkPoint and FWRD Transylvania sharing Wellness Rooted in Connection and Community Connectors. Watch the program and download the photos.',
     detailPath: '/collaboration-lab/media',
+    host: { name: 'Pisgah Health Foundation', logoPath: 'assets/collab-lab/phf-logo.webp' },
     imagePath: 'assets/collab-lab/collab-lab-tables-1920.webp',
     imageAlt: 'Attendees at a round table write on sticky notes during a small-group exercise.',
     partnerLine:

@@ -383,6 +383,38 @@
   font-size: 2.1rem;
 }
 
+/* A partner-hosted event: the host's logo in a chip that matches the date stamp. */
+.sp-event-host {
+  position: absolute;
+  z-index: 2;
+  top: 18px;
+  right: 18px;
+  display: grid;
+  justify-items: start;
+  gap: 6px;
+  padding: 10px 14px 12px;
+  color: var(--events-ink);
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 12px;
+  box-shadow: 0 12px 34px rgba(26, 26, 26, 0.16);
+}
+
+.sp-event-host b {
+  color: #68636b;
+  font-size: 0.64rem;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.sp-event-card-image .sp-event-host img {
+  width: clamp(120px, 14vw, 156px);
+  height: auto;
+  object-fit: contain;
+  transform: none;
+  transition: none;
+}
+
 .sp-event-card-copy {
   padding: 28px;
 }
