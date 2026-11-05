@@ -89,7 +89,7 @@ export const EVENTS: SparkPointEvent[] = [
     locationName: GALA_VENUE.name,
     locationLabel: `${GALA_VENUE.street}, ${GALA_VENUE.city}, ${GALA_VENUE.region} ${GALA_VENUE.postalCode}`,
     summary:
-      'Every journey connects back home. An evening of connection and a live auction of eight travel experiences, with a portion of every trip coming home to support the Transylvania Resilience Hub.',
+      'Every journey connects back home. An evening of connection and a travel experience that gives back, with a portion coming home to support the Transylvania Resilience Hub.',
     detailPath: '/events/sparkpoint-gala',
     featured: true,
     teaser: true,

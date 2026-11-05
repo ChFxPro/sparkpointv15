@@ -32,16 +32,17 @@ const heroPhoto = (width: number) => `${BASE}assets/events/gala/hero-wing-${widt
 // Passport photo: Age Cymru on Unsplash (photo-1674140731715, Unsplash License).
 const passportPhoto = (width: number) => `${BASE}assets/events/gala/passport-bearer-${width}.webp`;
 
-// Auction facts come from Sarah's travel-auction notes (2026-10-11). Keep off
-// this page: that board members may bid (internal), the AmFund contact, and
-// any giveback percentage until one is confirmed.
+// Keep the travel portion vague until the board settles it (Sarah, 2026-11-05):
+// no number of trips, no "live auction", and none of the package terms; call it
+// the "travel experience". Also keep off this page: that board members may bid
+// (internal), the AmFund contact, and any giveback percentage until confirmed.
 const STAMPS = [
-  { shape: 'round', top: '8', middle: 'Travel experiences', bottom: 'Worldwide', tilt: -8 },
-  { shape: 'rect', top: '3 years', middle: 'to travel', bottom: 'From purchase', tilt: 5 },
-  { shape: 'oval', top: 'No', middle: 'Blackout dates', bottom: 'Go when you like', tilt: -3 },
-  { shape: 'rect', top: 'Live', middle: 'Auction', bottom: 'Professional auctioneer', tilt: -6 },
-  { shape: 'round', top: 'Match', middle: 'The winning bid', bottom: 'Open to every guest', tilt: 7 },
-  { shape: 'oval', top: '1 year', middle: 'Gala price locked', bottom: 'After the event', tilt: -4 },
+  { shape: 'round', top: 'Dec 11', middle: 'Gala night', bottom: 'Connestee Falls', tilt: -8 },
+  { shape: 'rect', top: 'World', middle: 'Wide', bottom: 'Destinations soon', tilt: 5 },
+  { shape: 'oval', top: 'Travel', middle: 'Experience', bottom: 'Revealed soon', tilt: -3 },
+  { shape: 'rect', top: 'First', middle: 'Class evening', bottom: 'At home', tilt: -6 },
+  { shape: 'round', top: 'Gives', middle: 'Back home', bottom: 'Resilience Hub', tilt: 7 },
+  { shape: 'oval', top: 'Every', middle: 'Journey', bottom: 'Connects home', tilt: -4 },
 ];
 
 // Leather luggage tags. `code` is a playful airport-style code; `tilt` and
@@ -57,7 +58,7 @@ const TAGS = [
 const GIVES_BACK = [
   {
     title: 'Every adventure makes a difference',
-    copy: 'A portion of each travel package purchased supports SparkPoint’s mission of strengthening community well-being through collaboration and connection.',
+    copy: 'A portion of the Gala’s travel experience supports SparkPoint’s mission of strengthening community well-being through collaboration and connection.',
   },
   {
     title: 'Help bring the Resilience Hub to life',
@@ -81,7 +82,7 @@ const galaEventJsonLd = {
   name: GALA_NAME,
   alternateName: GALA_BYLINE,
   description:
-    'An evening of connection and a live auction of eight travel experiences, with a portion of every trip supporting the Transylvania Resilience Hub.',
+    'An evening of connection and a travel experience that gives back, with a portion supporting the Transylvania Resilience Hub.',
   startDate: '2026-12-11T18:00:00-05:00',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
   eventStatus: 'https://schema.org/EventScheduled',
@@ -151,7 +152,7 @@ export default function GalaPage() {
     <div className="gala-page">
       <SEOHead
         title={`${GALA_FULL_TITLE} | December 11, 2026`}
-        description="Every journey connects back home. Join us for A World of Connections, the SparkPoint Gala, on Friday, December 11, 2026 at 6 p.m. at Connestee Falls Country Club, and bid on eight travel experiences in a live auction that gives back to Transylvania County’s Resilience Hub. Tickets $100."
+        description="Every journey connects back home. Join us for A World of Connections, the SparkPoint Gala, on Friday, December 11, 2026 at 6 p.m. at Connestee Falls Country Club, for an evening of connection and a travel experience that gives back to Transylvania County’s Resilience Hub. Tickets $100."
         path={GALA_PATH}
         image={GALA_SHARE_IMAGE}
         imageAlt="A World of Connections, the SparkPoint Gala: the title over an airplane wing above golden clouds at sunset."
@@ -159,7 +160,7 @@ export default function GalaPage() {
         imageWidth={1200}
         imageHeight={630}
         jsonLd={galaEventJsonLd}
-        keywords={['A World of Connections', 'SparkPoint Gala', 'travel auction', 'Resilience Hub', 'Transylvania County', 'Western North Carolina']}
+        keywords={['A World of Connections', 'SparkPoint Gala', 'travel experience', 'Resilience Hub', 'Transylvania County', 'Western North Carolina']}
       />
 
       {/* 1 — Departures */}
@@ -181,8 +182,8 @@ export default function GalaPage() {
               Every journey <em>connects back home.</em>
             </p>
             <p className="gala-hero-lede">
-              One evening, eight journeys around the world, and a portion of every one of them
-              coming back to the place we call home.
+              One evening, a world of journeys, and a portion of every one of them coming back
+              to the place we call home.
             </p>
             <dl className="gala-hero-facts">
               <div>
@@ -229,7 +230,7 @@ export default function GalaPage() {
                 </Link>
               )}
               <a className="gala-button gala-button-ghost" href="#passport">
-                How the auction works
+                The travel experience
               </a>
             </div>
           </motion.div>
@@ -245,11 +246,11 @@ export default function GalaPage() {
           <motion.div className="gala-routes-head" {...reveal}>
             <p className="gala-label">Your next adventure could change lives</p>
             <h2 id="routes-title">
-              Eight connections. <em>One home base.</em>
+              A world of connections. <em>One home base.</em>
             </h2>
             <p>
-              Every trip auctioned at the Gala leaves from here. And a portion of every
-              package comes right back to Transylvania County.
+              Every journey at the Gala leaves from here. And a portion comes right back to
+              Transylvania County.
             </p>
           </motion.div>
           <GalaRouteMap />
@@ -260,9 +261,9 @@ export default function GalaPage() {
       <section id="passport" className="gala-passport-section" aria-labelledby="passport-title">
         <div className="gala-shell">
           <motion.div className="gala-section-head" {...reveal}>
-            <p className="gala-label gala-label-ink">How the auction works</p>
+            <p className="gala-label gala-label-ink">The travel experience</p>
             <h2 id="passport-title">
-              Your passport to <em>the auction.</em>
+              Your passport to <em>the world.</em>
             </h2>
           </motion.div>
 
@@ -332,12 +333,12 @@ export default function GalaPage() {
                   <dd>11 Dec 2026</dd>
                 </div>
                 <div>
-                  <dt>Valid for</dt>
-                  <dd>3 years from purchase</dd>
+                  <dt>Destination</dt>
+                  <dd>Revealed soon</dd>
                 </div>
                 <div className="is-wide">
-                  <dt>Restrictions</dt>
-                  <dd>None. No blackout dates.</dd>
+                  <dt>Purpose of travel</dt>
+                  <dd>Connection, and coming home.</dd>
                 </div>
               </dl>
 
@@ -360,7 +361,7 @@ export default function GalaPage() {
               <header className="gala-passport-issuer">
                 <span className="gala-passport-title">
                   <b>Visas · Entries</b>
-                  <small>Admitted to the auction</small>
+                  <small>Admitted to the Gala</small>
                 </span>
               </header>
               <ul className="gala-stamps">
@@ -374,17 +375,16 @@ export default function GalaPage() {
 
           <div className="gala-passport-notes">
             <motion.p {...reveal}>
-              <strong>Eight trips, one live auction.</strong> A professional auctioneer leads
-              the bidding on eight travel experiences to destinations around the world.
+              <strong>A world of possibilities.</strong> The Gala’s travel experience features
+              destinations around the world, for every kind of traveler.
             </motion.p>
             <motion.p {...revealLate}>
-              <strong>Match the winning bid.</strong> Once a trip sells, any guest at the Gala can buy
-              that same trip at the winning bid. And that Gala price stays locked in for up to a
-              year after the event.
+              <strong>Travel that gives back.</strong> A portion of the travel experience comes home
+              to help bring the Transylvania Resilience Hub to life.
             </motion.p>
           </div>
           <p className="gala-fine-print">
-            The trip lineup and each package’s details and terms are shared before the Gala.
+            Destinations and details are shared before the Gala.
           </p>
         </div>
       </section>

@@ -20,8 +20,10 @@ import { Sparkmark } from './Sparkmark';
 // whole lockup is hidden from screen readers.
 export const GALA_NAME = 'A World of Connections';
 export const GALA_BYLINE = 'The SparkPoint Gala';
-export const GALA_SUBLINE = 'Live travel auction';
-export const GALA_FULL_TITLE = 'A World of Connections: SparkPoint Gala & Travel Auction';
+// The travel portion is kept vague until the board decides (Sarah, 2026-11-05):
+// "Travel experience", not "live travel auction".
+export const GALA_SUBLINE = 'Travel experience';
+export const GALA_FULL_TITLE = 'A World of Connections: SparkPoint Gala & Travel Experience';
 const GALA_LABEL = `${GALA_NAME}, the SparkPoint Gala`;
 
 // Sunburst: 25 rays fanning up from below the name, alternating long and short
