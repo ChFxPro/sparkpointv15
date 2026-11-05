@@ -61,7 +61,7 @@ const PLATES = [
   ['03 List', 'programme'],
   ['04 Numbers', 'numbers'],
   ['05 People', 'content'],
-  ['06 Auction', 'auction'],
+  ['06 Travel experience', 'auction'],
   ['07 Trip', 'trip'],
   ['08 Thank you', 'thanks'],
   ['09 Plain', 'plain'],
@@ -251,7 +251,7 @@ pres.defineSlideMaster({
 });
 
 pres.defineSlideMaster({
-  title: 'Auction',
+  title: 'Travel experience',
   background: bg('auction'),
   objects: [
     ...FRAME,
@@ -344,8 +344,8 @@ const LOOP_NOTE = (s) =>
 
 let section = null;
 const sectionFor = (s) => {
-  if (s.type === 'trip' || s.type === 'auction') return 'The live travel auction';
-  if (s.type === 'thanks' || (section === 'The live travel auction' && s.type === 'loop')) return 'Close';
+  if (s.type === 'trip' || s.type === 'auction') return 'The travel experience';
+  if (s.type === 'thanks' || (section === 'The travel experience' && s.type === 'loop')) return 'Close';
   if (s.type === 'divider') return s.title || 'Section';
   return section || 'Welcome';
 };
@@ -442,7 +442,7 @@ for (const s of SHOW.slides) {
     if (s.type === 'sponsors')
       slide.addNotes('SPONSORS. Hidden until sponsors are confirmed: right-click the slide and choose Show Slide (Keynote: uncheck Skip Slide). Logos can go in place of names.');
   } else if (s.type === 'auction') {
-    const slide = add('Auction');
+    const slide = add('Travel experience');
     put(slide, 'title', caps(s.title));
     put(slide, 'body', s.body);
     put(slide, 'footer', caps(s.footer));
@@ -463,7 +463,7 @@ for (const s of SHOW.slides) {
     if (s.opening) slide.addText([{ text: 'OPENING BID', options: { ...label, fontSize: 11, breakLine: true } }, { text: s.opening }], { placeholder: 'opening' });
     const missing = [!s.title && 'trip name', !hasPlace(s) && 'latitude and longitude'].filter(Boolean);
     slide.addNotes(
-      `TRIP — ${connection(s.lot).toUpperCase()}${s.lot ? ` (lot ${s.lot})` : ''}.` +
+      `TRIP — ${connection(s.lot).toUpperCase()}${s.lot ? ` (no. ${s.lot})` : ''}.` +
         (hasPlace(s) ? ' The background shows the route from Brevard.' : ' The background is the plain trip globe; once the destination is set, re-run the kit for a background with its route, or use the deck.') +
         (missing.length ? ` Still needed: ${missing.join(', ')}.` : '') +
         (s.donor ? ` Donated by ${s.donor}.` : '') +

@@ -87,8 +87,8 @@ export const TYPES = {
     globe: { x: 960, y: 1240, r: 640, opacity: 0.35, lat: 40, spin: 2 },
   },
   auction: {
-    label: 'Auction opener',
-    help: 'Introduces the live travel auction.',
+    label: 'Travel experience opener',
+    help: 'Introduces the travel experience.',
     fields: [
       { key: 'title', label: 'Title', kind: 'text' },
       { key: 'body', label: 'Text', kind: 'area' },
@@ -98,9 +98,9 @@ export const TYPES = {
   },
   trip: {
     label: 'Trip',
-    help: 'One auction lot, numbered as a connection (Connection 01). The globe turns to the destination and draws the route from Brevard. Press S during the show to stamp it SOLD.',
+    help: 'One trip, numbered as a connection (Connection 01). The globe turns to the destination and draws the route from Brevard. Press S during the show to stamp it SOLD.',
     fields: [
-      { key: 'lot', label: 'Connection number (the lot number, e.g. 1)', kind: 'text' },
+      { key: 'lot', label: 'Connection number (e.g. 1)', kind: 'text' },
       { key: 'title', label: 'Trip name', kind: 'text' },
       { key: 'place', label: 'Destination (as it should read)', kind: 'text' },
       { key: 'lat', label: 'Latitude (e.g. 41.9 for Rome)', kind: 'number' },

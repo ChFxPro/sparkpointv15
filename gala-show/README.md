@@ -7,7 +7,7 @@ Its look follows the Gala brand kit in `Branding/Gala/WorldOfConnections/` (READ
 double-hairline rule, a double frame round each page, and trips numbered as
 connections ("Connection 01").
 It runs the room: the holding loop, the welcome, the year in review, staff and board
-recognition, the live travel auction (one page per trip, with a gold globe that turns to
+recognition, the travel experience (one page per trip, with a gold globe that turns to
 each destination and draws the route from Brevard), and the thank-you with a QR code
 for giving.
 

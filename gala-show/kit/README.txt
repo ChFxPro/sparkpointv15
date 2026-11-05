@@ -11,7 +11,7 @@ WHAT'S IN HERE
 
   A World of Connections - Show Template.pptx
       Opens in PowerPoint, Keynote and Canva. Eleven layouts (Cover, Section,
-      List, Numbers, People, Auction, Trip, Words, Thank you, Video, Plain),
+      List, Numbers, People, Travel experience, Trip, Words, Thank you, Video, Plain),
       already filled with the current run of show. Notes under each slide say
       what to do with videos, hidden slides and trips.
   Backgrounds/        every layout's background, 2560 x 1440 (16:9)
@@ -84,7 +84,7 @@ THE LOOK, IF YOU'RE BUILDING FROM SCRATCH
   The name is always the lockup image, never typed out. Write it
   "A World of Connections"; in a sentence, "Join us for A World of
   Connections, the SparkPoint Gala." The full form is "A World of
-  Connections: SparkPoint Gala & Travel Auction". Tagline: "Every journey
+  Connections: SparkPoint Gala & Travel Experience". Tagline: "Every journey
   connects back home."
   Under a title: the Gala rule (a double hairline, a diamond, the
   sparkmark, a diamond, a double hairline), as on the template. Use the

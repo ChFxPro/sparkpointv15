@@ -105,7 +105,7 @@ export function lockup(cls = '') {
     h('span', { class: 'lk-conn', 'aria-hidden': 'true' }, 'of Connections'),
     rule(),
     h('span', { class: 'lk-by', 'aria-hidden': 'true' }, 'The SparkPoint Gala'),
-    h('span', { class: 'lk-by2', 'aria-hidden': 'true' }, 'Live travel auction')
+    h('span', { class: 'lk-by2', 'aria-hidden': 'true' }, 'Travel experience')
   );
 }
 

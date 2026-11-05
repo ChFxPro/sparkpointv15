@@ -26,7 +26,7 @@ window.SHOW = {
         "| Dinner",
         "| A year at SparkPoint",
         "| Thanking our staff and board",
-        "| The live travel auction",
+        "| The travel experience",
         "| A last word, and thank you"
       ]
     },
@@ -108,8 +108,8 @@ window.SHOW = {
     {
       "id": "whi3ui6",
       "type": "auction",
-      "title": "The live travel auction",
-      "body": "Eight connections, one evening. Every one is travel that gives back to the Transylvania Resilience Hub.",
+      "title": "The travel experience",
+      "body": "Connections around the world, one evening at home. Every one is travel that gives back to the Transylvania Resilience Hub.",
       "footer": "Every journey connects back home."
     },
     {
