@@ -3544,36 +3544,13 @@ a.rh-logo-stage:focus-visible {
   font-weight: 700;
 }
 
-.rh-next-register {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  min-height: 56px;
-  margin-top: 22px;
-  padding: 14px 20px;
-  background: var(--rh-forest);
-  color: var(--rh-paper);
-  box-shadow: inset 0 0 0 2px var(--rh-forest), inset 0 0 0 3px rgba(245, 239, 221, 0.72);
-  font-size: 0.98rem;
-  font-weight: 800;
-  text-decoration: none;
-  transition: background-color 160ms ease, transform 160ms ease;
-}
-
-.rh-next-register:hover {
-  background: var(--rh-forest-deep);
-  transform: translateY(-2px);
-}
-
-.rh-next-register:focus-visible,
 .rh-next-link:focus-visible {
   outline: 3px solid var(--rh-brass);
   outline-offset: 3px;
 }
 
 .rh-next-note {
-  margin-top: 12px;
+  margin-top: 18px;
   color: var(--rh-slate);
   font-size: 0.8rem;
   line-height: 1.45;
@@ -3591,12 +3568,7 @@ a.rh-logo-stage:focus-visible {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rh-next-register,
   .rh-next-link {
     transition: none;
-  }
-
-  .rh-next-register:hover {
-    transform: none;
   }
 }
