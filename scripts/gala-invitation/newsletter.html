@@ -108,7 +108,7 @@
       <div class="pass-stub">
         <div class="band band-stub mono">SPK 1211</div>
         <div class="stub-body">
-          <p class="admit">Admit one <em>Live travel auction</em></p>
+          <p class="admit">Admit one <em>Travel experience</em></p>
           <img src="../../public/assets/events/gala/pass-pdf417.svg" alt="" />
         </div>
       </div>
@@ -119,8 +119,8 @@
 
 <!-- 03 · Departures board (animated: the letters flip into place) -->
 <section class="slice section" data-slice="03-departures" data-anim="flap">
-  <p class="eyebrow mono">The travel auction</p>
-  <h3>Eight connections. <em>One home base.</em></h3>
+  <p class="eyebrow mono">The travel experience</p>
+  <h3>A world of connections. <em>One home base.</em></h3>
   <p class="copy" data-fill="trips-copy"></p>
   <div class="board">
     <div class="board-title"><b>Departures</b><span class="mono">Transylvania County · Home base</span></div>
@@ -130,13 +130,13 @@
 
 <!-- 04 · Passport stamps -->
 <section class="slice section facts" data-slice="04-passport">
-  <p class="eyebrow mono">How the auction works</p>
-  <h3>Your passport to <em>the auction.</em></h3>
+  <p class="eyebrow mono">The travel experience</p>
+  <h3>Your passport to <em>the world.</em></h3>
   <div class="stamps">
-    <div class="st" style="--c:#b2245f; --r:-6deg"><strong>8</strong><span>Travel experiences</span></div>
-    <div class="st" style="--c:#1f4f7a; --r:5deg"><strong>3 yrs</strong><span>To travel</span></div>
-    <div class="st" style="--c:#2f6b4f; --r:-3deg"><strong>No</strong><span>Blackout dates</span></div>
-    <div class="st" style="--c:#b2245f; --r:6deg"><strong>Match</strong><span>The winning bid</span></div>
+    <div class="st" style="--c:#b2245f; --r:-6deg"><strong>Dec 11</strong><span>Gala night</span></div>
+    <div class="st" style="--c:#1f4f7a; --r:5deg"><strong>World</strong><span>Wide</span></div>
+    <div class="st" style="--c:#2f6b4f; --r:-3deg"><strong>Travel</strong><span>Experience</span></div>
+    <div class="st" style="--c:#b2245f; --r:6deg"><strong>Gives</strong><span>Back home</span></div>
   </div>
 </section>
 
@@ -162,7 +162,7 @@
       <img src="../../public/assets/events/gala/hub-winter-postcard.webp" alt="" />
       <figcaption><span>Greetings from</span><strong>HOME</strong></figcaption>
     </figure>
-    <p>Every great trip ends with coming home. A portion of every travel package sold at the Gala supports SparkPoint, helping bring the Transylvania Resilience Hub to life.<small>Resilience Hub · concept rendering</small></p>
+    <p>Every great trip ends with coming home. A portion of the Gala’s travel experience supports SparkPoint, helping bring the Transylvania Resilience Hub to life.<small>Resilience Hub · concept rendering</small></p>
   </div>
 </section>
 
@@ -204,17 +204,15 @@
     ? `${esc(cfg.tickets.price)}${venueName ? ' · ' + esc(venueName) : ''}`
     : '');
 
-  // Departures board.
+  // Departures board. The travel portion stays vague until the board settles it
+  // (Sarah, 2026-11-05): no trip count, no auction. With no trips listed, the
+  // board shows open-ended destinations; listed trips replace them.
   const trips = (cfg.trips || []).slice(0, 8);
-  fill('trips-copy', trips.length >= 8
-    ? 'Eight journeys go up for bid with a professional live auctioneer. Pick your next adventure.'
-    : 'Eight journeys around the world go up for bid with a professional live auctioneer. The destinations are revealed soon.');
+  const destinations = trips.length ? trips.map((t) => t.board || t.destination || '') : ['ANYWHERE', 'SOMEWHERE NEW', 'FAR FROM HOME', 'BUCKET LIST', 'THE LONG WAY'];
+  fill('trips-copy', 'Journeys to destinations around the world, revealed soon. A portion of the travel experience comes home to Transylvania County.');
   const pad = (text, n) => text.toUpperCase().slice(0, n).padEnd(n, ' ');
   const rowsText = [['SPARKPOINT GALA', 'DEC 11', 'gala']];
-  for (let i = 0; i < 8; i += 1) {
-    const trip = trips[i];
-    rowsText.push([trip ? (trip.board || trip.destination || '') : 'REVEALING SOON', 'AT AUCTION', '']);
-  }
+  for (const destination of destinations) rowsText.push([destination, 'REVEALING', '']);
   const board = document.querySelector('[data-fill="board"]');
   board.innerHTML = rowsText.map(([a, b, cls]) =>
     `<div class="row ${cls}"><span class="tiles">${[...pad(a, 16)].map((c) => `<span class="tile" data-c="${esc(c)}"></span>`).join('')}</span>` +

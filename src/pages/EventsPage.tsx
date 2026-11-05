@@ -3,7 +3,7 @@ import { ArrowRight, CalendarDays, Clock3, MapPin } from 'lucide-react';
 import { Link } from 'react-router';
 import heroImage from 'figma:asset/b7ea59b58a471ceacde60e41e5e3cd69fe78c66f.png';
 import { SEOHead } from '../components/SEOHead';
-import { GalaLockup } from '../components/GalaLockup';
+import { GALA_SUBLINE, GalaLockup } from '../components/GalaLockup';
 import {
   GALA_TICKETS_URL,
   GALA_TICKET_PRICE_LABEL,
@@ -80,7 +80,7 @@ function SaveTheDate({ event }: { event: SparkPointEvent }) {
 
           <div className="sp-featured-event-copy">
             <p className="sp-event-category">
-              <span>{event.presenter ?? event.category} ·</span> <span>Live travel auction</span>
+              <span>{event.presenter ?? event.category} ·</span> <span>{GALA_SUBLINE}</span>
             </p>
             <h2 id="featured-event-title">{event.title}</h2>
             <p className="sp-featured-summary">{event.summary}</p>

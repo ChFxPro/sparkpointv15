@@ -107,7 +107,7 @@ The two drafts:
 - **Attendees**: "You're invited: A World of Connections, the SparkPoint Gala". No
   sponsor section. Uses the on-sale note below, with the preview "A World of
   Connections, the SparkPoint Gala, December 11 at Connestee Falls: tickets on sale, $100 per person. An
-  evening of connection and a live travel auction that gives back to
+  evening of connection and a travel experience that gives back to
   Transylvania County."
 - **Sponsor direct**: "Come aboard A World of Connections, the SparkPoint Gala,
   as a travel partner". Adds the
@@ -120,7 +120,7 @@ The order, with each image's link (all on
 | --- | --- | --- |
 | Text | The note (see below) | both, worded per version |
 | Images | `01-hero` (page), `02-boarding-pass.gif` (page) | both |
-| Text | "Picture it: a first-class evening at home in Transylvania County, and a live auction of eight trips around the world. Tap any part of this invitation to explore it on the Gala page." | both |
+| Text | "Picture it: a first-class evening at home in Transylvania County, and a travel experience that reaches around the world. Tap any part of this invitation to explore it on the Gala page." | both |
 | Images | `03-departures.gif` (`#routes-title`), `04-passport` (`#passport`), `05-luggage-tags` (`#tags-title`), `06-postcard` (`#return-title`) | both |
 | Images | `07-travel-partners` (the Monday sponsor form) | sponsor only, above `08` |
 | Images | `08-your-seat` (the ticket link) | both |
@@ -148,23 +148,27 @@ settings change.
 
 **Alt text used**
 
-- Hero: You're invited: A World of Connections, the SparkPoint Gala, a live travel
-  auction. Every journey connects back home.
+The travel portion is kept vague until the board settles it (Sarah,
+2026-11-05): no number of trips, no "live auction", none of the package terms
+(years to travel, blackout dates, matching the winning bid). Call it the
+"travel experience".
+
+- Hero: You're invited: A World of Connections, the SparkPoint Gala, a travel
+  experience. Every journey connects back home.
 - Boarding pass: SparkPoint invites you to join us for A World of Connections,
   the SparkPoint Gala. A first-class boarding pass: Transylvania County to
   Anywhere, Friday, December 11, 2026, boarding at 6 p.m., at Connestee Falls
   Country Club, Brevard, NC.
-- Departures: The travel auction: eight connections, one home base. A
-  departures board lists the SparkPoint Gala on December 11 and eight trips
-  going up for bid with a live auctioneer, destinations revealed soon.
-- Passport: Your passport to the auction: 8 travel experiences, 3 years to
-  travel, no blackout dates, and you can match the winning bid.
+- Departures: The travel experience: a world of connections, one home base. A
+  departures board lists the SparkPoint Gala on December 11, then journeys to
+  anywhere and somewhere new, destinations revealed soon.
+- Passport: Your passport to the world: Gala night on December 11, worldwide
+  destinations, a travel experience that gives back home.
 - Luggage tags: Where will yours take you? Five leather luggage tags:
   anniversary, milestone birthday, honeymoon, family vacation, bucket list.
 - Postcard: Travel that gives back to our community. A postcard reading
   Greetings from HOME shows a concept rendering of the Transylvania Resilience
-  Hub, which a portion of every travel package sold at the Gala helps bring to
-  life.
+  Hub, which a portion of the Gala's travel experience helps bring to life.
 - Your seat: Tickets are on sale. Your seat is waiting: $100 per person at
   Connestee Falls Country Club.
 - Travel partners: Travel partners: your brand, cleared for takeoff. A cabin
@@ -177,7 +181,7 @@ Update the venue, board, and closing alt text along with the images.
 
 - Subject: Come aboard A World of Connections, the SparkPoint Gala, as a travel partner
 - Preview: A World of Connections, the SparkPoint Gala, December 11: put your brand on board for an
-  evening of connection and a live travel auction that gives back to
+  evening of connection and a travel experience that gives back to
   Transylvania County.
 - Note:
 
@@ -185,9 +189,9 @@ Update the venue, board, and closing alt text along with the images.
   >
   > SparkPoint invites you to join us for A World of Connections, the SparkPoint
   > Gala, on Friday, December 11, at 6 p.m. at Connestee Falls Country Club in
-  > Brevard: an evening of connection and a live auction of eight travel
-  > experiences, with a portion of every trip coming home to help bring the
-  > Transylvania Resilience Hub to life. Tickets are now on sale at $100 per
+  > Brevard: an evening of connection and a travel experience that gives
+  > back, with a portion coming home to help bring the Transylvania Resilience
+  > Hub to life. Tickets are now on sale at $100 per
   > person. We're inviting local businesses to come aboard A World of Connections
   > as travel partners, through sponsorships and in-kind support for food, drink,
   > and entertainment. Take a look at the evening below, then request early
@@ -198,25 +202,28 @@ The attendee draft uses the subject below and the on-sale note.
 ## The name
 
 The event is **A World of Connections** (plural, the client's wording), the
-SparkPoint Gala. It replaced A World of Connections on 2026-10-28; the brand kit is
+SparkPoint Gala. It replaced An Atlas of Wonders on 2026-10-28; the brand kit is
 `/Users/jeffbannister/Code/sparkpoint/Branding/Gala/WorldOfConnections/`.
 
 - In sentences: "Join us for A World of Connections, the SparkPoint Gala, on
   Friday, December 11…", then "the Gala". Invite people *for* it, not "at" it.
 - Full form, for titles and listings: *A World of Connections: SparkPoint Gala
-  & Travel Auction*.
-- As a kicker or label: "The SparkPoint Gala · Live travel auction".
+  & Travel Experience* (was "& Travel Auction" until 2026-11-05).
+- As a kicker or label: "The SparkPoint Gala · Travel experience". The lockup's
+  second byline line reads TRAVEL EXPERIENCE (was LIVE TRAVEL AUCTION).
 - The tagline is "Every journey connects back home.", with *connects back
   home.* in Josefin 600 brass.
-- Trips are numbered as **connections** ("Connection 01 · Kyoto", "Eight
-  connections, one evening."), never atlas plates. Fraunces and the "Atlas
-  Gala" nickname are retired.
+- Until the board settles the travel portion, no trip count anywhere: the
+  board shows open-ended destinations ("ANYWHERE", "SOMEWHERE NEW"). Once trips
+  are announced they can be numbered as **connections** ("Connection 01 ·
+  Kyoto"), never atlas plates. Fraunces and the "Atlas Gala" nickname are
+  retired.
 - Everything is set in Josefin Sans (`@fontsource-variable/josefin-sans`); only
   the split-flap board letters use a monospace face.
 - The full lockup (globe, sunburst and routes included) is the title wherever
   the name appears as a heading, never typed name text. The hero centers the
   dark-background lockup under a small "You're invited" line (the lockup
-  already says LIVE TRAVEL AUCTION), with the tagline beneath it; the
+  already says TRAVEL EXPERIENCE), with the tagline beneath it; the
   invitation card uses the light-background lockup on cream `#f7f1e5`, inside
   the kit's double-hairline frame. Both PNGs live in `assets/`; they're copies
   of `output/gala-print/logo/` from `npm run print:gala -- logo`.
@@ -239,7 +246,7 @@ copy is kept below for reference only.
 **Preview text**
 
 A World of Connections, the SparkPoint Gala, December 11 at Connestee Falls:
-tickets on sale, $100 per person. An evening of connection and a live travel auction that gives back to
+tickets on sale, $100 per person. An evening of connection and a travel experience that gives back to
 Transylvania County.
 
 **Note above the image**
@@ -248,9 +255,8 @@ Transylvania County.
 >
 > Join us for A World of Connections, the SparkPoint Gala, on Friday, December 11,
 > at 6 p.m. at Connestee Falls Country Club in Brevard. It's an evening of
-> connection and celebration, with a live auction of eight travel experiences,
-> and a portion of every trip comes home to help bring the Transylvania
-> Resilience Hub to life. Tickets are $100 per person and on sale now. Your
+> connection and celebration, with a travel experience that gives back, and a
+> portion comes home to help bring the Transylvania Resilience Hub to life. Tickets are $100 per person and on sale now. Your
 > seat is waiting.
 
 **Button**: Get tickets · $100, linking to
@@ -260,17 +266,17 @@ Transylvania County.
 
 You're invited to A World of Connections, the SparkPoint Gala, Friday, December
 11, 2026, at 6 p.m. at
-Connestee Falls Country Club: an evening of connection and a live auction of
-eight travel experiences that gives back to the Transylvania Resilience Hub.
+Connestee Falls Country Club: an evening of connection and a travel experience
+that gives back to the Transylvania Resilience Hub.
 Tickets are on sale now, $100 per person.
 
 **Before tickets went on sale** (no longer used)
 
-- Preview: An evening of connection and a live auction of eight travel
-  experiences that give back to Transylvania County.
+- Preview: An evening of connection and a travel experience that gives back
+  to Transylvania County.
 - Note: Please save the date for the SparkPoint Gala on Friday, December 11, at
-  6 p.m. It's an evening of connection and celebration, with a live auction of
-  eight travel experiences, and a portion of every trip comes home to help
-  bring the Transylvania Resilience Hub to life. Venue and tickets are coming
+  6 p.m. It's an evening of connection and celebration, with a travel
+  experience that gives back, and a portion comes home to help bring the
+  Transylvania Resilience Hub to life. Venue and tickets are coming
   soon, and we'd love for you to be there.
 - Button: Get gala updates, linking to the Gala page.

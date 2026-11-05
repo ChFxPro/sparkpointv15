@@ -14,7 +14,7 @@
     <span class="a" aria-hidden="true">A</span><span class="world" aria-hidden="true">World</span>
     <span class="conn" aria-hidden="true">of Connections</span>
     <span class="rule" aria-hidden="true"><i></i><b></b><img src="${mark}" alt=""><b></b><i></i></span>
-    <span class="by" aria-hidden="true">The SparkPoint Gala</span><span class="by2" aria-hidden="true">Live travel auction</span>`;
+    <span class="by" aria-hidden="true">The SparkPoint Gala</span><span class="by2" aria-hidden="true">Travel experience</span>`;
   for (const slot of document.querySelectorAll('.lk-slot')) {
     const lk = document.createElement('div');
     lk.className = 'lk ' + [...slot.classList].filter((c) => c !== 'lk-slot').join(' ');
