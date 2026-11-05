@@ -1,7 +1,8 @@
 // Small shared pieces of the /backporch feed: the copy-link button, Add to
 // calendar, the gold date block, month markers, photos, and the after-mount clock.
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { dateChip, porchImageSrcSet, porchImageUrl, postPath, shortAddress, type PorchPost } from '../../../lib/backporch';
+import { coverImgStyle, dateChip, porchImageSrcSet, porchImageUrl, postPath, shortAddress, type CoverFrame, type PorchPost } from '../../../lib/backporch';
+import { WholeBackdrop } from '../../../components/backporch/PorchParts';
 import { canonicalUrl } from '../../../lib/siteOrigin';
 import { googleCalendarUrl, icsDataUrl, timeUntil } from '../../../lib/porchFeed';
 
@@ -37,31 +38,64 @@ export function WhenLine({ post, fallback }: { post: PorchPost; fallback: string
 
 export const pageUrl = (post: PorchPost) => canonicalUrl(postPath(post.slug));
 
+/**
+ * A cover set to "show the whole image" is a poster or flyer: cards then show it at
+ * its own shape beside the words (data-cover="poster"), never cropped or blurred.
+ */
+export const isPoster = (post: PorchPost) => post.presentation?.cover?.fit === 'whole' && Boolean(post.image_path);
+
+/** The cover at its own shape, for poster cards. */
+export function Poster({ post, sizes, eager = false }: { post: PorchPost; sizes: string; eager?: boolean }) {
+  return (
+    <img
+      className="pf-poster"
+      src={porchImageUrl(post.image_path, 960) ?? ''}
+      srcSet={porchImageSrcSet(post.image_path)}
+      sizes={sizes}
+      alt={post.image_alt ?? ''}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+    />
+  );
+}
+
 export function Photo({
   path,
   alt,
   sizes,
   eager = false,
   className = '',
+  frame,
 }: {
   path: string | null;
   alt: string;
   sizes: string;
   eager?: boolean;
   className?: string;
+  /** The post's cover framing, when this photo is its cover. */
+  frame?: CoverFrame;
 }) {
   const src = porchImageUrl(path, 960);
   if (!src) return <div className={`pf-photo pf-photo-blank ${className}`} aria-hidden="true" />;
-  return (
+  const img = (
     <img
-      className={`pf-photo ${className}`}
+      className={frame?.fit === 'whole' ? 'pf-photo-main' : `pf-photo ${className}`}
       src={src}
       srcSet={porchImageSrcSet(path)}
       sizes={sizes}
       alt={alt}
       loading={eager ? 'eager' : 'lazy'}
       decoding="async"
+      style={coverImgStyle(frame)}
     />
+  );
+  if (frame?.fit !== 'whole') return img;
+  // Shown whole: the wrapper takes the photo's place in the layout.
+  return (
+    <span className={`pf-photo pf-photo-whole ${className}`}>
+      <WholeBackdrop path={path} className="pf-photo-backdrop" />
+      {img}
+    </span>
   );
 }
 

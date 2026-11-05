@@ -19,7 +19,7 @@ function project(lon: number, lat: number): [number, number] {
 const HOME = project(-82.73, 35.23);
 
 // ILLUSTRATIVE ONLY — these are spread across the map to suggest "anywhere",
-// not the actual auction trips. Replace with the real destinations (and add
+// not the actual trips. Replace with the real destinations (and add
 // labels) once the lineup is announced.
 const ROUTES: Array<[number, number]> = [
   [-64, 17],
@@ -69,7 +69,7 @@ export function GalaRouteMap() {
     <div ref={ref} className={visible ? 'gala-map is-visible' : 'gala-map'}>
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="gala-map-title">
         <title id="gala-map-title">
-          Eight illustrative travel routes leaving Transylvania County, North Carolina for destinations
+          Illustrative travel routes leaving Transylvania County, North Carolina for destinations
           around the world, with the giveback travelling home.
         </title>
         <image href={`${BASE}assets/events/gala/world-dots.svg`} width={W} height={H} opacity="0.55" />
@@ -118,7 +118,7 @@ export function GalaRouteMap() {
       <div className="gala-map-legend">
         <span><i className="is-out" /> The trips go out</span>
         <span><i className="is-home" /> The giveback comes home</span>
-        <span className="gala-map-note">Routes are illustrative. The eight connections are announced before the Gala.</span>
+        <span className="gala-map-note">Routes are illustrative. Destinations are announced before the Gala.</span>
       </div>
     </div>
   );

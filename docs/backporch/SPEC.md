@@ -484,6 +484,73 @@ https://claude.ai/artifact/4BpH6C8H5zqSY6m19vuHY6). Logic in `src/lib/porchFeed.
   hints. The prerender sets `window.__PRERENDER__`, and relative words ("In 16
   days") appear only in a visitor's browser, on the line that shows the date.
 
+## Cover photos from the command line (built 2026-10-30)
+
+So a post's cover can be set without the editor (a flyer from an email, a photo from an
+event gallery), `npm run porch:cover` resizes a photo to 480/960/1600 WebP, uploads it to
+`porch-media` as `posts/<slug>-<stamp>-<width>.webp` (the editor's own naming), and sets
+it as the post's `image_path` with its alt text. Drafts and published posts both work.
+
+```
+npm run porch:cover -- <slug> <photo> --alt "What the photo shows"
+npm run porch:cover -- <slug> <photo> --alt "…" --dry-run    resize only, nothing sent
+```
+
+`<photo>` is a file on disk, or a photo in this project's public `event-media` or
+`convening-photos` bucket (other URLs are refused: save them to disk first).
+
+It signs in as the **BackPorch bot**, an ordinary Auth user whose email is in
+`porch_editors`, so Row Level Security limits its writes to BackPorch posts and photos.
+No secret key is stored. Its login lives in the macOS Keychain and is read at run time.
+One-time setup (owner's choice, 2026-10-30):
+
+1. Supabase Dashboard > Authentication > Users > Add user > Create new user. Email
+   `backporch-bot@yoursparkpoint.org` (it needn't be a real inbox), a long generated
+   password, and **Auto Confirm User** ticked (`is_porch_editor()` requires a confirmed email).
+2. Add it to the allowlist:
+   `insert into porch_editors (email, name) values ('backporch-bot@yoursparkpoint.org', 'BackPorch bot');`
+3. Save the login in the Keychain (it asks for the password, hidden):
+   `security add-generic-password -s sparkpoint-backporch-bot -a backporch-bot@yoursparkpoint.org -w`
+
+To revoke it, delete the row from `porch_editors` (or the Auth user) and the Keychain item
+(`security delete-generic-password -s sparkpoint-backporch-bot`). The project's Auth is
+shared with other tools, so the bot can also read whatever any signed-in user can (for
+example the internal reports); it's a staff-level login, not a public one.
+
+## Cover framing (built 2026-10-30)
+
+Lists and the post page draw a cover in fixed-shape frames (16:10 on the post page, 4:3
+and wider in the feed, small squares in rows), so a portrait flyer lost most of itself
+to the centred crop. Each post now keeps a framing in `presentation.cover`
+(`CoverFrame` in `src/lib/backporch.ts`; absent means fill, centred):
+
+- **Fill the frame** with a focal point (`{ fit: 'fill', x, y }`, percent of the photo):
+  the crop centres there (`object-position`).
+- **Show the whole image** (`{ fit: 'whole' }`): the photo fits inside every frame over
+  a blurred copy of itself, so nothing is cropped. On the post's own page the frame
+  takes the photo's own shape, up to most of the screen's height, so a flyer can be read.
+
+It applies wherever the cover shows: the feed (`Photo` in `feed/FeedParts.tsx`, given
+`frame`), the homepage band, rows and the post page (`PorchImage` in `PorchParts.tsx`),
+the takeover breakout (focal point only), and the Facebook kit's share image. The editor
+sets it under the cover photo (`CoverFraming.tsx`): pick Fill or Whole, click the photo
+(or use the arrow keys) to place the focal point, and see the post-page, feed and square
+crops before saving. From the command line: `npm run porch:cover -- <slug> --whole`,
+`--focus 50,20`, or `--fill`, with or without a new photo.
+
+Photo blocks inside a post are unaffected: they already show at their own shape.
+
+**Poster cards (2026-10-30).** In the feed, "show the whole image" means the cover is a
+poster or flyer, so the card is laid out around it instead of fitting it into a photo
+slot: the gathering tickets (lead and small), the ask band and the side-by-side story
+card put the poster at its own shape in a column beside the words (`Poster` /
+`isPoster` in `feed/FeedParts.tsx`, `data-cover="poster"`, styles at the end of
+`feed/feed.css`), with no crop and no blur. A small ticket's date block then leads the
+words instead of overlapping the photo. Cards switch by their own width (a container
+query): narrow, the poster sits centred above the words. A gallery story with a poster
+cover takes the side-by-side shape (`shapeOf`), since its title can't sit over a flyer.
+Other places (homepage band, rows, post page) keep the blurred-backdrop fit above.
+
 ## Decisions (owner, 2026-10-15)
 
 1. **Name:** The BackPorch, one word. Partners are "neighbors".
