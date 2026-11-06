@@ -57,14 +57,14 @@ const COLLABORATIONS: Collaboration[] = [
     linkLabel: 'About PowHer',
   },
   {
-    id: 'trailhead',
-    title: 'TrailHead',
-    programId: 'trailhead',
+    id: 'rural-health-field-simulator',
+    title: 'Rural Health Field Simulator',
+    programId: 'rural-health-field-simulator',
     pathwayColor: '#2F4A3C',
-    body: 'TrailHead is a SparkPoint simulation. Its first edition, TrailHead: Rural Health, was built for the October 1 Western NC Regional Rural Health Convening with the North Carolina Rural Health Association and the Foundation for Health Leadership and Innovation, with a statewide briefing from the NC DHHS Office of Rural Health.',
+    body: 'The Rural Health Field Simulator is a SparkPoint simulation, built for the October 1 Western NC Regional Rural Health Convening with the North Carolina Rural Health Association and the Foundation for Health Leadership and Innovation, with a statewide briefing from the NC DHHS Office of Rural Health.',
     partners: ['North Carolina Rural Health Association', 'Foundation for Health Leadership and Innovation', 'NC DHHS Office of Rural Health'],
-    href: '/programs/trailhead',
-    linkLabel: 'About TrailHead',
+    href: '/programs/rural-health-field-simulator',
+    linkLabel: 'About the simulator',
   },
 ];
 
