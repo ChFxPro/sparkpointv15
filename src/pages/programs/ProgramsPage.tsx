@@ -67,7 +67,7 @@ export default function ProgramsPage() {
     <div className="sp-programs">
       <SEOHead
         title="Programs | SparkPoint"
-        description="SparkPoint's programs, in four pathways: Listen, Learn, Lead, and Connect. Story collection, leadership and workplace series, youth voice, the TrailHead simulation, and collaborations with partners across Transylvania County and Western North Carolina."
+        description="SparkPoint's programs, in four pathways: Listen, Learn, Lead, and Connect. Story collection, leadership and workplace series, youth voice, the Rural Health Field Simulator, and collaborations with partners across Transylvania County and Western North Carolina."
         path="/programs"
       />
 
