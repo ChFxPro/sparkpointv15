@@ -264,7 +264,12 @@
 .jm-tray {
   grid-area: tray;
   position: relative;
-  overflow: hidden;
+  /* Scrolls when a short screen can't fit the panel, so every stamp stays reachable. */
+  min-height: 0;
+  max-height: 62dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background: var(--jm-night-2);
   border-top: 1px solid rgba(217, 181, 106, 0.22);
   padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -272,6 +277,7 @@
 
 @media (min-width: 900px) {
   .jm-tray {
+    max-height: none;
     border-top: 0;
     border-left: 1px solid rgba(217, 181, 106, 0.22);
   }

@@ -74,8 +74,45 @@ function star5(x: Ctx, cx: number, cy: number, R: number) {
   x.fill();
 }
 
-/** The four-point SparkPoint star, drawn (the sparkmark image is used where it can be). */
+const cache = new Map<string, HTMLCanvasElement>();
+
+// The official sparkmark (src/components/Sparkmark.tsx), set once it has loaded. Its shape is
+// used as a mask, filled with the ink of whatever it's drawn in, like Sparkmark's `ink` variant.
+let sparkmark: HTMLImageElement | null = null;
+const tinted = new Map<string, HTMLCanvasElement>();
+
+export function setSparkmark(img: HTMLImageElement) {
+  sparkmark = img;
+  tinted.clear();
+  cache.clear();
+}
+
+function inkedMark(color: string) {
+  const hit = tinted.get(color);
+  if (hit || !sparkmark) return hit ?? null;
+  const c = document.createElement('canvas');
+  c.width = sparkmark.naturalWidth || 256;
+  c.height = sparkmark.naturalHeight || 256;
+  const x = c.getContext('2d');
+  if (!x) return null;
+  x.drawImage(sparkmark, 0, 0, c.width, c.height);
+  x.globalCompositeOperation = 'source-in';
+  x.fillStyle = color;
+  x.fillRect(0, 0, c.width, c.height);
+  tinted.set(color, c);
+  return c;
+}
+
+/**
+ * The sparkmark at (cx, cy), r from centre to tip, in the current fill colour.
+ * Until the official mark has loaded, a plain four-point star holds its place.
+ */
 export function spark(x: Ctx, cx: number, cy: number, r: number) {
+  const mark = typeof x.fillStyle === 'string' ? inkedMark(x.fillStyle) : null;
+  if (mark) {
+    x.drawImage(mark, cx - r, cy - r, r * 2, r * 2);
+    return;
+  }
   const q = r * 0.22;
   x.beginPath();
   x.moveTo(cx, cy - r);
@@ -461,8 +498,6 @@ export function fallbackStamp(name: string, connection: string): StampArt {
     },
   };
 }
-
-const cache = new Map<string, HTMLCanvasElement>();
 
 /** A stamp rendered on its own canvas at `k` pixels per unit, inked and worn. */
 export function stampCanvas(id: string, art: StampArt, k = 3): HTMLCanvasElement {
