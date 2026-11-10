@@ -127,12 +127,13 @@ def audit_cut(trips_dir, trip, reel, layout):
                                'kind': 'same-source' + (' continued' if src[0] == 'clip' and -1 <= gap <= 4 else ''),
                                'at': round(cut_t, 2), 'from': ps['what'], 'to': s['what'], 'source': src[1]})
             else:
-                a = frame(video, ps['end'] - 0.15)
+                # Sample clear of any dissolve, where the two shots are blended.
+                a = frame(video, ps['end'] - (s.get('fadeIn') or 0) - 0.15)
                 b = frame(video, s['start'] + (s.get('fadeIn') or 0) + 0.15)
                 if a is not None and b is not None:
                     ham = int((dhash(a) != dhash(b)).sum())
                     hc = hist_corr(a, b)
-                    ma, mb = motion(video, ps['end'] - 0.4), motion(video, s['start'] + (s.get('fadeIn') or 0) + 0.4)
+                    ma, mb = motion(video, ps['end'] - (s.get('fadeIn') or 0) - 0.4), motion(video, s['start'] + (s.get('fadeIn') or 0) + 0.4)
                     same_motion = ma is not None and ma == mb and ma != 'still'
                     # Tuned on the first five trips: dark, low-contrast frames of different scenes reached
                     # hash 4-9 with histogram 0.87-0.92, so both must be close (and the motion too, if looser).
