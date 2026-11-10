@@ -33,8 +33,9 @@ export async function writeLicenses(trip) {
   }
   if (video?.clips?.length) {
     lines.push('## Video footage (`video/`)', '', 'Supplied footage (Jeff\'s, from the NorthBend drive) is used first; rows marked "gap fill" were sourced by this session.', '', '| Clip | Shows | Author | Licence | Source | Used |', '| --- | --- | --- | --- | --- | --- |');
-    for (const c of video.clips) lines.push(`| ${c.id} | ${c.shows} | ${c.author} | ${link(c.license, c.licenseUrl || c.page)} | ${link(c.title, c.page)}${/^https?:/.test(c.page ?? '') ? '' : ' (source not yet in SOURCES.md)'} | ${c.used ?? ''} |`);
-    if (video.music) lines.push('', `Music: ${video.music.title} by ${video.music.author}, ${video.music.license} ([source](${video.music.page})).`);
+    for (const c of video.clips) lines.push(`| ${c.id} | ${c.shows} | ${c.author} | ${link(c.license, c.licenseUrl || c.page)} | ${link(c.title, c.page)} | ${c.used ?? ''} |`);
+    if (video.music) lines.push('', `Music: "${video.music.title}" by ${video.music.author}, ${video.music.license}${/^https?:/.test(video.music.page ?? '') ? ` ([source](${video.music.page}))` : ''}.`);
+    if (video.sfx?.length) lines.push('', `Sound effects: ${video.sfx.map((x) => x.title).join(', ')} (${video.sfx[0].license}).`);
     lines.push('');
   }
   lines.push('## SparkPoint artwork', '', 'The lockup, sparkmark, title cards, journey map and layouts are SparkPoint\'s own (A World of Connections brand kit).', 'The map\'s land outline is Natural Earth (public domain), via the world-atlas TopoJSON files.', '');

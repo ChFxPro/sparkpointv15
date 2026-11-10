@@ -260,7 +260,108 @@
       "music": {
         "commons": "File:Ice Flow (ISRC USUAN1200088).mp3",
         "start": 0
-      }
+      },
+      "reel": [
+        {
+          "local": {
+            "local": "aerial-footage-of-hallgrimskirkja-church-in-reykja-2026-09-30-13-23-13-utc.mp4",
+            "at": 12,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "social": true,
+          "shows": "Hallgrímskirkja, Reykjavík, from the air",
+          "caption": [
+            "Reykjavík · 6 nights",
+            "Iceland's capital, from the air"
+          ]
+        },
+        {
+          "local": {
+            "local": "winding-mountain-road-thingvellir-national-park-2026-10-27-21-28-10-utc.mp4",
+            "at": 3,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "shows": "The road through Þingvellir",
+          "caption": [
+            "The Golden Circle",
+            "Þingvellir, where two continents pull apart"
+          ]
+        },
+        {
+          "local": {
+            "local": "majestic-waterfall-in-thingvellir-national-park-i-2026-10-03-01-17-45-utc.mp4",
+            "at": 2,
+            "dur": 5.5
+          },
+          "fx": 0.5,
+          "dur": 5.5,
+          "shows": "Öxarárfoss, Þingvellir"
+        },
+        {
+          "local": {
+            "local": "top-down-aerial-shot-of-strokkur-geyser-eruption-i-2026-09-30-13-50-23-utc.mp4",
+            "at": 4.5,
+            "dur": 6.5
+          },
+          "fx": 0.5,
+          "dur": 6.5,
+          "social": true,
+          "shows": "Strokkur geyser erupting",
+          "caption": [
+            "Geysir",
+            "Strokkur erupts every few minutes"
+          ]
+        },
+        {
+          "local": {
+            "local": "gullfoss-waterfall-in-iceland-golden-waterfall-2026-10-02-17-01-56-utc.mp4",
+            "at": 2,
+            "dur": 6
+          },
+          "fx": 0.45,
+          "dur": 6,
+          "social": true,
+          "shows": "Gullfoss",
+          "caption": [
+            "Gullfoss",
+            "The golden waterfall"
+          ]
+        },
+        {
+          "still": "iceland-01",
+          "move": "in",
+          "fx": 0.5,
+          "dur": 5,
+          "shows": "Gullfoss with a rainbow"
+        },
+        {
+          "local": {
+            "local": "man-soaking-in-steaming-lagoon-water-2026-10-02-14-43-00-utc.mp4",
+            "at": 0.3,
+            "dur": 5.6
+          },
+          "fx": 0.6,
+          "dur": 5.6,
+          "social": true,
+          "shows": "A traveler in a steaming geothermal lagoon"
+        },
+        {
+          "still": "iceland-04",
+          "move": "out",
+          "fx": 0.5,
+          "dur": 5,
+          "shows": "Reykjavík at dusk",
+          "caption": [
+            "Reykjavík",
+            "A guided food tour of the city"
+          ]
+        }
+      ],
+      "factsBg": 2
     },
     "cortona": {
       "line": "Under the Tuscan Sun",
@@ -312,7 +413,112 @@
       "music": {
         "commons": "File:Bushwick Tarantella (ISRC USUAN1300002).mp3",
         "start": 0
-      }
+      },
+      "reel": [
+        {
+          "local": {
+            "local": "aerial-view-of-cortona-italy-2026-10-03-05-09-06-utc.mp4",
+            "at": 3,
+            "dur": 6.5
+          },
+          "fx": 0.55,
+          "dur": 6.5,
+          "social": true,
+          "shows": "Cortona on its hill, from the air",
+          "caption": [
+            "Cortona · 6 nights",
+            "A hilltop town above the Val di Chiana"
+          ]
+        },
+        {
+          "local": {
+            "local": "aerial-view-of-cortona-cityscape-italy-2026-10-03-05-13-02-utc.mp4",
+            "at": 15,
+            "dur": 5.5
+          },
+          "fx": 0.5,
+          "dur": 5.5,
+          "shows": "Cortona's rooftops"
+        },
+        {
+          "still": "cortona-02",
+          "move": "in",
+          "fx": 0.5,
+          "dur": 5,
+          "social": true,
+          "shows": "Piazza della Repubblica, Cortona",
+          "caption": [
+            "Piazza della Repubblica",
+            "Welcome cocktails on the main square"
+          ]
+        },
+        {
+          "commonsStill": "File:Cortona (2).jpg",
+          "move": "left",
+          "fx": 0.5,
+          "dur": 5,
+          "shows": "A street in Cortona's old town",
+          "caption": [
+            "The old town",
+            "A private two-hour guided walk"
+          ]
+        },
+        {
+          "commonsStill": "File:2018 Corner 103 Bacon Dinner - Sarah Stierch.jpg",
+          "move": "in",
+          "fx": 0.45,
+          "dur": 4.8,
+          "shows": "Red wine poured at dinner",
+          "caption": [
+            "Tasting dinner",
+            "Courses paired with wine"
+          ]
+        },
+        {
+          "local": {
+            "local": "aerial-view-of-cortona-cityscape-italy-2026-10-03-05-13-02-utc.mp4",
+            "at": 31,
+            "dur": 5.5
+          },
+          "fx": 0.5,
+          "dur": 5.5,
+          "shows": "Cortona and the valley beyond"
+        },
+        {
+          "local": {
+            "local": "scenic-aerial-view-of-green-rural-landscape-2026-10-03-01-42-31-utc.mp4",
+            "at": 2,
+            "dur": 6
+          },
+          "fx": 0.6,
+          "dur": 6,
+          "social": true,
+          "shows": "Tuscan countryside",
+          "caption": [
+            "Tuscany",
+            "All of Tuscany at the window"
+          ]
+        },
+        {
+          "local": {
+            "local": "woman-walks-down-picturesque-road-in-tuscany-at-su-2026-10-03-10-09-14-utc.mp4",
+            "at": 0.5,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "social": true,
+          "shows": "A cypress-lined road in Tuscany"
+        },
+        {
+          "still": "cortona-03",
+          "move": "out",
+          "fx": 0.5,
+          "dur": 5,
+          "shows": "The view over the Val di Chiana"
+        }
+      ],
+      "factsBg": 2
     },
     "scotland": {
       "line": "Lochs & Legends",
@@ -398,7 +604,121 @@
       "music": {
         "commons": "File:Skye Cuillin (ISRC USUAN1100346).mp3",
         "start": 0
-      }
+      },
+      "reel": [
+        {
+          "local": {
+            "local": "aerial-view-of-edinburgh-castle-united-kingdom-2026-10-03-12-09-38-utc.mp4",
+            "at": 1,
+            "dur": 6
+          },
+          "fx": 0.45,
+          "dur": 6,
+          "social": true,
+          "shows": "Edinburgh Castle from the air",
+          "caption": [
+            "Edinburgh · 4 nights",
+            "The castle on its rock"
+          ]
+        },
+        {
+          "local": {
+            "local": "tilting-shot-of-the-royal-mile-in-edinburgh-scotl-2026-10-02-13-44-36-utc.mov",
+            "at": 2,
+            "dur": 5
+          },
+          "fx": 0.55,
+          "dur": 5,
+          "shows": "The Royal Mile, Edinburgh",
+          "caption": [
+            "The Royal Mile",
+            "A guided tour of the castle and Old Town"
+          ]
+        },
+        {
+          "local": {
+            "local": "aerial-of-loch-ness-scottish-highlands-scotland-2026-10-07-17-36-12-utc.mp4",
+            "at": 2,
+            "dur": 6
+          },
+          "fx": 0.4,
+          "dur": 6,
+          "social": true,
+          "shows": "Loch Ness from the air",
+          "caption": [
+            "Loch Ness",
+            "A cruise on the loch"
+          ]
+        },
+        {
+          "local": {
+            "local": "aerial-shot-of-urquhart-castle-on-loch-ness-scott-2026-10-07-20-11-36-utc.mp4",
+            "at": 3,
+            "dur": 6
+          },
+          "fx": 0.55,
+          "dur": 6,
+          "shows": "Urquhart Castle on Loch Ness"
+        },
+        {
+          "local": {
+            "local": "aerial-view-of-glasgow-city-center-scotland-2026-10-02-12-46-15-utc.mov",
+            "at": 10,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "shows": "Kelvingrove, Glasgow",
+          "caption": [
+            "Glasgow · 3 nights",
+            "West by train to Glasgow"
+          ]
+        },
+        {
+          "local": {
+            "local": "three-sisters-of-glencoe-in-the-highlands-of-scotl-2026-10-03-00-19-33-utc.mp4",
+            "at": 2,
+            "dur": 6
+          },
+          "fx": 0.4,
+          "dur": 6,
+          "social": true,
+          "shows": "The Three Sisters of Glencoe",
+          "caption": [
+            "Glencoe",
+            "A day in the West Highlands"
+          ]
+        },
+        {
+          "local": {
+            "local": "aerial-view-of-glencoe-lochan-on-a-sunny-day-glen-2026-10-02-22-15-19-utc.mp4",
+            "at": 2,
+            "dur": 5.5
+          },
+          "fx": 0.5,
+          "dur": 5.5,
+          "shows": "Glencoe Lochan"
+        },
+        {
+          "local": {
+            "local": "boat-sailing-on-a-lake-with-mountain-backdrop-2026-10-02-14-12-30-utc.mov",
+            "at": 2,
+            "dur": 6
+          },
+          "fx": 0.55,
+          "dur": 6,
+          "social": true,
+          "shows": "A boat on a Highland loch"
+        },
+        {
+          "still": "scotland-01",
+          "move": "in",
+          "fx": 0.6,
+          "dur": 5,
+          "shows": "Glencoe in evening light"
+        }
+      ],
+      "factsBg": 1
     },
     "south-africa": {
       "line": "Wild Wonders Photo Safari",
@@ -437,7 +757,114 @@
       "music": {
         "commons": "File:Tafi Maradi no voice (ISRC USUAN1100740).mp3",
         "start": 0
-      }
+      },
+      "reel": [
+        {
+          "local": {
+            "local": "sunrise-view-from-vehicle-of-kruger-park-adventure-2026-10-02-15-14-42-utc.mov",
+            "at": 1,
+            "dur": 6
+          },
+          "fx": 0.55,
+          "dur": 6,
+          "social": true,
+          "shows": "Sunrise from a game-drive vehicle, Kruger",
+          "caption": [
+            "South Africa · 6 nights",
+            "Game drives from first light"
+          ]
+        },
+        {
+          "local": {
+            "local": "aerial-view-of-safari-tents-in-tropical-wilderness-2026-10-03-04-22-07-utc.mp4",
+            "at": 8,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "shows": "A tented safari camp from the air",
+          "caption": [
+            "Safari camp · 5 nights",
+            "A luxury tented suite in the bush"
+          ]
+        },
+        {
+          "local": {
+            "local": "elephants-drinking-at-watering-hole-at-sunrise-2026-09-30-02-59-32-utc.mp4",
+            "at": 3,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "social": true,
+          "shows": "Elephants at a waterhole at sunrise"
+        },
+        {
+          "local": {
+            "local": "lions-crossing-dusty-road-at-sunrise-2026-10-02-14-46-43-utc.mov",
+            "at": 10,
+            "dur": 6
+          },
+          "fx": 0.6,
+          "dur": 6,
+          "social": true,
+          "shows": "Lions crossing a dirt road",
+          "caption": [
+            "The Big Five",
+            "A Big Five safari drive"
+          ]
+        },
+        {
+          "local": {
+            "local": "feeding-giraffes-in-dawn-mist-south-africa-2026-10-02-22-14-18-utc.mp4",
+            "at": 4,
+            "dur": 6
+          },
+          "fx": 0.6,
+          "dur": 6,
+          "shows": "Giraffes feeding in the dawn mist"
+        },
+        {
+          "local": {
+            "local": "woman-sitting-on-top-of-4-wheel-drive-while-on-wil-2026-10-02-23-06-59-utc.mp4",
+            "at": 8,
+            "dur": 6
+          },
+          "fx": 0.55,
+          "dur": 6,
+          "shows": "A traveler on a game-drive vehicle",
+          "caption": [
+            "Game drives",
+            "Out every day with a guide"
+          ]
+        },
+        {
+          "local": {
+            "local": "pride-of-lions-walking-through-the-african-savanna-2026-10-02-07-36-44-utc.mp4",
+            "at": 12,
+            "dur": 5.5
+          },
+          "fx": 0.5,
+          "dur": 5.5,
+          "shows": "A pride of lions"
+        },
+        {
+          "local": {
+            "local": "silhouette-of-a-giraffe-walking-across-the-savanna-2026-10-03-15-25-27-utc.mp4",
+            "at": 1,
+            "dur": 6
+          },
+          "fx": 0.45,
+          "dur": 6,
+          "social": true,
+          "shows": "A giraffe at sunset",
+          "caption": [
+            "Evenings",
+            "A traditional bush braai"
+          ]
+        }
+      ],
+      "factsBg": 1
     },
     "portugal": {
       "line": "Lisbon & Porto",
@@ -508,7 +935,120 @@
       "music": {
         "commons": "File:Infados (ISRC USUAN1100449).mp3",
         "start": 0
-      }
+      },
+      "reel": [
+        {
+          "local": {
+            "local": "lisbon-skyline-at-lisbon-in-district-of-lisbon-por-2026-10-03-01-54-26-utc.mp4",
+            "at": 0.5,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "social": true,
+          "shows": "Praça do Comércio, Lisbon",
+          "caption": [
+            "Lisbon",
+            "Hills, trams and river light"
+          ]
+        },
+        {
+          "local": {
+            "local": "aerial-view-of-yellow-tram-through-lisbon-streets-2026-10-03-10-54-26-utc.mp4",
+            "at": 2,
+            "dur": 5.5
+          },
+          "fx": 0.5,
+          "dur": 5.5,
+          "shows": "A yellow tram through Lisbon's streets"
+        },
+        {
+          "local": {
+            "local": "aerial-view-of-the-colorful-pena-palace-in-sintra-2026-10-03-02-49-26-utc.mp4",
+            "at": 0.3,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "social": true,
+          "shows": "Pena Palace, Sintra",
+          "caption": [
+            "Sintra",
+            "A small-group tour of the palaces and the Riviera"
+          ]
+        },
+        {
+          "local": {
+            "local": "aerial-drone-view-of-park-and-palace-of-monserrate-2026-10-05-00-31-10-utc.mp4",
+            "at": 4,
+            "dur": 5.5
+          },
+          "fx": 0.5,
+          "dur": 5.5,
+          "shows": "The Palace of Monserrate, Sintra"
+        },
+        {
+          "local": {
+            "local": "aerial-view-of-porto-city-and-douro-river-at-sunse-2026-10-03-15-08-10-utc.mp4",
+            "at": 2,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "shows": "Porto and the Douro at sunset",
+          "caption": [
+            "Porto",
+            "A private guided drive north"
+          ]
+        },
+        {
+          "local": {
+            "local": "scenic-river-view-of-porto-portugal-with-rabelo-bo-2026-10-02-13-24-58-utc.mov",
+            "at": 0.3,
+            "dur": 6
+          },
+          "fx": 0.45,
+          "dur": 6,
+          "social": true,
+          "shows": "A rabelo boat on the Douro at Porto"
+        },
+        {
+          "local": {
+            "local": "tram-rides-across-the-bridge-in-porto-2026-10-01-05-38-48-utc.mp4",
+            "at": 3,
+            "dur": 5
+          },
+          "fx": 0.5,
+          "dur": 5,
+          "shows": "A tram crossing the Dom Luís I bridge, Porto"
+        },
+        {
+          "local": {
+            "local": "aerial-view-of-vineyard-and-flowing-river-2026-10-02-09-57-20-utc.mp4",
+            "at": 1,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "social": true,
+          "shows": "Terraced vineyards above the Douro",
+          "caption": [
+            "The Douro Valley",
+            "Wine tasting, lunch and a river cruise"
+          ]
+        },
+        {
+          "local": {
+            "local": "aerial-view-of-river-cruise-through-lush-valley-2026-10-03-03-50-45-utc.mp4",
+            "at": 3,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "shows": "A river cruise on the Douro"
+        }
+      ],
+      "factsBg": 0
     },
     "costa-rica": {
       "line": "Colorful Costa Rica",
@@ -549,7 +1089,120 @@
       "music": {
         "commons": "File:Ave Marimba (ISRC USUAN1700024).mp3",
         "start": 0
-      }
+      },
+      "reel": [
+        {
+          "local": {
+            "local": "aerial-view-of-the-majestic-arenal-volcano-under-a-2026-11-05-18-50-02-utc.mp4",
+            "at": 1,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "social": true,
+          "shows": "Arenal Volcano from the air",
+          "caption": [
+            "Arenal",
+            "Rainforest beneath a perfect cone"
+          ]
+        },
+        {
+          "local": {
+            "local": "discovering-the-magnificent-suspension-bridges-fou-2026-10-03-02-15-32-utc.mp4",
+            "at": 5,
+            "dur": 5.5
+          },
+          "fx": 0.5,
+          "dur": 5.5,
+          "shows": "Hanging bridges in the rainforest"
+        },
+        {
+          "local": {
+            "local": "collared-aracari-perched-on-mossy-branch-in-rainfo-2026-10-02-19-56-38-utc.mov",
+            "at": 1,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "shows": "A collared aracari in the rainforest",
+          "caption": [
+            "The rainforest",
+            "Toucans, sloths and hanging bridges"
+          ]
+        },
+        {
+          "local": {
+            "local": "gentle-sloth-hanging-from-tree-in-rainforest-2026-10-02-09-59-05-utc.mov",
+            "at": 1,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "social": true,
+          "shows": "A sloth hanging from a branch"
+        },
+        {
+          "local": {
+            "local": "person-zip-lining-through-a-tropical-rainforest-ca-2026-10-02-15-46-13-utc.mp4",
+            "at": 2,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "social": true,
+          "shows": "A traveler ziplining over the canopy",
+          "caption": [
+            "Two tours of your choosing",
+            "Ziplining through the canopy"
+          ]
+        },
+        {
+          "local": {
+            "local": "treehouse-adventure-with-zipline-in-tropical-fores-2026-10-02-16-31-39-utc.mov",
+            "at": 1,
+            "dur": 5.5
+          },
+          "fx": 0.5,
+          "dur": 5.5,
+          "shows": "A treehouse in the rainforest"
+        },
+        {
+          "local": {
+            "local": "aerial-view-of-tamarindo-beach-at-sunset-in-costa-2026-10-03-13-13-35-utc.mp4",
+            "at": 1,
+            "dur": 6
+          },
+          "fx": 0.55,
+          "dur": 6,
+          "shows": "Tamarindo beach from the air",
+          "caption": [
+            "Tamarindo",
+            "The Pacific beaches of Guanacaste"
+          ]
+        },
+        {
+          "local": {
+            "local": "sunlight-hitting-the-trees-and-wide-sand-beach-in-2026-10-02-21-52-26-utc.mp4",
+            "at": 2,
+            "dur": 5.5
+          },
+          "fx": 0.4,
+          "dur": 5.5,
+          "shows": "Palms and a wide sand beach"
+        },
+        {
+          "local": {
+            "local": "pan-right-hyperlapse-tamarindo-sunset-beach-costa-2026-10-03-12-02-33-utc.mp4",
+            "at": 0,
+            "dur": 4.8
+          },
+          "fx": 0.6,
+          "dur": 4.8,
+          "social": true,
+          "shows": "Sunset at Tamarindo"
+        }
+      ],
+      "factsBg": 0
     },
     "alaska": {
       "line": "Explorer of the North",
@@ -636,7 +1289,126 @@
       "music": {
         "commons": "File:Majestic Hills (ISRC USUAN1100423).mp3",
         "start": 0
-      }
+      },
+      "reel": [
+        {
+          "local": {
+            "local": "mountains-meets-the-sea-in-alaska-aerial-view-2026-10-02-21-43-45-utc.mov",
+            "at": 1,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "social": true,
+          "shows": "Mountains meeting the sea, Alaska",
+          "caption": [
+            "The Inside Passage",
+            "Seven nights in a balcony stateroom"
+          ]
+        },
+        {
+          "local": {
+            "local": "juneau-alaska-aerial-push-2026-10-03-03-45-18-utc.mp4",
+            "at": 3,
+            "dur": 6
+          },
+          "fx": 0.4,
+          "dur": 6,
+          "shows": "Juneau from the air",
+          "caption": [
+            "Juneau",
+            "The capital, between mountains and sea"
+          ]
+        },
+        {
+          "local": {
+            "local": "powerful-nugget-falls-cascading-into-mendenhall-la-2026-10-19-15-30-54-utc.mp4",
+            "at": 2,
+            "dur": 5.5
+          },
+          "fx": 0.6,
+          "dur": 5.5,
+          "shows": "Nugget Falls, Mendenhall Lake",
+          "caption": [
+            "Mendenhall",
+            "Nugget Falls and the glacier lake"
+          ]
+        },
+        {
+          "local": {
+            "local": "humpback-whale-breaching-and-splashing-in-the-deep-2026-10-03-16-18-28-utc.mp4",
+            "at": 0.3,
+            "dur": 5.5
+          },
+          "fx": 0.35,
+          "dur": 5.5,
+          "social": true,
+          "shows": "A humpback whale breaching"
+        },
+        {
+          "local": {
+            "local": "historic-white-pass-yukon-route-railway-in-skagway-2026-10-03-05-27-12-utc.mp4",
+            "at": 2,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "shows": "The White Pass & Yukon Route railway, Skagway",
+          "caption": [
+            "Skagway",
+            "The gold-rush railway"
+          ]
+        },
+        {
+          "local": {
+            "local": "grizzly-bear-chasing-and-catching-red-sockeye-salm-2026-10-23-18-48-31-utc.mp4",
+            "at": 8,
+            "dur": 6
+          },
+          "fx": 0.55,
+          "dur": 6,
+          "social": true,
+          "shows": "A brown bear fishing for salmon",
+          "caption": [
+            "Shore excursions",
+            "A credit toward your own adventure"
+          ]
+        },
+        {
+          "still": "alaska-03",
+          "move": "in",
+          "fx": 0.5,
+          "dur": 5,
+          "shows": "Creek Street, Ketchikan",
+          "caption": [
+            "Ketchikan",
+            "Creek Street on its stilts"
+          ]
+        },
+        {
+          "local": {
+            "local": "sailing-on-gastineau-channel-at-sunset-leaving-jun-2026-10-02-16-22-49-utc.mp4",
+            "at": 0,
+            "dur": 5.5
+          },
+          "fx": 0.5,
+          "dur": 5.5,
+          "social": true,
+          "shows": "Sailing the Gastineau Channel at sunset"
+        },
+        {
+          "still": "alaska-05",
+          "move": "out",
+          "fx": 0.5,
+          "dur": 5,
+          "shows": "The Inner Harbour, Victoria",
+          "caption": [
+            "Victoria, BC",
+            "A last call before Seattle"
+          ]
+        }
+      ],
+      "factsBg": 1
     }
   },
   "music": {

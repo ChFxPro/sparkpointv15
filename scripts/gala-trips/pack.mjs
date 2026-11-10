@@ -4,6 +4,7 @@
 //
 //   npm run trips:pack -- greece                 # everything for one trip
 //   npm run trips:pack -- greece --only=social,factsheet
+//   npm run trips:audio -- greece             # re-mix the sound only (see audio.mjs)
 //   npm run trips:pack -- greece --no-music
 //   npm run trips:pack -- greece --only=video --cuts=9x16,1x1
 //
@@ -18,6 +19,7 @@ import { writeLicenses } from './licenses.mjs';
 import { buildMap, factsLine } from './map.mjs';
 import { ffmpeg, launch, open } from './render.mjs';
 import { buildVideo } from './video.mjs';
+import { mixTrip } from './audio.mjs';
 
 const WHEN = 'Friday, December 11, 2026 · Connestee Falls';
 const GALA = 'A World of Connections, the SparkPoint Gala';
@@ -201,7 +203,8 @@ try {
     const pack = withResearch(trip, config.trips[trip.id]);
     const price = priceFor(trip);
     if (want('map')) await buildMap(browser, trip, pack, config.home);
-    if (want('video')) await buildVideo(browser, trip, pack, { price, when: WHEN, music: await music(pack.music), cuts });
+    if (want('video')) await buildVideo(browser, trip, pack, { price, when: WHEN, cuts });
+    if (want('video') || want('audio')) await mixTrip(trip, await music(pack.music));
     if (want('social')) await buildSocial(browser, trip, pack, price);
     if (want('factsheet')) await buildFactsheet(browser, trip, pack, price);
     await writeCaptions(trip, pack, price);

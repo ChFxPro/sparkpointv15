@@ -90,6 +90,7 @@
     "print:gala": "node scripts/gala-print/render.mjs",
     "trips:stills": "node scripts/gala-trips/stills.mjs",
     "trips:pack": "node scripts/gala-trips/pack.mjs",
+    "trips:audio": "node scripts/gala-trips/pack.mjs --only=audio",
     "predev": "npm run generate:press && node scripts/behind-story-manifest.mjs && npm run backporch:bake",
     "dev": "vite",
     "prebuild": "npm run generate:press && node scripts/behind-story-manifest.mjs && npm run backporch:bake",

@@ -1,4 +1,4 @@
-// The promo video: a 16:9 master for the Gala screen (60–90 s) and 30 s cuts at
+// The promo video (picture only; audio.mjs adds the sound): a 16:9 master for the Gala screen (60–90 s) and 30 s cuts at
 // 9:16 and 1:1 for social. Shots come from packs.json `reel`: the trip's own
 // stills, extra Commons stills, and Commons video clips (fetched as a small
 // byte range of the 4K original, then cropped). Every source is logged to
@@ -7,7 +7,7 @@ import { createHash } from 'node:crypto';
 import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { CACHE, UA, exists, fetchWithRetry, packDir, require, sleep, writeJson } from './lib.mjs';
+import { CACHE, SCRATCH, UA, exists, fetchWithRetry, packDir, require, sleep, writeJson } from './lib.mjs';
 import { factsLine, SIZES } from './map.mjs';
 import { ffmpeg, open, video } from './render.mjs';
 
@@ -68,6 +68,8 @@ async function clipFrames(spec) {
 
 // Jeff's supplemental footage on the NorthBend drive (read only: frames go to
 // the repo's git-ignored cache). Its licence comes from that folder's SOURCES.md.
+// Jeff confirmed 2026-11-10 that every clip in the Supp video folders is licensed to him through Envato Elements.
+const ENVATO = 'Envato Elements, licensed to Jeff Bannister (confirmed 2026-11-10)';
 export const SUPP = process.env.GALA_SUPP_DIR || '/Volumes/NORTHBEND/Sparkpoint/2026/Gala 26/Supp video';
 
 async function suppSources(tripId) {
@@ -91,7 +93,7 @@ async function localFrames(tripId, spec) {
   const [, url = '', license = ''] = line ? line.split('·').map((x) => x.trim()) : [];
   return {
     frames: { pattern: `${pathToFileURL(dir).href}/%05d.jpg`, count, fps: FPS },
-    info: { title: spec.local, page: url || '(source not yet listed in SOURCES.md)', author: 'Supplied by SparkPoint', license: license || 'Jeff to confirm (likely Envato Elements)', licenseUrl: url },
+    info: { title: spec.local, page: url || '', author: 'Supplied by SparkPoint', license: license || ENVATO, licenseUrl: url },
   };
 }
 
@@ -176,7 +178,7 @@ function cut(kind, prepared, trip, pack, layout, map) {
   return timeline([open, ...picks, facts, close], 30);
 }
 
-export async function buildVideo(browser, trip, pack, { price = null, when, music, cuts } = {}) {
+export async function buildVideo(browser, trip, pack, { price = null, when, cuts } = {}) {
   if (!pack.reel?.length) throw new Error(`${trip.id}: no reel in packs.json`);
   const prepared = await prepareShots(trip, pack);
   const page = await browser.newPage();
@@ -191,22 +193,16 @@ export async function buildVideo(browser, trip, pack, { price = null, when, musi
       closeLine: kind === 'full' ? 'Choose your trip tonight' : 'Choose your trip at the Gala',
       when,
     };
+    await writeJson(join(SCRATCH, 'timelines', `${trip.id}-${layout}.json`), shots.map((s) => ({ start: s.start, end: s.end, what: s.card ?? (s.map ? 'map' : s.shows) })));
     await open(page, 'reel.html', { width: W, height: H, global: 'REEL', data });
     const name = kind === 'full' ? `${trip.id}-promo-16x9` : `${trip.id}-promo-30s-${layout}`;
     const silent = packDir(trip.id, 'video', `${name}-silent.mp4`);
     await video(page, silent, { duration, fps: FPS, crf: 17 });
     outputs.push(silent);
-    if (music) {
-      const withMusic = packDir(trip.id, 'video', `${name}.mp4`);
-      await ffmpeg(['-i', silent, '-ss', String(music.start ?? 0), '-i', music.file, '-filter_complex',
-        `[1:a]atrim=0:${duration},asetpts=PTS-STARTPTS,afade=t=in:d=1.5,afade=t=out:st=${duration - 3}:d=3,loudnorm=I=-16:TP=-1.5:LRA=11[a]`,
-        '-map', '0:v', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', withMusic]);
-      outputs.push(withMusic);
-    }
     console.log(`${trip.id}: video ${name} (${duration.toFixed(1)} s)`);
   }
   await page.close();
-  const sources = { trip: trip.id, clips: prepared.sources, music: music?.credit ?? null };
+  const sources = { trip: trip.id, clips: prepared.sources, music: null };
   await writeJson(packDir(trip.id, 'video', 'sources.json'), sources);
   return outputs;
 }
