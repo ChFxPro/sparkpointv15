@@ -112,23 +112,29 @@ export async function renderVideo(browser, template, openOpts, out, { duration, 
   }));
   const renderSecs = (Date.now() - t0) / 1000;
   // Boundary check: re-render the frames either side of each join in one page.
+  // Each must match its own parallel frame (mean difference under 0.5/255; GPU
+  // anti-aliasing can move a few pixels by a few levels) and match it better
+  // than the frames next to it, so no frame is dropped, doubled or out of order.
   let check = 'single page';
   if (n > 1) {
     const sharp = require('sharp');
+    const raw = (b) => sharp(b).raw().toBuffer();
+    const mean = (x, y) => { let d = 0; for (let j = 0; j < x.length; j++) d += Math.abs(x[j] - y[j]); return d / x.length; };
     const p = pages[0];
-    let worst = 0;
+    let worst = 0, ordered = true;
     for (const [b] of ranges.slice(1)) {
       for (const i of [b - 1, b]) {
         await p.evaluate((tt) => window.frame(tt), i / fps);
-        const again = await p.screenshot({ type: 'png' });
-        const [x, y] = await Promise.all([sharp(again).raw().toBuffer(), sharp(name(i)).raw().toBuffer()]);
-        let diff = 0;
-        for (let j = 0; j < x.length; j++) diff = Math.max(diff, Math.abs(x[j] - y[j]));
-        worst = Math.max(worst, diff, x.length === y.length ? 0 : 255);
+        const again = await raw(await p.screenshot({ type: 'png' }));
+        const same = mean(again, await raw(name(i)));
+        const nb = [i - 1, i + 1].filter((k) => k >= 0 && k < frames);
+        const others = await Promise.all(nb.map(async (k) => mean(again, await raw(name(k)))));
+        worst = Math.max(worst, same);
+        if (others.some((o) => o > 0.5 && o <= same)) ordered = false;
       }
     }
-    check = worst === 0 ? `${n} pages, joins identical` : `${n} pages, joins differ by up to ${worst}/255`;
-    if (worst > 2) throw new Error(`${out}: frames at a page join don't match a single-page render (${worst}/255)`);
+    check = `${n} pages, joins match (mean diff ${worst.toFixed(3)}/255)`;
+    if (worst > 0.5 || !ordered) throw new Error(`${out}: frames at a page join don't match a single-page render (mean ${worst.toFixed(3)}, ordered ${ordered})`);
   }
   await Promise.all(pages.map((p) => p.close()));
   await mkdir(dirname(out), { recursive: true });
