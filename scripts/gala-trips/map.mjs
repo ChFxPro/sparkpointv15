@@ -28,7 +28,7 @@ export function mapData(trip, pack, home, layout) {
 
 export async function buildMap(browser, trip, pack, home, { layouts = Object.keys(SIZES), animate = true } = {}) {
   const stops = pack.stops.filter((s) => s.at);
-  if (stops.length < pack.stops.length) throw new Error(`${trip.id}: map needs coordinates for every stop (${pack.todo ?? ''})`);
+  if (stops.length < pack.stops.length) console.warn(`${trip.id}: map leaves out stops with no coordinates yet: ${pack.stops.filter((s) => !s.at).map((s) => s.name).join(', ')}`);
   const pad = 20;
   const lons = stops.map((s) => s.at[0]), lats = stops.map((s) => s.at[1]);
   await writeLand(join(BUILD, 'land.js'), [

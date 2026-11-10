@@ -172,7 +172,11 @@
           "shows": "The Acropolis lit at night, Athens"
         }
       ],
-      "factsBg": 1
+      "factsBg": 1,
+      "music": {
+        "commons": "File:Zero-project - Santorini (HD 1080).webm",
+        "start": 0
+      }
     },
     "iceland": {
       "line": "Land of the Vikings",
@@ -252,7 +256,11 @@
           "sky-lagoon",
           "day"
         ]
-      ]
+      ],
+      "music": {
+        "commons": "File:Ice Flow (ISRC USUAN1200088).mp3",
+        "start": 0
+      }
     },
     "cortona": {
       "line": "Under the Tuscan Sun",
@@ -300,7 +308,11 @@
           ],
           "kind": "city"
         }
-      ]
+      ],
+      "music": {
+        "commons": "File:Bushwick Tarantella (ISRC USUAN1300002).mp3",
+        "start": 0
+      }
     },
     "scotland": {
       "line": "Lochs & Legends",
@@ -382,7 +394,11 @@
           "loch-lomond",
           "day"
         ]
-      ]
+      ],
+      "music": {
+        "commons": "File:Skye Cuillin (ISRC USUAN1100346).mp3",
+        "start": 0
+      }
     },
     "south-africa": {
       "line": "Wild Wonders Photo Safari",
@@ -417,7 +433,11 @@
           "camp"
         ]
       ],
-      "todo": "Camp location not confirmed (research session). The map renders only once `at` is set."
+      "todo": "Camp location not confirmed (research session). The map renders only once `at` is set.",
+      "music": {
+        "commons": "File:Tafi Maradi no voice (ISRC USUAN1100740).mp3",
+        "start": 0
+      }
     },
     "portugal": {
       "line": "Lisbon & Porto",
@@ -484,7 +504,11 @@
           "douro",
           "day"
         ]
-      ]
+      ],
+      "music": {
+        "commons": "File:Infados (ISRC USUAN1100449).mp3",
+        "start": 0
+      }
     },
     "costa-rica": {
       "line": "Colorful Costa Rica",
@@ -521,7 +545,11 @@
           "arenal",
           "tamarindo"
         ]
-      ]
+      ],
+      "music": {
+        "commons": "File:Ave Marimba (ISRC USUAN1700024).mp3",
+        "start": 0
+      }
     },
     "alaska": {
       "line": "Explorer of the North",
@@ -604,13 +632,14 @@
           "victoria",
           "seattle"
         ]
-      ]
+      ],
+      "music": {
+        "commons": "File:Majestic Hills (ISRC USUAN1100423).mp3",
+        "start": 0
+      }
     }
   },
   "music": {
-    "_about": "Music bed. Needs Jeff's ear before it goes on the Gala screen; every cut is also written without music (-silent).",
-    "commons": "File:Zero-project - Santorini (HD 1080).webm",
-    "start": 0,
-    "credit": null
+    "_about": "Each trip sets its own `music` (a CC BY track on Wikimedia Commons). Jeff should audition each before it plays at the Gala; every cut is also written silent."
   }
 }

@@ -9,6 +9,7 @@
 //
 // Prices: shown only when trips.json `showPrices` is true, and then only the
 // trip's `publicPrice`. `listPrice` is internal and never used here.
+import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -62,23 +63,26 @@ function terms(trip) {
   return t;
 }
 
-async function music() {
-  if (noMusic || !config.music?.commons) return null;
-  const file = join(CACHE, 'music', 'bed.m4a');
-  const meta = join(CACHE, 'music', 'bed.json');
+async function music(spec) {
+  if (noMusic || !spec?.commons) return null;
+  const key = createHash('sha1').update(spec.commons).digest('hex').slice(0, 10);
+  const file = join(CACHE, 'music', `${key}.m4a`);
+  const meta = join(CACHE, 'music', `${key}.json`);
   if (!(await exists(file))) {
     const u = new URL('https://commons.wikimedia.org/w/api.php');
-    for (const [k, v] of Object.entries({ action: 'query', format: 'json', titles: config.music.commons, prop: 'videoinfo', viprop: 'url|extmetadata|derivatives' })) u.searchParams.set(k, v);
+    for (const [k, v] of Object.entries({ action: 'query', format: 'json', titles: spec.commons, prop: 'videoinfo', viprop: 'url|extmetadata|derivatives' })) u.searchParams.set(k, v);
     const res = await (await fetch(u, { headers: { 'User-Agent': UA } })).json();
     const page = Object.values(res.query.pages)[0];
     const v = page.videoinfo[0];
-    const src = v.derivatives.find((d) => /480p\.vp9\.webm$/.test(d.src))?.src ?? v.url;
+    // Video files: take the small transcode's audio. Audio files: the original.
+    const src = /\.webm$/i.test(page.title) ? (v.derivatives.find((d) => /480p\.vp9\.webm$/.test(d.src))?.src ?? v.url) : v.url;
     await mkdir(join(CACHE, 'music'), { recursive: true });
     await ffmpeg(['-user_agent', UA, '-i', src, '-vn', '-c:a', 'aac', '-b:a', '256k', file]);
     const strip = (h = '') => h.replace(/<[^>]+>/g, '').trim();
-    await writeJson(meta, { title: page.title.replace(/^File:/, '').replace(/\.webm$/, ''), author: strip(v.extmetadata.Artist?.value), license: v.extmetadata.LicenseShortName?.value, page: v.descriptionurl });
+    const title = page.title.replace(/^File:/, '').replace(/\.(webm|mp3|oga|ogg)$/i, '').replace(/ \((MacLeod, Kevin)\)/, '').replace(/ \(ISRC [^)]+\)/, '').replace(/ \(HD 1080\)/, '');
+    await writeJson(meta, { title, author: strip(v.extmetadata.Artist?.value).split('\n')[0], license: v.extmetadata.LicenseShortName?.value, page: v.descriptionurl });
   }
-  return { file, start: config.music.start ?? 0, credit: JSON.parse(await readFile(meta, 'utf8')) };
+  return { file, start: spec.start ?? 0, credit: JSON.parse(await readFile(meta, 'utf8')) };
 }
 
 async function stillsOf(trip) {
@@ -192,13 +196,12 @@ Price switch (trips.json \`showPrices\`): **${price ? 'on' : 'off'}**${price ? '
 
 const browser = await launch();
 try {
-  const bed = want('video') ? await music() : null;
   for (const trip of data.trips) {
     if (ids.length && !ids.includes(trip.id)) continue;
     const pack = withResearch(trip, config.trips[trip.id]);
     const price = priceFor(trip);
     if (want('map')) await buildMap(browser, trip, pack, config.home);
-    if (want('video')) await buildVideo(browser, trip, pack, { price, when: WHEN, music: bed, cuts });
+    if (want('video')) await buildVideo(browser, trip, pack, { price, when: WHEN, music: await music(pack.music), cuts });
     if (want('social')) await buildSocial(browser, trip, pack, price);
     if (want('factsheet')) await buildFactsheet(browser, trip, pack, price);
     await writeCaptions(trip, pack, price);

@@ -1,5 +1,6 @@
 // Shared paths and helpers for the Gala trip promo packs. See README.md.
 import { createRequire } from 'node:module';
+import { existsSync } from 'node:fs';
 import { readFile, mkdir, writeFile, stat } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -11,7 +12,12 @@ export const require = createRequire(join(root, 'package.json'));
 // The trip kit lives outside the repo (packs are large binaries, kept out of git).
 export const TRIPS_DIR = process.env.GALA_TRIPS_DIR
   || '/Users/jeffbannister/Code/sparkpoint/Branding/Gala/WorldOfConnections/trips';
-export const CACHE = join(root, 'output', 'gala-trips', 'cache');
+// Render scratch (downloads, frames, intermediates). Large, so it goes on the
+// NorthBend drive when that's mounted; GALA_SCRATCH overrides.
+const NORTHBEND_SCRATCH = '/Volumes/NORTHBEND/Sparkpoint/2026/Gala 26/_render-scratch';
+export const SCRATCH = process.env.GALA_SCRATCH
+  || (existsSync('/Volumes/NORTHBEND/Sparkpoint/2026/Gala 26') ? NORTHBEND_SCRATCH : join(root, 'output', 'gala-trips'));
+export const CACHE = join(SCRATCH, 'cache');
 
 export async function loadTrips() {
   return JSON.parse(await readFile(join(TRIPS_DIR, 'trips.json'), 'utf8'));

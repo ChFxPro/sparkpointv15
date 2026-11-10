@@ -5,10 +5,10 @@ import { spawn } from 'node:child_process';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { here, root, require } from './lib.mjs';
+import { SCRATCH, here, root, require } from './lib.mjs';
 
 const puppeteer = require('puppeteer');
-export const BUILD = join(root, 'output', 'gala-trips', '.build');
+export const BUILD = join(SCRATCH, '.build');
 export const KIT = '/Users/jeffbannister/Code/sparkpoint/Branding/Gala/WorldOfConnections';
 
 export const placeholders = {

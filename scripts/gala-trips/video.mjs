@@ -4,7 +4,7 @@
 // byte range of the 4K original, then cropped). Every source is logged to
 // video/sources.json, which feeds LICENSES.md.
 import { createHash } from 'node:crypto';
-import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { CACHE, UA, exists, fetchWithRetry, packDir, require, sleep, writeJson } from './lib.mjs';
@@ -99,6 +99,7 @@ async function localFrames(tripId, spec) {
 async function mapFrames(trip, layout) {
   const mp4 = packDir(trip.id, 'map', `${trip.id}-journey-map-${layout}.mp4`);
   const dir = join(CACHE, 'reel', `map-${trip.id}-${layout}`);
+  await rm(dir, { recursive: true, force: true });
   await mkdir(dir, { recursive: true });
   await ffmpeg(['-i', mp4, '-q:v', '2', join(dir, '%05d.jpg')]);
   const count = (await readdir(dir)).filter((f) => f.endsWith('.jpg')).length;
