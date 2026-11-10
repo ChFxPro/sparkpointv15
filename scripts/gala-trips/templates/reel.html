@@ -27,6 +27,11 @@
   .cap .t { margin-top: .45em; font: 300 calc(52px * var(--u)) / 1.1 'Josefin Sans'; letter-spacing: .01em; text-shadow: 0 2px 24px rgba(11,19,34,.6); }
   .l-9x16 .cap, .l-1x1 .cap { left: calc(70px * var(--u)); right: calc(70px * var(--u)); max-width: none; bottom: calc(150px * var(--u)); }
   .l-9x16 .cap .t { font-size: calc(54px * var(--u)); }
+  /* Phones crop ~9% off each side of the 9:16 cut to fill a 9:19.5 screen,
+     so all its text stays inside a 120 px safe margin (11%). */
+  .l-9x16 .cap { left: calc(120px * var(--u)); right: calc(120px * var(--u)); }
+  .l-9x16 .corner { left: calc(120px * var(--u)); }
+  .l-9x16 .center { padding: 0 calc(120px * var(--u)); }
 
   /* Running mark in the corner during footage. */
   .corner { position: absolute; left: calc(64px * var(--u)); top: calc(58px * var(--u)); display: flex; align-items: center; gap: .8em; color: #f1d9a0; font: 600 calc(17px * var(--u)) 'Josefin Sans'; letter-spacing: .36em; text-transform: uppercase; opacity: 0; text-shadow: 0 1px 12px rgba(11,19,34,.7); }
@@ -169,7 +174,7 @@ function steps(el, t0, s) {
 
 // Shrink a trip name until its longest word fits the frame.
 function fitNames() { for (const n of document.querySelectorAll('.name')) {
-  const max = W - 180 * U;
+  const max = W - (R.layout === '9x16' ? 260 : 180) * U;
   let size = parseFloat(getComputedStyle(n).fontSize);
   const widest = () => Math.max(...[...n.querySelectorAll('.word')].map((w) => w.getBoundingClientRect().width));
   while (widest() > max && size > 40) { size -= 4; n.style.fontSize = size + 'px'; }
