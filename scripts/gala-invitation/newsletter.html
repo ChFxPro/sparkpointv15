@@ -108,7 +108,7 @@
       <div class="pass-stub">
         <div class="band band-stub mono">SPK 1211</div>
         <div class="stub-body">
-          <p class="admit">Admit one <em>Travel experience</em></p>
+          <p class="admit">Admit one <em>Choose your trip</em></p>
           <img src="../../public/assets/events/gala/pass-pdf417.svg" alt="" />
         </div>
       </div>
@@ -119,8 +119,8 @@
 
 <!-- 03 · Departures board (animated: the letters flip into place) -->
 <section class="slice section" data-slice="03-departures" data-anim="flap">
-  <p class="eyebrow mono">The travel experience</p>
-  <h3>A world of connections. <em>One home base.</em></h3>
+  <p class="eyebrow mono">Departures</p>
+  <h3>Eight trips. <em>One home base.</em></h3>
   <p class="copy" data-fill="trips-copy"></p>
   <div class="board">
     <div class="board-title"><b>Departures</b><span class="mono">Transylvania County · Home base</span></div>
@@ -128,17 +128,18 @@
   </div>
 </section>
 
-<!-- 04 · Passport stamps -->
-<section class="slice section facts" data-slice="04-passport">
-  <p class="eyebrow mono">The travel experience</p>
-  <h3>Your passport to <em>the world.</em></h3>
-  <div class="stamps">
-    <div class="st" style="--c:#b2245f; --r:-6deg"><strong>Dec 11</strong><span>Gala night</span></div>
-    <div class="st" style="--c:#1f4f7a; --r:5deg"><strong>World</strong><span>Wide</span></div>
-    <div class="st" style="--c:#2f6b4f; --r:-3deg"><strong>Travel</strong><span>Experience</span></div>
-    <div class="st" style="--c:#b2245f; --r:6deg"><strong>Gives</strong><span>Back home</span></div>
-  </div>
-</section>
+<!-- 04 · The eight trips. "04-trips-all" is the whole line-up as one image;
+     "04-trips" (the heading) and "04-trip-NN-<id>" (one card per trip, built by
+     trips.js) are the same thing cut up, so each trip can link to #trip-<id>. -->
+<div class="slice" data-slice="04-trips-all">
+  <section class="slice section facts trips-intro" data-slice="04-trips">
+    <p class="eyebrow mono">The eight trips</p>
+    <h3>Eight connections, <em>one evening.</em></h3>
+    <p class="copy">Every trip is available to every guest at a set price, so more than one guest can choose the same one. Choose yours at the Gala.</p>
+    <p class="terms"><b>Land only:</b> hotels, tours and transfers on the ground; airfare isn&rsquo;t included. Each trip is for two travelers (Cortona for four), booked with a travel specialist, with three years to travel.</p>
+  </section>
+  <div id="trip-slices"></div>
+</div>
 
 <!-- 05 · Luggage tags -->
 <section class="slice section facts" data-slice="05-luggage-tags">
@@ -162,7 +163,7 @@
       <img src="../../public/assets/events/gala/hub-winter-postcard.webp" alt="" />
       <figcaption><span>Greetings from</span><strong>HOME</strong></figcaption>
     </figure>
-    <p>Every great trip ends with coming home. A portion of the Gala’s travel experience supports SparkPoint, helping bring the Transylvania Resilience Hub to life.<small>Resilience Hub · concept rendering</small></p>
+    <p>Every great trip ends with coming home. A portion of every trip supports SparkPoint, helping bring the Transylvania Resilience Hub to life.<small>Resilience Hub · concept rendering</small></p>
   </div>
 </section>
 
@@ -187,6 +188,7 @@
   <div class="rule"><span></span><img class="sparkmark" src="../../public/assets/brand/sparkmark-256.webp" alt="" /><span></span></div>
 </section>
 
+<script src="trips.js"></script>
 <script>
   const cfg = window.__INVITE__ || { tickets: {}, venue: {}, trips: [], pageUrl: 'yoursparkpoint.org/events/sparkpoint-gala' };
   const fill = (key, html) => document.querySelectorAll(`[data-fill="${key}"]`).forEach((el) => { el.innerHTML = html; });
@@ -199,20 +201,22 @@
   fill('gate', venueName ? esc(gate) : 'TBA');
   fill('where', venueName ? `<b>${esc(venueName)}</b>${venuePlace ? ' · ' + esc(venuePlace) : ''}` : '<b>Venue to be announced</b> · Transylvania County, NC');
   const live = Boolean(cfg.tickets && cfg.tickets.live);
-  fill('cta-eyebrow', live ? 'Tickets are on sale' : 'Venue, tickets &amp; destinations coming soon');
+  fill('cta-eyebrow', live ? 'Tickets are on sale' : 'Tickets coming soon');
   fill('price', live && cfg.tickets.price
     ? `${esc(cfg.tickets.price)}${venueName ? ' · ' + esc(venueName) : ''}`
     : '');
 
-  // Departures board. The travel portion stays vague until the board settles it
-  // (Sarah, 2026-11-05): no trip count, no auction. With no trips listed, the
-  // board shows open-ended destinations; listed trips replace them.
+  // Departures board: the Gala, then the eight trips (board decision 2026-11-09).
+  // No auction: every trip is available to every guest at a set price.
   const trips = (cfg.trips || []).slice(0, 8);
-  const destinations = trips.length ? trips.map((t) => t.board || t.destination || '') : ['ANYWHERE', 'SOMEWHERE NEW', 'FAR FROM HOME', 'BUCKET LIST', 'THE LONG WAY'];
-  fill('trips-copy', 'Journeys to destinations around the world, revealed soon. A portion of the travel experience comes home to Transylvania County.');
+  fill('trips-copy', 'Eight trips around the world, each one available to every guest at a set price. A portion of every trip comes home to Transylvania County.');
+  const rowsText = [['SPARKPOINT GALA', 'DEC 11', 'gala'], ...trips.map((t) => [t.board || t.name || '', `${t.nights} NIGHTS`, ''])];
+
+  // The line-up: one slice per trip card.
+  const { card } = window.galaTrips(cfg);
+  document.getElementById('trip-slices').innerHTML = trips.map((t, i) =>
+    `<section class="slice trip-slice${i === trips.length - 1 ? ' last' : ''}" data-slice="04-trip-${t.connection}-${t.id}">${card(t)}</section>`).join('');
   const pad = (text, n) => text.toUpperCase().slice(0, n).padEnd(n, ' ');
-  const rowsText = [['SPARKPOINT GALA', 'DEC 11', 'gala']];
-  for (const destination of destinations) rowsText.push([destination, 'REVEALING', '']);
   const board = document.querySelector('[data-fill="board"]');
   board.innerHTML = rowsText.map(([a, b, cls]) =>
     `<div class="row ${cls}"><span class="tiles">${[...pad(a, 16)].map((c) => `<span class="tile" data-c="${esc(c)}"></span>`).join('')}</span>` +

@@ -47,21 +47,21 @@
 
   /* Shortened departures board, matching the split-flap board on the Gala page.
      Edit BOARD_ROWS in the script at the bottom when destinations are announced. */
-  .board { margin-top: 0.13in; padding: 0.09in 0.11in 0.1in; background: linear-gradient(180deg, #1c2230, #141925); border: 1px solid rgba(217,181,106,.3); border-radius: 8px; box-shadow: inset 0 1px 0 rgba(255,255,255,.08); --cell: 0.095in; }
+  .board { margin-top: 0.13in; padding: 0.09in 0.11in 0.1in; background: linear-gradient(180deg, #1c2230, #141925); border: 1px solid rgba(217,181,106,.3); border-radius: 8px; box-shadow: inset 0 1px 0 rgba(255,255,255,.08); --cell: 0.1in; }
   .board-title { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.06in; padding-bottom: 0.05in; border-bottom: 1px solid rgba(217,181,106,.25); color: var(--brass-light); font-family: var(--display); font-size: 11pt; font-style: normal; }
   .board-title span { color: rgba(247,241,229,.72); font-family: var(--mono); font-size: 5.6pt; font-style: normal; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
   .board-rows { display: grid; gap: 0.03in; }
   .brow { display: flex; justify-content: space-between; }
   .bhead { color: rgba(247,241,229,.7); font-family: var(--mono); font-size: 5pt; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
-  .bhead span:nth-child(1), .bhead span:nth-child(3) { width: calc(var(--cell) * 7 + 1px * 6); }
-  .bhead span:nth-child(2) { width: calc(var(--cell) * 16 + 1px * 15); }
-  .bhead span:nth-child(4) { width: calc(var(--cell) * 10 + 1px * 9); }
+  .bhead .bhalf > span { display: block; white-space: nowrap; }
   .flaps { display: flex; gap: 1px; }
   .flap { position: relative; width: var(--cell); height: calc(var(--cell) * 1.4); display: grid; place-items: center; color: #fffaf0; background: linear-gradient(180deg, #0c0f16 0 49%, #07090e 51% 100%); border-radius: 1.5px; font-family: var(--flap); font-size: calc(var(--cell) * 0.78); font-weight: 700; line-height: 1; }
   .flap::after { content: ''; position: absolute; inset: 50% 0 auto; height: 0.5px; background: rgba(0,0,0,.9); }
   .brow.hl .flap { color: #ffd98a; }
   .brow.hl .flaps:last-child .flap { color: #7cf2b4; }
-  .brow:not(.hl):not(.bhead) .flaps:last-child .flap { color: #ff9ccf; }
+  .bhalf { display: flex; gap: 0.06in; }
+  .f-no .flap { color: #ffd98a; }
+  .f-nights .flap { color: #ff9ccf; }
 
   .spacer { flex: 1; min-height: 0.1in; }
 
@@ -115,8 +115,9 @@
       <p class="tagline">Every journey <em>connects back home.</em></p>
       <p class="request">
         SparkPoint requests the pleasure of your company for an evening of connection and
-        celebration, with <b>a live auction of eight travel experiences</b>. A portion of every
-        trip comes home to support the Transylvania Resilience Hub.
+        celebration, with <b>eight trips around the world to choose from</b>, each one available
+        to every guest at a set price. A portion of every trip comes home to the Transylvania
+        Resilience Hub.
       </p>
 
       <dl class="details">
@@ -129,9 +130,8 @@
       </dl>
 
       <div class="board">
-        <div class="board-title">Departures<span>Eight connections &middot; at auction</span></div>
+        <div class="board-title">Departures<span>Eight connections &middot; choose yours Dec 11</span></div>
         <div class="board-rows">
-          <div class="brow bhead"><span>Flight</span><span>Destination</span><span>Departs</span><span>Status</span></div>
         </div>
       </div>
 
@@ -174,31 +174,57 @@
 </div>
 <script>{{INCLUDE:shared/lockup.js}}</script>
 <script>
-  // Departures board rows. When the lineup is announced, change the destinations
-  // here (16 characters max), then re-render.
+  // Departures board: the eight Gala trips (board decision 2026-11-09), in
+  // trips.json order (Branding/Gala/WorldOfConnections/trips/). Keep them in
+  // step with it and with the email's invitation.config.json. 16 characters max
+  // per destination. No auction: every trip is available to every guest.
   const BOARD_ROWS = [
-    { flight: 'SPK1211', destination: 'SPARKPOINT GALA', time: 'DEC 11', status: 'ON TIME', hl: true },
-    { flight: 'SPK101', destination: 'REVEALING SOON', time: 'ANYTIME', status: 'AT AUCTION' },
-    { flight: 'SPK102', destination: 'REVEALING SOON', time: 'ANYTIME', status: 'AT AUCTION' },
-    { flight: 'SPK103', destination: 'REVEALING SOON', time: 'ANYTIME', status: 'AT AUCTION' },
-    { flight: 'SPK104', destination: 'REVEALING SOON', time: 'ANYTIME', status: 'AT AUCTION' },
+    { no: '01', destination: 'GREECE', nights: '8 NIGHTS', guests: 'FOR TWO' },
+    { no: '02', destination: 'ICELAND', nights: '6 NIGHTS', guests: 'FOR TWO' },
+    { no: '03', destination: 'CORTONA ITALY', nights: '6 NIGHTS', guests: 'FOR FOUR' },
+    { no: '04', destination: 'SCOTLAND', nights: '7 NIGHTS', guests: 'FOR TWO' },
+    { no: '05', destination: 'SOUTH AFRICA', nights: '6 NIGHTS', guests: 'FOR TWO' },
+    { no: '06', destination: 'PORTUGAL', nights: '7 NIGHTS', guests: 'FOR TWO' },
+    { no: '07', destination: 'COSTA RICA', nights: '6 NIGHTS', guests: 'FOR TWO' },
+    { no: '08', destination: 'ALASKA CRUISE', nights: '8 NIGHTS', guests: 'FOR TWO' },
   ];
-  const WIDTHS = { flight: 7, destination: 16, time: 7, status: 10 };
+  // Two columns of four, so all eight fit above the boarding pass.
+  const WIDTHS = { no: 2, destination: 13, nights: 2 };
+  const HEADS = { no: 'No.', destination: 'Destination', nights: 'Nts' };
   const rowsEl = document.querySelector('.board-rows');
-  for (const row of BOARD_ROWS) {
-    const r = document.createElement('div');
-    r.className = row.hl ? 'brow hl' : 'brow';
+  const cellW = (n) => `calc(var(--cell) * ${n} + 1px * ${n - 1})`;
+  const half = (row) => {
+    const h = document.createElement('span');
+    h.className = 'bhalf';
     for (const [key, width] of Object.entries(WIDTHS)) {
+      if (!row) {
+        const span = document.createElement('span');
+        span.style.width = cellW(width);
+        span.textContent = HEADS[key];
+        h.append(span);
+        continue;
+      }
+      const value = key === 'nights' ? row.nights.split(' ')[0].padStart(2, ' ') : row[key];
       const group = document.createElement('span');
-      group.className = 'flaps';
-      for (const ch of row[key].toUpperCase().padEnd(width, ' ').slice(0, width)) {
+      group.className = `flaps f-${key}`;
+      for (const ch of value.toUpperCase().padEnd(width, ' ').slice(0, width)) {
         const f = document.createElement('span');
         f.className = 'flap';
         f.textContent = ch === ' ' ? '\u00a0' : ch;
         group.append(f);
       }
-      r.append(group);
+      h.append(group);
     }
+    return h;
+  };
+  const head = document.createElement('div');
+  head.className = 'brow bhead';
+  head.append(half(), half());
+  rowsEl.append(head);
+  for (let i = 0; i < 4; i += 1) {
+    const r = document.createElement('div');
+    r.className = 'brow';
+    r.append(half(BOARD_ROWS[i]), half(BOARD_ROWS[i + 4]));
     rowsEl.append(r);
   }
 

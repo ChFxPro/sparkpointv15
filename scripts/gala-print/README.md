@@ -39,7 +39,7 @@ they render from any checkout:
 The lockup is the title everywhere the name appears as a heading: globe,
 sunburst and three flight routes meeting at a home node behind; a small italic
 "A"; WORLD with its Deco gap and edge lines; — OF CONNECTIONS —; a double-hairline
-rule with the sparkmark; THE SPARKPOINT GALA over LIVE TRAVEL AUCTION. It lives
+rule with the sparkmark; THE SPARKPOINT GALA over TRAVEL EXPERIENCE. It lives
 once, in `templates/shared/lockup.css` and `templates/shared/lockup.js`, ported
 exactly from the brand kit's master
 (`/Users/jeffbannister/Code/sparkpoint/Branding/Gala/WorldOfConnections/lockup.html`).
@@ -58,12 +58,19 @@ the split-flap board letters use a monospace face, so each letter fills a tile.
 
 ## Common updates
 
-- **The eight trips are announced:** in `templates/invite.html`, edit
-  `BOARD_ROWS` in the script at the bottom (16 characters max per destination,
-  capitals). Trips are numbered as **connections** ("Connection 01 · Kyoto"),
-  never atlas plates. Then run `npm run print:gala -- invite`. Update the website's
-  `DEPARTURES` (`src/pages/GalaDepartureBoard.tsx`) and the email's
-  `invitation.config.json` at the same time, so every piece lists the same trips.
+- **The eight trips** (board decision 2026-11-09) are on the invitation's
+  departures board: `BOARD_ROWS` in the script at the bottom of
+  `templates/invite.html`, two columns of four (No. · Destination · Nights),
+  in the trip kit's `trips.json` order
+  (`Branding/Gala/WorldOfConnections/trips/`). Destinations are 16 characters
+  max, capitals. When a trip changes, update `trips.json` first, then this
+  board, the email's `invitation.config.json` and the website's trips, and run
+  `npm run print:gala -- invite`. Trips are numbered as **connections**.
+- **No auction, no prices.** Every trip is available to every guest at a set
+  price; never write auction or bid language, never name the package provider
+  (AmFund), and never mention buying a trip after the Gala. Trip prices stay
+  off every print piece until Jeff sets public ones; never use `trips.json`'s
+  internal `listPrice`.
 - **Date, venue or price change:** the text is written into each template. Search
   the templates for the old value. The site reads these from `src/data/events.ts`.
 - **The ticket link changes:** don't, if you can help it. It's printed in the
@@ -85,7 +92,7 @@ thin white border. Scan a printed copy before printing a batch.
 The name is **A World of Connections** (plural; it replaced An Atlas of Wonders
 on 2026-10-28). In sentences: "Join us for A World of Connections, the
 SparkPoint Gala." The full form, for titles and the Squarespace product, is *A
-World of Connections: SparkPoint Gala & Travel Auction*. The tagline is "Every
+World of Connections: SparkPoint Gala & Travel Experience*. The tagline is "Every
 journey connects back home.", set with *connects back home.* in Josefin 600
 brass. Retired with Atlas: Fraunces, the atlas plates, and the "Atlas Gala"
 nickname. Keep internal notes off every piece: board-member bidding, the AmFund

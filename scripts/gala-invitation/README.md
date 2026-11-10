@@ -17,13 +17,13 @@ the command whenever you need the files):
   tickets are on sale): the whole invitation as one image, 1200 px wide, shown
   at 600 px, about 0.5 MB. Use it in Outlook and for online promotion.
 - `newsletter/`: the newsletter version (`newsletter.html`) cut into one image
-  per section, so the Squarespace email can link each one to its part of the
+  per section (and one per trip), so the Squarespace email can link each one to its part of the
   Gala page. Two are looping GIFs (the plane flies the boarding pass route; the
   departures board's letters flip into place). Their first frame is the finished
   picture, because desktop Outlook shows only that frame. About 0.7 MB in all;
   the command warns if a GIF passes 1 MB or the set passes 2.5 MB.
 
-Both templates share `styles.css`.
+Both templates share `styles.css` and `trips.js` (the trip cards).
 
 ## Updating it
 
@@ -37,10 +37,21 @@ Edit `invitation.config.json`, then run the command again.
 - **When the venue is set**: fill `venue.name` (e.g. `"The Venue Name"`),
   `venue.place` (e.g. `"Brevard, NC"`), and `venue.short`, a one-word label for
   the boarding pass's Gate field (10 characters max).
-- **When the 8 trips are defined**: add them to `trips`, for example
-  `{ "destination": "Tuscany, Italy", "board": "TUSCANY ITALY" }`. `board` is
-  what the departures board shows: 16 characters max, capitals. Until all 8 are
-  listed, the rest of the board says "REVEALING SOON".
+- **The eight trips** live in `trips`, copied from the trip kit's
+  `trips.json` (`Branding/Gala/WorldOfConnections/trips/`, board decision
+  2026-11-09). Keep them in step with it. Each has `board` (what the departures
+  board shows: 16 characters max, capitals), `name`, `title`, `nights`,
+  `travelers`, `stops` and `summary`, which `trips.js` turns into one card per
+  trip.
+- **Prices are hidden** (Jeff, 2026-11-10). A trip's `price` shows only when the
+  top-level `showPrices` is `true`; it defaults to `false`. `price` is the
+  public price, once Jeff sets it. Never copy `trips.json`'s internal
+  `listPrice` here: the render stops if a trip has one, and warns whenever
+  prices are on.
+- **Trip photos**: when the promo packs' stills are ready
+  (`trips/STILLS-READY.md`), copy one per trip from `trips/<id>/pack/stills/`
+  into `assets/trips/` and set that trip's `photo` to `assets/trips/<file>`.
+  The card then shows it on the left. With `photo: null` the card is text only.
 
 **Then update the email copy too.** The note, button, and alt text below come in
 a "save the date" version and an "on sale" version. Once tickets or the venue
@@ -54,8 +65,22 @@ node scripts/gala-invitation/render.mjs --config my-test.json --out /some/folder
 ```
 
 Keep the details here in step with the Gala page (`src/pages/GalaPage.tsx`,
-`src/data/events.ts`), and keep internal notes off both: board-member
-bidding, the AmFund contact, and any unconfirmed giveback percentage.
+`src/data/events.ts`), and keep internal notes off both: the package
+provider's name (never name AmFund or its staff), internal prices, SparkPoint's
+share, and any unconfirmed giveback percentage.
+
+**The trip rules** (Jeff, 2026-11-10; see the trip kit's README):
+
+- **No auction.** No bidding, auctioneer, "winning bid" or "live auction".
+  Every trip is sold at a set price, every trip is available to every guest,
+  and more than one guest can choose the same trip. Say "Choose your trip at the
+  Gala" or "Every trip is available to every guest at a set price".
+- **Never mention buying a trip after the Gala.**
+- Safe to say: land only (hotels, tours and transfers on the ground; airfare
+  not included); for two travelers (Cortona for four); booked with a travel
+  specialist; three years to travel. Not yet confirmed, so don't say: how or
+  when payment happens, child pricing, private vs group tours, insurance or
+  transfers. Don't name the Alaska cruise line.
 
 ## Sending it
 
@@ -105,27 +130,32 @@ default. Squarespace offers no Josefin, so check it by eye against the images.
 The two drafts:
 
 - **Attendees**: "You're invited: A World of Connections, the SparkPoint Gala". No
-  sponsor section. Uses the on-sale note below, with the preview "A World of
-  Connections, the SparkPoint Gala, December 11 at Connestee Falls: tickets on sale, $100 per person. An
-  evening of connection and a travel experience that gives back to
-  Transylvania County."
+  sponsor section. Uses the note and preview text under "Email copy" below.
 - **Sponsor direct**: "Come aboard A World of Connections, the SparkPoint Gala,
   as a travel partner". Adds the
   seat map and a "Request early boarding" button above the ticket button.
 
 The order, with each image's link (all on
-`https://yoursparkpoint.org/events/sparkpoint-gala` unless noted):
+`https://yoursparkpoint.org/events/sparkpoint-gala` unless noted). A
+Squarespace Images block holds four images, so the trips run across three:
 
 | Block | Images (link) | Version |
 | --- | --- | --- |
 | Text | The note (see below) | both, worded per version |
 | Images | `01-hero` (page), `02-boarding-pass.gif` (page) | both |
-| Text | "Picture it: a first-class evening at home in Transylvania County, and a travel experience that reaches around the world. Tap any part of this invitation to explore it on the Gala page." | both |
-| Images | `03-departures.gif` (`#routes-title`), `04-passport` (`#passport`), `05-luggage-tags` (`#tags-title`), `06-postcard` (`#return-title`) | both |
+| Text | "Picture it: a first-class evening at home in Transylvania County, and eight trips around the world to choose from. Tap any trip to see it on the Gala page." | both |
+| Images | `03-departures.gif` (`#routes-title`), `04-trips` (`#routes-title`), `04-trip-01-greece` (`#trip-greece`), `04-trip-02-iceland` (`#trip-iceland`) | both |
+| Images | `04-trip-03-cortona` (`#trip-cortona`), `04-trip-04-scotland` (`#trip-scotland`), `04-trip-05-south-africa` (`#trip-south-africa`), `04-trip-06-portugal` (`#trip-portugal`) | both |
+| Images | `04-trip-07-costa-rica` (`#trip-costa-rica`), `04-trip-08-alaska` (`#trip-alaska`), `05-luggage-tags` (`#tags-title`), `06-postcard` (`#return-title`) | both |
 | Images | `07-travel-partners` (the Monday sponsor form) | sponsor only, above `08` |
 | Images | `08-your-seat` (the ticket link) | both |
 | Button | "Request early boarding" (Monday sponsor form) | sponsor only |
 | Button | "Get tickets · $100" (the ticket link) | both |
+
+The `#trip-<id>` anchors are being added to the Gala page by the website work;
+until they're live, a link to one simply opens the top of the page. If the
+email gets too long, `04-trips-all.jpg` is the whole line-up as one image
+(linked to `#routes-title`) in place of `04-trips` and the eight cards.
 
 The ticket link is `https://secure.yoursparkpoint.org/store/p/2026-sparkpoint-gala`
 (tickets went on sale 2026-10-19 at $100 per person).
@@ -143,59 +173,64 @@ next to it in the block's image list.
 **To update it** after changing `invitation.config.json`: re-run the command,
 then in each draft open the image's block → Manage images, add the new file,
 drag it into place, remove the old one, and re-enter its link and alt text.
-The board (`03`), boarding pass (`02`), and closing (`08`) are the ones the
-settings change.
+The board (`03`), the trip cards (`04-…`), the boarding pass (`02`) and the
+closing (`08`) are the ones the settings change.
 
 **Alt text used**
 
-The travel portion is kept vague until the board settles it (Sarah,
-2026-11-05): no number of trips, no "live auction", none of the package terms
-(years to travel, blackout dates, matching the winning bid). Call it the
-"travel experience".
-
-- Hero: You're invited: A World of Connections, the SparkPoint Gala, a travel
-  experience. Every journey connects back home.
+- Hero: You're invited: A World of Connections, the SparkPoint Gala. Every
+  journey connects back home.
 - Boarding pass: SparkPoint invites you to join us for A World of Connections,
   the SparkPoint Gala. A first-class boarding pass: Transylvania County to
   Anywhere, Friday, December 11, 2026, boarding at 6 p.m., at Connestee Falls
   Country Club, Brevard, NC.
-- Departures: The travel experience: a world of connections, one home base. A
-  departures board lists the SparkPoint Gala on December 11, then journeys to
-  anywhere and somewhere new, destinations revealed soon.
-- Passport: Your passport to the world: Gala night on December 11, worldwide
-  destinations, a travel experience that gives back home.
+- Departures: Eight trips, one home base. A departures board lists the
+  SparkPoint Gala on December 11, then Greece, Iceland, Cortona, Scotland,
+  South Africa, Portugal, Costa Rica and an Alaska cruise, with the nights for
+  each.
+- Trips heading: Eight connections, one evening. Every trip is available to
+  every guest at a set price. Choose yours at the Gala. Land only, for two
+  travelers (Cortona for four), with three years to travel.
+- Trip 01: Connection 01: Greece & the Greek Islands, 8 nights for two. Three nights in Santorini, three in Mykonos, then two in Athens beneath the Acropolis, linked by an island flight and a ferry.
+- Trip 02: Connection 02: Iceland: Land of the Vikings, 6 nights for two. Six nights in Reykjavík with a food tour, the geysers and waterfalls of the Golden Circle, and the Sky Lagoon spa ritual.
+- Trip 03: Connection 03: Cortona: Under the Tuscan Sun for four, 6 nights for four. Six nights in a two-bedroom suite in the old town of Cortona, the hilltop village made famous by Under the Tuscan Sun.
+- Trip 04: Connection 04: Scotland: Lochs & Legends, 7 nights for two. Edinburgh's castle and Royal Mile, a Loch Ness cruise, then Glasgow and the West Highlands to Glencoe and Loch Lomond.
+- Trip 05: Connection 05: South Africa: Wild Wonders Photo Safari, 6 nights for two. Five nights in a lakefront tented camp with a private plunge pool, guided game drives every day, and a Big Five drive.
+- Trip 06: Connection 06: Captivating Portugal: Lisbon & Porto, 7 nights for two. Lisbon and Sintra, a private guided drive north to Porto, and a Douro Valley day of wine, lunch and a river cruise.
+- Trip 07: Connection 07: Colorful Costa Rica, 6 nights for two. Rainforest and volcano around Arenal, then the Pacific beaches of Tamarindo, with two tours of the traveler's choosing.
+- Trip 08: Connection 08: Alaska Cruise: Explorer of the North, 8 nights for two. A cruise from Seattle in a balcony cabin, calling at Ketchikan, Juneau, Skagway and Victoria, British Columbia.
 - Luggage tags: Where will yours take you? Five leather luggage tags:
   anniversary, milestone birthday, honeymoon, family vacation, bucket list.
 - Postcard: Travel that gives back to our community. A postcard reading
   Greetings from HOME shows a concept rendering of the Transylvania Resilience
-  Hub, which a portion of the Gala's travel experience helps bring to life.
+  Hub, which a portion of every trip helps bring to life.
 - Your seat: Tickets are on sale. Your seat is waiting: $100 per person at
   Connestee Falls Country Club.
 - Travel partners: Travel partners: your brand, cleared for takeoff. A cabin
   seat map with First Class, Business and Main Cabin sponsor seats. Seat map
   opening soon.
 
-Update the venue, board, and closing alt text along with the images.
+Update the venue, board, trip and closing alt text along with the images.
 
 **Sponsor-direct copy**
 
 - Subject: Come aboard A World of Connections, the SparkPoint Gala, as a travel partner
-- Preview: A World of Connections, the SparkPoint Gala, December 11: put your brand on board for an
-  evening of connection and a travel experience that gives back to
-  Transylvania County.
+- Preview: A World of Connections, the SparkPoint Gala, December 11: put your
+  brand on board for an evening of connection and eight trips around the world
+  that give back to Transylvania County.
 - Note:
 
   > Friends,
   >
   > SparkPoint invites you to join us for A World of Connections, the SparkPoint
   > Gala, on Friday, December 11, at 6 p.m. at Connestee Falls Country Club in
-  > Brevard: an evening of connection and a travel experience that gives
-  > back, with a portion coming home to help bring the Transylvania Resilience
-  > Hub to life. Tickets are now on sale at $100 per
-  > person. We're inviting local businesses to come aboard A World of Connections
-  > as travel partners, through sponsorships and in-kind support for food, drink,
-  > and entertainment. Take a look at the evening below, then request early
-  > boarding and we'll find the seat that fits you.
+  > Brevard: an evening of connection and celebration, with eight trips around
+  > the world to choose from and a portion of every trip coming home to help
+  > bring the Transylvania Resilience Hub to life. Tickets are now on sale at
+  > $100 per person. We're inviting local businesses to come aboard A World of
+  > Connections as travel partners, through sponsorships and in-kind support
+  > for food, drink, and entertainment. Take a look at the evening below, then
+  > request early boarding and we'll find the seat that fits you.
 
 The attendee draft uses the subject below and the on-sale note.
 
@@ -209,14 +244,14 @@ SparkPoint Gala. It replaced An Atlas of Wonders on 2026-10-28; the brand kit is
   Friday, December 11…", then "the Gala". Invite people *for* it, not "at" it.
 - Full form, for titles and listings: *A World of Connections: SparkPoint Gala
   & Travel Experience* (was "& Travel Auction" until 2026-11-05).
-- As a kicker or label: "The SparkPoint Gala · Travel experience". The lockup's
-  second byline line reads TRAVEL EXPERIENCE (was LIVE TRAVEL AUCTION).
+- As a kicker or label: "The SparkPoint Gala · Eight trips to choose from". The
+  lockup's second byline line still reads TRAVEL EXPERIENCE (it matches the
+  website's lockup; it was LIVE TRAVEL AUCTION before 2026-11-05).
 - The tagline is "Every journey connects back home.", with *connects back
   home.* in Josefin 600 brass.
-- Until the board settles the travel portion, no trip count anywhere: the
-  board shows open-ended destinations ("ANYWHERE", "SOMEWHERE NEW"). Once trips
-  are announced they can be numbered as **connections** ("Connection 01 ·
-  Kyoto"), never atlas plates. Fraunces and the "Atlas Gala" nickname are
+- The eight trips are numbered as **connections** ("Connection 01 · Greece",
+  "Eight connections, one evening."), in `trips.json` order, never atlas
+  plates. The departures board lists them by name with their nights. Fraunces and the "Atlas Gala" nickname are
   retired.
 - Everything is set in Josefin Sans (`@fontsource-variable/josefin-sans`); only
   the split-flap board letters use a monospace face.
@@ -246,18 +281,21 @@ copy is kept below for reference only.
 **Preview text**
 
 A World of Connections, the SparkPoint Gala, December 11 at Connestee Falls:
-tickets on sale, $100 per person. An evening of connection and a travel experience that gives back to
-Transylvania County.
+tickets on sale, $100 per person. Eight trips around the world to choose from,
+each one giving back to Transylvania County.
 
 **Note above the image**
 
 > Friends,
 >
-> Join us for A World of Connections, the SparkPoint Gala, on Friday, December 11,
-> at 6 p.m. at Connestee Falls Country Club in Brevard. It's an evening of
-> connection and celebration, with a travel experience that gives back, and a
-> portion comes home to help bring the Transylvania Resilience Hub to life. Tickets are $100 per person and on sale now. Your
-> seat is waiting.
+> Join us for A World of Connections, the SparkPoint Gala, on Friday, December
+> 11, at 6 p.m. at Connestee Falls Country Club in Brevard. It's an evening of
+> connection and celebration, with eight trips around the world to choose from:
+> Greece, Iceland, Cortona, Scotland, South Africa, Portugal, Costa Rica, and an
+> Alaska cruise. Every trip is available to every guest at a set price, and a
+> portion of every trip comes home to help bring the Transylvania Resilience
+> Hub to life. Tickets are $100 per person and on sale now. Your seat is
+> waiting.
 
 **Button**: Get tickets · $100, linking to
 `https://secure.yoursparkpoint.org/store/p/2026-sparkpoint-gala`
@@ -265,18 +303,8 @@ Transylvania County.
 **Alt text for the image**
 
 You're invited to A World of Connections, the SparkPoint Gala, Friday, December
-11, 2026, at 6 p.m. at
-Connestee Falls Country Club: an evening of connection and a travel experience
-that gives back to the Transylvania Resilience Hub.
-Tickets are on sale now, $100 per person.
-
-**Before tickets went on sale** (no longer used)
-
-- Preview: An evening of connection and a travel experience that gives back
-  to Transylvania County.
-- Note: Please save the date for the SparkPoint Gala on Friday, December 11, at
-  6 p.m. It's an evening of connection and celebration, with a travel
-  experience that gives back, and a portion comes home to help bring the
-  Transylvania Resilience Hub to life. Venue and tickets are coming
-  soon, and we'd love for you to be there.
-- Button: Get gala updates, linking to the Gala page.
+11, 2026, at 6 p.m. at Connestee Falls Country Club: an evening of connection
+with eight trips around the world to choose from (Greece, Iceland, Cortona,
+Scotland, South Africa, Portugal, Costa Rica and an Alaska cruise), each one
+available to every guest at a set price, giving back to the Transylvania
+Resilience Hub. Tickets are on sale now, $100 per person.

@@ -120,7 +120,7 @@
   .row.gala .tile { color: #ffd98a; }
   .row.gala .status .tile { color: #7cf2b4; }
 
-  /* 4. Auction facts (ivory) */
+  /* 4. Ivory sections (the trips line-up, the luggage tags) */
   .facts { background: var(--ivory); color: var(--ink); }
   .facts h3 { color: var(--midnight); }
   .facts h3 em { color: var(--plum); }
@@ -156,3 +156,25 @@
   /* 7. Footer */
   .footer { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 22px 36px 28px; color: rgba(247,241,229,.55); font-size: 9px; background: var(--midnight); border-top: 1px solid rgba(255,255,255,.06); }
   .footer .sparkmark { width: 16px; height: 16px; }
+
+  /* The eight trips: one Deco card per trip, built by trips.js from
+     invitation.config.json. Each card is its own newsletter image, so it can
+     link to that trip's anchor on the Gala page (#trip-<id>). */
+  .trips-intro { padding-bottom: 12px; }
+  .trips-intro .terms { margin-top: 14px; color: var(--muted); font-size: 12.5px; line-height: 1.55; }
+  .trips-intro .terms b { color: var(--midnight); font-weight: 600; }
+  .trip-slice { padding: 9px 36px; background: var(--ivory); }
+  .trip-slice.last { padding-bottom: 40px; }
+  .trip { position: relative; display: grid; grid-template-columns: 1fr; gap: 16px; margin: 6px 5px; padding: 16px 18px 14px; background: #fbf6ea; border: 1px solid rgba(138,119,84,.5); outline: 1px solid rgba(138,119,84,.28); outline-offset: 4px; color: var(--ink); text-align: left; }
+  .trip.has-photo { grid-template-columns: 150px 1fr; }
+  .trip-photo { width: 150px; height: 100%; min-height: 150px; object-fit: cover; }
+  .trip-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; color: var(--plum); font-size: 9.5px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
+  .trip-top span { color: var(--label); letter-spacing: .14em; }
+  .trip-name { margin-top: 8px; color: var(--midnight); font-size: 27px; font-weight: 700; line-height: 1; letter-spacing: .14em; text-transform: uppercase; }
+  .trip-title { margin-top: 6px; color: var(--plum); font-size: 14.5px; font-weight: 600; }
+  .trip-route { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 7px; margin-top: 8px; color: var(--label); font-size: 9px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+  .trip-route i { width: 5px; height: 5px; rotate: 45deg; border: 1px solid #c9b994; }
+  .trip-sum { margin-top: 8px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+  .trip-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 9px; border-top: 1px solid #e4d8bd; }
+  .trip-price { color: var(--midnight); font-size: 13px; font-weight: 700; letter-spacing: .06em; }
+  .trip-more { margin-left: auto; color: var(--pink); font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
