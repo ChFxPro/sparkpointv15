@@ -211,13 +211,6 @@
       "credit": [
         {
           "text": "Envato Elements"
-        },
-        {
-          "label": "Glencoe in evening light",
-          "author": "john mcsporran from Trossachs, Scotland",
-          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Glencoe_(26642526873).jpg",
-          "license": "CC BY 2.0",
-          "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
         }
       ]
     },
@@ -248,5 +241,34 @@
         "sourceUrl": "https://commons.wikimedia.org/wiki/File:Glencoe_(26642526873).jpg"
       }
     ]
+  },
+  "portugal": {
+    "loopWide": {
+      "webm": "portugal-loop-card-16x9.webm",
+      "mp4": "portugal-loop-card-16x9.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        }
+      ]
+    },
+    "loopTall": {
+      "webm": "portugal-loop-card-4x5.webm",
+      "mp4": "portugal-loop-card-4x5.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        }
+      ]
+    },
+    "poster": "portugal-loop-poster-16x9.webp",
+    "film": "portugal-film-16x9-web.mp4",
+    "captions": [
+      {
+        "file": "portugal-film-16x9-web.vtt",
+        "lang": "en"
+      }
+    ],
+    "credit": "Footage and music: Envato Elements."
   }
 }
