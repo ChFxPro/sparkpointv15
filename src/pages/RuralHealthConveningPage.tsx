@@ -863,7 +863,7 @@ export function RuralHealthConveningPage() {
                     src={ruralHealthAsset('simulator_screencap-1000.webp')}
                     srcSet={`${ruralHealthAsset('simulator_screencap-1000.webp')} 1000w, ${ruralHealthAsset('simulator_screencap.webp')} 1896w`}
                     sizes="(max-width: 900px) 100vw, 1400px"
-                    alt="The Rural Health Field Simulator trailhead screen, where participants can begin a live simulation or enter demo mode."
+                    alt="The Rural Health Field Simulator start screen, where participants can begin a live simulation or enter demo mode."
                     width={1896}
                     height={1642}
                     loading="lazy"

@@ -1,10 +1,9 @@
-import '@fontsource-variable/fraunces';
 import { motion } from 'motion/react';
 import { ArrowRight, CalendarDays, Clock3, MapPin } from 'lucide-react';
 import { Link } from 'react-router';
 import heroImage from 'figma:asset/b7ea59b58a471ceacde60e41e5e3cd69fe78c66f.png';
 import { SEOHead } from '../components/SEOHead';
-import { GalaLockup } from '../components/GalaLockup';
+import { GALA_SUBLINE, GalaLockup } from '../components/GalaLockup';
 import {
   GALA_TICKETS_URL,
   GALA_TICKET_PRICE_LABEL,
@@ -81,7 +80,7 @@ function SaveTheDate({ event }: { event: SparkPointEvent }) {
 
           <div className="sp-featured-event-copy">
             <p className="sp-event-category">
-              <span>{event.presenter ?? event.category} ·</span> <span>Live travel auction</span>
+              <span>{event.presenter ?? event.category} ·</span> <span>{GALA_SUBLINE}</span>
             </p>
             <h2 id="featured-event-title">{event.title}</h2>
             <p className="sp-featured-summary">{event.summary}</p>
@@ -148,12 +147,22 @@ function EventCard({ event }: { event: SparkPointEvent }) {
 
   return (
     <article className="sp-event-card">
-      <Link className="sp-event-card-image" to={event.detailPath} aria-label={`View ${event.title}`}>
+      <Link
+        className="sp-event-card-image"
+        to={event.detailPath}
+        aria-label={event.host ? `View ${event.title}, hosted by ${event.host.name}` : `View ${event.title}`}
+      >
         <img src={eventAssetUrl(event)} alt={event.imageAlt} loading="lazy" />
         <span className="sp-event-date-stamp" aria-hidden="true">
           <b>{eventMonth(event.startDate)}</b>
           <strong>{eventDay(event.startDate)}</strong>
         </span>
+        {event.host ? (
+          <span className="sp-event-host" aria-hidden="true">
+            <b>Hosted by</b>
+            <img src={`${import.meta.env.BASE_URL}${event.host.logoPath}`} alt="" width={720} height={266} />
+          </span>
+        ) : null}
       </Link>
       <div className="sp-event-card-copy">
         <p className="sp-event-category">{event.category}</p>

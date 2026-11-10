@@ -95,8 +95,6 @@ function createProgram(program: Omit<Program, "slug">): Program {
 import storylabLogo from "../../assets/storylab/storylab-logo-ink.svg";
 import storylabLogoReversed from "../../assets/storylab/storylab-logo-reversed.svg";
 import storylabLogoSmall from "../../assets/storylab/storylab-logo-small-ink.svg";
-import trailheadLogo from "../../assets/trailhead/trailhead-lockup-horizontal-full.svg";
-import trailheadLogoReversed from "../../assets/trailhead/trailhead-lockup-horizontal-reversed.svg";
 import { COMMUNITY_CONNECTORS_BRAND } from "../../components/communityConnectorsBrand";
 import wrcLogo from "../../assets/wrc/wrc-logo-horizontal-full.svg";
 import wrcLogoWhite from "../../assets/wrc/wrc-logo-horizontal-white.svg";
@@ -274,14 +272,15 @@ const leadPrograms: Program[] = [
     brand: { voice: "youth", voiceSample: "Your voice is already data. Here's what we do with it.", palette: "warm", typographicTone: "energetic" },
   }),
   createProgram({
-    id: "trailhead",
-    title: "TrailHead",
+    // Briefly branded TrailHead (2026-10-15 to 2026-11-06); /programs/trailhead redirects here.
+    id: "rural-health-field-simulator",
+    title: "Rural Health Field Simulator",
     pathway: "lead",
     shortDescription:
       "A SparkPoint simulation that turns a room into a system: small groups carry a fictional family through its doors, delays, and handoffs, then read the map together.",
     longDescription:
-      "TrailHead is a facilitated simulation. Each group carries a fictional family's story through a community system, making the choices that family would face, and the room sees what each path cost in time, money, and connection. Its first edition, TrailHead: Rural Health, filled the room at the October 1, 2026 Western NC Regional Rural Health Convening. New editions can be built around the system a group is working on.",
-    whyItExists: "Connection is easy to praise and hard to see. TrailHead makes the cost of a missing handoff something a room can feel, and talk about together.",
+      "The Rural Health Field Simulator is a facilitated simulation. Each group carries a fictional family's story through a community system, making the choices that family would face, and the room sees what each path cost in time, money, and connection. It filled the room at the October 1, 2026 Western NC Regional Rural Health Convening. It can be rebuilt around the system a group is working on.",
+    whyItExists: "Connection is easy to praise and hard to see. The simulator makes the cost of a missing handoff something a room can feel, and talk about together.",
     tags: ["Organizations", "Partners", "Leaders"],
     whoItsFor: ["Health systems and agencies", "Coalitions and funders", "Organizations planning together"],
     whatYoullExperience: ["A fictional family's story to carry", "Choices at every door", "A shared map of what the journeys took"],
@@ -289,11 +288,8 @@ const leadPrograms: Program[] = [
     idealPartners: ["Health systems", "Public agencies", "Coalitions", "Funders"],
     format: { type: "event", cadence: "Facilitated session" },
     offeringType: "fee-based",
-    contactCTA: { label: "Bring TrailHead to your group", href: "/intake?intent=partner" },
+    contactCTA: { label: "Bring the simulator to your group", href: "/intake?intent=partner" },
     brand: { accent: "#2F4A3C", accentSoft: "rgba(47, 74, 60, 0.1)", voice: "grounded", voiceSample: "Walk the system. Count what the journey costs.", palette: "cool", typographicTone: "structured" },
-    logo: trailheadLogo,
-    logoReversed: trailheadLogoReversed,
-    logoWidth: 220,
   }),
 ];
 
@@ -436,6 +432,7 @@ export const RETIRED_PROGRAM_SLUGS: Record<string, string | null> = {
   "ready-together-community-preparedness-resilience": "community-connectors",
   "emotional-intelligence-connective-leadership": "connected-leadership-culture",
   "workplace-well-being-positive-culture": "connected-leadership-culture",
+  "trailhead": "rural-health-field-simulator",
   "thrive-at-5": null,
   "social-health-101": null,
   "integrative-well-being-food-mood-movement": null,

@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'motion/react';
+import { GALA_TRIPS, travelersLabel } from '../data/galaTrips';
 
 // A split-flap departures board. Each cell flips through random characters
 // before settling on its letter, staggered left to right, and every few
 // seconds one destination row "re-checks" itself so the board feels live.
 //
-// When the trip lineup is announced, put each destination in `DEPARTURES`
-// (16 characters max) — the board needs no other change.
+// The rows are the Gala's eight trips, in connection order (01–08), straight
+// from src/data/galaTrips.ts: each trip's `board` name (16 characters max),
+// its nights, and who it's for. No auction wording anywhere.
 
 const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
@@ -24,18 +26,20 @@ interface Row {
 
 const GALA_ROW: Row = {
   flight: 'SPK1211',
-  destination: 'ATLAS OF WONDERS',
+  destination: 'SPARKPOINT GALA',
   time: 'DEC 11',
-  status: 'ON TIME',
+  status: 'ON SALE',
   highlight: true,
 };
 
-const DEPARTURES: Row[] = Array.from({ length: 8 }, (_, index) => ({
-  flight: `SPK10${index + 1}`,
-  destination: 'REVEALING SOON',
-  time: 'ANYTIME',
-  status: 'AT AUCTION',
-}));
+const DEPARTURES: Row[] = [...GALA_TRIPS]
+  .sort((a, b) => a.connection.localeCompare(b.connection))
+  .map((trip) => ({
+    flight: `SPK1${trip.connection}`,
+    destination: trip.board,
+    time: `${trip.nights} NTS`,
+    status: travelersLabel(trip.travelers),
+  }));
 
 const ROWS = [GALA_ROW, ...DEPARTURES];
 
@@ -139,9 +143,10 @@ export function GalaDepartureBoard() {
   return (
     <div className="gala-board" ref={boardRef}>
       <p className="sr-only">
-        Departures board: An Atlas of Wonders, the SparkPoint Gala, flight SPK 1211, departs December 11 and is on
-        time. Eight travel experiences are listed, with destinations revealed soon, available
-        anytime with no blackout dates, and sold at auction.
+        Departures board: A World of Connections, the SparkPoint Gala, flight SPK 1211, December 11,
+        tickets on sale. The eight trips:{' '}
+        {DEPARTURES.map((row) => `${row.flight.slice(3)}, ${row.destination.toLowerCase()}, ${row.time.replace('NTS', 'nights')}, ${row.status.toLowerCase()}`).join('; ')}.
+      
       </p>
       <div className="gala-board-inner" aria-hidden="true">
         <div className="gala-board-title">
@@ -151,8 +156,8 @@ export function GalaDepartureBoard() {
         <div className="gala-board-row gala-board-head">
           <span className="col-flight">Flight</span>
           <span className="col-destination">Destination</span>
-          <span className="col-time">Departs</span>
-          <span className="col-status">Status</span>
+          <span className="col-time">Time</span>
+          <span className="col-status">Seats</span>
         </div>
         {ROWS.map((row, rowIndex) => {
           const replay = replays[rowIndex];
