@@ -37,7 +37,8 @@
   .conn { display: flex; align-items: center; gap: 1em; color: #d9b56a; font: 600 calc(20px * var(--u)) 'Josefin Sans'; letter-spacing: .5em; margin-right: -.5em; text-transform: uppercase; }
   .conn::before, .conn::after { content: ''; width: 3em; height: 1px; background: currentColor; opacity: .75; }
   .name { margin-top: .32em; font: 700 calc(150px * var(--u)) / .95 'Josefin Sans'; text-transform: uppercase; letter-spacing: .16em; margin-right: -.16em; text-shadow: .045em .045em 0 #0b1322, .07em .07em 0 #d9b56a; }
-  .name span { display: inline-block; }
+  .name .word { display: inline-block; white-space: nowrap; }
+  .name .word span { display: inline-block; }
   .l-9x16 .name { font-size: calc(124px * var(--u)); }
   .line { margin-top: .55em; color: #f1d9a0; font: italic 300 calc(40px * var(--u)) 'Josefin Sans'; letter-spacing: .03em; }
   .hook { margin-top: 1.2em; max-width: 30em; color: rgba(247,241,229,.88); font: 300 calc(28px * var(--u)) / 1.45 'Josefin Sans'; }
@@ -95,7 +96,7 @@ const layers = R.shots.map((s) => {
   if (s.card === 'open') html += `<div class="center">
       <div class="lk-slot small rise" data-step="0"></div>
       <div class="conn rise" data-step="1" style="margin-top:calc(64px * var(--u))">Connection ${esc(R.trip.connection)}</div>
-      <div class="name" data-letters>${[...R.trip.name].map((c) => `<span>${c === ' ' ? '&nbsp;' : esc(c)}</span>`).join('')}</div>
+      <div class="name" data-letters>${R.trip.name.split(' ').map((w) => `<span class="word">${[...w].map((c) => `<span>${esc(c)}</span>`).join('')}</span>`).join(' ')}</div>
       <div class="line rise" data-step="2">${esc(R.trip.line)}</div>
     </div><div class="deco-frame"></div>`;
   if (s.card === 'facts') html += `<div class="center">
@@ -149,7 +150,7 @@ function steps(el, t0) {
     r.style.opacity = a;
     r.style.transform = `translateY(${(1 - a) * 16 * U}px)`;
   }
-  const letters = el.querySelectorAll('[data-letters] span');
+  const letters = el.querySelectorAll('[data-letters] .word span');
   letters.forEach((sp, i) => {
     const a = easeOut(seg(t0, .9 + i * .07, 1.6 + i * .07));
     sp.style.opacity = a;
@@ -157,6 +158,13 @@ function steps(el, t0) {
   });
 }
 
+// Shrink a trip name until its longest word fits the frame.
+function fitNames() { for (const n of document.querySelectorAll('.name')) {
+  const max = W - 180 * U;
+  let size = parseFloat(getComputedStyle(n).fontSize);
+  const widest = () => Math.max(...[...n.querySelectorAll('.word')].map((w) => w.getBoundingClientRect().width));
+  while (widest() > max && size > 40) { size -= 4; n.style.fontSize = size + 'px'; }
+} }
 window.DURATION = R.duration;
 window.frame = async (t) => {
   const pending = [];
@@ -188,6 +196,7 @@ window.frame = async (t) => {
 };
 window.ready = (async () => {
   await document.fonts.ready;
+  fitNames();
   // Preload every still so the first frame of each shot is ready.
   await Promise.all(R.shots.filter((s) => s.image).map((s) => load(s.image)));
 })();
