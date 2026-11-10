@@ -1,0 +1,225 @@
+{
+  "_about": "Hand-picked stills per trip, in display order; the first is the hero. `commons` is the Wikimedia Commons file title. The licence and author are read from Commons at build time. Optional `focus` [x,y] (0-1) steers the automatic landscape crop; `crop` [left,top,width,height] (0-1) sets it exactly.",
+  "greece": [
+    {
+      "commons": "File:1000 Three domes of Oia in Santorini Photo by Giles Laurent.jpg",
+      "slug": "santorini-oia",
+      "place": "Oia, Santorini",
+      "alt": "Blue-domed white churches of Oia above the Santorini caldera and the Aegean Sea",
+      "hero": true
+    },
+    {
+      "commons": "File:Sunset of Mykonos.jpg",
+      "slug": "mykonos-little-venice",
+      "place": "Little Venice, Mykonos",
+      "alt": "Balconied houses of Little Venice on Mykonos rising from the sea at sunset"
+    },
+    {
+      "commons": "File:Mykonos windmills with a view of the Aegean Sea in Greece - 50662259091.jpg",
+      "slug": "mykonos-windmills",
+      "place": "Kato Mili windmills, Mykonos",
+      "alt": "The white windmills of Mykonos on a hill above the blue Aegean"
+    },
+    {
+      "commons": "File:Attica 06-13 Athens 50 View from Philopappos - Acropolis Hill.jpg",
+      "slug": "athens-acropolis",
+      "place": "The Acropolis, Athens",
+      "alt": "The Acropolis and the Parthenon above the trees of Athens, seen from Philopappos Hill"
+    }
+  ],
+  "iceland": [
+    {
+      "commons": "File:Gullfoss, Suðurland, Islandia, 2014-08-16, DD 123.JPG",
+      "slug": "gullfoss",
+      "place": "Gullfoss, Golden Circle",
+      "alt": "Gullfoss waterfall plunging into its canyon with a rainbow in the spray",
+      "hero": true
+    },
+    {
+      "commons": "File:Strokkur, Área geotérmica de Geysir, Suðurland, Islandia, 2014-08-16, DD 098.JPG",
+      "slug": "strokkur-geysir",
+      "place": "Strokkur, Geysir geothermal field",
+      "alt": "Strokkur geyser erupting a white column of water across the green Haukadalur valley"
+    },
+    {
+      "commons": "File:Öxarárfoss, Parque Nacional de Þingvellir, Suðurland, Islandia, 2014-08-16, DD 029.JPG",
+      "slug": "thingvellir-oxararfoss",
+      "place": "Öxarárfoss, Þingvellir National Park",
+      "alt": "Öxarárfoss waterfall pouring over dark lava cliffs in Þingvellir National Park"
+    },
+    {
+      "commons": "File:Vista de Reikiavik desde Perlan, Distrito de la Capital, Islandia, 2014-08-13, DD 118-120 HDR.JPG",
+      "slug": "reykjavik-dusk",
+      "place": "Reykjavík",
+      "alt": "Reykjavík at dusk under a pink sky, with Hallgrímskirkja's spire and the mountains across the bay"
+    }
+  ],
+  "cortona": [
+    {
+      "commons": "File:Cortona dall'aereo.jpg",
+      "slug": "cortona-hilltop",
+      "place": "Cortona",
+      "alt": "The walled hilltop town of Cortona among olive terraces, seen from the air",
+      "hero": true
+    },
+    {
+      "commons": "File:Cortona, palazzi baldelli e bourbon-petrella, interno, veduta su piazza della repubblica col palazzo comunale 05.jpg",
+      "slug": "piazza-della-repubblica",
+      "place": "Piazza della Repubblica, Cortona",
+      "alt": "Stone palaces and the clock tower of the town hall around Cortona's main square"
+    },
+    {
+      "commons": "File:Cortona-Valdichiana.jpg",
+      "slug": "val-di-chiana-view",
+      "place": "View over the Val di Chiana",
+      "alt": "A shaded stone terrace in Cortona looking out over the patchwork fields of the Val di Chiana"
+    },
+    {
+      "commons": "File:Cortona, Tuscany (Italy) (8481930166).jpg",
+      "slug": "cortona-street",
+      "place": "Via Nazionale, Cortona",
+      "alt": "Café tables with flowers along a narrow stone street in Cortona's old town"
+    }
+  ],
+  "scotland": [
+    {
+      "commons": "File:Glencoe (26642526873).jpg",
+      "slug": "glencoe",
+      "place": "Glencoe, West Highlands",
+      "alt": "Golden evening light on the mountains of Glencoe in the Scottish Highlands",
+      "hero": true
+    },
+    {
+      "commons": "File:Ross Fountain and Castle, Edinburgh (IMG 20190628 175956).jpg",
+      "slug": "edinburgh-castle",
+      "place": "Edinburgh Castle",
+      "alt": "Edinburgh Castle on its rock above the ornate Ross Fountain and the green of Princes Street Gardens"
+    },
+    {
+      "commons": "File:Urquhart Castle 2 20211024.jpg",
+      "slug": "loch-ness-urquhart",
+      "place": "Urquhart Castle, Loch Ness",
+      "alt": "The ruins of Urquhart Castle on the shore of Loch Ness under a blue sky"
+    },
+    {
+      "commons": "File:PXL 20241214 100709354 Royal Mile Edinburgh United Kingdom 03.jpg",
+      "slug": "royal-mile",
+      "place": "The Royal Mile, Edinburgh",
+      "alt": "Stone tenements and a church spire along the cobbled Royal Mile in Edinburgh's Old Town"
+    }
+  ],
+  "south-africa": [
+    {
+      "commons": "File:Lion Kruger National Park.jpg",
+      "slug": "lion",
+      "place": "Kruger National Park",
+      "alt": "A young male lion resting in the long grass, looking toward the camera",
+      "hero": true
+    },
+    {
+      "commons": "File:Kruger National Park (ZA), Elefanten -- 2024 -- 0137.jpg",
+      "slug": "elephants",
+      "place": "Kruger National Park",
+      "alt": "An African elephant and her calf at the edge of the bush"
+    },
+    {
+      "commons": "File:Leopard (Panthera pardus pardus) young female Kruger 2.jpg",
+      "slug": "leopard",
+      "place": "Kruger National Park",
+      "alt": "A leopard resting on the branch of a tree"
+    },
+    {
+      "commons": "File:Makalali Game Reserve (ZA), Nashörner -- 2024 -- 1156.jpg",
+      "slug": "rhinos",
+      "place": "Greater Makalali, Limpopo",
+      "alt": "Two white rhinos standing on a sandy track in the bush"
+    }
+  ],
+  "portugal": [
+    {
+      "commons": "File:View of Ribeira (21).jpg",
+      "slug": "porto-ribeira",
+      "place": "Ribeira, Porto",
+      "alt": "Traditional rabelo boats on the Douro in front of Porto's Ribeira waterfront at golden hour",
+      "hero": true
+    },
+    {
+      "commons": "File:Igreja de Santo Estêvão from Miradouro das Portas do Sol, Lisbon, 20250606 1958 0420.jpg",
+      "slug": "lisbon-alfama",
+      "place": "Alfama, Lisbon",
+      "alt": "Terracotta rooftops and white church towers of the Alfama stepping down to the Tagus River in Lisbon"
+    },
+    {
+      "commons": "File:Palacio Nacional da Pena, Sintra, Portugal, 2019-05-25, DD 128.jpg",
+      "slug": "sintra-pena",
+      "place": "Pena Palace, Sintra",
+      "alt": "The red and yellow towers of Pena Palace in Sintra against a deep blue sky"
+    },
+    {
+      "commons": "File:Douro valley (3913265326).jpg",
+      "slug": "douro-valley",
+      "place": "Douro Valley",
+      "alt": "Terraced vineyards stepping down to the Douro River"
+    }
+  ],
+  "costa-rica": [
+    {
+      "commons": "File:Arenal volcano (70785p) (cropped).jpg",
+      "slug": "arenal-volcano",
+      "place": "Arenal Volcano",
+      "alt": "The cone of Arenal Volcano rising above green rainforest and farmland",
+      "hero": true
+    },
+    {
+      "commons": "File:Keel-billed toucan in Costa Rica 03.jpg",
+      "slug": "toucan",
+      "place": "Costa Rica",
+      "alt": "A keel-billed toucan with its rainbow beak perched on a branch"
+    },
+    {
+      "commons": "File:Ziplining through rainforest in San Ramon, Costa Rica.jpg",
+      "slug": "zipline",
+      "place": "Rainforest canopy",
+      "alt": "A traveler in a helmet ziplining through the rainforest canopy"
+    },
+    {
+      "commons": "File:Costa Rica Playa Tamarindo and Grande 2007 aerial photograph tamarindowiki.JPG",
+      "slug": "tamarindo",
+      "place": "Tamarindo, Guanacaste",
+      "alt": "Aerial view of the curving sands of Tamarindo and its turquoise bay on the Pacific coast"
+    }
+  ],
+  "alaska": [
+    {
+      "commons": "File:Mendenhall Glacier (Alaska).jpg",
+      "slug": "mendenhall-glacier",
+      "place": "Mendenhall Glacier, Juneau",
+      "alt": "Mendenhall Glacier flowing between mountains into its lake near Juneau",
+      "hero": true
+    },
+    {
+      "commons": "File:Tourists admiring Glacier Park. 2004.jpg",
+      "slug": "glacier-from-deck",
+      "place": "Inside Passage",
+      "alt": "Travelers on a ship's deck looking out at a tidewater glacier and snowy peaks"
+    },
+    {
+      "commons": "File:Ketchikan Creek Street (8110071326).jpg",
+      "slug": "ketchikan-creek-street",
+      "place": "Creek Street, Ketchikan",
+      "alt": "Colorful wooden houses on stilts along Creek Street in Ketchikan"
+    },
+    {
+      "commons": "File:White Pass & Yukon Railroad - Skagway - Alaska (13 of 19) (41768425985).jpg",
+      "slug": "skagway-white-pass",
+      "place": "White Pass, Skagway",
+      "alt": "A vintage train winding along a mountainside above Skagway"
+    },
+    {
+      "commons": "File:The Empress and Inner Harbour, Victoria, southwest view 20240827 2.jpg",
+      "slug": "victoria-inner-harbour",
+      "place": "Inner Harbour, Victoria, BC",
+      "alt": "The Empress hotel and boats in Victoria's Inner Harbour"
+    }
+  ]
+}
