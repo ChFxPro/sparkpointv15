@@ -1,5 +1,7 @@
-// Draws the "Join me" post for the Gala post maker: a 1080×1350 feed post and a 1080×1920
-// story. Everything is drawn on the visitor's device; nothing is uploaded.
+// Draws the "Join me" post for the Gala post maker: one 4:5 image that works as a Facebook or
+// Instagram post, an email attachment or an 8×10 print. It's laid out at 1080×1350 and saved
+// at twice that (2160×2700) so it prints sharply. Everything is drawn on the visitor's device;
+// nothing is uploaded.
 //
 // The lockup is drawn from the brand kit's values (scripts/gala-print/templates/shared/
 // lockup.css, ported from Branding/Gala/WorldOfConnections/lockup.html): every size is a
@@ -36,8 +38,6 @@ export interface PostInput {
 export interface PostAssets {
   sparkmark: HTMLImageElement | null;
 }
-export type PostKind = 'feed' | 'story';
-
 interface Layout {
   W: number;
   H: number;
@@ -54,10 +54,12 @@ interface Layout {
   small: number;
 }
 
-export const LAYOUTS: Record<PostKind, Layout> = {
+export const LAYOUTS: Record<'feed', Layout> = {
   feed: { W: 1080, H: 1350, C: 98, lockTop: 62, pass: 334, band: 1140, bandH: 140, join: 64, qr: 128, qrLabel: false, small: 24 },
-  story: { W: 1080, H: 1920, C: 138, lockTop: 286, pass: 660, band: 1470, bandH: 200, join: 92, qr: 170, qrLabel: true, small: 30 },
 };
+
+/** The saved image is drawn at this multiple of the layout, so it prints sharply. */
+export const EXPORT_SCALE = 2;
 
 /** Passport geometry inside a layout (canvas pixels). */
 export function geo(L: Layout) {
@@ -145,6 +147,12 @@ function fitText(x: Ctx, t: string, X: number, Y: number, max: number, weight: n
 }
 
 function vintage(x: Ctx, X: number, Y: number, w: number, h: number) {
+  // Pixel reads ignore the canvas transform, so work in device pixels.
+  const k = x.getTransform().a;
+  X = Math.round(X * k);
+  Y = Math.round(Y * k);
+  w = Math.round(w * k);
+  h = Math.round(h * k);
   const img = x.getImageData(X, Y, w, h);
   const d = img.data;
   for (let i = 0; i < d.length; i += 4) {
@@ -469,7 +477,8 @@ export function drawBand(x: Ctx, L: Layout) {
 }
 
 function drawStamp(x: Ctx, id: string, art: StampArt, [cx, cy, scale, rot]: readonly [number, number, number, number]) {
-  const c = stampCanvas(id, art);
+  // Ink the stamp at enough pixels for the canvas it lands on.
+  const c = stampCanvas(id, art, Math.ceil(scale * x.getTransform().a * 1.5));
   const w = art.w * scale;
   const h = art.h * scale;
   x.save();
@@ -481,14 +490,15 @@ function drawStamp(x: Ctx, id: string, art: StampArt, [cx, cy, scale, rot]: read
   x.restore();
 }
 
-/** The finished post, as a JPEG. */
-export function exportPost(kind: PostKind, input: PostInput, assets: PostAssets): Promise<Blob | null> {
-  const L = LAYOUTS[kind];
+/** The finished post, as a JPEG at EXPORT_SCALE times the layout. */
+export function exportPost(input: PostInput, assets: PostAssets, scale = EXPORT_SCALE): Promise<Blob | null> {
+  const L = LAYOUTS.feed;
   const c = document.createElement('canvas');
-  c.width = L.W;
-  c.height = L.H;
+  c.width = L.W * scale;
+  c.height = L.H * scale;
   const x = c.getContext('2d', { willReadFrequently: true });
   if (!x) return Promise.resolve(null);
+  x.scale(scale, scale);
   drawBackground(x, L);
   drawLockup(x, L, assets);
   drawPassport(x, L, input);
