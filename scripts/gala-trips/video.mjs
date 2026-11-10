@@ -201,7 +201,7 @@ export async function buildVideo(browser, trip, pack, { price = null, when, cuts
     await open(page, 'reel.html', { width: W, height: H, global: 'REEL', data });
     const name = kind === 'full' ? `${trip.id}-promo-16x9` : `${trip.id}-promo-30s-${layout}`;
     const silent = packDir(trip.id, 'video', `${name}-silent.mp4`);
-    await video(page, silent, { duration, fps: FPS, crf: 17 });
+    await video(page, silent, { duration, fps: FPS, crf: 17, ...(kind === 'full' ? { bitrate: '14M', maxrate: '20M' } : { bitrate: '8M', maxrate: '12M' }) });
     outputs.push(silent);
     console.log(`${trip.id}: video ${name} (${duration.toFixed(1)} s, ${shots.length} shots, cut to the music)`);
   }

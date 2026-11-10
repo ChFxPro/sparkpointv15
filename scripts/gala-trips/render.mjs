@@ -56,11 +56,17 @@ export async function still(page, out, t, { type = 'png', quality } = {}) {
 
 // Renders frame(t) for t in [0, duration) to an H.264 MP4 (or ProRes 4444 with
 // alpha when `alpha` is set, for overlays).
-export async function video(page, out, { duration, fps = 30, alpha = false, crf = 16 }) {
+// Encoder: 'hw' (default) uses the Mac's VideoToolbox H.264 encoder; 'x264'
+// is the slower full-quality software encode (for a final re-encode of the
+// Gala-screen masters). Set GALA_ENCODER=x264 to use it.
+export const ENCODER = process.env.GALA_ENCODER || 'hw';
+
+export async function video(page, out, { duration, fps = 30, alpha = false, crf = 16, bitrate = '14M', maxrate = '20M' }) {
   await mkdir(dirname(out), { recursive: true });
   const args = ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-i', '-'];
   if (alpha) args.push('-c:v', 'prores_ks', '-profile:v', '4444', '-pix_fmt', 'yuva444p10le', out);
-  else args.push('-c:v', 'libx264', '-preset', 'slow', '-crf', String(crf), '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out);
+  else if (ENCODER === 'x264') args.push('-c:v', 'libx264', '-preset', 'slow', '-crf', String(crf), '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out);
+  else args.push('-c:v', 'h264_videotoolbox', '-b:v', bitrate, '-maxrate', maxrate, '-bufsize', maxrate, '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out);
   const ff = spawn('ffmpeg', args, { stdio: ['pipe', 'inherit', 'inherit'] });
   const done = new Promise((res, rej) => ff.on('close', (c) => (c ? rej(new Error(`ffmpeg exited ${c} for ${out}`)) : res())));
   const frames = Math.round(duration * fps);
