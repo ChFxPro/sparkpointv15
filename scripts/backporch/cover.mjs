@@ -2,6 +2,13 @@
 //
 //   npm run porch:cover -- <slug> <photo> --alt "What the photo shows"
 //   npm run porch:cover -- <slug> <photo> --alt "…" --dry-run   resize only; signs in to nothing
+//   npm run porch:cover -- <slug> --whole                       framing only, no new photo
+//
+// Framing (presentation.cover; see CoverFrame in src/lib/backporch.ts), with or without
+// a new photo:
+//   --whole          show the entire image in every frame, over a blurred copy (flyers)
+//   --focus 50,20    crop to fill, centred on this point (percent across, down)
+//   --fill           crop to fill, centred (the default; clears a focal point)
 //
 // <photo> is a file on this Mac (an email attachment saved to disk, a flyer), or a photo
 // already in one of this project's public buckets (event-media, convening-photos), e.g.
@@ -51,51 +58,76 @@ const flag = (name) => {
   args.splice(i, 2);
   return value;
 };
-const dryRun = args.includes('--dry-run');
-if (dryRun) args.splice(args.indexOf('--dry-run'), 1);
+const toggle = (name) => {
+  const i = args.indexOf(name);
+  if (i === -1) return false;
+  args.splice(i, 1);
+  return true;
+};
+const dryRun = toggle('--dry-run');
+const whole = toggle('--whole');
+const fillCentred = toggle('--fill');
+const focus = flag('--focus');
 const alt = flag('--alt')?.trim();
 const [slug, src] = args;
 
-if (!slug || !src) fail('Usage: npm run porch:cover -- <slug> <photo file or bucket URL> --alt "What the photo shows" [--dry-run]');
+// The framing to set, if any: undefined leaves it alone, null clears it (fill, centred).
+let frame;
+if ([whole, fillCentred, focus !== undefined].filter(Boolean).length > 1) fail('Use only one of --whole, --fill, --focus.');
+if (whole) frame = { fit: 'whole', x: 50, y: 50 };
+if (fillCentred) frame = null;
+if (focus !== undefined) {
+  const m = /^(\d{1,3}),(\d{1,3})$/.exec(focus);
+  if (!m || +m[1] > 100 || +m[2] > 100) fail('--focus takes two percentages, across and down, like --focus 50,20');
+  frame = +m[1] === 50 && +m[2] === 50 ? null : { fit: 'fill', x: +m[1], y: +m[2] };
+}
+
+const usage = 'Usage: npm run porch:cover -- <slug> [<photo file or bucket URL> --alt "What the photo shows"] [--whole | --focus x,y | --fill] [--dry-run]';
+if (!slug || (!src && frame === undefined)) fail(usage);
 if (!SLUG.test(slug)) fail(`"${slug}" isn't a post slug (lowercase words joined by hyphens).`);
-if (!alt) fail('Add --alt "…": every cover needs alt text describing the photo.');
-if (alt.length > 300) fail(`Alt text is ${alt.length} characters; keep it to 300.`);
+if (src && !alt) fail('Add --alt "…": every cover needs alt text describing the photo.');
+if (alt && alt.length > 300) fail(`Alt text is ${alt.length} characters; keep it to 300.`);
+const framingNote = frame === undefined ? null : frame === null ? 'fill the frame, centred' : frame.fit === 'whole' ? 'show the whole image' : `fill the frame, focal point ${frame.x}% across, ${frame.y}% down`;
 
 // ── Read and resize the photo ──
 
-let input;
-if (/^https:\/\//.test(src)) {
-  if (!OWN_BUCKET_PHOTO.test(src)) fail('A URL must be a photo in this project\'s public event-media or convening-photos bucket. Save other images to disk first.');
-  const res = await fetch(src);
-  if (!res.ok) fail(`Couldn't download ${src} (${res.status}).`);
-  input = Buffer.from(await res.arrayBuffer());
-} else {
-  const file = path.resolve(src.replace(/^~(?=\/)/, process.env.HOME ?? '~'));
-  if (!fs.existsSync(file)) fail(`No file at ${file}`);
-  if (fs.statSync(file).size > MAX_SOURCE_BYTES) fail('That photo is over 25 MB. Use a smaller copy.');
-  input = fs.readFileSync(file);
-}
-
-let natural;
-try {
-  ({ width: natural } = await sharp(input).metadata());
-} catch {
-  fail('That file could not be read as a photo (JPEG, PNG, or WebP).');
-}
-if (!natural) fail('That file could not be read as a photo.');
-
-const stamp = Date.now().toString(36);
-const base = `posts/${slug}-${stamp}`;
 const files = [];
-for (const width of WIDTHS) {
-  const body = await sharp(input).rotate().resize({ width: Math.min(width, natural), withoutEnlargement: true }).webp({ quality: 82 }).toBuffer();
-  files.push({ path: `${base}-${width}.webp`, body });
+let mainPath = null;
+if (src) {
+  let input;
+  if (/^https:\/\//.test(src)) {
+    if (!OWN_BUCKET_PHOTO.test(src)) fail('A URL must be a photo in this project\'s public event-media or convening-photos bucket. Save other images to disk first.');
+    const res = await fetch(src);
+    if (!res.ok) fail(`Couldn't download ${src} (${res.status}).`);
+    input = Buffer.from(await res.arrayBuffer());
+  } else {
+    const file = path.resolve(src.replace(/^~(?=\/)/, process.env.HOME ?? '~'));
+    if (!fs.existsSync(file)) fail(`No file at ${file}`);
+    if (fs.statSync(file).size > MAX_SOURCE_BYTES) fail('That photo is over 25 MB. Use a smaller copy.');
+    input = fs.readFileSync(file);
+  }
+
+  let natural;
+  try {
+    ({ width: natural } = await sharp(input).metadata());
+  } catch {
+    fail('That file could not be read as a photo (JPEG, PNG, or WebP).');
+  }
+  if (!natural) fail('That file could not be read as a photo.');
+
+  const stamp = Date.now().toString(36);
+  const base = `posts/${slug}-${stamp}`;
+  for (const width of WIDTHS) {
+    const body = await sharp(input).rotate().resize({ width: Math.min(width, natural), withoutEnlargement: true }).webp({ quality: 82 }).toBuffer();
+    files.push({ path: `${base}-${width}.webp`, body });
+  }
+  mainPath = `${base}-960.webp`;
 }
-const mainPath = `${base}-960.webp`;
 
 console.log(`\nCover for "${slug}"`);
 for (const f of files) console.log(`  ${f.path}  ${(f.body.length / 1024).toFixed(0)} KB`);
-console.log(`  alt: ${alt}`);
+if (alt) console.log(`  alt: ${alt}`);
+if (framingNote) console.log(`  framing: ${framingNote}`);
 
 if (dryRun) {
   console.log('\nDry run: nothing was signed in to, uploaded, or changed.');
@@ -131,7 +163,7 @@ const auth = { apikey: anon, Authorization: `Bearer ${token}` };
 
 // ── Make sure the post exists and this login can edit it ──
 
-const lookup = await fetch(`${BASE}/rest/v1/porch_posts?slug=eq.${slug}&select=slug,status,image_path`, { headers: auth });
+const lookup = await fetch(`${BASE}/rest/v1/porch_posts?slug=eq.${slug}&select=slug,status,image_path,presentation`, { headers: auth });
 const [post] = lookup.ok ? await lookup.json() : [];
 if (!post) fail(`No post "${slug}" that ${email} can edit. Is the slug right, and is ${email} in porch_editors?`);
 
@@ -146,14 +178,21 @@ for (const f of files) {
   if (!res.ok) fail(`Upload failed for ${f.path} (${res.status}): ${(await res.text()).slice(0, 300)}`);
 }
 
+const changes = { updated_at: new Date().toISOString() };
+if (mainPath) Object.assign(changes, { image_path: mainPath, image_alt: alt });
+if (frame !== undefined) {
+  // Only the cover framing changes; the post's other presentation settings are kept.
+  const { cover: _old, ...rest } = post.presentation ?? {};
+  changes.presentation = frame ? { ...rest, cover: frame } : rest;
+}
 const update = await fetch(`${BASE}/rest/v1/porch_posts?slug=eq.${slug}`, {
   method: 'PATCH',
   headers: { ...auth, 'Content-Type': 'application/json', Prefer: 'return=representation' },
-  body: JSON.stringify({ image_path: mainPath, image_alt: alt, updated_at: new Date().toISOString() }),
+  body: JSON.stringify(changes),
 });
 const updated = update.ok ? await update.json() : [];
 if (updated.length !== 1) fail(`Uploaded, but setting the cover failed (${update.status}): ${JSON.stringify(updated).slice(0, 300)}`);
 
-console.log(`\nDone. "${slug}" (${post.status}) now uses ${mainPath}.`);
-if (post.image_path) console.log(`Its old cover, ${post.image_path}, is still in storage.`);
+console.log(`\nDone. "${slug}" (${post.status})${mainPath ? ` now uses ${mainPath}` : ''}${framingNote ? `${mainPath ? ',' : ''} framed to ${framingNote}` : ''}.`);
+if (mainPath && post.image_path) console.log(`Its old cover, ${post.image_path}, is still in storage.`);
 if (post.status === 'published') console.log('It shows on the site now; baked pages catch up at the next rebuild.');

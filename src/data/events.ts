@@ -52,6 +52,10 @@ export interface SparkPointEvent {
   imageAlt?: string;
   featured?: boolean;
   partnerLine?: string;
+  // The organization that hosted it, when that isn't SparkPoint. A white version of
+  // its logo (a public path, like imagePath) sits at the bottom-left of the card's
+  // photo over a dark fade; check that it doesn't cover a face.
+  host?: { name: string; logoPath: string };
   // Who puts the event on, shown as the line above its title on the Events
   // page (e.g. "The SparkPoint Gala"). Falls back to the category.
   presenter?: string;
@@ -85,7 +89,7 @@ export const EVENTS: SparkPointEvent[] = [
     locationName: GALA_VENUE.name,
     locationLabel: `${GALA_VENUE.street}, ${GALA_VENUE.city}, ${GALA_VENUE.region} ${GALA_VENUE.postalCode}`,
     summary:
-      'Every journey connects back home. An evening of connection and a live auction of eight travel experiences, with a portion of every trip coming home to support the Transylvania Resilience Hub.',
+      'Every journey connects back home. An evening of connection and eight trips to choose from, Greece, Iceland, Cortona, Scotland, South Africa, Portugal, Costa Rica, and Alaska, each at a set price, with a portion coming home to support the Transylvania Resilience Hub.',
     detailPath: '/events/sparkpoint-gala',
     featured: true,
     teaser: true,
@@ -165,12 +169,13 @@ export const EVENTS: SparkPointEvent[] = [
     locationName: 'Mary C. Jenkins Community & Cultural Center',
     locationLabel: 'Brevard, North Carolina',
     summary:
-      'Nonprofit and community leaders from across Transylvania County spent a morning on what makes partnerships work, with SparkPoint and FWRD Transylvania sharing Wellness Rooted in Connection and Community Connectors. Watch the program and download the photos.',
+      'Pisgah Health Foundation brought together nonprofit and community leaders from across Haywood, Madison, and Transylvania counties for a morning on what makes partnerships work, with SparkPoint and FWRD Transylvania sharing Wellness Rooted in Connection and Community Connectors. Watch the program and download the photos.',
     detailPath: '/collaboration-lab/media',
+    host: { name: 'Pisgah Health Foundation', logoPath: 'assets/collab-lab/phf-logo-white.webp' },
     imagePath: 'assets/collab-lab/collab-lab-tables-1920.webp',
     imageAlt: 'Attendees at a round table write on sticky notes during a small-group exercise.',
     partnerLine:
-      'Hosted by Pisgah Health Foundation in partnership with Dogwood Health Trust, with SparkPoint and FWRD Transylvania.',
+      'Hosted by Pisgah Health Foundation, in partnership with Dogwood Health Trust, SparkPoint, and FWRD Transylvania.',
   },
 ];
 

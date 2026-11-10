@@ -1,17 +1,14 @@
-import { ArrowRight, CalendarDays, Clock3, ExternalLink, Video } from 'lucide-react';
+import { ArrowRight, CalendarDays, Users, Video } from 'lucide-react';
 import { Sparkmark } from '../components/Sparkmark';
 
-// The virtual post-convening session (Thursday, November 5, 2026, 10 a.m. ET) for people
-// who attended on October 1. Registration is on Zoom. The band and the hero's "Up next"
-// link both retire on their own once the session day is over. The attendee photo page
-// reuses isPostSessionActive and the register URL from here. The homepage features the
-// session as a pinned BackPorch post; give that post a "take off the lists" time matching
-// POST_SESSION_EXPIRES below.
+// The WNC Regional Rural Health Virtual Post-Convening Session was held on Thursday,
+// November 5, 2026, at 10 a.m. ET on Zoom, for people who attended on October 1. This band
+// is now a record of it, between the recap hero and the photo web, and the hero carries a
+// small link down to it. The owner may come back with feedback and takeaways from the
+// session; add them to this band. The BackPorch post that announced the session was
+// unpinned on Nov 5. Don't name a host for the session: the source invite doesn't.
 
 export const POST_SESSION_ID = 'post-convening';
-export const POST_SESSION_REGISTER_URL =
-  'https://us02web.zoom.us/meeting/register/06fVIHohSyCuvisOJLrSTg#/registration';
-const POST_SESSION_EXPIRES = new Date('2026-11-06T00:00:00-05:00');
 
 const speakers = [
   'North Carolina Rural Health Association',
@@ -20,62 +17,34 @@ const speakers = [
   'WNC Health Policy Initiative',
 ];
 
-export function isPostSessionActive(now = new Date()) {
-  return now < POST_SESSION_EXPIRES;
-}
-
 export function PostSessionHeroLink() {
-  if (!isPostSessionActive()) return null;
-
   return (
     <a className="rh-next-link" href={`#${POST_SESSION_ID}`}>
-      <span className="rh-next-link-tag">Up next</span>
-      <span>Virtual post-convening session · Thu, Nov 5</span>
+      <span className="rh-next-link-tag">Nov 5</span>
+      <span>We met again online for the post-convening session</span>
       <ArrowRight aria-hidden="true" size={16} />
     </a>
   );
 }
 
-// A compact "Up next" link straight to Zoom registration, for pages that don't carry the
-// full band (the attendee photo page).
-export function PostSessionRegisterLink() {
-  if (!isPostSessionActive()) return null;
-
-  return (
-    <a
-      className="rh-next-link"
-      href={POST_SESSION_REGISTER_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <span className="rh-next-link-tag">Up next</span>
-      <span>Register for the Nov 5 virtual session</span>
-      <ExternalLink aria-hidden="true" size={15} />
-      <span className="sr-only">(opens Zoom registration in a new tab)</span>
-    </a>
-  );
-}
-
 export function PostSessionBand() {
-  if (!isPostSessionActive()) return null;
-
   return (
     <section id={POST_SESSION_ID} className="rh-next" aria-labelledby="rh-next-title">
       <div className="rh-shell rh-next-grid">
         <div className="rh-next-copy">
           <p className="rh-next-kicker">
             <Sparkmark size="1.05em" />
-            Up next · For everyone who was in the room
+            November 5 · Back together, online
           </p>
-          <h2 id="rh-next-title">Keep the conversation moving.</h2>
+          <h2 id="rh-next-title">The conversation kept moving.</h2>
           <p className="rh-next-name">WNC Regional Rural Health Virtual Post-Convening Session</p>
           <p className="rh-next-lede">
-            If you joined us on October 1, this is your invitation back. The virtual session is
-            a chance to reconnect with other rural health stakeholders and carry forward the
-            conversations and partnerships that started at Deerwoode Reserve.
+            On November 5, people from the October 1 convening came back together online to
+            reconnect, carry forward the conversations and partnerships that started at Deerwoode
+            Reserve, and share what they need and what they can offer one another.
           </p>
           <div className="rh-next-speakers">
-            <p>You’ll hear about upcoming events, opportunities, and resources from</p>
+            <p>Attendees heard about upcoming events, opportunities, and resources from</p>
             <ul>
               {speakers.map((speaker) => (
                 <li key={speaker}>{speaker}</li>
@@ -84,11 +53,11 @@ export function PostSessionBand() {
           </div>
         </div>
 
-        <aside className="rh-next-card" aria-label="Session details and registration">
+        <aside className="rh-next-card" aria-label="Session details">
           <div className="rh-next-date" aria-hidden="true">
             <span>Nov</span>
             <strong>05</strong>
-            <span>Thursday</span>
+            <span>Held</span>
           </div>
           <dl className="rh-next-facts">
             <div>
@@ -100,30 +69,22 @@ export function PostSessionBand() {
             </div>
             <div>
               <dt>
-                <Clock3 aria-hidden="true" size={17} />
-                Time
-              </dt>
-              <dd>10:00 a.m. Eastern</dd>
-            </div>
-            <div>
-              <dt>
                 <Video aria-hidden="true" size={17} />
                 Where
               </dt>
               <dd>Online, on Zoom</dd>
             </div>
+            <div>
+              <dt>
+                <Users aria-hidden="true" size={17} />
+                Who
+              </dt>
+              <dd>October 1 convening attendees</dd>
+            </div>
           </dl>
-          <a
-            className="rh-next-register"
-            href={POST_SESSION_REGISTER_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Register for the session
-            <ExternalLink aria-hidden="true" size={18} />
-          </a>
           <p className="rh-next-note">
-            Registration is on Zoom. Zoom emails your join link once you register.
+            Thank you to everyone who joined us. We’ll share more from the session here as it
+            comes together.
           </p>
         </aside>
       </div>

@@ -24,6 +24,38 @@ export interface Presentation {
   series?: { id: string; name: string; about?: string };
   /** An ask's "time to do it" line, e.g. "About five minutes · anonymous". */
   doIt?: string;
+  /** How the cover sits in its frames; absent means fill, centred. */
+  cover?: CoverFrame;
+}
+
+/**
+ * How a cover photo sits in the fixed-shape frames lists and the post page use.
+ * `fill` crops to the frame around a focal point (x, y in percent of the photo);
+ * `whole` fits the entire photo inside the frame over a blurred copy of itself,
+ * for flyers and other portrait images that mustn't be cropped.
+ */
+export interface CoverFrame {
+  fit: 'fill' | 'whole';
+  x: number;
+  y: number;
+}
+
+export const CENTRED: CoverFrame = { fit: 'fill', x: 50, y: 50 };
+
+const pct = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? Math.round(Math.min(100, Math.max(0, v))) : 50);
+
+export function normalizeCoverFrame(v: unknown): CoverFrame | undefined {
+  if (!v || typeof v !== 'object') return undefined;
+  const c = v as Record<string, unknown>;
+  const frame: CoverFrame = { fit: c.fit === 'whole' ? 'whole' : 'fill', x: pct(c.x), y: pct(c.y) };
+  // The default is stored as nothing, so untouched posts stay as they were.
+  return frame.fit === 'fill' && frame.x === 50 && frame.y === 50 ? undefined : frame;
+}
+
+/** Inline style for a cover <img>: its focal point, or nothing for the default. */
+export function coverImgStyle(frame: CoverFrame | undefined): { objectPosition?: string } | undefined {
+  if (!frame || frame.fit === 'whole') return undefined;
+  return { objectPosition: `${frame.x}% ${frame.y}%` };
 }
 
 const SERIES_ID = /^[a-z0-9]+(-[a-z0-9]+)*$/;
@@ -43,6 +75,7 @@ export function normalizePresentation(v: unknown): Presentation {
       return id && name ? { id, name, about: text(s?.about, 200) } : undefined;
     })(),
     doIt: text(o.doIt, 80),
+    cover: normalizeCoverFrame(o.cover),
   };
 }
 

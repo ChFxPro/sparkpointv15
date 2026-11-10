@@ -94,14 +94,22 @@ export function CollabLabHero({ loopSrc, posterSrc }: { loopSrc: string; posterS
             height={120}
           />
         </p>
-        <p className="clb-kicker">Collaboration Lab · October 23, 2026</p>
+        {/* PHF's own wording (Cara Bradshaw, 2026-11-02). Keep it as written. */}
+        <p className="clb-presented">
+          <strong>Presented by Pisgah Health Foundation,</strong> bringing together nonprofit and community leaders
+          from across Haywood, Madison, and Transylvania counties.
+        </p>
         <h1 id="clb-title">
           <span>Building partnerships</span>
           <span className="clb-title-accent">that last.</span>
         </h1>
         <p className="clb-hero-lede">
-          Nonprofits from across Transylvania County spent a morning trading practical tools and local success
-          stories. This is that morning, told in three parts, with every photo and clip ready for you to use.
+          Pisgah Health Foundation&rsquo;s Collaboration Lab brought together nonprofit and community leaders from
+          across our three-county region to explore practical approaches to partnership, innovation, and collective
+          impact. This is that morning, told in three parts, with every photo and clip ready for you to use.
+        </p>
+        <p className="clb-hero-meta">
+          October 23, 2026 · Mary C. Jenkins Community &amp; Cultural Center, Brevard, NC
         </p>
 
         <nav className="clb-acts-nav" aria-label="The morning in three parts">

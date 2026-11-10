@@ -383,6 +383,47 @@
   font-size: 2.1rem;
 }
 
+/* A partner-hosted event: "Hosted by" and the host's white logo, bottom-left on the
+   photo over a dark fade (no box). Bottom-left because faces sit in the top of event
+   photos; the top-right corner covered one on the Collaboration Lab card. */
+.sp-event-card-image:has(.sp-event-host)::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  height: 48%;
+  background: linear-gradient(0deg, rgba(20, 16, 22, 0.78) 0%, rgba(20, 16, 22, 0.42) 48%, rgba(20, 16, 22, 0) 100%);
+  pointer-events: none;
+}
+
+.sp-event-host {
+  position: absolute;
+  z-index: 2;
+  bottom: 18px;
+  left: 20px;
+  display: grid;
+  justify-items: start;
+  gap: 7px;
+  color: #fff;
+}
+
+.sp-event-host b {
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.sp-event-card-image .sp-event-host img {
+  width: clamp(130px, 15vw, 164px);
+  height: auto;
+  object-fit: contain;
+  transform: none;
+  transition: none;
+  filter: drop-shadow(0 1px 6px rgba(0, 0, 0, 0.35));
+}
+
 .sp-event-card-copy {
   padding: 28px;
 }

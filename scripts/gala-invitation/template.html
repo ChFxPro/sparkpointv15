@@ -34,7 +34,7 @@
     </svg>
     <p class="request">SparkPoint invites you to join us for</p>
     <h2 class="lockup"><img src="assets/world-of-connections-lockup-for-light-backgrounds.png" alt="A World of Connections, the SparkPoint Gala" /></h2>
-    <p class="lede">An evening of connection and celebration, with a live auction of eight travel experiences, and a portion of every trip coming home to the Transylvania Resilience Hub.</p>
+    <p class="lede">An evening of connection and celebration, with eight trips around the world to choose from, and a portion of every trip coming home to the Transylvania Resilience Hub.</p>
 
     <div class="pass">
       <div class="pass-main">
@@ -63,7 +63,7 @@
       <div class="pass-stub">
         <div class="band band-stub mono">SPK 1211</div>
         <div class="stub-body">
-          <p class="admit">Admit one <em>Live travel auction</em></p>
+          <p class="admit">Admit one <em>Choose your trip</em></p>
           <img src="../../public/assets/events/gala/pass-pdf417.svg" alt="" />
         </div>
       </div>
@@ -73,8 +73,8 @@
 
   <!-- 3. Departures -->
   <section class="section">
-    <p class="eyebrow mono">The travel auction</p>
-    <h3>Eight connections. <em>One home base.</em></h3>
+    <p class="eyebrow mono">Departures</p>
+    <h3>Eight trips. <em>One home base.</em></h3>
     <p class="copy" data-fill="trips-copy"></p>
     <div class="board">
       <div class="board-title"><b>Departures</b><span class="mono">Transylvania County · Home base</span></div>
@@ -82,18 +82,14 @@
     </div>
   </section>
 
-  <!-- 4. How the auction works -->
-  <section class="section facts">
-    <p class="eyebrow mono">How the auction works</p>
-    <h3>Your passport to <em>the auction.</em></h3>
-    <div class="stamps">
-      <div class="st" style="--c:#b2245f; --r:-6deg"><strong>8</strong><span>Travel experiences</span></div>
-      <div class="st" style="--c:#1f4f7a; --r:5deg"><strong>3 yrs</strong><span>To travel</span></div>
-      <div class="st" style="--c:#2f6b4f; --r:-3deg"><strong>No</strong><span>Blackout dates</span></div>
-      <div class="st" style="--c:#b2245f; --r:6deg"><strong>Live</strong><span>Auctioneer</span></div>
-    </div>
-    <p class="match"><b>Match the winning bid.</b> Once a trip sells, any guest at the Gala can buy that same trip at the winning bid, and the Gala price stays locked in for up to a year after the event.</p>
+  <!-- 4. The eight trips (cards built by trips.js from invitation.config.json) -->
+  <section class="section facts trips-intro">
+    <p class="eyebrow mono">The eight trips</p>
+    <h3>Eight connections, <em>one evening.</em></h3>
+    <p class="copy">Every trip is available to every guest at a set price, so more than one guest can choose the same one. Choose yours at the Gala.</p>
+    <p class="terms"><b>Land only:</b> hotels, tours and transfers on the ground; airfare isn&rsquo;t included. Each trip is for two travelers (Cortona for four), booked with a travel specialist, with three years to travel.</p>
   </section>
+  <div class="trips-list" data-fill="trip-cards"></div>
 
   <!-- 5. Travel that gives back -->
   <section class="section gives">
@@ -104,7 +100,7 @@
         <img src="../../public/assets/events/gala/hub-winter-postcard.webp" alt="" />
         <figcaption><span>Greetings from</span><strong>HOME</strong></figcaption>
       </figure>
-      <p>Every great trip ends with coming home. A portion of every travel package sold at the Gala supports SparkPoint, helping bring the Transylvania Resilience Hub to life.<small>Resilience Hub · concept rendering</small></p>
+      <p>Every great trip ends with coming home. A portion of every trip supports SparkPoint, helping bring the Transylvania Resilience Hub to life.<small>Resilience Hub · concept rendering</small></p>
     </div>
   </section>
 
@@ -123,6 +119,7 @@
     SparkPoint · Transylvania County, NC · yoursparkpoint.org
   </footer>
 
+<script src="trips.js"></script>
 <script>
   // Fills the variable parts from invitation.config.json (render.mjs sets window.__INVITE__).
   const cfg = window.__INVITE__ || { tickets: {}, venue: {}, trips: [], pageUrl: 'yoursparkpoint.org/events/sparkpoint-gala' };
@@ -138,23 +135,22 @@
     ? `<b>${esc(venueName)}</b>${venuePlace ? ' · ' + esc(venuePlace) : ''}`
     : '<b>Venue to be announced</b> · Transylvania County, NC');
 
-  // Departures board: the Gala, then the eight trips (or "REVEALING SOON").
+  // Departures board: the Gala, then the eight trips (board decision 2026-11-09).
+  // No auction: every trip is available to every guest at a set price.
   const pad = (text, n) => text.toUpperCase().slice(0, n).padEnd(n, ' ');
   const tiles = (text, n) => `<span class="tiles">${[...pad(text, n)].map((c) => `<span class="tile">${c === ' ' ? '&nbsp;' : esc(c)}</span>`).join('')}</span>`;
   const trips = (cfg.trips || []).slice(0, 8);
   const rows = [`<div class="row gala">${tiles('SPARKPOINT GALA', 16)}<span class="status">${tiles('DEC 11', 10)}</span></div>`];
-  for (let i = 0; i < 8; i += 1) {
-    const trip = trips[i];
-    const label = trip ? (trip.board || trip.destination || '') : 'REVEALING SOON';
-    rows.push(`<div class="row">${tiles(label, 16)}<span class="status">${tiles('AT AUCTION', 10)}</span></div>`);
+  for (const t of trips) {
+    rows.push(`<div class="row">${tiles(t.board || t.name || '', 16)}<span class="status">${tiles(`${t.nights} NIGHTS`, 10)}</span></div>`);
   }
   fill('board', rows.join(''));
-  fill('trips-copy', trips.length >= 8
-    ? 'Eight journeys go up for bid with a professional live auctioneer. Pick your next adventure.'
-    : 'Eight journeys around the world go up for bid with a professional live auctioneer. The destinations are revealed soon.');
+  fill('trips-copy', 'Eight trips around the world, each one available to every guest at a set price. A portion of every trip comes home to Transylvania County.');
+  const { card } = window.galaTrips(cfg);
+  fill('trip-cards', trips.map((t, i) => `<div class="trip-slice${i === trips.length - 1 ? ' last' : ''}">${card(t)}</div>`).join(''));
 
   const live = Boolean(cfg.tickets && cfg.tickets.live);
-  fill('cta-eyebrow', live ? 'Tickets are on sale' : 'Venue, tickets &amp; destinations coming soon');
+  fill('cta-eyebrow', live ? 'Tickets are on sale' : 'Tickets coming soon');
   fill('button', live ? 'Get your tickets &rarr;' : 'Get gala updates &rarr;');
   fill('price', live && cfg.tickets.price ? esc(cfg.tickets.price) : '');
   fill('url', esc(live && cfg.tickets.url ? cfg.tickets.url : cfg.pageUrl));

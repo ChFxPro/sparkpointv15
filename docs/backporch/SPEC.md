@@ -517,6 +517,40 @@ To revoke it, delete the row from `porch_editors` (or the Auth user) and the Key
 shared with other tools, so the bot can also read whatever any signed-in user can (for
 example the internal reports); it's a staff-level login, not a public one.
 
+## Cover framing (built 2026-10-30)
+
+Lists and the post page draw a cover in fixed-shape frames (16:10 on the post page, 4:3
+and wider in the feed, small squares in rows), so a portrait flyer lost most of itself
+to the centred crop. Each post now keeps a framing in `presentation.cover`
+(`CoverFrame` in `src/lib/backporch.ts`; absent means fill, centred):
+
+- **Fill the frame** with a focal point (`{ fit: 'fill', x, y }`, percent of the photo):
+  the crop centres there (`object-position`).
+- **Show the whole image** (`{ fit: 'whole' }`): the photo fits inside every frame over
+  a blurred copy of itself, so nothing is cropped. On the post's own page the frame
+  takes the photo's own shape, up to most of the screen's height, so a flyer can be read.
+
+It applies wherever the cover shows: the feed (`Photo` in `feed/FeedParts.tsx`, given
+`frame`), the homepage band, rows and the post page (`PorchImage` in `PorchParts.tsx`),
+the takeover breakout (focal point only), and the Facebook kit's share image. The editor
+sets it under the cover photo (`CoverFraming.tsx`): pick Fill or Whole, click the photo
+(or use the arrow keys) to place the focal point, and see the post-page, feed and square
+crops before saving. From the command line: `npm run porch:cover -- <slug> --whole`,
+`--focus 50,20`, or `--fill`, with or without a new photo.
+
+Photo blocks inside a post are unaffected: they already show at their own shape.
+
+**Poster cards (2026-10-30).** In the feed, "show the whole image" means the cover is a
+poster or flyer, so the card is laid out around it instead of fitting it into a photo
+slot: the gathering tickets (lead and small), the ask band and the side-by-side story
+card put the poster at its own shape in a column beside the words (`Poster` /
+`isPoster` in `feed/FeedParts.tsx`, `data-cover="poster"`, styles at the end of
+`feed/feed.css`), with no crop and no blur. A small ticket's date block then leads the
+words instead of overlapping the photo. Cards switch by their own width (a container
+query): narrow, the poster sits centred above the words. A gallery story with a poster
+cover takes the side-by-side shape (`shapeOf`), since its title can't sit over a flyer.
+Other places (homepage band, rows, post page) keep the blurred-backdrop fit above.
+
 ## Decisions (owner, 2026-10-15)
 
 1. **Name:** The BackPorch, one word. Partners are "neighbors".
