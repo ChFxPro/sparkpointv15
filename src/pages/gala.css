@@ -1339,8 +1339,34 @@
 }
 
 .gala-film-credit {
-  color: rgba(247, 241, 229, 0.66);
+  display: grid;
+  gap: 4px;
+  max-height: 22vh;
+  overflow-y: auto;
+  color: rgba(247, 241, 229, 0.7);
   font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+.gala-film-credit ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gala-film-credit a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(247, 241, 229, 0.4);
+  text-underline-offset: 2px;
+}
+
+.gala-film-credit a:hover,
+.gala-film-credit a:focus-visible {
+  color: var(--gala-brass-light);
 }
 
 /* Open passport resting on its navy leather cover. */

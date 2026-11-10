@@ -10,7 +10,7 @@ import {
   travelersLabel,
   type GalaTrip,
 } from '../data/galaTrips';
-import { tripMedia, tripVideoSrc, type GalaLoopSources } from '../data/galaTripMedia';
+import { cardVideoCredit, tripMedia, tripVideoSrc, type GalaLoopSources } from '../data/galaTripMedia';
 import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
 
 // The trips lounge: the eight trips as a departures lounge.
@@ -26,9 +26,9 @@ import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
 // still drifts slowly.
 //
 // Performance and access rules, kept on purpose:
-// - No <video> exists until its card is near the viewport, and it has
-//   preload="none", so nothing is fetched until a card boards. The first load
-//   carries no video at all.
+// - No <video> exists until its card is near the viewport and has boarded, and
+//   it has preload="none", so nothing is fetched for a card no one looks at. The
+//   first load carries no video at all.
 // - Only the boarding card plays: one loop at a time, paused when it stops boarding.
 // - No video, no drift and no pulsing cue under reduced motion (OS or the site's
 //   toggle), Save-Data or 2G. Those visitors get the stills.
@@ -133,7 +133,14 @@ function TripArt({ trip, boarding, near, videoAllowed, paused, onTogglePause }: 
   const media = tripMedia(trip.id);
   const loop = loopFor(trip);
   const [playing, setPlaying] = useState(false);
-  const mountVideo = Boolean(loop) && videoAllowed && near;
+  // The <video> is created the first time the card boards (never speculatively,
+  // so nothing is fetched for cards no one looks at) and kept while it stays near.
+  const [boarded, setBoarded] = useState(false);
+  useEffect(() => {
+    if (boarding) setBoarded(true);
+    else if (!near) setBoarded(false);
+  }, [boarding, near]);
+  const mountVideo = Boolean(loop) && videoAllowed && near && (boarded || boarding);
   const play = mountVideo && boarding && !paused;
   const onPlaying = useCallback((on: boolean) => setPlaying(on), []);
   const showControl = mountVideo && boarding && (playing || paused);
@@ -194,7 +201,7 @@ function TripArt({ trip, boarding, near, videoAllowed, paused, onTogglePause }: 
         <figcaption className="gala-trip-credit">
           {image.place ? <>{image.place} · </> : null}
           Photo: <CreditLine credit={image.credit} sourceUrl={image.sourceUrl} licenseUrl={image.licenseUrl} />
-          {media?.credit && loop ? <> · Video: {media.credit}</> : null}
+          {loop && cardVideoCredit(media) ? <> · Video: {cardVideoCredit(media)}</> : null}
         </figcaption>
       ) : null}
     </figure>

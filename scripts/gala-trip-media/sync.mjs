@@ -39,6 +39,41 @@ const MAX_FILM_BYTES = 40 * 1024 * 1024;
 
 const TRIP_IDS = ['greece', 'iceland', 'cortona', 'scotland', 'south-africa', 'portugal', 'costa-rica', 'alaska'];
 
+// web.json's credit is written for the team ("…, licensed to <name>. … (see LICENSES.md)").
+// The public line keeps only the sources: no licensee's name, no pointer to an internal file.
+function publicCredit(credit) {
+  return credit
+    .replace(/,?\s*licensed to [^.;]+/gi, '')
+    .replace(/\s*\(see LICENSES\.md\)/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// Rows of the "Video footage" table in <id>/pack/LICENSES.md whose licence is a
+// Creative Commons one: those need a visible credit (author, licence, link).
+// One entry per source, in the order they appear.
+function ccCredits(file) {
+  if (!fs.existsSync(file)) return [];
+  const text = fs.readFileSync(file, 'utf8');
+  const section = text.split(/^## /m).find((part) => part.startsWith('Video footage'));
+  if (!section) return [];
+  const link = (cell) => cell.match(/^\[(.+?)\]\((https?:[^)]+)\)$/);
+  const seen = new Set();
+  const out = [];
+  for (const line of section.split('\n')) {
+    if (!line.startsWith('|')) continue;
+    const cells = line.split('|').slice(1, -1).map((c) => c.trim());
+    if (cells.length < 5) continue;
+    const [, shows, author, licence, source] = cells;
+    const lic = link(licence);
+    const src = link(source);
+    if (!lic || !src || !/creativecommons\.org/.test(lic[2]) || seen.has(src[2])) continue;
+    seen.add(src[2]);
+    out.push({ shows, author, license: lic[1], licenseUrl: lic[2], sourceUrl: src[2] });
+  }
+  return out;
+}
+
 function pick(files, id, test) {
   return files.filter((f) => f.startsWith(`${id}-`) && test(f)).sort()[0] ?? null;
 }
@@ -98,10 +133,15 @@ for (const id of TRIP_IDS) {
   if (fs.existsSync(metaPath)) {
     try {
       const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
-      if (typeof meta.credit === 'string' && meta.credit.trim()) entry.credit = meta.credit.trim();
+      if (typeof meta.credit === 'string' && meta.credit.trim()) entry.credit = publicCredit(meta.credit);
     } catch (err) {
       problems.push(`${id}/pack/web/web.json could not be read: ${err.message}`);
     }
+  }
+  // CC-licensed work in the film, from the pack's licence log, credited in the film player.
+  if (entry.film) {
+    const credits = ccCredits(path.join(tripsDir, id, 'pack', 'LICENSES.md'));
+    if (credits.length) entry.filmCredits = credits;
   }
   if (entry.loopWide || entry.loopTall || entry.film) manifest[id] = entry;
 }
@@ -110,7 +150,7 @@ for (const p of problems) console.warn('!', p);
 console.log(
   Object.keys(manifest).length
     ? Object.entries(manifest)
-        .map(([id, e]) => `${id}: ${[e.loopWide && 'wide loop', e.loopTall && 'tall loop', e.poster && 'poster', e.film && 'film', e.captions && 'captions'].filter(Boolean).join(', ')}`)
+        .map(([id, e]) => `${id}: ${[e.loopWide && 'wide loop', e.loopTall && 'tall loop', e.poster && 'poster', e.film && 'film', e.captions && 'captions', e.filmCredits && `${e.filmCredits.length} CC credits`].filter(Boolean).join(', ')}`)
         .join('\n')
     : `No trip has web video yet in ${tripsDir}. Cards keep their poster stills.`
 );

@@ -60,7 +60,27 @@ export default function TripFilmDialog({ trip, onClose }: { trip: GalaTrip; onCl
               ))}
             </video>
           </div>
-          {media.credit ? <p className="gala-film-credit">Video: {media.credit}</p> : null}
+          {media.credit || media.filmCredits?.length ? (
+            <div className="gala-film-credit">
+              {media.credit ? <p>{media.credit}</p> : null}
+              {media.filmCredits?.length ? (
+                <ul>
+                  {media.filmCredits.map((c) => (
+                    <li key={c.sourceUrl}>
+                      {c.shows}:{' '}
+                      <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer">
+                        {c.author}
+                      </a>{' '}
+                      /{' '}
+                      <a href={c.licenseUrl} target="_blank" rel="noopener noreferrer license">
+                        {c.license}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          ) : null}
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>
