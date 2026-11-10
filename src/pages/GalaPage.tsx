@@ -415,6 +415,15 @@ export default function GalaPage() {
           <p className="gala-fine-print">
             A portion of every trip comes home to help bring the Transylvania Resilience Hub to life.
           </p>
+          <motion.div className="gala-passport-cta" {...reveal}>
+            <p>
+              <strong>Put yourself in the passport.</strong> Add your photo, stamp your dream trip, and
+              share a “Join me” post. Your photo stays on your device.
+            </p>
+            <Link className="gala-button gala-button-gold" to={`${GALA_PATH}/join-me`}>
+              Issue my passport
+            </Link>
+          </motion.div>
         </div>
       </section>
 

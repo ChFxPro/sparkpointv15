@@ -1797,6 +1797,32 @@
   font-size: 0.85rem;
 }
 
+/* Under the passport: the way into the "Join me" post maker (/events/sparkpoint-gala/join-me). */
+.gala-passport-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px 32px;
+  margin-top: 36px;
+  padding: 24px 28px;
+  border: 1px solid rgba(176, 141, 69, 0.45);
+  outline: 1px solid rgba(176, 141, 69, 0.22);
+  outline-offset: 5px;
+}
+
+.gala-passport-cta p {
+  flex: 1 1 320px;
+  margin: 0;
+  color: var(--gala-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.gala-passport-cta strong {
+  color: var(--gala-ink);
+}
+
 /* 4 — Luggage tags: leather tags hanging from a brass rail */
 .gala-tags-section {
   padding: 30px 0 120px;

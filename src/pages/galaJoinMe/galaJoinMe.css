@@ -1,0 +1,548 @@
+/* /events/sparkpoint-gala/join-me — the Gala "Join me" post maker. A one-screen app:
+   header (back, title, step dots), the post filling the stage, and a tray that steps
+   through Photo → Name → Stamp → Share. On wide screens the tray sits to the right.
+   Gala system: night blue, brass, SparkPoint pink, Josefin Sans throughout. */
+
+.jm {
+  --jm-night: #0b1322;
+  --jm-night-2: #121d33;
+  --jm-cream: #f7f1e5;
+  --jm-paper: #efe5cf;
+  --jm-brass: #d9b56a;
+  --jm-brass-light: #f1d9a0;
+  --jm-pink: #e03694;
+  --jm-ink: #1b1a1f;
+  --jm-display: 'Josefin Sans Variable', 'Josefin Sans', sans-serif;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  background: var(--jm-night);
+  color: var(--jm-cream);
+  font-family: var(--jm-display);
+  font-size: 17px;
+  line-height: 1.45;
+  color-scheme: dark;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.jm *,
+.jm *::before,
+.jm *::after {
+  box-sizing: border-box;
+}
+
+.jm-app {
+  height: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas: 'head' 'stage' 'tray';
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+@media (min-width: 900px) {
+  .jm-app {
+    grid-template-columns: minmax(0, 1fr) 400px;
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas: 'head head' 'stage tray';
+  }
+}
+
+/* Header */
+.jm-head {
+  grid-area: head;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-block: 10px;
+  padding-left: max(12px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  border-bottom: 1px solid rgba(217, 181, 106, 0.18);
+}
+
+.jm-back {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--jm-brass-light);
+  cursor: pointer;
+}
+
+.jm-back svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+.jm-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.jm-title h1 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.jm-title p {
+  margin: 0;
+  color: rgba(247, 241, 229, 0.6);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jm-dots {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.jm-dots li {
+  width: 22px;
+  height: 3px;
+  background: rgba(217, 181, 106, 0.25);
+  transition: background-color 0.3s;
+}
+
+.jm-dots li.is-on {
+  background: var(--jm-brass);
+}
+
+/* Stage: the post fits whatever room there is. */
+.jm-stage {
+  grid-area: stage;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding-block: 14px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  container-type: size;
+}
+
+.jm-card {
+  position: relative;
+  height: min(100cqh, 125cqw);
+  max-width: 100%;
+  aspect-ratio: 1080 / 1350;
+  overflow: hidden;
+  background: var(--jm-night);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  touch-action: none;
+  user-select: none;
+}
+
+.jm-card.can-pan {
+  cursor: grab;
+}
+
+.jm-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* The title and "Join me" band show faintly until the stamps land, then build in. */
+.jm-top,
+.jm-bottom {
+  opacity: 0.2;
+  transition: opacity 0.3s;
+}
+
+.jm-card.is-built .jm-top,
+.jm-card.is-built .jm-bottom {
+  opacity: 1;
+}
+
+.jm-card.is-building .jm-top {
+  animation: jm-from-top 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.jm-card.is-building .jm-bottom {
+  animation: jm-from-bottom 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+.jm-card.is-building .jm-base {
+  animation: jm-settle 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.jm-card.is-thud .jm-base {
+  animation: jm-thud 0.26s ease-out;
+}
+
+@keyframes jm-from-top {
+  from { opacity: 0.2; transform: translateY(-4%); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes jm-from-bottom {
+  from { opacity: 0.2; transform: translateY(4%); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes jm-settle {
+  from { transform: scale(1.03); }
+  to { transform: none; }
+}
+
+@keyframes jm-thud {
+  40% { transform: scale(0.994); }
+}
+
+/* A stamp lands: it comes down from above, overshoots a touch on impact, and settles. */
+.jm-stamp {
+  position: absolute;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.9;
+  transform: translate(-50%, -50%) rotate(var(--r, 0deg));
+}
+
+.jm-stamp img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.jm-stamp.is-land {
+  animation: jm-slam 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.18) both;
+}
+
+@keyframes jm-slam {
+  0% { opacity: 0; transform: translate(-50%, -50%) rotate(calc(var(--r, 0deg) + 8deg)) scale(1.9); }
+  60% { opacity: 0.94; transform: translate(-50%, -50%) rotate(var(--r, 0deg)) scale(0.96); }
+  100% { opacity: 0.9; transform: translate(-50%, -50%) rotate(var(--r, 0deg)) scale(1); }
+}
+
+.jm-pan-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 3%;
+  transform: translateX(-50%);
+  padding: 4px 10px;
+  background: rgba(11, 19, 34, 0.75);
+  color: var(--jm-cream);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Tray */
+.jm-tray {
+  grid-area: tray;
+  position: relative;
+  overflow: hidden;
+  background: var(--jm-night-2);
+  border-top: 1px solid rgba(217, 181, 106, 0.22);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (min-width: 900px) {
+  .jm-tray {
+    border-top: 0;
+    border-left: 1px solid rgba(217, 181, 106, 0.22);
+  }
+}
+
+.jm-panel {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding-block: 16px 18px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  animation: jm-panel-in 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.jm-panel.is-back {
+  animation-name: jm-panel-in-back;
+}
+
+@media (min-width: 900px) {
+  .jm-panel {
+    gap: 16px;
+    padding: 28px 24px;
+  }
+}
+
+@keyframes jm-panel-in {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes jm-panel-in-back {
+  from { opacity: 0; transform: translateX(-24px); }
+  to { opacity: 1; transform: none; }
+}
+
+.jm-panel h2 {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 300;
+  line-height: 1.1;
+}
+
+.jm-panel h2 b {
+  color: var(--jm-brass);
+  font-weight: 600;
+}
+
+.jm-row {
+  display: flex;
+  gap: 10px;
+}
+
+/* Deco buttons (kit): square corners, 1px brass border, Josefin 600 caps. */
+.jm-btn {
+  appearance: none;
+  position: relative;
+  flex: 1 1 0;
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 14px;
+  border: 1px solid var(--jm-brass);
+  border-radius: 0;
+  background: transparent;
+  color: var(--jm-cream);
+  font: 600 0.8rem/1 var(--jm-display);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.jm-btn svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+
+.jm-btn:active {
+  transform: scale(0.98);
+}
+
+.jm-primary {
+  background: var(--jm-pink);
+  color: #fff;
+}
+
+.jm-file input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.jm-link {
+  appearance: none;
+  justify-self: start;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: var(--jm-brass-light);
+  font: 400 0.92rem var(--jm-display);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.jm-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+
+.jm-back:focus-visible,
+.jm-btn:focus-visible,
+.jm-link:focus-visible,
+.jm-input:focus-visible,
+.jm-trip:focus-visible,
+.jm-zoom input:focus-visible,
+.jm-file:focus-within {
+  outline: 2px solid var(--jm-brass-light);
+  outline-offset: 3px;
+}
+
+.jm-privacy {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  color: rgba(247, 241, 229, 0.72);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.jm-privacy svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  fill: none;
+  stroke: var(--jm-brass);
+  stroke-width: 1.6;
+}
+
+.jm-zoom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(247, 241, 229, 0.75);
+  font-size: 0.82rem;
+}
+
+.jm-zoom input {
+  flex: 1;
+  accent-color: var(--jm-brass);
+}
+
+.jm-input {
+  width: 100%;
+  min-height: 52px;
+  padding: 10px 14px;
+  border: 1px solid rgba(217, 181, 106, 0.55);
+  border-radius: 0;
+  background: rgba(247, 241, 229, 0.05);
+  color: var(--jm-cream);
+  font: 400 1.15rem var(--jm-display);
+}
+
+.jm-input::placeholder {
+  color: rgba(247, 241, 229, 0.4);
+}
+
+.jm-note {
+  margin: 0;
+  color: rgba(247, 241, 229, 0.6);
+  font-size: 0.8rem;
+}
+
+.jm-toast {
+  min-height: 1.3em;
+  margin: 0;
+  color: var(--jm-brass-light);
+  font-size: 0.86rem;
+}
+
+/* Trip picker: a swipeable row on phones, a grid on wide screens. */
+.jm-trips {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 112px;
+  gap: 8px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+  padding: 2px max(16px, env(safe-area-inset-right, 0px)) 6px max(16px, env(safe-area-inset-left, 0px));
+  scroll-padding-inline: max(16px, env(safe-area-inset-left, 0px));
+  scrollbar-width: none;
+}
+
+.jm-trips::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .jm-trips {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-columns: auto;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+}
+
+.jm-trip {
+  appearance: none;
+  height: 112px;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 4px;
+  padding: 8px 4px 6px;
+  border: 1px solid rgba(217, 181, 106, 0.25);
+  border-radius: 0;
+  background: var(--jm-paper);
+  color: var(--jm-ink);
+  font: 600 0.66rem var(--jm-display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  scroll-snap-align: start;
+  cursor: pointer;
+}
+
+.jm-trip img {
+  width: 84px;
+  height: 70px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.jm-trip:active {
+  transform: scale(0.97);
+}
+
+.jm-trip[aria-pressed='true'] {
+  outline: 3px solid var(--jm-brass);
+  outline-offset: -3px;
+  background: #f8f0dc;
+}
+
+.jm-sr,
+.jm-haptic {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jm-card.is-building .jm-top,
+  .jm-card.is-building .jm-bottom,
+  .jm-card.is-building .jm-base,
+  .jm-card.is-thud .jm-base,
+  .jm-stamp.is-land,
+  .jm-panel {
+    animation: none;
+  }
+
+  .jm-dots li,
+  .jm-top,
+  .jm-bottom {
+    transition: none;
+  }
+}

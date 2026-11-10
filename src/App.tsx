@@ -21,6 +21,7 @@ const StoriesPage = lazy(() =>
 const EventsPage = lazy(() => import('./pages/EventsPage'));
 const ThriveAtFivePage = lazy(() => import('./pages/ThriveAtFivePage'));
 const GalaPage = lazy(() => import('./pages/GalaPage'));
+const GalaJoinMePage = lazy(() => import('./pages/GalaJoinMePage'));
 const StoryCategoryPage = lazy(() =>
   import('./pages/StoryCategoryPage').then((module) => ({ default: module.StoryCategoryPage }))
 );
@@ -171,8 +172,8 @@ function RouteLoading() {
 // Flagship program routes that render as immersive, chromeless landing pages.
 // These skip the site-wide <Header /> and wrapping <main> so the program's own
 // hero can occupy the full viewport without colliding with site chrome.
-const CHROMELESS_PATH_PREFIXES = ['/programs/purpose-workshops', '/rural-health-convening', '/collaboration-lab', '/internal'];
-const CUSTOM_FOOTER_PATH_PREFIXES = ['/rural-health-convening', '/collaboration-lab', '/internal'];
+const CHROMELESS_PATH_PREFIXES = ['/programs/purpose-workshops', '/rural-health-convening', '/collaboration-lab', '/internal', '/events/sparkpoint-gala/join-me'];
+const CUSTOM_FOOTER_PATH_PREFIXES = ['/rural-health-convening', '/collaboration-lab', '/internal', '/events/sparkpoint-gala/join-me'];
 
 function isChromelessPath(pathname: string): boolean {
   return CHROMELESS_PATH_PREFIXES.some(
@@ -197,6 +198,7 @@ function AppContent() {
         <Route path="/events" element={<EventsPage />} />
         <Route path="/events/thrive-at-five" element={<ThriveAtFivePage />} />
         <Route path="/events/sparkpoint-gala" element={<GalaPage />} />
+        <Route path="/events/sparkpoint-gala/join-me" element={<GalaJoinMePage />} />
         <Route path="/stories/collections" element={<StoryCollectionsPage />} />
         <Route path="/stories/collections/:id" element={<StoryCollectionDetailPage />} />
         <Route path="/stories/:categoryId" element={<StoryCategoryPage />} />
