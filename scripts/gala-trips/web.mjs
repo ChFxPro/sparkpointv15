@@ -12,6 +12,8 @@
 // Each loop is under 900 KB (never over 1.5 MB). The loop takes 3-4 footage
 // moments cut on the beats and crossfades its end into its start, so the
 // loop point is invisible.
+// A timed-out call from a page that has already been closed shouldn't end the run.
+process.on('unhandledRejection', (e) => console.warn(`ignored stray error: ${e?.message ?? e}`));
 import { execFileSync } from 'node:child_process';
 import { mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';

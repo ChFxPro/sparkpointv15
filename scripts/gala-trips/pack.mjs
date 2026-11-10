@@ -10,6 +10,8 @@
 //
 // Prices: shown only when trips.json `showPrices` is true, and then only the
 // trip's `publicPrice`. `listPrice` is internal and never used here.
+// A timed-out call from a page that has already been closed shouldn't end the run.
+process.on('unhandledRejection', (e) => console.warn(`ignored stray error: ${e?.message ?? e}`));
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';

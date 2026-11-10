@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { packDir, root } from './lib.mjs';
 import { writeLand } from './land.mjs';
-import { BUILD, open, still, video } from './render.mjs';
+import { BUILD, open, renderVideo, still, video } from './render.mjs';
 
 export const SIZES = { '16x9': [1920, 1080], '9x16': [1080, 1920], '1x1': [1080, 1080] };
 
@@ -68,11 +68,10 @@ export async function mapFramesTimed(browser, trip, pack, home, layout, timing, 
     [Math.min(...lons) - pad, Math.min(...lats) - pad, Math.max(...lons) + pad, Math.max(...lats) + pad],
     [home.at[0] - 25, home.at[1] - 15, home.at[0] + 25, home.at[1] + 15],
   ]);
-  const page = await browser.newPage();
   const [width, height] = SIZES[layout];
-  await open(page, 'map.html', { width, height, global: 'MAP', data: { ...mapData(trip, pack, home, layout), timing } });
   const mp4 = join(dir, `map-${layout}.mp4`);
-  await video(page, mp4, { duration: timing.end, crf: 14 });
-  await page.close();
+  const r = await renderVideo(browser, 'map.html', { width, height, global: 'MAP', data: { ...mapData(trip, pack, home, layout), timing } }, mp4,
+    { duration: timing.end, crf: 14, bitrate: '20M', maxrate: '30M', scratch: dir, real: true });
+  console.log(`${trip.id}: map for ${layout} timed to the music (${r.frames} frames at ${r.fps} fps on ${r.mode})`);
   return mp4;
 }

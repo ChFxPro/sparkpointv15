@@ -19,7 +19,10 @@ export const placeholders = {
 };
 
 export async function launch() {
-  return puppeteer.launch({ headless: true, protocolTimeout: 600000, args: ['--allow-file-access-from-files', '--force-color-profile=srgb'] });
+  // Parallel pages are background tabs to Chrome, which otherwise throttles
+// their timers and can defer image decoding there indefinitely.
+  return puppeteer.launch({ headless: true, protocolTimeout: 600000, args: ['--allow-file-access-from-files', '--force-color-profile=srgb',
+    '--disable-background-timer-throttling', '--disable-backgrounding-occluded-windows', '--disable-renderer-backgrounding'] });
 }
 
 async function prepare(template, extra = {}) {
@@ -104,7 +107,7 @@ const SMOKE = Number(process.env.GALA_SMOKE || 0);
 // Renders a cut on RENDER_PAGES pages; if it hangs (no new frame for
 // HANG_SECS), kills those pages and retries once on 2, then on 1.
 export async function renderVideo(browser, template, openOpts, out, opts) {
-  if (SMOKE) out = join(opts.scratch, `smoke-${basename(out)}`);
+  if (SMOKE && !opts.real) out = join(opts.scratch, `smoke-${basename(out)}`);
   const tries = [...new Set([RENDER_PAGES, Math.min(2, RENDER_PAGES), 1])];
   let lastErr;
   for (const pages of tries) {
@@ -113,21 +116,23 @@ export async function renderVideo(browser, template, openOpts, out, opts) {
       return { ...r, mode: `${pages} page${pages > 1 ? 's' : ''}${pages < tries[0] ? ` (retry after a hang)` : ''}` };
     } catch (err) {
       lastErr = err;
-      if (!err.hang) throw err;
+      if (!err.hang && !/timed out|Target closed|Session closed/.test(err.message)) throw err;
       console.warn(`render hung on ${pages} page(s) (${err.message}); retrying on fewer`);
     }
   }
   throw lastErr;
 }
 
-async function renderOnce(browser, template, openOpts, out, { duration, fps = 30, crf = 16, bitrate = '14M', maxrate = '20M', scratch, pages: want }) {
-  const frames = SMOKE ? Math.min(SMOKE, Math.round(duration * fps)) : Math.round(duration * fps);
+async function renderOnce(browser, template, openOpts, out, { duration, fps = 30, crf = 16, bitrate = '14M', maxrate = '20M', scratch, pages: want, real }) {
+  const frames = SMOKE && !real ? Math.min(SMOKE, Math.round(duration * fps)) : Math.round(duration * fps);
   const n = Math.min(want, Math.max(1, Math.floor(frames / 20)));
   const dir = join(scratch, `frames-${Date.now()}`);
   await mkdir(dir, { recursive: true });
   const name = (i) => join(dir, `${String(i).padStart(6, '0')}.png`);
   const ranges = Array.from({ length: n }, (_, k) => [Math.floor((k * frames) / n), Math.floor(((k + 1) * frames) / n)]);
   const t0 = Date.now();
+  console.log(`render ${basename(out)}: ${frames} frames on ${n} page(s)`);
+  let done = 0;
   try {
   const pages = await Promise.all(ranges.map(() => browser.newPage()));
   const url = await open(pages[0], template, openOpts);
@@ -148,6 +153,7 @@ async function renderOnce(browser, template, openOpts, out, { duration, fps = 30
         await p.evaluate((tt) => window.frame(tt), i / fps);
         await p.screenshot({ path: name(i), type: 'png' });
         last = Date.now();
+        if (++done % 300 === 0) console.log(`render ${basename(out)}: ${done}/${frames} frames, ${(done / ((last - t0) / 1000)).toFixed(2)} fps`);
       }
     }))]);
   } catch (err) {

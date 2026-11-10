@@ -124,8 +124,12 @@ const imgs = layers.map((el) => el.querySelector('img.bg'));
 const cache = new Map();
 function load(src) {
   if (!cache.has(src)) {
-    const im = new Image(); im.src = src;
-    cache.set(src, im.decode().then(() => im, () => { throw new Error('Could not load ' + src); }));
+    // Wait for the load event (decode() can stall in a background tab), then
+    // decode best-effort, never longer than a few seconds.
+    const im = new Image();
+    const loaded = new Promise((res, rej) => { im.onload = () => res(); im.onerror = () => rej(new Error('Could not load ' + src)); });
+    im.src = src;
+    cache.set(src, loaded.then(() => Promise.race([im.decode().catch(() => {}), new Promise((r) => setTimeout(r, 3000))])).then(() => im));
     if (cache.size > 24) cache.delete(cache.keys().next().value);
   }
   return cache.get(src);

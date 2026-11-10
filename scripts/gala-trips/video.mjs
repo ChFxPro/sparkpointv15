@@ -163,8 +163,9 @@ async function framesOf(mp4, dir) {
 export async function buildVideo(browser, trip, pack, { price = null, when, cuts, score, home } = {}) {
   if (!pack.reel?.length) throw new Error(`${trip.id}: no reel in packs.json`);
   if (!score) throw new Error(`${trip.id}: no score; the video is cut to its music`);
+  console.log(`${trip.id}: preparing shots`);
   const prepared = await prepareShots(trip, pack);
-  const page = await browser.newPage();
+  console.log(`${trip.id}: shots ready`);
   const outputs = [];
   const foot = (s) => ({ ...s, move: s.frames ? move('still', s.fx ?? .5) : move(s.move, s.fx ?? .5, s.fy ?? .5) });
   for (const [kind, layout] of [['full', '16x9'], ['social', '9x16'], ['social', '1x1']].filter(([, l]) => !cuts || cuts.includes(l))) {
@@ -205,7 +206,6 @@ export async function buildVideo(browser, trip, pack, { price = null, when, cuts
     outputs.push(silent);
     console.log(`${trip.id}: video ${name} (${duration.toFixed(1)} s, ${shots.length} shots, cut to the music; ${r.frames} frames at ${r.fps} fps on ${r.mode}, ${r.check})`);
   }
-  await page.close();
   const srcFile = packDir(trip.id, 'video', 'sources.json');
   const old = (await exists(srcFile)) ? JSON.parse(await readFile(srcFile, 'utf8')) : {};
   await writeJson(srcFile, { trip: trip.id, clips: prepared.sources, music: old.music ?? null, sfx: old.sfx ?? [] });
