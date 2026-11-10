@@ -1,4 +1,4 @@
-// Cuts a promo to its music. Given a beat map (beatmap.py) and the trip's
+// Cuts a promo to its music, without jump cuts. Given a beat map (beatmap.py) and the trip's
 // shots, returns the timeline: every shot change on a bar line (or on a beat,
 // when bars are long and the music is busy), the title on the first strong
 // downbeat, the map's last stop on a downbeat, shorter shots where the music
@@ -50,40 +50,71 @@ export function mapTiming(bm, L, nStops) {
   return { arcIn: 1.0 * g, arcOut: 4.6 * g, zoomOut: 1.2 * g, zoomWide: 4.4 * g, zoomRegion: 6.6 * g, stopTimes, end: L };
 }
 
-function maxDur(s) {
-  return s.frames ? s.frames.count / s.frames.fps - 0.1 : STILL_MAX;
+// Jeff's no-jump-cut rules (2026-11-10): every source at most once per cut,
+// a camera move plays as one shot, slow aerials hold at least AERIAL_MIN (and
+// cut on bar lines), stills with a slow push fill any gap, and a shortfall is
+// reported rather than covered with repeats.
+const AERIAL_MIN = 3.5;
+const STILL_STRETCH = 11; // a still may hold this long when footage runs short
+
+export const sourceKey = (s) => s.local?.local ?? s.clip?.commons ?? s.still ?? s.commonsStill ?? s.shows;
+export const isAerial = (s) => s.aerial ?? (Boolean(s.local || s.clip) && /aerial|drone|top-down|from the air|from directly above|flying|birds?-eye/i
+  .test(`${s.local?.local ?? s.clip?.commons ?? ''} ${s.shows ?? ''}`));
+
+function maxDur(s, stretch = false) {
+  return s.frames ? s.frames.count / s.frames.fps - 0.1 : stretch ? STILL_STRETCH : STILL_MAX;
 }
 
-// Lays footage shots into [t0, t1] with boundaries on the cut grid. Lengths
-// follow the music (shorter where it's busy) within each shot's limits: a
-// caption needs CAP_MIN, a clip can't run past its footage.
-function layFootage(bm, shots, t0, t1) {
-  const grid = cutGrid(bm).filter((g) => g >= t0 - 1e-3 && g <= t1 + 1e-3);
+// Lays footage into [t0, t1]. Shots keep reel order. Boundaries sit on the cut
+// grid (bar lines only next to an aerial). Lengths follow the music within
+// each shot's limits. `fills` are stills used only when the footage can't
+// cover the span. Returns { shots, report }.
+function layFootage(bm, shots, t0, t1, fills = []) {
   const span = t1 - t0;
-  const target = (t) => 5.2 - 2.6 * energyAt(bm, t);
-  const lo = (s) => (s.caption ? CAP_MIN : 1.8);
-  const hi = (s) => Math.max(lo(s), maxDur(s));
-  // How many shots: as many as the music's pace asks for, captioned first, in reel order.
-  const pace = (target(t0) + target((t0 + t1) / 2) + target(t1)) / 3;
-  let n = Math.max(1, Math.min(shots.length, Math.round(span / pace)));
-  const ranked = shots.map((s, i) => ({ s, i, keep: s.caption ? 2 : s.social ? 1 : s.extra ? -1 : 0 }));
-  let chosen = ranked.sort((a, b) => b.keep - a.keep || a.i - b.i).slice(0, n).sort((a, b) => a.i - b.i).map((x) => x.s);
-  const fits = () => chosen.reduce((a, s) => a + hi(s), 0) >= span && chosen.reduce((a, s) => a + lo(s), 0) <= span;
-  while (!fits() && chosen.reduce((a, s) => a + hi(s), 0) < span && chosen.length < shots.length) {
-    chosen = shots.filter((s) => chosen.includes(s) || s === shots.find((x) => !chosen.includes(x)));
+  const aerialMin = Math.max(AERIAL_MIN, bm.bar < 2 ? 2 * bm.bar : bm.bar);
+  const report = { span: +span.toFixed(2), dropped: [], fills: [], shortfall: 0 };
+  const lo = (s) => (isAerial(s) ? aerialMin : s.caption ? CAP_MIN : s.frames ? 2.0 : 3.0);
+  let stretch = false;
+  const hi = (s) => Math.max(lo(s), maxDur(s, stretch));
+  const target = (s, t) => (isAerial(s) ? 4.2 + 1.3 * (1 - energyAt(bm, t)) : 5.2 - 2.6 * energyAt(bm, t));
+  // Rule 1/4: one window per source in this cut.
+  const seen = new Set();
+  const pool = [];
+  for (const s of shots) {
+    const k = sourceKey(s);
+    if (seen.has(k)) { report.dropped.push(`${s.shows} (same source as an earlier shot)`); continue; }
+    seen.add(k); pool.push(s);
   }
-  while (chosen.length > 1 && chosen.reduce((a, s) => a + lo(s), 0) > span) {
-    const drop = [...chosen].reverse().find((s) => !s.caption) ?? chosen.at(-1);
+  for (const f of fills) seen.has(sourceKey(f)) || pool.push({ ...f, fill: true });
+  // Pace: how many shots the music asks for; captioned and social shots first, fills last.
+  const footage = pool.filter((s) => !s.fill);
+  const pace = footage.length ? footage.reduce((a, s) => a + target(s, (t0 + t1) / 2), 0) / footage.length : 5;
+  let n = Math.max(1, Math.min(footage.length, Math.round(span / pace)));
+  const rank = (s) => (s.fill ? -2 : s.caption ? 2 : s.social ? 1 : 0);
+  const order = (list) => list.sort((a, b) => pool.indexOf(a) - pool.indexOf(b));
+  let chosen = order([...footage].sort((a, b) => rank(b) - rank(a) || pool.indexOf(a) - pool.indexOf(b)).slice(0, n));
+  const sumHi = () => chosen.reduce((a, s) => a + hi(s), 0);
+  const sumLo = () => chosen.reduce((a, s) => a + lo(s), 0);
+  // Not enough footage time: add the remaining footage, then fill stills, then stretch stills.
+  for (const s of footage) if (sumHi() < span && !chosen.includes(s)) chosen = order([...chosen, s]);
+  for (const s of pool.filter((x) => x.fill)) if (sumHi() < span) { chosen = order([...chosen, s]); report.fills.push(s.shows); }
+  if (sumHi() < span) stretch = true;
+  if (sumHi() < span) report.shortfall = +(span - sumHi()).toFixed(2);
+  // Too many to fit their minimum holds: drop the lowest-ranked, latest first.
+  while (chosen.length > 1 && sumLo() > span) {
+    const drop = [...chosen].reverse().sort((a, b) => rank(a) - rank(b))[0];
     chosen = chosen.filter((s) => s !== drop);
+    report.dropped.push(`${drop.shows} (no room)`);
   }
-  // Ideal lengths from the energy where each shot falls, scaled to the span, clamped.
+  // Spread fills so no two stills sit together, when possible.
+  chosen = spreadStills(chosen);
+  // Ideal lengths from the music, scaled to the span, within limits.
   let d = chosen.map(() => span / chosen.length);
   for (let pass = 0; pass < 6; pass++) {
     let t = t0;
-    const ideal = chosen.map((s, i) => { const v = target(t + d[i] / 2); t += d[i]; return v; });
+    const ideal = chosen.map((s, i) => { const v = target(s, t + d[i] / 2); t += d[i]; return v; });
     const k = span / ideal.reduce((a, b) => a + b, 0);
     d = ideal.map((v, i) => Math.min(hi(chosen[i]), Math.max(lo(chosen[i]), v * k)));
-    // Hand any shortfall or excess to the shots that still have room.
     for (let r = 0; r < 4; r++) {
       const diff = span - d.reduce((a, b) => a + b, 0);
       if (Math.abs(diff) < 0.05) break;
@@ -93,26 +124,41 @@ function layFootage(bm, shots, t0, t1) {
       d = d.map((v, i) => v + Math.sign(diff) * Math.max(0, room[i]) * Math.min(1, Math.abs(diff) / total));
     }
   }
-  // Snap each boundary to the grid, keeping every shot within its limits.
+  // Boundaries: bar lines next to an aerial, the full cut grid otherwise.
+  const full = cutGrid(bm).filter((g) => g >= t0 - 1e-3 && g <= t1 + 1e-3);
+  const bars = bm.downbeats.filter((g) => g >= t0 - 1e-3 && g <= t1 + 1e-3);
   const bounds = [t0];
   let acc = t0;
   for (let i = 0; i < chosen.length - 1; i++) {
     acc += d[i];
     const prev = bounds.at(-1);
-    const rest = chosen.slice(i + 1).reduce((x, c) => x + Math.min(lo(c), 2.4), 0);
+    const grid = isAerial(chosen[i]) || isAerial(chosen[i + 1]) ? bars : full;
+    const rest = chosen.slice(i + 1).reduce((x, c) => x + lo(c), 0);
     const ok = grid.filter((g) => g >= prev + lo(chosen[i]) - 0.05 && g <= prev + hi(chosen[i]) + 0.05 && g <= t1 - rest + 0.05);
-    const loose = grid.filter((g) => g >= prev + 1.5 && g <= t1 - 1.5);
+    const loose = grid.filter((g) => g >= prev + Math.min(lo(chosen[i]), 3) && g <= t1 - Math.min(rest, 3));
     bounds.push(ok.length ? near(ok, acc) : loose.length ? near(loose, acc) : acc);
     acc = bounds.at(-1);
   }
   bounds.push(t1);
-  return chosen.map((s, i) => {
+  const out = chosen.map((s, i) => {
     const start = bounds[i], end = bounds[i + 1];
-    const x = i === 0 ? 0 : energyAt(bm, start) < 0.5 ? 0.5 : 0;
+    // Dissolve where the music is calm, or between two aerials; a hard cut otherwise.
+    const x = i === 0 ? 0 : energyAt(bm, start) < 0.5 || (isAerial(s) && isAerial(chosen[i - 1])) ? 0.5 : 0;
     const shot = { ...s, start: start - x / 2, end, fadeIn: x, fadeOut: 0 };
     if (shot.caption && end - start < CAP_MIN) delete shot.caption;
     return shot;
   }).map((s, i, all) => (all[i + 1]?.fadeIn ? { ...s, end: s.end + all[i + 1].fadeIn / 2 } : s));
+  report.shots = out.length;
+  report.short = out.filter((s) => isAerial(s) && s.end - s.start < AERIAL_MIN - 0.05).map((s) => s.shows);
+  return { shots: out, report };
+}
+
+function spreadStills(list) {
+  const stills = list.filter((s) => s.fill), clips = list.filter((s) => !s.fill);
+  if (!stills.length || clips.length < 2) return list;
+  const out = [...clips];
+  stills.forEach((st, k) => out.splice(Math.min(out.length, Math.round(((k + 1) * (clips.length + k)) / (stills.length + 1))), 0, st));
+  return out;
 }
 
 // The end card: in on a downbeat, lines on the beats, lockup on the final hit.
@@ -125,7 +171,7 @@ export function closeShot(bm) {
     cues: end.hit ? [lockAt, 0.1, 0.1 + 2 * bm.beat, 0.1 + 4 * bm.beat] : [0, 0.1 + 2 * bm.beat, 0.1 + 4 * bm.beat, 0.1 + 6 * bm.beat] };
 }
 
-export function plan(kind, bm, footage, cards) {
+export function plan(kind, bm, footage, cards, fills = []) {
   const D = bm.duration;
   const hit = hitTime(bm, kind);
   const end = endCard(bm, D);
@@ -144,7 +190,19 @@ export function plan(kind, bm, footage, cards) {
     shots.push({ ...cards.map, start: openEnd - 0.25, end: mapEnd, fadeIn: 0.5, fadeOut: 0 });
     footStart = mapEnd;
   }
-  shots.push(...layFootage(bm, footage, footStart, factsAt));
+  // Never squeeze an aerial: if snapping left one under AERIAL_MIN, drop the
+  // shortest uncaptioned shot and lay the footage out again.
+  let pool = footage, laid = layFootage(bm, pool, footStart, factsAt, fills);
+  for (let tries = 0; laid.report.short.length && tries < 4; tries++) {
+    const foot = laid.shots.filter((x) => !x.fill);
+    const victim = [...foot].filter((x) => !x.caption).sort((x, y) => (x.end - x.start) - (y.end - y.start))[0];
+    if (!victim || foot.length < 2) break;
+    pool = pool.filter((x) => x.shows !== victim.shows);
+    const again = layFootage(bm, pool, footStart, factsAt, fills);
+    again.report.dropped.push(...laid.report.dropped, `${victim.shows} (too little room for a full aerial hold)`);
+    laid = again;
+  }
+  shots.push(...laid.shots);
   const beatsAfter = (t0) => bm.beats.filter((b) => b > t0 + 0.6).map((b) => +(b - t0).toFixed(3));
   const fb = beatsAfter(factsAt);
   const nh = cards.facts.highlights ?? 3;
@@ -153,5 +211,5 @@ export function plan(kind, bm, footage, cards) {
   const cb = beatsAfter(closeAt).map((b) => b - 0.6);
   shots.push({ ...cards.close, ...closeShot(bm) });
   const changes = shots.slice(1).map((s) => +(s.start + (s.fadeIn ?? 0) / 2).toFixed(3));
-  return { shots, duration: D, hit, closeAt, finalHit: end.hit, factsAt, map: mapPlan, changes };
+  return { shots, duration: D, hit, closeAt, finalHit: end.hit, factsAt, map: mapPlan, changes, report: laid.report };
 }

@@ -104,17 +104,6 @@
         },
         {
           "local": {
-            "local": "alley-in-oia-santorini-greece-2026-10-07-03-27-22-utc.mp4",
-            "at": 8,
-            "dur": 5
-          },
-          "fx": 0.5,
-          "dur": 5,
-          "extra": true,
-          "shows": "Another lane in Oia"
-        },
-        {
-          "local": {
             "local": "colorful-view-of-oia-village-and-windmills-on-sant-2026-10-02-12-37-46-utc.mov",
             "at": 0,
             "dur": 5.5
@@ -135,14 +124,6 @@
           "shows": "Santorini's cliffside village at night"
         },
         {
-          "still": "greece-01",
-          "move": "in",
-          "fx": 0.62,
-          "dur": 5,
-          "extra": true,
-          "shows": "Blue domes of Oia"
-        },
-        {
           "local": {
             "local": "an-aerial-footage-of-little-venice-in-mykonos-reve-2026-11-09-23-21-42-utc.mp4",
             "at": 8,
@@ -158,30 +139,11 @@
           ]
         },
         {
-          "local": {
-            "local": "an-aerial-footage-of-little-venice-in-mykonos-reve-2026-11-09-23-21-42-utc.mp4",
-            "at": 17,
-            "dur": 5.5
-          },
-          "fx": 0.5,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Little Venice from the air, Mykonos"
-        },
-        {
           "still": "greece-02",
           "move": "right",
           "fx": 0.6,
           "dur": 5,
           "shows": "Little Venice at sunset, Mykonos"
-        },
-        {
-          "still": "greece-03",
-          "move": "left",
-          "fx": 0.5,
-          "dur": 5,
-          "extra": true,
-          "shows": "The windmills of Mykonos"
         },
         {
           "clip": {
@@ -199,14 +161,6 @@
           ]
         },
         {
-          "still": "greece-04",
-          "move": "out",
-          "fx": 0.55,
-          "dur": 5,
-          "extra": true,
-          "shows": "The Acropolis from Philopappos Hill"
-        },
-        {
           "local": {
             "local": "athens-acropolis-night-view-from-panthenon-2026-10-03-05-34-40-utc.mp4",
             "at": 2,
@@ -216,17 +170,6 @@
           "dur": 6.5,
           "social": true,
           "shows": "The Acropolis lit at night, Athens"
-        },
-        {
-          "local": {
-            "local": "athens-acropolis-night-view-from-panthenon-2026-10-03-05-34-40-utc.mp4",
-            "at": 10,
-            "dur": 5.5
-          },
-          "fx": 0.5,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "The Acropolis at night, from above"
         }
       ],
       "factsBg": 1,
@@ -340,17 +283,6 @@
         },
         {
           "local": {
-            "local": "aerial-footage-of-hallgrimskirkja-church-in-reykja-2026-09-30-13-23-13-utc.mp4",
-            "at": 20.8,
-            "dur": 5.5
-          },
-          "fx": 0.5,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Hallgrímskirkja, Reykjavík, from the air (second angle)"
-        },
-        {
-          "local": {
             "local": "winding-mountain-road-thingvellir-national-park-2026-10-27-21-28-10-utc.mp4",
             "at": 3,
             "dur": 6
@@ -361,18 +293,8 @@
           "caption": [
             "The Golden Circle",
             "Þingvellir, where two continents pull apart"
-          ]
-        },
-        {
-          "local": {
-            "local": "winding-mountain-road-thingvellir-national-park-2026-10-27-21-28-10-utc.mp4",
-            "at": 11.8,
-            "dur": 5.5
-          },
-          "fx": 0.5,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "The road through Þingvellir (second angle)"
+          ],
+          "aerial": true
         },
         {
           "local": {
@@ -382,18 +304,8 @@
           },
           "fx": 0.5,
           "dur": 5.5,
-          "shows": "Öxarárfoss, Þingvellir"
-        },
-        {
-          "local": {
-            "local": "majestic-waterfall-in-thingvellir-national-park-i-2026-10-03-01-17-45-utc.mp4",
-            "at": 10.3,
-            "dur": 5.5
-          },
-          "fx": 0.5,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Öxarárfoss, Þingvellir (second angle)"
+          "shows": "Öxarárfoss, Þingvellir",
+          "aerial": true
         },
         {
           "local": {
@@ -409,17 +321,6 @@
             "Geysir",
             "Strokkur erupts every few minutes"
           ]
-        },
-        {
-          "local": {
-            "local": "top-down-aerial-shot-of-strokkur-geyser-eruption-i-2026-09-30-13-50-23-utc.mp4",
-            "at": 13.8,
-            "dur": 4.9
-          },
-          "fx": 0.5,
-          "dur": 4.9,
-          "extra": true,
-          "shows": "Strokkur geyser erupting (second angle)"
         },
         {
           "local": {
@@ -541,17 +442,6 @@
         },
         {
           "local": {
-            "local": "aerial-view-of-cortona-italy-2026-10-03-05-09-06-utc.mp4",
-            "at": 12.3,
-            "dur": 5.5
-          },
-          "fx": 0.55,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Cortona on its hill, from the air (second angle)"
-        },
-        {
-          "local": {
             "local": "aerial-view-of-cortona-cityscape-italy-2026-10-03-05-13-02-utc.mp4",
             "at": 15,
             "dur": 5.5
@@ -559,17 +449,6 @@
           "fx": 0.5,
           "dur": 5.5,
           "shows": "Cortona's rooftops"
-        },
-        {
-          "local": {
-            "local": "aerial-view-of-cortona-cityscape-italy-2026-10-03-05-13-02-utc.mp4",
-            "at": 23.3,
-            "dur": 5.5
-          },
-          "fx": 0.5,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Cortona's rooftops (second angle)"
         },
         {
           "still": "cortona-02",
@@ -617,17 +496,6 @@
         },
         {
           "local": {
-            "local": "aerial-view-of-cortona-cityscape-italy-2026-10-03-05-13-02-utc.mp4",
-            "at": 39.3,
-            "dur": 5.5
-          },
-          "fx": 0.5,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Cortona and the valley beyond (second angle)"
-        },
-        {
-          "local": {
             "local": "scenic-aerial-view-of-green-rural-landscape-2026-10-03-01-42-31-utc.mp4",
             "at": 2,
             "dur": 6
@@ -639,18 +507,8 @@
           "caption": [
             "Tuscany",
             "All of Tuscany at the window"
-          ]
-        },
-        {
-          "local": {
-            "local": "scenic-aerial-view-of-green-rural-landscape-2026-10-03-01-42-31-utc.mp4",
-            "at": 10.8,
-            "dur": 5.0
-          },
-          "fx": 0.6,
-          "dur": 5.0,
-          "extra": true,
-          "shows": "Tuscan countryside (second angle)"
+          ],
+          "aerial": true
         },
         {
           "local": {
@@ -661,7 +519,8 @@
           "fx": 0.5,
           "dur": 6,
           "social": true,
-          "shows": "A cypress-lined road in Tuscany"
+          "shows": "A cypress-lined road in Tuscany",
+          "aerial": true
         },
         {
           "still": "cortona-03",
@@ -781,17 +640,6 @@
         },
         {
           "local": {
-            "local": "aerial-view-of-edinburgh-castle-united-kingdom-2026-10-03-12-09-38-utc.mp4",
-            "at": 9.8,
-            "dur": 5.5
-          },
-          "fx": 0.45,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Edinburgh Castle from the air (second angle)"
-        },
-        {
-          "local": {
             "local": "tilting-shot-of-the-royal-mile-in-edinburgh-scotl-2026-10-02-13-44-36-utc.mov",
             "at": 2,
             "dur": 5
@@ -806,14 +654,13 @@
         },
         {
           "local": {
-            "local": "tilting-shot-of-the-royal-mile-in-edinburgh-scotl-2026-10-02-13-44-36-utc.mov",
-            "at": 9.8,
-            "dur": 4.8
+            "local": "top-down-aerial-view-of-edinburgh-castle-in-scotla-2026-10-03-03-07-11-utc.mp4",
+            "at": 1,
+            "dur": 6
           },
-          "fx": 0.55,
-          "dur": 4.8,
-          "extra": true,
-          "shows": "The Royal Mile, Edinburgh (second angle)"
+          "fx": 0.5,
+          "dur": 6,
+          "shows": "Edinburgh Castle from directly above"
         },
         {
           "local": {
@@ -832,17 +679,6 @@
         },
         {
           "local": {
-            "local": "aerial-of-loch-ness-scottish-highlands-scotland-2026-10-07-17-36-12-utc.mp4",
-            "at": 10.8,
-            "dur": 5.5
-          },
-          "fx": 0.4,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Loch Ness from the air (second angle)"
-        },
-        {
-          "local": {
             "local": "aerial-shot-of-urquhart-castle-on-loch-ness-scott-2026-10-07-20-11-36-utc.mp4",
             "at": 3,
             "dur": 6
@@ -850,17 +686,6 @@
           "fx": 0.55,
           "dur": 6,
           "shows": "Urquhart Castle on Loch Ness"
-        },
-        {
-          "local": {
-            "local": "aerial-shot-of-urquhart-castle-on-loch-ness-scott-2026-10-07-20-11-36-utc.mp4",
-            "at": 11.8,
-            "dur": 5.5
-          },
-          "fx": 0.55,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Urquhart Castle on Loch Ness (second angle)"
         },
         {
           "local": {
@@ -878,14 +703,13 @@
         },
         {
           "local": {
-            "local": "aerial-view-of-glasgow-city-center-scotland-2026-10-02-12-46-15-utc.mov",
-            "at": 18.8,
-            "dur": 5.5
+            "local": "drone-view-of-people-s-palace-in-glasgow-green-par-2026-10-03-03-42-07-utc.mp4",
+            "at": 1,
+            "dur": 6
           },
           "fx": 0.5,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Kelvingrove, Glasgow (second angle)"
+          "dur": 6,
+          "shows": "The People's Palace, Glasgow Green"
         },
         {
           "local": {
@@ -900,18 +724,8 @@
           "caption": [
             "Glencoe",
             "A day in the West Highlands"
-          ]
-        },
-        {
-          "local": {
-            "local": "three-sisters-of-glencoe-in-the-highlands-of-scotl-2026-10-03-00-19-33-utc.mp4",
-            "at": 10.8,
-            "dur": 5.5
-          },
-          "fx": 0.4,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "The Three Sisters of Glencoe (second angle)"
+          ],
+          "aerial": true
         },
         {
           "local": {
@@ -925,17 +739,6 @@
         },
         {
           "local": {
-            "local": "aerial-view-of-glencoe-lochan-on-a-sunny-day-glen-2026-10-02-22-15-19-utc.mp4",
-            "at": 10.3,
-            "dur": 5.5
-          },
-          "fx": 0.5,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Glencoe Lochan (second angle)"
-        },
-        {
-          "local": {
             "local": "boat-sailing-on-a-lake-with-mountain-backdrop-2026-10-02-14-12-30-utc.mov",
             "at": 2,
             "dur": 6
@@ -943,18 +746,19 @@
           "fx": 0.55,
           "dur": 6,
           "social": true,
-          "shows": "A boat on a Highland loch"
+          "shows": "A boat on a Highland loch",
+          "aerial": true
         },
         {
           "local": {
-            "local": "boat-sailing-on-a-lake-with-mountain-backdrop-2026-10-02-14-12-30-utc.mov",
-            "at": 10.8,
-            "dur": 5.5
+            "local": "picturesque-lakeside-village-with-mountain-backdro-2026-10-07-17-56-27-utc.mp4",
+            "at": 4,
+            "dur": 6
           },
-          "fx": 0.55,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "A boat on a Highland loch (second angle)"
+          "fx": 0.5,
+          "dur": 6,
+          "shows": "A lochside village below the hills",
+          "aerial": true
         },
         {
           "still": "scotland-01",
@@ -1027,17 +831,6 @@
         },
         {
           "local": {
-            "local": "sunrise-view-from-vehicle-of-kruger-park-adventure-2026-10-02-15-14-42-utc.mov",
-            "at": 9.8,
-            "dur": 4.5
-          },
-          "fx": 0.55,
-          "dur": 4.5,
-          "extra": true,
-          "shows": "Sunrise from a game-drive vehicle, Kruger (second angle)"
-        },
-        {
-          "local": {
             "local": "aerial-view-of-safari-tents-in-tropical-wilderness-2026-10-03-04-22-07-utc.mp4",
             "at": 8,
             "dur": 6
@@ -1052,17 +845,6 @@
         },
         {
           "local": {
-            "local": "aerial-view-of-safari-tents-in-tropical-wilderness-2026-10-03-04-22-07-utc.mp4",
-            "at": 16.8,
-            "dur": 5.5
-          },
-          "fx": 0.5,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "A tented safari camp from the air (second angle)"
-        },
-        {
-          "local": {
             "local": "elephants-drinking-at-watering-hole-at-sunrise-2026-09-30-02-59-32-utc.mp4",
             "at": 3,
             "dur": 6
@@ -1071,17 +853,6 @@
           "dur": 6,
           "social": true,
           "shows": "Elephants at a waterhole at sunrise"
-        },
-        {
-          "local": {
-            "local": "elephants-drinking-at-watering-hole-at-sunrise-2026-09-30-02-59-32-utc.mp4",
-            "at": 11.8,
-            "dur": 5.5
-          },
-          "fx": 0.5,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Elephants at a waterhole at sunrise (second angle)"
         },
         {
           "local": {
@@ -1100,17 +871,6 @@
         },
         {
           "local": {
-            "local": "lions-crossing-dusty-road-at-sunrise-2026-10-02-14-46-43-utc.mov",
-            "at": 18.8,
-            "dur": 5.5
-          },
-          "fx": 0.6,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Lions crossing a dirt road (second angle)"
-        },
-        {
-          "local": {
             "local": "feeding-giraffes-in-dawn-mist-south-africa-2026-10-02-22-14-18-utc.mp4",
             "at": 4,
             "dur": 6
@@ -1118,17 +878,6 @@
           "fx": 0.6,
           "dur": 6,
           "shows": "Giraffes feeding in the dawn mist"
-        },
-        {
-          "local": {
-            "local": "feeding-giraffes-in-dawn-mist-south-africa-2026-10-02-22-14-18-utc.mp4",
-            "at": 12.8,
-            "dur": 5.5
-          },
-          "fx": 0.6,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Giraffes feeding in the dawn mist (second angle)"
         },
         {
           "local": {
@@ -1142,18 +891,8 @@
           "caption": [
             "Game drives",
             "Out every day with a guide"
-          ]
-        },
-        {
-          "local": {
-            "local": "woman-sitting-on-top-of-4-wheel-drive-while-on-wil-2026-10-02-23-06-59-utc.mp4",
-            "at": 16.8,
-            "dur": 5.5
-          },
-          "fx": 0.55,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "A traveler on a game-drive vehicle (second angle)"
+          ],
+          "aerial": true
         },
         {
           "local": {
@@ -1179,17 +918,6 @@
             "Evenings",
             "A traditional bush braai"
           ]
-        },
-        {
-          "local": {
-            "local": "silhouette-of-a-giraffe-walking-across-the-savanna-2026-10-03-15-25-27-utc.mp4",
-            "at": 9.8,
-            "dur": 5.5
-          },
-          "fx": 0.45,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "A giraffe at sunset (second angle)"
         }
       ],
       "factsBg": 1,
@@ -1283,7 +1011,8 @@
           "caption": [
             "Lisbon",
             "Hills, trams and river light"
-          ]
+          ],
+          "aerial": true
         },
         {
           "local": {
@@ -1322,17 +1051,6 @@
         },
         {
           "local": {
-            "local": "aerial-drone-view-of-park-and-palace-of-monserrate-2026-10-05-00-31-10-utc.mp4",
-            "at": 12.3,
-            "dur": 5.0
-          },
-          "fx": 0.5,
-          "dur": 5.0,
-          "extra": true,
-          "shows": "The Palace of Monserrate, Sintra (second angle)"
-        },
-        {
-          "local": {
             "local": "aerial-view-of-porto-city-and-douro-river-at-sunse-2026-10-03-15-08-10-utc.mp4",
             "at": 2,
             "dur": 6
@@ -1344,6 +1062,16 @@
             "Porto",
             "A private guided drive north"
           ]
+        },
+        {
+          "local": {
+            "local": "aerial-view-of-arrabida-bridge-over-douro-river-2026-10-03-05-10-02-utc.mp4",
+            "at": 2,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "shows": "The Arrábida bridge over the Douro, Porto"
         },
         {
           "local": {
@@ -1364,18 +1092,8 @@
           },
           "fx": 0.5,
           "dur": 5,
-          "shows": "A tram crossing the Dom Luís I bridge, Porto"
-        },
-        {
-          "local": {
-            "local": "tram-rides-across-the-bridge-in-porto-2026-10-01-05-38-48-utc.mp4",
-            "at": 10.8,
-            "dur": 5.5
-          },
-          "fx": 0.5,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "A tram crossing the Dom Luís I bridge, Porto (second angle)"
+          "shows": "A tram crossing the Dom Luís I bridge, Porto",
+          "aerial": true
         },
         {
           "local": {
@@ -1401,17 +1119,6 @@
           "fx": 0.5,
           "dur": 6,
           "shows": "A river cruise on the Douro"
-        },
-        {
-          "local": {
-            "local": "aerial-view-of-river-cruise-through-lush-valley-2026-10-03-03-50-45-utc.mp4",
-            "at": 11.8,
-            "dur": 5.5
-          },
-          "fx": 0.5,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "A river cruise on the Douro (second angle)"
         }
       ],
       "factsBg": 0,
@@ -1478,17 +1185,6 @@
         },
         {
           "local": {
-            "local": "aerial-view-of-the-majestic-arenal-volcano-under-a-2026-11-05-18-50-02-utc.mp4",
-            "at": 9.8,
-            "dur": 5.5
-          },
-          "fx": 0.5,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Arenal Volcano from the air (second angle)"
-        },
-        {
-          "local": {
             "local": "discovering-the-magnificent-suspension-bridges-fou-2026-10-03-02-15-32-utc.mp4",
             "at": 5,
             "dur": 5.5
@@ -1510,17 +1206,6 @@
             "The rainforest",
             "Toucans, sloths and hanging bridges"
           ]
-        },
-        {
-          "local": {
-            "local": "collared-aracari-perched-on-mossy-branch-in-rainfo-2026-10-02-19-56-38-utc.mov",
-            "at": 9.8,
-            "dur": 5.5
-          },
-          "fx": 0.5,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "A collared aracari in the rainforest (second angle)"
         },
         {
           "local": {
@@ -1546,18 +1231,28 @@
           "caption": [
             "Two tours of your choosing",
             "Ziplining through the canopy"
-          ]
+          ],
+          "aerial": true
         },
         {
           "local": {
-            "local": "person-zip-lining-through-a-tropical-rainforest-ca-2026-10-02-15-46-13-utc.mp4",
-            "at": 10.8,
-            "dur": 4.7
+            "local": "mountain-aerial-view-at-golden-hour-2026-10-02-22-05-12-utc.mp4",
+            "at": 1,
+            "dur": 6
           },
           "fx": 0.5,
-          "dur": 4.7,
-          "extra": true,
-          "shows": "A traveler ziplining over the canopy (second angle)"
+          "dur": 6,
+          "shows": "Arenal at golden hour"
+        },
+        {
+          "local": {
+            "local": "colorful-toucan-bird-perched-on-branch-in-rainfore-2026-10-02-21-44-16-utc.mov",
+            "at": 1,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "shows": "A toucan in the rainforest"
         },
         {
           "local": {
@@ -1567,7 +1262,19 @@
           },
           "fx": 0.5,
           "dur": 5.5,
-          "shows": "A treehouse in the rainforest"
+          "shows": "A treehouse in the rainforest",
+          "aerial": true
+        },
+        {
+          "local": {
+            "local": "ziplining-through-the-lush-tropical-forest-canopy-2026-10-03-02-20-32-utc.mp4",
+            "at": 3,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "shows": "Ziplining through the canopy",
+          "aerial": true
         },
         {
           "local": {
@@ -1585,13 +1292,24 @@
         },
         {
           "local": {
+            "local": "beautiful-sunset-at-beach-costa-rica-shot-on-red-2026-09-30-10-11-38-utc.mp4",
+            "at": 0.5,
+            "dur": 6
+          },
+          "fx": 0.5,
+          "dur": 6,
+          "shows": "Sunset over the Pacific"
+        },
+        {
+          "local": {
             "local": "sunlight-hitting-the-trees-and-wide-sand-beach-in-2026-10-02-21-52-26-utc.mp4",
             "at": 2,
             "dur": 5.5
           },
           "fx": 0.4,
           "dur": 5.5,
-          "shows": "Palms and a wide sand beach"
+          "shows": "Palms and a wide sand beach",
+          "aerial": true
         },
         {
           "local": {
@@ -1729,17 +1447,6 @@
         },
         {
           "local": {
-            "local": "juneau-alaska-aerial-push-2026-10-03-03-45-18-utc.mp4",
-            "at": 11.8,
-            "dur": 5.5
-          },
-          "fx": 0.4,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Juneau from the air (second angle)"
-        },
-        {
-          "local": {
             "local": "powerful-nugget-falls-cascading-into-mendenhall-la-2026-10-19-15-30-54-utc.mp4",
             "at": 2,
             "dur": 5.5
@@ -1750,18 +1457,8 @@
           "caption": [
             "Mendenhall",
             "Nugget Falls and the glacier lake"
-          ]
-        },
-        {
-          "local": {
-            "local": "powerful-nugget-falls-cascading-into-mendenhall-la-2026-10-19-15-30-54-utc.mp4",
-            "at": 10.3,
-            "dur": 5.5
-          },
-          "fx": 0.6,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "Nugget Falls, Mendenhall Lake (second angle)"
+          ],
+          "aerial": true
         },
         {
           "local": {
@@ -1786,18 +1483,8 @@
           "caption": [
             "Skagway",
             "The gold-rush railway"
-          ]
-        },
-        {
-          "local": {
-            "local": "historic-white-pass-yukon-route-railway-in-skagway-2026-10-03-05-27-12-utc.mp4",
-            "at": 10.8,
-            "dur": 4.7
-          },
-          "fx": 0.5,
-          "dur": 4.7,
-          "extra": true,
-          "shows": "The White Pass & Yukon Route railway, Skagway (second angle)"
+          ],
+          "aerial": true
         },
         {
           "local": {
@@ -1813,17 +1500,6 @@
             "Shore excursions",
             "A credit toward your own adventure"
           ]
-        },
-        {
-          "local": {
-            "local": "grizzly-bear-chasing-and-catching-red-sockeye-salm-2026-10-23-18-48-31-utc.mp4",
-            "at": 16.8,
-            "dur": 5.5
-          },
-          "fx": 0.55,
-          "dur": 5.5,
-          "extra": true,
-          "shows": "A brown bear fishing for salmon (second angle)"
         },
         {
           "still": "alaska-03",
@@ -1845,7 +1521,8 @@
           "fx": 0.5,
           "dur": 5.5,
           "social": true,
-          "shows": "Sailing the Gastineau Channel at sunset"
+          "shows": "Sailing the Gastineau Channel at sunset",
+          "aerial": true
         },
         {
           "still": "alaska-05",

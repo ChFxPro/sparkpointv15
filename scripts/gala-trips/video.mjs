@@ -6,10 +6,10 @@
 import { createHash } from 'node:crypto';
 import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { CACHE, SCRATCH, UA, exists, fetchWithRetry, packDir, require, sleep, writeJson } from './lib.mjs';
 import { factsLine, mapFramesTimed, SIZES } from './map.mjs';
-import { mapTiming, plan } from './plan.mjs';
+import { isAerial, mapTiming, plan, sourceKey } from './plan.mjs';
 import { ffmpeg, open, renderVideo, video } from './render.mjs';
 
 const sharp = require('sharp');
@@ -147,7 +147,51 @@ async function prepareShots(trip, pack) {
     shots.push(shot);
   }
   const cards = stills.map((s) => pathToFileURL(packDir(trip.id, 'stills', s.files[2400])).href);
-  return { shots, sources, cards };
+  // Stills the reel doesn't use, to fill with a slow push if footage runs short.
+  const usedStills = new Set(pack.reel.filter((r) => r.still).map((r) => r.still));
+  const moves = ['in', 'right', 'out', 'left'];
+  const fills = stills.filter((st) => ![...usedStills].some((u) => st.file.startsWith(u))).map((st, i) => ({
+    still: st.file, shows: st.place, image: pathToFileURL(packDir(trip.id, 'stills', st.files[2400])).href, move: moves[i % 4], fx: 0.5, social: true,
+    source: st.source,
+  }));
+  return { shots, sources, cards, fills };
+}
+
+// Look-alike check between neighbours (Jeff's rule 1): the last frame of one
+// shot against the first of the next, by perceptual hash and colour histogram.
+async function shotFrame(s, which) {
+  if (s.image) return fileURLToPath(s.image);
+  if (!s.frames) return null;
+  const len = s.end - s.start;
+  const idx = which === 'first' ? 1 : Math.max(1, Math.min(s.frames.count, Math.floor(len * s.frames.fps)));
+  return fileURLToPath(s.frames.pattern.replace('%05d', String(idx).padStart(5, '0')));
+}
+async function looks(file) {
+  const g = await sharp(file).resize(9, 8, { fit: 'fill' }).grayscale().raw().toBuffer();
+  const hash = [];
+  for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) hash.push(g[y * 9 + x + 1] > g[y * 9 + x]);
+  const c = await sharp(file).resize(32, 18, { fit: 'fill' }).removeAlpha().raw().toBuffer();
+  const h = new Array(48).fill(0);
+  for (let i = 0; i < c.length; i += 3) for (let k = 0; k < 3; k++) h[k * 16 + (c[i + k] >> 4)]++;
+  return { hash, h };
+}
+function corr(a, b) {
+  const ma = a.reduce((x, y) => x + y, 0) / a.length, mb = b.reduce((x, y) => x + y, 0) / b.length;
+  let n = 0, da = 0, db = 0;
+  for (let i = 0; i < a.length; i++) { n += (a[i] - ma) * (b[i] - mb); da += (a[i] - ma) ** 2; db += (b[i] - mb) ** 2; }
+  return n / Math.sqrt(da * db + 1e-9);
+}
+async function lookAlikes(shots) {
+  const out = [];
+  const foot = shots.filter((s) => !s.card && !s.map);
+  for (let i = 1; i < foot.length; i++) {
+    const a = await shotFrame(foot[i - 1], 'last'), b = await shotFrame(foot[i], 'first');
+    if (!a || !b) continue;
+    const [x, y] = await Promise.all([looks(a), looks(b)]);
+    const ham = x.hash.filter((v, k) => v !== y.hash[k]).length, hc = corr(x.h, y.h);
+    if (ham <= 8 && hc >= 0.94) out.push({ from: foot[i - 1].shows, to: foot[i].shows, hash: ham, hist: +hc.toFixed(3) });
+  }
+  return out;
 }
 
 // Frames of an MP4, for the compositor.
@@ -177,8 +221,19 @@ export async function buildVideo(browser, trip, pack, { price = null, when, cuts
       facts: { card: 'facts', shade: 'card', image: prepared.cards[pack.factsBg ?? 1], move: move('out'), highlights: pack.highlights.length },
       close: { card: 'close', shade: 'night' },
     };
-    const footage = prepared.shots.map(foot).filter((s) => kind === 'full' || s.social);
-    const p = plan(kind, bm, footage, cards);
+    let footage = prepared.shots.map(foot).filter((s) => kind === 'full' || s.social);
+    const fills = prepared.fills.map(foot);
+    let p = plan(kind, bm, footage, cards, fills);
+    // Rule 1: if neighbours look alike, move the second one later and re-plan.
+    let alike = await lookAlikes(p.shots);
+    for (let tries = 0; alike.length && tries < 4; tries++) {
+      const i = footage.findIndex((s) => s.shows === alike[0].to);
+      if (i < 0 || i >= footage.length - 1) break;
+      [footage[i], footage[i + 1]] = [footage[i + 1], footage[i]];
+      p = plan(kind, bm, footage, cards, fills);
+      alike = await lookAlikes(p.shots);
+    }
+    p.report.lookAlikes = alike;
     if (p.map && !planOnly) {
       const m = p.shots.find((s) => s.map);
       const timing = mapTiming(bm, m.end - m.start, pack.stops.filter((s) => s.at).length);
@@ -196,9 +251,17 @@ export async function buildVideo(browser, trip, pack, { price = null, when, cuts
       when,
     };
     const edit = { duration, hit: p.hit, factsAt: p.factsAt, closeAt: p.closeAt, finalHit: p.finalHit, changes: p.changes, map: p.map,
-      shots: shots.map((s) => ({ start: +s.start.toFixed(3), end: +s.end.toFixed(3), fadeIn: s.fadeIn, what: s.card ?? (s.map ? 'map' : s.shows), caption: s.caption ? s.caption.join(' — ') : null })) };
+      report: p.report,
+      shots: shots.map((s) => ({ start: +s.start.toFixed(3), end: +s.end.toFixed(3), fadeIn: s.fadeIn, what: s.card ?? (s.map ? 'map' : s.shows),
+        caption: s.caption ? s.caption.join(' — ') : null, source: s.card || s.map ? null : sourceKey(s), aerial: isAerial(s), fill: Boolean(s.fill),
+        window: s.local ? [s.local.at, s.local.dur] : s.clip ? [s.clip.at, s.clip.dur] : null })) };
     // The reel data, so web.mjs can re-render loop moments without text.
     await writeJson(join(SCRATCH, 'reels', `${trip.id}-${layout}.json`), data);
+    if (planOnly === 'dry') {
+      await writeJson(join(SCRATCH, 'plans', `${trip.id}-${layout}.json`), edit);
+      console.log(`${trip.id}: planned ${layout}`);
+      continue;
+    }
     if (planOnly) {
       const saved = JSON.parse(await readFile(packDir(trip.id, 'video', `edit-${layout}.json`), 'utf8'));
       const same = JSON.stringify(saved.changes) === JSON.stringify(edit.changes);

@@ -207,7 +207,7 @@ try {
     const price = priceFor(trip);
     if (want('map')) await buildMap(browser, trip, pack, config.home);
     if (only?.includes('plan')) {
-      await buildVideo(browser, trip, pack, { price, when: WHEN, cuts, score: await scoreTrip(trip, pack, config), home: config.home, planOnly: true });
+      await buildVideo(browser, trip, pack, { price, when: WHEN, cuts, score: await scoreTrip(trip, pack, config), home: config.home, planOnly: args.includes('--dry') ? 'dry' : true });
       continue;
     }
     const score = want('video') || want('audio') ? await scoreTrip(trip, pack, config) : null;

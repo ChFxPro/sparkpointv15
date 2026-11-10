@@ -96,6 +96,14 @@ def audit_cut(trips_dir, trip, reel, layout):
     by_show = {r.get('shows'): r for r in reel}
     foot = []
     for s in edit['shots']:
+        if s.get('source'):  # newer edits record their source directly
+            w = s.get('window') or [0, 0]
+            kind = 'clip' if s.get('window') else 'still'
+            r = by_show.get(s['what'], {'shows': s['what']})
+            if s.get('aerial'):
+                r = {**r, 'shows': r.get('shows', '') + ' aerial'}
+            foot.append((s, r, (kind, s['source'], w[0], w[1])))
+            continue
         r = by_show.get(s['what'])
         if r is None:
             foot.append(None)

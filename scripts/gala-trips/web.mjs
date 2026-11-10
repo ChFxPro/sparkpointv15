@@ -136,7 +136,12 @@ async function sourcesFor(trip, pack, v, shotNames) {
   const out = new Map();
   for (const name of shotNames) {
     const r = pack.reel.find((x) => x.shows === name);
-    if (!r) continue;
+    if (!r) {
+      // A fill still (a pack still the reel doesn't list).
+      const st = stills.find((x) => x.place === name);
+      if (st) out.set(st.source.title, { file: st.source.title.replace(/^File:/, ''), shows: name, credit: st.source.author, licence: st.source.license, url: st.source.page });
+      continue;
+    }
     let e = null;
     if (r.local) e = { file: 'Envato Elements footage', credit: 'Envato Elements', licence: 'Envato Elements licence', url: '' };
     else if (r.clip || r.commonsStill) {
