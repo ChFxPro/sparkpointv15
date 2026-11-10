@@ -88,9 +88,16 @@
           "text": "Envato Elements"
         },
         {
+          "label": "Gullfoss with a rainbow",
+          "author": "Diego Delso",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gullfoss,_Su%C3%B0urland,_Islandia,_2014-08-16,_DD_123.JPG",
+          "license": "CC BY-SA 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+        },
+        {
           "label": "Reykjavík at dusk",
           "author": "Diego Delso",
-          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vista_de_Reikiavik_desde_Perlan,_Distrito_de_la_Capital,_Islandia,_2014-08-13,_DD_118-120_HDR.JPG",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gullfoss,_Su%C3%B0urland,_Islandia,_2014-08-16,_DD_123.JPG",
           "license": "CC BY-SA 4.0",
           "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
         }
@@ -266,6 +273,35 @@
     "captions": [
       {
         "file": "portugal-film-16x9-web.vtt",
+        "lang": "en"
+      }
+    ],
+    "credit": "Footage and music: Envato Elements."
+  },
+  "costa-rica": {
+    "loopWide": {
+      "webm": "costa-rica-loop-card-16x9.webm",
+      "mp4": "costa-rica-loop-card-16x9.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        }
+      ]
+    },
+    "loopTall": {
+      "webm": "costa-rica-loop-card-4x5.webm",
+      "mp4": "costa-rica-loop-card-4x5.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        }
+      ]
+    },
+    "poster": "costa-rica-loop-poster-16x9.webp",
+    "film": "costa-rica-film-16x9-web.mp4",
+    "captions": [
+      {
+        "file": "costa-rica-film-16x9-web.vtt",
         "lang": "en"
       }
     ],
