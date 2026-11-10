@@ -127,21 +127,14 @@ function layFootage(bm, shots, t0, t1, fills = []) {
   // Boundaries: bar lines next to an aerial, the full cut grid otherwise.
   const full = cutGrid(bm).filter((g) => g >= t0 - 1e-3 && g <= t1 + 1e-3);
   const bars = bm.downbeats.filter((g) => g >= t0 - 1e-3 && g <= t1 + 1e-3);
-  const bounds = [t0];
-  let acc = t0;
-  for (let i = 0; i < chosen.length - 1; i++) {
-    acc += d[i];
-    const prev = bounds.at(-1);
-    const grid = isAerial(chosen[i]) || isAerial(chosen[i + 1]) ? bars : full;
-    const rest = chosen.slice(i + 1).reduce((x, c) => x + lo(c), 0);
-    const ok = grid.filter((g) => g >= prev + lo(chosen[i]) - 0.05 && g <= prev + hi(chosen[i]) + 0.05 && g <= t1 - rest + 0.05);
-    const loose = grid.filter((g) => g >= prev + Math.min(lo(chosen[i]), 3) && g <= t1 - Math.min(rest, 3));
-    bounds.push(ok.length ? near(ok, acc) : loose.length ? near(loose, acc) : acc);
-    acc = bounds.at(-1);
-  }
-  bounds.push(t1);
+  // Choose all boundaries together (dynamic programming over the grid): each
+  // shot within [lo, hi], lengths as close as possible to the ideal.
+  const bounds = snapAll(chosen, d, t0, t1, (i) => (isAerial(chosen[i]) || isAerial(chosen[i + 1]) ? bars : full), lo, hi);
+  if (!bounds) { report.infeasible = true; }
+  const B = bounds ?? (() => { const r = [t0]; let t = t0; for (const x of d.slice(0, -1)) r.push((t += x)); return r; })();
+  B.push(t1);
   const out = chosen.map((s, i) => {
-    const start = bounds[i], end = bounds[i + 1];
+    const start = B[i], end = B[i + 1];
     // Dissolve where the music is calm, or between two aerials; a hard cut otherwise.
     const x = i === 0 ? 0 : energyAt(bm, start) < 0.5 || (isAerial(s) && isAerial(chosen[i - 1])) ? 0.5 : 0;
     const shot = { ...s, start: start - x / 2, end, fadeIn: x, fadeOut: 0 };
@@ -149,8 +142,37 @@ function layFootage(bm, shots, t0, t1, fills = []) {
     return shot;
   }).map((s, i, all) => (all[i + 1]?.fadeIn ? { ...s, end: s.end + all[i + 1].fadeIn / 2 } : s));
   report.shots = out.length;
-  report.short = out.filter((s) => isAerial(s) && s.end - s.start < AERIAL_MIN - 0.05).map((s) => s.shows);
+  report.short = out.filter((s) => s.end - s.start - (s.fadeIn ?? 0) / 2 < lo(s) - 0.15).map((s) => s.shows);
+  if (report.infeasible && !report.short.length) report.short = [out.at(-1).shows];
   return { shots: out, report };
+}
+
+function snapAll(chosen, d, t0, t1, gridFor, lo, hi) {
+  const n = chosen.length;
+  if (n === 1) return [t0];
+  let layer = new Map([[t0, { cost: 0, path: [t0] }]]);
+  for (let i = 0; i < n - 1; i++) {
+    const next = new Map();
+    for (const g of gridFor(i)) {
+      if (g <= t0 + 0.5 || g >= t1 - 0.5) continue;
+      for (const [p, v] of layer) {
+        const len = g - p;
+        if (len < lo(chosen[i]) - 0.05 || len > hi(chosen[i]) + 0.05) continue;
+        const c = v.cost + (len - d[i]) ** 2;
+        if (!next.has(g) || next.get(g).cost > c) next.set(g, { cost: c, path: [...v.path, g] });
+      }
+    }
+    if (!next.size) return null;
+    layer = next;
+  }
+  let best = null;
+  for (const [p, v] of layer) {
+    const len = t1 - p, last = chosen[n - 1];
+    if (len < lo(last) - 0.05 || len > hi(last) + 0.05) continue;
+    const c = v.cost + (len - d[n - 1]) ** 2;
+    if (!best || c < best.cost) best = { cost: c, path: v.path };
+  }
+  return best ? best.path : null;
 }
 
 function spreadStills(list) {
@@ -199,7 +221,7 @@ export function plan(kind, bm, footage, cards, fills = []) {
     if (!victim || foot.length < 2) break;
     pool = pool.filter((x) => x.shows !== victim.shows);
     const again = layFootage(bm, pool, footStart, factsAt, fills);
-    again.report.dropped.push(...laid.report.dropped, `${victim.shows} (too little room for a full aerial hold)`);
+    again.report.dropped.push(...laid.report.dropped, `${victim.shows} (too little room for its minimum hold)`);
     laid = again;
   }
   shots.push(...laid.shots);
