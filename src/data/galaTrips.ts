@@ -21,9 +21,13 @@ export const GALA_SHOW_TRIP_PRICES = false;
 
 export interface GalaTripStop {
   name: string;
-  /** Decimal degrees. Filled in from the kit once the research session adds them. */
+  /** Decimal degrees, from the kit's research (trips.json `stops`). */
   lat?: number;
   lon?: number;
+  /** Nights spent here; 0 for a day visit or port call. */
+  nights?: number;
+  /** Map only: left off the card's stop line (an arrival airport, a return leg). */
+  routeOnly?: boolean;
 }
 
 export interface GalaTrip {
@@ -48,8 +52,22 @@ export interface GalaTrip {
   code: string;
   /** Public price in USD; null until set. Rendered only when GALA_SHOW_TRIP_PRICES is true. */
   price: number | null;
-  /** A still from the trip's promo pack (trips/<id>/pack/stills/), once one is in. */
-  image?: { src: string; srcSet?: string; alt: string };
+  /**
+   * The hero still from the trip's promo pack (trips/<id>/pack/stills/, `01`),
+   * copied to public/assets/events/gala/trips/. `credit` is stills.json's credit
+   * line, used exactly: the photos are CC BY / CC BY-SA and need visible credit.
+   */
+  image?: {
+    file: string;
+    alt: string;
+    /** Caption place name; null where it could mislead (South Africa's camp isn't named). */
+    place: string | null;
+    credit: string;
+    sourceUrl: string;
+    licenseUrl: string;
+    width: number;
+    height: number;
+  };
 }
 
 export const GALA_TRIPS: GalaTrip[] = [
@@ -71,10 +89,25 @@ export const GALA_TRIPS: GalaTrip[] = [
       'Inter-island flight and ferry to Mykonos',
       'Half-day guided tour of Athens',
     ],
-    stops: [{ name: 'Santorini' }, { name: 'Mykonos' }, { name: 'Athens' }],
+    stops: [
+      { name: "Athens airport", lat: 37.9364, lon: 23.9445, nights: 0, routeOnly: true },
+      { name: "Santorini", lat: 36.4166, lon: 25.432, nights: 3 },
+      { name: "Mykonos", lat: 37.4467, lon: 25.3289, nights: 3 },
+      { name: "Athens", lat: 37.9715, lon: 23.7257, nights: 2 },
+    ],
     board: 'GREECE',
     code: 'ATH',
     price: null,
+    image: {
+      file: "greece-01-santorini-oia",
+      alt: "Blue-domed white churches of Oia above the Santorini caldera and the Aegean Sea",
+      place: "Oia, Santorini",
+      credit: "Giles Laurent / CC BY-SA 4.0, via Wikimedia Commons",
+      sourceUrl: "https://commons.wikimedia.org/wiki/File:1000_Three_domes_of_Oia_in_Santorini_Photo_by_Giles_Laurent.jpg",
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0",
+      width: 2400,
+      height: 1600,
+    },
   },
   {
     id: 'iceland',
@@ -94,10 +127,26 @@ export const GALA_TRIPS: GalaTrip[] = [
       'Guided Golden Circle tour with farm lunch',
       'Sky Lagoon with the 7-step spa ritual',
     ],
-    stops: [{ name: 'Reykjavík' }, { name: 'Golden Circle (Þingvellir, Geysir, Gullfoss)' }, { name: 'Sky Lagoon' }],
+    stops: [
+      { name: "Reykjavík", lat: 64.1466, lon: -21.9426, nights: 6 },
+      { name: "Þingvellir National Park", lat: 64.2559, lon: -21.1299, nights: 0 },
+      { name: "Geysir / Strokkur", lat: 64.3104, lon: -20.3024, nights: 0 },
+      { name: "Gullfoss", lat: 64.3271, lon: -20.1199, nights: 0 },
+      { name: "Sky Lagoon", lat: 64.115, lon: -21.945, nights: 0 },
+    ],
     board: 'ICELAND',
     code: 'KEF',
     price: null,
+    image: {
+      file: "iceland-01-gullfoss",
+      alt: "Gullfoss waterfall plunging into its canyon with a rainbow in the spray",
+      place: "Gullfoss, Golden Circle",
+      credit: "Diego Delso / CC BY-SA 4.0, via Wikimedia Commons",
+      sourceUrl: "https://commons.wikimedia.org/wiki/File:Gullfoss,_Su%C3%B0urland,_Islandia,_2014-08-16,_DD_123.JPG",
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0",
+      width: 2400,
+      height: 1482,
+    },
   },
   {
     id: 'cortona',
@@ -117,10 +166,22 @@ export const GALA_TRIPS: GalaTrip[] = [
       'Gourmet tasting dinner with wine pairings',
       'Private 2-hour guided walk of the old town',
     ],
-    stops: [{ name: 'Cortona' }],
+    stops: [
+      { name: "Cortona", lat: 43.2753, lon: 11.9858, nights: 6 },
+    ],
     board: 'CORTONA',
     code: 'FLR',
     price: null,
+    image: {
+      file: "cortona-01-cortona-hilltop",
+      alt: "The walled hilltop town of Cortona among olive terraces, seen from the air",
+      place: "Cortona",
+      credit: "TeKappa / CC BY-SA 4.0, via Wikimedia Commons",
+      sourceUrl: "https://commons.wikimedia.org/wiki/File:Cortona_dall%27aereo.jpg",
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0",
+      width: 2400,
+      height: 1598,
+    },
   },
   {
     id: 'scotland',
@@ -140,10 +201,27 @@ export const GALA_TRIPS: GalaTrip[] = [
       'Edinburgh Castle and Royal Mile tour',
       'Loch Ness cruise and West Highlands day trips',
     ],
-    stops: [{ name: 'Edinburgh' }, { name: 'Loch Ness' }, { name: 'Glasgow' }, { name: 'Glencoe' }, { name: 'Loch Lomond' }],
+    stops: [
+      { name: "Edinburgh", lat: 55.9486, lon: -3.1999, nights: 4 },
+      { name: "Inverness", lat: 57.4778, lon: -4.2247, nights: 0 },
+      { name: "Loch Ness / Urquhart Castle", lat: 57.3242, lon: -4.4419, nights: 0 },
+      { name: "Glasgow", lat: 55.8642, lon: -4.2518, nights: 3 },
+      { name: "Glencoe", lat: 56.6826, lon: -5.1023, nights: 0 },
+      { name: "Loch Lomond", lat: 56.101, lon: -4.638, nights: 0 },
+    ],
     board: 'SCOTLAND',
     code: 'EDI',
     price: null,
+    image: {
+      file: "scotland-01-glencoe",
+      alt: "Golden evening light on the mountains of Glencoe in the Scottish Highlands",
+      place: "Glencoe, West Highlands",
+      credit: "john mcsporran from Trossachs, Scotland / CC BY 2.0, via Wikimedia Commons",
+      sourceUrl: "https://commons.wikimedia.org/wiki/File:Glencoe_(26642526873).jpg",
+      licenseUrl: "https://creativecommons.org/licenses/by/2.0",
+      width: 2400,
+      height: 1200,
+    },
   },
   {
     id: 'south-africa',
@@ -163,11 +241,24 @@ export const GALA_TRIPS: GalaTrip[] = [
       'Game drives, plus one Big Five safari drive',
       'A traditional bush braai, and all transfers',
     ],
-    // The camp's location is still to be confirmed in the kit.
-    stops: [{ name: 'Johannesburg' }, { name: 'Lakefront tented safari camp' }],
+    // The camp isn't named yet, so it has no coordinates and the photo has no place caption.
+    stops: [
+      { name: "Johannesburg", lat: -26.2041, lon: 28.0473, nights: 1 },
+      { name: 'Lakefront tented safari camp', nights: 5 },
+    ],
     board: 'SOUTH AFRICA',
     code: 'JNB',
     price: null,
+    image: {
+      file: "south-africa-01-lion",
+      alt: "A young male lion resting in the long grass, looking toward the camera",
+      place: null,
+      credit: "Chris Eason / CC BY 2.0, via Wikimedia Commons",
+      sourceUrl: "https://commons.wikimedia.org/wiki/File:Lion_Kruger_National_Park.jpg",
+      licenseUrl: "https://creativecommons.org/licenses/by/2.0",
+      width: 2400,
+      height: 1594,
+    },
   },
   {
     id: 'portugal',
@@ -188,10 +279,28 @@ export const GALA_TRIPS: GalaTrip[] = [
       'Douro Valley: wine tasting, lunch, river cruise',
       'Train from Porto back to Lisbon',
     ],
-    stops: [{ name: 'Lisbon' }, { name: 'Sintra' }, { name: 'Porto' }, { name: 'Douro Valley' }],
+    stops: [
+      { name: "Lisbon", lat: 38.7223, lon: -9.1393, nights: 3 },
+      { name: "Sintra", lat: 38.7876, lon: -9.3906, nights: 0 },
+      { name: "Cabo da Roca", lat: 38.7804, lon: -9.4989, nights: 0 },
+      { name: "Cascais", lat: 38.6979, lon: -9.4215, nights: 0 },
+      { name: "Porto", lat: 41.1496, lon: -8.611, nights: 3 },
+      { name: "Douro Valley", lat: 41.192, lon: -7.546, nights: 0 },
+      { name: "Lisbon", lat: 38.7223, lon: -9.1393, nights: 1, routeOnly: true },
+    ],
     board: 'PORTUGAL',
     code: 'LIS',
     price: null,
+    image: {
+      file: "portugal-01-porto-ribeira",
+      alt: "Traditional rabelo boats on the Douro in front of Porto's Ribeira waterfront at golden hour",
+      place: "Ribeira, Porto",
+      credit: "Krzysztof Golik / CC BY-SA 4.0, via Wikimedia Commons",
+      sourceUrl: "https://commons.wikimedia.org/wiki/File:View_of_Ribeira_(21).jpg",
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0",
+      width: 2400,
+      height: 1455,
+    },
   },
   {
     id: 'costa-rica',
@@ -211,10 +320,23 @@ export const GALA_TRIPS: GalaTrip[] = [
       'Choice of 2 shared tours, such as ziplining',
       'Airport and in-country transfers',
     ],
-    stops: [{ name: 'Arenal' }, { name: 'Tamarindo' }],
+    stops: [
+      { name: "Arenal", lat: 10.471, lon: -84.6453 },
+      { name: "Tamarindo", lat: 10.2993, lon: -85.8371 },
+    ],
     board: 'COSTA RICA',
     code: 'LIR',
     price: null,
+    image: {
+      file: "costa-rica-01-arenal-volcano",
+      alt: "The cone of Arenal Volcano rising above green rainforest and farmland",
+      place: "Arenal Volcano",
+      credit: "Rhododendrites / CC BY-SA 4.0, via Wikimedia Commons",
+      sourceUrl: "https://commons.wikimedia.org/wiki/File:Arenal_volcano_(70785p)_(cropped).jpg",
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0",
+      width: 2400,
+      height: 1326,
+    },
   },
   {
     id: 'alaska',
@@ -235,10 +357,27 @@ export const GALA_TRIPS: GalaTrip[] = [
       'Drinks, Wi-Fi and specialty dining package',
       '$100 shore excursion credit',
     ],
-    stops: [{ name: 'Seattle' }, { name: 'Ketchikan' }, { name: 'Juneau' }, { name: 'Skagway' }, { name: 'Victoria, BC' }],
+    stops: [
+      { name: "Seattle", lat: 47.6062, lon: -122.3321, nights: 1 },
+      { name: "Juneau", lat: 58.3019, lon: -134.4197, nights: 0 },
+      { name: "Skagway", lat: 59.4583, lon: -135.3139, nights: 0 },
+      { name: "Ketchikan", lat: 55.3422, lon: -131.6461, nights: 0 },
+      { name: "Victoria, BC", lat: 48.4284, lon: -123.3656, nights: 0 },
+      { name: "Seattle", lat: 47.6062, lon: -122.3321, nights: 0, routeOnly: true },
+    ],
     board: 'ALASKA',
     code: 'SEA',
     price: null,
+    image: {
+      file: "alaska-01-mendenhall-glacier",
+      alt: "Mendenhall Glacier flowing between mountains into its lake near Juneau",
+      place: "Mendenhall Glacier, Juneau",
+      credit: "Jay Galvin (jay galvin) / CC BY 2.0, via Wikimedia Commons",
+      sourceUrl: "https://commons.wikimedia.org/wiki/File:Mendenhall_Glacier_(Alaska).jpg",
+      licenseUrl: "https://creativecommons.org/licenses/by/2.0",
+      width: 2400,
+      height: 1414,
+    },
   },
 ];
 
@@ -266,6 +405,13 @@ export const travelersLabel = (travelers: number) =>
 /** The public price, or null when prices are switched off or not set. */
 export const tripPrice = (trip: GalaTrip) =>
   GALA_SHOW_TRIP_PRICES && trip.price != null ? `$${trip.price.toLocaleString('en-US')}` : null;
+
+/** Responsive sources for a trip's hero still. */
+export const tripImageSrc = (file: string, width: 800 | 1600) =>
+  `${import.meta.env.BASE_URL}assets/events/gala/trips/${file}-${width}.webp`;
+
+/** The stops named on a trip's card: no arrival airports or return legs. */
+export const cardStops = (trip: GalaTrip) => trip.stops.filter((stop) => !stop.routeOnly);
 
 /** True once every trip has at least one stop with coordinates (the route map then draws real routes). */
 export const GALA_TRIPS_HAVE_COORDS = GALA_TRIPS.every((trip) =>

@@ -490,6 +490,55 @@
   stroke-dashoffset: 0;
 }
 
+/* A trip's own path between its stops, drawn after the flight lands. */
+.gala-map-leg {
+  fill: none;
+  stroke: var(--gala-brass-light);
+  stroke-width: 1.1;
+  stroke-linejoin: round;
+  opacity: 0;
+  transition: opacity 400ms ease;
+  transition-delay: calc(1.2s + var(--i) * 140ms);
+}
+
+.gala-map.is-visible .gala-map-leg {
+  opacity: 0.9;
+}
+
+/* The connections key: real links to each trip's card. */
+.gala-map-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gala-map-key a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 12px 6px;
+  color: var(--gala-ivory);
+  border: 1px solid rgba(217, 181, 106, 0.4);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.gala-map-key a:hover,
+.gala-map-key a:focus-visible {
+  border-color: var(--gala-brass);
+  background: rgba(217, 181, 106, 0.1);
+}
+
+.gala-map-key b {
+  color: var(--gala-brass);
+}
+
 .gala-map-dest {
   fill: var(--gala-midnight-2);
   stroke: var(--gala-brass-light);
@@ -654,9 +703,13 @@
   outline-width: 2px;
 }
 
+.gala-trip-figure {
+  margin: 0;
+}
+
 .gala-trip-art {
   position: relative;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
   background: var(--gala-midnight);
 }
@@ -666,6 +719,43 @@
   height: 100%;
   display: block;
   object-fit: cover;
+}
+
+/* The connection number, in a small Deco tag on the photo. */
+.gala-trip-art-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 9px 4px;
+  color: var(--gala-ivory);
+  background: rgba(11, 19, 34, 0.78);
+  border: 1px solid rgba(217, 181, 106, 0.7);
+  outline: 1px solid rgba(217, 181, 106, 0.3);
+  outline-offset: 2px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1;
+}
+
+/* The photo's credit (CC BY / BY-SA need a visible one). */
+.gala-trip-credit {
+  padding: 8px 22px 0;
+  color: #6f6655;
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.gala-trip-credit a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(111, 102, 85, 0.4);
+  text-underline-offset: 2px;
+}
+
+.gala-trip-credit a:hover {
+  color: #8e2a5c;
+  text-decoration-color: currentColor;
 }
 
 .gala-trip-art-panel {
@@ -734,7 +824,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 22px 22px 24px;
+  padding: 16px 22px 24px;
 }
 
 .gala-trip-connection {
@@ -2931,6 +3021,10 @@
   .gala-map-dest,
   .gala-map-num {
     opacity: 1;
+  }
+
+  .gala-map-leg {
+    opacity: 0.9;
   }
 
   .gala-button:hover {

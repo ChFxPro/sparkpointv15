@@ -19,11 +19,12 @@ function project(lon: number, lat: number): [number, number] {
 // Home base: Transylvania County, NC (marked at the county seat).
 const HOME = project(-82.73, 35.23);
 
-// Real routes: once every trip in src/data/galaTrips.ts has coordinates on
-// its stops (the research session adds them to the trip kit), the map flies
-// from home to each trip's first stop, labelled with its connection number and
-// linked to its card. Until then it shows these ILLUSTRATIVE routes, unlabelled,
-// so no number sits on the wrong part of the world.
+// Real routes, from the stop coordinates in src/data/galaTrips.ts (the trip
+// kit's research): each trip flies from home to its first stop, labelled with
+// its connection number, then traces its own stops in order. A row of links
+// under the map jumps to each trip's card. If a trip ever lacks coordinates,
+// the map falls back to these ILLUSTRATIVE routes, unlabelled, so no number
+// sits on the wrong part of the world.
 const ILLUSTRATIVE: Array<[number, number]> = [
   [-64, 17],
   [-71, -41],
@@ -63,15 +64,20 @@ export function GalaRouteMap() {
     return () => observer.disconnect();
   }, []);
 
-  const routes: Array<{ end: [number, number]; d: string; label?: string; href?: string; name?: string }> =
+  const trips = [...GALA_TRIPS].sort((a, b) => a.connection.localeCompare(b.connection));
+  const routes: Array<{ end: [number, number]; d: string; leg?: string; label?: string; name?: string }> =
     GALA_TRIPS_HAVE_COORDS
-      ? [...GALA_TRIPS]
-          .sort((a, b) => a.connection.localeCompare(b.connection))
-          .map((trip) => {
-            const stop = trip.stops.find((s) => s.lat != null && s.lon != null)!;
-            const end = project(stop.lon!, stop.lat!);
-            return { end, d: arc(HOME, end), label: trip.connection, href: `#${tripAnchor(trip)}`, name: trip.name };
-          })
+      ? trips.map((trip) => {
+          const points = trip.stops
+            .filter((stop) => stop.lat != null && stop.lon != null)
+            .map((stop) => project(stop.lon!, stop.lat!));
+          const end = points[0];
+          const leg =
+            points.length > 1
+              ? points.map(([x, y], index) => `${index ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`).join(' ')
+              : undefined;
+          return { end, d: arc(HOME, end), leg, label: trip.connection, name: trip.name };
+        })
       : ILLUSTRATIVE.map(([lon, lat]) => {
           const end = project(lon, lat);
           return { end, d: arc(HOME, end) };
@@ -91,12 +97,11 @@ export function GalaRouteMap() {
           <g key={index} style={{ '--i': index } as CSSProperties}>
             <path className="gala-map-route" d={route.d} pathLength={1} />
             <circle className="gala-map-dest" cx={route.end[0]} cy={route.end[1]} r="4.5" />
+            {route.leg ? <path className="gala-map-leg" d={route.leg} /> : null}
             {route.label ? (
-              <a href={route.href} aria-label={`Connection ${route.label}: ${route.name}`}>
-                <text className="gala-map-num" x={route.end[0]} y={route.end[1] - 10}>
-                  {route.label}
-                </text>
-              </a>
+              <text className="gala-map-num" x={route.end[0]} y={route.end[1] - 10}>
+                {route.label}
+              </text>
             ) : null}
             {visible && !reduceMotion ? (
               <>
@@ -139,6 +144,15 @@ export function GalaRouteMap() {
           <span className="gala-map-note">Routes are illustrative. Each trip’s stops are below.</span>
         )}
       </div>
+      <ol className="gala-map-key" aria-label="The eight connections">
+        {trips.map((trip) => (
+          <li key={trip.id}>
+            <a href={`#${tripAnchor(trip)}`}>
+              <b>{trip.connection}</b> {trip.name}
+            </a>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }
