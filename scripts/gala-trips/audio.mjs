@@ -33,18 +33,55 @@ async function probe(file) {
   return Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', file]).toString().trim());
 }
 
-// Jeff's music and effects for a trip, if any.
+// Jeff's music and effects for a trip, if any. A track is a file, or an
+// Envato download folder holding versions (full, instrumental, 60/30 s edits,
+// shorts); loops and stems are ignored. A zip is unpacked into scratch.
+async function walk(dir) {
+  const out = [];
+  for (const e of await readdir(dir, { withFileTypes: true })) {
+    const p = join(dir, e.name);
+    if (e.isDirectory()) { if (!/^(loops?|stems?)$/i.test(e.name)) out.push(...(await walk(p))); }
+    else if (AUDIO.test(e.name) && !/loop|stem/i.test(e.name)) out.push(p);
+  }
+  return out;
+}
+
+const cleanTitle = (n) => n.replace(/^./, (c) => c).replace(/\.(zip|wav|mp3|m4a|aiff?|flac|ogg)$/i, '').replace(/-\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-utc$/, '').replace(/^1[\s_-]*/, '').replace(/[-_]+/g, ' ').trim().replace(/\b\w/g, (c) => c.toUpperCase());
+
 export async function suppliedAudio(tripId) {
   const dir = join(SUPP, '_music', tripId);
   if (!(await exists(dir))) return { music: null, sfx: [] };
-  const files = (await readdir(dir)).filter((f) => AUDIO.test(f)).sort();
-  const isSfx = (f) => /sfx|ambien|ambient|fx[-_ ]|sound[-_ ]?effect/i.test(f);
-  const tracks = files.filter((f) => !isSfx(f));
-  const pick = tracks.find((f) => f.startsWith('1')) ?? tracks[0];
-  return {
-    music: pick ? { file: join(dir, pick), credit: { title: basename(pick, extname(pick)), author: 'Envato Elements', license: ENVATO, page: '' } } : null,
-    sfx: files.filter(isSfx).map((f) => join(dir, f)),
-  };
+  const entries = (await readdir(dir, { withFileTypes: true })).filter((e) => !e.name.startsWith('.') && !/\.download$|\.md$/i.test(e.name));
+  const isSfx = (n) => /sfx|ambien|fx[-_ ]|sound[-_ ]?effect/i.test(n);
+  const sfx = entries.filter((e) => e.isFile() && AUDIO.test(e.name) && isSfx(e.name)).map((e) => join(dir, e.name));
+  const tracks = entries.filter((e) => !isSfx(e.name) && (e.isDirectory() || AUDIO.test(e.name) || /\.zip$/i.test(e.name))).sort((x, y) => x.name.localeCompare(y.name));
+  const pick = tracks.find((e) => e.name.startsWith('1')) ?? tracks[0];
+  if (!pick) return { music: null, sfx };
+  let root = join(dir, pick.name);
+  if (/\.zip$/i.test(pick.name)) {
+    const to = join(SCRATCH, 'music-unzipped', tripId, pick.name);
+    if (!(await exists(to))) { await (await import('node:fs/promises')).mkdir(to, { recursive: true }); (await import('node:child_process')).execFileSync('unzip', ['-q', '-o', root, '-d', to]); }
+    root = to;
+  }
+  const files = pick.isDirectory() || /\.zip$/i.test(pick.name) ? await walk(root) : [root];
+  const versions = [];
+  // One entry per version, WAV over MP3 when both are there.
+  const byStem = new Map();
+  for (const f of files) { const k = f.replace(/\.[^.]+$/, ''); if (!byStem.has(k) || /\.wav$/i.test(f)) byStem.set(k, f); }
+  for (const f of byStem.values()) versions.push({ file: f, len: await probe(f), name: basename(f).toLowerCase() });
+  return { music: { versions, credit: { title: cleanTitle(pick.name), author: 'Envato Elements', license: ENVATO, page: '' } }, sfx };
+}
+
+// The version of a supplied track that best fits a cut of `d` seconds: a
+// ready-made edit a little longer than the cut, else the full track
+// (instrumental first, so a voiceover can sit on top later).
+function versionFor(music, d) {
+  if (!music.versions) return music;
+  const v = music.versions;
+  const edit = v.filter((x) => x.len >= d - 1 && x.len <= d + 8).sort((a, b) => a.len - b.len)[0];
+  if (edit && d < 50) return { file: edit.file, start: 0 };
+  const full = v.filter((x) => x.len >= d).sort((a, b) => (/instrumental/.test(b.name) - /instrumental/.test(a.name)) || (/full|main/.test(b.name) - /full|main/.test(a.name)) || b.len - a.len)[0] ?? v.sort((a, b) => b.len - a.len)[0];
+  return { file: full.file, start: 0 };
 }
 
 async function measure(file, target) {
@@ -102,7 +139,8 @@ export async function mixTrip(trip, commonsMusic) {
     const timeline = (await exists(tlFile)) ? JSON.parse(await readFile(tlFile, 'utf8')) : [];
     const mBed = join(stems, `${cut.layout}-music.wav`), fBed = join(stems, `${cut.layout}-sfx.wav`);
     await (await import('node:fs/promises')).mkdir(stems, { recursive: true });
-    await bed(music, d, mBed);
+    const chosen = versionFor(music, d);
+    await bed(chosen, d, mBed);
     const hasSfx = await sfxBed(supplied.sfx, timeline, d, fBed);
     // Mix down, then two-pass loudness normalisation (measure, then apply linearly).
     const mixWav = join(stems, `${cut.layout}-mix.wav`);
@@ -112,7 +150,7 @@ export async function mixTrip(trip, commonsMusic) {
     await ffmpeg(['-i', silent, '-i', mixWav, '-filter_complex',
       `[1:a]loudnorm=${target}:measured_I=${m.input_i}:measured_TP=${m.input_tp}:measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:offset=${m.target_offset}:linear=true,aresample=48000[a]`,
       '-map', '0:v', '-map', '[a]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '256k', '-movflags', '+faststart', packDir(trip.id, 'video', `${cut.name(trip.id)}.mp4`)]);
-    console.log(`${trip.id}: audio ${cut.layout} (${cut.lufs} LUFS${hasSfx ? ', with effects' : ''})`);
+    console.log(`${trip.id}: audio ${cut.layout} (${cut.lufs} LUFS, ${basename(chosen.file)}${hasSfx ? ', with effects' : ''})`);
   }
   // Record the music (and effects) used, for LICENSES.md and captions.md.
   const srcFile = packDir(trip.id, 'video', 'sources.json');

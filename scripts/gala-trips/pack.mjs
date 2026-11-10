@@ -133,9 +133,9 @@ async function writeCaptions(trip, pack, price) {
   const stills = await stillsOf(trip);
   const video = (await exists(packDir(trip.id, 'video', 'sources.json'))) ? JSON.parse(await readFile(packDir(trip.id, 'video', 'sources.json'), 'utf8')) : null;
   const who = trip.travelers === 4 ? 'four' : 'two';
-  const footage = video ? [...new Map(video.clips.filter((c) => c.kind === 'clip').map((c) => [c.author, `${c.author} (${c.license})`])).values()] : [];
+  const footage = video ? [...new Map(video.clips.filter((c) => c.kind === 'clip' && c.author !== 'Supplied by SparkPoint').map((c) => [c.author, `${c.author} (${c.license})`])).values()] : [];
   const photos = [...new Map(stills.map((s) => [s.source.author, `${s.source.author} (${s.source.license})`])).values()];
-  const music = video?.music ? `Music: "${video.music.title}" by ${video.music.author} (${video.music.license}).` : '';
+  const music = video?.music && video.music.author !== 'Envato Elements' ? `Music: "${video.music.title}" by ${video.music.author} (${video.music.license}).` : '';
   const priceLine = price ? `\n${price} for ${who}.` : '';
   const md = `# ${trip.title}: ready-to-post captions
 
