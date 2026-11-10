@@ -717,12 +717,38 @@
 .gala-trip.is-featured {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  /* One split on every featured card: the photo always gets 55%, the text 45%. */
+  grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
 }
 
-/* Every other featured card puts its photo on the right. */
+.gala-trip.is-featured .gala-trip-figure {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.gala-trip.is-featured .gala-trip-body {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+}
+
+/* Every other featured card puts its photo on the right, at the same 55%. */
+.gala-trip.is-featured:nth-child(2n) {
+  grid-template-columns: minmax(0, 45fr) minmax(0, 55fr);
+}
+
 .gala-trip.is-featured:nth-child(2n) .gala-trip-figure {
-  order: 2;
+  grid-column: 2;
+}
+
+.gala-trip.is-featured:nth-child(2n) .gala-trip-body {
+  grid-column: 1;
+}
+
+/* The credits line runs along the foot of the whole card. */
+.gala-trip.is-featured .gala-trip-credits {
+  grid-column: 1 / -1;
+  grid-row: 2;
 }
 
 /* Boarding: the card that's hovered, focused, or (on touch) nearest the middle. */
@@ -745,8 +771,6 @@
 }
 
 .gala-trip-figure {
-  display: flex;
-  flex-direction: column;
   margin: 0;
   min-width: 0;
 }
@@ -758,10 +782,9 @@
   background: var(--gala-midnight);
 }
 
+/* One frame for every featured photo and loop: square, filled edge to edge. */
 .gala-trip.is-featured .gala-trip-art {
-  flex: 1;
-  aspect-ratio: auto;
-  min-height: 360px;
+  aspect-ratio: 1 / 1;
 }
 
 .gala-trip.is-tall .gala-trip-art {
@@ -925,26 +948,90 @@
   outline-offset: 3px;
 }
 
-/* The photo's credit (CC BY / BY-SA need a visible one). */
-.gala-trip-credit {
-  padding: 8px 22px 0;
+/* The card's credits: one compact line along its foot, and a Credits button
+   that opens every item in full (CC BY / BY-SA need a visible, linked credit). */
+.gala-trip-credits {
+  padding: 9px 20px 10px;
   color: #6f6655;
+  border-top: 1px solid rgba(140, 120, 80, 0.22);
   font-size: 0.72rem;
   line-height: 1.4;
 }
 
-.gala-trip.is-featured .gala-trip-credit {
-  padding: 8px 20px 10px;
+.gala-trip-credits-line {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-.gala-trip-credit a {
+.gala-trip-credits-line p {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gala-trip-credits-toggle {
+  flex: none;
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 2px 0;
+  color: #8e2a5c;
+  background: none;
+  border: 0;
+  font-family: inherit;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.gala-trip-credits-toggle:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.gala-trip-credits-toggle:focus-visible {
+  outline: 2px solid var(--gala-pink);
+  outline-offset: 3px;
+}
+
+.gala-trip-credits-caret {
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  rotate: 45deg;
+  translate: 0 -2px;
+  transition: rotate 200ms ease;
+}
+
+.gala-trip-credits-toggle[aria-expanded='true'] .gala-trip-credits-caret {
+  rotate: 225deg;
+  translate: 0 1px;
+}
+
+.gala-trip-credits-panel ul {
+  display: grid;
+  gap: 4px;
+  margin: 8px 0 2px;
+  padding: 0;
+  list-style: none;
+}
+
+.gala-trip-credits a {
   color: inherit;
   text-decoration: underline;
   text-decoration-color: rgba(111, 102, 85, 0.4);
   text-underline-offset: 2px;
 }
 
-.gala-trip-credit a:hover {
+.gala-trip-credits a:hover {
   color: #8e2a5c;
   text-decoration-color: currentColor;
 }
@@ -1188,12 +1275,11 @@
   }
 
   .gala-trip.is-featured .gala-trip-art {
-    flex: none;
     aspect-ratio: 16 / 9;
-    min-height: 0;
   }
 
   .gala-trip.is-featured .gala-trip-body {
+    align-self: stretch;
     padding: 24px 30px 30px;
   }
 
@@ -1202,14 +1288,27 @@
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
   }
 
-  .gala-trip.is-tall .gala-trip-art {
-    aspect-ratio: auto;
-    flex: 1;
-    min-height: 420px;
+  .gala-trip.is-tall .gala-trip-figure {
+    display: flex;
+    grid-column: 1;
+    grid-row: 1;
   }
 
-  .gala-trip.is-tall .gala-trip-credit {
-    padding-bottom: 10px;
+  .gala-trip.is-tall .gala-trip-body {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+  }
+
+  .gala-trip.is-tall .gala-trip-credits {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .gala-trip.is-tall .gala-trip-art {
+    flex: 1;
+    aspect-ratio: auto;
+    min-height: 420px;
   }
 }
 
@@ -1221,6 +1320,14 @@
 
   .gala-trip.is-tall {
     display: flex;
+  }
+
+  .gala-trip.is-tall .gala-trip-figure {
+    display: block;
+  }
+
+  .gala-trip.is-tall .gala-trip-body {
+    align-self: stretch;
   }
 
   .gala-trip.is-featured .gala-trip-art {
