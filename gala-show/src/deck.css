@@ -1598,7 +1598,7 @@ body.editing .editor {
   position: absolute;
   right: 120px;
   bottom: 52px;
-  width: 440px;
+  width: 1000px;
   margin: 0;
   color: var(--brass-light);
   font-size: 15px;

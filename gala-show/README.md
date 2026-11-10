@@ -19,7 +19,10 @@ to choose your trip tonight" page: every trip is available to every guest at a s
 price, and more than one guest can choose the same trip. How to pay isn't confirmed,
 so that page holds a "Details to come" placeholder until the How to pay field is filled
 in. Prices are hidden: they show only when **Show prices** is on (editor, Show settings),
-which stays off until the prices are set. Never use auction or bid language, name the
+which stays off until the prices are set. Trip photos come from the promo packs:
+`npm run stills` copies each featured trip's hero still into `show/media/trips/` and
+sets its credit from the pack's `stills.json`, shown under the photo (most are
+Creative Commons, which require it). Never use auction or bid language, name the
 package provider, or mention buying after the Gala.
 
 It is not part of the website. `show/` is a self-contained folder: copy it anywhere

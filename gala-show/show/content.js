@@ -136,7 +136,7 @@ window.SHOW = {
       "price": "",
       "photo": "trips/greece/greece-01-santorini-oia-1600.webp",
       "tripId": "greece",
-      "photoCredit": "Photo: Giles Laurent, CC BY-SA 4.0"
+      "photoCredit": "Photo: Giles Laurent / CC BY-SA 4.0, via Wikimedia Commons"
     },
     {
       "id": "0ltiw6o",
@@ -165,9 +165,9 @@ window.SHOW = {
       "travelers": "Two",
       "terms": "Land only · airfare not included · travel within three years",
       "price": "",
-      "photo": "",
+      "photo": "trips/iceland/iceland-01-gullfoss-1600.webp",
       "tripId": "iceland",
-      "photoCredit": ""
+      "photoCredit": "Photo: Diego Delso / CC BY-SA 4.0, via Wikimedia Commons"
     },
     {
       "id": "yb1aik8",
@@ -196,9 +196,9 @@ window.SHOW = {
       "travelers": "Four",
       "terms": "Land only · airfare not included · travel within three years",
       "price": "",
-      "photo": "",
+      "photo": "trips/cortona/cortona-01-cortona-hilltop-1600.webp",
       "tripId": "cortona",
-      "photoCredit": ""
+      "photoCredit": "Photo: TeKappa / CC BY-SA 4.0, via Wikimedia Commons"
     },
     {
       "id": "bxeom4w",
@@ -227,9 +227,9 @@ window.SHOW = {
       "travelers": "Two",
       "terms": "Land only · airfare not included · travel within three years",
       "price": "",
-      "photo": "",
+      "photo": "trips/scotland/scotland-01-glencoe-1600.webp",
       "tripId": "scotland",
-      "photoCredit": ""
+      "photoCredit": "Photo: john mcsporran from Trossachs, Scotland / CC BY 2.0, via Wikimedia Commons"
     },
     {
       "id": "ngxvipb",
@@ -258,9 +258,9 @@ window.SHOW = {
       "travelers": "Two",
       "terms": "Land only · airfare not included · travel within three years",
       "price": "",
-      "photo": "",
+      "photo": "trips/south-africa/south-africa-01-lion-1600.webp",
       "tripId": "south-africa",
-      "photoCredit": ""
+      "photoCredit": "Photo: Chris Eason / CC BY 2.0, via Wikimedia Commons"
     },
     {
       "id": "3nkz65e",

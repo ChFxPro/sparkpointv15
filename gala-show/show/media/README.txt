@@ -11,10 +11,12 @@ The deck looks for these names out of the box (change them in the editor, E):
 
 <trip> is the trip's id from the Gala trip kit: greece, iceland, cortona,
 scotland, south-africa. The films and stills come from each trip's promo
-pack (Branding/Gala/WorldOfConnections/trips/<trip>/pack/): copy the film
-in as promo.mp4, and copy a still in under its own name (the -1600 size is
-plenty). A Creative Commons still needs its credit in the trip page's
-"Photo credit" field; the pack's LICENSES.md has the credit line.
+pack (Branding/Gala/WorldOfConnections/trips/<trip>/pack/). Copy the film
+in as promo.mp4. For the stills, run `npm run stills` in gala-show/: it
+copies each featured trip's hero still here and puts its credit (from the
+pack's stills.json) on the trip page. Most stills are Creative Commons and
+must be shown with that credit; if you swap a photo by hand, fill in the
+trip page's "Photo credit" from the pack's stills.json or LICENSES.md.
 
 The three Atlas files are in the "SP Gala 26" drive folder, under
 "Logo loop Render /delivery". Use the .mp4 files: Chrome can't play the
