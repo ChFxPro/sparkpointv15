@@ -197,6 +197,11 @@ for (const id of TRIP_IDS) {
   if (entry.film) {
     const credits = ccCredits(path.join(tripsDir, id, 'pack', 'LICENSES.md'));
     if (credits.length) entry.filmCredits = credits;
+    // No Wikimedia work in this trip's film or loops: don't say there is.
+    const loopsUseCC = [entry.loopWide, entry.loopTall].some((l) => l?.credit?.some((part) => !('text' in part)));
+    if (!credits.length && !loopsUseCC && entry.credit) {
+      entry.credit = entry.credit.replace(/\s*Some photos and clips: Wikimedia Commons contributors\.?/i, '').trim();
+    }
   }
   if (entry.loopWide || entry.loopTall || entry.film) manifest[id] = entry;
 }
