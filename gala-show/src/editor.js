@@ -67,6 +67,22 @@ export function createEditor({ show, getIndex, go, rerender, relayout, flash }) 
     go(i, { instant: true });
   });
 
+  // Show-wide switches. Prices stay hidden until they are set.
+  const priceBox = h('input', { id: 'set-prices', type: 'checkbox' });
+  priceBox.checked = Boolean(show.settings?.showPrices);
+  priceBox.addEventListener('change', () => {
+    show.settings = { ...(show.settings || {}), showPrices: priceBox.checked };
+    changed();
+    rerender();
+  });
+  const settings = h(
+    'section',
+    { class: 'ed-sec' },
+    h('h3', {}, 'Show settings'),
+    h('div', { class: 'ed-field ed-check' }, priceBox, h('label', { for: 'set-prices' }, 'Show prices on the trip pages')),
+    h('p', { class: 'ed-help' }, 'Off until the prices are set. When it’s on, a trip’s price shows wherever one is filled in.')
+  );
+
   const saveBtn = h('button', { class: 'ed-btn ed-primary', onclick: () => save() }, 'Save');
   const folderBtn = h('button', { class: 'ed-btn', onclick: () => connect() }, 'Choose show folder');
   panel.append(
@@ -78,6 +94,7 @@ export function createEditor({ show, getIndex, go, rerender, relayout, flash }) 
     ),
     h('section', { class: 'ed-sec' }, h('h3', {}, 'Pages'), list, addSelect),
     form,
+    settings,
     h(
       'section',
       { class: 'ed-sec ed-tools' },
@@ -256,7 +273,9 @@ export function createEditor({ show, getIndex, go, rerender, relayout, flash }) 
     const oldLoop = results.filter((r) => r.ok && /atlas-of-wonders/i.test(r.file));
     const trips = show.slides.filter((s) => s.type === 'trip' && !s.hidden);
     const noPlace = trips.filter((s) => !Number.isFinite(parseFloat(s.lat)) || !Number.isFinite(parseFloat(s.lon)));
-    report.replaceChildren(
+    const noPay = show.slides.filter((s) => s.type === 'choose' && !s.hidden && !String(s.payment || '').trim());
+    // Only the checks that found something (a bare `false` would print as text).
+    const found = [
       h('p', { class: bad.length ? 'is-bad' : 'is-ok' }, bad.length ? `${bad.length} of ${results.length} files missing from media:` : `All ${results.length} media files found.`),
       bad.length > 0 &&
         h(
@@ -265,8 +284,10 @@ export function createEditor({ show, getIndex, go, rerender, relayout, flash }) 
           bad.map((r) => h('li', {}, h('button', { class: 'ed-link', onclick: () => go(r.i, { instant: true }) }, `Page ${r.i + 1}`), ` ${r.file}`))
         ),
       oldLoop.length > 0 && h('p', { class: 'is-bad' }, `${oldLoop.length} loop file(s) still show the old name, An Atlas of Wonders. Swap in the World of Connections renders when they land.`),
-      noPlace.length > 0 && h('p', { class: 'is-bad' }, `${noPlace.length} trip page(s) have no map location yet, so the globe won’t draw a route.`)
-    );
+      noPlace.length > 0 && h('p', { class: 'is-bad' }, `${noPlace.length} trip page(s) have no map location yet, so the globe won’t draw a route.`),
+      noPay.length > 0 && h('p', { class: 'is-bad' }, 'The “How to choose” page still says payment details are to come. Fill in How to pay once it’s confirmed.')
+    ];
+    report.replaceChildren(...found.filter(Boolean));
   }
 
   // --- Page list ------------------------------------------------------------
@@ -291,7 +312,7 @@ export function createEditor({ show, getIndex, go, rerender, relayout, flash }) 
             { class: 'ed-pick', onclick: () => go(i, { instant: true }) },
             h('span', { class: 'ed-num' }, String(i + 1)),
             h('span', { class: 'ed-name' }, slideName(s)),
-            h('span', { class: 'ed-type' }, (s.hidden ? 'Hidden · ' : '') + (s.type === 'trip' && s.sold ? 'Sold · ' : '') + (TYPES[s.type]?.label || s.type))
+            h('span', { class: 'ed-type' }, (s.hidden ? 'Hidden · ' : '') + (TYPES[s.type]?.label || s.type))
           ),
           i === cur &&
             h(
@@ -305,7 +326,7 @@ export function createEditor({ show, getIndex, go, rerender, relayout, flash }) 
                   class: 'ed-icon',
                   title: 'Duplicate',
                   onclick: () => {
-                    show.slides.splice(i + 1, 0, { ...structuredClone(s), id: newId(), sold: false, soldFor: '' });
+                    show.slides.splice(i + 1, 0, { ...structuredClone(s), id: newId() });
                     changed();
                     go(i + 1, { instant: true });
                   },

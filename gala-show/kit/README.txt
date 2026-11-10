@@ -77,7 +77,7 @@ THE LOOK, IF YOU'RE BUILDING FROM SCRATCH
   Brass       #D9B56A   labels, numbers, rules, frames
   Light brass #F1D9A0   subtitles, figures
   Plum        #8E2A5C   the accent on cream
-  Pink        #E03694   buttons, Brevard's pin and the SOLD stamp only
+  Pink        #E03694   buttons and Brevard's pin only
 
   All type is Josefin Sans, Art Deco style. Titles in spaced capitals
   (Semi-Bold); text in Josefin Sans; labels in small spaced capitals.
@@ -99,3 +99,10 @@ TRIPS
   destination in the show deck (latitude and longitude). Until then the Trip
   layout uses the plain globe. When the trips are set, ask for the kit to be
   rebuilt (gala-show/kit in the website repo: npm run kit).
+
+  The featured trips each have a Trip slide followed by a Video slide for the
+  trip's film. The other trips share one "More journeys, at the table" slide,
+  and "How to choose your trip tonight" closes the section. No auction or bid
+  language: every trip is available to every guest at a set price. Prices are
+  left off unless the show deck's "Show prices" switch is on. How to pay is
+  not confirmed yet: its box says "Details to come" until it is.

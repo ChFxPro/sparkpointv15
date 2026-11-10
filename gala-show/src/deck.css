@@ -725,7 +725,7 @@ body.editing {
   font-size: 1.5em;
   font-weight: 600;
 }
-.trip-donor {
+.trip-terms {
   margin: 0.8em 0 0;
   color: var(--brass-light);
   font-size: 0.75em;
@@ -746,48 +746,6 @@ body.editing {
 }
 .page:not(.is-in) > .trip-photo {
   transform: rotate(3deg) translateY(18px);
-}
-
-/* The SOLD stamp. */
-.stamp {
-  position: absolute;
-  top: 300px;
-  left: 1250px;
-  display: grid;
-  place-items: center;
-  align-content: center;
-  width: 300px;
-  height: 300px;
-  border: 8px double var(--pink);
-  border-radius: 50%;
-  color: var(--pink);
-  background: rgba(11, 19, 34, 0.55);
-  opacity: 0;
-  transform: rotate(-14deg) scale(1.8);
-  transition:
-    opacity 0.3s ease,
-    transform 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  pointer-events: none;
-}
-.page-trip.is-sold .stamp {
-  opacity: 1;
-  transform: rotate(-14deg) scale(1);
-}
-.page:not(.is-in) > .stamp {
-  transform: rotate(-14deg) scale(1.8);
-}
-.stamp-word {
-  font-family: var(--display);
-  font-size: 92px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  line-height: 1;
-}
-.stamp-amt {
-  margin-top: 6px;
-  font-size: 34px;
-  font-weight: 800;
 }
 
 /* --- Words --- */
@@ -1006,10 +964,6 @@ body.editing {
   color: var(--brass-light);
   font-size: 12px;
   font-weight: 800;
-}
-.ov-sold {
-  background: var(--pink);
-  color: #fff;
 }
 .ov-loop,
 .ov-video {
@@ -1391,13 +1345,10 @@ body.editing .editor {
   font-weight: 600;
   letter-spacing: 0.04em;
 }
-.trip-donor {
-  font-style: italic;
+.trip-terms {
+  font-style: normal;
   font-weight: 300;
-}
-.stamp-word {
-  font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.02em;
 }
 .divider-sub p,
 .auction-body p,
@@ -1463,4 +1414,195 @@ body.editing .editor {
 }
 .qr-card {
   border-radius: 2px;
+}
+
+/* --- Trip: small print --- */
+.trip-terms {
+  font-style: normal;
+}
+
+/* --- More journeys (the trips offered at the table) --- */
+.page-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.page-more .page-title {
+  margin-right: -0.12em;
+}
+.page-more .rule {
+  justify-content: center;
+}
+.more-trips {
+  display: grid;
+  grid-template-columns: repeat(var(--n, 3), 1fr);
+  gap: 48px;
+  width: 100%;
+  margin: 20px 0 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+  font-size: 32px;
+}
+.more-1 { --n: 1; width: 640px; }
+.more-2 { --n: 2; width: 1220px; }
+.more-4 { --n: 4; }
+.more-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.4em 1.1em 1.3em;
+  border: 1px solid rgba(217, 181, 106, 0.5);
+  outline: 1px solid rgba(217, 181, 106, 0.22);
+  outline-offset: 6px;
+  background: rgba(11, 19, 34, 0.62);
+}
+.more-num {
+  margin: 0;
+  color: var(--brass);
+  font-size: 0.62em;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+.more-place {
+  margin: 0.55em 0 0;
+  font-family: var(--display);
+  font-size: 1.85em;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+.more-name {
+  margin: 0.6em 0 0;
+  color: var(--brass-light);
+  font-size: 0.78em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.more-line {
+  margin: 0.9em 0 0;
+  font-size: 0.86em;
+  font-weight: 400;
+  line-height: 1.45;
+}
+.more-price {
+  margin: auto 0 0;
+  padding-top: 0.8em;
+  color: var(--brass-light);
+  font-size: 1.1em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* --- How to choose --- */
+.page-choose .rule {
+  margin: 28px 0 36px;
+}
+.choose-body {
+  display: grid;
+  grid-template-columns: 1fr 470px;
+  gap: 80px;
+  align-items: start;
+  width: 1340px;
+  max-height: 700px;
+  overflow: hidden;
+  font-size: 34px;
+}
+.choose-steps {
+  display: grid;
+  gap: 1.1em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.choose-steps li {
+  display: grid;
+  grid-template-columns: 1.9em 1fr;
+  gap: 0.8em;
+  align-items: start;
+}
+.choose-n {
+  display: grid;
+  place-items: center;
+  width: 1.9em;
+  height: 1.9em;
+  border: 1px solid var(--brass);
+  border-radius: 50%;
+  color: var(--brass-light);
+  font-weight: 600;
+  line-height: 1;
+}
+.choose-head {
+  margin: 0.15em 0 0;
+  font-family: var(--display);
+  font-size: 1.1em;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.choose-text {
+  margin: 0.35em 0 0;
+  font-weight: 400;
+  line-height: 1.42;
+}
+.choose-pay {
+  padding: 1.1em 1.2em;
+  border: 1px solid rgba(217, 181, 106, 0.55);
+  outline: 1px solid rgba(217, 181, 106, 0.22);
+  outline-offset: 6px;
+  background: rgba(11, 19, 34, 0.62);
+}
+.choose-pay.is-placeholder {
+  border-style: dashed;
+  outline: none;
+}
+.choose-pay-label {
+  margin: 0;
+  color: var(--brass);
+  font-size: 0.62em;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+.choose-pay-text {
+  margin: 0.5em 0 0;
+  font-weight: 400;
+  line-height: 1.42;
+}
+.is-placeholder .choose-pay-text {
+  color: var(--brass-light);
+  font-style: italic;
+  font-weight: 300;
+}
+
+/* Trip: connection number over the place, each on one line; keep the copy
+   clear of the globe's edge. */
+.trip-copy {
+  width: 840px;
+}
+.trip-lot {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.45em;
+}
+.trip-lot,
+.trip-place {
+  white-space: nowrap;
+}
+
+/* Credit under the trip photo (Creative Commons photos need one). */
+.trip-credit {
+  position: absolute;
+  right: 120px;
+  bottom: 52px;
+  width: 440px;
+  margin: 0;
+  color: var(--brass-light);
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  text-align: right;
 }

@@ -67,6 +67,7 @@ const PLATES = [
   ['09 Plain', 'plain'],
 ];
 const trips = SHOW.slides.filter((s) => s.type === 'trip' && hasPlace(s));
+const SHOW_PRICES = Boolean(SHOW.settings?.showPrices);
 const bgFile = {};
 
 console.log('Rendering backgrounds…');
@@ -86,7 +87,7 @@ for (const [label, type] of PLATES) {
   bgFile[type] = path;
 }
 for (const s of trips) {
-  const path = resolve(BG, `Trip - Lot ${s.lot || '?'} - ${s.place || s.title || 'trip'}.jpg`.replace(/[/\\:]/g, '-'));
+  const path = resolve(BG, `Trip - Connection ${String(s.lot || '?').padStart(2, '0')} - ${s.place || s.title || 'trip'}.jpg`.replace(/[/\\:]/g, '-'));
   await shoot(`type=trip&lat=${s.lat}&lon=${s.lon}`, path);
   bgFile[`trip:${s.id}`] = path;
 }
@@ -271,8 +272,8 @@ pres.defineSlideMaster({
     ph('title', 'title', px(120), 1.0, 6.3, 1.75, title(40), 'TRIP NAME'),
     ...rule(px(120), 2.95, { align: 'left' }),
     ph('body', 'body', px(120), 3.4, 6.3, 2.55, { fontSize: 17, valign: 'top', paraSpaceAfter: 6 }, 'Short description, then what’s included'),
-    ph('value', 'body', px(120), 6.1, 3, 0.75, { fontFace: HEAD, fontSize: 24, valign: 'bottom' }, 'Value'),
-    ph('opening', 'body', px(120) + 3.1, 6.1, 3, 0.75, { fontFace: HEAD, fontSize: 24, valign: 'bottom' }, 'Opening bid'),
+    ph('meta', 'body', px(120), 6.0, 6.3, 0.6, { fontFace: HEAD, fontSize: 20, valign: 'bottom' }, 'NIGHTS  ·  TRAVELERS'),
+    ph('terms', 'body', px(120), 6.65, 6.3, 0.3, { fontFace: LIGHT, fontSize: 12, color: COL.brassLight, valign: 'top' }, 'Small print (optional)'),
   ],
 });
 
@@ -344,7 +345,7 @@ const LOOP_NOTE = (s) =>
 
 let section = null;
 const sectionFor = (s) => {
-  if (s.type === 'trip' || s.type === 'auction') return 'The travel experience';
+  if (['trip', 'auction', 'more', 'choose'].includes(s.type) || s.tripId) return 'The travel experience';
   if (s.type === 'thanks' || (section === 'The travel experience' && s.type === 'loop')) return 'Close';
   if (s.type === 'divider') return s.title || 'Section';
   return section || 'Welcome';
@@ -459,16 +460,61 @@ for (const s of SHOW.slides) {
       delete body[body.length - 1].options.breakLine;
       slide.addText(body, { placeholder: 'body' });
     }
-    if (s.value) slide.addText([{ text: 'VALUE', options: { ...label, fontSize: 11, breakLine: true } }, { text: s.value }], { placeholder: 'value' });
-    if (s.opening) slide.addText([{ text: 'OPENING BID', options: { ...label, fontSize: 11, breakLine: true } }, { text: s.opening }], { placeholder: 'opening' });
+    // Prices show only when the show's "Show prices" switch is on.
+    const meta = [s.nights && `${s.nights} NIGHTS`, s.travelers && `FOR ${String(s.travelers).toUpperCase()}`, SHOW_PRICES && s.price].filter(Boolean);
+    put(slide, 'meta', meta.join('  ·  '));
+    put(slide, 'terms', s.terms);
     const missing = [!s.title && 'trip name', !hasPlace(s) && 'latitude and longitude'].filter(Boolean);
     slide.addNotes(
       `TRIP — ${connection(s.lot).toUpperCase()}${s.lot ? ` (no. ${s.lot})` : ''}.` +
         (hasPlace(s) ? ' The background shows the route from Brevard.' : ' The background is the plain trip globe; once the destination is set, re-run the kit for a background with its route, or use the deck.') +
         (missing.length ? ` Still needed: ${missing.join(', ')}.` : '') +
-        (s.donor ? ` Donated by ${s.donor}.` : '') +
-        ' To mark it sold, add a SOLD stamp (a pink double-ring circle) or move on.'
+        (s.tripId ? ` The next slide is its film (media/trips/${s.tripId}/promo.mp4).` : '')
     );
+  } else if (s.type === 'more') {
+    // The trips offered at the table: cards side by side.
+    const slide = add('People');
+    put(slide, 'title', caps(s.title));
+    put(slide, 'subtitle', s.subtitle);
+    const cards = lines(s.trips).slice(0, 4);
+    const gap = 0.35;
+    const cw = (W - 2 - gap * (cards.length - 1)) / Math.max(1, cards.length);
+    cards.forEach((l, i) => {
+      const [num, place, name, line, price] = parts(l);
+      const x = 1 + i * (cw + gap);
+      slide.addShape(pres.ShapeType.rect, { x, y: 2.5, w: cw, h: 3.6, fill: { color: COL.night, transparency: 35 }, line: { color: COL.brass, width: 0.75, transparency: 45 }, objectName: `Card ${i + 1}` });
+      const runs = [
+        { text: connection(num).toUpperCase(), options: { ...label, fontSize: 11, breakLine: true, paraSpaceAfter: 8 } },
+        { text: String(place || '').toUpperCase(), options: { fontFace: HEAD, fontSize: 26, color: COL.ivory, charSpacing: 3, breakLine: true, paraSpaceAfter: 6 } },
+        name && { text: name, options: { fontFace: HEAD, fontSize: 13, color: COL.brassLight, breakLine: true, paraSpaceAfter: 10 } },
+        line && { text: line, options: { fontFace: BODY, fontSize: 13, color: COL.ivory, breakLine: Boolean(SHOW_PRICES && price), paraSpaceAfter: 10 } },
+        SHOW_PRICES && price && { text: price, options: { fontFace: HEAD, fontSize: 18, color: COL.brassLight } },
+      ].filter(Boolean);
+      slide.addText(runs, { x: x + 0.2, y: 2.7, w: cw - 0.4, h: 3.2, margin: 0, align: 'center', valign: 'top', isTextBox: true, objectName: `Card ${i + 1} text` });
+    });
+    if (s.footer) slide.addText(caps(s.footer), { x: 1, y: 6.7, w: W - 2, h: 0.35, margin: 0, align: 'center', ...label, fontSize: 12, color: COL.brassLight, isTextBox: true, objectName: 'Footer' });
+  } else if (s.type === 'choose') {
+    const slide = add('List');
+    put(slide, 'title', caps(s.title), { w: W - 2, fontSize: 27, charSpacing: 3 });
+    const steps = lines(s.steps).slice(0, 4);
+    const body = steps.flatMap((l, i) => {
+      const [head, text] = parts(l);
+      return [
+        { text: `${i + 1}   ${String(head || '').toUpperCase()}`, options: { fontFace: HEAD, fontSize: 19, color: COL.ivory, charSpacing: 2, breakLine: true } },
+        { text: text || '', options: { fontFace: BODY, fontSize: 16, color: COL.ivory, breakLine: i < steps.length - 1, paraSpaceAfter: 14 } },
+      ];
+    });
+    if (body.length) slide.addText(body, { x: px(140), y: 2.15, w: 6.6, h: 4.4, margin: 0, valign: 'top', isTextBox: true, objectName: 'Steps' });
+    const pay = String(s.payment || '').trim();
+    slide.addShape(pres.ShapeType.rect, { x: 8.75, y: 2.15, w: 3.6, h: 1.5, fill: { color: COL.night, transparency: 35 }, line: { color: COL.brass, width: 0.75, transparency: 40, dashType: pay ? 'solid' : 'dash' }, objectName: 'How to pay box' });
+    slide.addText(
+      [
+        { text: 'HOW TO PAY', options: { ...label, fontSize: 11, breakLine: true, paraSpaceAfter: 6 } },
+        { text: pay || 'Details to come', options: { fontFace: pay ? BODY : LIGHT, italic: !pay, fontSize: 15, color: pay ? COL.ivory : COL.brassLight } },
+      ],
+      { x: 8.95, y: 2.3, w: 3.2, h: 1.2, margin: 0, valign: 'top', isTextBox: true, objectName: 'How to pay' }
+    );
+    if (!pay) slide.addNotes('HOW TO CHOOSE. How to pay is not confirmed yet: replace "Details to come" once it is.');
   } else if (s.type === 'text') {
     const slide = add('Words');
     // A quote is light italic in its own words; a heading is spaced capitals.

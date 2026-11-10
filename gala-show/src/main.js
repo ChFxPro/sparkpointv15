@@ -62,6 +62,7 @@ function go(i, { fromBack = false, instant = false } = {}) {
   const slide = show.slides[i];
   const ctx = {
     editing: editor.isOpen(),
+    showPrices: Boolean(show.settings?.showPrices),
     advance: () => current && current.slide === slide && next(),
     changed: () => editor.changed(),
     setGlobe: (pose) => current && current.slide === slide && globe.setPose(pose),
@@ -155,7 +156,6 @@ function openOverview() {
           h('span', { class: 'ov-type' }, TYPES[s.type]?.label || s.type),
           h('span', { class: 'ov-name' }, slideName(s)),
           s.hidden && h('span', { class: 'ov-flag' }, 'Hidden'),
-          s.type === 'trip' && s.sold && h('span', { class: 'ov-flag ov-sold' }, 'Sold')
         )
       )
     )
@@ -232,13 +232,6 @@ window.addEventListener('keydown', (e) => {
     case 'G':
       openOverview();
       break;
-    case 's':
-    case 'S':
-      if (current && current.page.toggleSold) {
-        current.page.toggleSold();
-        flash(current.slide.sold ? 'Marked sold' : 'Sold mark removed');
-      }
-      break;
     case 'f':
     case 'F':
     case 'F5':
@@ -278,7 +271,6 @@ const help = h(
       ['←  Page Up', 'Back'],
       ['B  or  .', 'Black screen (any key brings it back)'],
       ['L', 'Jump to the holding loop, and back again'],
-      ['S', 'Stamp a trip SOLD (again to remove)'],
       ['O', 'All pages'],
       ['12 then Enter', 'Go to page 12'],
       ['F', 'Full screen'],

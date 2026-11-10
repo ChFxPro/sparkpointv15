@@ -7,9 +7,20 @@ Its look follows the Gala brand kit in `Branding/Gala/WorldOfConnections/` (READ
 double-hairline rule, a double frame round each page, and trips numbered as
 connections ("Connection 01").
 It runs the room: the holding loop, the welcome, the year in review, staff and board
-recognition, the travel experience (one page per trip, with a gold globe that turns to
-each destination and draws the route from Brevard), and the thank-you with a QR code
-for giving.
+recognition, the travel experience, and the thank-you with a QR code for giving.
+
+The travel experience follows the trip kit in
+`Branding/Gala/WorldOfConnections/trips/` (`README.md` for the rules, `trips.json` for
+the data): eight packages, no auction. The **featured five** (Greece, Iceland, Cortona,
+Scotland, South Africa) each get a trip page (a gold globe turns to the destination and
+draws the route from Brevard) followed by the trip's film. The **other three**
+(Portugal, Costa Rica, Alaska) share a "More journeys, at the table" page. Then a "How
+to choose your trip tonight" page: every trip is available to every guest at a set
+price, and more than one guest can choose the same trip. How to pay isn't confirmed,
+so that page holds a "Details to come" placeholder until the How to pay field is filled
+in. Prices are hidden: they show only when **Show prices** is on (editor, Show settings),
+which stays off until the prices are set. Never use auction or bid language, name the
+package provider, or mention buying after the Gala.
 
 It is not part of the website. `show/` is a self-contained folder: copy it anywhere
 (the "SP Gala 26" Drive folder, a USB stick, the show laptop) and open `index.html` in
@@ -28,7 +39,6 @@ Chrome. No install, no internet.
 | ← Page Up | Back |
 | B or . | Black screen; any key brings it back |
 | L | Jump to the holding loop, and back to where you were |
-| S | On a trip page: stamp it SOLD (again to remove) |
 | O | All pages, click one to go there |
 | 12 then Enter | Go to page 12 |
 | F | Full screen |

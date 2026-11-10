@@ -398,10 +398,13 @@ R.auction = (s) => {
 
 R.trip = (s, ctx) => {
   const details = lines(s.details);
-  const meta = [s.value && ['Value', s.value], s.opening && ['Opening bid', s.opening]].filter(Boolean);
+  const meta = [
+    s.nights && ['Nights', s.nights],
+    s.travelers && ['Travelers', s.travelers],
+    ctx.showPrices && s.price && ['Price', s.price],
+  ].filter(Boolean);
   const photo = s.photo ? h('img', { class: 'trip-photo', src: media(s.photo), alt: '' }) : null;
   if (photo) photo.addEventListener('error', () => photo.remove());
-  const stamp = h('div', { class: 'stamp', 'aria-hidden': 'true' }, h('span', { class: 'stamp-word' }, 'Sold'), h('span', { class: 'stamp-amt' }, s.soldFor || ''));
   const title = h('h2', { class: 'trip-title' }, s.title || 'Trip to be announced');
   const copy = h(
     'div',
@@ -412,9 +415,11 @@ R.trip = (s, ctx) => {
     s.blurb && h('div', { class: 'trip-blurb' }, paras(s.blurb)),
     details.length > 0 && h('ul', { class: 'trip-details' }, details.map((d) => h('li', {}, d))),
     meta.length > 0 && h('dl', { class: 'trip-meta' }, meta.map(([k, v]) => h('div', {}, h('dt', {}, k), h('dd', {}, v)))),
-    s.donor && h('p', { class: 'trip-donor' }, `Donated by ${s.donor}`)
+    s.terms && h('p', { class: 'trip-terms' }, s.terms)
   );
-  const root = h('section', { class: `page page-trip ${photo ? 'has-photo' : ''} ${s.sold ? 'is-sold' : ''}` }, photo, copy, stamp);
+  const credit = photo && s.photoCredit ? h('p', { class: 'trip-credit' }, s.photoCredit) : null;
+  if (credit) photo.addEventListener('error', () => credit.remove());
+  const root = h('section', { class: `page page-trip ${photo ? 'has-photo' : ''}` }, photo, credit, copy);
   const hasPlace = s.lat !== '' && s.lon !== '' && Number.isFinite(Number(s.lat)) && Number.isFinite(Number(s.lon));
   return {
     root,
@@ -423,12 +428,63 @@ R.trip = (s, ctx) => {
       fit(title, 56);
       fit(copy, 16);
     },
-    toggleSold() {
-      s.sold = !s.sold;
-      root.classList.toggle('is-sold', s.sold);
-      ctx.changed();
-    },
   };
+};
+
+R.more = (s, ctx) => {
+  const trips = lines(s.trips).slice(0, 4);
+  const grid = h(
+    'ul',
+    { class: `more-trips more-${trips.length}` },
+    trips.map((l) => {
+      const [num, place, name, line, price] = parts(l);
+      return h(
+        'li',
+        { class: 'more-card' },
+        h('p', { class: 'more-num' }, connectionLabel(num)),
+        h('p', { class: 'more-place' }, place || ''),
+        name && h('p', { class: 'more-name' }, name),
+        line && h('p', { class: 'more-line' }, line),
+        ctx.showPrices && price && h('p', { class: 'more-price' }, price)
+      );
+    })
+  );
+  const root = h(
+    'section',
+    { class: 'page page-more' },
+    h('h2', { class: 'page-title' }, s.title),
+    s.subtitle && h('p', { class: 'page-sub' }, s.subtitle),
+    rule(),
+    grid,
+    s.footer && h('p', { class: 'page-footer' }, s.footer)
+  );
+  return { root, enter: () => fit(grid, 18) };
+};
+
+R.choose = (s) => {
+  const steps = lines(s.steps).slice(0, 4);
+  const list = h(
+    'ol',
+    { class: 'choose-steps' },
+    steps.map((l, i) => {
+      const [head, text] = parts(l);
+      return h('li', {}, h('span', { class: 'choose-n' }, String(i + 1)), h('div', {}, h('p', { class: 'choose-head' }, head), text && h('p', { class: 'choose-text' }, text)));
+    })
+  );
+  // How to pay isn't confirmed yet: until it is, hold its place.
+  const pay = String(s.payment || '').trim();
+  const payment = pay
+    ? h('div', { class: 'choose-pay' }, h('p', { class: 'choose-pay-label' }, 'How to pay'), paras(pay, 'choose-pay-text'))
+    : h('div', { class: 'choose-pay is-placeholder' }, h('p', { class: 'choose-pay-label' }, 'How to pay'), h('p', { class: 'choose-pay-text' }, 'Details to come'));
+  const root = h(
+    'section',
+    { class: 'page page-choose' },
+    h('h2', { class: 'page-title' }, s.title),
+    rule(),
+    h('div', { class: 'choose-body' }, list, payment),
+    s.footer && h('p', { class: 'page-footer' }, s.footer)
+  );
+  return { root, enter: () => fit(root.querySelector('.choose-body'), 18) };
 };
 
 R.text = (s) => {
