@@ -44,9 +44,36 @@ const TRIP_IDS = ['greece', 'iceland', 'cortona', 'scotland', 'south-africa', 'p
 function publicCredit(credit) {
   return credit
     .replace(/,?\s*licensed to [^.;]+/gi, '')
-    .replace(/\s*\(see LICENSES\.md\)/gi, '')
+    .replace(/\s*\((?:see LICENSES\.md|per-loop credits[^)]*)\)/gi, '')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+// "CC BY-SA 4.0" -> its deed URL; null for anything that isn't a CC licence.
+function licenseUrl(licence) {
+  const m = licence.match(/^CC (BY(?:-SA|-ND|-NC|-NC-SA|-NC-ND)?) (\d\.\d)$/i);
+  if (m) return `https://creativecommons.org/licenses/${m[1].toLowerCase()}/${m[2]}/`;
+  if (/^CC0/i.test(licence)) return 'https://creativecommons.org/publicdomain/zero/1.0/';
+  return null;
+}
+
+// A loop's public credit, from web.json's per-file `creditLine` and `sources`:
+// "Video: Envato Elements · Blue domes of Oia: Giles Laurent, CC BY-SA 4.0 · …".
+// Each " · " part naming a linked source becomes { label, author, sourceUrl,
+// license, licenseUrl } so the card can link it; the rest stay plain text.
+function loopCredit(meta, file) {
+  const entry = meta?.files?.find((f) => f.file === file);
+  if (!entry?.creditLine) return null;
+  const sources = (entry.sources ?? []).filter((src) => src.url);
+  return entry.creditLine
+    .replace(/^Video:\s*/i, '')
+    .split(' · ')
+    .map((part) => {
+      const src = sources.find((x) => part.includes(x.credit) && part.includes(x.licence));
+      if (!src) return { text: part };
+      const label = part.slice(0, part.indexOf(src.credit)).replace(/:\s*$/, '').trim();
+      return { label, author: src.credit, sourceUrl: src.url, license: src.licence, licenseUrl: licenseUrl(src.licence) };
+    });
 }
 
 // Rows of the "Video footage" table in <id>/pack/LICENSES.md whose licence is a
@@ -134,6 +161,12 @@ for (const id of TRIP_IDS) {
     try {
       const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
       if (typeof meta.credit === 'string' && meta.credit.trim()) entry.credit = publicCredit(meta.credit);
+      for (const key of ['loopWide', 'loopTall']) {
+        const src = entry[key];
+        if (!src) continue;
+        const credit = loopCredit(meta, src.webm ?? src.mp4) ?? loopCredit(meta, src.mp4);
+        if (credit) src.credit = credit;
+      }
     } catch (err) {
       problems.push(`${id}/pack/web/web.json could not be read: ${err.message}`);
     }

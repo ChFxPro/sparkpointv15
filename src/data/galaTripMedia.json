@@ -2,11 +2,35 @@
   "greece": {
     "loopWide": {
       "webm": "greece-loop-card-16x9.webm",
-      "mp4": "greece-loop-card-16x9.mp4"
+      "mp4": "greece-loop-card-16x9.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        },
+        {
+          "label": "Blue domes of Oia",
+          "author": "Giles Laurent",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:1000_Three_domes_of_Oia_in_Santorini_Photo_by_Giles_Laurent.jpg",
+          "license": "CC BY-SA 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+        },
+        {
+          "label": "Little Venice at sunset",
+          "author": "Roberto Faccenda",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sunset_of_Mykonos.jpg",
+          "license": "CC BY-SA 2.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/"
+        }
+      ]
     },
     "loopTall": {
       "webm": "greece-loop-card-4x5.webm",
-      "mp4": "greece-loop-card-4x5.mp4"
+      "mp4": "greece-loop-card-4x5.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        }
+      ]
     },
     "poster": "greece-loop-poster-16x9.webp",
     "film": "greece-film-16x9-web.mp4",
@@ -16,7 +40,7 @@
         "lang": "en"
       }
     ],
-    "credit": "Footage and music: Envato Elements. Some photos: Wikimedia Commons contributors.",
+    "credit": "Footage and music: Envato Elements. Some photos and clips: Wikimedia Commons contributors.",
     "filmCredits": [
       {
         "shows": "Oia, Santorini",

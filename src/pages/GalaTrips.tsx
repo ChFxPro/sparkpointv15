@@ -10,7 +10,7 @@ import {
   travelersLabel,
   type GalaTrip,
 } from '../data/galaTrips';
-import { cardVideoCredit, tripMedia, tripVideoSrc, type GalaLoopSources } from '../data/galaTripMedia';
+import { cardVideoCredit, tripMedia, tripVideoSrc, type GalaCreditPart, type GalaLoopSources } from '../data/galaTripMedia';
 import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
 
 // The trips lounge: the eight trips as a departures lounge.
@@ -69,6 +69,38 @@ function CreditLine({ credit, sourceUrl, licenseUrl }: { credit: string; sourceU
         {license}
       </a>
       {tail}
+    </>
+  );
+}
+
+// A loop's own credit: "Envato Elements · Blue domes of Oia: Giles Laurent / CC BY-SA 4.0",
+// with each CC author linked to its source and the licence to its deed.
+function LoopCredit({ parts }: { parts: GalaCreditPart[] }) {
+  return (
+    <>
+      {parts.map((part, index) => (
+        <span key={index}>
+          {index > 0 ? ' · ' : null}
+          {'text' in part ? (
+            part.text
+          ) : (
+            <>
+              {part.label ? `${part.label}: ` : null}
+              <a href={part.sourceUrl} target="_blank" rel="noopener noreferrer">
+                {part.author}
+              </a>{' '}
+              /{' '}
+              {part.licenseUrl ? (
+                <a href={part.licenseUrl} target="_blank" rel="noopener noreferrer license">
+                  {part.license}
+                </a>
+              ) : (
+                part.license
+              )}
+            </>
+          )}
+        </span>
+      ))}
     </>
   );
 }
@@ -201,7 +233,13 @@ function TripArt({ trip, boarding, near, videoAllowed, paused, onTogglePause }: 
         <figcaption className="gala-trip-credit">
           {image.place ? <>{image.place} · </> : null}
           Photo: <CreditLine credit={image.credit} sourceUrl={image.sourceUrl} licenseUrl={image.licenseUrl} />
-          {loop && cardVideoCredit(media) ? <> · Video: {cardVideoCredit(media)}</> : null}
+          {loop?.credit?.length ? (
+            <>
+              {' · '}Video: <LoopCredit parts={loop.credit} />
+            </>
+          ) : loop && cardVideoCredit(media) ? (
+            <> · Video: {cardVideoCredit(media)}</>
+          ) : null}
         </figcaption>
       ) : null}
     </figure>

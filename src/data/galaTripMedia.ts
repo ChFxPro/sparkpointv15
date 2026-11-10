@@ -6,9 +6,16 @@
 // Files live in public/assets/events/gala/trips/video/.
 import manifest from './galaTripMedia.json';
 
+/** One part of a loop's credit line: plain text, or a linked CC source. */
+export type GalaCreditPart =
+  | { text: string }
+  | { label: string; author: string; sourceUrl: string; license: string; licenseUrl: string | null };
+
 export interface GalaLoopSources {
   webm?: string;
   mp4?: string;
+  /** This loop's own footage credit, from the pack's web.json `creditLine` and `sources`. */
+  credit?: GalaCreditPart[];
 }
 
 export interface GalaTripMedia {
