@@ -61,6 +61,8 @@ function useHaptics() {
   const label = useRef<HTMLLabelElement>(null);
   const tap = useCallback((ms: number) => {
     if (prefersLessMotion()) return;
+    // Browsers refuse (and log) vibration until the visitor has tapped the page.
+    if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return;
     try {
       if (navigator.vibrate && navigator.vibrate(ms)) return;
     } catch {
