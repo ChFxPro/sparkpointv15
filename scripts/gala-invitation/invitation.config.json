@@ -1,19 +1,196 @@
 {
   "_readme": "Edit this file, then run `npm run invite:gala`. Images land in output/gala-invitation/. See README.md in this folder.",
-
+  "_trips": "The 8 Gala trips, copied from Branding/Gala/WorldOfConnections/trips/trips.json (board decision 2026-11-09). Keep them in step with it. `price` is the PUBLIC price only, shown just when showPrices is true; never copy trips.json's internal listPrice here. `photo` is the trip's hero still (01) from trips/<id>/pack/stills/, copied into assets/trips/ at 1600 px; photoAlt, photoPlace, photoCredit and photoSource come from that folder's stills.json. CC BY / BY-SA photos must show photoCredit, which the card prints on the photo (photo null = text-only card).",
+  "showPrices": false,
   "tickets": {
     "live": true,
     "price": "$100 per person",
     "url": "secure.yoursparkpoint.org/store/p/2026-sparkpoint-gala"
   },
-
   "venue": {
     "name": "Connestee Falls Country Club",
     "short": "CONNESTEE",
     "place": "Brevard, NC"
   },
-
-  "trips": [],
-
+  "trips": [
+    {
+      "id": "greece",
+      "connection": "01",
+      "name": "Greece",
+      "title": "Greece & the Greek Islands",
+      "board": "GREECE",
+      "nights": 8,
+      "travelers": 2,
+      "stops": [
+        "Santorini",
+        "Mykonos",
+        "Athens"
+      ],
+      "summary": "Three nights in Santorini, three in Mykonos, then two in Athens beneath the Acropolis, linked by an island flight and a ferry.",
+      "featured": true,
+      "photo": "assets/trips/greece-01-santorini-oia-1600.webp",
+      "price": null,
+      "photoAlt": "Blue-domed white churches of Oia above the Santorini caldera and the Aegean Sea",
+      "photoPlace": "Oia, Santorini",
+      "photoCredit": "Giles Laurent / CC BY-SA 4.0, via Wikimedia Commons",
+      "photoSource": "https://commons.wikimedia.org/wiki/File:1000_Three_domes_of_Oia_in_Santorini_Photo_by_Giles_Laurent.jpg"
+    },
+    {
+      "id": "iceland",
+      "connection": "02",
+      "name": "Iceland",
+      "title": "Iceland: Land of the Vikings",
+      "board": "ICELAND",
+      "nights": 6,
+      "travelers": 2,
+      "stops": [
+        "Reykjavík",
+        "Golden Circle",
+        "Sky Lagoon"
+      ],
+      "summary": "Six nights in Reykjavík with a food tour, the geysers and waterfalls of the Golden Circle, and the Sky Lagoon spa ritual.",
+      "featured": true,
+      "photo": "assets/trips/iceland-01-gullfoss-1600.webp",
+      "price": null,
+      "photoAlt": "Gullfoss waterfall plunging into its canyon with a rainbow in the spray",
+      "photoPlace": "Gullfoss, Golden Circle",
+      "photoCredit": "Diego Delso / CC BY-SA 4.0, via Wikimedia Commons",
+      "photoSource": "https://commons.wikimedia.org/wiki/File:Gullfoss,_Su%C3%B0urland,_Islandia,_2014-08-16,_DD_123.JPG"
+    },
+    {
+      "id": "cortona",
+      "connection": "03",
+      "name": "Cortona",
+      "title": "Cortona: Under the Tuscan Sun for four",
+      "board": "CORTONA ITALY",
+      "nights": 6,
+      "travelers": 4,
+      "stops": [
+        "Cortona"
+      ],
+      "summary": "Six nights in a two-bedroom suite in the old town of Cortona, the hilltop village made famous by Under the Tuscan Sun.",
+      "featured": true,
+      "photo": "assets/trips/cortona-01-cortona-hilltop-1600.webp",
+      "price": null,
+      "photoAlt": "The walled hilltop town of Cortona among olive terraces, seen from the air",
+      "photoPlace": "Cortona",
+      "photoCredit": "TeKappa / CC BY-SA 4.0, via Wikimedia Commons",
+      "photoSource": "https://commons.wikimedia.org/wiki/File:Cortona_dall%27aereo.jpg"
+    },
+    {
+      "id": "scotland",
+      "connection": "04",
+      "name": "Scotland",
+      "title": "Scotland: Lochs & Legends",
+      "board": "SCOTLAND",
+      "nights": 7,
+      "travelers": 2,
+      "stops": [
+        "Edinburgh",
+        "Loch Ness",
+        "Glasgow",
+        "Glencoe",
+        "Loch Lomond"
+      ],
+      "summary": "Edinburgh's castle and Royal Mile, a Loch Ness cruise, then Glasgow and the West Highlands to Glencoe and Loch Lomond.",
+      "featured": true,
+      "photo": "assets/trips/scotland-01-glencoe-1600.webp",
+      "price": null,
+      "photoAlt": "Golden evening light on the mountains of Glencoe in the Scottish Highlands",
+      "photoPlace": "Glencoe, West Highlands",
+      "photoCredit": "john mcsporran from Trossachs, Scotland / CC BY 2.0, via Wikimedia Commons",
+      "photoSource": "https://commons.wikimedia.org/wiki/File:Glencoe_(26642526873).jpg"
+    },
+    {
+      "id": "south-africa",
+      "connection": "05",
+      "name": "South Africa",
+      "title": "South Africa: Wild Wonders Photo Safari",
+      "board": "SOUTH AFRICA",
+      "nights": 6,
+      "travelers": 2,
+      "stops": [
+        "Johannesburg",
+        "Safari camp"
+      ],
+      "summary": "Five nights in a lakefront tented camp with a private plunge pool, guided game drives every day, and a Big Five drive.",
+      "featured": true,
+      "photo": "assets/trips/south-africa-01-lion-1600.webp",
+      "price": null,
+      "photoAlt": "A young male lion resting in the long grass, looking toward the camera",
+      "photoPlace": null,
+      "photoCredit": "Chris Eason / CC BY 2.0, via Wikimedia Commons",
+      "photoSource": "https://commons.wikimedia.org/wiki/File:Lion_Kruger_National_Park.jpg",
+      "_photoPlace": "Left blank on purpose: the hero still is from Kruger National Park, but the trip's safari camp location isn't confirmed, so the card doesn't name a place."
+    },
+    {
+      "id": "portugal",
+      "connection": "06",
+      "name": "Portugal",
+      "title": "Captivating Portugal: Lisbon & Porto",
+      "board": "PORTUGAL",
+      "nights": 7,
+      "travelers": 2,
+      "stops": [
+        "Lisbon",
+        "Sintra",
+        "Porto",
+        "Douro Valley"
+      ],
+      "summary": "Lisbon and Sintra, a private guided drive north to Porto, and a Douro Valley day of wine, lunch and a river cruise.",
+      "featured": false,
+      "photo": "assets/trips/portugal-01-porto-ribeira-1600.webp",
+      "price": null,
+      "photoAlt": "Traditional rabelo boats on the Douro in front of Porto's Ribeira waterfront at golden hour",
+      "photoPlace": "Ribeira, Porto",
+      "photoCredit": "Krzysztof Golik / CC BY-SA 4.0, via Wikimedia Commons",
+      "photoSource": "https://commons.wikimedia.org/wiki/File:View_of_Ribeira_(21).jpg"
+    },
+    {
+      "id": "costa-rica",
+      "connection": "07",
+      "name": "Costa Rica",
+      "title": "Colorful Costa Rica",
+      "board": "COSTA RICA",
+      "nights": 6,
+      "travelers": 2,
+      "stops": [
+        "Arenal",
+        "Tamarindo"
+      ],
+      "summary": "Rainforest and volcano around Arenal, then the Pacific beaches of Tamarindo, with two tours of the traveler's choosing.",
+      "featured": false,
+      "photo": "assets/trips/costa-rica-01-arenal-volcano-1600.webp",
+      "price": null,
+      "photoAlt": "The cone of Arenal Volcano rising above green rainforest and farmland",
+      "photoPlace": "Arenal Volcano",
+      "photoCredit": "Rhododendrites / CC BY-SA 4.0, via Wikimedia Commons",
+      "photoSource": "https://commons.wikimedia.org/wiki/File:Arenal_volcano_(70785p)_(cropped).jpg"
+    },
+    {
+      "id": "alaska",
+      "connection": "08",
+      "name": "Alaska",
+      "title": "Alaska Cruise: Explorer of the North",
+      "board": "ALASKA CRUISE",
+      "nights": 8,
+      "travelers": 2,
+      "stops": [
+        "Seattle",
+        "Ketchikan",
+        "Juneau",
+        "Skagway",
+        "Victoria, BC"
+      ],
+      "summary": "A cruise from Seattle in a balcony cabin, calling at Ketchikan, Juneau, Skagway and Victoria, British Columbia.",
+      "featured": false,
+      "photo": "assets/trips/alaska-01-mendenhall-glacier-1600.webp",
+      "price": null,
+      "photoAlt": "Mendenhall Glacier flowing between mountains into its lake near Juneau",
+      "photoPlace": "Mendenhall Glacier, Juneau",
+      "photoCredit": "Jay Galvin (jay galvin) / CC BY 2.0, via Wikimedia Commons",
+      "photoSource": "https://commons.wikimedia.org/wiki/File:Mendenhall_Glacier_(Alaska).jpg"
+    }
+  ],
   "pageUrl": "yoursparkpoint.org/events/sparkpoint-gala"
 }

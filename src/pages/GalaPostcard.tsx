@@ -52,8 +52,8 @@ export function GalaPostcard() {
         <div className="gala-postcard-grid">
           <div className="gala-postcard-message">
             <p>
-              Every great trip ends with coming home. A portion of the travel experience at
-              the Gala comes back to SparkPoint, helping bring the{' '}
+              Every great trip ends with coming home. A portion of every trip chosen at the
+              Gala, from Santorini to Skagway, comes back to SparkPoint, helping bring the{' '}
               <Link to="/resilience-hub">Transylvania Resilience Hub</Link> to life: one roof
               where people, organizations, and services come together.
             </p>

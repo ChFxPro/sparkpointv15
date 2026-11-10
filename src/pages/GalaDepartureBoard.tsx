@@ -1,21 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'motion/react';
+import { GALA_TRIPS, travelersLabel } from '../data/galaTrips';
 
 // A split-flap departures board. Each cell flips through random characters
 // before settling on its letter, staggered left to right, and every few
 // seconds one destination row "re-checks" itself so the board feels live.
 //
-// The travel experience is kept vague until the board settles it (Sarah,
-// 2026-11-05): no trip count and no auction, so the rows are open-ended
-// destinations rather than numbered connections. When the lineup is announced,
-// put the real destinations in `DEPARTURES` (16 characters max, e.g. 'KYOTO');
-// the board needs no other change.
+// The rows are the Gala's eight trips, in connection order (01–08), straight
+// from src/data/galaTrips.ts: each trip's `board` name (16 characters max),
+// its nights, and who it's for. No auction wording anywhere.
 
 const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
 type Column = 'flight' | 'destination' | 'time' | 'status';
 
-const WIDTHS: Record<Column, number> = { flight: 7, destination: 16, time: 7, status: 10 };
+const WIDTHS: Record<Column, number> = { flight: 7, destination: 16, time: 8, status: 10 };
 
 interface Row {
   flight: string;
@@ -29,18 +28,18 @@ const GALA_ROW: Row = {
   flight: 'SPK1211',
   destination: 'SPARKPOINT GALA',
   time: 'DEC 11',
-  status: 'ON TIME',
+  status: 'ON SALE',
   highlight: true,
 };
 
-const DEPARTURES: Row[] = ['ANYWHERE', 'SOMEWHERE NEW', 'FAR FROM HOME', 'BUCKET LIST', 'THE LONG WAY'].map(
-  (destination, index) => ({
-    flight: `SPK10${index + 1}`,
-    destination,
-    time: 'TBA',
-    status: 'REVEALING',
-  })
-);
+const DEPARTURES: Row[] = [...GALA_TRIPS]
+  .sort((a, b) => a.connection.localeCompare(b.connection))
+  .map((trip) => ({
+    flight: `SPK1${trip.connection}`,
+    destination: trip.board,
+    time: `${trip.nights} ${trip.nights === 1 ? 'NIGHT' : 'NIGHTS'}`,
+    status: travelersLabel(trip.travelers),
+  }));
 
 const ROWS = [GALA_ROW, ...DEPARTURES];
 
@@ -144,8 +143,10 @@ export function GalaDepartureBoard() {
   return (
     <div className="gala-board" ref={boardRef}>
       <p className="sr-only">
-        Departures board: A World of Connections, the SparkPoint Gala, flight SPK 1211, departs December 11 and is on
-        time. The travel experience departs for destinations to be revealed soon.
+        Departures board: A World of Connections, the SparkPoint Gala, flight SPK 1211, December 11,
+        tickets on sale. The eight trips:{' '}
+        {DEPARTURES.map((row) => `${row.flight.slice(3)}, ${row.destination.toLowerCase()}, ${row.time.toLowerCase()}, ${row.status.toLowerCase()}`).join('; ')}.
+      
       </p>
       <div className="gala-board-inner" aria-hidden="true">
         <div className="gala-board-title">
@@ -155,8 +156,8 @@ export function GalaDepartureBoard() {
         <div className="gala-board-row gala-board-head">
           <span className="col-flight">Flight</span>
           <span className="col-destination">Destination</span>
-          <span className="col-time">Departs</span>
-          <span className="col-status">Status</span>
+          <span className="col-time">Stay</span>
+          <span className="col-status">Seats</span>
         </div>
         {ROWS.map((row, rowIndex) => {
           const replay = replays[rowIndex];

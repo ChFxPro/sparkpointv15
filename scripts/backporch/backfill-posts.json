@@ -448,7 +448,7 @@
   {
    "slug": "an-atlas-of-wonders",
    "title": "A World of Connections",
-   "summary": "The SparkPoint Gala, Friday, December 11, at Connestee Falls Country Club: an evening of connection and a travel experience that gives back to the Resilience Hub.",
+   "summary": "The SparkPoint Gala, Friday, December 11, at Connestee Falls Country Club: an evening of connection and eight trips that give back: Greece, Iceland, Cortona, Scotland, South Africa, Portugal, Costa Rica, and Alaska, supporting the Resilience Hub.",
    "kind": "gathering",
    "pinned": true,
    "published_at": "2026-10-14T09:00:00-04:00",
@@ -461,7 +461,7 @@
    "blocks": [
     {
      "type": "text",
-     "text": "Every journey connects back home. Join us for an evening of connection and a travel experience that gives back, with a portion coming home to support the Transylvania Resilience Hub. Tickets are $100 per person."
+     "text": "Every journey connects back home. Join us for an evening of connection and eight trips that give back: Greece, Iceland, Cortona, Scotland, South Africa, Portugal, Costa Rica, and Alaska. Every trip is available to every guest at a set price, with a portion coming home to support the Transylvania Resilience Hub. Tickets are $100 per person."
     },
     {
      "type": "place",

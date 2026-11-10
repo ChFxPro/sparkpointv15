@@ -3,7 +3,9 @@
    brass for the journey, ivory paper for travel documents, evergreen for home.
    SparkPoint pink marks the giveback and the buttons. No Fraunces on the Gala. */
 
-.gala-page {
+/* The palette also goes on the film dialog, which renders outside .gala-page (in a portal). */
+.gala-page,
+.gala-film {
   --gala-midnight: #0b1322;
   --gala-midnight-2: #14213a;
   --gala-brass: #d9b56a;
@@ -19,6 +21,9 @@
   /* Machine type, kept only where the page imitates a machine: the split-flap
      tiles and the passport's machine-readable line. Everything else is Josefin. */
   --gala-machine: ui-monospace, 'SF Mono', 'Menlo', 'Consolas', monospace;
+}
+
+.gala-page {
   color: var(--gala-ink);
   background: var(--gala-ivory);
   font-family: var(--gala-display);
@@ -319,7 +324,7 @@
   /* Tiles are sized from the board's own width so they always fill it:
      N tiles, 2px between tiles, and a 0.9-tile gap between columns. */
   container-type: inline-size;
-  --cell: min(34px, calc((100cqi - 72px) / 42.7)); /* 4 columns, 40 tiles */
+  --cell: min(34px, calc((100cqi - 72px) / 43.7)); /* 4 columns, 41 tiles */
   display: grid;
   gap: 7px;
 }
@@ -368,9 +373,12 @@
   display: block;
 }
 
-.gala-board-head .col-flight,
-.gala-board-head .col-time {
+.gala-board-head .col-flight {
   width: calc(var(--cell) * 7 + 2px * 6);
+}
+
+.gala-board-head .col-time {
+  width: calc(var(--cell) * 8 + 2px * 7);
 }
 
 .gala-board-head .col-destination {
@@ -434,7 +442,7 @@
 
 @media (max-width: 1100px) {
   .gala-board-inner {
-    --cell: min(34px, calc((100cqi - 60px) / 34.8)); /* 3 columns, 33 tiles */
+    --cell: min(34px, calc((100cqi - 60px) / 35.8)); /* 3 columns, 34 tiles */
   }
 
   .gala-board .col-flight {
@@ -488,6 +496,55 @@
 
 .gala-map.is-visible .gala-map-route {
   stroke-dashoffset: 0;
+}
+
+/* A trip's own path between its stops, drawn after the flight lands. */
+.gala-map-leg {
+  fill: none;
+  stroke: var(--gala-brass-light);
+  stroke-width: 1.1;
+  stroke-linejoin: round;
+  opacity: 0;
+  transition: opacity 400ms ease;
+  transition-delay: calc(1.2s + var(--i) * 140ms);
+}
+
+.gala-map.is-visible .gala-map-leg {
+  opacity: 0.9;
+}
+
+/* The connections key: real links to each trip's card. */
+.gala-map-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gala-map-key a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 12px 6px;
+  color: var(--gala-ivory);
+  border: 1px solid rgba(217, 181, 106, 0.4);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.gala-map-key a:hover,
+.gala-map-key a:focus-visible {
+  border-color: var(--gala-brass);
+  background: rgba(217, 181, 106, 0.1);
+}
+
+.gala-map-key b {
+  color: var(--gala-brass);
 }
 
 .gala-map-dest {
@@ -605,6 +662,711 @@
   background:
     radial-gradient(circle at 10% 0%, rgba(217, 181, 106, 0.16), transparent 40%),
     var(--gala-ivory);
+}
+
+/* 3 — The trips: eight equal cards on the night sky, ticket-paper bodies under
+   a Deco art panel (a still from the trip's promo pack once it's in). */
+.gala-trips-section {
+  position: relative;
+  padding: 40px 0 110px;
+  color: var(--gala-ivory);
+  background:
+    radial-gradient(ellipse at 100% 100%, rgba(224, 54, 148, 0.1), transparent 45%),
+    var(--gala-midnight-2);
+  scroll-margin-top: 80px;
+}
+
+.gala-trips-section .gala-section-head p:not(.gala-label) {
+  margin-top: 16px;
+  color: rgba(247, 241, 229, 0.78);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* The lounge: the featured five as wide cinematic cards (photo and body side by
+   side, alternating), then the other three as tall cards, three across. Same
+   content, motion and film on every card. */
+.gala-trips {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 40px 30px;
+  margin: 56px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gala-trip {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  color: var(--gala-ink);
+  background: var(--gala-ivory);
+  /* Deco double hairline, as on the page's frames. */
+  outline: 1px solid rgba(217, 181, 106, 0.5);
+  outline-offset: 5px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+  scroll-margin-top: 96px;
+  transition:
+    outline-color 400ms ease,
+    outline-offset 400ms ease,
+    box-shadow 500ms ease,
+    translate 500ms ease;
+}
+
+.gala-trip.is-featured {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+}
+
+/* Every other featured card puts its photo on the right. */
+.gala-trip.is-featured:nth-child(2n) .gala-trip-figure {
+  order: 2;
+}
+
+/* Boarding: the card that's hovered, focused, or (on touch) nearest the middle. */
+.gala-trip.is-boarding {
+  outline-color: var(--gala-brass);
+  outline-offset: 7px;
+  box-shadow:
+    0 26px 60px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(217, 181, 106, 0.35),
+    0 0 46px rgba(217, 181, 106, 0.16);
+}
+
+.gala-trips:not(.is-still) .gala-trip.is-boarding {
+  translate: 0 -3px;
+}
+
+.gala-trip:target {
+  outline-color: var(--gala-brass);
+  outline-width: 2px;
+}
+
+.gala-trip-figure {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-width: 0;
+}
+
+.gala-trip-art {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--gala-midnight);
+}
+
+.gala-trip.is-featured .gala-trip-art {
+  flex: 1;
+  aspect-ratio: auto;
+  min-height: 360px;
+}
+
+.gala-trip.is-tall .gala-trip-art {
+  aspect-ratio: 4 / 5;
+}
+
+.gala-trip-art img,
+.gala-trip-loop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Without a loop, a boarding card's still drifts slowly; never under reduced motion. */
+.gala-trip-still {
+  transform-origin: 60% 45%;
+  transition: transform 1.4s ease;
+}
+
+.gala-trips:not(.is-still) .gala-trip.is-boarding .gala-trip-still {
+  transform: scale(1.06);
+  transition: transform 9s cubic-bezier(0.2, 0.6, 0.3, 1);
+}
+
+/* The loop dissolves in over its still once it's actually playing. */
+.gala-trip-loop {
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+.gala-trip-loop.is-shown {
+  opacity: 1;
+}
+
+/* A shade at the foot of the photo, so the boarding cue reads over any image. */
+.gala-trip-art::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: 38%;
+  content: '';
+  background: linear-gradient(to top, rgba(11, 19, 34, 0.62), transparent);
+  opacity: 0;
+  transition: opacity 500ms ease;
+  pointer-events: none;
+}
+
+.gala-trip.is-boarding .gala-trip-art::after {
+  opacity: 1;
+}
+
+/* The connection number, in a small Deco tag on the photo. */
+.gala-trip-art-tag {
+  position: absolute;
+  z-index: 1;
+  top: 14px;
+  left: 14px;
+  padding: 6px 9px 4px;
+  color: var(--gala-ivory);
+  background: rgba(11, 19, 34, 0.78);
+  border: 1px solid rgba(217, 181, 106, 0.7);
+  outline: 1px solid rgba(217, 181, 106, 0.3);
+  outline-offset: 2px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1;
+}
+
+.gala-trip.is-featured .gala-trip-art-tag {
+  top: 20px;
+  left: 20px;
+  font-size: 1rem;
+}
+
+/* "Now boarding", in brass at the foot of the boarding card's photo. */
+.gala-trip-boarding {
+  position: absolute;
+  z-index: 1;
+  bottom: 16px;
+  left: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--gala-brass-light);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  opacity: 0;
+  translate: 0 6px;
+  transition:
+    opacity 400ms ease,
+    translate 400ms ease;
+}
+
+.gala-trip.is-boarding .gala-trip-boarding {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.gala-trip-boarding::before {
+  width: 26px;
+  height: 1px;
+  content: '';
+  background: currentColor;
+  order: 2;
+}
+
+.gala-trip-boarding-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--gala-brass);
+  rotate: 45deg;
+  box-shadow: 0 0 0 3px rgba(217, 181, 106, 0.22);
+}
+
+.gala-trips:not(.is-still) .gala-trip.is-boarding .gala-trip-boarding-dot {
+  animation: gala-boarding 1.8s ease-in-out infinite;
+}
+
+@keyframes gala-boarding {
+  50% {
+    box-shadow: 0 0 0 6px rgba(217, 181, 106, 0);
+  }
+}
+
+/* Pause / play for moving video (WCAG 2.2.2). */
+.gala-trip-motion {
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  right: 12px;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px 7px;
+  color: var(--gala-ivory);
+  background: rgba(11, 19, 34, 0.8);
+  border: 1px solid rgba(217, 181, 106, 0.75);
+  border-radius: 0;
+  font-family: var(--gala-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.gala-trip-motion:hover {
+  background: rgba(11, 19, 34, 0.95);
+}
+
+.gala-trip-motion:focus-visible,
+.gala-trip-watch:focus-visible,
+.gala-trip-anchor:focus-visible {
+  outline: 2px solid var(--gala-pink);
+  outline-offset: 3px;
+}
+
+/* The photo's credit (CC BY / BY-SA need a visible one). */
+.gala-trip-credit {
+  padding: 8px 22px 0;
+  color: #6f6655;
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.gala-trip.is-featured .gala-trip-credit {
+  padding: 8px 20px 10px;
+}
+
+.gala-trip-credit a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(111, 102, 85, 0.4);
+  text-underline-offset: 2px;
+}
+
+.gala-trip-credit a:hover {
+  color: #8e2a5c;
+  text-decoration-color: currentColor;
+}
+
+.gala-trip-art-panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 6px;
+  background:
+    radial-gradient(ellipse at 50% 110%, rgba(217, 181, 106, 0.22), transparent 60%),
+    linear-gradient(160deg, #14213a, #0b1322 70%);
+}
+
+.gala-trip-art-panel::after {
+  position: absolute;
+  inset: 10px;
+  content: '';
+  border: 1px solid rgba(217, 181, 106, 0.45);
+  outline: 1px solid rgba(217, 181, 106, 0.22);
+  outline-offset: 4px;
+}
+
+.gala-trip-globe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: rgba(241, 217, 160, 0.2);
+  stroke-width: 0.6;
+}
+
+.gala-trip-globe .gala-trip-globe-route {
+  stroke: rgba(241, 217, 160, 0.75);
+  stroke-dasharray: 2.4 2.6;
+  stroke-width: 0.9;
+}
+
+.gala-trip-globe .gala-trip-globe-node {
+  fill: var(--gala-brass-light);
+  stroke: none;
+}
+
+.gala-trip-art-num {
+  position: relative;
+  color: var(--gala-ivory);
+  font-size: clamp(3rem, 5vw, 3.8rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-shadow:
+    0.045em 0.045em 0 var(--gala-midnight),
+    0.07em 0.07em 0 var(--gala-brass);
+}
+
+.gala-trip-art-country {
+  position: relative;
+  color: var(--gala-brass);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  margin-right: -0.4em;
+  text-transform: uppercase;
+}
+
+.gala-trip-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 16px 24px 26px;
+}
+
+.gala-trip.is-featured .gala-trip-body {
+  justify-content: center;
+  padding: 34px 38px 36px;
+}
+
+.gala-trip-connection {
+  color: #8e2a5c;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.gala-trip-anchor {
+  color: inherit;
+  text-decoration: none;
+}
+
+.gala-trip-anchor:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.gala-trip h3 {
+  margin-top: 10px;
+  color: var(--gala-midnight);
+  font-size: 1.36rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.gala-trip.is-featured h3 {
+  font-size: clamp(1.6rem, 2.3vw, 2.1rem);
+  font-weight: 600;
+  line-height: 1.12;
+}
+
+.gala-trip-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  margin-top: 10px;
+  color: #6b5d40;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* "Transylvania County ✈ Santorini → Mykonos → Athens" */
+.gala-trip-route {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 14px;
+  color: #8e2a5c;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.gala-trip-route-home {
+  color: #6b5d40;
+}
+
+.gala-trip-route-flight {
+  color: #b08a3e;
+}
+
+.gala-trip-stops-mark {
+  flex: none;
+  translate: 0 1px;
+}
+
+.gala-trip-summary {
+  margin-top: 14px;
+  color: #3d3a35;
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.gala-trip.is-featured .gala-trip-summary {
+  font-size: 1.04rem;
+}
+
+.gala-trip-included-title {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(140, 120, 80, 0.3);
+  color: #6b5d40;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.gala-trip-included {
+  display: grid;
+  gap: 7px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gala-trip-included li {
+  position: relative;
+  padding-left: 16px;
+  color: #3d3a35;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+/* Deco diamond bullets. */
+.gala-trip-included li::before {
+  position: absolute;
+  top: 0.5em;
+  left: 2px;
+  width: 5px;
+  height: 5px;
+  content: '';
+  border: 1px solid #b08a3e;
+  rotate: 45deg;
+}
+
+.gala-trip-actions {
+  margin-top: auto;
+  padding-top: 22px;
+}
+
+.gala-trip.is-featured .gala-trip-actions {
+  margin-top: 0;
+}
+
+.gala-trip-watch {
+  min-height: 44px;
+  padding: 12px 20px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.gala-trip-watch svg {
+  width: 14px;
+  height: 14px;
+}
+
+.gala-trips-section .gala-trips-fine {
+  max-width: 760px;
+  margin-top: 44px;
+  color: rgba(247, 241, 229, 0.66);
+}
+
+/* Tablets: featured photos go on top; the tall cards sit photo-beside-text. */
+@media (max-width: 1100px) {
+  .gala-trips {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 36px;
+  }
+
+  .gala-trip.is-featured {
+    display: flex;
+  }
+
+  .gala-trip.is-featured:nth-child(2n) .gala-trip-figure {
+    order: 0;
+  }
+
+  .gala-trip.is-featured .gala-trip-art {
+    flex: none;
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+  }
+
+  .gala-trip.is-featured .gala-trip-body {
+    padding: 24px 30px 30px;
+  }
+
+  .gala-trip.is-tall {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+  }
+
+  .gala-trip.is-tall .gala-trip-art {
+    aspect-ratio: auto;
+    flex: 1;
+    min-height: 420px;
+  }
+
+  .gala-trip.is-tall .gala-trip-credit {
+    padding-bottom: 10px;
+  }
+}
+
+/* Phones: one column, photo on top. */
+@media (max-width: 640px) {
+  .gala-trips {
+    gap: 30px;
+  }
+
+  .gala-trip.is-tall {
+    display: flex;
+  }
+
+  .gala-trip.is-featured .gala-trip-art {
+    aspect-ratio: 4 / 3;
+  }
+
+  .gala-trip.is-tall .gala-trip-art {
+    aspect-ratio: 4 / 5;
+    flex: none;
+    min-height: 0;
+  }
+
+  .gala-trip.is-featured .gala-trip-body,
+  .gala-trip-body {
+    padding: 18px 20px 24px;
+  }
+
+  .gala-trip.is-featured .gala-trip-art-tag {
+    top: 14px;
+    left: 14px;
+    font-size: 0.82rem;
+  }
+}
+
+/* The film player. */
+.gala-film-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(6, 10, 18, 0.86);
+}
+
+.gala-film {
+  position: fixed;
+  z-index: 81;
+  top: 50%;
+  left: 50%;
+  width: min(1100px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  color: var(--gala-ivory);
+  background: var(--gala-midnight);
+  border: 1px solid rgba(217, 181, 106, 0.6);
+  outline: 1px solid rgba(217, 181, 106, 0.28);
+  outline-offset: 6px;
+  font-family: var(--gala-display);
+  translate: -50% -50%;
+}
+
+.gala-film:focus {
+  outline-color: rgba(217, 181, 106, 0.28);
+}
+
+.gala-film-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.gala-film-title {
+  display: grid;
+  gap: 6px;
+  font-size: clamp(1.2rem, 2.4vw, 1.6rem);
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.gala-film-title span {
+  color: var(--gala-brass);
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.gala-film-close {
+  flex: none;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px 8px;
+  color: var(--gala-ivory);
+  background: transparent;
+  border: 1px solid rgba(217, 181, 106, 0.7);
+  border-radius: 0;
+  font-family: inherit;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.gala-film-close:hover {
+  background: rgba(241, 217, 160, 0.1);
+}
+
+.gala-film-close:focus-visible {
+  outline: 2px solid var(--gala-pink);
+  outline-offset: 3px;
+}
+
+.gala-film-frame {
+  aspect-ratio: 16 / 9;
+  max-height: calc(100vh - 150px);
+  background: #000;
+}
+
+.gala-film-video {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.gala-film-credit {
+  display: grid;
+  gap: 4px;
+  max-height: 22vh;
+  overflow-y: auto;
+  color: rgba(247, 241, 229, 0.7);
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+.gala-film-credit ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gala-film-credit a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(247, 241, 229, 0.4);
+  text-underline-offset: 2px;
+}
+
+.gala-film-credit a:hover,
+.gala-film-credit a:focus-visible {
+  color: var(--gala-brass-light);
 }
 
 /* Open passport resting on its navy leather cover. */
@@ -1283,6 +2045,23 @@
   font-size: 0.92rem;
   font-style: italic;
   line-height: 1.4;
+}
+
+.gala-tag-trip {
+  display: inline-block;
+  margin-top: 8px;
+  color: #8e2a5c;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-color: rgba(142, 42, 92, 0.35);
+  text-underline-offset: 3px;
+}
+
+.gala-tag-trip:hover {
+  text-decoration-color: currentColor;
 }
 
 .gala-tag-route {
@@ -2669,6 +3448,10 @@
   .gala-map-dest,
   .gala-map-num {
     opacity: 1;
+  }
+
+  .gala-map-leg {
+    opacity: 0.9;
   }
 
   .gala-button:hover {
