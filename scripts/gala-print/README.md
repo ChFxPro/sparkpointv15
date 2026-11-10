@@ -22,6 +22,8 @@ Replace the Drive files after re-rendering.
 | `tickets` | `ticket-{square,wide,banner,story}.html` | `tickets/` PNGs at 2160², 3840×2160, 3600×1200 and 2160×3840 for the Squarespace ticket page |
 | `share` | `share.html` | `share/gala-share-world-of-connections.jpg`, 1200×630; copy it to `public/assets/events/gala/` to update the site |
 
+| `guide` | `guide.html` | `00 Start here - A World of Connections asset guide.pdf`, the guide that sits at the top of the Drive folder. It uses the other groups' output (and `npm run invite:gala`'s) as thumbnails, so run it last |
+
 The `share` group uses the dark logo PNG, so it renders `logo` too.
 
 ## How the templates work
