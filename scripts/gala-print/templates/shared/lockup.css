@@ -35,6 +35,9 @@
 .lk .by2 { margin-top: .75em; color: var(--by); opacity: .85; font: 400 max(.08em, var(--by2-min, 11px)) 'Josefin Sans'; letter-spacing: .38em; margin-right: -.38em; text-transform: uppercase; }
 .lk.no-by2 .by2 { display: none; }
 
+/* The kit keeps italic for the lockup's small "A" only. */
+em { font-style: normal; }
+
 /* Deco details from the kit: double-hairline frame and the square pink button. */
 .deco-frame { position: absolute; inset: var(--frame-inset, 22px); border: 1px solid var(--frame, rgba(217,181,106,.5)); outline: 1px solid var(--frame2, rgba(217,181,106,.28)); outline-offset: 6px; pointer-events: none; z-index: 5; }
 .deco-btn { display: inline-block; padding: .9em 2.2em .78em; border: 1px solid #d9b56a; background: #e03694; color: #fff; font: 600 1em 'Josefin Sans'; letter-spacing: .2em; margin-right: -.2em; text-transform: uppercase; border-radius: 0; }
