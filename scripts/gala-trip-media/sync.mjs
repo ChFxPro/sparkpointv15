@@ -5,6 +5,7 @@
 //   npm run gala:trip-media              # from the kit's default location
 //   npm run gala:trip-media -- <tripsDir> # from another folder (same layout)
 //   npm run gala:trip-media -- --check   # list what it would copy, change nothing
+//   npm run gala:trip-media -- --all     # ignore WEB-READY.md (import every pack/web folder)
 //
 // It looks in <tripsDir>/<id>/pack/web/ for the promo-pack session's files:
 //   <id>-loop-card…16x9….mp4 / .webm   silent card loop, 960×540, 6–8 s
@@ -38,6 +39,22 @@ const MAX_LOOP_BYTES = 900 * 1024;
 const MAX_FILM_BYTES = 40 * 1024 * 1024;
 
 const TRIP_IDS = ['greece', 'iceland', 'cortona', 'scotland', 'south-africa', 'portugal', 'costa-rica', 'alaska'];
+
+// Only trips the kit's WEB-READY.md marks "ready" are imported, so a trip whose
+// files are still being built is never picked up half-done. Without a
+// WEB-READY.md (a test folder), or with --all, every trip with a pack/web folder is.
+function readyTrips() {
+  const file = path.join(tripsDir, 'WEB-READY.md');
+  if (args.includes('--all') || !fs.existsSync(file)) return null;
+  const ready = new Set();
+  for (const line of fs.readFileSync(file, 'utf8').split('\n')) {
+    const cells = line.split('|').slice(1, -1).map((c) => c.trim());
+    if (cells.length < 2 || !/^ready\b/i.test(cells[1])) continue;
+    ready.add(cells[0].toLowerCase().replace(/\s+/g, '-'));
+  }
+  return ready;
+}
+const READY = readyTrips();
 
 // web.json's credit is written for the team ("…, licensed to <name>. … (see LICENSES.md)").
 // The public line keeps only the sources: no licensee's name, no pointer to an internal file.
@@ -112,6 +129,10 @@ const problems = [];
 for (const id of TRIP_IDS) {
   const webDir = path.join(tripsDir, id, 'pack', 'web');
   if (!fs.existsSync(webDir)) continue;
+  if (READY && !READY.has(id)) {
+    console.log(`${id}: has a pack/web folder but isn't marked ready in WEB-READY.md; skipped`);
+    continue;
+  }
   const files = fs.readdirSync(webDir);
   const isLoop = (f) => f.includes('loop-card');
   const loop = (aspect, ext) => pick(files, id, (f) => isLoop(f) && f.includes(aspect) && f.endsWith(ext));

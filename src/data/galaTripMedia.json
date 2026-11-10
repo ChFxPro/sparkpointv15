@@ -78,5 +78,123 @@
         "sourceUrl": "https://commons.wikimedia.org/wiki/File:Attica_06-13_Athens_50_View_from_Philopappos_-_Acropolis_Hill.jpg"
       }
     ]
+  },
+  "iceland": {
+    "loopWide": {
+      "webm": "iceland-loop-card-16x9.webm",
+      "mp4": "iceland-loop-card-16x9.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        },
+        {
+          "label": "Reykjavík at dusk",
+          "author": "Diego Delso",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vista_de_Reikiavik_desde_Perlan,_Distrito_de_la_Capital,_Islandia,_2014-08-13,_DD_118-120_HDR.JPG",
+          "license": "CC BY-SA 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+        }
+      ]
+    },
+    "loopTall": {
+      "webm": "iceland-loop-card-4x5.webm",
+      "mp4": "iceland-loop-card-4x5.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        }
+      ]
+    },
+    "poster": "iceland-loop-poster-16x9.webp",
+    "film": "iceland-film-16x9-web.mp4",
+    "captions": [
+      {
+        "file": "iceland-film-16x9-web.vtt",
+        "lang": "en"
+      }
+    ],
+    "credit": "Footage and music: Envato Elements. Some photos and clips: Wikimedia Commons contributors.",
+    "filmCredits": [
+      {
+        "shows": "Gullfoss, Golden Circle",
+        "author": "Diego Delso",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gullfoss,_Su%C3%B0urland,_Islandia,_2014-08-16,_DD_123.JPG"
+      },
+      {
+        "shows": "Reykjavík",
+        "author": "Diego Delso",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vista_de_Reikiavik_desde_Perlan,_Distrito_de_la_Capital,_Islandia,_2014-08-13,_DD_118-120_HDR.JPG"
+      }
+    ]
+  },
+  "cortona": {
+    "loopWide": {
+      "webm": "cortona-loop-card-16x9.webm",
+      "mp4": "cortona-loop-card-16x9.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        },
+        {
+          "label": "The view over the Val di Chiana",
+          "author": "Matthias v.d. Elbe",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cortona-Valdichiana.jpg",
+          "license": "CC BY 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+        }
+      ]
+    },
+    "loopTall": {
+      "webm": "cortona-loop-card-4x5.webm",
+      "mp4": "cortona-loop-card-4x5.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        },
+        {
+          "label": "Piazza della Repubblica",
+          "author": "Sailko",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cortona,_palazzi_baldelli_e_bourbon-petrella,_interno,_veduta_su_piazza_della_repubblica_col_palazzo_comunale_05.jpg",
+          "license": "CC BY-SA 4.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+        }
+      ]
+    },
+    "poster": "cortona-loop-poster-16x9.webp",
+    "film": "cortona-film-16x9-web.mp4",
+    "captions": [
+      {
+        "file": "cortona-film-16x9-web.vtt",
+        "lang": "en"
+      }
+    ],
+    "credit": "Footage and music: Envato Elements. Some photos and clips: Wikimedia Commons contributors.",
+    "filmCredits": [
+      {
+        "shows": "Piazza della Repubblica, Cortona",
+        "author": "Sailko",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cortona,_palazzi_baldelli_e_bourbon-petrella,_interno,_veduta_su_piazza_della_repubblica_col_palazzo_comunale_05.jpg"
+      },
+      {
+        "shows": "Red wine poured at dinner",
+        "author": "Missvain",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:2018_Corner_103_Bacon_Dinner_-_Sarah_Stierch.jpg"
+      },
+      {
+        "shows": "View over the Val di Chiana",
+        "author": "Matthias v.d. Elbe",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cortona-Valdichiana.jpg"
+      }
+    ]
   }
 }
