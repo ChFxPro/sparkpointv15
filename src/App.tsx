@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router';
 import { useEffect, lazy, Suspense } from 'react';
+import { RouteErrorBoundary } from './components/RouteErrorBoundary';
 import { HelmetProvider } from 'react-helmet-async';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -82,8 +83,14 @@ const KnowYourNumbersPage = lazy(() =>
 );
 const RuralHealthConveningPage = lazy(() => import('./pages/RuralHealthConveningPage'));
 const RuralHealthPhotoSharePage = lazy(() => import('./pages/RuralHealthPhotoSharePage'));
+const CollabLabMediaPage = lazy(() => import('./pages/CollabLabMediaPage'));
+const CollabLabBrollPage = lazy(() => import('./pages/CollabLabBrollPage'));
 const InternalStatusPage = lazy(() => import('./pages/InternalStatusPage'));
 const InternalLoginPage = lazy(() => import('./pages/InternalLoginPage'));
+const InternalPortalPage = lazy(() => import('./pages/InternalPortalPage'));
+const InternalPortalDemoPage = lazy(() =>
+  import('./pages/InternalPortalPage').then((m) => ({ default: m.InternalPortalDemoPage })),
+);
 const InternalReportsHomePage = lazy(() => import('./pages/InternalReportsHomePage'));
 const InternalReportDashboardPage = lazy(() => import('./pages/InternalReportDashboardPage'));
 const BackPorchPage = lazy(() => import('./pages/backporch/BackPorchPage'));
@@ -164,8 +171,8 @@ function RouteLoading() {
 // Flagship program routes that render as immersive, chromeless landing pages.
 // These skip the site-wide <Header /> and wrapping <main> so the program's own
 // hero can occupy the full viewport without colliding with site chrome.
-const CHROMELESS_PATH_PREFIXES = ['/programs/purpose-workshops', '/rural-health-convening', '/internal'];
-const CUSTOM_FOOTER_PATH_PREFIXES = ['/rural-health-convening', '/internal'];
+const CHROMELESS_PATH_PREFIXES = ['/programs/purpose-workshops', '/rural-health-convening', '/collaboration-lab', '/internal'];
+const CUSTOM_FOOTER_PATH_PREFIXES = ['/rural-health-convening', '/collaboration-lab', '/internal'];
 
 function isChromelessPath(pathname: string): boolean {
   return CHROMELESS_PATH_PREFIXES.some(
@@ -181,6 +188,7 @@ function AppContent() {
   );
 
   const routes = (
+    <RouteErrorBoundary resetKey={location.pathname}>
     <Suspense fallback={<RouteLoading />}>
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -264,6 +272,10 @@ function AppContent() {
         <Route path="/rural-health-convening" element={<RuralHealthConveningPage />} />
         {/* Unlisted photo-share page: reached by direct link only (see the page header). */}
         <Route path="/rural-health-convening/photos" element={<RuralHealthPhotoSharePage />} />
+        {/* Photo + video page for the Oct 23 Collaboration Lab; its Events entry links here. */}
+        <Route path="/collaboration-lab/media" element={<CollabLabMediaPage />} />
+        {/* Its b-roll downloads, for editors (mainly PHF's): also direct link only. */}
+        <Route path="/collaboration-lab/media/b-roll" element={<CollabLabBrollPage />} />
         <Route path="/backporch" element={<BackPorchPage />} />
         <Route path="/backporch/:slug" element={<BackPorchPostPage />} />
         <Route path="/back-porch" element={<Navigate to="/backporch" replace />} />
@@ -274,6 +286,9 @@ function AppContent() {
         {import.meta.env.DEV && <Route path="/internal/backporch/demo" element={<InternalBackPorchDemoPage />} />}
         {import.meta.env.DEV && <Route path="/internal/lab/demo" element={<InternalLabDemoPage />} />}
         <Route path="/internal/status" element={<InternalStatusPage />} />
+        {/* Staff portal: where staff sign-in lands; links to every internal tool. */}
+        <Route path="/internal" element={<InternalPortalPage />} />
+        {import.meta.env.DEV && <Route path="/internal/demo" element={<InternalPortalDemoPage />} />}
         <Route path="/internal/login" element={<InternalLoginPage />} />
         <Route path="/internal/reports" element={<InternalReportsHomePage />} />
         <Route path="/internal/reports/:reportType/:period" element={<InternalReportDashboardPage />} />
@@ -302,6 +317,7 @@ function AppContent() {
         <Route path="*" element={<HomePage />} />
       </Routes>
     </Suspense>
+    </RouteErrorBoundary>
   );
 
   return (

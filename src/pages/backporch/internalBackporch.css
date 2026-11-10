@@ -1132,3 +1132,81 @@
   font-size: 0.85rem;
   color: var(--pe-muted);
 }
+
+/* ── Cover framing (CoverFraming.tsx) ─────────────────────────── */
+.pe-framing {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--pe-line);
+}
+
+.pe-focus-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.pe-focus {
+  position: relative;
+  display: inline-block;
+  padding: 0;
+  border: 1px solid var(--pe-line);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--pe-board);
+  cursor: crosshair;
+  line-height: 0;
+}
+
+.pe-focus:focus-visible {
+  outline: 3px solid var(--ir-pink);
+  outline-offset: 2px;
+}
+
+.pe-focus img {
+  display: block;
+  /* Fixed caps (not %), so the button shrinks to exactly the photo and the dot lines up. */
+  max-width: min(420px, 78vw);
+  max-height: 320px;
+  width: auto;
+  height: auto;
+  user-select: none;
+}
+
+.pe-focus-dot {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--pe-plum), 0 2px 8px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+.pe-frame-previews {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.pe-frame-preview {
+  margin: 0;
+}
+
+.pe-frame-preview .porch-img {
+  height: 112px;
+  aspect-ratio: var(--ratio);
+  border-radius: 8px;
+}
+
+.pe-frame-preview figcaption {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--pe-muted);
+}

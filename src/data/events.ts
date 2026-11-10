@@ -52,10 +52,14 @@ export interface SparkPointEvent {
   imageAlt?: string;
   featured?: boolean;
   partnerLine?: string;
+  // The organization that hosted it, when that isn't SparkPoint. A white version of
+  // its logo (a public path, like imagePath) sits at the bottom-left of the card's
+  // photo over a dark fade; check that it doesn't cover a face.
+  host?: { name: string; logoPath: string };
   // Who puts the event on, shown as the line above its title on the Events
   // page (e.g. "The SparkPoint Gala"). Falls back to the category.
   presenter?: string;
-  // Show the Gala's An Atlas of Wonders lockup in the save-the-date panel in
+  // Show the Gala's A World of Connections lockup in the save-the-date panel in
   // place of the big date.
   galaLockup?: boolean;
   // A save-the-date: an event without its own photo yet. The Events page gives
@@ -71,8 +75,8 @@ export interface SparkPointEvent {
 export const EVENTS: SparkPointEvent[] = [
   {
     id: 'sparkpoint-gala-2026',
-    title: 'An Atlas of Wonders',
-    shortTitle: 'An Atlas of Wonders',
+    title: 'A World of Connections',
+    shortTitle: 'A World of Connections',
     presenter: 'The SparkPoint Gala',
     galaLockup: true,
     category: 'Fundraiser',
@@ -85,7 +89,7 @@ export const EVENTS: SparkPointEvent[] = [
     locationName: GALA_VENUE.name,
     locationLabel: `${GALA_VENUE.street}, ${GALA_VENUE.city}, ${GALA_VENUE.region} ${GALA_VENUE.postalCode}`,
     summary:
-      'See the world. Strengthen home. An evening of connection and a live auction of eight travel experiences, with a portion of every trip coming home to support the Transylvania Resilience Hub.',
+      'Every journey connects back home. An evening of connection and eight trips to choose from, Greece, Iceland, Cortona, Scotland, South Africa, Portugal, Costa Rica, and Alaska, each at a set price, with a portion coming home to support the Transylvania Resilience Hub.',
     detailPath: '/events/sparkpoint-gala',
     featured: true,
     teaser: true,
@@ -152,6 +156,26 @@ export const EVENTS: SparkPointEvent[] = [
       'The Rural Health Field Simulator connection map showing the paths between trusted doors, care providers, and community resources.',
     partnerLine:
       'Hosted by SparkPoint in partnership with the North Carolina Rural Health Association.',
+  },
+  {
+    id: 'collaboration-lab-2026',
+    title: 'Collaboration Lab: Building Partnerships That Last',
+    shortTitle: 'Collaboration Lab',
+    category: 'Learning',
+    startDate: '2026-10-23T09:00:00-04:00',
+    endDate: '2026-10-23T12:00:00-04:00',
+    dateLabel: 'Friday, October 23, 2026',
+    timeLabel: '9:00 a.m.–12:00 p.m.',
+    locationName: 'Mary C. Jenkins Community & Cultural Center',
+    locationLabel: 'Brevard, North Carolina',
+    summary:
+      'Pisgah Health Foundation brought together nonprofit and community leaders from across Haywood, Madison, and Transylvania counties for a morning on what makes partnerships work, with SparkPoint and FWRD Transylvania sharing Wellness Rooted in Connection and Community Connectors. Watch the program and download the photos.',
+    detailPath: '/collaboration-lab/media',
+    host: { name: 'Pisgah Health Foundation', logoPath: 'assets/collab-lab/phf-logo-white.webp' },
+    imagePath: 'assets/collab-lab/collab-lab-tables-1920.webp',
+    imageAlt: 'Attendees at a round table write on sticky notes during a small-group exercise.',
+    partnerLine:
+      'Hosted by Pisgah Health Foundation, in partnership with Dogwood Health Trust, SparkPoint, and FWRD Transylvania.',
   },
 ];
 

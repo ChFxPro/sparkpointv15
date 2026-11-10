@@ -22,6 +22,10 @@ const configPath = arg('--config') ? path.resolve(arg('--config')) : path.join(h
 const config = JSON.parse(await readFile(configPath, 'utf8'));
 const trips = (config.trips || []).length;
 if (trips > 8) console.warn(`⚠ ${trips} trips listed; only the first 8 fit on the board.`);
+// Trip prices are internal until Jeff sets public ones (2026-11-10): refuse a
+// config that carries trips.json's listPrice, and say when prices are on.
+if ((config.trips || []).some((t) => 'listPrice' in t)) throw new Error('A trip in the config has listPrice (internal). Remove it; public prices go in `price`.');
+if (config.showPrices) console.warn('⚠ showPrices is on: trip prices will be printed on the images.');
 if (config.tickets?.live && !config.tickets?.url) console.warn('⚠ tickets.live is true but tickets.url is empty.');
 
 const outDir = arg('--out') ? path.resolve(arg('--out')) : path.join(root, 'output/gala-invitation');
@@ -33,7 +37,7 @@ try {
   await page.evaluateOnNewDocument((cfg) => { window.__INVITE__ = cfg; }, config);
   await page.goto('file://' + path.join(here, 'template.html'), { waitUntil: 'networkidle0' });
   await page.evaluate(() => document.fonts.ready);
-  const fontsOk = await page.evaluate(() => document.fonts.check('400 40px Fraunces') && document.fonts.check('800 16px Manrope'));
+  const fontsOk = await page.evaluate(() => document.fonts.check('700 40px "Josefin Sans"') && document.fonts.check('300 16px "Josefin Sans"'));
   if (!fontsOk) throw new Error('Fonts failed to load; run `npm install` first.');
 
   const png = await page.screenshot({ fullPage: true, type: 'png' });
@@ -73,7 +77,8 @@ try {
     }
     const meta = await sharp(out, { animated: true }).metadata();
     const kb = Math.round((await readFile(out)).length / 1024);
-    total += kb;
+    // 04-trips-all is an alternative to the cut-up trip cards, not an extra.
+    if (!name.endsWith('-all')) total += kb;
     const flag = anim && kb > 1024 ? '  ⚠ over 1 MB' : '';
     console.log(`✓ ${path.relative(root, out)}  ${meta.width}×${meta.pageHeight || meta.height}${anim ? `  ${meta.pages} frames` : ''}  ${kb} KB${flag}`);
   }
