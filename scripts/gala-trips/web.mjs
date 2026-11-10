@@ -36,7 +36,11 @@ function moments(edit, bm, want = 4, total = 7.2) {
   const clean = foot.filter((s) => !s.caption);
   const pool = (clean.length >= want ? clean : foot);
   const step = pool.length / want;
-  const picked = Array.from({ length: Math.min(want, pool.length) }, (_, i) => pool[Math.floor(i * step + step / 2)]);
+  // Each shot at most once (with few shots, each holds longer); top up from
+  // the captioned shots (the clean render drops their text) before repeating.
+  let picked = [...new Set(Array.from({ length: Math.min(want, pool.length) }, (_, i) => pool[Math.floor(i * step + step / 2)]))];
+  for (const s of foot) if (picked.length < Math.min(want, 3) && !picked.includes(s)) picked.push(s);
+  picked.sort((a, b) => a.start - b.start);
   const beats = Math.max(2, Math.round((total + XF) / picked.length / bm.beat));
   return picked.map((s) => {
     const len = beats * bm.beat;
