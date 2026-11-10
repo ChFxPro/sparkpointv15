@@ -78,37 +78,64 @@
       ],
       "reel": [
         {
-          "still": "greece-01",
-          "move": "in",
-          "fx": 0.62,
+          "local": {
+            "local": "aerial-view-of-oia-village-and-red-cliffs-in-santo-2026-10-03-16-25-49-utc.mp4",
+            "at": 0.5,
+            "dur": 6
+          },
+          "fx": 0.4,
           "dur": 6,
           "social": true,
-          "shows": "Oia, Santorini",
+          "shows": "Oia and the red cliffs, Santorini",
           "caption": [
             "Santorini · 3 nights",
             "Whitewashed Oia, high above the caldera"
           ]
         },
         {
-          "commonsStill": "File:Oia - Santorini - Greece - 13.jpg",
-          "move": "left",
+          "local": {
+            "local": "alley-in-oia-santorini-greece-2026-10-07-03-27-22-utc.mp4",
+            "at": 2,
+            "dur": 5
+          },
+          "fx": 0.55,
           "dur": 5,
-          "shows": "Oia and the Ammoudi cliffs, Santorini"
+          "shows": "A lane in Oia, Santorini"
         },
         {
-          "clip": {
-            "commons": "File:MYKONOS , a walking tour of this Greek island (in 4K).webm",
-            "at": 117.6,
-            "dur": 4.2,
-            "keepTop": 0.85
+          "local": {
+            "local": "colorful-view-of-oia-village-and-windmills-on-sant-2026-10-02-12-37-46-utc.mov",
+            "at": 0,
+            "dur": 5.5
           },
-          "fx": 0.5,
-          "dur": 4.2,
+          "fx": 0.45,
+          "dur": 5.5,
           "social": true,
-          "shows": "Mykonos harbour",
+          "shows": "Oia and its windmills at dusk"
+        },
+        {
+          "local": {
+            "local": "santorini-greece-village-on-cliff-at-night-2026-09-30-13-03-21-utc.mp4",
+            "at": 1,
+            "dur": 5.5
+          },
+          "fx": 0.4,
+          "dur": 5.5,
+          "shows": "Santorini's cliffside village at night"
+        },
+        {
+          "local": {
+            "local": "an-aerial-footage-of-little-venice-in-mykonos-reve-2026-11-09-23-21-42-utc.mp4",
+            "at": 8,
+            "dur": 6.5
+          },
+          "fx": 0.55,
+          "dur": 6.5,
+          "social": true,
+          "shows": "The windmills and Little Venice, Mykonos",
           "caption": [
             "Mykonos · 3 nights",
-            "Harbour mornings and island evenings"
+            "Windmills above Little Venice"
           ]
         },
         {
@@ -116,23 +143,7 @@
           "move": "right",
           "fx": 0.6,
           "dur": 5,
-          "shows": "Little Venice, Mykonos"
-        },
-        {
-          "clip": {
-            "commons": "File:MYKONOS , a walking tour of this Greek island (in 4K).webm",
-            "at": 552.5,
-            "dur": 6,
-            "keepTop": 0.85
-          },
-          "fx": 0.3,
-          "dur": 6,
-          "social": true,
-          "shows": "Mykonos windmills at sunset",
-          "caption": [
-            "Mykonos",
-            "Sunset at the windmills"
-          ]
+          "shows": "Little Venice at sunset, Mykonos"
         },
         {
           "clip": {
@@ -143,33 +154,25 @@
           },
           "fx": 0.45,
           "dur": 5.4,
-          "social": true,
-          "shows": "The Parthenon, Athens",
+          "shows": "The Parthenon by day, Athens",
           "caption": [
             "Athens · 2 nights",
             "A guided tour beneath the Acropolis"
           ]
         },
         {
-          "still": "greece-04",
-          "move": "out",
-          "fx": 0.55,
-          "dur": 5,
-          "shows": "The Acropolis from Philopappos Hill"
-        },
-        {
-          "clip": {
-            "commons": "File:The Acropolis of Athens, Greece.webm",
-            "at": 171.2,
-            "dur": 4.6,
-            "keepTop": 0.86
+          "local": {
+            "local": "athens-acropolis-night-view-from-panthenon-2026-10-03-05-34-40-utc.mp4",
+            "at": 2,
+            "dur": 6.5
           },
           "fx": 0.6,
-          "dur": 4.6,
-          "shows": "Athens from the Acropolis"
+          "dur": 6.5,
+          "social": true,
+          "shows": "The Acropolis lit at night, Athens"
         }
       ],
-      "factsBg": 3
+      "factsBg": 1
     },
     "iceland": {
       "line": "Land of the Vikings",

@@ -39,6 +39,9 @@ function rings(t) {
   return out;
 }
 
+// Drops points closer than `tol` degrees to the last kept one: 10m detail is
+// finer than a dot, and fewer points keeps each frame fast.
+const thin = (r, tol) => r.filter((p, i) => { if (!i || i === r.length - 1) return true; const q = thin.last; const keep = !q || Math.abs(p[0] - q[0]) + Math.abs(p[1] - q[1]) > tol; if (keep) thin.last = p; return keep; });
 const round = (r) => r.map(([x, y]) => [Math.round(x * 1000) / 1000, Math.round(y * 1000) / 1000]);
 
 // Writes land.js (window.LAND_COARSE, window.LAND_FINE). Fine outlines are kept
@@ -47,7 +50,8 @@ export async function writeLand(file, boxes) {
   const coarse = rings(await topo('110m')).map(round);
   const fine = rings(await topo('10m'))
     .filter((r) => r.some(([x, y]) => boxes.some(([lon0, lat0, lon1, lat1]) => x >= lon0 && x <= lon1 && y >= lat0 && y <= lat1)))
-    .map(round);
+    .map((r) => { thin.last = null; return round(thin(r, 0.02)); })
+    .filter((r) => r.length > 3);
   await mkdir(dirname(file), { recursive: true });
   await writeFile(file, `window.LAND_COARSE=${JSON.stringify(coarse)};\nwindow.LAND_FINE=${JSON.stringify(fine)};\n`);
 }

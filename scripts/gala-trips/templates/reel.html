@@ -22,14 +22,14 @@
 
   /* Lower-third caption on footage. */
   .cap { position: absolute; left: calc(110px * var(--u)); bottom: calc(104px * var(--u)); max-width: 70%; }
-  .cap .k { display: flex; align-items: center; gap: .9em; color: #d9b56a; font: 600 calc(17px * var(--u)) 'Josefin Sans'; letter-spacing: .42em; text-transform: uppercase; }
+  .cap .k { display: flex; align-items: center; gap: .9em; color: #d9b56a; font: 600 calc(20px * var(--u)) 'Josefin Sans'; letter-spacing: .42em; text-transform: uppercase; }
   .cap .k::before { content: ''; width: 2.6em; height: 1px; background: currentColor; opacity: .8; }
-  .cap .t { margin-top: .45em; font: 300 calc(46px * var(--u)) / 1.1 'Josefin Sans'; letter-spacing: .01em; text-shadow: 0 2px 24px rgba(11,19,34,.6); }
+  .cap .t { margin-top: .45em; font: 300 calc(52px * var(--u)) / 1.1 'Josefin Sans'; letter-spacing: .01em; text-shadow: 0 2px 24px rgba(11,19,34,.6); }
   .l-9x16 .cap, .l-1x1 .cap { left: calc(70px * var(--u)); right: calc(70px * var(--u)); max-width: none; bottom: calc(150px * var(--u)); }
   .l-9x16 .cap .t { font-size: calc(54px * var(--u)); }
 
   /* Running mark in the corner during footage. */
-  .corner { position: absolute; left: calc(64px * var(--u)); top: calc(58px * var(--u)); display: flex; align-items: center; gap: .8em; color: #f1d9a0; font: 600 calc(14px * var(--u)) 'Josefin Sans'; letter-spacing: .36em; text-transform: uppercase; opacity: 0; text-shadow: 0 1px 12px rgba(11,19,34,.7); }
+  .corner { position: absolute; left: calc(64px * var(--u)); top: calc(58px * var(--u)); display: flex; align-items: center; gap: .8em; color: #f1d9a0; font: 600 calc(17px * var(--u)) 'Josefin Sans'; letter-spacing: .36em; text-transform: uppercase; opacity: 0; text-shadow: 0 1px 12px rgba(11,19,34,.7); }
   .corner img { width: calc(22px * var(--u)); }
 
   /* Cards. */
@@ -41,23 +41,24 @@
   .l-9x16 .name { font-size: calc(124px * var(--u)); }
   .line { margin-top: .55em; color: #f1d9a0; font: italic 300 calc(40px * var(--u)) 'Josefin Sans'; letter-spacing: .03em; }
   .hook { margin-top: 1.2em; max-width: 30em; color: rgba(247,241,229,.88); font: 300 calc(28px * var(--u)) / 1.45 'Josefin Sans'; }
-  .facts { display: flex; gap: 1.2em; align-items: center; justify-content: center; font: 600 calc(24px * var(--u)) 'Josefin Sans'; letter-spacing: .34em; margin-right: -.34em; text-transform: uppercase; }
+  .facts { display: flex; gap: 1.2em; align-items: center; justify-content: center; font: 600 calc(32px * var(--u)) 'Josefin Sans'; letter-spacing: .34em; margin-right: -.34em; text-transform: uppercase; }
   .facts b, .hl b { width: .42em; height: .42em; rotate: 45deg; border: 1px solid #d9b56a; flex: none; }
-  .hls { margin-top: 1.6em; display: grid; gap: .85em; justify-items: start; text-align: left; }
-  .hl { display: flex; align-items: center; gap: 1.1em; font: 300 calc(36px * var(--u)) / 1.2 'Josefin Sans'; }
-  .l-9x16 .hl { font-size: calc(40px * var(--u)); }
+  .hls { margin-top: 1.3em; display: grid; gap: .85em; justify-items: start; text-align: left; }
+  .hl { display: flex; align-items: center; gap: 1.1em; font: 300 calc(50px * var(--u)) / 1.2 'Josefin Sans'; }
+  .l-9x16 .hl { font-size: calc(46px * var(--u)); }
+  .l-1x1 .hl { font-size: calc(42px * var(--u)); }
   .price { margin-top: 1.8em; color: #f1d9a0; font: 600 calc(22px * var(--u)) 'Josefin Sans'; letter-spacing: .3em; text-transform: uppercase; }
   .price strong { display: block; margin-top: .35em; color: #f7f1e5; font: 300 calc(54px * var(--u)) 'Josefin Sans'; letter-spacing: .06em; }
   .rule { display: flex; align-items: center; gap: .8em; margin: 1.6em 0 0; }
   .rule i { width: calc(110px * var(--u)); height: 5px; border-top: 1px solid #f1d9a0; border-bottom: 1px solid #f1d9a0; opacity: .6; }
   .rule img { width: calc(26px * var(--u)); }
   .rule.top { margin: 0 0 1.4em; }
-  .cta { margin-top: 1.3em; font: 600 calc(30px * var(--u)) 'Josefin Sans'; letter-spacing: .3em; margin-right: -.3em; text-transform: uppercase; }
-  .tag { margin-top: 1em; font: 300 calc(40px * var(--u)) 'Josefin Sans'; letter-spacing: .02em; }
+  .cta { margin-top: 1.3em; font: 600 calc(36px * var(--u)) 'Josefin Sans'; letter-spacing: .3em; margin-right: -.3em; text-transform: uppercase; }
+  .tag { margin-top: 1em; font: 300 calc(48px * var(--u)) 'Josefin Sans'; letter-spacing: .02em; }
   .tag em { font-style: normal; font-weight: 600; color: #d9b56a; }
-  .when { margin-top: 1.6em; color: #f1d9a0; font: 400 calc(19px * var(--u)) 'Josefin Sans'; letter-spacing: .32em; margin-right: -.32em; text-transform: uppercase; }
-  .lk { font-size: calc(96px * var(--u)); }
-  .lk.small { font-size: calc(54px * var(--u)); }
+  .when { margin-top: 1.6em; color: #f1d9a0; font: 400 calc(24px * var(--u)) 'Josefin Sans'; letter-spacing: .32em; margin-right: -.32em; text-transform: uppercase; }
+  .lk { font-size: calc(128px * var(--u)); }
+  .lk.small { font-size: calc(64px * var(--u)); }
   .l-9x16 .lk { font-size: calc(110px * var(--u)); }
   .l-9x16 .lk.small { font-size: calc(62px * var(--u)); }
   .rise { opacity: 0; }
@@ -92,7 +93,7 @@ const layers = R.shots.map((s) => {
   if (s.caption) html += `<div class="cap rise"><div class="k">${esc(s.caption[0])}</div><div class="t">${esc(s.caption[1])}</div></div>`;
   if (s.card === 'open') html += `<div class="center">
       <div class="lk-slot small rise" data-step="0"></div>
-      <div class="conn rise" data-step="1" style="margin-top:${1.4}em">Connection ${esc(R.trip.connection)}</div>
+      <div class="conn rise" data-step="1" style="margin-top:calc(64px * var(--u))">Connection ${esc(R.trip.connection)}</div>
       <div class="name" data-letters>${[...R.trip.name].map((c) => `<span>${c === ' ' ? '&nbsp;' : esc(c)}</span>`).join('')}</div>
       <div class="line rise" data-step="2">${esc(R.trip.line)}</div>
     </div><div class="deco-frame"></div>`;
@@ -122,7 +123,7 @@ const cache = new Map();
 function load(src) {
   if (!cache.has(src)) {
     const im = new Image(); im.src = src;
-    cache.set(src, im.decode().then(() => im));
+    cache.set(src, im.decode().then(() => im, () => { throw new Error('Could not load ' + src); }));
     if (cache.size > 24) cache.delete(cache.keys().next().value);
   }
   return cache.get(src);

@@ -13,6 +13,7 @@
   .hero { position: relative; background-size: cover; background-position: center; }
   .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,19,34,.6), rgba(11,19,34,.05) 42%, rgba(11,19,34,.78)); }
   .hero .lk { position: absolute; z-index: 2; top: .3in; right: .55in; font-size: 30px; --by2-min: 7pt; }
+  .hero::before { content: ''; position: absolute; z-index: 1; right: 0; top: 0; width: 4.2in; height: 2.2in; background: radial-gradient(ellipse at 70% 30%, rgba(11,19,34,.75), rgba(11,19,34,0) 70%); }
   .hero .title { position: absolute; z-index: 2; left: .6in; right: .6in; bottom: .34in; color: #f7f1e5; }
   .conn { display: flex; align-items: center; gap: .9em; color: #f1d9a0; font: 600 10pt 'Josefin Sans'; letter-spacing: .44em; text-transform: uppercase; }
   .conn::after { content: ''; width: 3em; height: 1px; background: currentColor; opacity: .75; }

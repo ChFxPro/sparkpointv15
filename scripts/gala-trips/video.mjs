@@ -63,7 +63,36 @@ async function clipFrames(spec) {
     await writeFile(done, '');
   }
   const count = (await readdir(dir)).filter((f) => f.endsWith('.jpg')).length;
-  return { frames: { pattern: pathToFileURL(join(dir, '%05d.jpg')).href, count, fps: FPS }, info };
+  return { frames: { pattern: `${pathToFileURL(dir).href}/%05d.jpg`, count, fps: FPS }, info };
+}
+
+// Jeff's supplemental footage on the NorthBend drive (read only: frames go to
+// the repo's git-ignored cache). Its licence comes from that folder's SOURCES.md.
+export const SUPP = process.env.GALA_SUPP_DIR || '/Volumes/NORTHBEND/Sparkpoint/2026/Gala 26/Supp video';
+
+async function suppSources(tripId) {
+  const file = join(SUPP, tripId, 'SOURCES.md');
+  return (await exists(file)) ? await readFile(file, 'utf8') : '';
+}
+
+async function localFrames(tripId, spec) {
+  const src = join(SUPP, tripId, spec.local);
+  if (!(await exists(src))) throw new Error(`${tripId}: footage not found (is NorthBend mounted?): ${src}`);
+  const key = hash(`${tripId}|${spec.local}|${spec.at}|${spec.dur}`);
+  const dir = join(CACHE, 'reel', `local-${key}`);
+  if (!(await exists(join(dir, 'done')))) {
+    await mkdir(dir, { recursive: true });
+    await ffmpeg(['-ss', String(spec.at), '-i', src, '-t', String(spec.dur + 0.5), '-an', '-vf', `fps=${FPS},scale=1920:-2:flags=lanczos`, '-q:v', '2', join(dir, '%05d.jpg')]);
+    await writeFile(join(dir, 'done'), '');
+  }
+  const count = (await readdir(dir)).filter((f) => f.endsWith('.jpg')).length;
+  // SOURCES.md: one line per clip, "filename · source URL · licence".
+  const line = (await suppSources(tripId)).split('\n').find((l) => l.includes(spec.local));
+  const [, url = '', license = ''] = line ? line.split('·').map((x) => x.trim()) : [];
+  return {
+    frames: { pattern: `${pathToFileURL(dir).href}/%05d.jpg`, count, fps: FPS },
+    info: { title: spec.local, page: url || '(source not yet listed in SOURCES.md)', author: 'Supplied by SparkPoint', license: license || 'Jeff to confirm (likely Envato Elements)', licenseUrl: url },
+  };
 }
 
 // The map's own MP4 for this layout, as frames.
@@ -73,7 +102,7 @@ async function mapFrames(trip, layout) {
   await mkdir(dir, { recursive: true });
   await ffmpeg(['-i', mp4, '-q:v', '2', join(dir, '%05d.jpg')]);
   const count = (await readdir(dir)).filter((f) => f.endsWith('.jpg')).length;
-  return { pattern: pathToFileURL(join(dir, '%05d.jpg')).href, count, fps: FPS };
+  return { pattern: `${pathToFileURL(dir).href}/%05d.jpg`, count, fps: FPS };
 }
 
 const MOVES = {
@@ -102,6 +131,10 @@ async function prepareShots(trip, pack) {
       const { file, info } = await extraStill(r.commonsStill);
       shot.image = pathToFileURL(file).href;
       sources.push({ id: `still-${hash(r.commonsStill)}`, kind: 'still', shows: r.shows ?? '', ...info, used: 'video only' });
+    } else if (r.local) {
+      const { frames, info } = await localFrames(trip.id, r.local);
+      shot.frames = frames;
+      sources.push({ id: r.local.local, kind: 'clip', shows: r.shows ?? '', ...info, used: `${r.local.at}s–${r.local.at + r.local.dur}s` });
     } else if (r.clip) {
       const { frames, info } = await clipFrames(r.clip);
       shot.frames = frames;
@@ -109,7 +142,8 @@ async function prepareShots(trip, pack) {
     }
     shots.push(shot);
   }
-  return { shots, sources };
+  const cards = stills.map((s) => pathToFileURL(packDir(trip.id, 'stills', s.files[2400])).href);
+  return { shots, sources, cards };
 }
 
 // Lays shots end to end with crossfades. `fit` stretches the last shot so the
@@ -129,8 +163,8 @@ function timeline(list, fit) {
 }
 
 function cut(kind, prepared, trip, pack, layout, map) {
-  const open = { card: 'open', shade: 'card', image: prepared.shots[0].image, move: move('in'), dur: kind === 'full' ? 6.5 : 4.2 };
-  const facts = { card: 'facts', shade: 'card', image: prepared.shots[pack.factsBg ?? 1].image, move: move('out'), dur: kind === 'full' ? 9 : 7 };
+  const open = { card: 'open', shade: 'card', image: prepared.cards[0], move: move('in'), dur: kind === 'full' ? 6.5 : 4.2 };
+  const facts = { card: 'facts', shade: 'card', image: prepared.cards[pack.factsBg ?? 1], move: move('out'), dur: kind === 'full' ? 9 : 7 };
   const close = { card: 'close', shade: 'night', dur: kind === 'full' ? 8 : 6 };
   const foot = (s) => ({ ...s, move: s.frames ? move('still', s.fx ?? .5) : move(s.move, s.fx ?? .5, s.fy ?? .5) });
   if (kind === 'full') {

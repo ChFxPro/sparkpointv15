@@ -9,10 +9,10 @@
   html, body { margin: 0; background: #0b1322; }
   .post { position: relative; overflow: hidden; background: #0b1322; color: #f7f1e5; font-family: 'Josefin Sans'; display: flex; flex-direction: column; }
   .photo { position: relative; flex: 1 1 auto; min-height: 0; background-size: cover; }
-  .photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,19,34,.35) 0%, rgba(11,19,34,0) 26%, rgba(11,19,34,0) 55%, #0b1322 100%); }
+  .photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,19,34,.72) 0%, rgba(11,19,34,.25) 18%, rgba(11,19,34,0) 30%, rgba(11,19,34,0) 55%, #0b1322 100%); }
   .top { position: absolute; z-index: 2; top: 64px; left: 0; right: 0; display: flex; justify-content: center; }
   .top .lk { font-size: 60px; }
-  .top::before { content: ''; position: absolute; left: 0; right: 0; top: -64px; height: 330px; background: linear-gradient(180deg, rgba(11,19,34,.7), rgba(11,19,34,0)); z-index: -1; }
+
   .body { position: relative; z-index: 2; margin-top: -170px; padding: 0 80px 86px; text-align: center; display: grid; justify-items: center; }
   .conn { display: flex; align-items: center; gap: 1em; color: #d9b56a; font: 600 19px 'Josefin Sans'; letter-spacing: .5em; margin-right: -.5em; text-transform: uppercase; }
   .conn::before, .conn::after { content: ''; width: 3em; height: 1px; background: currentColor; opacity: .75; }
