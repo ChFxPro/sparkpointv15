@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useId, useRef, useState } from 'react';
 import { Pause, Play } from 'lucide-react';
 import { Sparkmark } from '../components/Sparkmark';
 import {
@@ -162,7 +162,6 @@ function TripLoop({ sources, play, onPlaying }: { sources: GalaLoopSources; play
 
 function TripArt({ trip, boarding, near, videoAllowed, paused, onTogglePause }: TripArtProps) {
   const image = trip.image;
-  const media = tripMedia(trip.id);
   const loop = loopFor(trip);
   const [playing, setPlaying] = useState(false);
   // The <video> is created the first time the card boards (never speculatively,
@@ -229,20 +228,91 @@ function TripArt({ trip, boarding, near, videoAllowed, paused, onTogglePause }: 
           </button>
         ) : null}
       </div>
-      {image ? (
-        <figcaption className="gala-trip-credit">
-          {image.place ? <>{image.place} · </> : null}
-          Photo: <CreditLine credit={image.credit} sourceUrl={image.sourceUrl} licenseUrl={image.licenseUrl} />
-          {loop?.credit?.length ? (
-            <>
-              {' · '}Video: <LoopCredit parts={loop.credit} />
-            </>
-          ) : loop && cardVideoCredit(media) ? (
-            <> · Video: {cardVideoCredit(media)}</>
-          ) : null}
-        </figcaption>
-      ) : null}
     </figure>
+  );
+}
+
+// "Author / Licence, via Site" -> its author and licence, for the compact line.
+function photoCredit(credit: string) {
+  const slash = credit.lastIndexOf(' / ');
+  if (slash < 0) return { author: credit, license: '' };
+  const rest = credit.slice(slash + 3);
+  const comma = rest.indexOf(', ');
+  return { author: credit.slice(0, slash), license: comma < 0 ? rest : rest.slice(0, comma) };
+}
+
+// The card's credits: one compact line at its foot (the photo's author and
+// licence, linked, and the video's sources), and a Credits button that opens
+// every item in full, each author linked to its source and each licence to its
+// deed. Nothing is dropped: the full list is one click away, in the card.
+function TripCredits({ trip }: { trip: GalaTrip }) {
+  const [open, setOpen] = useState(false);
+  const panelId = useId();
+  const image = trip.image;
+  const media = tripMedia(trip.id);
+  const loop = loopFor(trip);
+  if (!image && !loop) return null;
+  const photo = image ? photoCredit(image.credit) : null;
+  const ccParts = loop?.credit?.filter((part) => !('text' in part)) ?? [];
+  const videoSources = loop?.credit?.length
+    ? [...loop.credit.filter((part) => 'text' in part).map((part) => (part as { text: string }).text), ...(ccParts.length ? ['Wikimedia Commons'] : [])].join(' and ')
+    : loop
+      ? cardVideoCredit(media)
+      : null;
+
+  return (
+    <div className="gala-trip-credits">
+      <div className="gala-trip-credits-line">
+        <p>
+          {photo && image ? (
+            <>
+              Photo:{' '}
+              <a href={image.sourceUrl} target="_blank" rel="noopener noreferrer">
+                {photo.author}
+              </a>
+              {photo.license ? (
+                <>
+                  ,{' '}
+                  <a href={image.licenseUrl} target="_blank" rel="noopener noreferrer license">
+                    {photo.license}
+                  </a>
+                </>
+              ) : null}
+            </>
+          ) : null}
+          {photo && videoSources ? ' · ' : null}
+          {videoSources ? <>Video: {videoSources}</> : null}
+        </p>
+        <button
+          type="button"
+          className="gala-trip-credits-toggle"
+          aria-expanded={open}
+          aria-controls={panelId}
+          onClick={() => setOpen((o) => !o)}
+        >
+          Credits
+          <span className="gala-trip-credits-caret" aria-hidden="true" />
+        </button>
+      </div>
+      <div id={panelId} className="gala-trip-credits-panel" hidden={!open}>
+        <ul>
+          {image ? (
+            <li>
+              Photo{image.place ? <>, {image.place}</> : null}:{' '}
+              <CreditLine credit={image.credit} sourceUrl={image.sourceUrl} licenseUrl={image.licenseUrl} />
+            </li>
+          ) : null}
+          {loop?.credit?.length ? (
+            <li>
+              Video: <LoopCredit parts={loop.credit} />
+            </li>
+          ) : videoSources ? (
+            <li>Video: {videoSources}</li>
+          ) : null}
+          {media?.film && media.filmCredits?.length ? <li>The film lists its photo and clip credits as it plays.</li> : null}
+        </ul>
+      </div>
+    </div>
   );
 }
 
@@ -340,6 +410,7 @@ function TripCard({ trip, boarding, near, videoAllowed, paused, onTogglePause, o
           </div>
         ) : null}
       </div>
+      <TripCredits trip={trip} />
     </li>
   );
 }
