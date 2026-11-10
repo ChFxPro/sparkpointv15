@@ -5,7 +5,7 @@
 //
 // Privacy: the photo is read and drawn on this device only. It is never uploaded, stored or
 // tracked, and the page has no analytics of its own. A pre-filled name can ride in the link's
-// hash (#name=Sam%20Rivera), which browsers never send to the server.
+// hash (#name=Clara%20Bennett), which browsers never send to the server.
 import '@fontsource-variable/josefin-sans';
 import '@fontsource-variable/josefin-sans/wght-italic.css';
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type PointerEvent as ReactPointerEvent } from 'react';
@@ -42,6 +42,9 @@ const GALA_PATH = '/events/sparkpoint-gala';
 const PAGE_PATH = '/events/sparkpoint-gala/join-me';
 const SHARE_IMAGE = '/assets/events/gala/gala-share-world-of-connections.jpg';
 const PRIVACY = 'Your photo stays on this device. It’s never uploaded, saved or tracked.';
+// The sample passport's bearer, shown only with the sample photo. Once a guest adds their own
+// photo (or the Gala seal), a blank name reads "You", so nobody's post goes out as Clara.
+const SAMPLE_NAME = 'Clara Bennett';
 
 const TRIPS: PostTrip[] = GALA_TRIPS_IN_ORDER.map((t) => ({ id: t.id, name: t.name, connection: t.connection }));
 const STEPS = ['Photo', 'Name', 'Stamp', 'Share'] as const;
@@ -120,7 +123,8 @@ export default function GalaJoinMePage() {
   const pan = useRef<{ x: number; y: number; ox: number; oy: number; k: number } | null>(null);
   const { label: hapticLabel, tap } = useHaptics();
 
-  const input: PostInput = useMemo(() => ({ name, photo, frame, trip }), [name, photo, frame, trip]);
+  const shownName = name.trim() || (photo.kind === 'sample' ? SAMPLE_NAME : '');
+  const input: PostInput = useMemo(() => ({ name: shownName, photo, frame, trip }), [shownName, photo, frame, trip]);
 
   // ---- assets, fonts and the pre-filled name ----
   useEffect(() => {
@@ -300,7 +304,7 @@ export default function GalaJoinMePage() {
     const firstTime = !built;
     setTrip(t);
     setPicked(t ? t.id : GALA_STAMP_ID);
-    const exporting = makePosts({ name, photo, frame, trip: t });
+    const exporting = makePosts({ name: shownName, photo, frame, trip: t });
     if (t) {
       setTripStamp((s) => ({ id: t.id, key: (s?.key ?? 0) + 1 }));
       await wait(210);
@@ -389,7 +393,7 @@ export default function GalaJoinMePage() {
   const tripPlace = tripArt ? stampPlacement('trip', tripArt.art) : null;
   const galaPlace = stampPlacement('gala', STAMPS[GALA_STAMP_ID]);
   const cardLabel = built
-    ? `Your post: a World of Connections passport for ${name.trim() || 'You'}${trip ? `, stamped for ${trip.name}` : ''}, with the Gala’s entry stamp, reading “Join me.” Friday, December 11, 2026, Brevard, North Carolina.`
+    ? `Your post: a World of Connections passport for ${shownName || 'You'}${trip ? `, stamped for ${trip.name}` : ''}, with the Gala’s entry stamp, reading “Join me.” Friday, December 11, 2026, Brevard, North Carolina.`
     : 'Your passport post, before stamping.';
   const ownPhoto = photo.kind === 'own';
 
