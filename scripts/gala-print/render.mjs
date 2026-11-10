@@ -32,6 +32,7 @@ const placeholders = {
   PUBLIC: pathToFileURL(join(root, 'public')).href,
   ASSETS: pathToFileURL(join(here, 'assets')).href,
   OUTPUT: pathToFileURL(OUT).href,
+  INVITATION: pathToFileURL(join(root, 'output', 'gala-invitation')).href,
 };
 
 async function prepare(template) {
@@ -160,9 +161,21 @@ const groups = {
     await page.screenshot({ path: join(OUT, 'share', 'gala-share-world-of-connections.jpg'), type: 'jpeg', quality: 86 });
     console.log('share/gala-share-world-of-connections.jpg  (copy to public/assets/events/gala/ to update the site)');
   },
+
+  // The "00 Start here" guide for the Drive folder. Its thumbnails are the
+  // other groups' output (and the email's, from npm run invite:gala), so run
+  // it after them.
+  async guide(page) {
+    await open(page, 'invite.html', 1056, 816, 2);
+    await (await page.$('.invite')).screenshot({ path: join(BUILD, 'guide-invite.png') });
+    await open(page, 'guide.html', 816, 1056, 1);
+    const name = '00 Start here - A World of Connections asset guide.pdf';
+    await page.pdf({ path: join(OUT, name), format: 'letter', printBackground: true, preferCSSPageSize: true });
+    console.log(name);
+  },
 };
 
-const order = ['logo', 'invite', 'social', 'tickets', 'share'];
+const order = ['logo', 'invite', 'social', 'tickets', 'share', 'guide'];
 const asked = process.argv.slice(2);
 for (const name of asked) {
   if (!order.includes(name)) throw new Error(`Unknown group "${name}". Use: ${order.join(', ')}`);
