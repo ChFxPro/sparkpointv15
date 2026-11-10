@@ -115,8 +115,8 @@ const CREDIT = 'Footage and music: Envato Elements. Some photos and clips: Wikim
 const ts = (t) => { const h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), s = (t % 60).toFixed(3).padStart(6, '0'); return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${s}`; };
 
 // WebVTT of the on-screen text, from the saved edit plan.
-async function describe(trip, pack, v) {
-  const e = JSON.parse(await readFile(v('edit-16x9.json'), 'utf8'));
+async function describe(trip, pack, v, layout = '16x9') {
+  const e = JSON.parse(await readFile(v(`edit-${layout}.json`), 'utf8'));
   const cue = [];
   for (const s of e.shots) {
     const a = Math.max(0, s.start + (s.fadeIn ?? 0)), b = s.end;
@@ -159,6 +159,40 @@ async function sourcesFor(trip, pack, v, shotNames) {
   if (sources.some((x) => x.credit === 'Envato Elements')) parts.push('Video: Envato Elements');
   for (const x of cc) parts.push(`${x.shows.split(',')[0]}: ${x.credit}, ${x.licence}`);
   return { sources: sources.map(({ shows, ...x }) => x), creditLine: parts.join(' · ') };
+}
+
+// The vertical film for phones: the 30 s 9:16 cut with its music (its end
+// card already says "Choose your trip at the Gala"), 720x1280, under 8 MB.
+const FILM9_MAX = 8 * 1024 * 1024;
+async function buildFilm9(trip, pack, v, out) {
+  const src = v(`${trip.id}-promo-30s-9x16.mp4`);
+  if (!(await exists(src))) throw new Error(`${trip.id}: ${src} missing`);
+  const film = join(out, `${trip.id}-film-9x16-web.mp4`);
+  for (const rate of ['1800k', '1500k', '1200k']) {
+    await ffmpeg(['-i', src, '-vf', 'scale=720:1280:flags=lanczos', '-c:v', 'libx264', '-preset', 'slow', '-b:v', rate, '-maxrate', '2200k', '-bufsize', '4000k',
+      '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', film]);
+    if ((await size(film)) <= FILM9_MAX) break;
+  }
+  if ((await size(film)) > FILM9_MAX) throw new Error(`${film} is over 8 MB`);
+  const vtt = film.replace(/\.mp4$/, '.vtt');
+  await writeFile(vtt, await describe(trip, pack, v, '9x16'));
+  return [
+    { file: film.split('/').pop(), bytes: await size(film), kind: 'film', format: '9x16', width: 720, height: 1280, duration: +dur(film).toFixed(2), codec: 'h264+aac', audio: true },
+    { file: vtt.split('/').pop(), bytes: await size(vtt), kind: 'captions', format: 'vtt', lang: 'en', for: film.split('/').pop() },
+  ];
+}
+
+// Adds (or replaces) the vertical film in an existing web.json.
+export async function addFilm9(trip) {
+  const v = (n) => packDir(trip.id, 'video', n);
+  const out = packDir(trip.id, 'web');
+  const pack = JSON.parse(await readFile(join(here, 'packs.json'), 'utf8')).trips[trip.id];
+  const w = JSON.parse(await readFile(join(out, 'web.json'), 'utf8'));
+  const added = await buildFilm9(trip, pack, v, out);
+  const names = new Set(added.map((f) => f.file));
+  w.files = [...w.files.filter((f) => !names.has(f.file)), ...added];
+  await writeJson(join(out, 'web.json'), w);
+  console.log(`${trip.id}: web ${added.map((f) => `${f.file} ${(f.bytes / 1024).toFixed(0)} KB`).join(', ')}`);
 }
 
 export async function buildWeb(trip, { metaOnly = false } = {}) {
@@ -222,7 +256,8 @@ export async function buildWeb(trip, { metaOnly = false } = {}) {
   // A short descriptive caption track of the on-screen text (the film has music, no speech).
   const vtt = film.replace(/\.mp4$/, '.vtt');
   await writeFile(vtt, await describe(trip, pack, v));
-  await add(vtt, { kind: 'captions', format: 'vtt', lang: 'en' });
+  await add(vtt, { kind: 'captions', format: 'vtt', lang: 'en', for: film.split('/').pop() });
+  files.push(...(await buildFilm9(trip, pack, v, out)));
   await writeJson(join(out, 'web.json'), { trip: trip.id, name: trip.name, generated: new Date().toLocaleString("sv-SE", { timeZone: "America/New_York" }).slice(0, 16) + " ET", credit: CREDIT, files });
   await rm(work, { recursive: true, force: true });
   console.log(`${trip.id}: web ${files.map((f) => `${f.file} ${(f.bytes / 1024).toFixed(0)} KB`).join(', ')}`);
@@ -234,10 +269,11 @@ export async function writeWebReady() {
   const rows = [];
   for (const t of trips) {
     const f = packDir(t.id, 'web', 'web.json');
-    if (!(await exists(f))) { rows.push(`| ${t.name} | not yet | |`); continue; }
+    if (!(await exists(f))) { rows.push(`| ${t.name} | not yet | | |`); continue; }
     const w = JSON.parse(await readFile(f, 'utf8'));
     const loops = w.files.filter((x) => x.kind === 'loop').map((x) => `${x.format} ${x.codec} ${(x.bytes / 1024).toFixed(0)} KB`).join(', ');
-    rows.push(`| ${t.name} | ready (${w.generated}) | ${loops} |`);
+    const v9 = w.files.find((x) => x.kind === 'film' && x.format === '9x16');
+    rows.push(`| ${t.name} | ready (${w.generated}) | ${loops} | ${v9 ? `${(v9.bytes / 1048576).toFixed(1)} MB, ${v9.duration} s` : 'not yet'} |`);
   }
   await writeFile(join(TRIPS_DIR, 'WEB-READY.md'), `# Web files for the Gala page's trips section
 
@@ -247,12 +283,13 @@ are in \`<trip>/pack/web/\`, listed with sizes, durations and dimensions in its 
 - \`<trip>-loop-card-16x9.{mp4,webm}\` (960×540) and \`<trip>-loop-card-4x5.{mp4,webm}\` (720×900): 6–8 s seamless loops, no audio, under 900 KB each. Use \`muted autoplay loop playsinline\`, WebM first, MP4 fallback, and pause them under reduced motion.
 - \`<trip>-loop-poster-{16x9,4x5}.webp\`: each loop's first frame (about 40 KB), as the \`poster\`.
 - \`<trip>-film-16x9-web.mp4\`: the full promo with its music, 1280×720, for an on-demand "Watch the film" player (don't autoplay it).
+- \`<trip>-film-9x16-web.mp4\` (with its \`.vtt\`): the 30 s vertical cut with its music, 720×1280, under 8 MB, for phones. Listed in web.json for each trip that has it.
 
 Credits: the footage and music are Envato Elements (no public credit needed). Each loop in web.json has its own \`sources\` and a public \`creditLine\`. Some trips also use CC-licensed
 Wikimedia Commons stills or clips; see that trip's \`pack/LICENSES.md\`. If the page credits photos, use the lines there.
 
-| Trip | Web files | Loops |
-| --- | --- | --- |
+| Trip | Web files | Loops | Vertical film (9:16) |
+| --- | --- | --- | --- |
 ${rows.join('\n')}
 `);
 }
@@ -261,6 +298,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const ids = process.argv.slice(2).filter((a) => !a.startsWith('--'));
   const { trips } = await loadTrips();
   const metaOnly = process.argv.includes('--meta-only');
-  for (const t of trips) if (!ids.length || ids.includes(t.id)) await buildWeb(t, { metaOnly });
+  const film9Only = process.argv.includes('--film9-only');
+  for (const t of trips) if (!ids.length || ids.includes(t.id)) await (film9Only ? addFilm9(t) : buildWeb(t, { metaOnly }));
   await writeWebReady();
 }
