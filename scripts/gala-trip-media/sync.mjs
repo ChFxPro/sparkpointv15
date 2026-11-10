@@ -101,7 +101,8 @@ function ccCredits(file) {
   const text = fs.readFileSync(file, 'utf8');
   const section = text.split(/^## /m).find((part) => part.startsWith('Video footage'));
   if (!section) return [];
-  const link = (cell) => cell.match(/^\[(.+?)\]\((https?:[^)]+)\)$/);
+  // Greedy URL match: Commons file names can contain parentheses.
+  const link = (cell) => cell.match(/^\[(.+?)\]\((https?:.+)\)$/);
   const seen = new Set();
   const out = [];
   for (const line of section.split('\n')) {
