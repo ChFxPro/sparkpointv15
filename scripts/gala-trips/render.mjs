@@ -3,7 +3,7 @@
 // so a video is just frame(t) + a screenshot, piped into ffmpeg.
 import { spawn } from 'node:child_process';
 import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { SCRATCH, here, root, require } from './lib.mjs';
 
@@ -19,7 +19,7 @@ export const placeholders = {
 };
 
 export async function launch() {
-  return puppeteer.launch({ headless: true, args: ['--allow-file-access-from-files', '--force-color-profile=srgb'] });
+  return puppeteer.launch({ headless: true, protocolTimeout: 600000, args: ['--allow-file-access-from-files', '--force-color-profile=srgb'] });
 }
 
 async function prepare(template, extra = {}) {
@@ -39,13 +39,16 @@ async function prepare(template, extra = {}) {
 }
 
 // Opens a template with `data` set as window[global] before any script runs.
-export async function open(page, template, { width, height, global, data, extra, scale = 1 }) {
+// `url` reuses a template already prepared (parallel pages must not rewrite the file another page is loading).
+export async function open(page, template, { width, height, global, data, extra, scale = 1, url }) {
   await page.setViewport({ width, height, deviceScaleFactor: scale });
   if (global) await page.evaluateOnNewDocument((g, d) => { window[g] = d; }, global, data);
-  await page.goto(await prepare(template, extra), { waitUntil: 'networkidle0', timeout: 120000 });
+  url ??= await prepare(template, extra);
+  await page.goto(url, { waitUntil: 'networkidle0', timeout: 300000 });
   await page.evaluate(() => window.ready);
   const ok = await page.evaluate(() => document.fonts.check('600 20px "Josefin Sans"'));
   if (!ok) throw new Error(`Josefin Sans did not load in ${template}`);
+  return url;
 }
 
 export async function still(page, out, t, { type = 'png', quality } = {}) {
@@ -92,24 +95,67 @@ export function ffmpeg(args) {
 // join: the frame count is exact and the audio stays in sync. Frames either
 // side of each range boundary are re-rendered in one page and compared
 // pixel-for-pixel with the parallel output.
+// Pages to start with; a cut that hangs is retried on fewer (renderVideo).
 export const RENDER_PAGES = Math.max(1, Number(process.env.GALA_RENDER_PAGES || 3));
+const HANG_SECS = Number(process.env.GALA_HANG_SECS || 90);
+// GALA_SMOKE=<frames>: render only that many frames, to scratch, as a smoke test.
+const SMOKE = Number(process.env.GALA_SMOKE || 0);
 
-export async function renderVideo(browser, template, openOpts, out, { duration, fps = 30, crf = 16, bitrate = '14M', maxrate = '20M', scratch }) {
-  const frames = Math.round(duration * fps);
-  const n = Math.min(RENDER_PAGES, Math.max(1, Math.floor(frames / 60)));
+// Renders a cut on RENDER_PAGES pages; if it hangs (no new frame for
+// HANG_SECS), kills those pages and retries once on 2, then on 1.
+export async function renderVideo(browser, template, openOpts, out, opts) {
+  if (SMOKE) out = join(opts.scratch, `smoke-${basename(out)}`);
+  const tries = [...new Set([RENDER_PAGES, Math.min(2, RENDER_PAGES), 1])];
+  let lastErr;
+  for (const pages of tries) {
+    try {
+      const r = await renderOnce(browser, template, openOpts, out, { ...opts, pages });
+      return { ...r, mode: `${pages} page${pages > 1 ? 's' : ''}${pages < tries[0] ? ` (retry after a hang)` : ''}` };
+    } catch (err) {
+      lastErr = err;
+      if (!err.hang) throw err;
+      console.warn(`render hung on ${pages} page(s) (${err.message}); retrying on fewer`);
+    }
+  }
+  throw lastErr;
+}
+
+async function renderOnce(browser, template, openOpts, out, { duration, fps = 30, crf = 16, bitrate = '14M', maxrate = '20M', scratch, pages: want }) {
+  const frames = SMOKE ? Math.min(SMOKE, Math.round(duration * fps)) : Math.round(duration * fps);
+  const n = Math.min(want, Math.max(1, Math.floor(frames / 20)));
   const dir = join(scratch, `frames-${Date.now()}`);
   await mkdir(dir, { recursive: true });
   const name = (i) => join(dir, `${String(i).padStart(6, '0')}.png`);
   const ranges = Array.from({ length: n }, (_, k) => [Math.floor((k * frames) / n), Math.floor(((k + 1) * frames) / n)]);
   const t0 = Date.now();
+  try {
   const pages = await Promise.all(ranges.map(() => browser.newPage()));
-  await Promise.all(pages.map((p) => open(p, template, openOpts)));
-  await Promise.all(pages.map(async (p, k) => {
-    for (let i = ranges[k][0]; i < ranges[k][1]; i++) {
-      await p.evaluate((tt) => window.frame(tt), i / fps);
-      await p.screenshot({ path: name(i), type: 'png' });
-    }
-  }));
+  const url = await open(pages[0], template, openOpts);
+  await Promise.all(pages.slice(1).map((p) => open(p, template, { ...openOpts, url })));
+  // Watchdog: any new frame from any page resets it.
+  let last = Date.now(), stop = false, timer;
+  const hang = new Promise((_, reject) => {
+    timer = setInterval(() => {
+      if (Date.now() - last > HANG_SECS * 1000) {
+        stop = true;
+        const e = new Error(`no new frame for ${HANG_SECS} s`); e.hang = true; reject(e);
+      }
+    }, 5000);
+  });
+  try {
+    await Promise.race([hang, Promise.all(pages.map(async (p, k) => {
+      for (let i = ranges[k][0]; i < ranges[k][1] && !stop; i++) {
+        await p.evaluate((tt) => window.frame(tt), i / fps);
+        await p.screenshot({ path: name(i), type: 'png' });
+        last = Date.now();
+      }
+    }))]);
+  } catch (err) {
+    clearInterval(timer);
+    await Promise.all(pages.map((p) => p.close().catch(() => {})));
+    throw err;
+  }
+  clearInterval(timer);
   const renderSecs = (Date.now() - t0) / 1000;
   // Boundary check: re-render the frames either side of each join in one page.
   // Each must match its own parallel frame (mean difference under 0.5/255; GPU
@@ -144,4 +190,8 @@ export async function renderVideo(browser, template, openOpts, out, { duration, 
   await ffmpeg(['-framerate', String(fps), '-i', join(dir, '%06d.png'), '-frames:v', String(frames), ...enc, '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out]);
   await rm(dir, { recursive: true, force: true });
   return { frames, pages: n, renderSecs, fps: +(frames / renderSecs).toFixed(2), check };
+  } catch (err) {
+    await rm(dir, { recursive: true, force: true });
+    throw err;
+  }
 }

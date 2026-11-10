@@ -203,7 +203,7 @@ export async function buildVideo(browser, trip, pack, { price = null, when, cuts
     const r = await renderVideo(browser, 'reel.html', { width: W, height: H, global: 'REEL', data }, silent,
       { duration, fps: FPS, crf: 17, scratch: join(SCRATCH, 'render'), ...(kind === 'full' ? { bitrate: '14M', maxrate: '20M' } : { bitrate: '8M', maxrate: '12M' }) });
     outputs.push(silent);
-    console.log(`${trip.id}: video ${name} (${duration.toFixed(1)} s, ${shots.length} shots, cut to the music; ${r.frames} frames at ${r.fps} fps, ${r.check})`);
+    console.log(`${trip.id}: video ${name} (${duration.toFixed(1)} s, ${shots.length} shots, cut to the music; ${r.frames} frames at ${r.fps} fps on ${r.mode}, ${r.check})`);
   }
   await page.close();
   const srcFile = packDir(trip.id, 'video', 'sources.json');
