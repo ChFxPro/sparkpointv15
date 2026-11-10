@@ -5,7 +5,7 @@
 //
 // Privacy: the photo is read and drawn on this device only. It is never uploaded, stored or
 // tracked, and the page has no analytics of its own. A pre-filled name can ride in the link's
-// hash (#name=Ora%20Smith), which browsers never send to the server.
+// hash (#name=Sam%20Rivera), which browsers never send to the server.
 import '@fontsource-variable/josefin-sans';
 import '@fontsource-variable/josefin-sans/wght-italic.css';
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type PointerEvent as ReactPointerEvent } from 'react';
@@ -418,7 +418,7 @@ export default function GalaJoinMePage() {
           )}
           <div className="jm-title">
             <h1>Join me at the Gala</h1>
-            <p>A World of Connections · Dec 11</p>
+            <p>Dec 11 · Brevard, NC</p>
           </div>
           <ol className="jm-dots" aria-label={`Step ${step + 1} of ${STEPS.length}: ${STEPS[step]}`}>
             {STEPS.map((s, i) => (

@@ -50,11 +50,13 @@ interface Layout {
   join: number;
   qr: number;
   qrLabel: boolean;
+  /** Date line and link size in the band. */
+  small: number;
 }
 
 export const LAYOUTS: Record<PostKind, Layout> = {
-  feed: { W: 1080, H: 1350, C: 100, lockTop: 68, pass: 330, band: 1142, bandH: 136, join: 60, qr: 122, qrLabel: false },
-  story: { W: 1080, H: 1920, C: 138, lockTop: 292, pass: 650, band: 1468, bandH: 190, join: 88, qr: 160, qrLabel: true },
+  feed: { W: 1080, H: 1350, C: 98, lockTop: 62, pass: 334, band: 1140, bandH: 140, join: 64, qr: 128, qrLabel: false, small: 24 },
+  story: { W: 1080, H: 1920, C: 138, lockTop: 286, pass: 660, band: 1470, bandH: 200, join: 92, qr: 170, qrLabel: true, small: 30 },
 };
 
 /** Passport geometry inside a layout (canvas pixels). */
@@ -172,8 +174,12 @@ export function drawBackground(x: Ctx, L: Layout) {
 export function drawLockup(x: Ctx, L: Layout, assets: PostAssets) {
   const C = L.C;
   const cx = L.W / 2;
-  const by2Size = Math.max(0.08 * C, 13);
-  const height = 0.264 * C + C + 0.256 * C + 0.0715 * C + 0.195 * C + 0.16 * C + 0.75 * by2Size + by2Size;
+  // Kit proportions, with pixel floors on the small lines so they stay legible when the
+  // post is seen at phone-feed size (the same departure the site's GalaLockup makes).
+  const connSize = Math.max(0.2 * C, 22);
+  const bySize = Math.max(0.1 * C, 21);
+  const by2Size = Math.max(0.08 * C, 17);
+  const height = 0.264 * C + C + 0.056 * C + connSize + 0.0715 * C + 0.195 * C + 0.06 * C + bySize + 0.75 * by2Size + by2Size;
   const top = L.lockTop;
 
   // Art behind: a 25-ray sunburst and a faint globe, centred 44% down, 150% of the lockup tall.
@@ -216,17 +222,17 @@ export function drawLockup(x: Ctx, L: Layout, assets: PostAssets) {
   y += C;
   // — OF CONNECTIONS —: 400, 0.2em, letter-spacing 0.62em, bars 2.6em wide.
   y += 0.056 * C;
-  const cf = F(400, 0.2 * C);
-  const cw = spacedWidth(x, 'OF CONNECTIONS', cf, 0.124 * C);
+  const cf = F(400, connSize);
+  const cw = spacedWidth(x, 'OF CONNECTIONS', cf, 0.62 * connSize);
   x.fillStyle = '#d9b56a';
-  text(x, 'OF CONNECTIONS', cx, y + 0.2 * C * 0.8, cf, 'center', 0.124 * C);
+  text(x, 'OF CONNECTIONS', cx, y + connSize * 0.8, cf, 'center', 0.62 * connSize);
   x.save();
   x.globalAlpha = 0.7;
-  const barY = y + 0.2 * C * 0.48;
-  x.fillRect(cx - cw / 2 - 0.12 * C - 0.52 * C, barY, 0.52 * C, 1.5);
-  x.fillRect(cx + cw / 2 + 0.12 * C, barY, 0.52 * C, 1.5);
+  const barY = y + connSize * 0.48;
+  x.fillRect(cx - cw / 2 - 0.6 * connSize - 2.6 * connSize, barY, 2.6 * connSize, 1.5);
+  x.fillRect(cx + cw / 2 + 0.6 * connSize, barY, 2.6 * connSize, 1.5);
   x.restore();
-  y += 0.2 * C;
+  y += connSize;
   // Rule: double hairlines, diamond outlines and the sparkmark, at 0.13em.
   y += 0.0715 * C;
   const f = 0.13 * C;
@@ -274,8 +280,8 @@ export function drawLockup(x: Ctx, L: Layout, assets: PostAssets) {
   // THE SPARKPOINT GALA: 600, 0.1em, letter-spacing 0.44em.
   y += 0.06 * C;
   x.fillStyle = '#f1d9a0';
-  text(x, 'THE SPARKPOINT GALA', cx, y + 0.1 * C * 0.8, F(600, 0.1 * C), 'center', 0.044 * C);
-  y += 0.1 * C;
+  text(x, 'THE SPARKPOINT GALA', cx, y + bySize * 0.8, F(600, bySize), 'center', 0.44 * bySize);
+  y += bySize;
   // TRAVEL EXPERIENCE: 400, 0.08em (with a floor), letter-spacing 0.38em, at 85%.
   y += 0.75 * by2Size;
   x.save();
@@ -331,8 +337,8 @@ export function drawPassport(x: Ctx, L: Layout, input: PostInput) {
   x.fillStyle = '#3a2f1d';
   text(x, 'World of Connections', Lx + 72, T + 24, F(600, 30), 'left');
   x.fillStyle = '#8a7754';
-  text(x, 'PASSPORT · PASSEPORT · PASAPORTE', Lx + 72, T + 50, F(700, 15), 'left', 2.4);
-  text(x, 'PASSPORT NO.', px + pw - 44, T + 16, F(700, 15), 'right', 2.4);
+  text(x, 'PASSPORT · PASSEPORT · PASAPORTE', Lx + 72, T + 52, F(700, 16), 'left', 2.2);
+  text(x, 'PASSPORT NO.', px + pw - 44, T + 16, F(700, 16), 'right', 2.2);
   x.fillStyle = '#2d2618';
   text(x, 'GALA1211', px + pw - 44, T + 46, F(700, 22), 'right');
   x.fillStyle = '#d8c7a1';
@@ -389,15 +395,15 @@ export function drawPassport(x: Ctx, L: Layout, input: PostInput) {
   const colW = px + pw - 44 - cx0;
   const field = (label: string, value: string, Y: number, size: number, weight = 400) => {
     x.fillStyle = '#8a7754';
-    text(x, label, cx0, Y, F(700, 14), 'left', 2.2);
+    text(x, label, cx0, Y, F(700, 17), 'left', 2.2);
     x.fillStyle = '#1b1a1f';
     x.textAlign = 'left';
     fitText(x, value, cx0, Y + size + 8, colW, weight, size);
   };
   field('BEARER · TITULAIRE', displayName(input), fy + 14, 58, 600);
-  field('HOME PORT', 'Transylvania County, NC', fy + 120, 28);
-  field('DATE OF ISSUE', '11 Dec 2026', fy + 200, 28);
-  field('DESTINATION', input.trip ? `Connection ${input.trip.connection} · ${input.trip.name}` : 'The SparkPoint Gala', fy + 280, 30, 600);
+  field('HOME PORT', 'Transylvania County, NC', fy + 122, 30);
+  field('DATE OF ISSUE', '11 Dec 2026', fy + 204, 30);
+  field('DESTINATION', input.trip ? `Connection ${input.trip.connection} · ${input.trip.name}` : 'The SparkPoint Gala', fy + 286, 32, 600);
   // Signature: the name in script
   const sy = py + 590;
   x.save();
@@ -410,7 +416,7 @@ export function drawPassport(x: Ctx, L: Layout, input: PostInput) {
   x.fillStyle = '#b8a37a';
   x.fillRect(Lx, sy + 14, 470, 1.5);
   x.fillStyle = '#8a7754';
-  text(x, 'SIGNATURE OF BEARER', Lx, sy + 36, F(700, 13), 'left', 2.2);
+  text(x, 'SIGNATURE OF BEARER', Lx, sy + 38, F(700, 16), 'left', 2.2);
   // Machine-readable zone
   x.fillStyle = '#d8c7a1';
   x.fillRect(Lx, py + ph - 92, pw - 88, 1.5);
@@ -434,9 +440,16 @@ export function drawBand(x: Ctx, L: Layout) {
   x.font = F(600, L.join);
   x.fillText('me.', X0 + jw, base);
   x.fillStyle = '#f1d9a0';
-  text(x, 'FRIDAY · DECEMBER 11 · 2026 · BREVARD, NC', X0, base + 46, F(600, 20), 'left', 3.6);
-  x.fillStyle = 'rgba(247,241,229,.75)';
-  text(x, SHORT_URL, X0, base + 82, F(400, 21), 'left');
+  // The date line and link keep clear of the QR code: shrink only if they would reach it.
+  const room = L.W - 76 - L.qr - 28 - X0;
+  const DATE = 'FRIDAY · DECEMBER 11 · 2026 · BREVARD, NC';
+  let ds = L.small;
+  while (ds > 16 && spacedWidth(x, DATE, F(600, ds), ds * 0.1) > room) ds -= 1;
+  text(x, DATE, X0, base + L.small * 1.9, F(600, ds), 'left', ds * 0.1);
+  let us = L.small;
+  while (us > 16 && spacedWidth(x, SHORT_URL, F(400, us), 0) > room) us -= 1;
+  x.fillStyle = 'rgba(247,241,229,.88)';
+  text(x, SHORT_URL, X0, base + L.small * 3.35, F(400, us), 'left');
   // QR code to the Gala page
   const qr = QRCode.create(PAGE_URL, { errorCorrectionLevel: 'M' }).modules;
   const n = qr.size;
@@ -450,8 +463,8 @@ export function drawBand(x: Ctx, L: Layout) {
   x.fillStyle = '#0b1322';
   for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (qr.get(r, c)) x.fillRect(X + pad + c * cell, Y + pad + r * cell, Math.ceil(cell), Math.ceil(cell));
   if (L.qrLabel) {
-    x.fillStyle = 'rgba(247,241,229,.55)';
-    text(x, 'SCAN FOR TICKETS', X + size / 2, Y + size + 22, F(600, 12), 'center', 2.4);
+    x.fillStyle = 'rgba(247,241,229,.75)';
+    text(x, 'SCAN FOR TICKETS', X + size / 2, Y + size + 26, F(600, 16), 'center', 2.4);
   }
 }
 
