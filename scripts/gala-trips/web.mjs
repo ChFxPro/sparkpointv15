@@ -15,10 +15,13 @@
 import { execFileSync } from 'node:child_process';
 import { mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { exists, loadTrips, packDir, SCRATCH, TRIPS_DIR, writeJson } from './lib.mjs';
-import { ffmpeg } from './render.mjs';
+import { exists, here, loadTrips, packDir, SCRATCH, TRIPS_DIR, writeJson } from './lib.mjs';
+import { ffmpeg, renderVideo, launch } from './render.mjs';
+import { closeShot } from './plan.mjs';
+import { factsLine } from './map.mjs';
 
-const TARGET = 900 * 1024, CEILING = 1.5 * 1024 * 1024;
+// The site importer (PR #235) refuses loops over 900 KB and films over 40 MB.
+const TARGET = 880 * 1024, CEILING = 900 * 1024, FILM_MAX = 40 * 1024 * 1024;
 const XF = 0.5; // loop-point crossfade
 
 const size = async (f) => (await stat(f)).size;
@@ -67,7 +70,7 @@ async function loop(src, segs, vf, outBase, dir) {
     await ffmpeg(['-i', seamless, '-an', '-c:v', 'libvpx-vp9', '-b:v', '0', '-crf', String(crf), '-row-mt', '1', '-deadline', 'good', '-cpu-used', '2', webm]);
     if ((await size(webm)) <= TARGET) break;
   }
-  for (const f of [mp4, webm]) if ((await size(f)) > CEILING) throw new Error(`${f} is over 1.5 MB`);
+  for (const f of [mp4, webm]) if ((await size(f)) > CEILING) throw new Error(`${f} is over 900 KB`);
   // Poster: the loop's first frame, about 40 KB.
   const poster = outBase.replace('-loop-card-', '-loop-poster-') + '.webp';
   const png = join(dir, 'poster.png');
@@ -77,6 +80,25 @@ async function loop(src, segs, vf, outBase, dir) {
     if ((await size(poster)) <= 45 * 1024) break;
   }
   return { mp4, webm, poster, duration: +dur(mp4).toFixed(2) };
+}
+
+const CREDIT = 'Footage and music: Envato Elements, licensed to Jeff Bannister. Some photos: Wikimedia Commons contributors (see LICENSES.md).';
+
+const ts = (t) => { const h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), s = (t % 60).toFixed(3).padStart(6, '0'); return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${s}`; };
+
+// WebVTT of the on-screen text, from the saved edit plan.
+async function describe(trip, pack, v) {
+  const e = JSON.parse(await readFile(v('edit-16x9.json'), 'utf8'));
+  const cue = [];
+  for (const s of e.shots) {
+    const a = Math.max(0, s.start + (s.fadeIn ?? 0)), b = s.end;
+    if (s.what === 'open') cue.push([a + 0.4, b, `A World of Connections, the SparkPoint Gala. Connection ${trip.connection}: ${trip.name}, ${pack.line}.`]);
+    else if (s.what === 'map') cue.push([a, b, `Map: from Transylvania County, North Carolina, to ${pack.stops.map((x) => x.name).join(', ')}.`]);
+    else if (s.what === 'facts') cue.push([a + 0.3, b, `${factsLine(trip).join(', ')}. ${pack.highlights.join('. ')}.`]);
+    else if (s.what === 'close') cue.push([a, b, 'Choose your trip at the Gala. Every journey connects back home. Friday, December 11, 2026, Connestee Falls.']);
+    else if (s.caption) cue.push([a + 0.5, b - 0.3, `${s.caption}.`]);
+  }
+  return 'WEBVTT\n\n' + cue.map(([a, b, t], i) => `${i + 1}\n${ts(a)} --> ${ts(b)}\n${t}\n`).join('\n');
 }
 
 export async function buildWeb(trip) {
@@ -102,10 +124,34 @@ export async function buildWeb(trip) {
     await add(r.webm, { kind: 'loop', format: fmt, width: w, height: h, duration: r.duration, codec: 'vp9' });
     await add(r.poster, { kind: 'poster', format: fmt, width: w, height: h });
   }
+  // The film: the 16:9 promo with its music, but with the website's end line
+  // ("Choose your trip at the Gala") in place of the Gala screen's "tonight".
+  const bm16 = JSON.parse(await readFile(v('beatmap-16x9.json'), 'utf8'));
+  const close = closeShot(bm16);
+  const len = +(close.end - close.start).toFixed(3);
+  const pack = JSON.parse(await readFile(join(here, 'packs.json'), 'utf8')).trips[trip.id];
+  const browser = await launch();
+  const webClose = join(work, 'close.mp4');
+  try {
+    await renderVideo(browser, 'reel.html', { width: 1920, height: 1080, global: 'REEL', data: {
+      W: 1920, H: 1080, layout: '16x9', xfade: 0, duration: len, price: null, when: 'Friday, December 11, 2026 · Connestee Falls',
+      closeLine: 'Choose your trip at the Gala',
+      trip: { connection: trip.connection, name: trip.name, line: pack.line, facts: factsLine(trip), highlights: pack.highlights },
+      shots: [{ card: 'close', shade: 'night', ...close, start: 0, end: len }],
+    } }, webClose, { duration: len, scratch: join(work, 'render') });
+  } finally { await browser.close(); }
   const film = join(out, `${trip.id}-film-16x9-web.mp4`);
-  await ffmpeg(['-i', v(`${trip.id}-promo-16x9.mp4`), '-vf', 'scale=1280:720:flags=lanczos', '-c:v', 'libx264', '-preset', 'slow', '-b:v', '2500k', '-maxrate', '3000k', '-bufsize', '5000k', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart', film]);
+  await ffmpeg(['-i', v(`${trip.id}-promo-16x9.mp4`), '-i', webClose, '-filter_complex',
+    `[0:v]trim=0:${close.start},setpts=PTS-STARTPTS[a];[1:v]setpts=PTS-STARTPTS[b];[a][b]concat=n=2:v=1:a=0,scale=1280:720:flags=lanczos,format=yuv420p[v]`,
+    '-map', '[v]', '-map', '0:a', '-c:v', 'libx264', '-preset', 'slow', '-b:v', '2500k', '-maxrate', '3000k', '-bufsize', '5000k',
+    '-c:a', 'aac', '-b:a', '160k', '-shortest', '-movflags', '+faststart', film]);
+  if ((await size(film)) > FILM_MAX) throw new Error(`${film} is over 40 MB`);
   await add(film, { kind: 'film', format: '16x9', width: 1280, height: 720, duration: +dur(film).toFixed(2), codec: 'h264+aac', audio: true });
-  await writeJson(join(out, 'web.json'), { trip: trip.id, name: trip.name, generated: new Date().toISOString().slice(0, 16), files });
+  // A short descriptive caption track of the on-screen text (the film has music, no speech).
+  const vtt = film.replace(/\.mp4$/, '.vtt');
+  await writeFile(vtt, await describe(trip, pack, v));
+  await add(vtt, { kind: 'captions', format: 'vtt', lang: 'en' });
+  await writeJson(join(out, 'web.json'), { trip: trip.id, name: trip.name, generated: new Date().toISOString().slice(0, 16), credit: CREDIT, files });
   await rm(work, { recursive: true, force: true });
   console.log(`${trip.id}: web ${files.map((f) => `${f.file} ${(f.bytes / 1024).toFixed(0)} KB`).join(', ')}`);
   return files;

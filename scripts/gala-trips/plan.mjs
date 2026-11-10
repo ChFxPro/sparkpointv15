@@ -115,6 +115,16 @@ function layFootage(bm, shots, t0, t1) {
   }).map((s, i, all) => (all[i + 1]?.fadeIn ? { ...s, end: s.end + all[i + 1].fadeIn / 2 } : s));
 }
 
+// The end card: in on a downbeat, lines on the beats, lockup on the final hit.
+export function closeShot(bm) {
+  const D = bm.duration;
+  const end = endCard(bm, D);
+  const closeAt = end.start;
+  const lockAt = end.hit ? Math.max(0.2, end.hit - closeAt - 0.55) : 0;
+  return { start: closeAt, end: D, fadeIn: 0, fadeOut: 0.8, finalHit: end.hit,
+    cues: end.hit ? [lockAt, 0.1, 0.1 + 2 * bm.beat, 0.1 + 4 * bm.beat] : [0, 0.1 + 2 * bm.beat, 0.1 + 4 * bm.beat, 0.1 + 6 * bm.beat] };
+}
+
 export function plan(kind, bm, footage, cards) {
   const D = bm.duration;
   const hit = hitTime(bm, kind);
@@ -141,10 +151,7 @@ export function plan(kind, bm, footage, cards) {
   shots.push({ ...cards.facts, start: factsAt - 0.25, end: closeAt, fadeIn: 0.5, fadeOut: 0,
     cues: [0.3, ...Array.from({ length: nh + 1 }, (_, i) => fb[Math.min(fb.length - 1, i * 2)] ?? 1 + i)] });
   const cb = beatsAfter(closeAt).map((b) => b - 0.6);
-  // Lockup (step 0) lands on the final hit; the lines step in on the beats before it.
-  const lockAt = end.hit ? Math.max(0.2, end.hit - closeAt - 0.55) : 0;
-  shots.push({ ...cards.close, start: closeAt, end: D, fadeIn: 0, fadeOut: 0.8, finalHit: end.hit,
-    cues: end.hit ? [lockAt, 0.1, 0.1 + 2 * bm.beat, 0.1 + 4 * bm.beat] : [0, 0.1 + 2 * bm.beat, 0.1 + 4 * bm.beat, 0.1 + 6 * bm.beat] });
+  shots.push({ ...cards.close, ...closeShot(bm) });
   const changes = shots.slice(1).map((s) => +(s.start + (s.fadeIn ?? 0) / 2).toFixed(3));
   return { shots, duration: D, hit, closeAt, finalHit: end.hit, factsAt, map: mapPlan, changes };
 }

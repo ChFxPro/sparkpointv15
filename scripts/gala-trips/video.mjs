@@ -195,7 +195,7 @@ export async function buildVideo(browser, trip, pack, { price = null, when, cuts
       when,
     };
     const edit = { duration, hit: p.hit, factsAt: p.factsAt, closeAt: p.closeAt, finalHit: p.finalHit, changes: p.changes, map: p.map,
-      shots: shots.map((s) => ({ start: +s.start.toFixed(3), end: +s.end.toFixed(3), fadeIn: s.fadeIn, what: s.card ?? (s.map ? 'map' : s.shows), caption: s.caption?.[0] ?? null })) };
+      shots: shots.map((s) => ({ start: +s.start.toFixed(3), end: +s.end.toFixed(3), fadeIn: s.fadeIn, what: s.card ?? (s.map ? 'map' : s.shows), caption: s.caption ? s.caption.join(' — ') : null })) };
     await writeJson(join(SCRATCH, 'timelines', `${trip.id}-${layout}.json`), edit.shots);
     await writeJson(packDir(trip.id, 'video', `edit-${layout}.json`), edit);
     const name = kind === 'full' ? `${trip.id}-promo-16x9` : `${trip.id}-promo-30s-${layout}`;
