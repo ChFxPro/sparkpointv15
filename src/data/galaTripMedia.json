@@ -182,6 +182,13 @@
         "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cortona,_palazzi_baldelli_e_bourbon-petrella,_interno,_veduta_su_piazza_della_repubblica_col_palazzo_comunale_05.jpg"
       },
       {
+        "shows": "A street in Cortona's old town",
+        "author": "Elekes Andor",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cortona_(2).jpg"
+      },
+      {
         "shows": "Red wine poured at dinner",
         "author": "Missvain",
         "license": "CC BY 4.0",
@@ -194,6 +201,51 @@
         "license": "CC BY 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
         "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cortona-Valdichiana.jpg"
+      }
+    ]
+  },
+  "scotland": {
+    "loopWide": {
+      "webm": "scotland-loop-card-16x9.webm",
+      "mp4": "scotland-loop-card-16x9.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        },
+        {
+          "label": "Glencoe in evening light",
+          "author": "john mcsporran from Trossachs, Scotland",
+          "sourceUrl": "https://commons.wikimedia.org/wiki/File:Glencoe_(26642526873).jpg",
+          "license": "CC BY 2.0",
+          "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
+        }
+      ]
+    },
+    "loopTall": {
+      "webm": "scotland-loop-card-4x5.webm",
+      "mp4": "scotland-loop-card-4x5.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        }
+      ]
+    },
+    "poster": "scotland-loop-poster-16x9.webp",
+    "film": "scotland-film-16x9-web.mp4",
+    "captions": [
+      {
+        "file": "scotland-film-16x9-web.vtt",
+        "lang": "en"
+      }
+    ],
+    "credit": "Footage and music: Envato Elements. Some photos and clips: Wikimedia Commons contributors.",
+    "filmCredits": [
+      {
+        "shows": "Glencoe, West Highlands",
+        "author": "john mcsporran from Trossachs, Scotland",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Glencoe_(26642526873).jpg"
       }
     ]
   }
