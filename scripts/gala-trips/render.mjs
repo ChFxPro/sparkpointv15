@@ -2,7 +2,7 @@
 // HTML with {{PLACEHOLDERS}}; each exposes window.ready and window.frame(t),
 // so a video is just frame(t) + a screenshot, piped into ffmpeg.
 import { spawn } from 'node:child_process';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { SCRATCH, here, root, require } from './lib.mjs';
@@ -84,4 +84,58 @@ export function ffmpeg(args) {
     const p = spawn('ffmpeg', ['-y', '-loglevel', 'error', ...args], { stdio: ['ignore', 'inherit', 'inherit'] });
     p.on('close', (c) => (c ? rej(new Error(`ffmpeg exited ${c}: ${args.join(' ')}`)) : res()));
   });
+}
+
+// Renders a template's frames in several Chrome pages at once (GALA_RENDER_PAGES,
+// default 3), each taking a contiguous range of frames, saved as numbered PNGs
+// in render scratch; then one encode reads them all in order, so there is no
+// join: the frame count is exact and the audio stays in sync. Frames either
+// side of each range boundary are re-rendered in one page and compared
+// pixel-for-pixel with the parallel output.
+export const RENDER_PAGES = Math.max(1, Number(process.env.GALA_RENDER_PAGES || 3));
+
+export async function renderVideo(browser, template, openOpts, out, { duration, fps = 30, crf = 16, bitrate = '14M', maxrate = '20M', scratch }) {
+  const frames = Math.round(duration * fps);
+  const n = Math.min(RENDER_PAGES, Math.max(1, Math.floor(frames / 60)));
+  const dir = join(scratch, `frames-${Date.now()}`);
+  await mkdir(dir, { recursive: true });
+  const name = (i) => join(dir, `${String(i).padStart(6, '0')}.png`);
+  const ranges = Array.from({ length: n }, (_, k) => [Math.floor((k * frames) / n), Math.floor(((k + 1) * frames) / n)]);
+  const t0 = Date.now();
+  const pages = await Promise.all(ranges.map(() => browser.newPage()));
+  await Promise.all(pages.map((p) => open(p, template, openOpts)));
+  await Promise.all(pages.map(async (p, k) => {
+    for (let i = ranges[k][0]; i < ranges[k][1]; i++) {
+      await p.evaluate((tt) => window.frame(tt), i / fps);
+      await p.screenshot({ path: name(i), type: 'png' });
+    }
+  }));
+  const renderSecs = (Date.now() - t0) / 1000;
+  // Boundary check: re-render the frames either side of each join in one page.
+  let check = 'single page';
+  if (n > 1) {
+    const sharp = require('sharp');
+    const p = pages[0];
+    let worst = 0;
+    for (const [b] of ranges.slice(1)) {
+      for (const i of [b - 1, b]) {
+        await p.evaluate((tt) => window.frame(tt), i / fps);
+        const again = await p.screenshot({ type: 'png' });
+        const [x, y] = await Promise.all([sharp(again).raw().toBuffer(), sharp(name(i)).raw().toBuffer()]);
+        let diff = 0;
+        for (let j = 0; j < x.length; j++) diff = Math.max(diff, Math.abs(x[j] - y[j]));
+        worst = Math.max(worst, diff, x.length === y.length ? 0 : 255);
+      }
+    }
+    check = worst === 0 ? `${n} pages, joins identical` : `${n} pages, joins differ by up to ${worst}/255`;
+    if (worst > 2) throw new Error(`${out}: frames at a page join don't match a single-page render (${worst}/255)`);
+  }
+  await Promise.all(pages.map((p) => p.close()));
+  await mkdir(dirname(out), { recursive: true });
+  const enc = ENCODER === 'x264'
+    ? ['-c:v', 'libx264', '-preset', 'slow', '-crf', String(crf)]
+    : ['-c:v', 'h264_videotoolbox', '-b:v', bitrate, '-maxrate', maxrate, '-bufsize', maxrate];
+  await ffmpeg(['-framerate', String(fps), '-i', join(dir, '%06d.png'), '-frames:v', String(frames), ...enc, '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out]);
+  await rm(dir, { recursive: true, force: true });
+  return { frames, pages: n, renderSecs, fps: +(frames / renderSecs).toFixed(2), check };
 }

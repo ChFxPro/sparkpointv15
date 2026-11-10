@@ -10,7 +10,7 @@ import { pathToFileURL } from 'node:url';
 import { CACHE, SCRATCH, UA, exists, fetchWithRetry, packDir, require, sleep, writeJson } from './lib.mjs';
 import { factsLine, mapFramesTimed, SIZES } from './map.mjs';
 import { mapTiming, plan } from './plan.mjs';
-import { ffmpeg, open, video } from './render.mjs';
+import { ffmpeg, open, renderVideo, video } from './render.mjs';
 
 const sharp = require('sharp');
 const FPS = 30;
@@ -198,12 +198,12 @@ export async function buildVideo(browser, trip, pack, { price = null, when, cuts
       shots: shots.map((s) => ({ start: +s.start.toFixed(3), end: +s.end.toFixed(3), fadeIn: s.fadeIn, what: s.card ?? (s.map ? 'map' : s.shows), caption: s.caption?.[0] ?? null })) };
     await writeJson(join(SCRATCH, 'timelines', `${trip.id}-${layout}.json`), edit.shots);
     await writeJson(packDir(trip.id, 'video', `edit-${layout}.json`), edit);
-    await open(page, 'reel.html', { width: W, height: H, global: 'REEL', data });
     const name = kind === 'full' ? `${trip.id}-promo-16x9` : `${trip.id}-promo-30s-${layout}`;
     const silent = packDir(trip.id, 'video', `${name}-silent.mp4`);
-    await video(page, silent, { duration, fps: FPS, crf: 17, ...(kind === 'full' ? { bitrate: '14M', maxrate: '20M' } : { bitrate: '8M', maxrate: '12M' }) });
+    const r = await renderVideo(browser, 'reel.html', { width: W, height: H, global: 'REEL', data }, silent,
+      { duration, fps: FPS, crf: 17, scratch: join(SCRATCH, 'render'), ...(kind === 'full' ? { bitrate: '14M', maxrate: '20M' } : { bitrate: '8M', maxrate: '12M' }) });
     outputs.push(silent);
-    console.log(`${trip.id}: video ${name} (${duration.toFixed(1)} s, ${shots.length} shots, cut to the music)`);
+    console.log(`${trip.id}: video ${name} (${duration.toFixed(1)} s, ${shots.length} shots, cut to the music; ${r.frames} frames at ${r.fps} fps, ${r.check})`);
   }
   await page.close();
   const srcFile = packDir(trip.id, 'video', 'sources.json');
