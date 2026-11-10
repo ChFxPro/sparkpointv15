@@ -77,7 +77,7 @@ export async function video(page, out, { duration, fps = 30, alpha = false, crf 
   const done = new Promise((res, rej) => ff.on('close', (c) => (c ? rej(new Error(`ffmpeg exited ${c} for ${out}`)) : res())));
   const frames = Math.round(duration * fps);
   for (let i = 0; i < frames; i++) {
-    await page.evaluate((tt) => window.frame(tt), from + i / fps);
+    await page.evaluate((tt) => window.frame(tt), i / fps);
     const buf = await page.screenshot({ type: 'png', omitBackground: alpha });
     if (!ff.stdin.write(buf)) await new Promise((r) => ff.stdin.once('drain', r));
   }
