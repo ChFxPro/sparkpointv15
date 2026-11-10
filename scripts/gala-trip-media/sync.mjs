@@ -82,11 +82,15 @@ function loopCredit(meta, file) {
   const entry = meta?.files?.find((f) => f.file === file);
   if (!entry?.creditLine) return null;
   const sources = (entry.sources ?? []).filter((src) => src.url);
+  // Each part takes the next unused matching source, in order: two works can
+  // share an author and licence (Iceland's two Diego Delso photos).
+  const used = new Set();
   return entry.creditLine
     .replace(/^Video:\s*/i, '')
     .split(' · ')
     .map((part) => {
-      const src = sources.find((x) => part.includes(x.credit) && part.includes(x.licence));
+      const src = sources.find((x) => !used.has(x) && part.includes(x.credit) && part.includes(x.licence));
+      if (src) used.add(src);
       if (!src) return { text: part };
       const label = part.slice(0, part.indexOf(src.credit)).replace(/:\s*$/, '').trim();
       return { label, author: src.credit, sourceUrl: src.url, license: src.licence, licenseUrl: licenseUrl(src.licence) };
