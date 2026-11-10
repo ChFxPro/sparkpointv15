@@ -49,15 +49,14 @@ const FEATURED: Featured[] = [
     note: "Organizations across the county, listening together.",
   },
   {
-    program: byId("trailhead"),
+    program: byId("rural-health-field-simulator"),
     image: {
       src: highlight("simulator-tablet", 800),
       srcSet: `${highlight("simulator-tablet", 800)} 800w, ${highlight("simulator-tablet", 1600)} 1600w`,
-      alt: "A small group gathers around a tablet, working through TrailHead at the October 1 convening.",
+      alt: "A small group gathers around a tablet, working through the Rural Health Field Simulator at the October 1 convening.",
     },
     tone: "#2F4A3C",
-    logo: byId("trailhead").logoReversed,
-    note: "Its first edition filled the room on October 1.",
+    note: "It filled the room on October 1.",
   },
 ];
 
@@ -104,7 +103,7 @@ function FeaturedCard({ item, side, onOpen }: { item: Featured; side: "left" | "
             </a>
           )}
           <button type="button" className="spl-link-light" onClick={() => onOpen(program)}>
-            More about {program.id === "trailhead" ? "TrailHead" : "the collaborative"}
+            More about {program.id === "rural-health-field-simulator" ? "the simulator" : "the collaborative"}
           </button>
         </div>
       </div>

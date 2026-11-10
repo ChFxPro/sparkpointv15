@@ -7,9 +7,6 @@ import storyWebp from '../assets/connection_happens/story1.webp';
 import connectorsWebp from '../assets/commconn/imgs/comcon_group_elev-1200.webp';
 import hub800 from '../assets/hub/hub-day-800.webp';
 import hub1600 from '../assets/hub/hub-day-1600.webp';
-// TrailHead's own lockup (the double blaze and wordmark, cream for dark grounds),
-// from the logo kit in Branding/TrailHead; see that folder's README.
-import trailheadLockup from '../assets/trailhead/trailhead-lockup-horizontal-reversed.svg';
 import storylabLogoReversed from '../assets/storylab/storylab-logo-reversed.svg';
 import { COMMUNITY_CONNECTORS_BRAND as CC } from './communityConnectorsBrand';
 
@@ -20,11 +17,9 @@ import { COMMUNITY_CONNECTORS_BRAND as CC } from './communityConnectorsBrand';
 // cards stack on the right; on smaller screens the cards simply follow
 // one another.
 
-// The simulator's name (2026-10-15), written joined and capitalised like
-// SparkPoint. Until it's widely known, introduce it alongside SparkPoint
-// ("a SparkPoint simulation"): said aloud it's the same word as Salesforce's
-// Trailhead. Scenarios are editions of it, e.g. "TrailHead: Rural Health".
-const SIMULATOR_NAME = 'TrailHead';
+// The simulator's name. It was briefly branded TrailHead (2026-10-15); the
+// owner reverted it to the Rural Health Field Simulator on 2026-11-06.
+const SIMULATOR_NAME = 'Rural Health Field Simulator';
 
 // `color` is the pathway colour from the programs page; `deep` is a darker
 // shade of it that each card is drawn in, dark enough for white text.
@@ -97,8 +92,7 @@ const PROGRAMS: Program[] = [
       { label: 'Bring it to your group', to: '/intake?intent=partner' },
       { label: 'See it at the convening', to: '/rural-health-convening#simulator' },
     ],
-    // TrailHead has its own brand: its logo, drawn on its own forest green.
-    logo: trailheadLockup,
+    // Drawn on the simulator's forest green.
     tone: '#2F4A3C',
   },
   {
@@ -110,7 +104,7 @@ const PROGRAMS: Program[] = [
     image: { src: connectorsWebp, alt: 'Community Connectors gathered around long tables, talking in small groups.', position: '50% 40%' },
     links: [{ label: 'Meet the Connectors', to: '/community-connectors' }],
     // Community Connectors' own lockup and cream, as on its own page. A light card, which
-    // also keeps it apart from TrailHead's green card just above it.
+    // also keeps it apart from the simulator's green card just above it.
     logo: CC.logoDark,
     tone: CC.colors.cream,
     light: true,
