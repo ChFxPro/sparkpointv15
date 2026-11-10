@@ -5,6 +5,7 @@
 //   npm run trips:pack -- greece                 # everything for one trip
 //   npm run trips:pack -- greece --only=social,factsheet
 //   npm run trips:pack -- greece --no-music
+//   npm run trips:pack -- greece --only=video --cuts=9x16,1x1
 //
 // Prices: shown only when trips.json `showPrices` is true, and then only the
 // trip's `publicPrice`. `listPrice` is internal and never used here.
@@ -25,6 +26,7 @@ const ids = args.filter((a) => !a.startsWith('--'));
 const only = args.find((a) => a.startsWith('--only='))?.slice(7).split(',');
 const want = (step) => !only || only.includes(step);
 const noMusic = args.includes('--no-music');
+const cuts = args.find((a) => a.startsWith('--cuts='))?.slice(7).split(',');
 
 const config = JSON.parse(await readFile(join(here, 'packs.json'), 'utf8'));
 const data = await loadTrips();
@@ -196,7 +198,7 @@ try {
     const pack = withResearch(trip, config.trips[trip.id]);
     const price = priceFor(trip);
     if (want('map')) await buildMap(browser, trip, pack, config.home);
-    if (want('video')) await buildVideo(browser, trip, pack, { price, when: WHEN, music: bed });
+    if (want('video')) await buildVideo(browser, trip, pack, { price, when: WHEN, music: bed, cuts });
     if (want('social')) await buildSocial(browser, trip, pack, price);
     if (want('factsheet')) await buildFactsheet(browser, trip, pack, price);
     await writeCaptions(trip, pack, price);

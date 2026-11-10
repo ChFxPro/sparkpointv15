@@ -126,11 +126,11 @@ async function prepareShots(trip, pack) {
       const s = stills.find((x) => x.file.startsWith(r.still));
       if (!s) throw new Error(`${trip.id}: no still ${r.still}`);
       shot.image = pathToFileURL(packDir(trip.id, 'stills', s.files[2400])).href;
-      sources.push({ id: s.file, kind: 'still', shows: s.place, ...s.source, used: 'pack still' });
+      sources.push({ id: s.file, kind: 'still', shows: s.place, ...s.source, used: 'gap fill: pack still' });
     } else if (r.commonsStill) {
       const { file, info } = await extraStill(r.commonsStill);
       shot.image = pathToFileURL(file).href;
-      sources.push({ id: `still-${hash(r.commonsStill)}`, kind: 'still', shows: r.shows ?? '', ...info, used: 'video only' });
+      sources.push({ id: `still-${hash(r.commonsStill)}`, kind: 'still', shows: r.shows ?? '', ...info, used: 'gap fill: video only' });
     } else if (r.local) {
       const { frames, info } = await localFrames(trip.id, r.local);
       shot.frames = frames;
@@ -138,7 +138,7 @@ async function prepareShots(trip, pack) {
     } else if (r.clip) {
       const { frames, info } = await clipFrames(r.clip);
       shot.frames = frames;
-      sources.push({ id: `clip-${hash(r.clip.commons)}`, kind: 'clip', shows: r.shows ?? '', ...info, used: `${r.clip.at}s–${r.clip.at + r.clip.dur}s${r.clip.keepTop ? ', cropped' : ''}` });
+      sources.push({ id: `clip-${hash(r.clip.commons)}`, kind: 'clip', shows: r.shows ?? '', ...info, used: `gap fill: ${r.clip.at}s–${r.clip.at + r.clip.dur}s${r.clip.keepTop ? ', cropped to remove a watermark' : ''}` });
     }
     shots.push(shot);
   }
@@ -175,12 +175,12 @@ function cut(kind, prepared, trip, pack, layout, map) {
   return timeline([open, ...picks, facts, close], 30);
 }
 
-export async function buildVideo(browser, trip, pack, { price = null, when, music } = {}) {
+export async function buildVideo(browser, trip, pack, { price = null, when, music, cuts } = {}) {
   if (!pack.reel?.length) throw new Error(`${trip.id}: no reel in packs.json`);
   const prepared = await prepareShots(trip, pack);
   const page = await browser.newPage();
   const outputs = [];
-  for (const [kind, layout] of [['full', '16x9'], ['social', '9x16'], ['social', '1x1']]) {
+  for (const [kind, layout] of [['full', '16x9'], ['social', '9x16'], ['social', '1x1']].filter(([, l]) => !cuts || cuts.includes(l))) {
     const [W, H] = SIZES[layout];
     const map = kind === 'full' ? await mapFrames(trip, layout) : null;
     const { shots, duration } = cut(kind, prepared, trip, pack, layout, map);

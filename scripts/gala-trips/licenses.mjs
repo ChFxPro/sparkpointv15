@@ -4,6 +4,8 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { exists, packDir } from './lib.mjs';
 
+const link = (text, url) => (/^https?:/.test(url ?? '') ? `[${text}](${url})` : text);
+
 async function readJson(path) {
   return (await exists(path)) ? JSON.parse(await readFile(path, 'utf8')) : null;
 }
@@ -30,11 +32,11 @@ export async function writeLicenses(trip) {
     lines.push('');
   }
   if (video?.clips?.length) {
-    lines.push('## Video footage (`video/`)', '', '| Clip | Shows | Author | Licence | Source | Used |', '| --- | --- | --- | --- | --- | --- |');
-    for (const c of video.clips) lines.push(`| ${c.id} | ${c.shows} | ${c.author} | [${c.license}](${c.licenseUrl || c.page}) | [${c.title}](${c.page}) | ${c.used ?? ''} |`);
+    lines.push('## Video footage (`video/`)', '', 'Supplied footage (Jeff\'s, from the NorthBend drive) is used first; rows marked "gap fill" were sourced by this session.', '', '| Clip | Shows | Author | Licence | Source | Used |', '| --- | --- | --- | --- | --- | --- |');
+    for (const c of video.clips) lines.push(`| ${c.id} | ${c.shows} | ${c.author} | ${link(c.license, c.licenseUrl || c.page)} | ${link(c.title, c.page)}${/^https?:/.test(c.page ?? '') ? '' : ' (source not yet in SOURCES.md)'} | ${c.used ?? ''} |`);
     if (video.music) lines.push('', `Music: ${video.music.title} by ${video.music.author}, ${video.music.license} ([source](${video.music.page})).`);
     lines.push('');
   }
-  lines.push('## SparkPoint artwork', '', 'The lockup, sparkmark, title cards, journey map and layouts are SparkPoint\'s own (A World of Connections brand kit).', 'The map\'s land outline is from Natural Earth (public domain) via the website\'s `world-dots.svg`.', '');
+  lines.push('## SparkPoint artwork', '', 'The lockup, sparkmark, title cards, journey map and layouts are SparkPoint\'s own (A World of Connections brand kit).', 'The map\'s land outline is Natural Earth (public domain), via the world-atlas TopoJSON files.', '');
   await writeFile(packDir(trip.id, 'LICENSES.md'), lines.join('\n'));
 }
