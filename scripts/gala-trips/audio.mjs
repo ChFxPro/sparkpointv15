@@ -126,12 +126,13 @@ async function sfxBed(sfx, timeline, d, out) {
   return true;
 }
 
-export async function mixTrip(trip, commonsMusic) {
+export async function mixTrip(trip, commonsMusic, score = null, only = null) {
   const supplied = await suppliedAudio(trip.id);
-  const music = supplied.music ?? commonsMusic;
+  // With a score, each cut already has its own music (edit or phrase-line cut), and the picture was cut to it.
+  const music = score ? { credit: { title: score.title, author: 'Envato Elements', license: ENVATO, page: '' } } : supplied.music ?? commonsMusic;
   if (!music) { console.warn(`${trip.id}: no music; silent masters only`); return null; }
   const stems = join(SCRATCH, 'stems', trip.id);
-  for (const cut of CUTS) {
+  for (const cut of CUTS.filter((c) => !only || only.includes(c.layout))) {
     const silent = packDir(trip.id, 'video', `${cut.name(trip.id)}-silent.mp4`);
     if (!(await exists(silent))) continue;
     const d = await probe(silent);
@@ -139,8 +140,9 @@ export async function mixTrip(trip, commonsMusic) {
     const timeline = (await exists(tlFile)) ? JSON.parse(await readFile(tlFile, 'utf8')) : [];
     const mBed = join(stems, `${cut.layout}-music.wav`), fBed = join(stems, `${cut.layout}-sfx.wav`);
     await (await import('node:fs/promises')).mkdir(stems, { recursive: true });
-    const chosen = versionFor(music, d);
-    await bed(chosen, d, mBed);
+    const chosen = score ? { file: score.cuts[cut.layout].file } : versionFor(music, d);
+    if (score) await ffmpeg(['-i', chosen.file, '-af', `apad,atrim=0:${d},afade=t=out:st=${Math.max(0, d - 0.25)}:d=0.25`, '-ar', '48000', '-ac', '2', mBed]);
+    else await bed(chosen, d, mBed);
     const hasSfx = await sfxBed(supplied.sfx, timeline, d, fBed);
     // Mix down, then two-pass loudness normalisation (measure, then apply linearly).
     const mixWav = join(stems, `${cut.layout}-mix.wav`);

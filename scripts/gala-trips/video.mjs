@@ -8,7 +8,8 @@ import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { CACHE, SCRATCH, UA, exists, fetchWithRetry, packDir, require, sleep, writeJson } from './lib.mjs';
-import { factsLine, SIZES } from './map.mjs';
+import { factsLine, mapFramesTimed, SIZES } from './map.mjs';
+import { mapTiming, plan } from './plan.mjs';
 import { ffmpeg, open, video } from './render.mjs';
 
 const sharp = require('sharp');
@@ -47,19 +48,19 @@ async function extraStill(title) {
 // and burnt-in subtitles sit there on some uploads).
 async function clipFrames(spec) {
   const info = await commons(spec.commons, true);
-  const key = hash(`${spec.commons}|${spec.at}|${spec.dur}|${spec.keepTop ?? 1}`);
+  const key = hash(`${spec.commons}|${spec.at}|${spec.dur}|${spec.keepTop ?? 1}|long`);
   const dir = join(CACHE, 'reel', `clip-${key}`);
   const done = join(dir, 'done');
   if (!(await exists(done))) {
     await mkdir(dir, { recursive: true });
     const part = join(dir, 'part.webm');
     const pre = Math.min(3, spec.at);
-    await ffmpeg(['-user_agent', UA, '-ss', String(spec.at - pre), '-i', info.url, '-t', String(spec.dur + pre + 3), '-an', '-c:v', 'copy', part]);
+    await ffmpeg(['-user_agent', UA, '-ss', String(spec.at - pre), '-i', info.url, '-t', String(spec.dur + pre + 5), '-an', '-c:v', 'copy', part]);
     // Keep the top `keepTop` of the frame at 16:9, centred on `cropX`.
     const keep = spec.keepTop ?? 1;
     const crop = `crop='min(iw,ih*${keep}*16/9)':'ih*${keep}':'(iw-min(iw,ih*${keep}*16/9))*${spec.cropX ?? 0.5}':0`;
     // `-ss` after -i seeks exactly (by decoding) within the fetched part.
-    await ffmpeg(['-i', part, '-ss', String(pre), '-t', String(spec.dur + 0.5), '-vf', `${crop},scale=2560:-2:flags=lanczos,fps=${FPS}`, '-q:v', '3', join(dir, '%05d.jpg')]);
+    await ffmpeg(['-i', part, '-ss', String(pre), '-t', String(spec.dur + 2.5), '-vf', `${crop},scale=2560:-2:flags=lanczos,fps=${FPS}`, '-q:v', '3', join(dir, '%05d.jpg')]);
     await writeFile(done, '');
   }
   const count = (await readdir(dir)).filter((f) => f.endsWith('.jpg')).length;
@@ -80,11 +81,11 @@ async function suppSources(tripId) {
 async function localFrames(tripId, spec) {
   const src = join(SUPP, tripId, spec.local);
   if (!(await exists(src))) throw new Error(`${tripId}: footage not found (is NorthBend mounted?): ${src}`);
-  const key = hash(`${tripId}|${spec.local}|${spec.at}|${spec.dur}`);
+  const key = hash(`${tripId}|${spec.local}|${spec.at}|${spec.dur}|long`);
   const dir = join(CACHE, 'reel', `local-${key}`);
   if (!(await exists(join(dir, 'done')))) {
     await mkdir(dir, { recursive: true });
-    await ffmpeg(['-ss', String(spec.at), '-i', src, '-t', String(spec.dur + 0.5), '-an', '-vf', `fps=${FPS},scale=1920:-2:flags=lanczos`, '-q:v', '2', join(dir, '%05d.jpg')]);
+    await ffmpeg(['-ss', String(spec.at), '-i', src, '-t', String(spec.dur + 2.5), '-an', '-vf', `fps=${FPS},scale=1920:-2:flags=lanczos`, '-q:v', '2', join(dir, '%05d.jpg')]);
     await writeFile(join(dir, 'done'), '');
   }
   const count = (await readdir(dir)).filter((f) => f.endsWith('.jpg')).length;
@@ -149,60 +150,64 @@ async function prepareShots(trip, pack) {
   return { shots, sources, cards };
 }
 
-// Lays shots end to end with crossfades. `fit` stretches the last shot so the
-// cut lands on an exact length.
-function timeline(list, fit) {
-  let t = 0;
-  const out = list.map((s, i) => {
-    const start = i ? t - XFADE : 0;
-    const shot = { ...s, start, end: start + s.dur };
-    t = shot.end;
-    return shot;
-  });
-  if (fit) { const last = out.at(-1); last.end += fit - t; t = fit; }
-  out[0].fadeIn = 0;
-  out.at(-1).fadeOut = 1.2;
-  return { shots: out, duration: t };
+// Frames of an MP4, for the compositor.
+async function framesOf(mp4, dir) {
+  await rm(dir, { recursive: true, force: true });
+  await mkdir(dir, { recursive: true });
+  await ffmpeg(['-i', mp4, '-q:v', '2', join(dir, '%05d.jpg')]);
+  const count = (await readdir(dir)).filter((f) => f.endsWith('.jpg')).length;
+  return { pattern: `${pathToFileURL(dir).href}/%05d.jpg`, count, fps: FPS };
 }
 
-function cut(kind, prepared, trip, pack, layout, map) {
-  const open = { card: 'open', shade: 'card', image: prepared.cards[0], move: move('in'), dur: kind === 'full' ? 6.5 : 4.2 };
-  const facts = { card: 'facts', shade: 'card', image: prepared.cards[pack.factsBg ?? 1], move: move('out'), dur: kind === 'full' ? 9 : 7 };
-  const close = { card: 'close', shade: 'night', dur: kind === 'full' ? 8 : 6 };
-  const foot = (s) => ({ ...s, move: s.frames ? move('still', s.fx ?? .5) : move(s.move, s.fx ?? .5, s.fy ?? .5) });
-  if (kind === 'full') {
-    const mapShot = { map: true, shade: 'none', frames: map, move: move('still'), dur: map.count / FPS };
-    return timeline([open, mapShot, ...prepared.shots.map(foot), facts, close]);
-  }
-  const picks = prepared.shots.filter((s) => s.social).map((s) => ({ ...foot(s), dur: 3.9 }));
-  return timeline([open, ...picks, facts, close], 30);
-}
-
-export async function buildVideo(browser, trip, pack, { price = null, when, cuts } = {}) {
+// Cuts each format to its music (see plan.mjs and score.mjs).
+export async function buildVideo(browser, trip, pack, { price = null, when, cuts, score, home } = {}) {
   if (!pack.reel?.length) throw new Error(`${trip.id}: no reel in packs.json`);
+  if (!score) throw new Error(`${trip.id}: no score; the video is cut to its music`);
   const prepared = await prepareShots(trip, pack);
   const page = await browser.newPage();
   const outputs = [];
+  const foot = (s) => ({ ...s, move: s.frames ? move('still', s.fx ?? .5) : move(s.move, s.fx ?? .5, s.fy ?? .5) });
   for (const [kind, layout] of [['full', '16x9'], ['social', '9x16'], ['social', '1x1']].filter(([, l]) => !cuts || cuts.includes(l))) {
     const [W, H] = SIZES[layout];
-    const map = kind === 'full' ? await mapFrames(trip, layout) : null;
-    const { shots, duration } = cut(kind, prepared, trip, pack, layout, map);
+    const bm = score.cuts[layout].beatmap;
+    const cards = {
+      open: { card: 'open', shade: 'card', image: prepared.cards[0], move: move('in') },
+      map: { map: true, shade: 'none', move: move('still') },
+      facts: { card: 'facts', shade: 'card', image: prepared.cards[pack.factsBg ?? 1], move: move('out'), highlights: pack.highlights.length },
+      close: { card: 'close', shade: 'night' },
+    };
+    const footage = prepared.shots.map(foot).filter((s) => kind === 'full' || s.social);
+    const p = plan(kind, bm, footage, cards);
+    if (p.map) {
+      const m = p.shots.find((s) => s.map);
+      const timing = mapTiming(bm, m.end - m.start, pack.stops.filter((s) => s.at).length);
+      const dir = join(SCRATCH, 'reel', `map-${trip.id}-${layout}-timed`);
+      await mkdir(dir, { recursive: true });
+      const mp4 = await mapFramesTimed(browser, trip, pack, home, layout, timing, dir);
+      m.frames = await framesOf(mp4, join(dir, 'frames'));
+      m.timing = timing;
+    }
+    const { shots, duration } = p;
     const data = {
-      W, H, layout, xfade: XFADE, duration, shots, price,
+      W, H, layout, xfade: 0, duration, shots, price,
       trip: { connection: trip.connection, name: trip.name, line: pack.line, facts: factsLine(trip), highlights: pack.highlights },
       closeLine: kind === 'full' ? 'Choose your trip tonight' : 'Choose your trip at the Gala',
       when,
     };
-    await writeJson(join(SCRATCH, 'timelines', `${trip.id}-${layout}.json`), shots.map((s) => ({ start: s.start, end: s.end, what: s.card ?? (s.map ? 'map' : s.shows) })));
+    const edit = { duration, hit: p.hit, factsAt: p.factsAt, closeAt: p.closeAt, finalHit: p.finalHit, changes: p.changes, map: p.map,
+      shots: shots.map((s) => ({ start: +s.start.toFixed(3), end: +s.end.toFixed(3), fadeIn: s.fadeIn, what: s.card ?? (s.map ? 'map' : s.shows), caption: s.caption?.[0] ?? null })) };
+    await writeJson(join(SCRATCH, 'timelines', `${trip.id}-${layout}.json`), edit.shots);
+    await writeJson(packDir(trip.id, 'video', `edit-${layout}.json`), edit);
     await open(page, 'reel.html', { width: W, height: H, global: 'REEL', data });
     const name = kind === 'full' ? `${trip.id}-promo-16x9` : `${trip.id}-promo-30s-${layout}`;
     const silent = packDir(trip.id, 'video', `${name}-silent.mp4`);
     await video(page, silent, { duration, fps: FPS, crf: 17 });
     outputs.push(silent);
-    console.log(`${trip.id}: video ${name} (${duration.toFixed(1)} s)`);
+    console.log(`${trip.id}: video ${name} (${duration.toFixed(1)} s, ${shots.length} shots, cut to the music)`);
   }
   await page.close();
-  const sources = { trip: trip.id, clips: prepared.sources, music: null };
-  await writeJson(packDir(trip.id, 'video', 'sources.json'), sources);
+  const srcFile = packDir(trip.id, 'video', 'sources.json');
+  const old = (await exists(srcFile)) ? JSON.parse(await readFile(srcFile, 'utf8')) : {};
+  await writeJson(srcFile, { trip: trip.id, clips: prepared.sources, music: old.music ?? null, sfx: old.sfx ?? [] });
   return outputs;
 }

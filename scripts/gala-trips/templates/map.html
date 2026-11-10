@@ -114,8 +114,13 @@ const camRegion = fit(region, LAYOUT_RECT, M.minSpan || 2.4);
 const outbound = greatCircle(M.home.at, stops[0].at);
 
 // Timeline (seconds). The still is the last frame.
-const T = { arcIn: 1.0, arcOut: 4.6, zoomOut: 1.2, zoomWide: 4.4, zoomRegion: 6.6, stops: 6.4, per: 1.05 };
-const D = T.stops + stops.length * T.per + 2.2;
+// Timeline (seconds). M.timing, when set, comes from the music's beat map:
+// camera phases scaled to fit, each stop landing on a beat, the last one on a
+// downbeat, and the whole map ending on a bar line.
+const T = { arcIn: 1.0, arcOut: 4.6, zoomOut: 1.2, zoomWide: 4.4, zoomRegion: 6.6, stops: 6.4, per: 1.05, ...(M.timing || {}) };
+const stopAt = (i) => (T.stopTimes ? T.stopTimes[i] : T.stops + i * T.per);
+const gapBefore = (i) => (i > 0 ? stopAt(i) - stopAt(i - 1) : T.per);
+const D = T.end ?? (T.stops + stops.length * T.per + 2.2);
 window.DURATION = D;
 
 function drawDots(t) {
@@ -305,7 +310,7 @@ window.frame = (t) => {
   // Legs between stops, then the stops themselves, one after another.
   M.legs.forEach(([a, b, kind]) => {
     const ib = stops.indexOf(byId[b]);
-    const p = ease(seg(t, T.stops + (ib - .55) * T.per, T.stops + (ib - .05) * T.per));
+    const p = ease(seg(t, stopAt(ib) - .55 * gapBefore(ib), stopAt(ib) - .05 * gapBefore(ib)));
     if (p <= 0) return;
     const pts = legPoints(byId[a], byId[b]);
     const tip = polyline(pts, p, kind === 'day'
@@ -313,7 +318,7 @@ window.frame = (t) => {
       : { color: '#d9b56a', width: 2.4 * U, dash: [10 * U, 8 * U] });
     if (p < 1) glowDot(tip[0], tip[1], 4 * U);
   });
-  stops.forEach((s, i) => drawStop(s, i, seg(t, T.stops + i * T.per - .25, T.stops + i * T.per + .45)));
+  stops.forEach((s, i) => drawStop(s, i, seg(t, stopAt(i) - .25, stopAt(i) + .45)));
 
   // Title block: rises in as the camera settles on the trip.
   const ta = ease(seg(t, T.zoomWide + 1.2, T.zoomRegion + .4));

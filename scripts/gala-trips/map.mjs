@@ -57,3 +57,22 @@ export async function buildMap(browser, trip, pack, home, { layouts = Object.key
   await page.close();
   return out;
 }
+
+// The map as frames for one cut of the promo, timed to the music (see
+// video.mjs mapTiming). Written to render scratch, not the pack.
+export async function mapFramesTimed(browser, trip, pack, home, layout, timing, dir) {
+  const stops = pack.stops.filter((s) => s.at);
+  const pad = 20;
+  const lons = stops.map((s) => s.at[0]), lats = stops.map((s) => s.at[1]);
+  await writeLand(join(BUILD, 'land.js'), [
+    [Math.min(...lons) - pad, Math.min(...lats) - pad, Math.max(...lons) + pad, Math.max(...lats) + pad],
+    [home.at[0] - 25, home.at[1] - 15, home.at[0] + 25, home.at[1] + 15],
+  ]);
+  const page = await browser.newPage();
+  const [width, height] = SIZES[layout];
+  await open(page, 'map.html', { width, height, global: 'MAP', data: { ...mapData(trip, pack, home, layout), timing } });
+  const mp4 = join(dir, `map-${layout}.mp4`);
+  await video(page, mp4, { duration: timing.end, crf: 14 });
+  await page.close();
+  return mp4;
+}

@@ -20,6 +20,7 @@ import { buildMap, factsLine } from './map.mjs';
 import { ffmpeg, launch, open } from './render.mjs';
 import { buildVideo } from './video.mjs';
 import { mixTrip } from './audio.mjs';
+import { scoreTrip } from './score.mjs';
 
 const WHEN = 'Friday, December 11, 2026 · Connestee Falls';
 const GALA = 'A World of Connections, the SparkPoint Gala';
@@ -203,8 +204,9 @@ try {
     const pack = withResearch(trip, config.trips[trip.id]);
     const price = priceFor(trip);
     if (want('map')) await buildMap(browser, trip, pack, config.home);
-    if (want('video')) await buildVideo(browser, trip, pack, { price, when: WHEN, cuts });
-    if (want('video') || want('audio')) await mixTrip(trip, await music(pack.music));
+    const score = want('video') || want('audio') ? await scoreTrip(trip, pack, config) : null;
+    if (want('video')) await buildVideo(browser, trip, pack, { price, when: WHEN, cuts, score, home: config.home });
+    if (want('video') || want('audio')) await mixTrip(trip, await music(pack.music), score, cuts);
     if (want('social')) await buildSocial(browser, trip, pack, price);
     if (want('factsheet')) await buildFactsheet(browser, trip, pack, price);
     await writeCaptions(trip, pack, price);

@@ -81,7 +81,7 @@ const MARK = '{{PUBLIC}}/assets/brand/sparkmark-256.webp';
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const ease = (x) => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
 const easeOut = (x) => 1 - Math.pow(1 - clamp(x), 3);
-const seg = (t, a, b) => clamp((t - a) / (b - a));
+const seg = (t, a, b) => (b > a ? clamp((t - a) / (b - a)) : t >= a ? 1 : 0);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const rule = (cls = '') => `<div class="rule ${cls}"><i></i><img src="${MARK}" alt=""><i></i></div>`;
 
@@ -143,16 +143,21 @@ function place(img, nw, nh, s, p) {
   img.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
 }
 
-function steps(el, t0) {
+// Card elements rise in at cue times (local seconds) set from the beat map:
+// s.cues[k] for data-step k; letters of the trip name land on s.hit.
+function steps(el, t0, s) {
   for (const r of el.querySelectorAll('.rise')) {
     const k = Number(r.dataset.step || 0);
-    const a = easeOut(seg(t0, .35 + k * .45, 1.15 + k * .45));
+    const at = s.cues?.[k] ?? .35 + k * .45;
+    const a = easeOut(seg(t0, at, at + .7));
     r.style.opacity = a;
     r.style.transform = `translateY(${(1 - a) * 16 * U}px)`;
   }
   const letters = el.querySelectorAll('[data-letters] .word span');
+  const hit = s.hit ?? 1.6 + (letters.length - 1) * .07;
+  const base = Math.max(0, hit - .55 - (letters.length - 1) * .06);
   letters.forEach((sp, i) => {
-    const a = easeOut(seg(t0, .9 + i * .07, 1.6 + i * .07));
+    const a = easeOut(seg(t0, base + i * .06, base + .55 + i * .06));
     sp.style.opacity = a;
     sp.style.transform = `translateY(${(1 - a) * .18}em)`;
   });
@@ -171,9 +176,9 @@ window.frame = async (t) => {
   R.shots.forEach((s, i) => {
     const el = layers[i];
     const fadeIn = s.fadeIn ?? R.xfade, fadeOut = s.fadeOut ?? R.xfade;
-    const a = Math.min(seg(t, s.start, s.start + fadeIn || 1e-6), 1 - seg(t, s.end - fadeOut, s.end));
+    const a = Math.min(fadeIn > 0 ? seg(t, s.start, s.start + fadeIn) : 1, fadeOut > 0 ? 1 - seg(t, s.end - fadeOut, s.end) : 1);
     const on = t >= s.start && t < s.end;
-    el.style.opacity = on ? (i === 0 && !s.fadeIn ? Math.min(1, 1 - seg(t, s.end - fadeOut, s.end)) : a) : 0;
+    el.style.opacity = on ? a : 0;
     el.style.visibility = on ? 'visible' : 'hidden';
     if (!on) return;
     const local = t - s.start, p = local / (s.end - s.start);
@@ -183,7 +188,7 @@ window.frame = async (t) => {
       if (s.frames) src = s.frames.pattern.replace('%05d', String(Math.min(s.frames.count, 1 + Math.floor(local * s.frames.fps))).padStart(5, '0'));
       pending.push(load(src).then((im) => { if (img.src !== im.src) img.src = im.src; place(img, im.naturalWidth, im.naturalHeight, s.move, s.frames ? 0 : p); }));
     }
-    steps(el, local);
+    steps(el, local, s);
     const cap = el.querySelector('.cap');
     if (cap) {
       const ca = easeOut(seg(local, .5, 1.3)) * (1 - seg(local, s.end - s.start - .9, s.end - s.start - .3));

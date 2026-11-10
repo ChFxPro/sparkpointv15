@@ -1,0 +1,147 @@
+// Lightweight web files for the Gala page's trips section, built from the
+// finished, music-led masters:
+//
+//   npm run trips:web -- greece
+//
+// <trip>/pack/web/:
+//   <trip>-loop-card-16x9.{mp4,webm}  960x540, 6-8 s seamless loop, no audio
+//   <trip>-loop-card-4x5.{mp4,webm}   720x900 (cropped from the 9:16 cut)
+//   <trip>-loop-poster-{16x9,4x5}.webp  the loop's first frame
+//   <trip>-film-16x9-web.mp4          the 16:9 promo with its music, 1280x720
+//   web.json                          names, sizes, durations, dimensions
+// Each loop is under 900 KB (never over 1.5 MB). The loop takes 3-4 footage
+// moments cut on the beats and crossfades its end into its start, so the
+// loop point is invisible.
+import { execFileSync } from 'node:child_process';
+import { mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
+import { exists, loadTrips, packDir, SCRATCH, TRIPS_DIR, writeJson } from './lib.mjs';
+import { ffmpeg } from './render.mjs';
+
+const TARGET = 900 * 1024, CEILING = 1.5 * 1024 * 1024;
+const XF = 0.5; // loop-point crossfade
+
+const size = async (f) => (await stat(f)).size;
+const dur = (f) => Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f]).toString().trim());
+
+// 3-4 moments: footage shots, uncaptioned first (no text in the loop), spread
+// through the film, each a whole number of beats starting on a downbeat.
+function moments(edit, bm, want = 4, total = 7.2) {
+  const foot = edit.shots.filter((s) => !['open', 'facts', 'close', 'map'].includes(s.what) && s.end - s.start >= 2);
+  const clean = foot.filter((s) => !s.caption);
+  const pool = (clean.length >= want ? clean : foot);
+  const step = pool.length / want;
+  const picked = Array.from({ length: Math.min(want, pool.length) }, (_, i) => pool[Math.floor(i * step + step / 2)]);
+  const beats = Math.max(2, Math.round((total + XF) / picked.length / bm.beat));
+  return picked.map((s) => {
+    const len = beats * bm.beat;
+    const startAt = bm.downbeats.find((d) => d >= s.start + 0.3 && d + len <= s.end - 0.1) ?? s.start + 0.3;
+    return { from: +startAt.toFixed(3), len: +Math.min(len, s.end - startAt - 0.05).toFixed(3) };
+  });
+}
+
+async function loop(src, segs, vf, outBase, dir) {
+  // Cut the moments (hard cuts on the beats), then crossfade the tail into the head.
+  const parts = [];
+  for (const [i, s] of segs.entries()) {
+    const p = join(dir, `seg-${i}.mp4`);
+    await ffmpeg(['-ss', String(s.from), '-t', String(s.len), '-i', src, '-an', '-vf', `${vf},fps=30,setsar=1`, '-c:v', 'libx264', '-crf', '14', '-preset', 'fast', '-pix_fmt', 'yuv420p', p]);
+    parts.push(p);
+  }
+  const list = join(dir, 'list.txt');
+  await writeFile(list, parts.map((p) => `file '${p}'`).join('\n'));
+  const joined = join(dir, 'joined.mp4');
+  await ffmpeg(['-f', 'concat', '-safe', '0', '-i', list, '-c', 'copy', joined]);
+  const T = dur(joined);
+  const seamless = join(dir, 'seamless.mp4');
+  await ffmpeg(['-i', joined, '-filter_complex',
+    `[0:v]split[a][b];[a]trim=${XF}:${T},setpts=PTS-STARTPTS[body];[b]trim=0:${XF},setpts=PTS-STARTPTS[head];[body][head]xfade=transition=fade:duration=${XF}:offset=${(T - 2 * XF).toFixed(3)}[v]`,
+    '-map', '[v]', '-c:v', 'libx264', '-crf', '12', '-preset', 'fast', '-pix_fmt', 'yuv420p', seamless]);
+  // Encode under the size target, stepping quality down until it fits.
+  const mp4 = `${outBase}.mp4`, webm = `${outBase}.webm`;
+  for (const crf of [28, 30, 32, 34, 36, 38]) {
+    await ffmpeg(['-i', seamless, '-an', '-c:v', 'libx264', '-profile:v', 'high', '-preset', 'veryslow', '-crf', String(crf), '-pix_fmt', 'yuv420p', '-movflags', '+faststart', mp4]);
+    if ((await size(mp4)) <= TARGET) break;
+  }
+  for (const crf of [38, 41, 44, 47, 50]) {
+    await ffmpeg(['-i', seamless, '-an', '-c:v', 'libvpx-vp9', '-b:v', '0', '-crf', String(crf), '-row-mt', '1', '-deadline', 'good', '-cpu-used', '2', webm]);
+    if ((await size(webm)) <= TARGET) break;
+  }
+  for (const f of [mp4, webm]) if ((await size(f)) > CEILING) throw new Error(`${f} is over 1.5 MB`);
+  // Poster: the loop's first frame, about 40 KB.
+  const poster = outBase.replace('-loop-card-', '-loop-poster-') + '.webp';
+  const png = join(dir, 'poster.png');
+  await ffmpeg(['-i', mp4, '-frames:v', '1', png]);
+  for (const q of [72, 62, 52, 42]) {
+    execFileSync('cwebp', ['-quiet', '-q', String(q), png, '-o', poster]);
+    if ((await size(poster)) <= 45 * 1024) break;
+  }
+  return { mp4, webm, poster, duration: +dur(mp4).toFixed(2) };
+}
+
+export async function buildWeb(trip) {
+  const v = (n) => packDir(trip.id, 'video', n);
+  const need = [v(`${trip.id}-promo-16x9-silent.mp4`), v(`${trip.id}-promo-30s-9x16-silent.mp4`), v(`${trip.id}-promo-16x9.mp4`), v('edit-16x9.json'), v('edit-9x16.json')];
+  for (const f of need) if (!(await exists(f))) throw new Error(`${trip.id}: ${f} missing; build the music-led video first`);
+  const out = packDir(trip.id, 'web');
+  await mkdir(out, { recursive: true });
+  const work = join(SCRATCH, 'web', trip.id);
+  await rm(work, { recursive: true, force: true });
+  const files = [];
+  const add = async (file, extra) => files.push({ file: file.split('/').pop(), bytes: await size(file), ...extra });
+
+  for (const [fmt, src, edit, bmf, vf, w, h] of [
+    ['16x9', `${trip.id}-promo-16x9-silent.mp4`, 'edit-16x9.json', 'beatmap-16x9.json', 'scale=960:540:flags=lanczos', 960, 540],
+    ['4x5', `${trip.id}-promo-30s-9x16-silent.mp4`, 'edit-9x16.json', 'beatmap-9x16.json', 'crop=1080:1350:0:285,scale=720:900:flags=lanczos', 720, 900],
+  ]) {
+    const e = JSON.parse(await readFile(v(edit), 'utf8')), bm = JSON.parse(await readFile(v(bmf), 'utf8'));
+    const dir = join(work, fmt);
+    await mkdir(dir, { recursive: true });
+    const r = await loop(v(src), moments(e, bm), vf, join(out, `${trip.id}-loop-card-${fmt}`), dir);
+    await add(r.mp4, { kind: 'loop', format: fmt, width: w, height: h, duration: r.duration, codec: 'h264' });
+    await add(r.webm, { kind: 'loop', format: fmt, width: w, height: h, duration: r.duration, codec: 'vp9' });
+    await add(r.poster, { kind: 'poster', format: fmt, width: w, height: h });
+  }
+  const film = join(out, `${trip.id}-film-16x9-web.mp4`);
+  await ffmpeg(['-i', v(`${trip.id}-promo-16x9.mp4`), '-vf', 'scale=1280:720:flags=lanczos', '-c:v', 'libx264', '-preset', 'slow', '-b:v', '2500k', '-maxrate', '3000k', '-bufsize', '5000k', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart', film]);
+  await add(film, { kind: 'film', format: '16x9', width: 1280, height: 720, duration: +dur(film).toFixed(2), codec: 'h264+aac', audio: true });
+  await writeJson(join(out, 'web.json'), { trip: trip.id, name: trip.name, generated: new Date().toISOString().slice(0, 16), files });
+  await rm(work, { recursive: true, force: true });
+  console.log(`${trip.id}: web ${files.map((f) => `${f.file} ${(f.bytes / 1024).toFixed(0)} KB`).join(', ')}`);
+  return files;
+}
+
+export async function writeWebReady() {
+  const { trips } = await loadTrips();
+  const rows = [];
+  for (const t of trips) {
+    const f = packDir(t.id, 'web', 'web.json');
+    if (!(await exists(f))) { rows.push(`| ${t.name} | not yet | |`); continue; }
+    const w = JSON.parse(await readFile(f, 'utf8'));
+    const loops = w.files.filter((x) => x.kind === 'loop').map((x) => `${x.format} ${x.codec} ${(x.bytes / 1024).toFixed(0)} KB`).join(', ');
+    rows.push(`| ${t.name} | ready (${w.generated}) | ${loops} |`);
+  }
+  await writeFile(join(TRIPS_DIR, 'WEB-READY.md'), `# Web files for the Gala page's trips section
+
+Built by \`npm run trips:web -- <trip>\` (\`scripts/gala-trips/web.mjs\`) from the music-led masters. Each trip's files
+are in \`<trip>/pack/web/\`, listed with sizes, durations and dimensions in its \`web.json\`:
+
+- \`<trip>-loop-card-16x9.{mp4,webm}\` (960×540) and \`<trip>-loop-card-4x5.{mp4,webm}\` (720×900): 6–8 s seamless loops, no audio, under 900 KB each. Use \`muted autoplay loop playsinline\`, WebM first, MP4 fallback, and pause them under reduced motion.
+- \`<trip>-loop-poster-{16x9,4x5}.webp\`: each loop's first frame (about 40 KB), as the \`poster\`.
+- \`<trip>-film-16x9-web.mp4\`: the full promo with its music, 1280×720, for an on-demand "Watch the film" player (don't autoplay it).
+
+Credits: the footage and music are Envato Elements, licensed to Jeff Bannister (no public credit needed). Some trips also use CC-licensed
+Wikimedia Commons stills or clips; see that trip's \`pack/LICENSES.md\`. If the page credits photos, use the lines there.
+
+| Trip | Web files | Loops |
+| --- | --- | --- |
+${rows.join('\n')}
+`);
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const ids = process.argv.slice(2);
+  const { trips } = await loadTrips();
+  for (const t of trips) if (!ids.length || ids.includes(t.id)) await buildWeb(t);
+  await writeWebReady();
+}
