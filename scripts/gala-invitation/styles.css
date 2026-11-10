@@ -166,8 +166,12 @@
   .trip-slice { padding: 9px 36px; background: var(--ivory); }
   .trip-slice.last { padding-bottom: 40px; }
   .trip { position: relative; display: grid; grid-template-columns: 1fr; gap: 16px; margin: 6px 5px; padding: 16px 18px 14px; background: #fbf6ea; border: 1px solid rgba(138,119,84,.5); outline: 1px solid rgba(138,119,84,.28); outline-offset: 4px; color: var(--ink); text-align: left; }
-  .trip.has-photo { grid-template-columns: 150px 1fr; }
-  .trip-photo { width: 150px; height: 100%; min-height: 150px; object-fit: cover; }
+  .trip.has-photo { gap: 14px; padding-top: 10px; }
+  .trip-photo { position: relative; margin: 0 -8px; height: 200px; overflow: hidden; }
+  .trip-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .trip-photo figcaption { position: absolute; inset: auto 0 0; display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; padding: 22px 10px 6px; background: linear-gradient(180deg, transparent, rgba(11,19,34,.72)); color: #f7f1e5; }
+  .trip-photo figcaption span { font-size: 9.5px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; white-space: nowrap; }
+  .trip-photo figcaption small { font-size: 7.5px; line-height: 1.3; letter-spacing: .02em; text-align: right; opacity: .9; }
   .trip-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; color: var(--plum); font-size: 9.5px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
   .trip-top span { color: var(--label); letter-spacing: .14em; }
   .trip-name { margin-top: 8px; color: var(--midnight); font-size: 27px; font-weight: 700; line-height: 1; letter-spacing: .14em; text-transform: uppercase; }

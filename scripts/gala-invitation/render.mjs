@@ -77,7 +77,8 @@ try {
     }
     const meta = await sharp(out, { animated: true }).metadata();
     const kb = Math.round((await readFile(out)).length / 1024);
-    total += kb;
+    // 04-trips-all is an alternative to the cut-up trip cards, not an extra.
+    if (!name.endsWith('-all')) total += kb;
     const flag = anim && kb > 1024 ? '  ⚠ over 1 MB' : '';
     console.log(`✓ ${path.relative(root, out)}  ${meta.width}×${meta.pageHeight || meta.height}${anim ? `  ${meta.pages} frames` : ''}  ${kb} KB${flag}`);
   }

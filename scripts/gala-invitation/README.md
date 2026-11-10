@@ -48,10 +48,14 @@ Edit `invitation.config.json`, then run the command again.
   public price, once Jeff sets it. Never copy `trips.json`'s internal
   `listPrice` here: the render stops if a trip has one, and warns whenever
   prices are on.
-- **Trip photos**: when the promo packs' stills are ready
-  (`trips/STILLS-READY.md`), copy one per trip from `trips/<id>/pack/stills/`
-  into `assets/trips/` and set that trip's `photo` to `assets/trips/<file>`.
-  The card then shows it on the left. With `photo: null` the card is text only.
+- **Trip photos**: each card shows the trip's hero still (`01`) from
+  `trips/<id>/pack/stills/`, copied into `assets/trips/` at 1600 px, with
+  `photoAlt`, `photoPlace`, `photoCredit` and `photoSource` from that folder's
+  `stills.json`. Most are CC BY or CC BY-SA, so the card prints the credit on
+  the photo, and the email adds a credits text block (below). To swap a photo,
+  copy the new file in and update all five fields. South Africa's place is
+  left blank on purpose: the still is from Kruger National Park, but the
+  trip's camp location isn't confirmed. `photo: null` gives a text-only card.
 
 **Then update the email copy too.** The note, button, and alt text below come in
 a "save the date" version and an "on sale" version. Once tickets or the venue
@@ -146,7 +150,9 @@ Squarespace Images block holds four images, so the trips run across three:
 | Text | "Picture it: a first-class evening at home in Transylvania County, and eight trips around the world to choose from. Tap any trip to see it on the Gala page." | both |
 | Images | `03-departures.gif` (`#routes-title`), `04-trips` (`#routes-title`), `04-trip-01-greece` (`#trip-greece`), `04-trip-02-iceland` (`#trip-iceland`) | both |
 | Images | `04-trip-03-cortona` (`#trip-cortona`), `04-trip-04-scotland` (`#trip-scotland`), `04-trip-05-south-africa` (`#trip-south-africa`), `04-trip-06-portugal` (`#trip-portugal`) | both |
-| Images | `04-trip-07-costa-rica` (`#trip-costa-rica`), `04-trip-08-alaska` (`#trip-alaska`), `05-luggage-tags` (`#tags-title`), `06-postcard` (`#return-title`) | both |
+| Images | `04-trip-07-costa-rica` (`#trip-costa-rica`), `04-trip-08-alaska` (`#trip-alaska`) | both |
+| Text | The photo credits (below), small, centered, colour `#E6DFD2` | both |
+| Images | `05-luggage-tags` (`#tags-title`), `06-postcard` (`#return-title`) | both |
 | Images | `07-travel-partners` (the Monday sponsor form) | sponsor only, above `08` |
 | Images | `08-your-seat` (the ticket link) | both |
 | Button | "Request early boarding" (Monday sponsor form) | sponsor only |
@@ -176,6 +182,15 @@ drag it into place, remove the old one, and re-enter its link and alt text.
 The board (`03`), the trip cards (`04-…`), the boarding pass (`02`) and the
 closing (`08`) are the ones the settings change.
 
+**Photo credits text block** (under the trip images; link each licence name to
+its deed, below):
+
+> Trip photos via Wikimedia Commons: Greece, Giles Laurent (CC BY-SA 4.0); Iceland, Diego Delso (CC BY-SA 4.0); Cortona, TeKappa (CC BY-SA 4.0); Scotland, john mcsporran from Trossachs, Scotland (CC BY 2.0); South Africa, Chris Eason (CC BY 2.0); Portugal, Krzysztof Golik (CC BY-SA 4.0); Costa Rica, Rhododendrites (CC BY-SA 4.0); Alaska, Jay Galvin (jay galvin) (CC BY 2.0).
+
+Licence deeds:
+  - CC BY 2.0: https://creativecommons.org/licenses/by/2.0
+  - CC BY-SA 4.0: https://creativecommons.org/licenses/by-sa/4.0
+
 **Alt text used**
 
 - Hero: You're invited: A World of Connections, the SparkPoint Gala. Every
@@ -191,14 +206,14 @@ closing (`08`) are the ones the settings change.
 - Trips heading: Eight connections, one evening. Every trip is available to
   every guest at a set price. Choose yours at the Gala. Land only, for two
   travelers (Cortona for four), with three years to travel.
-- Trip 01: Connection 01: Greece & the Greek Islands, 8 nights for two. Three nights in Santorini, three in Mykonos, then two in Athens beneath the Acropolis, linked by an island flight and a ferry.
-- Trip 02: Connection 02: Iceland: Land of the Vikings, 6 nights for two. Six nights in Reykjavík with a food tour, the geysers and waterfalls of the Golden Circle, and the Sky Lagoon spa ritual.
-- Trip 03: Connection 03: Cortona: Under the Tuscan Sun for four, 6 nights for four. Six nights in a two-bedroom suite in the old town of Cortona, the hilltop village made famous by Under the Tuscan Sun.
-- Trip 04: Connection 04: Scotland: Lochs & Legends, 7 nights for two. Edinburgh's castle and Royal Mile, a Loch Ness cruise, then Glasgow and the West Highlands to Glencoe and Loch Lomond.
-- Trip 05: Connection 05: South Africa: Wild Wonders Photo Safari, 6 nights for two. Five nights in a lakefront tented camp with a private plunge pool, guided game drives every day, and a Big Five drive.
-- Trip 06: Connection 06: Captivating Portugal: Lisbon & Porto, 7 nights for two. Lisbon and Sintra, a private guided drive north to Porto, and a Douro Valley day of wine, lunch and a river cruise.
-- Trip 07: Connection 07: Colorful Costa Rica, 6 nights for two. Rainforest and volcano around Arenal, then the Pacific beaches of Tamarindo, with two tours of the traveler's choosing.
-- Trip 08: Connection 08: Alaska Cruise: Explorer of the North, 8 nights for two. A cruise from Seattle in a balcony cabin, calling at Ketchikan, Juneau, Skagway and Victoria, British Columbia.
+- Trip 01: Connection 01: Greece & the Greek Islands, 8 nights for two. Three nights in Santorini, three in Mykonos, then two in Athens beneath the Acropolis, linked by an island flight and a ferry. Photo: Blue-domed white churches of Oia above the Santorini caldera and the Aegean Sea.
+- Trip 02: Connection 02: Iceland: Land of the Vikings, 6 nights for two. Six nights in Reykjavík with a food tour, the geysers and waterfalls of the Golden Circle, and the Sky Lagoon spa ritual. Photo: Gullfoss waterfall plunging into its canyon with a rainbow in the spray.
+- Trip 03: Connection 03: Cortona: Under the Tuscan Sun for four, 6 nights for four. Six nights in a two-bedroom suite in the old town of Cortona, the hilltop village made famous by Under the Tuscan Sun. Photo: The walled hilltop town of Cortona among olive terraces, seen from the air.
+- Trip 04: Connection 04: Scotland: Lochs & Legends, 7 nights for two. Edinburgh's castle and Royal Mile, a Loch Ness cruise, then Glasgow and the West Highlands to Glencoe and Loch Lomond. Photo: Golden evening light on the mountains of Glencoe in the Scottish Highlands.
+- Trip 05: Connection 05: South Africa: Wild Wonders Photo Safari, 6 nights for two. Five nights in a lakefront tented camp with a private plunge pool, guided game drives every day, and a Big Five drive. Photo: A young male lion resting in the long grass, looking toward the camera.
+- Trip 06: Connection 06: Captivating Portugal: Lisbon & Porto, 7 nights for two. Lisbon and Sintra, a private guided drive north to Porto, and a Douro Valley day of wine, lunch and a river cruise. Photo: Traditional rabelo boats on the Douro in front of Porto's Ribeira waterfront at golden hour.
+- Trip 07: Connection 07: Colorful Costa Rica, 6 nights for two. Rainforest and volcano around Arenal, then the Pacific beaches of Tamarindo, with two tours of the traveler's choosing. Photo: The cone of Arenal Volcano rising above green rainforest and farmland.
+- Trip 08: Connection 08: Alaska Cruise: Explorer of the North, 8 nights for two. A cruise from Seattle in a balcony cabin, calling at Ketchikan, Juneau, Skagway and Victoria, British Columbia. Photo: Mendenhall Glacier flowing between mountains into its lake near Juneau.
 - Luggage tags: Where will yours take you? Five leather luggage tags:
   anniversary, milestone birthday, honeymoon, family vacation, bucket list.
 - Postcard: Travel that gives back to our community. A postcard reading
