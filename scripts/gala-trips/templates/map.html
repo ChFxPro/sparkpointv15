@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- The journey map for one trip, in the Gala style: dot-drawn land on night
+     blue, a brass route out of Transylvania County, NC, then the trip's stops.
+     pack.mjs injects window.MAP and the land data, then calls frame(t) for each
+     video frame (or once, at the end, for the still). Nothing here animates on
+     its own, so every frame is exactly reproducible. -->
+<style>
+  @font-face { font-family: 'Josefin Sans'; src: url('{{FONTS}}/josefin-sans-latin-wght-normal.woff2') format('woff2'); font-weight: 100 700; }
+  @font-face { font-family: 'Josefin Sans'; src: url('{{FONTS}}/josefin-sans-latin-wght-italic.woff2') format('woff2'); font-weight: 100 700; font-style: italic; }
+  html, body { margin: 0; background: #0b1322; overflow: hidden; }
+  #stage { position: relative; overflow: hidden; background: #0b1322; }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .deco-frame { position: absolute; inset: calc(22px * var(--u)); border: 1px solid rgba(217,181,106,.5); outline: 1px solid rgba(217,181,106,.28); outline-offset: calc(6px * var(--u)); pointer-events: none; }
+  .title { position: absolute; color: #f7f1e5; font-family: 'Josefin Sans'; }
+  .title .conn { color: #d9b56a; font: 600 calc(19px * var(--u)) 'Josefin Sans'; letter-spacing: .44em; text-transform: uppercase; display: flex; align-items: center; gap: .9em; }
+  .title .conn::after { content: ''; width: 3.2em; height: 1px; background: currentColor; opacity: .7; }
+  .title h1 { margin: .38em 0 0; font: 700 calc(92px * var(--u)) / .95 'Josefin Sans'; text-transform: uppercase; letter-spacing: .12em; text-shadow: .045em .045em 0 #0b1322, .07em .07em 0 #d9b56a; }
+  .title .line { margin-top: .5em; color: #f1d9a0; font: 300 italic calc(30px * var(--u)) 'Josefin Sans'; letter-spacing: .04em; }
+  .title .facts { margin-top: 1.5em; display: flex; gap: 1.1em; align-items: center; color: #f7f1e5; font: 600 calc(18px * var(--u)) 'Josefin Sans'; letter-spacing: .3em; text-transform: uppercase; }
+  .title .facts b { width: .42em; height: .42em; rotate: 45deg; border: 1px solid #d9b56a; }
+  .title .from { margin-top: 2.4em; color: rgba(241,217,160,.78); font: 400 calc(15px * var(--u)) 'Josefin Sans'; letter-spacing: .26em; text-transform: uppercase; }
+  .l-16x9 .title { left: calc(110px * var(--u)); top: 50%; translate: 0 -50%; width: 34%; }
+  .l-9x16 .title, .l-1x1 .title { left: 0; right: 0; top: calc(120px * var(--u)); text-align: center; }
+  .l-9x16 .title .conn, .l-1x1 .title .conn, .l-9x16 .title .facts, .l-1x1 .title .facts { justify-content: center; }
+  .l-9x16 .title .conn::before, .l-1x1 .title .conn::before { content: ''; width: 3.2em; height: 1px; background: currentColor; opacity: .7; }
+  .l-1x1 .title { top: calc(86px * var(--u)); }
+  .l-1x1 .title h1 { font-size: calc(80px * var(--u)); }
+  .l-1x1 .title .from { display: none; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="c"></canvas>
+  <div class="title" id="title">
+    <div class="conn" id="conn"></div>
+    <h1 id="name"></h1>
+    <div class="line" id="line"></div>
+    <div class="facts" id="facts"></div>
+    <div class="from" id="from"></div>
+  </div>
+  <div class="deco-frame"></div>
+</div>
+<script src="{{BUILD}}/land.js"></script>
+<script>
+const M = window.MAP;
+const { W, H } = M;
+const U = Math.min(W, H) / 1080;
+const stage = document.getElementById('stage');
+stage.style.width = W + 'px'; stage.style.height = H + 'px';
+stage.style.setProperty('--u', U);
+stage.classList.add('l-' + M.layout);
+const cv = document.getElementById('c'); cv.width = W; cv.height = H;
+const ctx = cv.getContext('2d');
+const mask = new OffscreenCanvas(Math.ceil(W / 2), Math.ceil(H / 2));
+const mctx = mask.getContext('2d', { willReadFrequently: true });
+
+document.getElementById('conn').textContent = 'Connection ' + M.trip.connection;
+document.getElementById('name').textContent = M.trip.name;
+document.getElementById('line').textContent = M.trip.line;
+document.getElementById('facts').innerHTML = M.trip.facts.map((f) => `<span>${f}</span>`).join('<b></b>');
+document.getElementById('from').textContent = 'From ' + M.home.name;
+
+const mark = new Image(); mark.src = M.sparkmark;
+const DEG = Math.PI / 180;
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const ease = (x) => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+
+// Equirectangular, centred on the camera, with longitudes scaled by the cosine
+// of the trip's own latitude so the destination isn't stretched.
+const COS = Math.cos(M.refLat * DEG);
+let cam;
+const proj = ([lon, lat]) => [W / 2 + (lon - cam.lon) * COS * cam.k, H / 2 - (lat - cam.lat) * cam.k];
+const unproj = (x, y) => [cam.lon + (x - W / 2) / (COS * cam.k), cam.lat - (y - H / 2) / cam.k];
+
+function fit(points, rect, minSpan) {
+  let [x0, y0, x1, y1] = [Infinity, Infinity, -Infinity, -Infinity];
+  for (const [lon, lat] of points) { x0 = Math.min(x0, lon); x1 = Math.max(x1, lon); y0 = Math.min(y0, lat); y1 = Math.max(y1, lat); }
+  let dLon = Math.max(x1 - x0, minSpan / COS), dLat = Math.max(y1 - y0, minSpan);
+  const [rx0, ry0, rx1, ry1] = rect.map((v, i) => v * (i % 2 ? H : W));
+  const k = Math.min((rx1 - rx0) / (dLon * COS), (ry1 - ry0) / dLat);
+  // Centre the box in the rect, then shift the camera so the rect sits where it is on screen.
+  const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+  const sx = (rx0 + rx1) / 2 - W / 2, sy = (ry0 + ry1) / 2 - H / 2;
+  return { lon: cx - sx / (COS * k), lat: cy + sy / k, k };
+}
+const mix = (a, b, p) => ({ lon: a.lon + (b.lon - a.lon) * p, lat: a.lat + (b.lat - a.lat) * p, k: Math.exp(Math.log(a.k) + (Math.log(b.k) - Math.log(a.k)) * p) });
+
+// Great-circle points between two [lon, lat] places.
+function greatCircle(a, b, n = 160) {
+  const v = ([lon, lat]) => [Math.cos(lat * DEG) * Math.cos(lon * DEG), Math.cos(lat * DEG) * Math.sin(lon * DEG), Math.sin(lat * DEG)];
+  const p = v(a), q = v(b);
+  const w = Math.acos(clamp(p[0] * q[0] + p[1] * q[1] + p[2] * q[2], -1, 1));
+  const out = [];
+  for (let i = 0; i <= n; i++) {
+    const f = i / n, s1 = Math.sin((1 - f) * w) / Math.sin(w), s2 = Math.sin(f * w) / Math.sin(w);
+    const x = s1 * p[0] + s2 * q[0], y = s1 * p[1] + s2 * q[1], z = s1 * p[2] + s2 * q[2];
+    out.push([Math.atan2(y, x) / DEG, Math.atan2(z, Math.hypot(x, y)) / DEG]);
+  }
+  return out;
+}
+
+const stops = M.stops;
+const byId = Object.fromEntries(stops.map((s) => [s.id, s]));
+const region = [...stops.map((s) => s.at), ...(M.context || []).map((c) => c.at)];
+const LAYOUT_RECT = M.bare ? [.14, .14, .86, .86] : { '16x9': [.42, .16, .92, .84], '9x16': [.1, .4, .9, .86], '1x1': [.1, .4, .9, .88] }[M.layout];
+if (M.bare) document.getElementById('title').style.display = 'none';
+const camStart = fit([M.home.at], [.2, .2, .8, .8], 16);
+const camWide = fit([M.home.at, stops[0].at], [.2, .2, .86, .8], 10);
+const camRegion = fit(region, LAYOUT_RECT, M.minSpan || 2.4);
+const outbound = greatCircle(M.home.at, stops[0].at);
+
+// Timeline (seconds). The still is the last frame.
+const T = { arcIn: 1.0, arcOut: 4.6, zoomOut: 1.2, zoomWide: 4.4, zoomRegion: 6.6, stops: 6.4, per: 1.05 };
+const D = T.stops + stops.length * T.per + 2.2;
+window.DURATION = D;
+
+function drawDots(t) {
+  const fine = cam.k > 40;
+  const polys = fine ? LAND_FINE : LAND_COARSE;
+  mctx.setTransform(1, 0, 0, 1, 0, 0);
+  mctx.clearRect(0, 0, mask.width, mask.height);
+  mctx.setTransform(.5, 0, 0, .5, 0, 0);
+  mctx.fillStyle = '#fff';
+  mctx.beginPath();
+  for (const ring of polys) {
+    let prev = null;
+    for (let i = 0; i < ring.length; i++) {
+      const [x, y] = proj(ring[i]);
+      if (i === 0) mctx.moveTo(x, y); else mctx.lineTo(x, y);
+      prev = [x, y];
+    }
+    mctx.closePath();
+  }
+  mctx.fill('evenodd');
+  const data = mctx.getImageData(0, 0, mask.width, mask.height).data;
+  const inside = (x, y) => {
+    const ix = x >> 1, iy = y >> 1;
+    return ix >= 0 && iy >= 0 && ix < mask.width && iy < mask.height && data[(iy * mask.width + ix) * 4 + 3] > 127;
+  };
+  // Dots sit on a fixed geographic grid that halves as the camera zooms in, so
+  // they stay put and new ones fade in between them rather than shimmering.
+  const target = 10.5 * U;
+  const d = Math.log2((8 * cam.k) / target);
+  const L0 = Math.floor(d), frac = d - L0;
+  const [lonA, latB] = unproj(0, H), [lonB, latA] = unproj(W, 0);
+  const r = 1.7 * U;
+  for (const [level, alpha] of [[L0, 1], [L0 + 1, frac]]) {
+    if (alpha < .02) continue;
+    const s = 8 / Math.pow(2, level), sx = s / COS;
+    ctx.fillStyle = `rgba(241, 217, 160, ${0.42 * alpha})`;
+    const i0 = Math.floor(lonA / sx), i1 = Math.ceil(lonB / sx), j0 = Math.floor(latB / s), j1 = Math.ceil(latA / s);
+    for (let j = j0; j <= j1; j++) {
+      for (let i = i0; i <= i1; i++) {
+        if (level === L0 + 1 && i % 2 === 0 && j % 2 === 0) continue; // already drawn at the coarser level
+        const [x, y] = proj([i * sx, j * s]);
+        if (x < -2 || y < -2 || x > W + 2 || y > H + 2 || !inside(x | 0, y | 0)) continue;
+        ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+  }
+}
+
+function graticule() {
+  const step = cam.k > 30 ? 2 : cam.k > 8 ? 10 : 30;
+  ctx.strokeStyle = 'rgba(217,181,106,.07)'; ctx.lineWidth = 1;
+  const [lonA, latB] = unproj(0, H), [lonB, latA] = unproj(W, 0);
+  ctx.beginPath();
+  for (let lon = Math.ceil(lonA / step) * step; lon <= lonB; lon += step) { const [x] = proj([lon, 0]); ctx.moveTo(x, 0); ctx.lineTo(x, H); }
+  for (let lat = Math.ceil(latB / step) * step; lat <= latA; lat += step) { const [, y] = proj([0, lat]); ctx.moveTo(0, y); ctx.lineTo(W, y); }
+  ctx.stroke();
+}
+
+function polyline(points, p, style) {
+  const n = Math.max(1, Math.round((points.length - 1) * p));
+  ctx.save();
+  ctx.strokeStyle = style.color; ctx.lineWidth = style.width; ctx.setLineDash(style.dash); ctx.lineCap = 'round';
+  ctx.shadowColor = 'rgba(217,181,106,.55)'; ctx.shadowBlur = 10 * U;
+  ctx.beginPath();
+  points.slice(0, n + 1).forEach((pt, i) => { const [x, y] = proj(pt); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+  ctx.stroke();
+  ctx.restore();
+  return proj(points[n]);
+}
+
+// A gentle arc between two stops, bowed to one side.
+function legPoints(a, b, n = 40) {
+  const pa = a.at, pb = b.at;
+  const mx = (pa[0] + pb[0]) / 2, my = (pa[1] + pb[1]) / 2;
+  const dx = (pb[0] - pa[0]) * COS, dy = pb[1] - pa[1];
+  const bow = .18;
+  const cx = mx - (dy * bow) / COS, cy = my + dx * bow;
+  return Array.from({ length: n + 1 }, (_, i) => { const f = i / n; return [(1 - f) ** 2 * pa[0] + 2 * (1 - f) * f * cx + f * f * pb[0], (1 - f) ** 2 * pa[1] + 2 * (1 - f) * f * cy + f * f * pb[1]]; });
+}
+
+function glowDot(x, y, r, a = 1) {
+  ctx.save(); ctx.globalAlpha = a;
+  const g = ctx.createRadialGradient(x, y, 0, x, y, r * 4);
+  g.addColorStop(0, 'rgba(255,240,200,.95)'); g.addColorStop(.25, 'rgba(241,217,160,.6)'); g.addColorStop(1, 'rgba(241,217,160,0)');
+  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r * 4, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+}
+
+function spaced(text, x, y, font, color, tracking, align = 'left') {
+  ctx.font = font; ctx.fillStyle = color; ctx.letterSpacing = tracking + 'px'; ctx.textAlign = align;
+  // Trailing tracking would push centred text off-centre.
+  const dx = align === 'center' ? tracking / 2 : align === 'right' ? tracking : 0;
+  ctx.fillText(text, x + dx, y);
+  ctx.letterSpacing = '0px';
+}
+
+function drawHome(t) {
+  const a = ease(seg(t, .1, .8));
+  if (!a) return;
+  const [x, y] = proj(M.home.at);
+  if (x < -100 || x > W + 100 || y < -100 || y > H + 100) return;
+  ctx.save(); ctx.globalAlpha = a;
+  for (const off of [0, .9]) {
+    const ph = ((t + off) % 1.8) / 1.8;
+    ctx.strokeStyle = `rgba(217,181,106,${.5 * (1 - ph)})`; ctx.lineWidth = 1.2 * U;
+    ctx.beginPath(); ctx.arc(x, y, (10 + 26 * ph) * U, 0, Math.PI * 2); ctx.stroke();
+  }
+  ctx.strokeStyle = '#d9b56a'; ctx.lineWidth = 1.2 * U; ctx.beginPath(); ctx.arc(x, y, 13 * U, 0, Math.PI * 2); ctx.stroke();
+  const s = 30 * U; if (mark.complete) ctx.drawImage(mark, x - s / 2, y - s / 2, s, s);
+  const la = 1 - seg(t, 4.0, 4.8);
+  if (la > 0) {
+    ctx.globalAlpha = a * la;
+    spaced('Home', x, y + 44 * U, `600 ${15 * U}px "Josefin Sans"`, '#d9b56a', 5 * U, 'center');
+    spaced(M.home.name.toUpperCase(), x, y + 68 * U, `600 ${21 * U}px "Josefin Sans"`, '#f7f1e5', 4 * U, 'center');
+  }
+  ctx.restore();
+}
+
+function drawStop(s, i, a) {
+  if (a <= 0) return;
+  const [x, y] = proj(s.at);
+  ctx.save(); ctx.globalAlpha = a;
+  const r = 15 * U * (0.6 + 0.4 * ease(a));
+  ctx.fillStyle = '#0b1322'; ctx.strokeStyle = '#d9b56a'; ctx.lineWidth = 1.5 * U;
+  ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+  ctx.strokeStyle = 'rgba(217,181,106,.4)'; ctx.lineWidth = 1 * U;
+  ctx.beginPath(); ctx.arc(x, y, r + 6 * U, 0, Math.PI * 2); ctx.stroke();
+  ctx.font = `600 ${13 * U}px "Josefin Sans"`; ctx.fillStyle = '#f1d9a0'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(String(i + 1).padStart(2, '0'), x, y + 1 * U);
+  ctx.textBaseline = 'alphabetic';
+  const gap = 32 * U, name = s.name.toUpperCase(), note = (s.note || '').toUpperCase();
+  const nameFont = `600 ${24 * U}px "Josefin Sans"`, noteFont = `400 ${15 * U}px "Josefin Sans"`;
+  let lx = x, ly = y, align = 'left';
+  if (s.label === 'right') { lx = x + gap; ly = y + 2 * U; }
+  if (s.label === 'left') { lx = x - gap; ly = y + 2 * U; align = 'right'; }
+  if (s.label === 'top') { ly = y - gap - 22 * U; align = 'center'; }
+  if (s.label === 'bottom') { ly = y + gap + 14 * U; align = 'center'; }
+  const rise = (1 - ease(a)) * 8 * U;
+  spaced(name, lx, ly + rise, nameFont, '#f7f1e5', 4.6 * U, align);
+  if (note) spaced(note, lx, ly + 24 * U + rise, noteFont, '#d9b56a', 3.2 * U, align);
+  ctx.restore();
+}
+
+function drawContext(a) {
+  if (a <= 0 || !M.context) return;
+  ctx.save(); ctx.globalAlpha = a;
+  for (const c of M.context) {
+    const [x, y] = proj(c.at);
+    if (c.kind === 'sea') spaced(c.name.toUpperCase(), x, y, `italic 300 ${20 * U}px "Josefin Sans"`, 'rgba(217,181,106,.55)', 9 * U, 'center');
+    else if (c.kind === 'land') spaced(c.name.toUpperCase(), x, y, `italic 400 ${15 * U}px "Josefin Sans"`, 'rgba(247,241,229,.5)', 6 * U, 'center');
+    else {
+      ctx.fillStyle = 'rgba(247,241,229,.5)'; ctx.beginPath(); ctx.arc(x, y, 3 * U, 0, Math.PI * 2); ctx.fill();
+      spaced(c.name.toUpperCase(), x + 10 * U, y + 5 * U, `400 ${14 * U}px "Josefin Sans"`, 'rgba(247,241,229,.55)', 3 * U, 'left');
+    }
+  }
+  ctx.restore();
+}
+
+window.frame = (t) => {
+  // Camera: close on home, out to show the crossing, then in to the trip.
+  if (t < T.zoomOut) cam = camStart;
+  else if (t < T.zoomWide) cam = mix(camStart, camWide, ease(seg(t, T.zoomOut, T.zoomWide)));
+  else cam = mix(camWide, camRegion, ease(seg(t, T.zoomWide, T.zoomRegion)));
+
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  const bg = ctx.createRadialGradient(W * .62, H * .45, 0, W * .62, H * .45, Math.max(W, H) * .75);
+  bg.addColorStop(0, '#13203a'); bg.addColorStop(1, '#0b1322');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+  graticule();
+  drawDots(t);
+  drawContext(ease(seg(t, T.zoomRegion - .6, T.zoomRegion + .4)));
+
+  // The flight out. It fades once the stops take over.
+  const pOut = ease(seg(t, T.arcIn, T.arcOut));
+  if (pOut > 0) {
+    ctx.save(); ctx.globalAlpha = 1 - .78 * seg(t, T.zoomRegion, T.zoomRegion + 1);
+    const tip = polyline(outbound, pOut, { color: '#d9b56a', width: 2.4 * U, dash: [10 * U, 8 * U] });
+    ctx.restore();
+    if (pOut < 1) glowDot(tip[0], tip[1], 5 * U);
+  }
+  drawHome(t);
+
+  // Legs between stops, then the stops themselves, one after another.
+  M.legs.forEach(([a, b, kind]) => {
+    const ib = stops.indexOf(byId[b]);
+    const p = ease(seg(t, T.stops + (ib - .55) * T.per, T.stops + (ib - .05) * T.per));
+    if (p <= 0) return;
+    const pts = legPoints(byId[a], byId[b]);
+    const tip = polyline(pts, p, kind === 'day'
+      ? { color: 'rgba(241,217,160,.85)', width: 1.6 * U, dash: [2 * U, 6 * U] }
+      : { color: '#d9b56a', width: 2.4 * U, dash: [10 * U, 8 * U] });
+    if (p < 1) glowDot(tip[0], tip[1], 4 * U);
+  });
+  stops.forEach((s, i) => drawStop(s, i, seg(t, T.stops + i * T.per - .25, T.stops + i * T.per + .45)));
+
+  // Title block: rises in as the camera settles on the trip.
+  const ta = ease(seg(t, T.zoomWide + 1.2, T.zoomRegion + .4));
+  const title = document.getElementById('title');
+  title.style.opacity = ta;
+  title.style.transform = `translateY(${(1 - ta) * 18 * U}px)`;
+};
+window.ready = Promise.all([document.fonts.ready, new Promise((r) => (mark.complete ? r() : (mark.onload = r)))]);
+</script>
+</body>
+</html>

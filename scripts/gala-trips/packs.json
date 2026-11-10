@@ -1,0 +1,613 @@
+{
+  "_about": "Per-trip content for the promo packs: map stops and legs, the highlights on the title cards, and the video beats. Facts (nights, travelers, what's included) come from the kit's trips.json; this file only shapes how they are shown. Coordinates are [lon, lat]. When the research session adds coordinates to trips.json they take precedence (matched by stop name). Copy rules: no auction language, no prices (the price slot follows trips.json `showPrices`), never the provider's name, nothing about buying after the Gala.",
+  "home": {
+    "name": "Transylvania County, NC",
+    "at": [
+      -82.73,
+      35.23
+    ]
+  },
+  "trips": {
+    "greece": {
+      "line": "& the Greek Islands",
+      "hook": "Whitewashed villages above the caldera, island evenings on Mykonos, and the Parthenon at golden hour.",
+      "highlights": [
+        "Three nights each in Santorini and Mykonos",
+        "Two nights in Athens, with a guided tour",
+        "Island flight and ferry included"
+      ],
+      "stops": [
+        {
+          "id": "santorini",
+          "name": "Santorini",
+          "at": [
+            25.43,
+            36.42
+          ],
+          "note": "3 nights",
+          "label": "right"
+        },
+        {
+          "id": "mykonos",
+          "name": "Mykonos",
+          "at": [
+            25.33,
+            37.45
+          ],
+          "note": "3 nights",
+          "label": "right"
+        },
+        {
+          "id": "athens",
+          "name": "Athens",
+          "at": [
+            23.73,
+            37.98
+          ],
+          "note": "2 nights",
+          "label": "left"
+        }
+      ],
+      "legs": [
+        [
+          "santorini",
+          "mykonos"
+        ],
+        [
+          "mykonos",
+          "athens"
+        ]
+      ],
+      "context": [
+        {
+          "name": "Aegean Sea",
+          "at": [
+            25.0,
+            38.9
+          ],
+          "kind": "sea"
+        },
+        {
+          "name": "Crete",
+          "at": [
+            24.8,
+            35.05
+          ],
+          "kind": "land"
+        }
+      ],
+      "reel": [
+        {
+          "still": "greece-01",
+          "move": "in",
+          "fx": 0.62,
+          "dur": 6,
+          "social": true,
+          "shows": "Oia, Santorini",
+          "caption": [
+            "Santorini · 3 nights",
+            "Whitewashed Oia, high above the caldera"
+          ]
+        },
+        {
+          "commonsStill": "File:Oia - Santorini - Greece - 13.jpg",
+          "move": "left",
+          "dur": 5,
+          "shows": "Oia and the Ammoudi cliffs, Santorini"
+        },
+        {
+          "clip": {
+            "commons": "File:MYKONOS , a walking tour of this Greek island (in 4K).webm",
+            "at": 117.6,
+            "dur": 4.2,
+            "keepTop": 0.85
+          },
+          "fx": 0.5,
+          "dur": 4.2,
+          "social": true,
+          "shows": "Mykonos harbour",
+          "caption": [
+            "Mykonos · 3 nights",
+            "Harbour mornings and island evenings"
+          ]
+        },
+        {
+          "still": "greece-02",
+          "move": "right",
+          "fx": 0.6,
+          "dur": 5,
+          "shows": "Little Venice, Mykonos"
+        },
+        {
+          "clip": {
+            "commons": "File:MYKONOS , a walking tour of this Greek island (in 4K).webm",
+            "at": 552.5,
+            "dur": 6,
+            "keepTop": 0.85
+          },
+          "fx": 0.3,
+          "dur": 6,
+          "social": true,
+          "shows": "Mykonos windmills at sunset",
+          "caption": [
+            "Mykonos",
+            "Sunset at the windmills"
+          ]
+        },
+        {
+          "clip": {
+            "commons": "File:The Acropolis of Athens, Greece.webm",
+            "at": 144.2,
+            "dur": 5.4,
+            "keepTop": 0.86
+          },
+          "fx": 0.45,
+          "dur": 5.4,
+          "social": true,
+          "shows": "The Parthenon, Athens",
+          "caption": [
+            "Athens · 2 nights",
+            "A guided tour beneath the Acropolis"
+          ]
+        },
+        {
+          "still": "greece-04",
+          "move": "out",
+          "fx": 0.55,
+          "dur": 5,
+          "shows": "The Acropolis from Philopappos Hill"
+        },
+        {
+          "clip": {
+            "commons": "File:The Acropolis of Athens, Greece.webm",
+            "at": 171.2,
+            "dur": 4.6,
+            "keepTop": 0.86
+          },
+          "fx": 0.6,
+          "dur": 4.6,
+          "shows": "Athens from the Acropolis"
+        }
+      ],
+      "factsBg": 3
+    },
+    "iceland": {
+      "line": "Land of the Vikings",
+      "hook": "Geysers, thundering falls and the rift between two continents, then a warm lagoon at the edge of the sea.",
+      "highlights": [
+        "Six nights in Reykjavík",
+        "The Golden Circle, with a farm lunch",
+        "Sky Lagoon and its seven-step ritual"
+      ],
+      "stops": [
+        {
+          "id": "reykjavik",
+          "name": "Reykjavík",
+          "at": [
+            -21.94,
+            64.15
+          ],
+          "note": "6 nights",
+          "label": "left"
+        },
+        {
+          "id": "thingvellir",
+          "name": "Þingvellir",
+          "at": [
+            -21.13,
+            64.26
+          ],
+          "note": "Golden Circle",
+          "label": "top"
+        },
+        {
+          "id": "geysir",
+          "name": "Geysir",
+          "at": [
+            -20.3,
+            64.31
+          ],
+          "note": "Golden Circle",
+          "label": "top"
+        },
+        {
+          "id": "gullfoss",
+          "name": "Gullfoss",
+          "at": [
+            -20.12,
+            64.33
+          ],
+          "note": "Golden Circle",
+          "label": "right"
+        },
+        {
+          "id": "sky-lagoon",
+          "name": "Sky Lagoon",
+          "at": [
+            -21.95,
+            64.11
+          ],
+          "note": "Spa ritual",
+          "label": "bottom"
+        }
+      ],
+      "legs": [
+        [
+          "reykjavik",
+          "thingvellir"
+        ],
+        [
+          "thingvellir",
+          "geysir"
+        ],
+        [
+          "geysir",
+          "gullfoss"
+        ],
+        [
+          "reykjavik",
+          "sky-lagoon",
+          "day"
+        ]
+      ]
+    },
+    "cortona": {
+      "line": "Under the Tuscan Sun",
+      "hook": "Six slow days in a hilltop town of stone lanes and long lunches, with all of Tuscany at the window.",
+      "highlights": [
+        "Six nights in a two-bedroom suite, for four",
+        "Welcome cocktails on the main square",
+        "Tasting dinner with wine, and a private walk"
+      ],
+      "stops": [
+        {
+          "id": "cortona",
+          "name": "Cortona",
+          "at": [
+            11.99,
+            43.27
+          ],
+          "note": "6 nights",
+          "label": "right"
+        }
+      ],
+      "legs": [],
+      "context": [
+        {
+          "name": "Florence",
+          "at": [
+            11.26,
+            43.77
+          ],
+          "kind": "city"
+        },
+        {
+          "name": "Siena",
+          "at": [
+            11.33,
+            43.32
+          ],
+          "kind": "city"
+        },
+        {
+          "name": "Rome",
+          "at": [
+            12.5,
+            41.9
+          ],
+          "kind": "city"
+        }
+      ]
+    },
+    "scotland": {
+      "line": "Lochs & Legends",
+      "hook": "Castle and Royal Mile, the dark water of Loch Ness, and the glens of the West Highlands.",
+      "highlights": [
+        "Four nights in Edinburgh, three in Glasgow",
+        "Edinburgh Castle and a Loch Ness cruise",
+        "Day trips to Glencoe and Loch Lomond"
+      ],
+      "stops": [
+        {
+          "id": "edinburgh",
+          "name": "Edinburgh",
+          "at": [
+            -3.19,
+            55.95
+          ],
+          "note": "4 nights",
+          "label": "right"
+        },
+        {
+          "id": "loch-ness",
+          "name": "Loch Ness",
+          "at": [
+            -4.45,
+            57.32
+          ],
+          "note": "Cruise",
+          "label": "right"
+        },
+        {
+          "id": "glasgow",
+          "name": "Glasgow",
+          "at": [
+            -4.25,
+            55.86
+          ],
+          "note": "3 nights",
+          "label": "bottom"
+        },
+        {
+          "id": "glencoe",
+          "name": "Glencoe",
+          "at": [
+            -5.1,
+            56.68
+          ],
+          "note": "Day trip",
+          "label": "left"
+        },
+        {
+          "id": "loch-lomond",
+          "name": "Loch Lomond",
+          "at": [
+            -4.63,
+            56.1
+          ],
+          "note": "Day trip",
+          "label": "left"
+        }
+      ],
+      "legs": [
+        [
+          "edinburgh",
+          "loch-ness",
+          "day"
+        ],
+        [
+          "edinburgh",
+          "glasgow"
+        ],
+        [
+          "glasgow",
+          "glencoe",
+          "day"
+        ],
+        [
+          "glasgow",
+          "loch-lomond",
+          "day"
+        ]
+      ]
+    },
+    "south-africa": {
+      "line": "Wild Wonders Photo Safari",
+      "hook": "Game drives at first light, a tented suite by the water, and a night under the African sky.",
+      "highlights": [
+        "Five nights in a lakefront tented suite",
+        "Daily game drives, and a Big Five drive",
+        "Farm-to-table meals and a bush braai"
+      ],
+      "stops": [
+        {
+          "id": "johannesburg",
+          "name": "Johannesburg",
+          "at": [
+            28.05,
+            -26.2
+          ],
+          "note": "1 night",
+          "label": "left"
+        },
+        {
+          "id": "camp",
+          "name": "Safari camp",
+          "at": null,
+          "note": "5 nights",
+          "label": "right"
+        }
+      ],
+      "legs": [
+        [
+          "johannesburg",
+          "camp"
+        ]
+      ],
+      "todo": "Camp location not confirmed (research session). The map renders only once `at` is set."
+    },
+    "portugal": {
+      "line": "Lisbon & Porto",
+      "hook": "Lisbon's hills and Sintra's palaces, then north to Porto and a day among the vineyards of the Douro.",
+      "highlights": [
+        "Lisbon, Sintra and the Riviera",
+        "A private guided drive to Porto",
+        "A Douro Valley day: wine, lunch and a river cruise"
+      ],
+      "stops": [
+        {
+          "id": "lisbon",
+          "name": "Lisbon",
+          "at": [
+            -9.14,
+            38.72
+          ],
+          "note": "City stay",
+          "label": "right"
+        },
+        {
+          "id": "sintra",
+          "name": "Sintra",
+          "at": [
+            -9.39,
+            38.8
+          ],
+          "note": "Day tour",
+          "label": "left"
+        },
+        {
+          "id": "porto",
+          "name": "Porto",
+          "at": [
+            -8.61,
+            41.15
+          ],
+          "note": "City stay",
+          "label": "left"
+        },
+        {
+          "id": "douro",
+          "name": "Douro Valley",
+          "at": [
+            -7.79,
+            41.16
+          ],
+          "note": "Wine day",
+          "label": "right"
+        }
+      ],
+      "legs": [
+        [
+          "lisbon",
+          "sintra",
+          "day"
+        ],
+        [
+          "lisbon",
+          "porto"
+        ],
+        [
+          "porto",
+          "douro",
+          "day"
+        ]
+      ]
+    },
+    "costa-rica": {
+      "line": "Colorful Costa Rica",
+      "hook": "Rainforest mornings beneath Arenal's perfect cone, then long Pacific sunsets on the beach at Tamarindo.",
+      "highlights": [
+        "Arenal's rainforest and volcano",
+        "The Pacific beaches of Tamarindo",
+        "Two tours of your choosing, like ziplining"
+      ],
+      "stops": [
+        {
+          "id": "arenal",
+          "name": "Arenal",
+          "at": [
+            -84.7,
+            10.46
+          ],
+          "note": "Rainforest & volcano",
+          "label": "right"
+        },
+        {
+          "id": "tamarindo",
+          "name": "Tamarindo",
+          "at": [
+            -85.84,
+            10.3
+          ],
+          "note": "Pacific beaches",
+          "label": "left"
+        }
+      ],
+      "legs": [
+        [
+          "arenal",
+          "tamarindo"
+        ]
+      ]
+    },
+    "alaska": {
+      "line": "Explorer of the North",
+      "hook": "A balcony at sea through the Inside Passage: glaciers, rainforest ports and gold-rush trails.",
+      "highlights": [
+        "Seven nights at sea in a balcony stateroom",
+        "Ketchikan, Juneau, Skagway and Victoria",
+        "Drinks, dining and Wi-Fi package"
+      ],
+      "stops": [
+        {
+          "id": "seattle",
+          "name": "Seattle",
+          "at": [
+            -122.33,
+            47.61
+          ],
+          "note": "1 night, then sail",
+          "label": "right"
+        },
+        {
+          "id": "ketchikan",
+          "name": "Ketchikan",
+          "at": [
+            -131.65,
+            55.34
+          ],
+          "note": "Port",
+          "label": "left"
+        },
+        {
+          "id": "juneau",
+          "name": "Juneau",
+          "at": [
+            -134.42,
+            58.3
+          ],
+          "note": "Port",
+          "label": "left"
+        },
+        {
+          "id": "skagway",
+          "name": "Skagway",
+          "at": [
+            -135.31,
+            59.46
+          ],
+          "note": "Port",
+          "label": "right"
+        },
+        {
+          "id": "victoria",
+          "name": "Victoria, BC",
+          "at": [
+            -123.37,
+            48.43
+          ],
+          "note": "Port",
+          "label": "left"
+        }
+      ],
+      "legs": [
+        [
+          "seattle",
+          "ketchikan"
+        ],
+        [
+          "ketchikan",
+          "juneau"
+        ],
+        [
+          "juneau",
+          "skagway"
+        ],
+        [
+          "skagway",
+          "victoria"
+        ],
+        [
+          "victoria",
+          "seattle"
+        ]
+      ]
+    }
+  },
+  "music": {
+    "_about": "Music bed. Needs Jeff's ear before it goes on the Gala screen; every cut is also written without music (-silent).",
+    "commons": "File:Zero-project - Santorini (HD 1080).webm",
+    "start": 0,
+    "credit": null
+  }
+}

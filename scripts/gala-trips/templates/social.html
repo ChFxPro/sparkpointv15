@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- A trip's social still at 1080x1350, 1080x1080 or 1080x1920. pack.mjs sets
+     window.SOCIAL. The price line renders only when SOCIAL.price is set. -->
+<style>
+  {{INCLUDE:scripts/gala-print/templates/shared/lockup.css}}
+  html, body { margin: 0; background: #0b1322; }
+  .post { position: relative; overflow: hidden; background: #0b1322; color: #f7f1e5; font-family: 'Josefin Sans'; display: flex; flex-direction: column; }
+  .photo { position: relative; flex: 1 1 auto; min-height: 0; background-size: cover; }
+  .photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,19,34,.35) 0%, rgba(11,19,34,0) 26%, rgba(11,19,34,0) 55%, #0b1322 100%); }
+  .top { position: absolute; z-index: 2; top: 64px; left: 0; right: 0; display: flex; justify-content: center; }
+  .top .lk { font-size: 60px; }
+  .top::before { content: ''; position: absolute; left: 0; right: 0; top: -64px; height: 330px; background: linear-gradient(180deg, rgba(11,19,34,.7), rgba(11,19,34,0)); z-index: -1; }
+  .body { position: relative; z-index: 2; margin-top: -170px; padding: 0 80px 86px; text-align: center; display: grid; justify-items: center; }
+  .conn { display: flex; align-items: center; gap: 1em; color: #d9b56a; font: 600 19px 'Josefin Sans'; letter-spacing: .5em; margin-right: -.5em; text-transform: uppercase; }
+  .conn::before, .conn::after { content: ''; width: 3em; height: 1px; background: currentColor; opacity: .75; }
+  h1 { margin: .28em 0 0; font: 700 118px / .95 'Josefin Sans'; text-transform: uppercase; letter-spacing: .14em; margin-right: -.14em; text-shadow: .045em .045em 0 #0b1322, .07em .07em 0 #d9b56a; }
+  h1.long { font-size: 92px; }
+  .line { margin-top: .5em; color: #f1d9a0; font: italic 300 34px 'Josefin Sans'; }
+  .facts { margin-top: 1.3em; display: flex; gap: 1.1em; align-items: center; font: 600 21px 'Josefin Sans'; letter-spacing: .32em; margin-right: -.32em; text-transform: uppercase; }
+  .facts b, .hl b { width: .42em; height: .42em; rotate: 45deg; border: 1px solid #d9b56a; flex: none; }
+  .hls { margin-top: 1.3em; display: grid; gap: .55em; justify-items: start; text-align: left; }
+  .hl { display: flex; gap: .9em; align-items: center; font: 300 29px / 1.25 'Josefin Sans'; }
+  .price { margin-top: 1.2em; color: #f1d9a0; font: 600 20px 'Josefin Sans'; letter-spacing: .3em; text-transform: uppercase; }
+  .price strong { color: #f7f1e5; font-weight: 300; font-size: 1.9em; letter-spacing: .04em; margin-left: .4em; }
+  .cta { margin-top: 1.5em; display: flex; align-items: center; gap: 1em; }
+  .cta .deco-btn { font-size: 19px; }
+  .when { margin-top: 1.25em; color: #f1d9a0; font: 400 17px 'Josefin Sans'; letter-spacing: .3em; margin-right: -.3em; text-transform: uppercase; }
+  .url { margin-top: .55em; color: rgba(247,241,229,.7); font: 400 17px 'Josefin Sans'; letter-spacing: .12em; }
+  .credit { position: absolute; z-index: 3; right: 30px; bottom: 14px; color: rgba(247,241,229,.45); font: 400 11px 'Josefin Sans'; letter-spacing: .04em; }
+  .deco-frame { z-index: 4; }
+  /* Square: less room, so the highlights go. */
+  .sq .body { margin-top: -150px; padding-bottom: 70px; }
+  .sq .top .lk { font-size: 54px; }
+  .sq .hls { display: none; }
+  .sq h1 { font-size: 104px; }
+  /* Story: bigger type, keep clear of the app's top and bottom bars. */
+  .story .top { top: 200px; }
+  .story .top .lk { font-size: 76px; }
+  .story .body { padding-bottom: 240px; margin-top: -260px; }
+  .story .conn { font-size: 24px; }
+  .story h1 { font-size: 150px; }
+  .story .line { font-size: 44px; }
+  .story .facts { font-size: 26px; }
+  .story .hl { font-size: 38px; }
+  .story .cta .deco-btn { font-size: 24px; }
+  .story .when, .story .url { font-size: 21px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const S = window.SOCIAL;
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+document.getElementById('root').innerHTML = `
+  <div class="post ${S.variant}" style="width:${S.W}px;height:${S.H}px">
+    <div class="photo" style="background-image:url('${S.photo}');background-position:${S.focus}"></div>
+    <div class="top"><div class="lk-slot"></div></div>
+    <div class="body">
+      <div class="conn">Connection ${esc(S.trip.connection)}</div>
+      <h1 class="${S.trip.name.length > 8 ? 'long' : ''}">${esc(S.trip.name)}</h1>
+      <div class="line">${esc(S.trip.line)}</div>
+      <div class="facts">${S.trip.facts.map(esc).join('<b></b>')}</div>
+      <div class="hls">${S.trip.highlights.map((h) => `<div class="hl"><b></b><span>${esc(h)}</span></div>`).join('')}</div>
+      ${S.price ? `<div class="price">Your trip<strong>${esc(S.price)}</strong></div>` : ''}
+      <div class="cta"><span class="deco-btn">Choose your trip at the Gala</span></div>
+      <div class="when">${esc(S.when)}</div>
+      <div class="url">yoursparkpoint.org/events/sparkpoint-gala</div>
+    </div>
+    <div class="credit">Photo: ${esc(S.credit)}</div>
+    <div class="deco-frame"></div>
+  </div>`;
+</script>
+<script>
+  {{INCLUDE:scripts/gala-print/templates/shared/lockup.js}}
+</script>
+<script>
+window.frame = () => {};
+window.ready = Promise.all([document.fonts.ready, new Promise((r) => { const i = new Image(); i.onload = i.onerror = r; i.src = S.photo; })]);
+</script>
+</body>
+</html>
