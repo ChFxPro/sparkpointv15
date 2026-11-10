@@ -214,7 +214,7 @@ are in \`<trip>/pack/web/\`, listed with sizes, durations and dimensions in its 
 - \`<trip>-loop-poster-{16x9,4x5}.webp\`: each loop's first frame (about 40 KB), as the \`poster\`.
 - \`<trip>-film-16x9-web.mp4\`: the full promo with its music, 1280×720, for an on-demand "Watch the film" player (don't autoplay it).
 
-Credits: the footage and music are Envato Elements (no public credit needed). Each loop in web.json has its own `sources` and a public `creditLine`. Some trips also use CC-licensed
+Credits: the footage and music are Envato Elements (no public credit needed). Each loop in web.json has its own \`sources\` and a public \`creditLine\`. Some trips also use CC-licensed
 Wikimedia Commons stills or clips; see that trip's \`pack/LICENSES.md\`. If the page credits photos, use the lines there.
 
 | Trip | Web files | Loops |
