@@ -165,7 +165,7 @@ export function GalaBoardingPass() {
             </p>
             {GALA_TICKETS_URL ? (
               <>
-                <p>{GALA_TICKET_PRICE_LABEL}. Destinations revealed before boarding.</p>
+                <p>{GALA_TICKET_PRICE_LABEL}. Eight trips, from Greece to Alaska.</p>
                 <a
                   className="gala-button gala-button-gold"
                   href={GALA_TICKETS_URL}

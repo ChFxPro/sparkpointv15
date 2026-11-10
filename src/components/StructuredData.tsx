@@ -39,7 +39,7 @@ const ROUTE_DESCRIPTIONS: Record<string, string> = {
   '/stories': 'Community stories and lived experiences from across Transylvania County.',
   '/events': 'Upcoming SparkPoint convenings, workshops, and community gatherings across Western North Carolina.',
   '/events/thrive-at-five': 'Join SparkPoint and Pisgah Coffee Roasters for the Common Ground Resilience Roast release party with live music, food, drinks, and friends.',
-  '/events/sparkpoint-gala': 'A World of Connections, the SparkPoint Gala and travel experience on December 11, 2026, supporting the Transylvania Resilience Hub.',
+  '/events/sparkpoint-gala': 'A World of Connections, the SparkPoint Gala, on December 11, 2026, with eight trips that give back: Greece, Iceland, Cortona, Scotland, South Africa, Portugal, Costa Rica, and Alaska, supporting the Transylvania Resilience Hub.',
   '/partners': 'SparkPoint’s partners and sponsors across Transylvania County and Western North Carolina.',
   '/resilience-hub': 'Preparedness, connection, and coordinated support through the SparkPoint Resilience Hub.',
   '/press': 'The SparkPoint Newsroom — press releases, media assets, newsletters, organizational background, and media contact information in one place.',
