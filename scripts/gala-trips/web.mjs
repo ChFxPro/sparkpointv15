@@ -45,12 +45,34 @@ function moments(edit, bm, want = 4, total = 7.2) {
   });
 }
 
-async function loop(src, segs, vf, outBase, dir) {
+// Renders each loop moment from the cut's saved reel data with text off
+// (no corner title, no captions), so the loop carries no words.
+async function cleanSegments(trip, layout, segs, dir) {
+  const reelFile = join(SCRATCH, 'reels', `${trip.id}-${layout}.json`);
+  if (!(await exists(reelFile))) {
+    // Re-plan the cut (deterministic, no render) to recover its reel data.
+    execFileSync('node', [join(here, 'pack.mjs'), trip.id, '--only=plan', `--cuts=${layout}`], { stdio: 'inherit' });
+  }
+  const data = { ...JSON.parse(await readFile(reelFile, 'utf8')), clean: true };
+  const browser = await launch();
+  const files = [];
+  try {
+    for (const [i, sg] of segs.entries()) {
+      const f = join(dir, `clean-${i}.mp4`);
+      await renderVideo(browser, 'reel.html', { width: data.W, height: data.H, global: 'REEL', data }, f,
+        { from: sg.from, duration: sg.len, bitrate: '24M', maxrate: '30M', scratch: join(dir, 'render') });
+      files.push(f);
+    }
+  } finally { await browser.close(); }
+  return files;
+}
+
+async function loop(clips, segs, vf, outBase, dir) {
   // Cut the moments (hard cuts on the beats), then crossfade the tail into the head.
   const parts = [];
   for (const [i, s] of segs.entries()) {
     const p = join(dir, `seg-${i}.mp4`);
-    await ffmpeg(['-ss', String(s.from), '-t', String(s.len), '-i', src, '-an', '-vf', `${vf},fps=30,setsar=1`, '-c:v', 'libx264', '-crf', '14', '-preset', 'fast', '-pix_fmt', 'yuv420p', p]);
+    await ffmpeg(['-i', clips[i], '-an', '-vf', `${vf},fps=30,setsar=1`, '-c:v', 'libx264', '-crf', '14', '-preset', 'fast', '-pix_fmt', 'yuv420p', p]);
     parts.push(p);
   }
   const list = join(dir, 'list.txt');
@@ -153,7 +175,8 @@ export async function buildWeb(trip, { metaOnly = false } = {}) {
     const segs = moments(e, bm);
     const credit = await sourcesFor(trip, pack, v, [...new Set(segs.map((x) => x.shot))]);
     if (metaOnly) { loopMeta[fmt] = credit; continue; }
-    const r = await loop(v(src), segs, vf, join(out, `${trip.id}-loop-card-${fmt}`), dir);
+    const clips = await cleanSegments(trip, fmt === '16x9' ? '16x9' : '9x16', segs, dir);
+    const r = await loop(clips, segs, vf, join(out, `${trip.id}-loop-card-${fmt}`), dir);
     await add(r.mp4, { kind: 'loop', format: fmt, width: w, height: h, duration: r.duration, codec: 'h264', ...credit });
     await add(r.webm, { kind: 'loop', format: fmt, width: w, height: h, duration: r.duration, codec: 'vp9', ...credit });
     await add(r.poster, { kind: 'poster', format: fmt, width: w, height: h });
@@ -191,7 +214,7 @@ export async function buildWeb(trip, { metaOnly = false } = {}) {
   const vtt = film.replace(/\.mp4$/, '.vtt');
   await writeFile(vtt, await describe(trip, pack, v));
   await add(vtt, { kind: 'captions', format: 'vtt', lang: 'en' });
-  await writeJson(join(out, 'web.json'), { trip: trip.id, name: trip.name, generated: new Date().toISOString().slice(0, 16), credit: CREDIT, files });
+  await writeJson(join(out, 'web.json'), { trip: trip.id, name: trip.name, generated: new Date().toLocaleString("sv-SE", { timeZone: "America/New_York" }).slice(0, 16) + " ET", credit: CREDIT, files });
   await rm(work, { recursive: true, force: true });
   console.log(`${trip.id}: web ${files.map((f) => `${f.file} ${(f.bytes / 1024).toFixed(0)} KB`).join(', ')}`);
   return files;

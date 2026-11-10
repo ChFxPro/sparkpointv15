@@ -206,6 +206,10 @@ try {
     const pack = withResearch(trip, config.trips[trip.id]);
     const price = priceFor(trip);
     if (want('map')) await buildMap(browser, trip, pack, config.home);
+    if (only?.includes('plan')) {
+      await buildVideo(browser, trip, pack, { price, when: WHEN, cuts, score: await scoreTrip(trip, pack, config), home: config.home, planOnly: true });
+      continue;
+    }
     const score = want('video') || want('audio') ? await scoreTrip(trip, pack, config) : null;
     if (want('video')) await buildVideo(browser, trip, pack, { price, when: WHEN, cuts, score, home: config.home });
     if (want('video') || want('audio')) await mixTrip(trip, await music(pack.music), score, cuts);

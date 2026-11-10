@@ -160,7 +160,7 @@ async function framesOf(mp4, dir) {
 }
 
 // Cuts each format to its music (see plan.mjs and score.mjs).
-export async function buildVideo(browser, trip, pack, { price = null, when, cuts, score, home } = {}) {
+export async function buildVideo(browser, trip, pack, { price = null, when, cuts, score, home, planOnly = false } = {}) {
   if (!pack.reel?.length) throw new Error(`${trip.id}: no reel in packs.json`);
   if (!score) throw new Error(`${trip.id}: no score; the video is cut to its music`);
   console.log(`${trip.id}: preparing shots`);
@@ -179,7 +179,7 @@ export async function buildVideo(browser, trip, pack, { price = null, when, cuts
     };
     const footage = prepared.shots.map(foot).filter((s) => kind === 'full' || s.social);
     const p = plan(kind, bm, footage, cards);
-    if (p.map) {
+    if (p.map && !planOnly) {
       const m = p.shots.find((s) => s.map);
       const timing = mapTiming(bm, m.end - m.start, pack.stops.filter((s) => s.at).length);
       const dir = join(SCRATCH, 'reel', `map-${trip.id}-${layout}-timed`);
@@ -197,6 +197,15 @@ export async function buildVideo(browser, trip, pack, { price = null, when, cuts
     };
     const edit = { duration, hit: p.hit, factsAt: p.factsAt, closeAt: p.closeAt, finalHit: p.finalHit, changes: p.changes, map: p.map,
       shots: shots.map((s) => ({ start: +s.start.toFixed(3), end: +s.end.toFixed(3), fadeIn: s.fadeIn, what: s.card ?? (s.map ? 'map' : s.shows), caption: s.caption ? s.caption.join(' — ') : null })) };
+    // The reel data, so web.mjs can re-render loop moments without text.
+    await writeJson(join(SCRATCH, 'reels', `${trip.id}-${layout}.json`), data);
+    if (planOnly) {
+      const saved = JSON.parse(await readFile(packDir(trip.id, 'video', `edit-${layout}.json`), 'utf8'));
+      const same = JSON.stringify(saved.changes) === JSON.stringify(edit.changes);
+      console.log(`${trip.id}: plan for ${layout} ${same ? 'matches the rendered edit' : 'DIFFERS from the rendered edit'}`);
+      if (!same) throw new Error(`${trip.id} ${layout}: re-planned edit does not match the render`);
+      continue;
+    }
     await writeJson(join(SCRATCH, 'timelines', `${trip.id}-${layout}.json`), edit.shots);
     await writeJson(packDir(trip.id, 'video', `edit-${layout}.json`), edit);
     const name = kind === 'full' ? `${trip.id}-promo-16x9` : `${trip.id}-promo-30s-${layout}`;
@@ -206,6 +215,7 @@ export async function buildVideo(browser, trip, pack, { price = null, when, cuts
     outputs.push(silent);
     console.log(`${trip.id}: video ${name} (${duration.toFixed(1)} s, ${shots.length} shots, cut to the music; ${r.frames} frames at ${r.fps} fps on ${r.mode}, ${r.check})`);
   }
+  if (planOnly) return outputs;
   const srcFile = packDir(trip.id, 'video', 'sources.json');
   const old = (await exists(srcFile)) ? JSON.parse(await readFile(srcFile, 'utf8')) : {};
   await writeJson(srcFile, { trip: trip.id, clips: prepared.sources, music: old.music ?? null, sfx: old.sfx ?? [] });

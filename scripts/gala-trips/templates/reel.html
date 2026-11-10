@@ -92,7 +92,7 @@ const layers = R.shots.map((s) => {
   let html = '';
   if (s.image || s.frames) html += '<img class="bg" alt="">';
   html += `<div class="shade ${s.shade || (s.card ? 'card' : 'foot')}"></div>`;
-  if (s.caption) html += `<div class="cap rise"><div class="k">${esc(s.caption[0])}</div><div class="t">${esc(s.caption[1])}</div></div>`;
+  if (s.caption && !R.clean) html += `<div class="cap rise"><div class="k">${esc(s.caption[0])}</div><div class="t">${esc(s.caption[1])}</div></div>`;
   if (s.card === 'open') html += `<div class="center">
       <div class="lk-slot small rise" data-step="0"></div>
       <div class="conn rise" data-step="1" style="margin-top:calc(64px * var(--u))">Connection ${esc(R.trip.connection)}</div>
@@ -200,7 +200,7 @@ window.frame = async (t) => {
     }
   });
   const foot = R.shots.find((s) => t >= s.start && t < s.end && !s.card && !s.map);
-  document.getElementById('corner').style.opacity = foot ? Math.min(1, seg(t, foot.start, foot.start + .6)) * .9 : 0;
+  document.getElementById('corner').style.opacity = foot && !R.clean ? Math.min(1, seg(t, foot.start, foot.start + .6)) * .9 : 0;
   await Promise.all(pending);
 };
 window.ready = (async () => {

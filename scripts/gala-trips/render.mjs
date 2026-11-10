@@ -77,7 +77,7 @@ export async function video(page, out, { duration, fps = 30, alpha = false, crf 
   const done = new Promise((res, rej) => ff.on('close', (c) => (c ? rej(new Error(`ffmpeg exited ${c} for ${out}`)) : res())));
   const frames = Math.round(duration * fps);
   for (let i = 0; i < frames; i++) {
-    await page.evaluate((tt) => window.frame(tt), i / fps);
+    await page.evaluate((tt) => window.frame(tt), from + i / fps);
     const buf = await page.screenshot({ type: 'png', omitBackground: alpha });
     if (!ff.stdin.write(buf)) await new Promise((r) => ff.stdin.once('drain', r));
   }
@@ -123,7 +123,7 @@ export async function renderVideo(browser, template, openOpts, out, opts) {
   throw lastErr;
 }
 
-async function renderOnce(browser, template, openOpts, out, { duration, fps = 30, crf = 16, bitrate = '14M', maxrate = '20M', scratch, pages: want, real }) {
+async function renderOnce(browser, template, openOpts, out, { duration, fps = 30, crf = 16, bitrate = '14M', maxrate = '20M', scratch, pages: want, real, from = 0 }) {
   const frames = SMOKE && !real ? Math.min(SMOKE, Math.round(duration * fps)) : Math.round(duration * fps);
   const n = Math.min(want, Math.max(1, Math.floor(frames / 20)));
   const dir = join(scratch, `frames-${Date.now()}`);
@@ -155,7 +155,7 @@ async function renderOnce(browser, template, openOpts, out, { duration, fps = 30
   try {
     await Promise.race([hang, Promise.all(pages.map(async (p, k) => {
       for (let i = ranges[k][0]; i < ranges[k][1] && !stop; i++) {
-        await p.evaluate((tt) => window.frame(tt), i / fps);
+        await p.evaluate((tt) => window.frame(tt), from + i / fps);
         await p.screenshot({ path: name(i), type: 'png' });
         last = Date.now();
         if (++done % 300 === 0) console.log(`render ${basename(out)}: ${done}/${frames} frames, ${(done / ((last - t0) / 1000)).toFixed(2)} fps`);
@@ -182,7 +182,7 @@ async function renderOnce(browser, template, openOpts, out, { duration, fps = 30
     let worst = 0, ordered = true;
     for (const [b] of ranges.slice(1)) {
       for (const i of [b - 1, b]) {
-        await p.evaluate((tt) => window.frame(tt), i / fps);
+        await p.evaluate((tt) => window.frame(tt), from + i / fps);
         const again = await raw(await p.screenshot({ type: 'png' }));
         const same = mean(again, await raw(name(i)));
         const nb = [i - 1, i + 1].filter((k) => k >= 0 && k < frames);
