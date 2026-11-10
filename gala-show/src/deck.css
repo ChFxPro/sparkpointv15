@@ -747,6 +747,11 @@ body.editing {
 .page:not(.is-in) > .trip-photo {
   transform: rotate(3deg) translateY(18px);
 }
+/* Johannesburg's route ends where the photo usually sits; move it left of the endpoint. */
+.page-trip[data-trip='south-africa'] > .trip-photo,
+.page-trip[data-trip='south-africa'] > .trip-credit {
+  right: 400px;
+}
 
 /* --- Words --- */
 .page-text {

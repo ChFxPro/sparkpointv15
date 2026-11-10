@@ -419,7 +419,7 @@ R.trip = (s, ctx) => {
   );
   const credit = photo && s.photoCredit ? h('p', { class: 'trip-credit' }, s.photoCredit) : null;
   if (credit) photo.addEventListener('error', () => credit.remove());
-  const root = h('section', { class: `page page-trip ${photo ? 'has-photo' : ''}` }, photo, credit, copy);
+  const root = h('section', { class: `page page-trip ${photo ? 'has-photo' : ''}`, 'data-trip': s.tripId || '' }, photo, credit, copy);
   const hasPlace = s.lat !== '' && s.lon !== '' && Number.isFinite(Number(s.lat)) && Number.isFinite(Number(s.lon));
   return {
     root,
