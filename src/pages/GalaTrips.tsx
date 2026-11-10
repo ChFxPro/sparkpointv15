@@ -30,8 +30,8 @@ import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
 //   preload="none", so nothing is fetched until a card boards. The first load
 //   carries no video at all.
 // - Only the boarding card plays: one loop at a time, paused when it stops boarding.
-// - No video and no drift under reduced motion (OS or the site's toggle), Save-Data
-//   or 2G. Those visitors get the stills.
+// - No video, no drift and no pulsing cue under reduced motion (OS or the site's
+//   toggle), Save-Data or 2G. Those visitors get the stills.
 // - Moving video has a visible pause control (WCAG 2.2.2), and pausing holds for
 //   every card until the visitor presses play.
 // - The full film (with sound) loads only when someone presses Watch the film,
@@ -356,19 +356,37 @@ export function GalaTrips() {
       });
       setCentred(best ? (best as HTMLElement).dataset.trip! : null);
     };
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) inBand.add(entry.target as HTMLElement);
-          else inBand.delete(entry.target as HTMLElement);
-        }
-        pick();
-      },
-      // A band across the middle third of the screen.
-      { rootMargin: '-33% 0px -33% 0px' }
-    );
-    cards.current.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    // A band across the middle third of the screen, in pixels from the
+    // viewport's height (so it holds in landscape too), rebuilt on resize.
+    let io: IntersectionObserver | null = null;
+    const observe = () => {
+      io?.disconnect();
+      inBand.clear();
+      const inset = Math.round(window.innerHeight / 3);
+      io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) inBand.add(entry.target as HTMLElement);
+            else inBand.delete(entry.target as HTMLElement);
+          }
+          pick();
+        },
+        { rootMargin: `-${inset}px 0px -${inset}px 0px` }
+      );
+      cards.current.forEach((el) => io!.observe(el));
+    };
+    observe();
+    let resizeTimer = 0;
+    const onResize = () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(observe, 150);
+    };
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      window.clearTimeout(resizeTimer);
+      io?.disconnect();
+    };
   }, [env.hover]);
 
   const boardingId = env.hover ? hovered : hovered ?? centred;
@@ -382,7 +400,7 @@ export function GalaTrips() {
 
   return (
     <>
-      <ol className={`gala-trips${env.motion ? '' : ' is-still'}`}>
+      <ol className={`gala-trips${env.motion && env.data ? '' : ' is-still'}`}>
         {GALA_TRIPS_IN_ORDER.map((trip) => (
           <TripCard
             key={trip.id}

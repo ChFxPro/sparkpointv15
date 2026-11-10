@@ -3,7 +3,9 @@
    brass for the journey, ivory paper for travel documents, evergreen for home.
    SparkPoint pink marks the giveback and the buttons. No Fraunces on the Gala. */
 
-.gala-page {
+/* The palette also goes on the film dialog, which renders outside .gala-page (in a portal). */
+.gala-page,
+.gala-film {
   --gala-midnight: #0b1322;
   --gala-midnight-2: #14213a;
   --gala-brass: #d9b56a;
@@ -19,6 +21,9 @@
   /* Machine type, kept only where the page imitates a machine: the split-flap
      tiles and the passport's machine-readable line. Everything else is Josefin. */
   --gala-machine: ui-monospace, 'SF Mono', 'Menlo', 'Consolas', monospace;
+}
+
+.gala-page {
   color: var(--gala-ink);
   background: var(--gala-ivory);
   font-family: var(--gala-display);
@@ -1263,7 +1268,7 @@
   border: 1px solid rgba(217, 181, 106, 0.6);
   outline: 1px solid rgba(217, 181, 106, 0.28);
   outline-offset: 6px;
-  font-family: 'Josefin Sans Variable', 'Josefin Sans', sans-serif;
+  font-family: var(--gala-display);
   translate: -50% -50%;
 }
 
