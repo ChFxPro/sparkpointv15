@@ -12,7 +12,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, ty
 import { Link } from 'react-router';
 import { SEOHead } from '../components/SEOHead';
 import { GALA_TRIPS_IN_ORDER } from '../data/galaTrips';
-import { GALA_STAMP_ID, STAMPS, clearStampCache, stampCanvas } from './galaJoinMe/stamps';
+import { SPARKMARK_URL } from '../components/Sparkmark';
+import { GALA_STAMP_ID, STAMPS, clearStampCache, setSparkmark, stampCanvas } from './galaJoinMe/stamps';
 import {
   LAYOUTS,
   artFor,
@@ -37,7 +38,6 @@ import './galaJoinMe/galaJoinMe.css';
 
 const BASE = import.meta.env.BASE_URL;
 const SAMPLE_SRC = `${BASE}assets/events/gala/passport-bearer-600.webp`;
-const SPARKMARK_SRC = `${BASE}assets/brand/sparkmark-256.webp`;
 const GALA_PATH = '/events/sparkpoint-gala';
 const PAGE_PATH = '/events/sparkpoint-gala/join-me';
 const SHARE_IMAGE = '/assets/events/gala/gala-share-world-of-connections.jpg';
@@ -61,6 +61,8 @@ function useHaptics() {
   const label = useRef<HTMLLabelElement>(null);
   const tap = useCallback((ms: number) => {
     if (prefersLessMotion()) return;
+    // Browsers refuse (and log) vibration until the visitor has tapped the page.
+    if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return;
     try {
       if (navigator.vibrate && navigator.vibrate(ms)) return;
     } catch {
@@ -143,10 +145,11 @@ export default function GalaJoinMePage() {
         setFrame((f) => (f.ox || f.oy ? f : autoFrame(sample)));
       })
       .catch(() => undefined);
-    loadImage(SPARKMARK_SRC)
+    loadImage(SPARKMARK_URL)
       .then((img) => {
         if (!live) return;
         assets.current.sparkmark = img;
+        setSparkmark(img);
         setVersion((v) => v + 1);
       })
       .catch(() => undefined);
