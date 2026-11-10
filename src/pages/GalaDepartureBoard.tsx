@@ -14,7 +14,7 @@ const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
 type Column = 'flight' | 'destination' | 'time' | 'status';
 
-const WIDTHS: Record<Column, number> = { flight: 7, destination: 16, time: 7, status: 10 };
+const WIDTHS: Record<Column, number> = { flight: 7, destination: 16, time: 8, status: 10 };
 
 interface Row {
   flight: string;
@@ -37,7 +37,7 @@ const DEPARTURES: Row[] = [...GALA_TRIPS]
   .map((trip) => ({
     flight: `SPK1${trip.connection}`,
     destination: trip.board,
-    time: `${trip.nights} NTS`,
+    time: `${trip.nights} ${trip.nights === 1 ? 'NIGHT' : 'NIGHTS'}`,
     status: travelersLabel(trip.travelers),
   }));
 
@@ -145,7 +145,7 @@ export function GalaDepartureBoard() {
       <p className="sr-only">
         Departures board: A World of Connections, the SparkPoint Gala, flight SPK 1211, December 11,
         tickets on sale. The eight trips:{' '}
-        {DEPARTURES.map((row) => `${row.flight.slice(3)}, ${row.destination.toLowerCase()}, ${row.time.replace('NTS', 'nights')}, ${row.status.toLowerCase()}`).join('; ')}.
+        {DEPARTURES.map((row) => `${row.flight.slice(3)}, ${row.destination.toLowerCase()}, ${row.time.toLowerCase()}, ${row.status.toLowerCase()}`).join('; ')}.
       
       </p>
       <div className="gala-board-inner" aria-hidden="true">
@@ -156,7 +156,7 @@ export function GalaDepartureBoard() {
         <div className="gala-board-row gala-board-head">
           <span className="col-flight">Flight</span>
           <span className="col-destination">Destination</span>
-          <span className="col-time">Time</span>
+          <span className="col-time">Stay</span>
           <span className="col-status">Seats</span>
         </div>
         {ROWS.map((row, rowIndex) => {
