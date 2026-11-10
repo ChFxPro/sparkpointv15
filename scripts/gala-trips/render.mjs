@@ -133,8 +133,13 @@ async function renderOnce(browser, template, openOpts, out, { duration, fps = 30
   const t0 = Date.now();
   console.log(`render ${basename(out)}: ${frames} frames on ${n} page(s)`);
   let done = 0;
+  let extra = [];
   try {
-  const pages = await Promise.all(ranges.map(() => browser.newPage()));
+  // One Chrome per range: pages in a single Chrome share its compositor and
+  // screenshot path, so they barely run in parallel (2.4 fps on 3 pages vs 2.3 on 1).
+  extra = await Promise.all(ranges.slice(1).map(() => launch()));
+  const browsers = [browser, ...extra];
+  const pages = await Promise.all(browsers.map((b) => b.newPage()));
   const url = await open(pages[0], template, openOpts);
   await Promise.all(pages.slice(1).map((p) => open(p, template, { ...openOpts, url })));
   // Watchdog: any new frame from any page resets it.
@@ -159,6 +164,7 @@ async function renderOnce(browser, template, openOpts, out, { duration, fps = 30
   } catch (err) {
     clearInterval(timer);
     await Promise.all(pages.map((p) => p.close().catch(() => {})));
+    await Promise.all(extra.map((b) => b.close().catch(() => {})));
     throw err;
   }
   clearInterval(timer);
@@ -189,6 +195,7 @@ async function renderOnce(browser, template, openOpts, out, { duration, fps = 30
     if (worst > 0.5 || !ordered) throw new Error(`${out}: frames at a page join don't match a single-page render (mean ${worst.toFixed(3)}, ordered ${ordered})`);
   }
   await Promise.all(pages.map((p) => p.close()));
+  await Promise.all(extra.map((b) => b.close().catch(() => {})));
   await mkdir(dirname(out), { recursive: true });
   const enc = ENCODER === 'x264'
     ? ['-c:v', 'libx264', '-preset', 'slow', '-crf', String(crf)]
@@ -197,6 +204,7 @@ async function renderOnce(browser, template, openOpts, out, { duration, fps = 30
   await rm(dir, { recursive: true, force: true });
   return { frames, pages: n, renderSecs, fps: +(frames / renderSecs).toFixed(2), check };
   } catch (err) {
+    await Promise.all(extra.map((b) => b.close().catch(() => {})));
     await rm(dir, { recursive: true, force: true });
     throw err;
   }
