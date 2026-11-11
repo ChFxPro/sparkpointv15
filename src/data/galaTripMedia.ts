@@ -28,6 +28,9 @@ export interface GalaTripMedia {
   /** The full promo with music, loaded only when someone asks to watch it. */
   film?: string;
   captions?: { file: string; lang: string }[];
+  /** The vertical (9:16) cut, about 30 s, played on phones held upright. */
+  filmVertical?: string;
+  captionsVertical?: { file: string; lang: string }[];
   /** Credit for the footage and music, from the pack's web.json (no licensee's name). */
   credit?: string;
   /** Creative Commons work in the film (from the pack's LICENSES.md), credited in the film player. */

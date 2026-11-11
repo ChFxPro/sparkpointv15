@@ -1,7 +1,8 @@
 // /events/sparkpoint-gala/join-me — "Issue my passport": a one-screen post maker for the Gala.
 // A guest adds a photo and their name, taps the trip they dream of, and the passport is
 // stamped (the trip's stamp, then the Gala's) while a "Join me" post builds around it.
-// Shares a 1080×1350 post or a 1080×1920 story through the phone's share sheet.
+// One image (4:5, saved at 2160×2700) for every use: a Facebook or Instagram post, an email
+// attachment or a print. Phones share it through the share sheet; computers save it.
 //
 // Privacy: the photo is read and drawn on this device only. It is never uploaded, stored or
 // tracked, and the page has no analytics of its own. A pre-filled name can ride in the link's
@@ -31,7 +32,6 @@ import {
   type Photo,
   type PostAssets,
   type PostInput,
-  type PostKind,
   type PostTrip,
 } from './galaJoinMe/post';
 import './galaJoinMe/galaJoinMe.css';
@@ -120,8 +120,10 @@ export default function GalaJoinMePage() {
   const bottomRef = useRef<HTMLCanvasElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const assets = useRef<PostAssets>({ sparkmark: null });
-  const posts = useRef<Partial<Record<PostKind, Blob>>>({});
+  const post = useRef<Blob | null>(null);
   const running = useRef(false);
+  // Bumped by Back and Start over, so a stamping sequence still in flight stops where it is.
+  const run = useRef(0);
   const pan = useRef<{ x: number; y: number; ox: number; oy: number; k: number } | null>(null);
   const { label: hapticLabel, tap } = useHaptics();
 
@@ -202,9 +204,8 @@ export default function GalaJoinMePage() {
   }, [version]);
 
   const makePosts = useCallback(async (from: PostInput) => {
-    const [feed, story] = await Promise.all([exportPost('feed', from, assets.current), exportPost('story', from, assets.current)]);
-    if (feed) posts.current.feed = feed;
-    if (story) posts.current.story = story;
+    const blob = await exportPost(from, assets.current);
+    if (blob) post.current = blob;
   }, []);
 
   // After the first build, keep the saved images in step with any change.
@@ -301,9 +302,16 @@ export default function GalaJoinMePage() {
     void c.offsetWidth;
     c.classList.add('is-thud');
   };
+  const cancelStamping = () => {
+    run.current += 1;
+    running.current = false;
+    setBuilding(false);
+  };
   const stampAndBuild = async (t: PostTrip | null) => {
     if (running.current) return;
     running.current = true;
+    const id = ++run.current;
+    const live = () => run.current === id;
     const firstTime = !built;
     setTrip(t);
     setPicked(t ? t.id : GALA_STAMP_ID);
@@ -311,24 +319,30 @@ export default function GalaJoinMePage() {
     if (t) {
       setTripStamp((s) => ({ id: t.id, key: (s?.key ?? 0) + 1 }));
       await wait(210);
+      if (!live()) return;
       thud();
       tap(18);
       await wait(300);
+      if (!live()) return;
     } else {
       setTripStamp(null);
     }
     if (firstTime) {
       setGalaKey((k) => k + 1);
       await wait(210);
+      if (!live()) return;
       thud();
       tap(26);
       await wait(420);
+      if (!live()) return;
       setBuilt(true);
       setBuilding(true);
       await wait(860);
+      if (!live()) return;
       setBuilding(false);
     }
     await exporting;
+    if (!live()) return;
     if (firstTime) tap(12);
     running.current = false;
     setToast('');
@@ -344,12 +358,12 @@ export default function GalaJoinMePage() {
       return false;
     }
   };
-  const share = async (kind: PostKind) => {
-    const blob = posts.current[kind];
+  const share = async () => {
+    const blob = post.current;
     if (!blob) return;
     const copied = await copyCaption(input);
     const hint = copied ? 'Caption copied. Paste it into your post.' : 'Tap “Copy caption”, then paste it into your post.';
-    const fileName = kind === 'feed' ? 'sparkpoint-gala-join-me.jpg' : 'sparkpoint-gala-join-me-story.jpg';
+    const fileName = 'sparkpoint-gala-join-me.jpg';
     if (canShareFiles) {
       try {
         await navigator.share({ files: [new File([blob], fileName, { type: 'image/jpeg' })] });
@@ -374,6 +388,7 @@ export default function GalaJoinMePage() {
   };
 
   const startOver = () => {
+    cancelStamping();
     setName('');
     setTrip(null);
     setPicked(null);
@@ -381,7 +396,7 @@ export default function GalaJoinMePage() {
     setTripStamp(null);
     setGalaKey(0);
     setToast('');
-    posts.current = {};
+    post.current = null;
     loadImage(SAMPLE_SRC)
       .then((img) => {
         const sample: Photo = { kind: 'sample', source: img, w: img.naturalWidth, h: img.naturalHeight };
@@ -419,7 +434,7 @@ export default function GalaJoinMePage() {
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
             </Link>
           ) : (
-            <button className="jm-back" type="button" aria-label="Back" onClick={() => { tap(8); go(step - 1); }}>
+            <button className="jm-back" type="button" aria-label="Back" onClick={() => { cancelStamping(); tap(8); go(step - 1); }}>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
             </button>
           )}
@@ -591,15 +606,15 @@ export default function GalaJoinMePage() {
               <h2>
                 Your post is <b>ready.</b>
               </h2>
-              <div className="jm-row">
-                <button className="jm-btn jm-primary" type="button" onClick={() => void share('feed')}>
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4M8 8l4-4 4 4" /><path d="M5 12v8h14v-8" /></svg>
-                  {canShareFiles ? 'Share post' : 'Save post'}
-                </button>
-                <button className="jm-btn" type="button" onClick={() => void share('story')}>
-                  {canShareFiles ? 'Story' : 'Save story'}
-                </button>
-              </div>
+              <button className="jm-btn jm-primary" type="button" onClick={() => void share()}>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4M8 8l4-4 4 4" /><path d="M5 12v8h14v-8" /></svg>
+                {canShareFiles ? 'Share' : 'Save image'}
+              </button>
+              <p className="jm-note">
+                {canShareFiles
+                  ? 'Post it, text it, email it, save it to your photos or print it: it’s all in your phone’s share menu.'
+                  : 'A high-resolution image for Facebook, Instagram, email or printing.'}
+              </p>
               <p className="jm-toast" role="status">{toast}</p>
               <div className="jm-links">
                 <button
