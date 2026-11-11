@@ -10,14 +10,26 @@ import { tripMedia, tripVideoSrc, type GalaTripMedia } from '../../data/galaTrip
 // play, volume, captions and full screen. Caption tracks come from the pack
 // (`<id>-film-16x9-web.vtt`) when it has them.
 //
-// On a phone held upright, a trip with a vertical cut (`<id>-film-9x16-web.mp4`)
-// plays it full screen instead, with a "Watch the full film" switch to the 16:9.
+// A trip with a vertical cut (`<id>-film-9x16-web.mp4`) plays it when the
+// visitor opens the player from the card's photo (any screen), or from Watch the
+// film on a phone held upright. A bar at the foot of the vertical player switches
+// to the full 16:9 film. On a phone held upright the vertical cut fills the
+// screen; elsewhere it sits centred at its own shape, uncropped.
 
 const LANG_LABEL: Record<string, string> = { en: 'English', es: 'Español' };
 
-// Phones held upright get the vertical (9:16) cut when the trip has one, chosen
-// once when the player opens. Nothing is preloaded either way.
+// Phones held upright get the vertical (9:16) cut full screen, chosen once when
+// the player opens. Nothing is preloaded either way.
 const PORTRAIT_PHONE = '(orientation: portrait) and (max-width: 767px)';
+// Below this height (a phone on its side) a boxed 9:16 film would be too small
+// to watch, so the 16:9 plays instead.
+const MIN_BOXED_HEIGHT = 520;
+
+function startVertical(hasVertical: boolean, preferVertical: boolean) {
+  if (!hasVertical || typeof window === 'undefined') return false;
+  if (window.matchMedia(PORTRAIT_PHONE).matches) return true;
+  return preferVertical && window.innerHeight >= MIN_BOXED_HEIGHT;
+}
 
 function FilmCredits({ media }: { media: GalaTripMedia }) {
   if (!media.credit && !media.filmCredits?.length) return null;
@@ -44,11 +56,17 @@ function FilmCredits({ media }: { media: GalaTripMedia }) {
   );
 }
 
-export default function TripFilmDialog({ trip, onClose }: { trip: GalaTrip; onClose: () => void }) {
+interface TripFilmDialogProps {
+  trip: GalaTrip;
+  // True when opened from the card's photo: play the vertical cut on any screen.
+  preferVertical?: boolean;
+  onClose: () => void;
+}
+
+export default function TripFilmDialog({ trip, preferVertical = false, onClose }: TripFilmDialogProps) {
   const media = tripMedia(trip.id);
-  const [vertical, setVertical] = useState(
-    () => Boolean(media?.filmVertical) && typeof window !== 'undefined' && window.matchMedia(PORTRAIT_PHONE).matches
-  );
+  const [vertical, setVertical] = useState(() => startVertical(Boolean(media?.filmVertical), preferVertical));
+  const [fullScreen] = useState(() => typeof window !== 'undefined' && window.matchMedia(PORTRAIT_PHONE).matches);
   const [showCredits, setShowCredits] = useState(false);
   const creditsId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -62,7 +80,7 @@ export default function TripFilmDialog({ trip, onClose }: { trip: GalaTrip; onCl
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="gala-film-overlay" />
         <DialogPrimitive.Content
-          className={`gala-film${vertical ? ' is-vertical' : ''}`}
+          className={`gala-film${vertical ? (fullScreen ? ' is-vertical' : ' is-vertical-boxed') : ''}`}
           aria-labelledby={titleId}
           aria-describedby={undefined}
           onCloseAutoFocus={(event) => event.preventDefault()}
@@ -79,33 +97,6 @@ export default function TripFilmDialog({ trip, onClose }: { trip: GalaTrip; onCl
               <X aria-hidden="true" size={18} />
               <span aria-hidden="true">Close</span>
             </DialogPrimitive.Close>
-            {vertical ? (
-              <div className="gala-film-tools">
-                <button
-                  type="button"
-                  className="gala-film-switch"
-                  onClick={() => {
-                    setVertical(false);
-                    setShowCredits(false);
-                    // This button goes away with the switch: keep keyboard focus in the player.
-                    window.requestAnimationFrame(() => closeRef.current?.focus());
-                  }}
-                >
-                  Watch the full film
-                </button>
-                {media.credit || media.filmCredits?.length ? (
-                  <button
-                    type="button"
-                    className="gala-film-switch"
-                    aria-expanded={showCredits}
-                    aria-controls={creditsId}
-                    onClick={() => setShowCredits((v) => !v)}
-                  >
-                    Credits
-                  </button>
-                ) : null}
-              </div>
-            ) : null}
           </div>
           {vertical ? (
             <div id={creditsId} className="gala-film-credits-sheet" hidden={!showCredits}>
@@ -147,7 +138,35 @@ export default function TripFilmDialog({ trip, onClose }: { trip: GalaTrip; onCl
               ))}
             </video>
           </div>
-          {vertical ? null : <FilmCredits media={media} />}
+          {vertical ? (
+            <div className="gala-film-foot">
+              <button
+                type="button"
+                className="gala-film-full"
+                onClick={() => {
+                  setVertical(false);
+                  setShowCredits(false);
+                  // This bar goes away with the switch: keep keyboard focus in the player.
+                  window.requestAnimationFrame(() => closeRef.current?.focus());
+                }}
+              >
+                Watch the full film
+              </button>
+              {media.credit || media.filmCredits?.length ? (
+                <button
+                  type="button"
+                  className="gala-film-switch"
+                  aria-expanded={showCredits}
+                  aria-controls={creditsId}
+                  onClick={() => setShowCredits((v) => !v)}
+                >
+                  Credits
+                </button>
+              ) : null}
+            </div>
+          ) : (
+            <FilmCredits media={media} />
+          )}
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>

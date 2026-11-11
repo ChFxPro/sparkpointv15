@@ -914,10 +914,65 @@
   }
 }
 
+/* The photo is a button that opens the film. It covers the art; the pause
+   control sits above it. The tag and the boarding cue let clicks through. */
+.gala-trip-art-play {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.gala-trip-art-play:focus-visible {
+  outline: 2px solid var(--gala-pink);
+  outline-offset: -5px;
+}
+
+.gala-trip-art-tag,
+.gala-trip-boarding {
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* "Play film", at the photo's foot, opposite Now boarding, while the card boards. */
+.gala-trip-art-play-cue {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px 6px;
+  color: var(--gala-ivory);
+  background: rgba(11, 19, 34, 0.72);
+  border: 1px solid rgba(217, 181, 106, 0.7);
+  font-family: var(--gala-display);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.gala-trip.is-boarding .gala-trip-art-play-cue,
+.gala-trip-art-play:focus-visible .gala-trip-art-play-cue {
+  opacity: 1;
+}
+
+.gala-trip-art-play:hover .gala-trip-art-play-cue {
+  background: rgba(11, 19, 34, 0.92);
+}
+
 /* Pause / play for moving video (WCAG 2.2.2). */
 .gala-trip-motion {
   position: absolute;
-  z-index: 2;
+  z-index: 3;
   top: 12px;
   right: 12px;
   min-height: 36px;
@@ -1454,7 +1509,9 @@
   height: 100%;
   height: 100dvh;
   max-height: none;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   padding: 0;
   background: #000;
   border: 0;
@@ -1463,8 +1520,9 @@
 }
 
 .gala-film.is-vertical .gala-film-frame {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  flex: 1;
+  min-height: 0;
   aspect-ratio: auto;
   max-height: none;
 }
@@ -1493,20 +1551,81 @@
   row-gap: 12px;
 }
 
-.gala-film.is-vertical .gala-film-tools {
-  flex-basis: 100%;
+/* The bar at the foot of the vertical player: the full film, and credits. */
+.gala-film-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.gala-film.is-vertical .gala-film-foot {
+  padding: 12px max(14px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom))
+    max(14px, env(safe-area-inset-left));
+  background: var(--gala-midnight);
+  border-top: 1px solid rgba(217, 181, 106, 0.45);
+}
+
+.gala-film-full {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 11px 20px 10px;
+  color: #fff;
+  background: var(--gala-pink);
+  border: 1px solid var(--gala-brass);
+  border-radius: 0;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.gala-film-full:hover {
+  background: #c92b81;
+}
+
+.gala-film-full:focus-visible {
+  outline: 2px solid var(--gala-brass-light);
+  outline-offset: 3px;
+}
+
+/* The vertical cut on a wider screen: centred at its own shape, uncropped,
+   sized to the screen's height. */
+.gala-film.is-vertical-boxed {
+  --gala-film-h: min(calc(100vh - 210px), 1000px);
+  --gala-film-h: min(calc(100dvh - 210px), 1000px);
+  width: min-content;
+  max-width: calc(100vw - 32px);
+}
+
+.gala-film.is-vertical-boxed .gala-film-frame {
+  width: min(calc(var(--gala-film-h) * 9 / 16), calc(100vw - 68px));
+  aspect-ratio: 9 / 16;
+  max-height: none;
+}
+
+.gala-film.is-vertical-boxed .gala-film-video {
+  object-fit: contain;
+}
+
+.gala-film.is-vertical-boxed .gala-film-title {
+  font-size: 1.1rem;
+}
+
+.gala-film.is-vertical-boxed .gala-film-credits-sheet {
+  top: 96px;
+  right: 18px;
+  left: 18px;
 }
 
 .gala-film-heading {
   display: grid;
   gap: 10px;
   min-width: 0;
-}
-
-.gala-film-tools {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 
 .gala-film-switch {
@@ -1536,7 +1655,7 @@
 .gala-film-credits-sheet {
   position: absolute;
   z-index: 3;
-  top: calc(max(14px, env(safe-area-inset-top)) + 118px);
+  top: calc(max(14px, env(safe-area-inset-top)) + 70px);
   right: max(12px, env(safe-area-inset-right));
   left: max(12px, env(safe-area-inset-left));
   max-height: 50vh;
