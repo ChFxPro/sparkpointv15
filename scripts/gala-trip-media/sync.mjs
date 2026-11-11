@@ -104,28 +104,68 @@ function loopCredit(meta, file) {
   return parts.length ? parts : null;
 }
 
-// Rows of the "Video footage" table in <id>/pack/LICENSES.md under a CC BY licence:
-// those need a visible credit (author, licence, link). CC0 rows don't.
-// One entry per source, in the order they appear.
-function ccCredits(file) {
+// The clips and stills a trip's films use, from the edit lists beside its footage
+// (pack/video/edit-16x9.json and edit-9x16.json), or null when it has none.
+// LICENSES.md logs every clip ever sourced, including ones a later cut dropped.
+function filmSources(id) {
+  const files = ['16x9', '9x16']
+    .map((aspect) => path.join(tripsDir, id, 'pack', 'video', `edit-${aspect}.json`))
+    .filter((f) => fs.existsSync(f));
+  if (!files.length) return null;
+  const used = new Set();
+  for (const f of files) {
+    const edit = JSON.parse(fs.readFileSync(f, 'utf8'));
+    for (const shot of edit.shots ?? []) if (shot.source) used.add(String(shot.source));
+  }
+  return used;
+}
+
+// The CC BY work in a trip's films, from <id>/pack/LICENSES.md: author, licence
+// and link, one entry per source. CC0 and Envato Elements rows need no credit.
+// With the edit lists (`used`), only what the films use is credited: a clip row
+// in the "Video footage" table, matched by its name, its Commons file or (for a
+// pack still, which the edits name by prefix, `cortona-01`) its id; a still the
+// edits use that only the stills table lists is credited from there.
+function ccCredits(file, used = null) {
   if (!fs.existsSync(file)) return [];
   const text = fs.readFileSync(file, 'utf8');
-  const section = text.split(/^## /m).find((part) => part.startsWith('Video footage'));
-  if (!section) return [];
   // Greedy URL match: Commons file names can contain parentheses.
   const link = (cell) => cell.match(/^\[(.+?)\]\((https?:.+)\)$/);
+  const rows = (section) =>
+    (section ?? '')
+      .split('\n')
+      .filter((line) => line.startsWith('|'))
+      .map((line) => line.split('|').slice(1, -1).map((c) => c.trim()))
+      .filter((cells) => cells.length >= 5);
+  const sections = text.split(/^## /m);
+  const video = rows(sections.find((part) => part.startsWith('Video footage')));
+  const stills = rows(sections.find((part) => /^Stills|^Photos/i.test(part)) ?? sections[0]);
+  // A still's id from its row: `cortona-01-cortona-hilltop-{800,1600,2400}.webp` -> cortona-01-cortona-hilltop.
+  const stillId = (cell) => cell.replace(/`/g, '').replace(/-\{.*$|\.webp$/, '').trim();
+  const usedBy = (id, commons) =>
+    !used || used.has(id) || used.has(commons) || [...used].some((u) => /^[a-z-]+-\d\d$/.test(u) && id.startsWith(`${u}-`));
   const seen = new Set();
   const out = [];
-  for (const line of section.split('\n')) {
-    if (!line.startsWith('|')) continue;
-    const cells = line.split('|').slice(1, -1).map((c) => c.trim());
-    if (cells.length < 5) continue;
-    const [, shows, author, licence, source] = cells;
+  const add = (shows, licence, author, source) => {
     const lic = link(licence);
     const src = link(source);
-    if (!lic || !src || !needsCredit(lic[1]) || !/creativecommons\.org/.test(lic[2]) || seen.has(src[2])) continue;
+    if (!lic || !src || !needsCredit(lic[1]) || !/creativecommons\.org/.test(lic[2]) || seen.has(src[2])) return;
     seen.add(src[2]);
     out.push({ shows, author, license: lic[1], licenseUrl: lic[2], sourceUrl: src[2] });
+  };
+  const matched = new Set();
+  for (const [clip, shows, author, licence, source] of video) {
+    const commons = link(source)?.[1];
+    if (!usedBy(clip, commons)) continue;
+    matched.add(clip);
+    add(shows, licence, author, source);
+  }
+  if (used) {
+    for (const [cell, shows, author, licence, source] of stills) {
+      const id = stillId(cell);
+      if (!/^[a-z-]+-\d\d/.test(id) || [...matched].some((m) => m.startsWith(id) || id.startsWith(m))) continue;
+      if ([...used].some((u) => u === id || id.startsWith(`${u}-`))) add(shows, licence, author, source);
+    }
   }
   return out;
 }
@@ -251,7 +291,7 @@ for (const id of TRIP_IDS) {
   }
   // CC-licensed work in the film, from the pack's licence log, credited in the film player.
   if (entry.film) {
-    const credits = ccCredits(path.join(tripsDir, id, 'pack', 'LICENSES.md'));
+    const credits = ccCredits(path.join(tripsDir, id, 'pack', 'LICENSES.md'), filmSources(id));
     if (credits.length) entry.filmCredits = credits;
   }
   if (entry.loopWide || entry.loopTall || entry.film) manifest[id] = entry;
