@@ -14,7 +14,8 @@
 //   <id>-film-16x9-web.mp4             the full promo with music (optional)
 //   <id>-film-16x9-web.vtt / .<lang>.vtt  captions for the film (optional)
 //   <id>-film-9x16-web.mp4 (+ .vtt)    the vertical cut, played on portrait phones (optional)
-//   web.json                           optional: { "credit": "...", "captions": [...] }
+//   web.json                           optional: { "credit": "...", "captions": [...] };
+//                                      a film entry with "voiceover": true turns its captions on by default
 // File names are matched loosely (any name starting with the right prefix and
 // containing the aspect), so small naming changes don't break the sync.
 //
@@ -126,6 +127,19 @@ function ccCredits(file) {
   return out;
 }
 
+// A WebVTT file's cue text, joined into one plain paragraph (no timings, ids or tags).
+function vttText(vtt) {
+  return vtt
+    .replace(/\r/g, '')
+    .split(/\n{2,}/)
+    .map((block) => block.split('\n').filter((l) => l && !/^WEBVTT|^NOTE|^STYLE|-->|^\d+$/.test(l.trim())))
+    .filter((lines) => lines.length)
+    .map((lines) => lines.join(' ').replace(/<[^>]+>/g, '').trim())
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function pick(files, id, test) {
   return files.filter((f) => f.startsWith(`${id}-`) && test(f)).sort()[0] ?? null;
 }
@@ -167,7 +181,23 @@ for (const id of TRIP_IDS) {
     entry.poster = poster;
     copies.push([path.join(webDir, poster), poster]);
   }
-  // Caption tracks named after a film: <film>.vtt or <film>.<lang>.vtt.
+  // web.json, read early: a film entry marked `"voiceover": true` has spoken
+  // words, so its captions are real speech and start switched on.
+  let meta = null;
+  const metaPath = path.join(webDir, 'web.json');
+  if (fs.existsSync(metaPath)) {
+    try {
+      meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+    } catch {
+      meta = null; // reported below
+    }
+  }
+  const hasVoiceover = (film) =>
+    meta?.voiceover === true || (meta?.files ?? []).some((f) => f.file === film && f.voiceover === true);
+  // Caption tracks named after a film: <film>.vtt or <film>.<lang>.vtt. Each
+  // carries its cues as plain text, which the player gives screen readers as the
+  // dialog's description (the films are music only, so the captions repeat the
+  // text burned into the picture and start off).
   const tracksFor = (film) =>
     files
       .filter((f) => f.startsWith(film.replace(/\.mp4$/, '')) && f.endsWith('.vtt'))
@@ -175,7 +205,9 @@ for (const id of TRIP_IDS) {
       .map((file) => {
         const lang = file.match(/\.([a-z]{2})\.vtt$/)?.[1] ?? 'en';
         copies.push([path.join(webDir, file), file]);
-        return { file, lang };
+        const track = { file, lang, text: vttText(fs.readFileSync(path.join(webDir, file), 'utf8')) };
+        if (hasVoiceover(film)) track.speech = true;
+        return track;
       });
   const film = pick(files, id, (f) => f.includes('film') && !f.includes('9x16') && f.endsWith('-web.mp4'));
   if (film) {
@@ -201,10 +233,9 @@ for (const id of TRIP_IDS) {
       if (tracks.length) entry.captionsVertical = tracks;
     }
   }
-  const metaPath = path.join(webDir, 'web.json');
   if (fs.existsSync(metaPath)) {
     try {
-      const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+      meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
       if (typeof meta.credit === 'string' && meta.credit.trim()) entry.credit = publicCredit(meta.credit);
       for (const key of ['loopWide', 'loopTall']) {
         const src = entry[key];
