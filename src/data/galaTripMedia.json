@@ -33,6 +33,13 @@
         "lang": "en"
       }
     ],
+    "filmVertical": "greece-film-9x16-web.mp4",
+    "captionsVertical": [
+      {
+        "file": "greece-film-9x16-web.vtt",
+        "lang": "en"
+      }
+    ],
     "credit": "Footage and music: Envato Elements. Some photos and clips: Wikimedia Commons contributors.",
     "filmCredits": [
       {
@@ -89,6 +96,13 @@
     "captions": [
       {
         "file": "iceland-film-16x9-web.vtt",
+        "lang": "en"
+      }
+    ],
+    "filmVertical": "iceland-film-9x16-web.mp4",
+    "captionsVertical": [
+      {
+        "file": "iceland-film-9x16-web.vtt",
         "lang": "en"
       }
     ],
@@ -210,6 +224,13 @@
         "lang": "en"
       }
     ],
+    "filmVertical": "scotland-film-9x16-web.mp4",
+    "captionsVertical": [
+      {
+        "file": "scotland-film-9x16-web.vtt",
+        "lang": "en"
+      }
+    ],
     "credit": "Footage and music: Envato Elements. Some photos and clips: Wikimedia Commons contributors.",
     "filmCredits": [
       {
@@ -248,6 +269,13 @@
         "lang": "en"
       }
     ],
+    "filmVertical": "portugal-film-9x16-web.mp4",
+    "captionsVertical": [
+      {
+        "file": "portugal-film-9x16-web.vtt",
+        "lang": "en"
+      }
+    ],
     "credit": "Footage and music: Envato Elements."
   },
   "costa-rica": {
@@ -274,6 +302,13 @@
     "captions": [
       {
         "file": "costa-rica-film-16x9-web.vtt",
+        "lang": "en"
+      }
+    ],
+    "filmVertical": "costa-rica-film-9x16-web.mp4",
+    "captionsVertical": [
+      {
+        "file": "costa-rica-film-9x16-web.vtt",
         "lang": "en"
       }
     ],
