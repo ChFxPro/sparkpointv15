@@ -13,6 +13,7 @@
 //   <id>-loop-poster….webp             a still from the loop (optional)
 //   <id>-film-16x9-web.mp4             the full promo with music (optional)
 //   <id>-film-16x9-web.vtt / .<lang>.vtt  captions for the film (optional)
+//   <id>-film-9x16-web.mp4 (+ .vtt)    the vertical cut, played on portrait phones (optional)
 //   web.json                           optional: { "credit": "...", "captions": [...] }
 // File names are matched loosely (any name starting with the right prefix and
 // containing the aspect), so small naming changes don't break the sync.
@@ -37,6 +38,8 @@ const manifestPath = path.join(repo, 'src/data/galaTripMedia.json');
 const MAX_LOOP_BYTES = 900 * 1024;
 // The film loads only on request, but a runaway export would bloat the repo.
 const MAX_FILM_BYTES = 40 * 1024 * 1024;
+// The vertical (9:16) cut for phones: about 30 s at 720×1280.
+const MAX_VERTICAL_FILM_BYTES = 8 * 1024 * 1024;
 
 const TRIP_IDS = ['greece', 'iceland', 'cortona', 'scotland', 'south-africa', 'portugal', 'costa-rica', 'alaska'];
 
@@ -160,7 +163,17 @@ for (const id of TRIP_IDS) {
     entry.poster = poster;
     copies.push([path.join(webDir, poster), poster]);
   }
-  const film = pick(files, id, (f) => f.includes('film') && f.endsWith('-web.mp4'));
+  // Caption tracks named after a film: <film>.vtt or <film>.<lang>.vtt.
+  const tracksFor = (film) =>
+    files
+      .filter((f) => f.startsWith(film.replace(/\.mp4$/, '')) && f.endsWith('.vtt'))
+      .sort()
+      .map((file) => {
+        const lang = file.match(/\.([a-z]{2})\.vtt$/)?.[1] ?? 'en';
+        copies.push([path.join(webDir, file), file]);
+        return { file, lang };
+      });
+  const film = pick(files, id, (f) => f.includes('film') && !f.includes('9x16') && f.endsWith('-web.mp4'));
   if (film) {
     const size = fs.statSync(path.join(webDir, film)).size;
     if (size > MAX_FILM_BYTES) {
@@ -168,14 +181,20 @@ for (const id of TRIP_IDS) {
     } else {
       entry.film = film;
       copies.push([path.join(webDir, film), film]);
-      const tracks = files.filter((f) => f.startsWith(film.replace(/\.mp4$/, '')) && f.endsWith('.vtt')).sort();
-      if (tracks.length) {
-        entry.captions = tracks.map((file) => {
-          const lang = file.match(/\.([a-z]{2})\.vtt$/)?.[1] ?? 'en';
-          copies.push([path.join(webDir, file), file]);
-          return { file, lang };
-        });
-      }
+      const tracks = tracksFor(film);
+      if (tracks.length) entry.captions = tracks;
+    }
+  }
+  const vertical = pick(files, id, (f) => f.includes('film-9x16') && f.endsWith('-web.mp4'));
+  if (vertical && entry.film) {
+    const size = fs.statSync(path.join(webDir, vertical)).size;
+    if (size > MAX_VERTICAL_FILM_BYTES) {
+      problems.push(`${vertical} is ${(size / 1048576).toFixed(1)} MB (limit ${MAX_VERTICAL_FILM_BYTES / 1048576} MB); skipped`);
+    } else {
+      entry.filmVertical = vertical;
+      copies.push([path.join(webDir, vertical), vertical]);
+      const tracks = tracksFor(vertical);
+      if (tracks.length) entry.captionsVertical = tracks;
     }
   }
   const metaPath = path.join(webDir, 'web.json');
@@ -210,7 +229,7 @@ for (const p of problems) console.warn('!', p);
 console.log(
   Object.keys(manifest).length
     ? Object.entries(manifest)
-        .map(([id, e]) => `${id}: ${[e.loopWide && 'wide loop', e.loopTall && 'tall loop', e.poster && 'poster', e.film && 'film', e.captions && 'captions', e.filmCredits && `${e.filmCredits.length} CC credits`].filter(Boolean).join(', ')}`)
+        .map(([id, e]) => `${id}: ${[e.loopWide && 'wide loop', e.loopTall && 'tall loop', e.poster && 'poster', e.film && 'film', e.captions && 'captions', e.filmVertical && 'vertical film', e.filmCredits && `${e.filmCredits.length} CC credits`].filter(Boolean).join(', ')}`)
         .join('\n')
     : `No trip has web video yet in ${tripsDir}. Cards keep their poster stills.`
 );
