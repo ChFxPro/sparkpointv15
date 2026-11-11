@@ -34,8 +34,10 @@ import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
 //   toggle), Save-Data or 2G. Those visitors get the stills.
 // - Moving video has a visible pause control (WCAG 2.2.2), and pausing holds for
 //   every card until the visitor presses play.
-// - The full film (with sound) loads only when someone presses Watch the film,
-//   in a lazily loaded dialog.
+// - The full film (with sound) loads only when someone asks for it, in a lazily
+//   loaded dialog: pressing the photo plays the vertical cut (the 16:9 if the
+//   trip has none), and Watch the film plays the 16:9 (the vertical cut on a
+//   phone held upright). Either way the player can switch to the full film.
 
 const TripFilmDialog = lazy(() => import('./galaTrips/TripFilmDialog'));
 
@@ -118,6 +120,7 @@ interface TripArtProps {
   videoAllowed: boolean;
   paused: boolean;
   onTogglePause: () => void;
+  onPlayFilm?: (from: HTMLButtonElement) => void;
 }
 
 function TripLoop({ sources, play, onPlaying }: { sources: GalaLoopSources; play: boolean; onPlaying: (on: boolean) => void }) {
@@ -160,7 +163,7 @@ function TripLoop({ sources, play, onPlaying }: { sources: GalaLoopSources; play
   );
 }
 
-function TripArt({ trip, boarding, near, videoAllowed, paused, onTogglePause }: TripArtProps) {
+function TripArt({ trip, boarding, near, videoAllowed, paused, onTogglePause, onPlayFilm }: TripArtProps) {
   const image = trip.image;
   const loop = loopFor(trip);
   const [playing, setPlaying] = useState(false);
@@ -208,6 +211,21 @@ function TripArt({ trip, boarding, near, videoAllowed, paused, onTogglePause }: 
           </div>
         )}
         {mountVideo && loop ? <TripLoop sources={loop} play={play} onPlaying={onPlaying} /> : null}
+        {/* The whole photo is a button that opens the film. The pause control
+            sits above it, a separate button, never inside it. */}
+        {onPlayFilm ? (
+          <button
+            type="button"
+            className="gala-trip-art-play"
+            onClick={(event) => onPlayFilm(event.currentTarget)}
+            aria-label={`Play the film: ${trip.title}`}
+          >
+            <span className="gala-trip-art-play-cue" aria-hidden="true">
+              <Play size={13} />
+              Play film
+            </span>
+          </button>
+        ) : null}
         <span className="gala-trip-art-tag" aria-hidden="true">
           {trip.connection}
         </span>
@@ -325,7 +343,7 @@ interface TripCardProps {
   onTogglePause: () => void;
   onBoard: (id: string | null) => void;
   hover: boolean;
-  onWatch: (trip: GalaTrip, from: HTMLButtonElement) => void;
+  onWatch: (trip: GalaTrip, from: HTMLButtonElement, preferVertical: boolean) => void;
   register: (id: string, el: HTMLLIElement | null) => void;
 }
 
@@ -356,6 +374,7 @@ function TripCard({ trip, boarding, near, videoAllowed, paused, onTogglePause, o
         videoAllowed={videoAllowed}
         paused={paused}
         onTogglePause={onTogglePause}
+        onPlayFilm={film ? (from) => onWatch(trip, from, true) : undefined}
       />
       <div className="gala-trip-body">
         <p className="gala-trip-connection">
@@ -401,7 +420,7 @@ function TripCard({ trip, boarding, near, videoAllowed, paused, onTogglePause, o
             <button
               type="button"
               className="gala-button gala-button-gold gala-trip-watch"
-              onClick={(event) => onWatch(trip, event.currentTarget)}
+              onClick={(event) => onWatch(trip, event.currentTarget, false)}
               aria-label={`Watch the film: ${trip.title}`}
             >
               <Play aria-hidden="true" size={14} />
@@ -421,7 +440,7 @@ export function GalaTrips() {
   const [centred, setCentred] = useState<string | null>(null);
   const [near, setNear] = useState<Set<string>>(() => new Set());
   const [paused, setPaused] = useState(false);
-  const [film, setFilm] = useState<GalaTrip | null>(null);
+  const [film, setFilm] = useState<{ trip: GalaTrip; preferVertical: boolean } | null>(null);
   const filmOpener = useRef<HTMLButtonElement | null>(null);
   const cards = useRef(new Map<string, HTMLLIElement>());
 
@@ -509,9 +528,9 @@ export function GalaTrips() {
 
   const onBoard = useCallback((id: string | null) => setHovered(id), []);
   const onTogglePause = useCallback(() => setPaused((p) => !p), []);
-  const onWatch = useCallback((trip: GalaTrip, from: HTMLButtonElement) => {
+  const onWatch = useCallback((trip: GalaTrip, from: HTMLButtonElement, preferVertical: boolean) => {
     filmOpener.current = from;
-    setFilm(trip);
+    setFilm({ trip, preferVertical });
   }, []);
 
   return (
@@ -536,7 +555,8 @@ export function GalaTrips() {
       {film ? (
         <Suspense fallback={null}>
           <TripFilmDialog
-            trip={film}
+            trip={film.trip}
+            preferVertical={film.preferVertical}
             onClose={() => {
               setFilm(null);
               // Back to the button that opened it.
