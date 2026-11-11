@@ -89,6 +89,7 @@
     "invite:gala": "node scripts/gala-invitation/render.mjs",
     "print:gala": "node scripts/gala-print/render.mjs",
     "gala:trip-media": "node scripts/gala-trip-media/sync.mjs",
+    "gala:trailer": "node scripts/gala-trip-media/trailer.mjs",
     "predev": "npm run generate:press && node scripts/behind-story-manifest.mjs && npm run backporch:bake",
     "dev": "vite",
     "prebuild": "npm run generate:press && node scripts/behind-story-manifest.mjs && npm run backporch:bake",

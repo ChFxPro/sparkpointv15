@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog@1.1.6';
 import { X } from 'lucide-react';
 import type { GalaTrip } from '../../data/galaTrips';
@@ -23,6 +23,9 @@ import { tripMedia, tripVideoSrc, type GalaTripMedia } from '../../data/galaTrip
 // (the trip tag is at the very top; titles, place lines and fact cards are in
 // the middle and lower third). A film the pack marks as having a voiceover has
 // real speech in its captions, so they start on, in that same band.
+//
+// The same player plays the all-trips trailer (`film` instead of `trip`): its
+// media and title are passed in, and it has no vertical cut.
 
 const LANG_LABEL: Record<string, string> = { en: 'English', es: 'Español' };
 
@@ -95,14 +98,17 @@ function FilmCredits({ media }: { media: GalaTripMedia }) {
 }
 
 interface TripFilmDialogProps {
-  trip: GalaTrip;
+  trip?: GalaTrip;
+  // A film that isn't one trip's (the all-trips trailer): its own media and title.
+  film?: { id: string; media: GalaTripMedia; title: ReactNode };
   // True when opened from the card's photo: play the vertical cut on any screen.
   preferVertical?: boolean;
   onClose: () => void;
 }
 
-export default function TripFilmDialog({ trip, preferVertical = false, onClose }: TripFilmDialogProps) {
-  const media = tripMedia(trip.id);
+export default function TripFilmDialog({ trip, film, preferVertical = false, onClose }: TripFilmDialogProps) {
+  const media = film?.media ?? (trip ? tripMedia(trip.id) : undefined);
+  const filmId = film?.id ?? trip?.id ?? 'film';
   const [vertical, setVertical] = useState(() => startVertical(Boolean(media?.filmVertical), preferVertical));
   const [fullScreen] = useState(() => typeof window !== 'undefined' && window.matchMedia(PORTRAIT_PHONE).matches);
   const [showCredits, setShowCredits] = useState(false);
@@ -131,9 +137,11 @@ export default function TripFilmDialog({ trip, preferVertical = false, onClose }
   }, [video, cueLine]);
 
   if (!media?.film || !src) return null;
-  const titleId = `trip-film-${trip.id}-title`;
+  const titleId = `trip-film-${filmId}-title`;
   const tracks = (vertical ? media.captionsVertical : media.captions) ?? [];
-  const description = tracks[0]?.text;
+  // Music-only films: the caption text describes the dialog for screen readers.
+  // A voiceover's captions are speech, start on, and are heard anyway.
+  const description = tracks[0]?.speech ? undefined : tracks[0]?.text;
 
   return (
     <DialogPrimitive.Root open onOpenChange={(open) => (open ? undefined : onClose())}>
@@ -148,9 +156,15 @@ export default function TripFilmDialog({ trip, preferVertical = false, onClose }
           <div className="gala-film-head">
             <div className="gala-film-heading">
               <DialogPrimitive.Title id={titleId} className="gala-film-title">
-                <span>Connection {trip.connection}</span>
-                <span className="sr-only">: </span>
-                {trip.title}
+                {film ? (
+                  film.title
+                ) : trip ? (
+                  <>
+                    <span>Connection {trip.connection}</span>
+                    <span className="sr-only">: </span>
+                    {trip.title}
+                  </>
+                ) : null}
               </DialogPrimitive.Title>
             </div>
             {description ? (
