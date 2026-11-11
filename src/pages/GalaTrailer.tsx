@@ -56,8 +56,8 @@ export function GalaTrailer() {
           <TripFilmDialog
             film={{
               id: 'trailer',
-              // The poster is page art (it may carry its own play button), not a frame of the film.
-              media: { ...trailer, poster: undefined },
+              // A poster with a drawn play button is page art, not a frame of the film.
+              media: trailer.posterHasCue ? { ...trailer, poster: undefined } : trailer,
               title: (
                 <>
                   <span>The trailer</span>

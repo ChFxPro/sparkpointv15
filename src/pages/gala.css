@@ -472,14 +472,15 @@
   line-height: 1.08;
 }
 
-/* The poster is the play button: 16:9, a brass hairline, the cue centred. */
+/* The poster is the play button: 16:9, a brass hairline. The cue sits in the
+   lower band, below the lockup that the poster centres. */
 .gala-trailer-play {
   position: relative;
   display: grid;
-  place-items: center;
+  place-items: end center;
   width: 100%;
   margin-top: 32px;
-  padding: 0;
+  padding: 0 0 7%;
   overflow: hidden;
   aspect-ratio: 16 / 9;
   color: var(--gala-ivory);
@@ -553,19 +554,26 @@
     padding-top: 64px;
   }
 
+  /* Smaller and lower, so the cue stays clear of the poster's lockup. */
   .gala-trailer-play {
     margin-top: 24px;
+    padding-bottom: 3%;
   }
 
   .gala-trailer-cue {
-    gap: 10px;
-    padding: 8px 14px 7px 8px;
-    font-size: 0.7rem;
+    gap: 9px;
+    padding: 5px 12px 4px 5px;
+    font-size: 0.64rem;
   }
 
   .gala-trailer-icon {
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .gala-trailer-icon svg {
+    width: 16px;
+    height: 16px;
   }
 }
 
