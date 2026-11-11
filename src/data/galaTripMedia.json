@@ -8,13 +8,6 @@
           "text": "Envato Elements"
         },
         {
-          "label": "Blue domes of Oia",
-          "author": "Giles Laurent",
-          "sourceUrl": "https://commons.wikimedia.org/wiki/File:1000_Three_domes_of_Oia_in_Santorini_Photo_by_Giles_Laurent.jpg",
-          "license": "CC BY-SA 4.0",
-          "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
-        },
-        {
           "label": "Little Venice at sunset",
           "author": "Roberto Faccenda",
           "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sunset_of_Mykonos.jpg",
@@ -43,13 +36,6 @@
     "credit": "Footage and music: Envato Elements. Some photos and clips: Wikimedia Commons contributors.",
     "filmCredits": [
       {
-        "shows": "Oia, Santorini",
-        "author": "Giles Laurent",
-        "license": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:1000_Three_domes_of_Oia_in_Santorini_Photo_by_Giles_Laurent.jpg"
-      },
-      {
         "shows": "Little Venice, Mykonos",
         "author": "Roberto Faccenda",
         "license": "CC BY-SA 2.0",
@@ -57,25 +43,11 @@
         "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sunset_of_Mykonos.jpg"
       },
       {
-        "shows": "Kato Mili windmills, Mykonos",
-        "author": "dronepicr",
-        "license": "CC BY 2.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mykonos_windmills_with_a_view_of_the_Aegean_Sea_in_Greece_-_50662259091.jpg"
-      },
-      {
         "shows": "The Parthenon by day, Athens",
         "author": "Le Monde en Vidéo",
         "license": "CC BY 3.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
         "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Acropolis_of_Athens,_Greece.webm"
-      },
-      {
-        "shows": "The Acropolis, Athens",
-        "author": "A.Savin",
-        "license": "CC BY-SA 3.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Attica_06-13_Athens_50_View_from_Philopappos_-_Acropolis_Hill.jpg"
       }
     ]
   },
