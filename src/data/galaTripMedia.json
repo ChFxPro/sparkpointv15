@@ -242,6 +242,42 @@
       }
     ]
   },
+  "south-africa": {
+    "loopWide": {
+      "webm": "south-africa-loop-card-16x9.webm",
+      "mp4": "south-africa-loop-card-16x9.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        }
+      ]
+    },
+    "loopTall": {
+      "webm": "south-africa-loop-card-4x5.webm",
+      "mp4": "south-africa-loop-card-4x5.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        }
+      ]
+    },
+    "poster": "south-africa-loop-poster-16x9.webp",
+    "film": "south-africa-film-16x9-web.mp4",
+    "captions": [
+      {
+        "file": "south-africa-film-16x9-web.vtt",
+        "lang": "en"
+      }
+    ],
+    "filmVertical": "south-africa-film-9x16-web.mp4",
+    "captionsVertical": [
+      {
+        "file": "south-africa-film-9x16-web.vtt",
+        "lang": "en"
+      }
+    ],
+    "credit": "Footage and music: Envato Elements."
+  },
   "portugal": {
     "loopWide": {
       "webm": "portugal-loop-card-16x9.webm",
