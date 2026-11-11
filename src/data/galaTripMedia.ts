@@ -18,6 +18,19 @@ export interface GalaLoopSources {
   credit?: GalaCreditPart[];
 }
 
+/**
+ * A film's caption track. The films are music only, so the captions repeat the
+ * text burned into the picture: they start off, and `text` (every cue, as one
+ * paragraph) is read to screen readers instead. `speech` is set when the pack
+ * marks the film as having a voiceover; its captions then start on.
+ */
+export interface GalaCaptionTrack {
+  file: string;
+  lang: string;
+  text?: string;
+  speech?: boolean;
+}
+
 export interface GalaTripMedia {
   /** Silent 16:9 card loop (960×540). */
   loopWide?: GalaLoopSources;
@@ -27,10 +40,10 @@ export interface GalaTripMedia {
   poster?: string;
   /** The full promo with music, loaded only when someone asks to watch it. */
   film?: string;
-  captions?: { file: string; lang: string }[];
+  captions?: GalaCaptionTrack[];
   /** The vertical (9:16) cut, about 30 s, played on phones held upright. */
   filmVertical?: string;
-  captionsVertical?: { file: string; lang: string }[];
+  captionsVertical?: GalaCaptionTrack[];
   /** Credit for the footage and music, from the pack's web.json (no licensee's name). */
   credit?: string;
   /** Creative Commons work in the film (from the pack's LICENSES.md), credited in the film player. */

@@ -1500,6 +1500,17 @@
   display: block;
 }
 
+/* Captions, when switched on: small and light, on a soft band, so they read
+   without covering the film's own type. TripFilmDialog places them near the top. */
+.gala-film-video::cue {
+  font-family: 'Josefin Sans Variable', 'Josefin Sans', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px; /* CUE_LINE_PX in TripFilmDialog.tsx */
+  color: #f6efe2;
+  background: rgba(14, 18, 32, 0.55);
+}
+
 /* The vertical player (phones held upright, trips with a 9:16 cut): the film
    fills the screen edge to edge, with the title, Close and the switches over
    its top, kept clear of the notch and rounded corners. */

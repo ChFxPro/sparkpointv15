@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog@1.1.6';
 import { X } from 'lucide-react';
 import type { GalaTrip } from '../../data/galaTrips';
@@ -15,6 +15,14 @@ import { tripMedia, tripVideoSrc, type GalaTripMedia } from '../../data/galaTrip
 // film on a phone held upright. A bar at the foot of the vertical player switches
 // to the full 16:9 film. On a phone held upright the vertical cut fills the
 // screen; elsewhere it sits centred at its own shape, uncropped.
+//
+// Captions: the films are music only, and their captions repeat the text burned
+// into the picture, so they start off (the player's CC control turns them on)
+// and their text is the dialog's description for screen readers instead. When
+// shown, they sit in a band near the top that the burned-in text leaves clear
+// (the trip tag is at the very top; titles, place lines and fact cards are in
+// the middle and lower third). A film the pack marks as having a voiceover has
+// real speech in its captions, so they start on, in that same band.
 
 const LANG_LABEL: Record<string, string> = { en: 'English', es: 'Español' };
 
@@ -24,6 +32,36 @@ const PORTRAIT_PHONE = '(orientation: portrait) and (max-width: 767px)';
 // Below this height (a phone on its side) a boxed 9:16 film would be too small
 // to watch, so the 16:9 plays instead.
 const MIN_BOXED_HEIGHT = 520;
+
+// Where caption cues sit, as a percentage of the video's height from the top.
+// Phone (full screen): below the player's own title bar. Boxed 9:16: just under
+// the trip tag. 16:9: under the tag, above the title cards.
+const CUE_LINE = { fullScreen: 17, boxed: 9, wide: 10 };
+
+// Height of one caption line in px, matching `.gala-film-video::cue` in gala.css.
+const CUE_LINE_PX = 18;
+
+// Cues stay snapped to lines (Chrome stops wrapping a cue placed by percentage),
+// so the band's percentage becomes a line number counted from the top.
+function placeCues(video: HTMLVideoElement, percent: number) {
+  const line = Math.max(1, Math.round((video.clientHeight * percent) / 100 / CUE_LINE_PX));
+  for (const track of Array.from(video.textTracks)) {
+    let moved = false;
+    for (const cue of Array.from(track.cues ?? [])) {
+      if (!(cue instanceof VTTCue) || (cue.snapToLines && cue.line === line)) continue;
+      cue.snapToLines = true;
+      cue.line = line;
+      moved = true;
+    }
+    // A cue already on screen keeps its old spot until the track is redrawn.
+    if (moved && track.mode === 'showing' && track.activeCues?.length) {
+      track.mode = 'hidden';
+      window.requestAnimationFrame(() => {
+        track.mode = 'showing';
+      });
+    }
+  }
+}
 
 function startVertical(hasVertical: boolean, preferVertical: boolean) {
   if (!hasVertical || typeof window === 'undefined') return false;
@@ -70,10 +108,32 @@ export default function TripFilmDialog({ trip, preferVertical = false, onClose }
   const [showCredits, setShowCredits] = useState(false);
   const creditsId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
-  if (!media?.film) return null;
+  // State, not a ref: the dialog's content mounts after this component does.
+  const [video, setVideo] = useState<HTMLVideoElement | null>(null);
+  const src = media && (vertical && media.filmVertical ? media.filmVertical : media.film);
+  const cueLine = vertical ? (fullScreen ? CUE_LINE.fullScreen : CUE_LINE.boxed) : CUE_LINE.wide;
+
+  // Cues load only once a track is turned on, so place them whenever one loads.
+  useEffect(() => {
+    if (!video) return undefined;
+    const place = () => placeCues(video, cueLine);
+    const trackEls = Array.from(video.querySelectorAll('track'));
+    const textTracks = Array.from(video.textTracks);
+    trackEls.forEach((el) => el.addEventListener('load', place));
+    // cuechange fires as a cue becomes active, so even a cue that loaded before
+    // the listener is moved before it is drawn for long.
+    textTracks.forEach((t) => t.addEventListener('cuechange', place));
+    place();
+    return () => {
+      trackEls.forEach((el) => el.removeEventListener('load', place));
+      textTracks.forEach((t) => t.removeEventListener('cuechange', place));
+    };
+  }, [video, cueLine]);
+
+  if (!media?.film || !src) return null;
   const titleId = `trip-film-${trip.id}-title`;
-  const src = vertical && media.filmVertical ? media.filmVertical : media.film;
   const tracks = (vertical ? media.captionsVertical : media.captions) ?? [];
+  const description = tracks[0]?.text;
 
   return (
     <DialogPrimitive.Root open onOpenChange={(open) => (open ? undefined : onClose())}>
@@ -82,7 +142,7 @@ export default function TripFilmDialog({ trip, preferVertical = false, onClose }
         <DialogPrimitive.Content
           className={`gala-film${vertical ? (fullScreen ? ' is-vertical' : ' is-vertical-boxed') : ''}`}
           aria-labelledby={titleId}
-          aria-describedby={undefined}
+          {...(description ? {} : { 'aria-describedby': undefined })}
           onCloseAutoFocus={(event) => event.preventDefault()}
         >
           <div className="gala-film-head">
@@ -93,6 +153,11 @@ export default function TripFilmDialog({ trip, preferVertical = false, onClose }
                 {trip.title}
               </DialogPrimitive.Title>
             </div>
+            {description ? (
+              <DialogPrimitive.Description className="sr-only">
+                Text in the film: {description}
+              </DialogPrimitive.Description>
+            ) : null}
             <DialogPrimitive.Close ref={closeRef} className="gala-film-close" aria-label="Close the film">
               <X aria-hidden="true" size={18} />
               <span aria-hidden="true">Close</span>
@@ -117,6 +182,7 @@ export default function TripFilmDialog({ trip, preferVertical = false, onClose }
             {/* Sound on: the visitor asked for the film. Keyed on the source so
                 switching cuts starts the new one from the top. */}
             <video
+              ref={setVideo}
               key={src}
               className="gala-film-video"
               src={tripVideoSrc(src)}
@@ -133,7 +199,7 @@ export default function TripFilmDialog({ trip, preferVertical = false, onClose }
                   src={tripVideoSrc(track.file)}
                   srcLang={track.lang}
                   label={LANG_LABEL[track.lang] ?? track.lang}
-                  default={index === 0}
+                  default={index === 0 && Boolean(track.speech)}
                 />
               ))}
             </video>
