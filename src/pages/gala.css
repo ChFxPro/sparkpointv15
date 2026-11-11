@@ -1557,9 +1557,10 @@
   font-size: 1.08rem;
 }
 
+/* Close stays on the title's row at every width: a long trip title wraps
+   beside it instead (South Africa, Cortona, Portugal, Alaska). */
 .gala-film.is-vertical .gala-film-head {
-  flex-wrap: wrap;
-  row-gap: 12px;
+  gap: 12px;
 }
 
 /* The bar at the foot of the vertical player: the full film, and credits. */
@@ -1634,9 +1635,19 @@
 }
 
 .gala-film-heading {
+  flex: 1 1 auto;
   display: grid;
   gap: 10px;
   min-width: 0;
+}
+
+.gala-film-head {
+  flex-wrap: nowrap;
+}
+
+.gala-film-title {
+  overflow-wrap: break-word;
+  text-wrap: balance;
 }
 
 .gala-film-switch {

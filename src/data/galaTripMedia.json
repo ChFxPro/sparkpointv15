@@ -249,6 +249,44 @@
       }
     ]
   },
+  "south-africa": {
+    "loopWide": {
+      "webm": "south-africa-loop-card-16x9.webm",
+      "mp4": "south-africa-loop-card-16x9.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        }
+      ]
+    },
+    "loopTall": {
+      "webm": "south-africa-loop-card-4x5.webm",
+      "mp4": "south-africa-loop-card-4x5.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        }
+      ]
+    },
+    "poster": "south-africa-loop-poster-16x9.webp",
+    "film": "south-africa-film-16x9-web.mp4",
+    "captions": [
+      {
+        "file": "south-africa-film-16x9-web.vtt",
+        "lang": "en",
+        "text": "A World of Connections, the SparkPoint Gala. Connection 05: South Africa, Wild Wonders Photo Safari. Map: from Transylvania County, North Carolina, to Johannesburg, Safari camp. South Africa · 6 nights — Game drives from first light. Safari camp · 5 nights — A luxury tented suite in the bush. The Big Five — A Big Five safari drive. Game drives — Out every day with a guide. Evenings — A traditional bush braai. 6 nights, 2 travelers. Five nights in a lakefront tented suite. Daily game drives, and a Big Five drive. Farm-to-table meals and a bush braai. Choose your trip at the Gala. Every journey connects back home. Friday, December 11, 2026, Connestee Falls."
+      }
+    ],
+    "filmVertical": "south-africa-film-9x16-web.mp4",
+    "captionsVertical": [
+      {
+        "file": "south-africa-film-9x16-web.vtt",
+        "lang": "en",
+        "text": "A World of Connections, the SparkPoint Gala. Connection 05: South Africa, Wild Wonders Photo Safari. South Africa · 6 nights — Game drives from first light. The Big Five — A Big Five safari drive. Evenings — A traditional bush braai. 6 nights, 2 travelers. Five nights in a lakefront tented suite. Daily game drives, and a Big Five drive. Farm-to-table meals and a bush braai. Choose your trip at the Gala. Every journey connects back home. Friday, December 11, 2026, Connestee Falls."
+      }
+    ],
+    "credit": "Footage and music: Envato Elements."
+  },
   "portugal": {
     "loopWide": {
       "webm": "portugal-loop-card-16x9.webm",
@@ -324,5 +362,59 @@
       }
     ],
     "credit": "Footage and music: Envato Elements."
+  },
+  "alaska": {
+    "loopWide": {
+      "webm": "alaska-loop-card-16x9.webm",
+      "mp4": "alaska-loop-card-16x9.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        }
+      ]
+    },
+    "loopTall": {
+      "webm": "alaska-loop-card-4x5.webm",
+      "mp4": "alaska-loop-card-4x5.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        }
+      ]
+    },
+    "poster": "alaska-loop-poster-16x9.webp",
+    "film": "alaska-film-16x9-web.mp4",
+    "captions": [
+      {
+        "file": "alaska-film-16x9-web.vtt",
+        "lang": "en",
+        "text": "A World of Connections, the SparkPoint Gala. Connection 08: Alaska, Explorer of the North. Map: from Transylvania County, North Carolina, to Seattle, Ketchikan, Juneau, Skagway, Victoria, BC. The Inside Passage — Seven nights in a balcony stateroom. Juneau — The capital, between mountains and sea. Mendenhall — Nugget Falls and the glacier lake. Skagway — The gold-rush railway. Shore excursions — A credit toward your own adventure. Ketchikan — Creek Street on its stilts. Victoria, BC — A last call before Seattle. 8 nights, 2 travelers. Seven nights at sea in a balcony stateroom. Ketchikan, Juneau, Skagway and Victoria. Drinks, dining and Wi-Fi package. Choose your trip at the Gala. Every journey connects back home. Friday, December 11, 2026, Connestee Falls."
+      }
+    ],
+    "filmVertical": "alaska-film-9x16-web.mp4",
+    "captionsVertical": [
+      {
+        "file": "alaska-film-9x16-web.vtt",
+        "lang": "en",
+        "text": "A World of Connections, the SparkPoint Gala. Connection 08: Alaska, Explorer of the North. The Inside Passage — Seven nights in a balcony stateroom. Shore excursions — A credit toward your own adventure. 8 nights, 2 travelers. Seven nights at sea in a balcony stateroom. Ketchikan, Juneau, Skagway and Victoria. Drinks, dining and Wi-Fi package. Choose your trip at the Gala. Every journey connects back home. Friday, December 11, 2026, Connestee Falls."
+      }
+    ],
+    "credit": "Footage and music: Envato Elements. Some photos and clips: Wikimedia Commons contributors.",
+    "filmCredits": [
+      {
+        "shows": "Creek Street, Ketchikan",
+        "author": "Bernard Spragg. NZ from Christchurch, New Zealand",
+        "license": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ketchikan_Creek_Street_(8110071326).jpg"
+      },
+      {
+        "shows": "Inner Harbour, Victoria, BC",
+        "author": "DXR",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Empress_and_Inner_Harbour,_Victoria,_southwest_view_20240827_2.jpg"
+      }
+    ]
   }
 }
