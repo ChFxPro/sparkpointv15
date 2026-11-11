@@ -454,6 +454,121 @@
   }
 }
 
+/* The all-trips trailer, just above the routes (same ground, so they read as one band). */
+.gala-trailer {
+  scroll-margin-top: 80px;
+  padding: 88px 0 24px;
+  color: var(--gala-ivory);
+  background: var(--gala-midnight-2);
+}
+
+.gala-trailer-head {
+  max-width: 760px;
+}
+
+.gala-trailer-head h2 {
+  margin-top: 10px;
+  font-size: clamp(2rem, 4.4vw, 3.4rem);
+  line-height: 1.08;
+}
+
+/* The poster is the play button: 16:9, a brass hairline, the cue centred. */
+.gala-trailer-play {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  margin-top: 32px;
+  padding: 0;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  color: var(--gala-ivory);
+  background: radial-gradient(ellipse at 50% 40%, #1d2c4a 0%, var(--gala-midnight) 75%);
+  border: 1px solid rgba(217, 181, 106, 0.55);
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.gala-trailer-play:focus-visible {
+  outline: 2px solid var(--gala-pink);
+  outline-offset: 4px;
+}
+
+.gala-trailer-poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gala-trailer-cue {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 22px 11px 12px;
+  background: rgba(11, 19, 34, 0.78);
+  border: 1px solid rgba(217, 181, 106, 0.8);
+  font-family: var(--gala-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: background-color 250ms ease;
+}
+
+.gala-trailer-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: #fff;
+  background: var(--gala-pink);
+  border: 1px solid var(--gala-brass);
+}
+
+.gala-trailer-icon svg {
+  margin-left: 3px; /* optical centring of the play triangle */
+  fill: currentColor;
+}
+
+.gala-trailer-play:hover .gala-trailer-cue,
+.gala-trailer-play:focus-visible .gala-trailer-cue {
+  background: rgba(11, 19, 34, 0.94);
+}
+
+/* A poster with its own drawn play button brightens a little on hover instead. */
+.gala-trailer-poster {
+  transition: filter 250ms ease;
+}
+
+.gala-trailer-play:hover .gala-trailer-poster,
+.gala-trailer-play:focus-visible .gala-trailer-poster {
+  filter: brightness(1.12);
+}
+
+@media (max-width: 640px) {
+  .gala-trailer {
+    padding-top: 64px;
+  }
+
+  .gala-trailer-play {
+    margin-top: 24px;
+  }
+
+  .gala-trailer-cue {
+    gap: 10px;
+    padding: 8px 14px 7px 8px;
+    font-size: 0.7rem;
+  }
+
+  .gala-trailer-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
 /* 2 — Routes */
 .gala-routes {
   padding: 40px 0 110px;

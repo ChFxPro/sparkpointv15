@@ -22,6 +22,7 @@ import { GalaPostcard } from './GalaPostcard';
 import { GalaSeatMap } from './GalaSeatMap';
 import { GalaRouteMap } from './GalaRouteMap';
 import { GalaTrips } from './GalaTrips';
+import { GalaTrailer } from './GalaTrailer';
 import './gala.css';
 
 const BASE = import.meta.env.BASE_URL;
@@ -244,6 +245,9 @@ export default function GalaPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* The all-trips trailer (#trailer, linked from the newsletter); renders only once imported. */}
+      <GalaTrailer />
 
       {/* 2 — Routes */}
       <section className="gala-routes" aria-labelledby="routes-title">
