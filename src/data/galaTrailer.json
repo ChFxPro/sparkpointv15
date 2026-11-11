@@ -1,1 +1,13 @@
-null
+{
+  "film": "gala-trips-trailer-16x9-web.mp4",
+  "captions": [
+    {
+      "file": "gala-trips-trailer-16x9-web.vtt",
+      "lang": "en",
+      "text": "Connection one. Greece, and the Greek Islands. Connection two. Iceland, land of the Vikings. Connection three. Cortona, under the Tuscan sun. Connection four. Scotland, lochs and legends. Connection five. South Africa, a wild wonders photo safari. Connection six. Captivating Portugal: Lisbon and Porto. Connection seven. Colorful Costa Rica. Connection eight. Alaska, explorer of the north. Choose your trip at the Gala. Every journey connects back home.",
+      "speech": true
+    }
+  ],
+  "poster": "gala-trips-trailer-email-poster-1200x676.jpg",
+  "posterHasCue": true
+}

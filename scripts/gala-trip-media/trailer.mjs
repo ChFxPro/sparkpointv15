@@ -14,7 +14,8 @@
 // It looks in <trailerDir>/web/, <trailerDir>/pack/web/ or <trailerDir>/ for:
 //   *trailer*16x9*.mp4 (or any *trailer*.mp4 that isn't 9x16)  the trailer, with sound
 //   <same name>.vtt / .<lang>.vtt                              its captions (voiceover: on by default)
-//   *trailer*poster*.webp|.jpg|.png (or *poster*)              the still the slot shows
+//   *poster*.webp|.jpg|.png, beside it or in <trailerDir>/ or <trailerDir>/email/;
+//                                                              the widest one is the still the slot shows
 //
 // Credits: only what a licence requires (CC BY and CC BY-SA). Each shot in
 // <trailerDir>/edit.json is looked up in its trip's pack/LICENSES.md; Envato
@@ -70,8 +71,8 @@ function vttText(vtt) {
 
 // The trailer's shots, from edit.json, matched to their rows in each trip's licence log.
 function shotCredits() {
-  const editPath = path.join(trailerDir, 'edit.json');
-  if (!fs.existsSync(editPath)) {
+  const editPath = [path.join(webDir, 'edit.json'), path.join(trailerDir, 'edit.json')].find((f) => fs.existsSync(f));
+  if (!editPath) {
     problems.push('no edit.json beside the trailer: its shots could not be checked for required credits');
     return [];
   }
@@ -135,21 +136,37 @@ const captions = captionFiles.map((file) => ({
   speech: true,
 }));
 
-const images = files.filter((f) => /\.(webp|jpe?g|png)$/i.test(f));
-const poster = images.find((f) => /trailer/i.test(f) && /poster/i.test(f)) ?? images.find((f) => /poster/i.test(f)) ?? null;
+// The poster can sit beside the video, in the trailer folder or in its email/ folder.
+// The widest one wins (…poster-1200x676.jpg over …-600x338.jpg).
+const posterPaths = [webDir, trailerDir, path.join(trailerDir, 'email')]
+  .filter((dir, i, all) => fs.existsSync(dir) && all.indexOf(dir) === i)
+  .flatMap((dir) => fs.readdirSync(dir).filter((f) => /poster/i.test(f) && /\.(webp|jpe?g|png)$/i.test(f)).map((f) => path.join(dir, f)));
+const width = (f) => Number(path.basename(f).match(/(\d{3,4})x\d{3,4}/)?.[1] ?? 0);
+const posterPath = posterPaths.sort((a, b) => width(b) - width(a) || a.localeCompare(b))[0] ?? null;
+const poster = posterPath ? path.basename(posterPath) : null;
 if (!poster) problems.push('no poster image: the slot will show a plain panel until one is added');
-else if (fs.statSync(path.join(webDir, poster)).size > MAX_POSTER_BYTES)
+else if (fs.statSync(posterPath).size > MAX_POSTER_BYTES)
   problems.push(`${poster} is over ${MAX_POSTER_BYTES / 1024} KB: consider a WebP`);
 
 const filmCredits = shotCredits();
-const data = { film, ...(captions.length ? { captions } : {}), ...(poster ? { poster } : {}), ...(filmCredits.length ? { filmCredits } : {}) };
-const copies = [film, ...captionFiles, ...(poster ? [poster] : [])];
+// The email's poster has its own play button and "Watch the trailer" drawn in,
+// so the page shows it without adding a second cue.
+const posterHasCue = Boolean(poster && /email/i.test(poster));
+const data = {
+  film,
+  ...(captions.length ? { captions } : {}),
+  ...(poster ? { poster } : {}),
+  ...(posterHasCue ? { posterHasCue } : {}),
+  ...(filmCredits.length ? { filmCredits } : {}),
+};
+const copies = [film, ...captionFiles].map((name) => [path.join(webDir, name), name]);
+if (posterPath) copies.push([posterPath, poster]);
 
 for (const p of problems) console.warn('!', p);
 console.log(`trailer: ${film} (${(filmBytes / 1048576).toFixed(1)} MB), ${captions.length} caption track(s), ${poster ? `poster ${poster}` : 'no poster'}, ${filmCredits.length} CC credit(s)`);
 if (check) process.exit(0);
 
 fs.mkdirSync(outDir, { recursive: true });
-for (const name of copies) fs.copyFileSync(path.join(webDir, name), path.join(outDir, name));
+for (const [from, name] of copies) fs.copyFileSync(from, path.join(outDir, name));
 fs.writeFileSync(dataPath, JSON.stringify(data, null, 2) + '\n');
 console.log(`Wrote ${path.relative(repo, dataPath)} and copied ${copies.length} file(s) to ${path.relative(repo, outDir)}/`);

@@ -39,10 +39,13 @@ export function GalaTrailer() {
               decoding="async"
             />
           ) : null}
-          <span className="gala-trailer-cue">
-            <span className="gala-trailer-icon" aria-hidden="true">
-              <Play size={22} />
-            </span>
+          {/* The email's poster draws its own play button; then the cue is for screen readers only. */}
+          <span className={trailer.posterHasCue ? 'sr-only' : 'gala-trailer-cue'}>
+            {trailer.posterHasCue ? null : (
+              <span className="gala-trailer-icon" aria-hidden="true">
+                <Play size={22} />
+              </span>
+            )}
             Play the trailer
           </span>
           <span className="sr-only">: A World of Connections, with sound and captions</span>
@@ -53,7 +56,8 @@ export function GalaTrailer() {
           <TripFilmDialog
             film={{
               id: 'trailer',
-              media: trailer,
+              // The poster is page art (it may carry its own play button), not a frame of the film.
+              media: { ...trailer, poster: undefined },
               title: (
                 <>
                   <span>The trailer</span>

@@ -7,7 +7,11 @@
 import data from './galaTrailer.json';
 import type { GalaTripMedia } from './galaTripMedia';
 
-export type GalaTrailer = Required<Pick<GalaTripMedia, 'film'>> & Pick<GalaTripMedia, 'captions' | 'poster' | 'filmCredits'>;
+export type GalaTrailer = Required<Pick<GalaTripMedia, 'film'>> &
+  Pick<GalaTripMedia, 'captions' | 'poster' | 'filmCredits'> & {
+    /** The poster already shows a play button and "Watch the trailer" (the email's art). */
+    posterHasCue?: boolean;
+  };
 
 const trailer = data as GalaTrailer | null;
 

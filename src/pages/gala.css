@@ -538,6 +538,16 @@
   background: rgba(11, 19, 34, 0.94);
 }
 
+/* A poster with its own drawn play button brightens a little on hover instead. */
+.gala-trailer-poster {
+  transition: filter 250ms ease;
+}
+
+.gala-trailer-play:hover .gala-trailer-poster,
+.gala-trailer-play:focus-visible .gala-trailer-poster {
+  filter: brightness(1.12);
+}
+
 @media (max-width: 640px) {
   .gala-trailer {
     padding-top: 64px;
