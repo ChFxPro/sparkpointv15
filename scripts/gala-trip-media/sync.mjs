@@ -14,8 +14,14 @@
 //   <id>-film-16x9-web.mp4             the full promo with music (optional)
 //   <id>-film-16x9-web.vtt / .<lang>.vtt  captions for the film (optional)
 //   <id>-film-9x16-web.mp4 (+ .vtt)    the vertical cut, played on portrait phones (optional)
-//   web.json                           optional: { "credit": "...", "captions": [...] };
+//   web.json                           optional: per-file `creditLine` and `sources`, "captions": [...];
 //                                      a film entry with "voiceover": true turns its captions on by default
+//
+// Credits: the site publishes only the attributions a licence requires, which
+// means Creative Commons BY and BY-SA work (author, licence and source, linked).
+// Stock footage and music (Envato Elements) and CC0 work need no credit, so they
+// are left out, and so is web.json's team-facing `credit` line. The kit's
+// LICENSES.md and web.json keep the full record.
 // File names are matched loosely (any name starting with the right prefix and
 // containing the aspect), so small naming changes don't break the sync.
 //
@@ -60,15 +66,9 @@ function readyTrips() {
 }
 const READY = readyTrips();
 
-// web.json's credit is written for the team ("…, licensed to <name>. … (see LICENSES.md)").
-// The public line keeps only the sources: no licensee's name, no pointer to an internal file.
-function publicCredit(credit) {
-  return credit
-    .replace(/,?\s*licensed to [^.;]+/gi, '')
-    .replace(/\s*\((?:see LICENSES\.md|per-loop credits[^)]*)\)/gi, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
+// Licences that require a visible credit: CC BY and its variants (BY-SA, BY-ND, BY-NC…).
+// CC0 and stock licences don't.
+const needsCredit = (licence) => /^CC BY\b/i.test(licence ?? '');
 
 // "CC BY-SA 4.0" -> its deed URL; null for anything that isn't a CC licence.
 function licenseUrl(licence) {
@@ -79,30 +79,33 @@ function licenseUrl(licence) {
 }
 
 // A loop's public credit, from web.json's per-file `creditLine` and `sources`:
-// "Video: Envato Elements · Blue domes of Oia: Giles Laurent, CC BY-SA 4.0 · …".
-// Each " · " part naming a linked source becomes { label, author, sourceUrl,
-// license, licenseUrl } so the card can link it; the rest stay plain text.
+// "Video: Envato Elements · Gullfoss with a rainbow: Diego Delso, CC BY-SA 4.0".
+// Each " · " part naming a linked CC BY source becomes { label, author, sourceUrl,
+// license, licenseUrl } so the card can link it. Every other part (the stock
+// footage, CC0 work) is dropped; null when nothing is left to credit.
 function loopCredit(meta, file) {
   const entry = meta?.files?.find((f) => f.file === file);
   if (!entry?.creditLine) return null;
-  const sources = (entry.sources ?? []).filter((src) => src.url);
+  const sources = (entry.sources ?? []).filter((src) => src.url && needsCredit(src.licence));
   // Each part takes the next unused matching source, in order: two works can
   // share an author and licence (Iceland's two Diego Delso photos).
   const used = new Set();
-  return entry.creditLine
+  const parts = entry.creditLine
     .replace(/^Video:\s*/i, '')
     .split(' · ')
     .map((part) => {
       const src = sources.find((x) => !used.has(x) && part.includes(x.credit) && part.includes(x.licence));
       if (src) used.add(src);
-      if (!src) return { text: part };
+      if (!src) return null;
       const label = part.slice(0, part.indexOf(src.credit)).replace(/:\s*$/, '').trim();
       return { label, author: src.credit, sourceUrl: src.url, license: src.licence, licenseUrl: licenseUrl(src.licence) };
-    });
+    })
+    .filter(Boolean);
+  return parts.length ? parts : null;
 }
 
-// Rows of the "Video footage" table in <id>/pack/LICENSES.md whose licence is a
-// Creative Commons one: those need a visible credit (author, licence, link).
+// Rows of the "Video footage" table in <id>/pack/LICENSES.md under a CC BY licence:
+// those need a visible credit (author, licence, link). CC0 rows don't.
 // One entry per source, in the order they appear.
 function ccCredits(file) {
   if (!fs.existsSync(file)) return [];
@@ -120,7 +123,7 @@ function ccCredits(file) {
     const [, shows, author, licence, source] = cells;
     const lic = link(licence);
     const src = link(source);
-    if (!lic || !src || !/creativecommons\.org/.test(lic[2]) || seen.has(src[2])) continue;
+    if (!lic || !src || !needsCredit(lic[1]) || !/creativecommons\.org/.test(lic[2]) || seen.has(src[2])) continue;
     seen.add(src[2]);
     out.push({ shows, author, license: lic[1], licenseUrl: lic[2], sourceUrl: src[2] });
   }
@@ -236,7 +239,6 @@ for (const id of TRIP_IDS) {
   if (fs.existsSync(metaPath)) {
     try {
       meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
-      if (typeof meta.credit === 'string' && meta.credit.trim()) entry.credit = publicCredit(meta.credit);
       for (const key of ['loopWide', 'loopTall']) {
         const src = entry[key];
         if (!src) continue;
@@ -251,11 +253,6 @@ for (const id of TRIP_IDS) {
   if (entry.film) {
     const credits = ccCredits(path.join(tripsDir, id, 'pack', 'LICENSES.md'));
     if (credits.length) entry.filmCredits = credits;
-    // No Wikimedia work in this trip's film or loops: don't say there is.
-    const loopsUseCC = [entry.loopWide, entry.loopTall].some((l) => l?.credit?.some((part) => !('text' in part)));
-    if (!credits.length && !loopsUseCC && entry.credit) {
-      entry.credit = entry.credit.replace(/\s*Some photos and clips: Wikimedia Commons contributors\.?/i, '').trim();
-    }
   }
   if (entry.loopWide || entry.loopTall || entry.film) manifest[id] = entry;
 }

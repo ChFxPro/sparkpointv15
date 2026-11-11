@@ -5,9 +5,6 @@
       "mp4": "greece-loop-card-16x9.mp4",
       "credit": [
         {
-          "text": "Envato Elements"
-        },
-        {
           "label": "Little Venice at sunset",
           "author": "Roberto Faccenda",
           "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sunset_of_Mykonos.jpg",
@@ -18,12 +15,7 @@
     },
     "loopTall": {
       "webm": "greece-loop-card-4x5.webm",
-      "mp4": "greece-loop-card-4x5.mp4",
-      "credit": [
-        {
-          "text": "Envato Elements"
-        }
-      ]
+      "mp4": "greece-loop-card-4x5.mp4"
     },
     "poster": "greece-loop-poster-16x9.webp",
     "film": "greece-film-16x9-web.mp4",
@@ -42,7 +34,6 @@
         "text": "A World of Connections, the SparkPoint Gala. Connection 01: Greece, & the Greek Islands. Santorini · 3 nights — Whitewashed Oia, high above the caldera. Mykonos · 3 nights — Windmills above Little Venice. 8 nights, 2 travelers. Three nights each in Santorini and Mykonos. Two nights in Athens, with a guided tour. Island flight and ferry included. Choose your trip at the Gala. Every journey connects back home. Friday, December 11, 2026, Connestee Falls."
       }
     ],
-    "credit": "Footage and music: Envato Elements. Some photos and clips: Wikimedia Commons contributors.",
     "filmCredits": [
       {
         "shows": "Little Venice, Mykonos",
@@ -66,9 +57,6 @@
       "mp4": "iceland-loop-card-16x9.mp4",
       "credit": [
         {
-          "text": "Envato Elements"
-        },
-        {
           "label": "Gullfoss with a rainbow",
           "author": "Diego Delso",
           "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gullfoss,_Su%C3%B0urland,_Islandia,_2014-08-16,_DD_123.JPG",
@@ -86,12 +74,7 @@
     },
     "loopTall": {
       "webm": "iceland-loop-card-4x5.webm",
-      "mp4": "iceland-loop-card-4x5.mp4",
-      "credit": [
-        {
-          "text": "Envato Elements"
-        }
-      ]
+      "mp4": "iceland-loop-card-4x5.mp4"
     },
     "poster": "iceland-loop-poster-16x9.webp",
     "film": "iceland-film-16x9-web.mp4",
@@ -110,7 +93,6 @@
         "text": "A World of Connections, the SparkPoint Gala. Connection 02: Iceland, Land of the Vikings. Reykjavík · 6 nights — Iceland's capital, from the air. Geysir — Strokkur erupts every few minutes. Gullfoss — The golden waterfall. 6 nights, 2 travelers. Six nights in Reykjavík. The Golden Circle, with a farm lunch. Sky Lagoon and its seven-step ritual. Choose your trip at the Gala. Every journey connects back home. Friday, December 11, 2026, Connestee Falls."
       }
     ],
-    "credit": "Footage and music: Envato Elements. Some photos and clips: Wikimedia Commons contributors.",
     "filmCredits": [
       {
         "shows": "Gullfoss, Golden Circle",
@@ -134,9 +116,6 @@
       "mp4": "cortona-loop-card-16x9.mp4",
       "credit": [
         {
-          "text": "Envato Elements"
-        },
-        {
           "label": "The view over the Val di Chiana",
           "author": "Matthias v.d. Elbe",
           "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cortona-Valdichiana.jpg",
@@ -149,9 +128,6 @@
       "webm": "cortona-loop-card-4x5.webm",
       "mp4": "cortona-loop-card-4x5.mp4",
       "credit": [
-        {
-          "text": "Envato Elements"
-        },
         {
           "label": "Piazza della Repubblica",
           "author": "Sailko",
@@ -170,7 +146,6 @@
         "text": "A World of Connections, the SparkPoint Gala. Connection 03: Cortona, Under the Tuscan Sun. Map: from Transylvania County, North Carolina, to Cortona. Cortona · 6 nights — A hilltop town above the Val di Chiana. Piazza della Repubblica — Welcome cocktails on the main square. The old town — A private two-hour guided walk. Tasting dinner — Courses paired with wine. Tuscany — All of Tuscany at the window. 6 nights, 4 travelers. Six nights in a two-bedroom suite, for four. Welcome cocktails on the main square. Tasting dinner with wine, and a private walk. Choose your trip at the Gala. Every journey connects back home. Friday, December 11, 2026, Connestee Falls."
       }
     ],
-    "credit": "Footage and music: Envato Elements. Some photos and clips: Wikimedia Commons contributors.",
     "filmCredits": [
       {
         "shows": "Piazza della Repubblica, Cortona",
@@ -205,21 +180,11 @@
   "scotland": {
     "loopWide": {
       "webm": "scotland-loop-card-16x9.webm",
-      "mp4": "scotland-loop-card-16x9.mp4",
-      "credit": [
-        {
-          "text": "Envato Elements"
-        }
-      ]
+      "mp4": "scotland-loop-card-16x9.mp4"
     },
     "loopTall": {
       "webm": "scotland-loop-card-4x5.webm",
-      "mp4": "scotland-loop-card-4x5.mp4",
-      "credit": [
-        {
-          "text": "Envato Elements"
-        }
-      ]
+      "mp4": "scotland-loop-card-4x5.mp4"
     },
     "poster": "scotland-loop-poster-16x9.webp",
     "film": "scotland-film-16x9-web.mp4",
@@ -238,7 +203,6 @@
         "text": "A World of Connections, the SparkPoint Gala. Connection 04: Scotland, Lochs & Legends. Edinburgh · 4 nights — The castle on its rock. Loch Ness — A cruise on the loch. 7 nights, 2 travelers. Four nights in Edinburgh, three in Glasgow. Edinburgh Castle and a Loch Ness cruise. Day trips to Glencoe and Loch Lomond. Choose your trip at the Gala. Every journey connects back home. Friday, December 11, 2026, Connestee Falls."
       }
     ],
-    "credit": "Footage and music: Envato Elements. Some photos and clips: Wikimedia Commons contributors.",
     "filmCredits": [
       {
         "shows": "Glencoe, West Highlands",
@@ -252,21 +216,11 @@
   "south-africa": {
     "loopWide": {
       "webm": "south-africa-loop-card-16x9.webm",
-      "mp4": "south-africa-loop-card-16x9.mp4",
-      "credit": [
-        {
-          "text": "Envato Elements"
-        }
-      ]
+      "mp4": "south-africa-loop-card-16x9.mp4"
     },
     "loopTall": {
       "webm": "south-africa-loop-card-4x5.webm",
-      "mp4": "south-africa-loop-card-4x5.mp4",
-      "credit": [
-        {
-          "text": "Envato Elements"
-        }
-      ]
+      "mp4": "south-africa-loop-card-4x5.mp4"
     },
     "poster": "south-africa-loop-poster-16x9.webp",
     "film": "south-africa-film-16x9-web.mp4",
@@ -284,27 +238,16 @@
         "lang": "en",
         "text": "A World of Connections, the SparkPoint Gala. Connection 05: South Africa, Wild Wonders Photo Safari. South Africa · 6 nights — Game drives from first light. The Big Five — A Big Five safari drive. Evenings — A traditional bush braai. 6 nights, 2 travelers. Five nights in a lakefront tented suite. Daily game drives, and a Big Five drive. Farm-to-table meals and a bush braai. Choose your trip at the Gala. Every journey connects back home. Friday, December 11, 2026, Connestee Falls."
       }
-    ],
-    "credit": "Footage and music: Envato Elements."
+    ]
   },
   "portugal": {
     "loopWide": {
       "webm": "portugal-loop-card-16x9.webm",
-      "mp4": "portugal-loop-card-16x9.mp4",
-      "credit": [
-        {
-          "text": "Envato Elements"
-        }
-      ]
+      "mp4": "portugal-loop-card-16x9.mp4"
     },
     "loopTall": {
       "webm": "portugal-loop-card-4x5.webm",
-      "mp4": "portugal-loop-card-4x5.mp4",
-      "credit": [
-        {
-          "text": "Envato Elements"
-        }
-      ]
+      "mp4": "portugal-loop-card-4x5.mp4"
     },
     "poster": "portugal-loop-poster-16x9.webp",
     "film": "portugal-film-16x9-web.mp4",
@@ -322,27 +265,16 @@
         "lang": "en",
         "text": "A World of Connections, the SparkPoint Gala. Connection 06: Portugal, Lisbon & Porto. Lisbon — Hills, trams and river light. Sintra — A small-group tour of the palaces and the Riviera. The Douro Valley — Wine tasting, lunch and a river cruise. 7 nights, 2 travelers. Lisbon, Sintra and the Riviera. A private guided drive to Porto. A Douro Valley day: wine, lunch and a river cruise. Choose your trip at the Gala. Every journey connects back home. Friday, December 11, 2026, Connestee Falls."
       }
-    ],
-    "credit": "Footage and music: Envato Elements."
+    ]
   },
   "costa-rica": {
     "loopWide": {
       "webm": "costa-rica-loop-card-16x9.webm",
-      "mp4": "costa-rica-loop-card-16x9.mp4",
-      "credit": [
-        {
-          "text": "Envato Elements"
-        }
-      ]
+      "mp4": "costa-rica-loop-card-16x9.mp4"
     },
     "loopTall": {
       "webm": "costa-rica-loop-card-4x5.webm",
-      "mp4": "costa-rica-loop-card-4x5.mp4",
-      "credit": [
-        {
-          "text": "Envato Elements"
-        }
-      ]
+      "mp4": "costa-rica-loop-card-4x5.mp4"
     },
     "poster": "costa-rica-loop-poster-16x9.webp",
     "film": "costa-rica-film-16x9-web.mp4",
@@ -360,27 +292,16 @@
         "lang": "en",
         "text": "A World of Connections, the SparkPoint Gala. Connection 07: Costa Rica, Colorful Costa Rica. Arenal — Rainforest beneath a perfect cone. Two tours of your choosing — Ziplining through the canopy. 6 nights, 2 travelers. Arenal's rainforest and volcano. The Pacific beaches of Tamarindo. Two tours of your choosing, like ziplining. Choose your trip at the Gala. Every journey connects back home. Friday, December 11, 2026, Connestee Falls."
       }
-    ],
-    "credit": "Footage and music: Envato Elements."
+    ]
   },
   "alaska": {
     "loopWide": {
       "webm": "alaska-loop-card-16x9.webm",
-      "mp4": "alaska-loop-card-16x9.mp4",
-      "credit": [
-        {
-          "text": "Envato Elements"
-        }
-      ]
+      "mp4": "alaska-loop-card-16x9.mp4"
     },
     "loopTall": {
       "webm": "alaska-loop-card-4x5.webm",
-      "mp4": "alaska-loop-card-4x5.mp4",
-      "credit": [
-        {
-          "text": "Envato Elements"
-        }
-      ]
+      "mp4": "alaska-loop-card-4x5.mp4"
     },
     "poster": "alaska-loop-poster-16x9.webp",
     "film": "alaska-film-16x9-web.mp4",
@@ -399,15 +320,7 @@
         "text": "A World of Connections, the SparkPoint Gala. Connection 08: Alaska, Explorer of the North. The Inside Passage — Seven nights in a balcony stateroom. Shore excursions — A credit toward your own adventure. 8 nights, 2 travelers. Seven nights at sea in a balcony stateroom. Ketchikan, Juneau, Skagway and Victoria. Drinks, dining and Wi-Fi package. Choose your trip at the Gala. Every journey connects back home. Friday, December 11, 2026, Connestee Falls."
       }
     ],
-    "credit": "Footage and music: Envato Elements. Some photos and clips: Wikimedia Commons contributors.",
     "filmCredits": [
-      {
-        "shows": "Creek Street, Ketchikan",
-        "author": "Bernard Spragg. NZ from Christchurch, New Zealand",
-        "license": "CC0",
-        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ketchikan_Creek_Street_(8110071326).jpg"
-      },
       {
         "shows": "Inner Harbour, Victoria, BC",
         "author": "DXR",

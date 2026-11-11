@@ -10,7 +10,7 @@ import {
   travelersLabel,
   type GalaTrip,
 } from '../data/galaTrips';
-import { cardVideoCredit, tripMedia, tripVideoSrc, type GalaCreditPart, type GalaLoopSources } from '../data/galaTripMedia';
+import { tripMedia, tripVideoSrc, type GalaCreditPart, type GalaLoopSources } from '../data/galaTripMedia';
 import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
 
 // The trips lounge: the eight trips as a departures lounge.
@@ -75,31 +75,25 @@ function CreditLine({ credit, sourceUrl, licenseUrl }: { credit: string; sourceU
   );
 }
 
-// A loop's own credit: "Envato Elements · Blue domes of Oia: Giles Laurent / CC BY-SA 4.0",
-// with each CC author linked to its source and the licence to its deed.
+// The CC work in a loop: "Gullfoss with a rainbow: Diego Delso / CC BY-SA 4.0",
+// with each author linked to its source and the licence to its deed.
 function LoopCredit({ parts }: { parts: GalaCreditPart[] }) {
   return (
     <>
       {parts.map((part, index) => (
         <span key={index}>
           {index > 0 ? ' · ' : null}
-          {'text' in part ? (
-            part.text
+          {part.label ? `${part.label}: ` : null}
+          <a href={part.sourceUrl} target="_blank" rel="noopener noreferrer">
+            {part.author}
+          </a>{' '}
+          /{' '}
+          {part.licenseUrl ? (
+            <a href={part.licenseUrl} target="_blank" rel="noopener noreferrer license">
+              {part.license}
+            </a>
           ) : (
-            <>
-              {part.label ? `${part.label}: ` : null}
-              <a href={part.sourceUrl} target="_blank" rel="noopener noreferrer">
-                {part.author}
-              </a>{' '}
-              /{' '}
-              {part.licenseUrl ? (
-                <a href={part.licenseUrl} target="_blank" rel="noopener noreferrer license">
-                  {part.license}
-                </a>
-              ) : (
-                part.license
-              )}
-            </>
+            part.license
           )}
         </span>
       ))}
@@ -260,23 +254,21 @@ function photoCredit(credit: string) {
 }
 
 // The card's credits: one compact line at its foot (the photo's author and
-// licence, linked, and the video's sources), and a Credits button that opens
-// every item in full, each author linked to its source and each licence to its
-// deed. Nothing is dropped: the full list is one click away, in the card.
+// licence, linked, and "Video: Wikimedia Commons" when the loop holds CC work),
+// and a Credits button that opens every item in full, each author linked to its
+// source and each licence to its deed. Only what a licence requires is credited
+// (CC BY and BY-SA); the stock footage and music are not, by the owner's call.
 function TripCredits({ trip }: { trip: GalaTrip }) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const image = trip.image;
   const media = tripMedia(trip.id);
   const loop = loopFor(trip);
-  if (!image && !loop) return null;
+  const ccParts = loop?.credit ?? [];
+  const filmCC = Boolean(media?.film && media.filmCredits?.length);
+  if (!image && !ccParts.length && !filmCC) return null;
   const photo = image ? photoCredit(image.credit) : null;
-  const ccParts = loop?.credit?.filter((part) => !('text' in part)) ?? [];
-  const videoSources = loop?.credit?.length
-    ? [...loop.credit.filter((part) => 'text' in part).map((part) => (part as { text: string }).text), ...(ccParts.length ? ['Wikimedia Commons'] : [])].join(' and ')
-    : loop
-      ? cardVideoCredit(media)
-      : null;
+  const videoSources = ccParts.length ? 'Wikimedia Commons' : null;
 
   return (
     <div className="gala-trip-credits">
@@ -320,14 +312,12 @@ function TripCredits({ trip }: { trip: GalaTrip }) {
               <CreditLine credit={image.credit} sourceUrl={image.sourceUrl} licenseUrl={image.licenseUrl} />
             </li>
           ) : null}
-          {loop?.credit?.length ? (
+          {ccParts.length ? (
             <li>
-              Video: <LoopCredit parts={loop.credit} />
+              Video: <LoopCredit parts={ccParts} />
             </li>
-          ) : videoSources ? (
-            <li>Video: {videoSources}</li>
           ) : null}
-          {media?.film && media.filmCredits?.length ? <li>The film lists its photo and clip credits as it plays.</li> : null}
+          {filmCC ? <li>The film lists its photo and clip credits as it plays.</li> : null}
         </ul>
       </div>
     </div>
