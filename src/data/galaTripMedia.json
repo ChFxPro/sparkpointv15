@@ -349,5 +349,57 @@
       }
     ],
     "credit": "Footage and music: Envato Elements."
+  },
+  "alaska": {
+    "loopWide": {
+      "webm": "alaska-loop-card-16x9.webm",
+      "mp4": "alaska-loop-card-16x9.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        }
+      ]
+    },
+    "loopTall": {
+      "webm": "alaska-loop-card-4x5.webm",
+      "mp4": "alaska-loop-card-4x5.mp4",
+      "credit": [
+        {
+          "text": "Envato Elements"
+        }
+      ]
+    },
+    "poster": "alaska-loop-poster-16x9.webp",
+    "film": "alaska-film-16x9-web.mp4",
+    "captions": [
+      {
+        "file": "alaska-film-16x9-web.vtt",
+        "lang": "en"
+      }
+    ],
+    "filmVertical": "alaska-film-9x16-web.mp4",
+    "captionsVertical": [
+      {
+        "file": "alaska-film-9x16-web.vtt",
+        "lang": "en"
+      }
+    ],
+    "credit": "Footage and music: Envato Elements. Some photos and clips: Wikimedia Commons contributors.",
+    "filmCredits": [
+      {
+        "shows": "Creek Street, Ketchikan",
+        "author": "Bernard Spragg. NZ from Christchurch, New Zealand",
+        "license": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ketchikan_Creek_Street_(8110071326).jpg"
+      },
+      {
+        "shows": "Inner Harbour, Victoria, BC",
+        "author": "DXR",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Empress_and_Inner_Harbour,_Victoria,_southwest_view_20240827_2.jpg"
+      }
+    ]
   }
 }
