@@ -15,7 +15,7 @@
 //   *trailer*16x9*.mp4 (or any *trailer*.mp4 that isn't 9x16)  the trailer, with sound
 //   <same name>.vtt / .<lang>.vtt                              its captions (voiceover: on by default)
 //   *poster*.webp|.jpg|.png, beside it or in <trailerDir>/ or <trailerDir>/email/;
-//                                                              the widest one is the still the slot shows
+//                                                              one beside the video is preferred
 //
 // Credits: only what a licence requires (CC BY and CC BY-SA). Each shot in
 // <trailerDir>/edit.json is looked up in its trip's pack/LICENSES.md; Envato
@@ -137,12 +137,14 @@ const captions = captionFiles.map((file) => ({
 }));
 
 // The poster can sit beside the video, in the trailer folder or in its email/ folder.
-// The widest one wins (…poster-1200x676.jpg over …-600x338.jpg).
+// One beside the video wins (the page's own, without a drawn play button), then a
+// WebP, then the widest (…poster-1200x676.jpg over …-600x338.jpg).
 const posterPaths = [webDir, trailerDir, path.join(trailerDir, 'email')]
   .filter((dir, i, all) => fs.existsSync(dir) && all.indexOf(dir) === i)
   .flatMap((dir) => fs.readdirSync(dir).filter((f) => /poster/i.test(f) && /\.(webp|jpe?g|png)$/i.test(f)).map((f) => path.join(dir, f)));
 const width = (f) => Number(path.basename(f).match(/(\d{3,4})x\d{3,4}/)?.[1] ?? 0);
-const posterPath = posterPaths.sort((a, b) => width(b) - width(a) || a.localeCompare(b))[0] ?? null;
+const rank = (f) => (path.dirname(f) === webDir ? 0 : 2) + (/\.webp$/i.test(f) ? 0 : 1);
+const posterPath = posterPaths.sort((a, b) => rank(a) - rank(b) || width(b) - width(a) || a.localeCompare(b))[0] ?? null;
 const poster = posterPath ? path.basename(posterPath) : null;
 if (!poster) problems.push('no poster image: the slot will show a plain panel until one is added');
 else if (fs.statSync(posterPath).size > MAX_POSTER_BYTES)
