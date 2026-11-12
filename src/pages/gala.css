@@ -597,14 +597,6 @@
   background: var(--gala-midnight);
 }
 
-.gala-trailer-video::cue {
-  font-family: 'Josefin Sans Variable', 'Josefin Sans', system-ui, sans-serif;
-  font-size: 15px;
-  line-height: 20px; /* CUE_LINE_PX in GalaTrailer.tsx */
-  color: #f6efe2;
-  background: rgba(11, 19, 34, 0.6);
-}
-
 /* Shade top and bottom so the title and controls read over any frame. */
 .gala-trailer-shade {
   position: absolute;
@@ -624,34 +616,37 @@
   left: 50%;
   display: inline-flex;
   align-items: center;
-  gap: 14px;
-  padding: 12px 24px 11px 12px;
+  gap: 12px;
+  padding: 6px 20px 6px 6px;
   color: var(--gala-ivory);
-  background: rgba(11, 19, 34, 0.82);
-  border: 1px solid rgba(217, 181, 106, 0.85);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
   font-family: var(--gala-display);
-  font-size: 0.82rem;
+  font-size: 0.76rem;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   white-space: nowrap;
   transform: translate(-50%, -50%);
   cursor: pointer;
 }
 
-.gala-trailer-start:hover,
-.gala-trailer-start:focus-visible {
-  background: rgba(11, 19, 34, 0.95);
+.gala-trailer-start:hover {
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .gala-trailer-icon {
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   color: #fff;
-  background: var(--gala-pink);
-  border: 1px solid var(--gala-brass);
+  background: rgba(224, 54, 148, 0.85);
+  border-radius: 50%;
 }
 
 .gala-trailer-icon svg {
@@ -664,120 +659,185 @@
   z-index: 1;
   align-self: start;
   padding-top: clamp(104px, 15vh, 150px);
-  pointer-events: none;
 }
 
 .gala-trailer-head h2 {
   max-width: 14ch;
-  margin-top: 10px;
   font-size: clamp(2.2rem, 5vw, 4.2rem);
   line-height: 1.04;
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
 }
 
+/* "Read the film": the voiceover as text, in place of captions. */
+.gala-trailer-read {
+  max-width: 46ch;
+  margin-top: 14px;
+  font-size: 0.86rem;
+}
+
+.gala-trailer-read summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 14px 2px;
+  color: rgba(247, 241, 229, 0.86);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  backdrop-filter: blur(12px) saturate(1.3);
+  -webkit-backdrop-filter: blur(12px) saturate(1.3);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.gala-trailer-read summary::-webkit-details-marker {
+  display: none;
+}
+
+.gala-trailer-read p {
+  margin-top: 10px;
+  padding: 14px 16px;
+  line-height: 1.6;
+  background: rgba(11, 19, 34, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* Controls: a slim frosted strip at the bottom right, clear of the film's
+   burned-in trip label at the bottom left. */
 .gala-trailer-controls {
   position: relative;
   z-index: 2;
   align-self: end;
-  display: grid;
-  justify-items: start;
-  gap: 14px;
-  padding-bottom: clamp(20px, 4vh, 40px);
-}
-
-/* The one loud control: pink, Deco caps, brass hairline. */
-.gala-trailer-sound {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 48px;
-  padding: 12px 22px 10px;
-  color: #fff;
-  background: var(--gala-pink);
-  border: 1px solid var(--gala-brass);
-  font-family: var(--gala-display);
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  cursor: pointer;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-}
-
-.gala-trailer-sound svg {
-  width: 20px;
-  height: 20px;
-  margin-top: -2px;
-}
-
-.gala-trailer-sound:hover,
-.gala-trailer-sound:focus-visible {
-  background: #c92a82;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: clamp(18px, 3.5vh, 34px);
+  pointer-events: none;
 }
 
 .gala-trailer-bar {
   display: flex;
   align-items: center;
-  gap: 6px;
-  width: 100%;
-  padding: 4px 8px;
-  background: rgba(11, 19, 34, 0.62);
-  border: 1px solid rgba(217, 181, 106, 0.4);
-  backdrop-filter: blur(6px);
+  gap: 2px;
+  padding: 3px;
+  color: var(--gala-ivory);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  pointer-events: auto;
 }
 
 .gala-trailer-btn {
-  display: grid;
+  display: inline-flex;
   flex: none;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  color: var(--gala-ivory);
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 9px;
+  color: inherit;
   background: transparent;
   border: 0;
+  border-radius: 999px;
   cursor: pointer;
+  transition: background-color 200ms ease;
 }
 
 .gala-trailer-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
 }
 
-.gala-trailer-btn[aria-pressed='false'] svg {
-  opacity: 0.55;
+.gala-trailer-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
 }
 
-.gala-trailer-btn:hover,
-.gala-trailer-start:focus-visible,
-.gala-trailer-sound:focus-visible,
-.gala-trailer-btn:focus-visible {
-  color: var(--gala-brass-light);
+/* Muted: the sound button carries its words, a touch brighter, so it's found. */
+.gala-trailer-sound.is-muted {
+  padding-right: 13px;
+  color: #fff;
+  background: rgba(224, 54, 148, 0.42);
+  font-family: var(--gala-display);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
-.gala-trailer-start:focus-visible,
-.gala-trailer-sound:focus-visible,
-.gala-trailer-btn:focus-visible,
-.gala-trailer-scrub:focus-visible {
-  outline: 2px solid var(--gala-brass-light);
-  outline-offset: 2px;
+.gala-trailer-sound.is-muted span {
+  padding-top: 2px;
+}
+
+.gala-trailer-sound.is-muted:hover {
+  background: rgba(224, 54, 148, 0.6);
+}
+
+/* Scrubber, time and full screen: shown on activity, folded away when idle. */
+.gala-trailer-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 380px;
+  padding-left: 6px;
+  overflow: hidden;
+  transition:
+    max-width 450ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 300ms ease;
+}
+
+.gala-trailer.is-idle .gala-trailer-more:not(:focus-within) {
+  max-width: 0;
+  padding-left: 0;
+  opacity: 0;
+}
+
+.gala-trailer.is-idle .gala-trailer-bar:not(:focus-within) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .gala-trailer-time {
   flex: none;
-  min-width: 2.6em;
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.06em;
-  text-align: center;
-  opacity: 0.85;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  opacity: 0.8;
 }
 
 .gala-trailer-scrub {
-  flex: 1;
-  min-width: 0;
-  height: 24px;
-  accent-color: var(--gala-pink);
+  width: 150px;
+  height: 18px;
+  accent-color: var(--gala-ivory);
   cursor: pointer;
+}
+
+.gala-trailer-start:focus-visible,
+.gala-trailer-btn:focus-visible,
+.gala-trailer-scrub:focus-visible,
+.gala-trailer-read summary:focus-visible {
+  outline: 2px solid var(--gala-brass-light);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gala-trailer-more {
+    transition: none;
+  }
+}
+
+html.reduce-motion .gala-trailer-more {
+  transition: none;
 }
 
 /* Upright phones and narrow screens: title, the whole 16:9, then the controls,
@@ -787,10 +847,9 @@
     grid-template-areas: 'head' 'stage' 'controls';
     grid-template-rows: auto auto auto;
     align-content: center;
-    gap: 22px;
+    gap: 18px;
     padding-block: 64px 28px;
-    background:
-      radial-gradient(ellipse at 50% 45%, #1d2c4a 0%, var(--gala-midnight) 70%);
+    background: radial-gradient(ellipse at 50% 45%, #1d2c4a 0%, var(--gala-midnight) 70%);
   }
 
   .gala-trailer-head {
@@ -806,12 +865,16 @@
 
   .gala-trailer-controls {
     grid-area: controls;
+    justify-content: center;
     padding-bottom: 0;
   }
 
-  .gala-trailer-sound {
-    justify-self: stretch;
-    justify-content: center;
+  .gala-trailer-scrub {
+    width: 104px;
+  }
+
+  .gala-trailer-time {
+    display: none;
   }
 
   .gala-trailer-shade {
@@ -830,15 +893,6 @@
   .gala-trailer-icon {
     width: 36px;
     height: 36px;
-  }
-
-  .gala-trailer-bar {
-    gap: 0;
-    padding: 2px 4px;
-  }
-
-  .gala-trailer-time {
-    display: none;
   }
 }
 
@@ -3270,6 +3324,9 @@
 
 /* 5 — The return trip */
 .gala-return {
+  /* The postcard flies in and out across the full width of the screen, so
+     clip here, at the screen's edges, not at the content column. */
+  overflow-x: clip;
   padding: 110px 0;
   color: var(--gala-ivory);
   background:
@@ -3298,7 +3355,6 @@
   min-height: 100vh;
   min-height: 100svh;
   padding-block: 92px 28px;
-  overflow-x: clip;
 }
 
 .gala-postcard-scene {

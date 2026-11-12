@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Captions, Maximize, Pause, Play, Volume2, VolumeX } from 'lucide-react';
+import { Maximize, Pause, Play, Volume2, VolumeX } from 'lucide-react';
 import { GALA_TRAILER, GALA_TRAILER_ANCHOR } from '../data/galaTrailer';
-import { tripVideoCrossOrigin, tripVideoSrc } from '../data/galaTripMedia';
+import { tripVideoSrc } from '../data/galaTripMedia';
 import { GALA_TRIP_COUNT_WORD } from '../data/galaTrips';
 import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
 
@@ -17,31 +17,23 @@ import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
 //   poster and a play button, and plays only when asked, with sound.
 // - It pauses when scrolled away and picks up again on return, unless the
 //   visitor paused it.
-// - The controls are always visible: play/pause (WCAG 2.2.2), turn on sound,
-//   captions, a scrubber and full screen. "Turn on sound" starts the trailer
-//   from the beginning so the voiceover is heard from the top.
-// - The trailer's captions are its voiceover, so they start on.
+// - Controls (Jeff, 2026-11-12: subtle, glassy, out of the way): a slim frosted
+//   strip at the bottom right, clear of the film's burned-in trip label at the
+//   bottom left. While the film plays and nobody touches it, the strip folds
+//   down to just play/pause and sound (so pause is always on screen, WCAG
+//   2.2.2); any pointer movement, tap, key press or focus brings back the
+//   scrubber and full screen. "Sound on" restarts the film from the top so the
+//   voiceover is heard from "Connection one".
+// - No captions on this trailer (Jeff's call): the voiceover repeats the
+//   burned-in title cards, and the whole voiceover is on the page as text under
+//   "Read the film" (from the captions' `text` in galaTrailer.json). The .vtt
+//   stays in the repo and is not loaded here.
 //
 // Nothing renders until `npm run gala:trailer` has imported the files.
 
 const capitalize = (word: string) => word.charAt(0).toUpperCase() + word.slice(1);
-
-// Caption cues sit near the top of the frame, clear of the film's burned-in
-// type at the bottom (as in the trip films' player).
-const CUE_LINE_PERCENT = 9;
-const CUE_LINE_PX = 20; // `.gala-trailer-video::cue` line height in gala.css
-
-function placeCues(video: HTMLVideoElement) {
-  // The video is object-fit: cover on wide screens, so measure the drawn frame.
-  const line = Math.max(1, Math.round((video.clientHeight * CUE_LINE_PERCENT) / 100 / CUE_LINE_PX));
-  for (const track of Array.from(video.textTracks)) {
-    for (const cue of Array.from(track.cues ?? [])) {
-      if (!(cue instanceof VTTCue) || (cue.snapToLines && cue.line === line)) continue;
-      cue.snapToLines = true;
-      cue.line = line;
-    }
-  }
-}
+// How long the full strip stays after the last pointer or key activity.
+const IDLE_MS = 2600;
 
 const formatTime = (seconds: number) => {
   if (!Number.isFinite(seconds)) return '0:00';
@@ -60,7 +52,7 @@ export function GalaTrailer() {
   const [inView, setInView] = useState(false); // at least half on screen
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
-  const [captionsOn, setCaptionsOn] = useState(true);
+  const [idle, setIdle] = useState(false);
   const [time, setTime] = useState(0);
   const [duration, setDuration] = useState(0);
   // The visitor pressed pause: don't start it again by scrolling.
@@ -110,25 +102,14 @@ export function GalaTrailer() {
     if (video && !autoplayAllowed && !userStarted.current && !video.paused) video.pause();
   }, [autoplayAllowed]);
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    for (const track of Array.from(video.textTracks)) track.mode = captionsOn ? 'showing' : 'hidden';
-  }, [captionsOn, near]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !near) return undefined;
-    const place = () => placeCues(video);
-    const trackEls = Array.from(video.querySelectorAll('track'));
-    trackEls.forEach((el) => el.addEventListener('load', place));
-    window.addEventListener('resize', place);
-    place();
-    return () => {
-      trackEls.forEach((el) => el.removeEventListener('load', place));
-      window.removeEventListener('resize', place);
-    };
-  }, [near]);
+  // Fold the strip down after a moment without activity; any activity brings it back.
+  const idleTimer = useRef<number>();
+  const wake = useCallback(() => {
+    setIdle(false);
+    window.clearTimeout(idleTimer.current);
+    idleTimer.current = window.setTimeout(() => setIdle(true), IDLE_MS);
+  }, []);
+  useEffect(() => () => window.clearTimeout(idleTimer.current), []);
 
   const start = useCallback(() => {
     const video = videoRef.current;
@@ -210,20 +191,30 @@ export function GalaTrailer() {
 
   if (!GALA_TRAILER) return null;
   const trailer = GALA_TRAILER;
-  const tracks = trailer.captions ?? [];
+  const transcript = trailer.captions?.[0]?.text;
   const showStartButton = !playing && !userStarted.current && !autoplayAllowed;
 
   return (
     <section
       ref={sectionRef}
       id={GALA_TRAILER_ANCHOR}
-      className={`gala-trailer${playing ? ' is-playing' : ''}`}
+      className={`gala-trailer${playing ? ' is-playing' : ''}${playing && idle ? ' is-idle' : ''}`}
       aria-labelledby="trailer-title"
+      onPointerMove={wake}
+      onPointerDown={wake}
+      onKeyDown={wake}
+      onFocus={wake}
     >
       <div className="gala-shell gala-trailer-head">
         <h2 id="trailer-title">
           {capitalize(GALA_TRIP_COUNT_WORD)} trips. <em>One film.</em>
         </h2>
+        {transcript ? (
+          <details className="gala-trailer-read">
+            <summary>Read the film</summary>
+            <p>{transcript}</p>
+          </details>
+        ) : null}
       </div>
 
       <div className="gala-trailer-stage">
@@ -232,38 +223,28 @@ export function GalaTrailer() {
           className="gala-trailer-video"
           src={near ? tripVideoSrc(trailer.film) : undefined}
           poster={trailer.poster ? tripVideoSrc(trailer.poster) : undefined}
-          crossOrigin={tripVideoCrossOrigin()}
           preload="none"
           muted={muted}
           playsInline
           loop={muted}
           aria-label="The trailer: A World of Connections, eight trips in one film"
-          onPlay={() => setPlaying(true)}
+          onClick={wake}
+          onPlay={() => {
+            setPlaying(true);
+            wake();
+          }}
           onPause={() => setPlaying(false)}
           onTimeUpdate={(event) => setTime(event.currentTarget.currentTime)}
           onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
           onDurationChange={(event) => setDuration(event.currentTarget.duration)}
           onVolumeChange={(event) => setMuted(event.currentTarget.muted)}
-        >
-          {near
-            ? tracks.map((track, index) => (
-                <track
-                  key={track.file}
-                  kind="captions"
-                  src={tripVideoSrc(track.file)}
-                  srcLang={track.lang}
-                  label={track.lang === 'en' ? 'English' : track.lang}
-                  default={index === 0}
-                />
-              ))
-            : null}
-        </video>
+        />
         <div className="gala-trailer-shade" aria-hidden="true" />
 
         {showStartButton ? (
           <button type="button" className="gala-trailer-start" onClick={togglePlay}>
             <span className="gala-trailer-icon" aria-hidden="true">
-              <Play size={26} />
+              <Play size={22} />
             </span>
             Play the trailer
             <span className="sr-only"> with sound</span>
@@ -271,43 +252,28 @@ export function GalaTrailer() {
         ) : null}
       </div>
 
-      <div className="gala-shell gala-trailer-controls" role="group" aria-label="Trailer controls">
-          {muted && !showStartButton ? (
-            <button type="button" className="gala-trailer-sound" onClick={toggleSound}>
-              <Volume2 aria-hidden="true" /> Turn on sound
-            </button>
-          ) : null}
-          <div className="gala-trailer-bar">
-            <button
-              type="button"
-              className="gala-trailer-btn"
-              onClick={togglePlay}
-              aria-label={playing ? 'Pause the trailer' : 'Play the trailer'}
-            >
-              {playing ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
-            </button>
-            <button
-              type="button"
-              className="gala-trailer-btn"
-              onClick={toggleSound}
-              aria-label="Sound"
-              aria-pressed={!muted}
-            >
-              {muted ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
-            </button>
-            {tracks.length ? (
-              <button
-                type="button"
-                className="gala-trailer-btn"
-                onClick={() => setCaptionsOn((on) => !on)}
-                aria-label="Captions"
-                aria-pressed={captionsOn}
-              >
-                <Captions aria-hidden="true" />
-              </button>
-            ) : null}
+      <div className="gala-shell gala-trailer-controls">
+        <div className="gala-trailer-bar" role="group" aria-label="Trailer controls">
+          <button
+            type="button"
+            className="gala-trailer-btn"
+            onClick={togglePlay}
+            aria-label={playing ? 'Pause the trailer' : 'Play the trailer'}
+          >
+            {playing ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
+          </button>
+          <button
+            type="button"
+            className={`gala-trailer-btn gala-trailer-sound${muted ? ' is-muted' : ''}`}
+            onClick={toggleSound}
+            aria-label={muted ? 'Sound on' : 'Sound off'}
+          >
+            {muted ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
+            {muted ? <span aria-hidden="true">Sound on</span> : null}
+          </button>
+          <span className="gala-trailer-more">
             <span className="gala-trailer-time" aria-hidden="true">
-              {formatTime(time)}
+              {formatTime(time)} / {formatTime(duration)}
             </span>
             <input
               className="gala-trailer-scrub"
@@ -321,13 +287,11 @@ export function GalaTrailer() {
               aria-valuetext={`${formatTime(time)} of ${formatTime(duration)}`}
               disabled={!duration}
             />
-            <span className="gala-trailer-time" aria-hidden="true">
-              {formatTime(duration)}
-            </span>
             <button type="button" className="gala-trailer-btn" onClick={fullScreen} aria-label="Full screen">
               <Maximize aria-hidden="true" />
             </button>
-          </div>
+          </span>
+        </div>
       </div>
     </section>
   );
