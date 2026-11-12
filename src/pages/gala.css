@@ -603,6 +603,7 @@
   inset: 0;
   pointer-events: none;
   background:
+    radial-gradient(ellipse 60% 55% at 12% 22%, rgba(6, 11, 22, 0.5), transparent 70%),
     linear-gradient(180deg, rgba(11, 19, 34, 0.82) 0%, rgba(11, 19, 34, 0) 30%),
     linear-gradient(0deg, rgba(11, 19, 34, 0.86) 0%, rgba(11, 19, 34, 0) 32%);
   transition: opacity 600ms ease;
@@ -661,52 +662,55 @@
   padding-top: clamp(104px, 15vh, 150px);
 }
 
+/* The title is set into the film, not floating on it: a soft pool of night
+   behind it (::before), layered shadows for a lift off the picture, and the
+   Deco double hairline under it. */
 .gala-trailer-head h2 {
+  position: relative;
   max-width: 14ch;
   font-size: clamp(2.2rem, 5vw, 4.2rem);
   line-height: 1.04;
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.55),
+    0 3px 10px rgba(0, 0, 0, 0.5),
+    0 10px 42px rgba(4, 8, 18, 0.75);
 }
 
-/* "Read the film": the voiceover as text, in place of captions. */
-.gala-trailer-read {
-  max-width: 46ch;
-  margin-top: 14px;
-  font-size: 0.86rem;
+.gala-trailer-head h2::before {
+  position: absolute;
+  z-index: -1;
+  inset: -55% -45% -70% -30%;
+  content: '';
+  background: radial-gradient(closest-side, rgba(6, 11, 22, 0.62), rgba(6, 11, 22, 0.32) 55%, transparent);
+  filter: blur(6px);
+  pointer-events: none;
 }
 
-.gala-trailer-read summary {
-  display: inline-flex;
-  align-items: center;
-  min-height: 32px;
-  padding: 4px 14px 2px;
-  color: rgba(247, 241, 229, 0.86);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 999px;
-  backdrop-filter: blur(12px) saturate(1.3);
-  -webkit-backdrop-filter: blur(12px) saturate(1.3);
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-size: 0.68rem;
-  cursor: pointer;
-  list-style: none;
+.gala-trailer-head h2::after {
+  display: block;
+  width: 3.2em;
+  height: 4px;
+  margin-top: 0.32em;
+  content: '';
+  border-block: 1px solid rgba(217, 181, 106, 0.75);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
-.gala-trailer-read summary::-webkit-details-marker {
-  display: none;
+.gala-trailer-video::cue {
+  font-family: 'Josefin Sans Variable', 'Josefin Sans', system-ui, sans-serif;
+  font-size: 18px;
+  line-height: 1.4;
+  color: #f7f1e5;
+  background: rgba(11, 19, 34, 0.62);
 }
 
-.gala-trailer-read p {
-  margin-top: 10px;
-  padding: 14px 16px;
-  line-height: 1.6;
-  background: rgba(11, 19, 34, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 12px;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+.gala-trailer-cc[aria-pressed='false'] svg {
+  opacity: 0.6;
+}
+
+.gala-trailer-cc[aria-pressed='true'] {
+  color: var(--gala-brass-light);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 /* Controls: a slim frosted strip at the bottom right, clear of the film's
@@ -825,7 +829,7 @@
 .gala-trailer-start:focus-visible,
 .gala-trailer-btn:focus-visible,
 .gala-trailer-scrub:focus-visible,
-.gala-trailer-read summary:focus-visible {
+.gala-trailer-cc:focus-visible {
   outline: 2px solid var(--gala-brass-light);
   outline-offset: 2px;
 }
@@ -3336,14 +3340,14 @@ html.reduce-motion .gala-trailer-more {
 
 /* "The return trip", told with scroll (GalaPostcardJourney). Without motion the
    track is just a wrapper and the card sits still, fully written. With motion
-   it is a tall track whose sticky stage holds the card while it slides in, is
-   written, stamped, and sent off to the right. */
+   it is a tall track whose sticky stage is a writing desk: the card slides on
+   in perspective, the pen writes it, the stamp lands, and it flies home. */
 .gala-postcard-track {
   margin-top: 56px;
 }
 
 .gala-postcard-track.is-scroll {
-  height: 320vh;
+  height: 420vh;
   margin-top: 8px;
 }
 
@@ -3355,58 +3359,335 @@ html.reduce-motion .gala-trailer-more {
   min-height: 100vh;
   min-height: 100svh;
   padding-block: 92px 28px;
+  perspective: 1800px;
+  perspective-origin: 50% 30%;
+}
+
+/* A warm desk lamp over the evergreen tabletop. */
+.gala-postcard-track.is-scroll .gala-postcard-stage::before {
+  position: absolute;
+  inset: 0 calc(50% - 50vw);
+  content: '';
+  background:
+    radial-gradient(ellipse 55% 60% at 38% 42%, rgba(241, 217, 160, 0.12), transparent 70%),
+    radial-gradient(ellipse 80% 70% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.28));
+  pointer-events: none;
 }
 
 .gala-postcard-scene {
+  position: relative;
+  z-index: 2;
+}
+
+.gala-postcard-track.is-scroll .gala-postcard-scene {
+  transform-style: preserve-3d;
   will-change: transform;
 }
 
-/* The words appear in order as --write runs 0 → 1 (GalaPostcard.tsx). */
+/* Handwriting: each word is wiped in from the left as --write reaches it, so the
+   message appears in order, as the pen writes it (GalaPostcard.tsx). */
 .gala-postcard .gala-w {
   --o: clamp(0, calc((var(--write, 1) - var(--at)) * var(--n)), 1);
-  opacity: var(--o);
+  display: inline-block;
+  opacity: calc(var(--o) * 40);
+  clip-path: inset(-0.3em calc((1 - var(--o)) * 100%) -0.35em -0.2em);
 }
 
 /* A keyboard visitor reaching the link sees it, written or not. */
 .gala-postcard a:focus-visible .gala-w {
   opacity: 1;
+  clip-path: none;
 }
 
+/* The card as card stock: edge thickness, and a shadow that grows as it lifts.
+   --thud jolts it when the stamp lands. */
 .gala-postcard-track.is-scroll .gala-postcard,
 .gala-postcard-track.is-scroll .gala-postcard:hover {
   transition: none;
-  transform: rotate(-1.2deg);
+  transform: rotate(-1.2deg) translate3d(calc(var(--thud, 0) * 1.5px), calc(var(--thud, 0) * 5px), 0);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 1px 0 #e9dfc8,
+    0 2px 0 #dccfb3,
+    0 3px 0 #cdbf9f,
+    0 4px 2px rgba(0, 0, 0, 0.25),
+    0 calc(30px + var(--lift, 0) * 70px) calc(60px + var(--lift, 0) * 60px) rgba(0, 0, 0, calc(0.45 - var(--lift, 0) * 0.15));
 }
 
-/* Stamp lands (drops from above, larger), then the postmark cancels it. */
-.gala-postcard-track.is-scroll .gala-postcard-stamp {
-  opacity: var(--stamp);
-  transform: rotate(calc(3deg + (1 - var(--stamp)) * 14deg)) scale(calc(1 + (1 - var(--stamp)) * 0.9));
-  transform-origin: 50% 50%;
+/* Light crossing the card as it turns. */
+.gala-postcard-sheen {
+  display: none;
 }
 
-.gala-postcard-track.is-scroll .gala-postcard-postmark {
-  opacity: calc(0.72 * var(--cancel));
-  transform: rotate(-8deg) scale(calc(1 + (1 - var(--cancel)) * 0.35));
-}
-
-.gala-postcard-sent {
-  justify-self: center;
-  margin-top: -1.4em;
-  color: var(--gala-brass-light);
-  font-family: var(--gala-display);
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
+.gala-postcard-track.is-scroll .gala-postcard-sheen {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  display: block;
+  border-radius: inherit;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 252, 240, 0.55) 48%, rgba(255, 252, 240, 0.12) 54%, transparent 62%)
+    no-repeat;
+  background-size: 260% 100%;
+  background-position: calc(100% - var(--sheen, 0) * 100%) 0;
+  mix-blend-mode: soft-light;
   pointer-events: none;
+}
+
+/* The stamp comes down from above: big, high and soft-shadowed, then lands with
+   a squash on --thud and an ink bloom around it. */
+.gala-postcard-track.is-scroll .gala-postcard-stamp {
+  opacity: calc(var(--stamp) * 4);
+  transform:
+    translateY(calc((1 - var(--stamp)) * -70px))
+    rotate(calc(3deg + (1 - var(--stamp)) * 18deg))
+    scale(calc(1 + (1 - var(--stamp)) * 1.2 - var(--thud, 0) * 0.07));
+  transform-origin: 50% 50%;
+  filter: drop-shadow(
+    calc((1 - var(--stamp)) * 18px) calc(1px + (1 - var(--stamp)) * 34px) calc(1px + (1 - var(--stamp)) * 16px)
+      rgba(0, 0, 0, 0.3)
+  );
+}
+
+.gala-postcard-track.is-scroll .gala-postcard-postage::after {
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  width: 128px;
+  height: 140px;
+  content: '';
+  background: radial-gradient(closest-side, rgba(27, 42, 72, 0.22), transparent);
+  opacity: var(--thud, 0);
+  transform: scale(calc(0.7 + var(--thud, 0) * 0.5));
+  pointer-events: none;
+}
+
+/* The postmark rolls on from the left, like a cancelling wheel. */
+.gala-postcard-track.is-scroll .gala-postcard-postmark {
+  opacity: calc(var(--cancel) * 30 * 0.72);
+  clip-path: inset(-10% calc((1 - var(--cancel)) * 110%) -10% -10%);
+}
+
+/* The desk: trip photos and a cup of coffee, drifting at their own speeds. */
+.gala-desk {
+  position: absolute;
+  z-index: 1;
+  inset: 0 calc(50% - 50vw);
+  pointer-events: none;
+}
+
+.gala-desk-photo {
+  position: absolute;
+  width: clamp(130px, 13vw, 210px);
+  margin: 0;
+  padding: 8px 8px 26px;
+  background: #fbf7ee;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3), 0 22px 40px rgba(0, 0, 0, 0.35);
+}
+
+.gala-desk-photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  filter: saturate(0.85) brightness(0.92);
+}
+
+.gala-desk-photo figcaption {
+  position: absolute;
+  inset: auto 0 6px;
+  color: #5f5a52;
+  font-family: var(--gala-display);
+  font-size: 0.7rem;
+  font-style: italic;
+  text-align: center;
+}
+
+.gala-desk-photo.is-a {
+  top: 12%;
+  left: 2.5%;
+}
+
+.gala-desk-photo.is-b {
+  bottom: 4%;
+  left: 7%;
+}
+
+.gala-desk-photo.is-c {
+  top: 8%;
+  right: 3%;
+}
+
+.gala-desk-cup {
+  position: absolute;
+  right: 4%;
+  bottom: 7%;
+  width: clamp(110px, 11vw, 170px);
+  filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.4));
+}
+
+.gala-desk-cup svg {
+  display: block;
+  width: 100%;
+}
+
+.gala-desk-ring {
+  position: absolute;
+  right: 15%;
+  bottom: 30%;
+  width: 92px;
+  height: 92px;
+  border: 3px solid rgba(80, 52, 28, 0.32);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(80, 52, 28, 0.12);
+  transform: rotate(14deg) scaleX(1.05);
+  opacity: 0.7;
+}
+
+/* The fountain pen. Its nib is the transform origin's target (GalaPostcard.tsx). */
+.gala-pen {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 230px;
+  transform-origin: 50% 100%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.gala-pen svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The airmail route home, and the pin it lands on. */
+.gala-route {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.gala-route-line {
+  fill: none;
+  stroke: var(--gala-brass-light);
+  stroke-width: 2;
+  stroke-dasharray: 2 9;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.gala-home-pin {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.gala-home-pin-dot {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  background: var(--gala-pink);
+  border: 2px solid var(--gala-brass-light);
+  border-radius: 50%;
+  box-shadow: 0 0 0 6px rgba(224, 54, 148, 0.25), 0 0 24px rgba(224, 54, 148, 0.6);
+}
+
+.gala-home-pin-label {
+  display: grid;
+  gap: 2px;
+  margin-top: -14px;
+  color: var(--gala-ivory);
+  font-family: var(--gala-display);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.gala-home-pin-label b {
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.gala-home-pin-label small {
+  color: var(--gala-brass-light);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.gala-home-pin-label em {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  color: var(--gala-brass);
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
 }
 
 /* Narrow screens, where the card is one column: one side at a time. The front
    slides in, then the card turns over (--flip) and the back is written. */
 @media (max-width: 1020px) {
   .gala-postcard-track.is-scroll {
-    height: 360vh;
+    height: 460vh;
+  }
+
+  /* Phones: a lighter desk, so it frames the card rather than crowding it. */
+  .gala-desk-photo {
+    width: 120px;
+  }
+
+  .gala-desk-photo.is-a {
+    top: 5%;
+    left: -40px;
+  }
+
+  .gala-desk-photo.is-b,
+  .gala-desk-ring {
+    display: none;
+  }
+
+  .gala-desk-photo.is-c {
+    top: auto;
+    right: -36px;
+    bottom: 2%;
+  }
+
+  .gala-desk-cup {
+    right: auto;
+    bottom: -30px;
+    left: -26px;
+    width: 104px;
+  }
+
+  /* The pin sits near the right edge, so its label reads to the left of it. */
+  .gala-home-pin {
+    flex-direction: row-reverse;
+    transform-origin: 100% 0;
+    translate: calc(-100% + 8px) 0;
+  }
+
+  .gala-home-pin-dot {
+    margin: -8px 0 0 0;
+  }
+
+  .gala-home-pin-label {
+    justify-items: end;
+    text-align: right;
   }
 
   .gala-postcard-track.is-scroll .gala-postcard-stage {
@@ -3417,7 +3698,7 @@ html.reduce-motion .gala-trailer-more {
   .gala-postcard-track.is-scroll .gala-postcard,
   .gala-postcard-track.is-scroll .gala-postcard:hover {
     grid-template-areas: 'side';
-    transform: rotate(-0.6deg) rotateY(calc(var(--flip) * 180deg));
+    transform: rotate(-0.6deg) translateY(calc(var(--thud, 0) * 4px)) rotateY(calc(var(--flip) * 180deg));
     transform-style: preserve-3d;
   }
 
