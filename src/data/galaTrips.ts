@@ -11,9 +11,10 @@
 //   here: anything in src/ ships in the public JavaScript bundle. Each trip's
 //   `price` stays null until a public price is set, and nothing renders it
 //   unless GALA_SHOW_TRIP_PRICES is true.
-// - Never name the package provider or its staff, never say the trips can be
-//   bought after the Gala, and don't state payment timing, child pricing,
-//   insurance or transferability (not confirmed).
+// - The package provider, AmFund, is credited only in the Gala page's travel
+//   partner block (owner's call, 2026-11-12); never name its staff. Never say
+//   the trips can be bought after the Gala, and don't state payment timing,
+//   child pricing, insurance or transferability.
 // - Alaska: don't name the cruise line until it's confirmed.
 
 /** One switch for every trip price on the site. Leave false until the public prices are final. */
