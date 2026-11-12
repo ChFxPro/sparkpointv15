@@ -2,6 +2,7 @@ import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { Pause, Play } from 'lucide-react';
 import { Link } from 'react-router';
 import { Sparkmark } from '../components/Sparkmark';
+import { markReturn, type JoinMeReturn } from './galaJoinMe/returnTo';
 import {
   GALA_TRIPS_IN_ORDER,
   cardStops,
@@ -431,6 +432,8 @@ function TripCard({ trip, boarding, near, videoAllowed, paused, onTogglePause, o
           <Link
             className="gala-trip-stamp"
             to={`/events/sparkpoint-gala/join-me#trip=${trip.id}`}
+            state={{ returnTo: tripAnchor(trip), returnLabel: trip.name } satisfies JoinMeReturn}
+            onClick={() => markReturn(tripAnchor(trip))}
             aria-label={`Stamp ${trip.name} in your passport and invite a friend`}
           >
             {/* The maker's own ink stamp for this trip (scripts/gala-trip-media/stamps.mjs). */}

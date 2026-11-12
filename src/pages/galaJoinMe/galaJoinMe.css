@@ -63,25 +63,57 @@
   border-bottom: 1px solid rgba(217, 181, 106, 0.18);
 }
 
+/* Back: a labelled brass pill ("Back to Greece", "Back"), so the way out is obvious. */
 .jm-back {
   flex: none;
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  padding: 0;
-  border: 0;
-  background: none;
+  min-height: 44px;
+  max-width: 46vw;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px 6px 8px;
+  border: 1px solid rgba(217, 181, 106, 0.6);
+  border-radius: 999px;
+  background: rgba(217, 181, 106, 0.08);
   color: var(--jm-brass-light);
+  font: 600 0.8rem/1 var(--jm-display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
   cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.jm-back span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.jm-back:hover {
+  border-color: var(--jm-brass);
+  background: rgba(217, 181, 106, 0.18);
+}
+
+/* Phones: just the place ("< South Africa"); the arrow says "back". */
+@media (max-width: 480px) {
+  .jm-back .jm-back-to {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
 }
 
 .jm-back svg {
-  width: 22px;
-  height: 22px;
+  flex: none;
+  width: 18px;
+  height: 18px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.8;
+  stroke-width: 2;
 }
 
 .jm-title {

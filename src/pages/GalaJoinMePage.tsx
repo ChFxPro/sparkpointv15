@@ -10,7 +10,9 @@
 import '@fontsource-variable/josefin-sans';
 import '@fontsource-variable/josefin-sans/wght-italic.css';
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type PointerEvent as ReactPointerEvent } from 'react';
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
+import type { MouseEvent as ReactMouseEvent } from 'react';
+import { readReturn } from './galaJoinMe/returnTo';
 import { SEOHead } from '../components/SEOHead';
 import { GALA_TRIPS_IN_ORDER } from '../data/galaTrips';
 import { SPARKMARK_URL } from '../components/Sparkmark';
@@ -126,6 +128,9 @@ export default function GalaJoinMePage() {
   // A trip chosen on the Gala page ("Stamp this trip"): highlighted on the stamp step.
   const [suggested, setSuggested] = useState<string | null>(null);
   const [captionId, setCaptionId] = useState<CaptionOption['id']>('join');
+  const location = useLocation();
+  const navigate = useNavigate();
+  const cameFrom = useMemo(() => readReturn(location.state), [location.state]);
 
   const cardRef = useRef<HTMLDivElement>(null);
   const baseRef = useRef<HTMLCanvasElement>(null);
@@ -431,6 +436,15 @@ export default function GalaJoinMePage() {
     : 'Your passport post, before stamping.';
   const ownPhoto = photo.kind === 'own';
   const suggestedTrip = suggested ? TRIPS.find((t) => t.id === suggested) ?? null : null;
+  // Back to the spot on the Gala page they came from (galaJoinMe/returnTo.ts): browser
+  // history when we arrived from it (its entry already ends in that #anchor), else a link.
+  const backTo = cameFrom ? `${GALA_PATH}#${cameFrom.returnTo}` : GALA_PATH;
+  const backLabel = cameFrom?.returnLabel ? `Back to ${cameFrom.returnLabel}` : 'Gala page';
+  const backToGala = (event: ReactMouseEvent) => {
+    if (!cameFrom || location.key === 'default') return;
+    event.preventDefault();
+    navigate(-1);
+  };
   const captionOptions = captions(input);
   const activeCaption = captionOptions.find((o) => o.id === captionId) ?? captionOptions[0];
 
@@ -449,12 +463,17 @@ export default function GalaJoinMePage() {
       <div className="jm-app">
         <header className="jm-head">
           {step === 0 ? (
-            <Link className="jm-back" to={GALA_PATH} aria-label="Back to the Gala page">
+            <Link className="jm-back" to={backTo} onClick={backToGala}>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+              <span>
+                {cameFrom?.returnLabel ? <span className="jm-back-to">Back to </span> : null}
+                {cameFrom?.returnLabel || 'Gala page'}
+              </span>
             </Link>
           ) : (
-            <button className="jm-back" type="button" aria-label="Back" onClick={() => { cancelStamping(); tap(8); go(step - 1); }}>
+            <button className="jm-back" type="button" onClick={() => { cancelStamping(); tap(8); go(step - 1); }}>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+              <span>Back</span>
             </button>
           )}
           <div className="jm-title">
@@ -681,8 +700,8 @@ export default function GalaJoinMePage() {
                 <button className="jm-link" type="button" onClick={startOver}>
                   Start over
                 </button>
-                <Link className="jm-link" to={GALA_PATH}>
-                  The Gala page
+                <Link className="jm-link" to={backTo} onClick={backToGala}>
+                  {backLabel}
                 </Link>
               </div>
             </div>
