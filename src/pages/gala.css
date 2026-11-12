@@ -1673,7 +1673,10 @@
   left: 0;
   padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) 36px
     max(14px, env(safe-area-inset-left));
-  background: linear-gradient(to bottom, rgba(6, 10, 18, 0.88), rgba(6, 10, 18, 0.5) 65%, transparent);
+  /* Solid behind the title and Close, fading only below them: the film's own
+     trip label sits in this band, and showing through it would say the trip
+     twice. The captions sit lower (CUE_LINE.fullScreen), clear of the fade. */
+  background: linear-gradient(to bottom, rgb(6, 10, 18) calc(100% - 36px), transparent);
 }
 
 .gala-film.is-vertical .gala-film-title {

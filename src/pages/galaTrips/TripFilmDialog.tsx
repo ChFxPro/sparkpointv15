@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog@1.1.6';
 import { X } from 'lucide-react';
 import type { GalaTrip } from '../../data/galaTrips';
-import { tripMedia, tripVideoSrc, type GalaTripMedia } from '../../data/galaTripMedia';
+import { tripMedia, tripVideoSrc, type GalaFilmCredit, type GalaTripMedia } from '../../data/galaTripMedia';
 
 // The full trip film, with sound, in a modal player. Loaded lazily: neither this
 // code nor the film is fetched until someone presses Watch the film. Radix keeps
@@ -72,27 +72,25 @@ function startVertical(hasVertical: boolean, preferVertical: boolean) {
   return preferVertical && window.innerHeight >= MIN_BOXED_HEIGHT;
 }
 
-function FilmCredits({ media }: { media: GalaTripMedia }) {
-  if (!media.credit && !media.filmCredits?.length) return null;
+// The CC BY work in the cut being played. A cut without any shows nothing.
+function FilmCredits({ credits }: { credits?: GalaFilmCredit[] }) {
+  if (!credits?.length) return null;
   return (
     <div className="gala-film-credit">
-      {media.credit ? <p>{media.credit}</p> : null}
-      {media.filmCredits?.length ? (
-        <ul>
-          {media.filmCredits.map((c) => (
-            <li key={c.sourceUrl}>
-              {c.shows}:{' '}
-              <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer">
-                {c.author}
-              </a>{' '}
-              /{' '}
-              <a href={c.licenseUrl} target="_blank" rel="noopener noreferrer license">
-                {c.license}
-              </a>
-            </li>
-          ))}
-        </ul>
-      ) : null}
+      <ul>
+        {credits.map((c) => (
+          <li key={c.sourceUrl}>
+            {c.shows}:{' '}
+            <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer">
+              {c.author}
+            </a>{' '}
+            /{' '}
+            <a href={c.licenseUrl} target="_blank" rel="noopener noreferrer license">
+              {c.license}
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -117,6 +115,8 @@ export default function TripFilmDialog({ trip, film, preferVertical = false, onC
   // State, not a ref: the dialog's content mounts after this component does.
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
   const src = media && (vertical && media.filmVertical ? media.filmVertical : media.film);
+  // Credits follow the cut on screen: the vertical cut has its own, often none.
+  const credits = media && (vertical && media.filmVertical ? media.filmCreditsVertical : media.filmCredits);
   const cueLine = vertical ? (fullScreen ? CUE_LINE.fullScreen : CUE_LINE.boxed) : CUE_LINE.wide;
 
   // Cues load only once a track is turned on, so place them whenever one loads.
@@ -179,7 +179,7 @@ export default function TripFilmDialog({ trip, film, preferVertical = false, onC
           </div>
           {vertical ? (
             <div id={creditsId} className="gala-film-credits-sheet" hidden={!showCredits}>
-              <FilmCredits media={media} />
+              <FilmCredits credits={credits} />
             </div>
           ) : null}
           {/* The browser's own video controls swallow Esc when the video has focus,
@@ -232,7 +232,7 @@ export default function TripFilmDialog({ trip, film, preferVertical = false, onC
               >
                 Watch the full film
               </button>
-              {media.credit || media.filmCredits?.length ? (
+              {credits?.length ? (
                 <button
                   type="button"
                   className="gala-film-switch"
@@ -245,7 +245,7 @@ export default function TripFilmDialog({ trip, film, preferVertical = false, onC
               ) : null}
             </div>
           ) : (
-            <FilmCredits media={media} />
+            <FilmCredits credits={credits} />
           )}
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
