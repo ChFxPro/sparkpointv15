@@ -512,7 +512,38 @@ export function exportPost(input: PostInput, assets: PostAssets, scale = EXPORT_
   return new Promise((resolve) => c.toBlob(resolve, 'image/jpeg', 0.9));
 }
 
-export function caption(input: PostInput) {
-  const trip = input.trip ? ` My dream trip: ${input.trip.name}.` : '';
-  return `I’m going to A World of Connections, the SparkPoint Gala, on Friday, December 11 in Brevard.${trip} Join me?\n\nEvery journey connects back home.\nTickets: ${SHORT_URL}`;
+// Suggested captions for the finished post, shown on the last step so guests can see
+// and pick the words (one tap), and copied automatically when they share. The trip
+// one only appears when a trip is stamped. Keep them plain: no auction or bid words,
+// no prices, no giveback percentage.
+export type CaptionOption = { id: 'join' | 'crew' | 'trip'; label: string; text: string };
+
+export function captions(input: PostInput): CaptionOption[] {
+  const tickets = `Tickets: ${SHORT_URL}`;
+  const dream = input.trip ? ` My dream trip: ${input.trip.name}.` : '';
+  const options: CaptionOption[] = [
+    {
+      id: 'join',
+      label: 'Join me',
+      text: `I’m going to A World of Connections, the SparkPoint Gala, on Friday, December 11 in Brevard.${dream} Join me?\n\nEvery journey connects back home.\n${tickets}`,
+    },
+    {
+      id: 'crew',
+      label: 'Who’s in?',
+      text: `Who’s coming with me? My passport is ready for A World of Connections, the SparkPoint Gala: Friday, December 11 in Brevard, eight trips to choose from, and a night that gives back to the Transylvania Resilience Hub.\n\n${tickets}`,
+    },
+  ];
+  if (input.trip) {
+    options.push({
+      id: 'trip',
+      label: input.trip.name,
+      text: `Passport stamped: ${input.trip.name}. I’m going to A World of Connections, the SparkPoint Gala, on December 11 in Brevard, where travel gives back to home. Come dream with me?\n\n${tickets}`,
+    });
+  }
+  return options;
+}
+
+export function caption(input: PostInput, id: CaptionOption['id'] = 'join') {
+  const options = captions(input);
+  return (options.find((o) => o.id === id) ?? options[0]).text;
 }

@@ -20,6 +20,7 @@ import {
   artFor,
   autoFrame,
   caption,
+  captions,
   clampFrame,
   drawBackground,
   drawBand,
@@ -28,6 +29,7 @@ import {
   exportPost,
   photoBox,
   stampPlacement,
+  type CaptionOption,
   type Frame,
   type Photo,
   type PostAssets,
@@ -73,17 +75,25 @@ function useHaptics() {
   return { label, tap };
 }
 
-function nameFromHash(hash: string) {
-  const named = hash.match(/^#name=(.{1,80})$/);
-  if (named) {
+// The link's hash can carry a name and a trip: #name=Clara%20Bennett, #trip=greece, or
+// both (#trip=greece&name=Clara). The Gala page's "Stamp this trip" links use #trip=.
+// The older #for-Clara-Bennett form still works.
+function fromHash(hash: string): { name: string; trip: string } {
+  const raw = hash.replace(/^#/, '');
+  if (raw.includes('=')) {
     try {
-      return decodeURIComponent(named[1].replace(/\+/g, ' ')).slice(0, 24);
+      const params = new URLSearchParams(raw);
+      const trip = params.get('trip') ?? '';
+      return {
+        name: (params.get('name') ?? '').slice(0, 80).trim().slice(0, 24),
+        trip: TRIPS.some((t) => t.id === trip) ? trip : '',
+      };
     } catch {
-      return '';
+      return { name: '', trip: '' };
     }
   }
-  const dashed = hash.match(/^#for-([A-Za-z][A-Za-z-]{0,40})$/);
-  return dashed ? dashed[1].replace(/-/g, ' ').slice(0, 24) : '';
+  const dashed = raw.match(/^for-([A-Za-z][A-Za-z-]{0,40})$/);
+  return { name: dashed ? dashed[1].replace(/-/g, ' ').slice(0, 24) : '', trip: '' };
 }
 
 function loadImage(src: string) {
@@ -113,6 +123,9 @@ export default function GalaJoinMePage() {
   const [notice, setNotice] = useState('');
   const [toast, setToast] = useState('');
   const [canShareFiles, setCanShareFiles] = useState(false);
+  // A trip chosen on the Gala page ("Stamp this trip"): highlighted on the stamp step.
+  const [suggested, setSuggested] = useState<string | null>(null);
+  const [captionId, setCaptionId] = useState<CaptionOption['id']>('join');
 
   const cardRef = useRef<HTMLDivElement>(null);
   const baseRef = useRef<HTMLCanvasElement>(null);
@@ -133,7 +146,9 @@ export default function GalaJoinMePage() {
   // ---- assets, fonts and the pre-filled name ----
   useEffect(() => {
     let live = true;
-    setName(nameFromHash(window.location.hash));
+    const fromLink = fromHash(window.location.hash);
+    setName(fromLink.name);
+    setSuggested(fromLink.trip || null);
     try {
       setCanShareFiles(!!navigator.canShare && navigator.canShare({ files: [new File([new Blob()], 'x.jpg', { type: 'image/jpeg' })] }));
     } catch {
@@ -167,8 +182,9 @@ export default function GalaJoinMePage() {
       .catch(() => undefined);
     document.fonts.addEventListener('loadingdone', refresh);
     const onHash = () => {
-      const n = nameFromHash(window.location.hash);
-      if (n) setName(n);
+      const h = fromHash(window.location.hash);
+      if (h.name) setName(h.name);
+      if (h.trip) setSuggested(h.trip);
     };
     window.addEventListener('hashchange', onHash);
     return () => {
@@ -352,7 +368,7 @@ export default function GalaJoinMePage() {
   // ---- share ----
   const copyCaption = async (from: PostInput) => {
     try {
-      await navigator.clipboard.writeText(caption(from));
+      await navigator.clipboard.writeText(caption(from, captionId));
       return true;
     } catch {
       return false;
@@ -414,6 +430,9 @@ export default function GalaJoinMePage() {
     ? `Your post: a World of Connections passport for ${shownName || 'You'}${trip ? `, stamped for ${trip.name}` : ''}, with the Gala’s entry stamp, reading “Join me.” Friday, December 11, 2026, Brevard, North Carolina.`
     : 'Your passport post, before stamping.';
   const ownPhoto = photo.kind === 'own';
+  const suggestedTrip = suggested ? TRIPS.find((t) => t.id === suggested) ?? null : null;
+  const captionOptions = captions(input);
+  const activeCaption = captionOptions.find((o) => o.id === captionId) ?? captionOptions[0];
 
   return (
     <div className="jm">
@@ -577,9 +596,9 @@ export default function GalaJoinMePage() {
                   <button
                     key={t.id}
                     type="button"
-                    className="jm-trip"
+                    className={`jm-trip${!picked && suggested === t.id ? ' is-suggested' : ''}`}
                     aria-pressed={picked === t.id}
-                    aria-label={`Stamp Connection ${t.connection}, ${t.name}`}
+                    aria-label={`Stamp Connection ${t.connection}, ${t.name}${!picked && suggested === t.id ? ' (your pick from the Gala page)' : ''}`}
                     onClick={() => void stampAndBuild(t)}
                   >
                     {stampSrc[t.id] ? <img src={stampSrc[t.id]} alt="" /> : null}
@@ -597,7 +616,11 @@ export default function GalaJoinMePage() {
                   <span>Just the Gala</span>
                 </button>
               </div>
-              <p className="jm-note">Tap a stamp. The Gala stamps you in too.</p>
+              <p className="jm-note">
+                {!picked && suggestedTrip
+                  ? `${suggestedTrip.name} is inked and ready. Tap it, or choose another. The Gala stamps you in too.`
+                  : 'Tap a stamp. The Gala stamps you in too.'}
+              </p>
             </div>
           ) : null}
 
@@ -616,14 +639,42 @@ export default function GalaJoinMePage() {
                   : 'A high-resolution image for Facebook, Instagram, email or printing.'}
               </p>
               <p className="jm-toast" role="status">{toast}</p>
+              <div className="jm-caption" role="group" aria-labelledby="jm-caption-title">
+                <div className="jm-caption-head">
+                  <h3 id="jm-caption-title">Suggested caption</h3>
+                  <div className="jm-caption-tabs" role="radiogroup" aria-label="Caption style">
+                    {captionOptions.map((o) => (
+                      <button
+                        key={o.id}
+                        type="button"
+                        role="radio"
+                        aria-checked={activeCaption.id === o.id}
+                        className="jm-caption-tab"
+                        onClick={() => {
+                          tap(6);
+                          setCaptionId(o.id);
+                        }}
+                      >
+                        {o.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <p className="jm-caption-text">{activeCaption.text}</p>
+                <div className="jm-caption-foot">
+                  <button
+                    className="jm-btn jm-caption-copy"
+                    type="button"
+                    onClick={async () => setToast((await copyCaption(input)) ? 'Caption copied. Paste it into your post.' : 'Couldn’t copy on this device. Press and hold the caption to copy it.')}
+                  >
+                    Copy caption
+                  </button>
+                  <p className="jm-note">
+                    It’s copied for you when you share, too. Tag <b>@yoursparkpoint</b> so we can cheer you on.
+                  </p>
+                </div>
+              </div>
               <div className="jm-links">
-                <button
-                  className="jm-link"
-                  type="button"
-                  onClick={async () => setToast((await copyCaption(input)) ? 'Caption copied.' : 'Couldn’t copy on this device.')}
-                >
-                  Copy caption
-                </button>
                 <button className="jm-link" type="button" onClick={() => go(2)}>
                   Change trip
                 </button>
