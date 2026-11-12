@@ -73,11 +73,10 @@ function startVertical(hasVertical: boolean, preferVertical: boolean) {
 }
 
 function FilmCredits({ media }: { media: GalaTripMedia }) {
-  if (!media.credit && !media.filmCredits?.length) return null;
+  if (!media.filmCredits?.length) return null;
   return (
     <div className="gala-film-credit">
-      {media.credit ? <p>{media.credit}</p> : null}
-      {media.filmCredits?.length ? (
+      {media.filmCredits.length ? (
         <ul>
           {media.filmCredits.map((c) => (
             <li key={c.sourceUrl}>
@@ -232,7 +231,7 @@ export default function TripFilmDialog({ trip, film, preferVertical = false, onC
               >
                 Watch the full film
               </button>
-              {media.credit || media.filmCredits?.length ? (
+              {media.filmCredits?.length ? (
                 <button
                   type="button"
                   className="gala-film-switch"
