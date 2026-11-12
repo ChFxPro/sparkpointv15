@@ -24,10 +24,28 @@ import { GalaRouteMap } from './GalaRouteMap';
 import { GalaTrips } from './GalaTrips';
 import { GalaTrailer } from './GalaTrailer';
 import { GalaTravelPartner } from './GalaTravelPartner';
+import { markReturn, type JoinMeReturn } from './galaJoinMe/returnTo';
 import './gala.css';
 
 const BASE = import.meta.env.BASE_URL;
 const GALA_PATH = '/events/sparkpoint-gala';
+// "Issue my passport" (GalaJoinMePage). Three ways in from this page: the hero's
+// "Invite a friend", the passport's bearer photo, and the button under the passport;
+// each trip card also has "Stamp this trip" (GalaTrips.tsx), which adds #trip=<id>.
+const JOIN_ME_PATH = `${GALA_PATH}/join-me`;
+// Back from the maker lands on the passport section (see galaJoinMe/returnTo.ts).
+const PASSPORT_RETURN: JoinMeReturn = { returnTo: 'passport', returnLabel: 'the passport' };
+
+// A small passport book, drawn to match the page's line icons.
+function PassportIcon() {
+  return (
+    <svg className="gala-passport-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="5" y="3" width="14" height="18" rx="2" />
+      <circle cx="12" cy="10" r="3" />
+      <path d="M9 16h6" />
+    </svg>
+  );
+}
 // Rendered by scripts/gala-print (the print session's PR), 1200×630.
 const GALA_SHARE_IMAGE = '/assets/events/gala/gala-share-world-of-connections.jpg';
 // Hero photo: Astra Liu on Unsplash (photo-1539612793508, Unsplash License), with a
@@ -243,6 +261,9 @@ export default function GalaPage() {
               <a className="gala-button gala-button-ghost" href="#trips">
                 See the eight trips
               </a>
+              <Link className="gala-button gala-button-ghost gala-hero-invite" to={JOIN_ME_PATH}>
+                <PassportIcon /> Invite a friend
+              </Link>
             </div>
           </motion.div>
           <motion.div {...revealLate}>
@@ -335,8 +356,12 @@ export default function GalaPage() {
                 </dl>
               </header>
 
-              <div className="gala-passport-photo" aria-hidden="true">
+              {/* The bearer photo is the way in: tap it to put yourself in the passport. */}
+              <Link className="gala-passport-photo is-link" to={JOIN_ME_PATH} state={PASSPORT_RETURN} onClick={() => markReturn(PASSPORT_RETURN.returnTo)} aria-label="Put your photo in the passport: issue my passport">
                 <img src={passportPhoto(300)} srcSet={`${passportPhoto(300)} 300w, ${passportPhoto(600)} 600w`} sizes="150px" alt="" loading="lazy" />
+                <span className="gala-passport-yours" aria-hidden="true">
+                  <PassportIcon /> Your photo here
+                </span>
                 <span className="gala-passport-holo" />
                 <span className="gala-passport-seal">
                   <svg viewBox="0 0 100 100">
@@ -350,7 +375,7 @@ export default function GalaPage() {
                   </svg>
                   <Sparkmark variant="ink" size="36%" className="gala-passport-seal-mark" />
                 </span>
-              </div>
+              </Link>
 
               <dl className="gala-passport-fields">
                 <div className="is-wide">
@@ -427,10 +452,10 @@ export default function GalaPage() {
           </p>
           <motion.div className="gala-passport-cta" {...reveal}>
             <p>
-              <strong>Put yourself in the passport.</strong> Add your photo, stamp your dream trip, and
-              share a “Join me” post. Your photo stays on your device.
+              <strong>Going? Bring someone along.</strong> Add your photo, stamp your dream trip,
+              and share a ready-made “Join me” post, caption included. Your photo stays on your device.
             </p>
-            <Link className="gala-button gala-button-gold" to={`${GALA_PATH}/join-me`}>
+            <Link className="gala-button gala-button-gold" to={JOIN_ME_PATH} state={PASSPORT_RETURN} onClick={() => markReturn(PASSPORT_RETURN.returnTo)}>
               Issue my passport
             </Link>
           </motion.div>

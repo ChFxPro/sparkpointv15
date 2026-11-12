@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { Pause, Play } from 'lucide-react';
+import { Link } from 'react-router';
 import { Sparkmark } from '../components/Sparkmark';
+import { markReturn, type JoinMeReturn } from './galaJoinMe/returnTo';
 import {
   GALA_TRIPS_IN_ORDER,
   cardStops,
@@ -413,8 +415,8 @@ function TripCard({ trip, boarding, near, videoAllowed, paused, onTogglePause, o
             <li key={item}>{item}</li>
           ))}
         </ul>
-        {film ? (
-          <div className="gala-trip-actions">
+        <div className="gala-trip-actions">
+          {film ? (
             <button
               type="button"
               className="gala-button gala-button-gold gala-trip-watch"
@@ -425,8 +427,29 @@ function TripCard({ trip, boarding, near, videoAllowed, paused, onTogglePause, o
               <Play aria-hidden="true" size={14} />
               Watch the film
             </button>
-          </div>
-        ) : null}
+          ) : null}
+          {/* Into "Issue my passport" with this trip ready to stamp. */}
+          <Link
+            className="gala-trip-stamp"
+            to={`/events/sparkpoint-gala/join-me#trip=${trip.id}`}
+            state={{ returnTo: tripAnchor(trip), returnLabel: trip.name } satisfies JoinMeReturn}
+            onClick={() => markReturn(tripAnchor(trip))}
+            aria-label={`Stamp ${trip.name} in your passport and invite a friend`}
+          >
+            {/* The maker's own ink stamp for this trip (scripts/gala-trip-media/stamps.mjs). */}
+            <img
+              className="gala-trip-stamp-ink"
+              src={`${import.meta.env.BASE_URL}assets/events/gala/stamps/${trip.id}.webp`}
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+            <span className="gala-trip-stamp-label">
+              Stamp this trip
+              <small>Add it to your passport</small>
+            </span>
+          </Link>
+        </div>
       </div>
       <TripCredits trip={trip} />
     </li>

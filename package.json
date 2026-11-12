@@ -91,6 +91,7 @@
     "gala:trip-media": "node scripts/gala-trip-media/sync.mjs",
     "gala:media-upload": "bash scripts/gala-trip-media/upload.sh",
     "gala:trailer": "node scripts/gala-trip-media/trailer.mjs",
+    "gala:stamps": "node scripts/gala-trip-media/stamps.mjs",
     "predev": "npm run generate:press && node scripts/behind-story-manifest.mjs && npm run backporch:bake",
     "dev": "vite",
     "prebuild": "npm run generate:press && node scripts/behind-story-manifest.mjs && npm run backporch:bake",
