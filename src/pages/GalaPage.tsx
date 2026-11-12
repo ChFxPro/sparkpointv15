@@ -19,7 +19,7 @@ import { GALA_TRIP_COUNT, GALA_TRIP_COUNT_WORD, GALA_TRIP_NAMES, GALA_TRIPS, tri
 import { GalaBoardingPass } from './GalaBoardingPass';
 import { GalaChapterMark } from './GalaChapterMark';
 import { GalaDepartureBoard } from './GalaDepartureBoard';
-import { GalaPostcardJourney } from './GalaPostcard';
+import { GalaPostcard } from './GalaPostcard';
 import { GalaSeatMap } from './GalaSeatMap';
 import { GalaRouteMap } from './GalaRouteMap';
 import { GalaTrips } from './GalaTrips';
@@ -524,7 +524,11 @@ export default function GalaPage() {
             </h2>
           </motion.div>
 
-          <GalaPostcardJourney />
+          {/* The scroll-told desk version (GalaPostcardJourney) is held back while a new
+              version is built (Jeff, 2026-11-12); the still card stands in. */}
+          <motion.div className="gala-postcard-scene" {...reveal}>
+            <GalaPostcard />
+          </motion.div>
 
           <ol className="gala-gives">
             {GIVES_BACK.map((item, index) => (
