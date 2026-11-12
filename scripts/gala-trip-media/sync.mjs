@@ -105,10 +105,11 @@ function loopCredit(meta, file) {
 }
 
 // The clips and stills a trip's films use, from the edit lists beside its footage
-// (pack/video/edit-16x9.json and edit-9x16.json), or null when it has none.
+// (pack/video/edit-16x9.json and edit-9x16.json, or just the ones asked for),
+// or null when it has none.
 // LICENSES.md logs every clip ever sourced, including ones a later cut dropped.
-function filmSources(id) {
-  const files = ['16x9', '9x16']
+function filmSources(id, aspects = ['16x9', '9x16']) {
+  const files = aspects
     .map((aspect) => path.join(tripsDir, id, 'pack', 'video', `edit-${aspect}.json`))
     .filter((f) => fs.existsSync(f));
   if (!files.length) return null;
@@ -289,10 +290,16 @@ for (const id of TRIP_IDS) {
       problems.push(`${id}/pack/web/web.json could not be read: ${err.message}`);
     }
   }
-  // CC-licensed work in the film, from the pack's licence log, credited in the film player.
+  // CC-licensed work in each cut, from the pack's licence log, credited in the
+  // film player for the cut being played (the 30 s vertical often has none).
+  const licences = path.join(tripsDir, id, 'pack', 'LICENSES.md');
   if (entry.film) {
-    const credits = ccCredits(path.join(tripsDir, id, 'pack', 'LICENSES.md'), filmSources(id));
+    const credits = ccCredits(licences, filmSources(id, ['16x9']));
     if (credits.length) entry.filmCredits = credits;
+  }
+  if (entry.filmVertical) {
+    const credits = ccCredits(licences, filmSources(id, ['9x16']));
+    if (credits.length) entry.filmCreditsVertical = credits;
   }
   if (entry.loopWide || entry.loopTall || entry.film) manifest[id] = entry;
 }
@@ -301,7 +308,7 @@ for (const p of problems) console.warn('!', p);
 console.log(
   Object.keys(manifest).length
     ? Object.entries(manifest)
-        .map(([id, e]) => `${id}: ${[e.loopWide && 'wide loop', e.loopTall && 'tall loop', e.poster && 'poster', e.film && 'film', e.captions && 'captions', e.filmVertical && 'vertical film', e.filmCredits && `${e.filmCredits.length} CC credits`].filter(Boolean).join(', ')}`)
+        .map(([id, e]) => `${id}: ${[e.loopWide && 'wide loop', e.loopTall && 'tall loop', e.poster && 'poster', e.film && 'film', e.captions && 'captions', e.filmVertical && 'vertical film', e.filmCredits && `${e.filmCredits.length} CC credits`, e.filmCreditsVertical && `${e.filmCreditsVertical.length} in the vertical`].filter(Boolean).join(', ')}`)
         .join('\n')
     : `No trip has web video yet in ${tripsDir}. Cards keep their poster stills.`
 );

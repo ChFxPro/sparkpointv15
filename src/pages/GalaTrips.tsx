@@ -265,7 +265,7 @@ function TripCredits({ trip }: { trip: GalaTrip }) {
   const media = tripMedia(trip.id);
   const loop = loopFor(trip);
   const ccParts = loop?.credit ?? [];
-  const filmCC = Boolean(media?.film && media.filmCredits?.length);
+  const filmCC = Boolean(media?.film && (media.filmCredits?.length || media.filmCreditsVertical?.length));
   if (!image && !ccParts.length && !filmCC) return null;
   const photo = image ? photoCredit(image.credit) : null;
   const videoSources = ccParts.length ? 'Wikimedia Commons' : null;

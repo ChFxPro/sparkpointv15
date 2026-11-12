@@ -149,7 +149,9 @@
         "license": "CC BY 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
         "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cortona_(2).jpg"
-      },
+      }
+    ],
+    "filmCreditsVertical": [
       {
         "shows": "Cortona",
         "author": "TeKappa",

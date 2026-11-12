@@ -33,6 +33,8 @@ export interface GalaCaptionTrack {
   speech?: boolean;
 }
 
+export type GalaFilmCredit = { shows: string; author: string; license: string; licenseUrl: string; sourceUrl: string };
+
 export interface GalaTripMedia {
   /** Silent 16:9 card loop (960×540). */
   loopWide?: GalaLoopSources;
@@ -47,7 +49,10 @@ export interface GalaTripMedia {
   filmVertical?: string;
   captionsVertical?: GalaCaptionTrack[];
   /** CC BY work in the film (from the pack's LICENSES.md), credited in the film player. */
-  filmCredits?: { shows: string; author: string; license: string; licenseUrl: string; sourceUrl: string }[];
+  /** CC BY work in the 16:9 film, credited in the player while it plays. */
+  filmCredits?: GalaFilmCredit[];
+  /** CC BY work in the vertical cut, which often has none of the 16:9's. */
+  filmCreditsVertical?: GalaFilmCredit[];
 }
 
 const MEDIA = manifest as Record<string, GalaTripMedia>;
