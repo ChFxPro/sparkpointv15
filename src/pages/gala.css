@@ -1437,54 +1437,179 @@
   color: rgba(247, 241, 229, 0.66);
 }
 
-/* Travel partner credit: AmFund's reversed logo beside one line about them. */
-.gala-trips-partner {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  max-width: 760px;
-  margin-top: 28px;
-  padding-top: 26px;
-  border-top: 1px solid rgba(217, 181, 106, 0.28);
+/* "Our travel partner": AmFund's story beside its numbers, then what it means
+   for guests. A brass-ruled panel inside the dark trips section. */
+.gala-amfund {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 40px 56px;
+  margin-top: 56px;
+  padding: 48px;
+  text-align: left;
+  border: 1px solid rgba(217, 181, 106, 0.32);
+  border-radius: 6px;
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(217, 181, 106, 0.1), transparent 55%),
+    rgba(11, 19, 34, 0.55);
 }
 
-.gala-trips-partner-logo {
-  flex: 0 0 auto;
-  display: block;
+.gala-amfund-logo {
+  display: inline-block;
+  margin-bottom: 28px;
   border-radius: 4px;
 }
 
-.gala-trips-partner-logo:focus-visible {
+.gala-amfund-logo:focus-visible,
+.gala-amfund-more a:focus-visible {
   outline: 2px solid var(--gala-ivory);
   outline-offset: 6px;
 }
 
-.gala-trips-partner-logo img {
+.gala-amfund-logo img {
   display: block;
-  width: 170px;
+  width: 200px;
   height: auto;
 }
 
-.gala-trips-partner p {
+.gala-amfund-intro h3 {
+  margin: 10px 0 20px;
+  color: var(--gala-ivory);
+  font-family: var(--gala-display);
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  font-weight: 300;
+  line-height: 1.15;
+}
+
+.gala-amfund-intro h3 em {
+  color: var(--gala-brass-light);
+  font-weight: 700;
+  font-style: italic;
+}
+
+.gala-amfund-intro p:not(.gala-label) {
+  margin: 0 0 14px;
+  color: rgba(247, 241, 229, 0.8);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.gala-amfund-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-self: center;
   margin: 0;
-  color: rgba(247, 241, 229, 0.78);
+  border-top: 1px solid rgba(217, 181, 106, 0.32);
+}
+
+.gala-amfund-facts div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 6px;
+  padding: 26px 0 24px;
+  border-bottom: 1px solid rgba(217, 181, 106, 0.32);
+}
+
+.gala-amfund-facts div:nth-child(odd) {
+  padding-right: 20px;
+  border-right: 1px solid rgba(217, 181, 106, 0.32);
+}
+
+.gala-amfund-facts div:nth-child(even) {
+  padding-left: 24px;
+}
+
+.gala-amfund-facts dd {
+  margin: 0;
+  color: var(--gala-brass-light);
+  font-family: var(--gala-display);
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: lining-nums;
+}
+
+.gala-amfund-facts dt {
+  color: rgba(247, 241, 229, 0.72);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.gala-amfund-promises {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  margin: 0;
+  padding: 32px 0 0;
+  list-style: none;
+  border-top: 1px solid rgba(217, 181, 106, 0.32);
+}
+
+.gala-amfund-promises strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--gala-ivory);
+  font-family: var(--gala-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.gala-amfund-promises p {
+  margin: 0;
+  color: rgba(247, 241, 229, 0.74);
   font-size: 0.95rem;
   line-height: 1.6;
 }
 
-.gala-trips-partner strong {
-  color: var(--gala-ivory);
+.gala-amfund-more {
+  grid-column: 1 / -1;
+  max-width: 820px;
+  margin: 0;
+  color: rgba(247, 241, 229, 0.66);
+  font-size: 0.9rem;
+  line-height: 1.6;
 }
 
-@media (max-width: 640px) {
-  .gala-trips-partner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+.gala-amfund-more a {
+  color: var(--gala-brass-light);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .gala-amfund {
+    grid-template-columns: 1fr;
+    padding: 36px 28px;
   }
 
-  .gala-trips-partner-logo img {
-    width: 150px;
+  .gala-amfund-promises {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding-top: 0;
+    border-top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .gala-amfund {
+    margin-top: 44px;
+    padding: 28px 20px;
+  }
+
+  .gala-amfund-logo img {
+    width: 170px;
+  }
+
+  .gala-amfund-facts div:nth-child(even) {
+    padding-left: 16px;
+  }
+
+  .gala-amfund-facts div:nth-child(odd) {
+    padding-right: 12px;
   }
 }
 

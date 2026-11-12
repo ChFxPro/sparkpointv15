@@ -23,6 +23,7 @@ import { GalaSeatMap } from './GalaSeatMap';
 import { GalaRouteMap } from './GalaRouteMap';
 import { GalaTrips } from './GalaTrips';
 import { GalaTrailer } from './GalaTrailer';
+import { GalaTravelPartner } from './GalaTravelPartner';
 import './gala.css';
 
 const BASE = import.meta.env.BASE_URL;
@@ -42,10 +43,10 @@ const passportPhoto = (width: number) => `${BASE}assets/events/gala/passport-bea
 // be bought after the Gala, and don't state payment timing, child pricing,
 // insurance or transferability. Keep off this page any giveback percentage
 // until it's confirmed.
-// AmFund (the American Fundraising Foundation) arranges the trips and is
-// credited once, with its logo, under the trips (owner's call, 2026-11-12, at
-// AmFund's request, so guests see it as a partner rather than a vendor). Name
-// the organisation only: no staff names or contact details.
+// AmFund (the American Fundraising Foundation) arranges the trips and has its
+// own "Our travel partner" section under them (GalaTravelPartner.tsx; owner's
+// call, 2026-11-12, at AmFund's request, so guests see it as a partner rather
+// than a vendor). No AmFund staff names or contact details.
 const STAMPS = [
   { shape: 'round', top: String(GALA_TRIP_COUNT), middle: 'Trips', bottom: 'Choose at the Gala', tilt: -8 },
   { shape: 'rect', top: 'Set', middle: 'Price', bottom: 'Every guest', tilt: 5 },
@@ -289,28 +290,7 @@ export default function GalaPage() {
             You book your dates with a travel specialist and travel within three years.
             Travelers or extra nights can be added on request.
           </p>
-          <div className="gala-trips-partner">
-            <a
-              className="gala-trips-partner-logo"
-              href="https://www.amfund.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img
-                src={`${BASE}assets/events/gala/amfund-logo-reversed.webp`}
-                alt="AmFund, American Fundraising Foundation"
-                width={503}
-                height={155}
-                loading="lazy"
-                decoding="async"
-              />
-            </a>
-            <p>
-              <strong>Our travel partner.</strong> Every trip is arranged by AmFund, the
-              American Fundraising Foundation, which partners with nonprofits to raise funds
-              through travel. Their team will be with us at the Gala to help you choose yours.
-            </p>
-          </div>
+          <GalaTravelPartner />
         </div>
       </section>
 
