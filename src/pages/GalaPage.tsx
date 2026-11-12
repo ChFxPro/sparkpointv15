@@ -518,7 +518,7 @@ export default function GalaPage() {
       <section className="gala-return" aria-labelledby="return-title">
         <div className="gala-shell">
           <motion.div className="gala-section-head" {...reveal}>
-            <GalaChapterMark kind="postmark" />
+            <GalaChapterMark kind="postage" />
             <h2 id="return-title">
               Travel that gives back <em>to our community.</em>
             </h2>

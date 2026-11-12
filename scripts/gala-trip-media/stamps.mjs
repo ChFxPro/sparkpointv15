@@ -6,6 +6,11 @@
 // fonts. This renders each stamp in the running site and saves a transparent WebP per
 // trip to public/assets/events/gala/stamps/<trip-id>.webp.
 //
+// It also exports the Gala page's chapter stamps from src/pages/galaJoinMe/
+// chapterStamps.ts: the visa over "How it works" (chapter-entry-visa.webp, one
+// ink, inked on the page with a CSS mask) and the postmarked postage stamp over
+// "The return trip" (chapter-return-postage.webp, full colour).
+//
 // Re-run after changing a stamp in stamps.ts:
 //   npm run dev                       (in another terminal)
 //   npm run gala:stamps               (or: node scripts/gala-trip-media/stamps.mjs http://localhost:3000)
@@ -63,6 +68,27 @@ try {
     n += 1;
   }
   console.log(`Wrote ${n} stamps to ${out}`);
+
+  const chapters = await page.evaluate(async () => {
+    const S = await import('/src/pages/galaJoinMe/stamps.ts');
+    const C = await import('/src/pages/galaJoinMe/chapterStamps.ts');
+    const img = new Image();
+    img.src = new URL('assets/brand/sparkmark-256.webp', document.baseURI.replace(/events\/.*$/, '')).href;
+    await img.decode();
+    S.setSparkmark(img);
+    S.clearStampCache();
+    const o = {};
+    for (const [id, art] of Object.entries(C.CHAPTER_STAMPS)) o[id] = S.stampCanvas(`chapter-${id}`, art, 3).toDataURL('image/png');
+    for (const [id, art] of Object.entries(C.POSTAL_STAMPS)) o[id] = C.postalCanvas(art, 3).toDataURL('image/png');
+    return o;
+  });
+  for (const [id, url] of Object.entries(chapters)) {
+    const png = Buffer.from(url.split(',')[1], 'base64');
+    const webp = await sharp(png).resize({ width: 560, withoutEnlargement: true }).webp({ quality: 90, alphaQuality: 100 }).toBuffer();
+    await writeFile(join(out, `chapter-${id}.webp`), webp);
+    const meta = await sharp(webp).metadata();
+    console.log(`chapter-${id}.webp  ${meta.width}×${meta.height}  ${(webp.length / 1024).toFixed(1)} KB`);
+  }
 } finally {
   await browser.close();
 }

@@ -51,7 +51,8 @@ function randomGlyph() {
   return GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
 }
 
-function FlapText({
+/** A row of split-flap cells that flips through glyphs and settles on `text`. Also used by GalaChapterMark. */
+export function FlapText({
   text,
   width,
   play,
