@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog@1.1.6';
-import { X } from 'lucide-react';
+import { Captions, Pause, Play, Volume2, VolumeX, X } from 'lucide-react';
 import type { GalaTrip } from '../../data/galaTrips';
 import { tripMedia, tripVideoCrossOrigin, tripVideoSrc, type GalaFilmCredit, type GalaTripMedia } from '../../data/galaTripMedia';
 
@@ -20,6 +20,11 @@ import { tripMedia, tripVideoCrossOrigin, tripVideoSrc, type GalaFilmCredit, typ
 //   web page, so there the player already fills the screen, the 16:9 film sits
 //   letterboxed until the phone is turned, and a short hint says so. Leaving full
 //   screen (the back gesture) closes the player.
+//   Controls here are our own (Jeff, 2026-11-12: the browser's were too dark and
+//   stayed too long, and a page can't restyle or retime them): a slim glass
+//   strip at the foot (play/pause, position, sound, captions) and a light title
+//   band. Both slip away 1.6 s after the film plays and come back with a tap
+//   anywhere on the film, for 2.2 s, or while it's paused. Close always stays.
 // - Computers: the framed player in the middle of the page, as before; the video's
 //   own full-screen button is there for anyone who wants it.
 //
@@ -47,7 +52,15 @@ const CUE_LINE = { vertical: 17, wide: 10 };
 // Height of one caption line in px, matching `.gala-film-video::cue` in gala.css.
 const CUE_LINE_PX = 18;
 // How long the title stays over a playing film before it fades.
-const TITLE_MS = 2800;
+const TITLE_MS = 1600;
+// How long the controls stay after a tap on the film.
+const TAP_MS = 2200;
+
+const clock = (seconds: number) => {
+  if (!Number.isFinite(seconds)) return '0:00';
+  const s = Math.max(0, Math.floor(seconds));
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+};
 
 // Cues stay snapped to lines (Chrome stops wrapping a cue placed by percentage),
 // so the band's percentage becomes a line number counted from the top.
@@ -227,26 +240,57 @@ export default function TripFilmDialog({ trip, film, onClose }: TripFilmDialogPr
     };
   }, [video, src]);
 
-  // The title shows on open and whenever the film pauses, and fades while it plays.
+  // The title (and, full screen, the controls) show on open and whenever the
+  // film pauses, and slip away while it plays; a tap brings them back.
+  const hideTimer = useRef(0);
+  const reveal = useCallback(
+    (ms: number) => {
+      window.clearTimeout(hideTimer.current);
+      setShowTitle(true);
+      if (video && !video.paused) hideTimer.current = window.setTimeout(() => setShowTitle(false), ms);
+    },
+    [video]
+  );
   useEffect(() => {
     if (!video) return undefined;
-    let timer = 0;
-    const onPlay = () => {
-      window.clearTimeout(timer);
-      timer = window.setTimeout(() => setShowTitle(false), TITLE_MS);
-    };
+    const onPlay = () => reveal(TITLE_MS);
     const onPause = () => {
-      window.clearTimeout(timer);
+      window.clearTimeout(hideTimer.current);
       setShowTitle(true);
     };
     video.addEventListener('play', onPlay);
     video.addEventListener('pause', onPause);
     return () => {
-      window.clearTimeout(timer);
+      window.clearTimeout(hideTimer.current);
       video.removeEventListener('play', onPlay);
       video.removeEventListener('pause', onPause);
     };
+  }, [video, reveal]);
+
+  // Full screen: our own controls' state, read from the video.
+  const [playing, setPlaying] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [time, setTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [captionsOn, setCaptionsOn] = useState<boolean | null>(null);
+  useEffect(() => {
+    if (!video) return undefined;
+    const sync = () => {
+      setPlaying(!video.paused);
+      setMuted(video.muted);
+      setTime(video.currentTime);
+      setDuration(video.duration || 0);
+    };
+    const events = ['play', 'pause', 'timeupdate', 'durationchange', 'loadedmetadata', 'volumechange'];
+    events.forEach((e) => video.addEventListener(e, sync));
+    sync();
+    return () => events.forEach((e) => video.removeEventListener(e, sync));
   }, [video]);
+  // Captions follow the CC button once it's used; until then, the track's default.
+  useEffect(() => {
+    if (!video || captionsOn === null) return;
+    for (const track of Array.from(video.textTracks)) track.mode = captionsOn ? 'showing' : 'hidden';
+  }, [video, captionsOn, src]);
 
   // Cues load only once a track is turned on, so place them whenever one loads.
   useEffect(() => {
@@ -272,6 +316,7 @@ export default function TripFilmDialog({ trip, film, onClose }: TripFilmDialogPr
   // A voiceover's captions are speech, start on, and are heard anyway.
   const description = tracks[0]?.speech ? undefined : tracks[0]?.text;
   const theatre = touch;
+  const ccShown = captionsOn ?? Boolean(tracks[0]?.speech);
 
   return (
     <DialogPrimitive.Root open onOpenChange={(open) => (open ? undefined : close())}>
@@ -338,8 +383,9 @@ export default function TripFilmDialog({ trip, film, onClose }: TripFilmDialogPr
               key={src}
               className="gala-film-video"
               src={tripVideoSrc(src)}
-              controls
+              controls={!theatre}
               autoPlay
+              onClick={theatre ? () => (showTitle && playing ? setShowTitle(false) : reveal(TAP_MS)) : undefined}
               playsInline
               preload="auto"
               crossOrigin={crossOrigin}
@@ -367,6 +413,66 @@ export default function TripFilmDialog({ trip, film, onClose }: TripFilmDialogPr
                 <span className="gala-film-rotate-icon" />
                 Turn your phone for the full picture
               </span>
+            ) : null}
+            {theatre ? (
+              <div
+                className={`gala-film-bar${showTitle ? '' : ' is-hidden'}`}
+                role="group"
+                aria-label="Film controls"
+                onFocus={() => reveal(TAP_MS * 2)}
+                onPointerDown={() => reveal(TAP_MS)}
+              >
+                <button
+                  type="button"
+                  className="gala-film-btn"
+                  onClick={() => (video?.paused ? void video.play() : video?.pause())}
+                  aria-label={playing ? 'Pause' : 'Play'}
+                >
+                  {playing ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
+                </button>
+                <span className="gala-film-time" aria-hidden="true">
+                  {clock(time)}
+                </span>
+                <input
+                  className="gala-film-scrub"
+                  type="range"
+                  min={0}
+                  max={duration || 0}
+                  step={0.1}
+                  value={Math.min(time, duration || 0)}
+                  onChange={(event) => {
+                    if (video) video.currentTime = Number(event.target.value);
+                  }}
+                  aria-label="Position in the film"
+                  aria-valuetext={`${clock(time)} of ${clock(duration)}`}
+                  disabled={!duration}
+                />
+                <span className="gala-film-time" aria-hidden="true">
+                  {clock(duration)}
+                </span>
+                <button
+                  type="button"
+                  className="gala-film-btn"
+                  onClick={() => {
+                    if (video) video.muted = !video.muted;
+                  }}
+                  aria-label="Sound"
+                  aria-pressed={!muted}
+                >
+                  {muted ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
+                </button>
+                {tracks.length ? (
+                  <button
+                    type="button"
+                    className="gala-film-btn"
+                    onClick={() => setCaptionsOn(!ccShown)}
+                    aria-label="Captions"
+                    aria-pressed={ccShown}
+                  >
+                    <Captions aria-hidden="true" />
+                  </button>
+                ) : null}
+              </div>
             ) : null}
           </div>
           {theatre ? null : <FilmCredits credits={credits} />}
