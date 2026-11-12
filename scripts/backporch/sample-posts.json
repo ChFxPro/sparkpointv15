@@ -32,7 +32,7 @@
   "id": "f1",
   "slug": "gala",
   "title": "A World of Connections",
-  "summary": "The SparkPoint Gala at Connestee Falls Country Club: eight trips at a set price, with part of every trip supporting the Transylvania Resilience Hub. Tickets are $100.",
+  "summary": "The SparkPoint Gala at Connestee Falls Clubhouse: eight trips at a set price, with part of every trip supporting the Transylvania Resilience Hub. Tickets are $100.",
   "kind": "gathering",
   "org": "sparkpoint",
   "image_path": "/assets/events/gala/hero-wing-1400.webp",
@@ -41,7 +41,7 @@
   "link_label": "Get tickets",
   "event_start": "2026-12-11T23:00:00Z",
   "event_end": null,
-  "event_place": "Connestee Falls Country Club, Brevard",
+  "event_place": "Connestee Falls Clubhouse, Brevard",
   "pinned": true,
   "status": "published",
   "published_at": "2026-10-14T14:00:00Z",
@@ -64,7 +64,7 @@
    {
     "id": "g3",
     "type": "place",
-    "name": "Connestee Falls Country Club",
+    "name": "Connestee Falls Clubhouse",
     "address": "98 Overlook Clubhouse Dr, Brevard, NC 28712"
    }
   ],
