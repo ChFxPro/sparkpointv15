@@ -43,7 +43,7 @@ export function spacedWidth(x: Ctx, t: string, font: string, spacing: number) {
 }
 
 /** Text along a circle: 'top' reads clockwise over the top, 'bottom' left to right along the bottom. */
-function arcText(x: Ctx, t: string, cx: number, cy: number, r: number, font: string, spacing: number, where: 'top' | 'bottom') {
+export function arcText(x: Ctx, t: string, cx: number, cy: number, r: number, font: string, spacing: number, where: 'top' | 'bottom') {
   x.font = font;
   const chars = [...t];
   const widths = chars.map((c) => x.measureText(c).width);
@@ -63,7 +63,7 @@ function arcText(x: Ctx, t: string, cx: number, cy: number, r: number, font: str
   });
 }
 
-function star5(x: Ctx, cx: number, cy: number, R: number) {
+export function star5(x: Ctx, cx: number, cy: number, R: number) {
   x.beginPath();
   for (let i = 0; i < 10; i++) {
     const r = i % 2 ? R * 0.42 : R;
@@ -140,7 +140,7 @@ function schengen(x: Ctx, cx: number, cy: number, R: number, code: string) {
   text(x, code, cx, cy + R * 0.2, F(700, R * (code.length > 1 ? 0.5 : 0.62)));
 }
 
-function plane(x: Ctx, cx: number, cy: number, size: number, rot = -0.35) {
+export function plane(x: Ctx, cx: number, cy: number, size: number, rot = -0.35) {
   const pts = [[11, 0], [7, -1.4], [2, -1.4], [-3, -8.5], [-5.6, -8.5], [-2.6, -1.4], [-7.4, -1.4], [-9.4, -4.6], [-11, -4.6], [-9.8, 0], [-11, 4.6], [-9.4, 4.6], [-7.4, 1.4], [-2.6, 1.4], [-5.6, 8.5], [-3, 8.5], [2, 1.4], [7, 1.4]];
   x.save();
   x.translate(cx, cy);
@@ -153,7 +153,7 @@ function plane(x: Ctx, cx: number, cy: number, size: number, rot = -0.35) {
   x.restore();
 }
 
-function frameRect(x: Ctx, X: number, Y: number, w: number, h: number, r: number, lw: number) {
+export function frameRect(x: Ctx, X: number, Y: number, w: number, h: number, r: number, lw: number) {
   x.lineWidth = lw;
   x.beginPath();
   if (r) x.roundRect(X, Y, w, h, r);
@@ -161,7 +161,7 @@ function frameRect(x: Ctx, X: number, Y: number, w: number, h: number, r: number
   x.stroke();
 }
 
-function poly(x: Ctx, pts: number[][], lw: number, close = true) {
+export function poly(x: Ctx, pts: number[][], lw: number, close = true) {
   x.lineWidth = lw;
   x.beginPath();
   pts.forEach(([a, b], i) => (i ? x.lineTo(a, b) : x.moveTo(a, b)));
