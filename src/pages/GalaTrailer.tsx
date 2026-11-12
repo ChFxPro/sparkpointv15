@@ -3,6 +3,7 @@ import { Captions, Maximize, Pause, Play, Volume2, VolumeX } from 'lucide-react'
 import { GALA_TRAILER, GALA_TRAILER_ANCHOR } from '../data/galaTrailer';
 import { tripVideoCrossOrigin, tripVideoSrc } from '../data/galaTripMedia';
 import { GALA_TRIP_COUNT_WORD } from '../data/galaTrips';
+import { GalaLockup } from '../components/GalaLockup';
 import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
 
 // The all-trips trailer, at #trailer (the newsletter links here, so keep the id),
@@ -14,7 +15,7 @@ import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
 // - It plays muted, by itself, only while at least half of it is on screen, and
 //   only when motion and data allow (no autoplay under the OS reduce-motion
 //   setting, the site's own motion toggle, Save-Data or 2G). Then it shows its
-//   poster and a play button, and plays only when asked, with sound.
+//   still title scene and a play button, and plays only when asked, with sound.
 // - It pauses when scrolled away and picks up again on return, unless the
 //   visitor paused it.
 // - Controls (Jeff, 2026-11-12: subtle, glassy, out of the way): a slim frosted
@@ -22,9 +23,19 @@ import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
 //   bottom left. While the film plays and nobody touches it, the strip folds
 //   down to just play/pause and sound (so pause is always on screen, WCAG
 //   2.2.2); any pointer movement, tap, key press or focus brings back the
-//   scrubber and full screen. "Sound on" restarts the film from the top so the
-//   voiceover is heard from "Connection one"; after that one play with sound it
-//   mutes itself and returns to the silent loop.
+//   scrubber and full screen. Play/pause and "Sound on" sit at the right end of
+//   the strip, so the strip opening out never moves them under a finger.
+// - "Sound on" is one tap: the film carries on where it is and the sound fades
+//   in (Jeff, 2026-11-12, like a streaming service's autoplay). After the end
+//   card plays out with sound, it mutes itself and goes back to the silent loop.
+// - The still (Jeff, 2026-11-12: a static section that comes to life): our own
+//   lockup, live and crisp, on a background matched to the film's title card,
+//   covers the film's title card at the start and end (whose sparkmark renders
+//   as a blur). Before it plays, and between loops, the section is that still;
+//   as the footage begins (5.35 s) the still dissolves into the film, and it
+//   dissolves back before the footage ends (52.55 s). The silent loop skips the
+//   rest of the end card and the opening, so the "pause" between loops is a
+//   few seconds of the still.
 // - Captions start off (Jeff, 2026-11-12): the voiceover repeats the burned-in
 //   title cards. A small CC button in the strip turns them on; they sit about
 //   two-thirds down the frame, above the bottom shade and the burned-in label.
@@ -32,6 +43,19 @@ import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
 // Nothing renders until `npm run gala:trailer` has imported the files.
 
 const capitalize = (word: string) => word.charAt(0).toUpperCase() + word.slice(1);
+
+// The film's timeline (gala-trips-trailer-16x9-web.mp4): title card until the
+// cut to Greece at 5.35 s; the trips until the cut to the end card at 52.55 s.
+/** Where playback starts, a moment before the footage, so the still comes to life soon after. */
+const START_AT = 4.0;
+/** The still dissolves away from here... */
+const STILL_OUT = 5.3;
+/** ...and back from here, ahead of the cut to the end card. */
+const STILL_IN = 51.8;
+/** The silent loop goes round from here (the end card's voiceover isn't heard muted). */
+const LOOP_AT = 55;
+/** How long the sound takes to fade in. */
+const FADE_MS = 1200;
 // How long the full strip stays after the last pointer or key activity.
 const IDLE_MS = 2600;
 
@@ -60,7 +84,7 @@ export function GalaTrailer() {
   const userPaused = useRef(false);
   // The visitor pressed play (or sound): resume it when scrolled back to.
   const userStarted = useRef(false);
-  const soundStarted = useRef(false);
+  const fade = useRef(0);
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -140,43 +164,51 @@ export function GalaTrailer() {
     userPaused.current = false;
     userStarted.current = true;
     if (!near) setNear(true);
+    if (video.currentTime < START_AT) video.currentTime = START_AT;
     void video.play().catch(() => setPlaying(false));
   }, [near]);
+
+  /** Unmute and bring the volume up gently (where the browser allows; iPhone's volume is fixed). */
+  const soundIn = useCallback((video: HTMLVideoElement) => {
+    window.cancelAnimationFrame(fade.current);
+    video.volume = 0;
+    video.muted = false;
+    setMuted(false);
+    const began = performance.now();
+    const step = (now: number) => {
+      const t = Math.min(1, (now - began) / FADE_MS);
+      video.volume = t * t;
+      if (t < 1) fade.current = window.requestAnimationFrame(step);
+    };
+    fade.current = window.requestAnimationFrame(step);
+  }, []);
+  useEffect(() => () => window.cancelAnimationFrame(fade.current), []);
 
   const togglePlay = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
     if (video.paused) {
-      // Played by hand (e.g. under reduced motion): with sound, from where it is.
-      if (!autoplayAllowed && !userStarted.current) {
-        video.muted = false;
-        setMuted(false);
-        soundStarted.current = true;
-      }
+      // Played by hand (e.g. under reduced motion): with sound.
+      if (!autoplayAllowed && !userStarted.current) soundIn(video);
       start();
     } else {
       userPaused.current = true;
       video.pause();
     }
-  }, [autoplayAllowed, start]);
+  }, [autoplayAllowed, start, soundIn]);
 
   const toggleSound = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
     if (video.muted) {
-      video.muted = false;
-      setMuted(false);
-      // The first time, from the top, so the voiceover starts at "Connection one".
-      if (!soundStarted.current) {
-        soundStarted.current = true;
-        video.currentTime = 0;
-      }
-      start();
+      soundIn(video);
+      if (video.paused) start();
     } else {
+      window.cancelAnimationFrame(fade.current);
       video.muted = true;
       setMuted(true);
     }
-  }, [start]);
+  }, [start, soundIn]);
 
   const fullScreen = useCallback(() => {
     const video = videoRef.current as FullscreenVideo | null;
@@ -216,6 +248,9 @@ export function GalaTrailer() {
   const trailer = GALA_TRAILER;
   const tracks = trailer.captions ?? [];
   const showStartButton = !playing && !userStarted.current && !autoplayAllowed;
+  // The still shows before the film first plays, and over the title cards.
+  const started = playing || time > 0;
+  const still = !started || time < STILL_OUT || time >= STILL_IN;
 
   return (
     <section
@@ -239,12 +274,10 @@ export function GalaTrailer() {
           ref={videoRef}
           className="gala-trailer-video"
           src={near ? tripVideoSrc(trailer.film) : undefined}
-          poster={trailer.poster ? tripVideoSrc(trailer.poster) : undefined}
           crossOrigin={tripVideoCrossOrigin()}
           preload="none"
           muted={muted}
           playsInline
-          loop={muted}
           aria-label="The trailer: A World of Connections, eight trips in one film"
           onClick={wake}
           onPlay={() => {
@@ -253,18 +286,21 @@ export function GalaTrailer() {
           }}
           onPause={() => setPlaying(false)}
           onEnded={(event) => {
-            // One full play with sound, then back to the silent loop (Jeff,
-            // 2026-11-12). Under reduced motion it simply stops at the end.
+            // The end card has played out with sound: mute, and back to the
+            // silent loop. Under reduced motion it simply stops at the end.
             const video = event.currentTarget;
+            window.cancelAnimationFrame(fade.current);
             video.muted = true;
             setMuted(true);
-            soundStarted.current = false;
-            if (autoplayAllowed && !userPaused.current) {
-              video.currentTime = 0;
-              void video.play().catch(() => setPlaying(false));
-            }
+            video.currentTime = START_AT;
+            if (autoplayAllowed && !userPaused.current) void video.play().catch(() => setPlaying(false));
           }}
-          onTimeUpdate={(event) => setTime(event.currentTarget.currentTime)}
+          onTimeUpdate={(event) => {
+            const video = event.currentTarget;
+            // The silent loop: round again from the still.
+            if (video.muted && video.currentTime >= LOOP_AT) video.currentTime = START_AT;
+            setTime(video.currentTime);
+          }}
           onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
           onDurationChange={(event) => setDuration(event.currentTarget.duration)}
           onVolumeChange={(event) => setMuted(event.currentTarget.muted)}
@@ -283,6 +319,14 @@ export function GalaTrailer() {
         </video>
         <div className="gala-trailer-shade" aria-hidden="true" />
 
+        <div className={`gala-trailer-still${still ? ' is-on' : ''}`} aria-hidden="true">
+          <GalaLockup className="gala-trailer-lockup" />
+          <p className="gala-trailer-still-tag">
+            Every journey <em>connects back home.</em>
+          </p>
+          <p className="gala-trailer-still-date">Eight connections · Friday, December 11</p>
+        </div>
+
         {showStartButton ? (
           <button type="button" className="gala-trailer-start" onClick={togglePlay}>
             <span className="gala-trailer-icon" aria-hidden="true">
@@ -296,23 +340,6 @@ export function GalaTrailer() {
 
       <div className="gala-shell gala-trailer-controls">
         <div className="gala-trailer-bar" role="group" aria-label="Trailer controls">
-          <button
-            type="button"
-            className="gala-trailer-btn"
-            onClick={togglePlay}
-            aria-label={playing ? 'Pause the trailer' : 'Play the trailer'}
-          >
-            {playing ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
-          </button>
-          <button
-            type="button"
-            className={`gala-trailer-btn gala-trailer-sound${muted ? ' is-muted' : ''}`}
-            onClick={toggleSound}
-            aria-label={muted ? 'Sound on' : 'Sound off'}
-          >
-            {muted ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
-            {muted ? <span aria-hidden="true">Sound on</span> : null}
-          </button>
           <span className="gala-trailer-more">
             <span className="gala-trailer-time" aria-hidden="true">
               {formatTime(time)} / {formatTime(duration)}
@@ -344,6 +371,23 @@ export function GalaTrailer() {
               <Maximize aria-hidden="true" />
             </button>
           </span>
+          <button
+            type="button"
+            className="gala-trailer-btn"
+            onClick={togglePlay}
+            aria-label={playing ? 'Pause the trailer' : 'Play the trailer'}
+          >
+            {playing ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
+          </button>
+          <button
+            type="button"
+            className={`gala-trailer-btn gala-trailer-sound${muted ? ' is-muted' : ''}`}
+            onClick={toggleSound}
+            aria-label={muted ? 'Sound on' : 'Sound off'}
+          >
+            {muted ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
+            {muted ? <span aria-hidden="true">Sound on</span> : null}
+          </button>
         </div>
       </div>
     </section>
