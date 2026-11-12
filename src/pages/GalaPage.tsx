@@ -17,8 +17,9 @@ import {
 import { canonicalUrl } from '../lib/siteOrigin';
 import { GALA_TRIP_COUNT, GALA_TRIP_COUNT_WORD, GALA_TRIP_NAMES, GALA_TRIPS, tripAnchor } from '../data/galaTrips';
 import { GalaBoardingPass } from './GalaBoardingPass';
+import { GalaChapterMark } from './GalaChapterMark';
 import { GalaDepartureBoard } from './GalaDepartureBoard';
-import { GalaPostcard } from './GalaPostcard';
+import { GalaPostcardJourney } from './GalaPostcard';
 import { GalaSeatMap } from './GalaSeatMap';
 import { GalaRouteMap } from './GalaRouteMap';
 import { GalaTrips } from './GalaTrips';
@@ -269,19 +270,15 @@ export default function GalaPage() {
         </div>
       </section>
 
-      {/* The all-trips trailer (#trailer, linked from the newsletter); renders only once imported. */}
-      <GalaTrailer />
-
       {/* 2 — Routes */}
       <section className="gala-routes" aria-labelledby="routes-title">
         <div className="gala-shell">
           <motion.div className="gala-routes-head" {...reveal}>
-            <p className="gala-label">Your next adventure could change lives</p>
             <h2 id="routes-title">
               Eight connections. <em>One home base.</em>
             </h2>
             <p>
-              Every trip at the Gala leaves from here. And a portion of every one comes right
+              Your next adventure could change lives. Every trip at the Gala leaves from here. And a portion of every one comes right
               back to Transylvania County.
             </p>
           </motion.div>
@@ -289,11 +286,15 @@ export default function GalaPage() {
         </div>
       </section>
 
+      {/* The all-trips trailer (#trailer, linked from the newsletter), full screen,
+          as the opening of the trips; renders only once imported. */}
+      <GalaTrailer />
+
       {/* 3 — The trips */}
       <section id="trips" className="gala-trips-section" aria-labelledby="trips-title">
         <div className="gala-shell">
           <motion.div className="gala-section-head" {...reveal}>
-            <p className="gala-label">The trips</p>
+            <GalaChapterMark kind="departures" />
             <h2 id="trips-title">
               Eight trips. <em>Choose yours at the Gala.</em>
             </h2>
@@ -316,7 +317,7 @@ export default function GalaPage() {
       <section id="passport" className="gala-passport-section" aria-labelledby="passport-title">
         <div className="gala-shell">
           <motion.div className="gala-section-head" {...reveal}>
-            <p className="gala-label gala-label-ink">How it works</p>
+            <GalaChapterMark kind="entry" />
             <h2 id="passport-title">
               Your passport to <em>the world.</em>
             </h2>
@@ -463,7 +464,6 @@ export default function GalaPage() {
       <section className="gala-tags-section" aria-labelledby="tags-title">
         <div className="gala-shell">
           <motion.div className="gala-section-head gala-section-head-center" {...reveal}>
-            <p className="gala-label gala-label-ink">Made for the moments that matter</p>
             <h2 id="tags-title">
               Where will yours <em>take you?</em>
             </h2>
@@ -515,15 +515,13 @@ export default function GalaPage() {
       <section className="gala-return" aria-labelledby="return-title">
         <div className="gala-shell">
           <motion.div className="gala-section-head" {...reveal}>
-            <p className="gala-label">The return trip</p>
+            <GalaChapterMark kind="postmark" />
             <h2 id="return-title">
               Travel that gives back <em>to our community.</em>
             </h2>
           </motion.div>
 
-          <motion.div className="gala-postcard-scene" {...reveal}>
-            <GalaPostcard />
-          </motion.div>
+          <GalaPostcardJourney />
 
           <ol className="gala-gives">
             {GIVES_BACK.map((item, index) => (
@@ -542,7 +540,6 @@ export default function GalaPage() {
         <div className="gala-shell">
           <div className="gala-partners-head">
             <motion.div className="gala-section-head" {...reveal}>
-              <p className="gala-label gala-label-ink">Travel partners</p>
               <h2 id="partners-title">
                 Your brand, cleared <em>for takeoff.</em>
               </h2>
@@ -587,12 +584,12 @@ export default function GalaPage() {
       <section className="gala-close" aria-labelledby="close-title">
         <div className="gala-shell">
           <motion.div className="gala-section-head gala-section-head-center" {...reveal}>
-            <p className="gala-label">
-              {GALA_VENUE.name} · {GALA_TICKETS_URL ? GALA_TICKET_PRICE_LABEL : 'Tickets on sale soon'}
-            </p>
             <h2 id="close-title">
               Your seat <em>is waiting.</em>
             </h2>
+            <p className="gala-close-where">
+              {GALA_VENUE.name} · {GALA_TICKETS_URL ? GALA_TICKET_PRICE_LABEL : 'Tickets on sale soon'}
+            </p>
           </motion.div>
 
           <motion.div {...reveal}>

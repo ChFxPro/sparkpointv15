@@ -1,97 +1,334 @@
-import { useCallback, useRef, useState } from 'react';
-import { Play } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Captions, Maximize, Pause, Play, Volume2, VolumeX } from 'lucide-react';
 import { GALA_TRAILER, GALA_TRAILER_ANCHOR } from '../data/galaTrailer';
-import { tripVideoSrc } from '../data/galaTripMedia';
+import { tripVideoCrossOrigin, tripVideoSrc } from '../data/galaTripMedia';
 import { GALA_TRIP_COUNT_WORD } from '../data/galaTrips';
-import { floatFilm, loadFilmPlayer, type FilmPlayer } from './galaTrips/filmPlayer';
 import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
 
-// The same lazily loaded player as the trip films: neither the trailer nor the
-// player's code is fetched until someone heads for the play button (the code)
-// or presses it (the film). The film floats out of the poster into the player.
+// The all-trips trailer, at #trailer (the newsletter links here, so keep the id),
+// as a full-screen "second hero" just above the trips.
+//
+// Video rules, keep all of them:
+// - No video file is requested until the section is near the viewport (the
+//   <video> has no src before then, and preload="none" after).
+// - It plays muted, by itself, only while at least half of it is on screen, and
+//   only when motion and data allow (no autoplay under the OS reduce-motion
+//   setting, the site's own motion toggle, Save-Data or 2G). Then it shows its
+//   poster and a play button, and plays only when asked, with sound.
+// - It pauses when scrolled away and picks up again on return, unless the
+//   visitor paused it.
+// - The controls are always visible: play/pause (WCAG 2.2.2), turn on sound,
+//   captions, a scrubber and full screen. "Turn on sound" starts the trailer
+//   from the beginning so the voiceover is heard from the top.
+// - The trailer's captions are its voiceover, so they start on.
+//
+// Nothing renders until `npm run gala:trailer` has imported the files.
 
 const capitalize = (word: string) => word.charAt(0).toUpperCase() + word.slice(1);
 
-// The all-trips trailer, at #trailer (the newsletter links here, so keep the id).
-// A poster and a play button; the film, with sound and its voiceover captions on,
-// plays only in the player. Nothing renders until `npm run gala:trailer` has
-// imported the files, so the slot never shows an empty player.
+// Caption cues sit near the top of the frame, clear of the film's burned-in
+// type at the bottom (as in the trip films' player).
+const CUE_LINE_PERCENT = 9;
+const CUE_LINE_PX = 20; // `.gala-trailer-video::cue` line height in gala.css
+
+function placeCues(video: HTMLVideoElement) {
+  // The video is object-fit: cover on wide screens, so measure the drawn frame.
+  const line = Math.max(1, Math.round((video.clientHeight * CUE_LINE_PERCENT) / 100 / CUE_LINE_PX));
+  for (const track of Array.from(video.textTracks)) {
+    for (const cue of Array.from(track.cues ?? [])) {
+      if (!(cue instanceof VTTCue) || (cue.snapToLines && cue.line === line)) continue;
+      cue.snapToLines = true;
+      cue.line = line;
+    }
+  }
+}
+
+const formatTime = (seconds: number) => {
+  if (!Number.isFinite(seconds)) return '0:00';
+  const s = Math.max(0, Math.floor(seconds));
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+};
+
+type FullscreenVideo = HTMLVideoElement & { webkitEnterFullscreen?: () => void };
+type LockableOrientation = ScreenOrientation & { lock?: (o: 'landscape') => Promise<void> };
+
 export function GalaTrailer() {
-  const [Player, setPlayer] = useState<FilmPlayer | null>(null);
-  const [open, setOpen] = useState(false);
-  const opener = useRef<HTMLButtonElement>(null);
-  const { motion } = useTripLoungeEnv();
-  const play = useCallback(() => {
-    void loadFilmPlayer().then((Loaded) =>
-      floatFilm('open', opener.current, () => {
-        setPlayer(() => Loaded);
-        setOpen(true);
-      }, motion)
+  const { video: autoplayAllowed } = useTripLoungeEnv();
+  const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [near, setNear] = useState(false); // attach the source once close to the viewport
+  const [inView, setInView] = useState(false); // at least half on screen
+  const [playing, setPlaying] = useState(false);
+  const [muted, setMuted] = useState(true);
+  const [captionsOn, setCaptionsOn] = useState(true);
+  const [time, setTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  // The visitor pressed pause: don't start it again by scrolling.
+  const userPaused = useRef(false);
+  // The visitor pressed play (or sound): resume it when scrolled back to.
+  const userStarted = useRef(false);
+  const soundStarted = useRef(false);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return undefined;
+    const nearObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setNear(true);
+          nearObserver.disconnect();
+        }
+      },
+      { rootMargin: '600px 0px' }
     );
-  }, [motion]);
-  const close = useCallback(() => {
-    floatFilm('close', opener.current, () => setOpen(false), motion);
-    // Back to the button that opened it.
-    window.requestAnimationFrame(() => opener.current?.focus());
-  }, [motion]);
+    const viewObserver = new IntersectionObserver(([entry]) => setInView(entry.intersectionRatio >= 0.5), {
+      threshold: [0, 0.5, 1],
+    });
+    nearObserver.observe(el);
+    viewObserver.observe(el);
+    return () => {
+      nearObserver.disconnect();
+      viewObserver.disconnect();
+    };
+  }, []);
+
+  // Play while on screen (muted autoplay, or the visitor's own play); pause when away.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !near) return;
+    const wants = inView && !userPaused.current && (autoplayAllowed || userStarted.current);
+    if (wants && video.paused) {
+      void video.play().catch(() => setPlaying(false));
+    } else if (!wants && !video.paused) {
+      video.pause();
+    }
+  }, [inView, near, autoplayAllowed]);
+
+  // If motion is turned off while it's playing on its own, stop it.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video && !autoplayAllowed && !userStarted.current && !video.paused) video.pause();
+  }, [autoplayAllowed]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    for (const track of Array.from(video.textTracks)) track.mode = captionsOn ? 'showing' : 'hidden';
+  }, [captionsOn, near]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !near) return undefined;
+    const place = () => placeCues(video);
+    const trackEls = Array.from(video.querySelectorAll('track'));
+    trackEls.forEach((el) => el.addEventListener('load', place));
+    window.addEventListener('resize', place);
+    place();
+    return () => {
+      trackEls.forEach((el) => el.removeEventListener('load', place));
+      window.removeEventListener('resize', place);
+    };
+  }, [near]);
+
+  const start = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    userPaused.current = false;
+    userStarted.current = true;
+    if (!near) setNear(true);
+    void video.play().catch(() => setPlaying(false));
+  }, [near]);
+
+  const togglePlay = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      // Played by hand (e.g. under reduced motion): with sound, from where it is.
+      if (!autoplayAllowed && !userStarted.current) {
+        video.muted = false;
+        setMuted(false);
+        soundStarted.current = true;
+      }
+      start();
+    } else {
+      userPaused.current = true;
+      video.pause();
+    }
+  }, [autoplayAllowed, start]);
+
+  const toggleSound = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.muted) {
+      video.muted = false;
+      setMuted(false);
+      // The first time, from the top, so the voiceover starts at "Connection one".
+      if (!soundStarted.current) {
+        soundStarted.current = true;
+        video.currentTime = 0;
+      }
+      start();
+    } else {
+      video.muted = true;
+      setMuted(true);
+    }
+  }, [start]);
+
+  const fullScreen = useCallback(() => {
+    const video = videoRef.current as FullscreenVideo | null;
+    if (!video) return;
+    if (video.paused) start();
+    if (video.requestFullscreen && document.fullscreenEnabled) {
+      video
+        .requestFullscreen({ navigationUI: 'hide' })
+        .then(() => (screen.orientation as LockableOrientation | undefined)?.lock?.('landscape'))
+        .catch(() => undefined);
+    } else {
+      // iPhone: the system player.
+      video.webkitEnterFullscreen?.();
+    }
+  }, [start]);
+
+  useEffect(() => {
+    const onChange = () => {
+      if (!document.fullscreenElement) {
+        try {
+          screen.orientation?.unlock?.();
+        } catch {
+          /* not locked */
+        }
+      }
+    };
+    document.addEventListener('fullscreenchange', onChange);
+    return () => document.removeEventListener('fullscreenchange', onChange);
+  }, []);
+
+  const seek = (value: number) => {
+    const video = videoRef.current;
+    if (video && Number.isFinite(value)) video.currentTime = value;
+  };
+
   if (!GALA_TRAILER) return null;
   const trailer = GALA_TRAILER;
+  const tracks = trailer.captions ?? [];
+  const showStartButton = !playing && !userStarted.current && !autoplayAllowed;
 
   return (
-    <section id={GALA_TRAILER_ANCHOR} className="gala-trailer" aria-labelledby="trailer-title">
-      <div className="gala-shell gala-trailer-inner">
-        <div className="gala-trailer-head">
-          <p className="gala-label">The trailer</p>
-          <h2 id="trailer-title">
-            {capitalize(GALA_TRIP_COUNT_WORD)} trips. <em>One film.</em>
-          </h2>
-        </div>
-        <button
-          ref={opener}
-          type="button"
-          className="gala-trailer-play"
-          onClick={play}
-          onPointerEnter={() => void loadFilmPlayer()}
-          onFocus={() => void loadFilmPlayer()}
-          onTouchStart={() => void loadFilmPlayer()}
-        >
-          {trailer.poster ? (
-            <img
-              className="gala-trailer-poster"
-              src={tripVideoSrc(trailer.poster)}
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
-          ) : null}
-          {/* The email's poster draws its own play button; then the cue is for screen readers only. */}
-          <span className={trailer.posterHasCue ? 'sr-only' : 'gala-trailer-cue'}>
-            {trailer.posterHasCue ? null : (
-              <span className="gala-trailer-icon" aria-hidden="true">
-                <Play size={22} />
-              </span>
-            )}
-            Play the trailer
-          </span>
-          <span className="sr-only">: A World of Connections, with sound and captions</span>
-        </button>
+    <section
+      ref={sectionRef}
+      id={GALA_TRAILER_ANCHOR}
+      className={`gala-trailer${playing ? ' is-playing' : ''}`}
+      aria-labelledby="trailer-title"
+    >
+      <div className="gala-shell gala-trailer-head">
+        <h2 id="trailer-title">
+          {capitalize(GALA_TRIP_COUNT_WORD)} trips. <em>One film.</em>
+        </h2>
       </div>
-      {open && Player ? (
-        <Player
-          film={{
-            id: 'trailer',
-            // A poster with a drawn play button is page art, not a frame of the film.
-            media: trailer.posterHasCue ? { ...trailer, poster: undefined } : trailer,
-            title: (
-              <>
-                <span>The trailer</span>
-                <span className="sr-only">: </span>A World of Connections
-              </>
-            ),
-          }}
-          onClose={close}
-        />
-      ) : null}
+
+      <div className="gala-trailer-stage">
+        <video
+          ref={videoRef}
+          className="gala-trailer-video"
+          src={near ? tripVideoSrc(trailer.film) : undefined}
+          poster={trailer.poster ? tripVideoSrc(trailer.poster) : undefined}
+          crossOrigin={tripVideoCrossOrigin()}
+          preload="none"
+          muted={muted}
+          playsInline
+          loop={muted}
+          aria-label="The trailer: A World of Connections, eight trips in one film"
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          onTimeUpdate={(event) => setTime(event.currentTarget.currentTime)}
+          onLoadedMetadata={(event) => setDuration(event.currentTarget.duration)}
+          onDurationChange={(event) => setDuration(event.currentTarget.duration)}
+          onVolumeChange={(event) => setMuted(event.currentTarget.muted)}
+        >
+          {near
+            ? tracks.map((track, index) => (
+                <track
+                  key={track.file}
+                  kind="captions"
+                  src={tripVideoSrc(track.file)}
+                  srcLang={track.lang}
+                  label={track.lang === 'en' ? 'English' : track.lang}
+                  default={index === 0}
+                />
+              ))
+            : null}
+        </video>
+        <div className="gala-trailer-shade" aria-hidden="true" />
+
+        {showStartButton ? (
+          <button type="button" className="gala-trailer-start" onClick={togglePlay}>
+            <span className="gala-trailer-icon" aria-hidden="true">
+              <Play size={26} />
+            </span>
+            Play the trailer
+            <span className="sr-only"> with sound</span>
+          </button>
+        ) : null}
+      </div>
+
+      <div className="gala-shell gala-trailer-controls" role="group" aria-label="Trailer controls">
+          {muted && !showStartButton ? (
+            <button type="button" className="gala-trailer-sound" onClick={toggleSound}>
+              <Volume2 aria-hidden="true" /> Turn on sound
+            </button>
+          ) : null}
+          <div className="gala-trailer-bar">
+            <button
+              type="button"
+              className="gala-trailer-btn"
+              onClick={togglePlay}
+              aria-label={playing ? 'Pause the trailer' : 'Play the trailer'}
+            >
+              {playing ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
+            </button>
+            <button
+              type="button"
+              className="gala-trailer-btn"
+              onClick={toggleSound}
+              aria-label="Sound"
+              aria-pressed={!muted}
+            >
+              {muted ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}
+            </button>
+            {tracks.length ? (
+              <button
+                type="button"
+                className="gala-trailer-btn"
+                onClick={() => setCaptionsOn((on) => !on)}
+                aria-label="Captions"
+                aria-pressed={captionsOn}
+              >
+                <Captions aria-hidden="true" />
+              </button>
+            ) : null}
+            <span className="gala-trailer-time" aria-hidden="true">
+              {formatTime(time)}
+            </span>
+            <input
+              className="gala-trailer-scrub"
+              type="range"
+              min={0}
+              max={duration || 0}
+              step={0.1}
+              value={Math.min(time, duration || 0)}
+              onChange={(event) => seek(Number(event.target.value))}
+              aria-label="Trailer position"
+              aria-valuetext={`${formatTime(time)} of ${formatTime(duration)}`}
+              disabled={!duration}
+            />
+            <span className="gala-trailer-time" aria-hidden="true">
+              {formatTime(duration)}
+            </span>
+            <button type="button" className="gala-trailer-btn" onClick={fullScreen} aria-label="Full screen">
+              <Maximize aria-hidden="true" />
+            </button>
+          </div>
+      </div>
     </section>
   );
 }
