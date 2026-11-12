@@ -50,6 +50,8 @@ jobs:
           SITE_ORIGIN: https://yoursparkpoint.org
           PUBLIC_ORIGIN: https://yoursparkpoint.org
           VITE_SITE_ORIGIN: https://yoursparkpoint.org
+          # The Gala trip videos play from Supabase Storage (see scripts/gala-trip-media/upload.sh).
+          VITE_GALA_MEDIA_BASE: https://suqtfbculwuetfdhdgdh.supabase.co/storage/v1/object/public/gala-media/trips/
         run: npm run build
 
       - name: Add CNAME for custom domain

@@ -1,48 +1,53 @@
-import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog@1.1.6';
 import { X } from 'lucide-react';
 import type { GalaTrip } from '../../data/galaTrips';
-import { tripMedia, tripVideoSrc, type GalaFilmCredit, type GalaTripMedia } from '../../data/galaTripMedia';
+import { tripMedia, tripVideoCrossOrigin, tripVideoSrc, type GalaFilmCredit, type GalaTripMedia } from '../../data/galaTripMedia';
 
-// The full trip film, with sound, in a modal player. Loaded lazily: neither this
-// code nor the film is fetched until someone presses Watch the film. Radix keeps
-// focus inside the dialog and closes it on Esc; the player's own controls carry
-// play, volume, captions and full screen. Caption tracks come from the pack
-// (`<id>-film-16x9-web.vtt`) when it has them.
+// The film player, with sound, for a trip's film and the all-trips trailer.
+// Loaded lazily: neither this code nor the film is fetched until someone asks
+// to watch. Radix keeps focus inside and closes on Esc; the browser's own video
+// controls carry play, volume, captions and full screen.
 //
-// A trip with a vertical cut (`<id>-film-9x16-web.mp4`) plays it when the
-// visitor opens the player from the card's photo (any screen), or from Watch the
-// film on a phone held upright. A bar at the foot of the vertical player switches
-// to the full 16:9 film. On a phone held upright the vertical cut fills the
-// screen; elsewhere it sits centred at its own shape, uncropped.
+// Two presentations (reworked 2026-11-11, Jeff: "a full screen experience"):
 //
-// Captions: the films are music only, and their captions repeat the text burned
-// into the picture, so they start off (the player's CC control turns them on)
-// and their text is the dialog's description for screen readers instead. When
-// shown, they sit in a band near the top that the burned-in text leaves clear
-// (the trip tag is at the very top; titles, place lines and fact cards are in
-// the middle and lower third). A film the pack marks as having a voiceover has
-// real speech in its captions, so they start on, in that same band.
+// - Phones and tablets (a touch screen without a mouse): the film opens straight
+//   into full screen, black edge to edge, with nothing over it but a small Close,
+//   a title that fades once the film plays, and Credits when the cut has any.
+//   Where the browser allows it (Android, iPad, desktop browsers) the player asks
+//   for real full screen, which hides the browser's own bars, and turns a 16:9
+//   film sideways by itself (screen orientation lock). iPhone allows neither to a
+//   web page, so there the player already fills the screen, the 16:9 film sits
+//   letterboxed until the phone is turned, and a short hint says so. Leaving full
+//   screen (the back gesture) closes the player.
+// - Computers: the framed player in the middle of the page, as before; the video's
+//   own full-screen button is there for anyone who wants it.
 //
-// The same player plays the all-trips trailer (`film` instead of `trip`): its
-// media and title are passed in, and it has no vertical cut.
+// Which cut plays: the 16:9 film, unless the trip has a full-length vertical cut
+// (`verticalFull` in the manifest: the whole story reframed upright, on the same
+// timeline second for second). Then a phone held upright plays the vertical, a
+// phone on its side plays the 16:9, and turning the phone swaps between them at
+// the same moment, playing or paused as it was. The 30 s vertical cuts are for
+// social and no longer play here: a 30 s cut with a "watch the full film" bar
+// under it was not a full-screen experience.
+//
+// Captions: a film the pack marks as voiced has real speech in its captions, so
+// they start on; music-only films start with them off (their text repeats what
+// is burned into the picture) and give that text to screen readers instead.
+// When shown, cues sit in a band near the top that the burned-in type leaves clear.
 
 const LANG_LABEL: Record<string, string> = { en: 'English', es: 'Español' };
 
-// Phones held upright get the vertical (9:16) cut full screen, chosen once when
-// the player opens. Nothing is preloaded either way.
-const PORTRAIT_PHONE = '(orientation: portrait) and (max-width: 767px)';
-// Below this height (a phone on its side) a boxed 9:16 film would be too small
-// to watch, so the 16:9 plays instead.
-const MIN_BOXED_HEIGHT = 520;
+// A touch screen with no mouse: phones and tablets get the full-screen player.
+const TOUCH_ONLY = '(hover: none) and (pointer: coarse)';
+const PORTRAIT = '(orientation: portrait)';
 
 // Where caption cues sit, as a percentage of the video's height from the top.
-// Phone (full screen): below the player's own title bar. Boxed 9:16: just under
-// the trip tag. 16:9: under the tag, above the title cards.
-const CUE_LINE = { fullScreen: 17, boxed: 9, wide: 10 };
-
+const CUE_LINE = { vertical: 17, wide: 10 };
 // Height of one caption line in px, matching `.gala-film-video::cue` in gala.css.
 const CUE_LINE_PX = 18;
+// How long the title stays over a playing film before it fades.
+const TITLE_MS = 2800;
 
 // Cues stay snapped to lines (Chrome stops wrapping a cue placed by percentage),
 // so the band's percentage becomes a line number counted from the top.
@@ -66,11 +71,12 @@ function placeCues(video: HTMLVideoElement, percent: number) {
   }
 }
 
-function startVertical(hasVertical: boolean, preferVertical: boolean) {
-  if (!hasVertical || typeof window === 'undefined') return false;
-  if (window.matchMedia(PORTRAIT_PHONE).matches) return true;
-  return preferVertical && window.innerHeight >= MIN_BOXED_HEIGHT;
-}
+const matches = (query: string) => typeof window !== 'undefined' && window.matchMedia(query).matches;
+
+// Screen Orientation lock: Chrome on Android (in full screen only); absent or
+// refused elsewhere, which is fine.
+type LockableOrientation = ScreenOrientation & { lock?: (o: 'landscape' | 'portrait') => Promise<void> };
+const orientation = () => (typeof screen !== 'undefined' ? (screen.orientation as LockableOrientation | undefined) : undefined);
 
 // The CC BY work in the cut being played. A cut without any shows nothing.
 function FilmCredits({ credits }: { credits?: GalaFilmCredit[] }) {
@@ -99,25 +105,148 @@ interface TripFilmDialogProps {
   trip?: GalaTrip;
   // A film that isn't one trip's (the all-trips trailer): its own media and title.
   film?: { id: string; media: GalaTripMedia; title: ReactNode };
-  // True when opened from the card's photo: play the vertical cut on any screen.
-  preferVertical?: boolean;
   onClose: () => void;
 }
 
-export default function TripFilmDialog({ trip, film, preferVertical = false, onClose }: TripFilmDialogProps) {
+export default function TripFilmDialog({ trip, film, onClose }: TripFilmDialogProps) {
   const media = film?.media ?? (trip ? tripMedia(trip.id) : undefined);
   const filmId = film?.id ?? trip?.id ?? 'film';
-  const [vertical, setVertical] = useState(() => startVertical(Boolean(media?.filmVertical), preferVertical));
-  const [fullScreen] = useState(() => typeof window !== 'undefined' && window.matchMedia(PORTRAIT_PHONE).matches);
+  // Only a full-length vertical cut on the 16:9's timeline plays here.
+  const hasVertical = Boolean(media?.filmVertical && media.verticalFull);
+  const [touch] = useState(() => matches(TOUCH_ONLY));
+  const [portrait, setPortrait] = useState(() => matches(PORTRAIT));
+  const vertical = touch && hasVertical && portrait;
+
   const [showCredits, setShowCredits] = useState(false);
+  const [showTitle, setShowTitle] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [rotateHint, setRotateHint] = useState(false);
   const creditsId = useId();
-  const closeRef = useRef<HTMLButtonElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   // State, not a ref: the dialog's content mounts after this component does.
   const [video, setVideo] = useState<HTMLVideoElement | null>(null);
+  // Where to pick up when the cut changes with the phone's orientation.
+  const resume = useRef<{ time: number; playing: boolean } | null>(null);
+  const closing = useRef(false);
+
   const src = media && (vertical && media.filmVertical ? media.filmVertical : media.film);
-  // Credits follow the cut on screen: the vertical cut has its own, often none.
-  const credits = media && (vertical && media.filmVertical ? media.filmCreditsVertical : media.filmCredits);
-  const cueLine = vertical ? (fullScreen ? CUE_LINE.fullScreen : CUE_LINE.boxed) : CUE_LINE.wide;
+  // Credits follow the cut on screen.
+  const credits = media && (vertical ? media.filmCreditsVertical : media.filmCredits);
+  const cueLine = vertical ? CUE_LINE.vertical : CUE_LINE.wide;
+  const crossOrigin = tripVideoCrossOrigin();
+
+  // Leave full screen and release the orientation lock, then close.
+  const close = useCallback(() => {
+    if (closing.current) return;
+    closing.current = true;
+    try {
+      orientation()?.unlock?.();
+    } catch {
+      /* not locked */
+    }
+    if (document.fullscreenElement) void document.exitFullscreen().catch(() => undefined);
+    onClose();
+  }, [onClose]);
+
+  // Phones and tablets: real full screen where the browser allows it, and the
+  // 16:9 turned sideways where it can be. The tap that opened the player still
+  // counts as the user's gesture here.
+  useEffect(() => {
+    if (!touch) return undefined;
+    const el = contentRef.current;
+    let entered = false;
+    if (el?.requestFullscreen && document.fullscreenEnabled) {
+      el.requestFullscreen({ navigationUI: 'hide' })
+        .then(() => {
+          entered = true;
+          // With no vertical cut, the 16:9 turns the screen sideways itself.
+          if (!hasVertical) return orientation()?.lock?.('landscape');
+          return undefined;
+        })
+        .catch(() => undefined);
+    }
+    // Leaving full screen (back gesture, the browser's own control) closes the player.
+    const onChange = () => {
+      if (entered && !document.fullscreenElement) close();
+    };
+    document.addEventListener('fullscreenchange', onChange);
+    return () => document.removeEventListener('fullscreenchange', onChange);
+  }, [touch, hasVertical, close]);
+
+  // Phones: follow the orientation. With a vertical cut, turning the phone
+  // swaps cuts at the same moment; without one, a 16:9 film on an upright
+  // phone that couldn't be turned for it (iPhone) gets a short hint.
+  useEffect(() => {
+    if (!touch) return undefined;
+    const mq = window.matchMedia(PORTRAIT);
+    const onTurn = () => {
+      if (hasVertical && video) resume.current = { time: video.currentTime, playing: !video.paused };
+      setPortrait(mq.matches);
+    };
+    mq.addEventListener('change', onTurn);
+    return () => mq.removeEventListener('change', onTurn);
+  }, [touch, hasVertical, video]);
+
+  useEffect(() => {
+    if (!touch || hasVertical || !portrait) {
+      setRotateHint(false);
+      return undefined;
+    }
+    // Give the orientation lock a moment to turn the screen before hinting.
+    const show = window.setTimeout(() => setRotateHint(matches(PORTRAIT)), 900);
+    const hide = window.setTimeout(() => setRotateHint(false), 5200);
+    return () => {
+      window.clearTimeout(show);
+      window.clearTimeout(hide);
+    };
+  }, [touch, hasVertical, portrait]);
+
+  // A new cut (or the first): pick up where the last one was.
+  useEffect(() => {
+    if (!video) return undefined;
+    setLoading(true);
+    const onMeta = () => {
+      const at = resume.current;
+      if (!at) return;
+      resume.current = null;
+      video.currentTime = Math.min(at.time, Math.max(0, video.duration - 0.1));
+      if (at.playing) void video.play().catch(() => undefined);
+      else video.pause();
+    };
+    const onReady = () => setLoading(false);
+    const onWait = () => setLoading(true);
+    video.addEventListener('loadedmetadata', onMeta);
+    video.addEventListener('playing', onReady);
+    video.addEventListener('canplay', onReady);
+    video.addEventListener('waiting', onWait);
+    return () => {
+      video.removeEventListener('loadedmetadata', onMeta);
+      video.removeEventListener('playing', onReady);
+      video.removeEventListener('canplay', onReady);
+      video.removeEventListener('waiting', onWait);
+    };
+  }, [video, src]);
+
+  // The title shows on open and whenever the film pauses, and fades while it plays.
+  useEffect(() => {
+    if (!video) return undefined;
+    let timer = 0;
+    const onPlay = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setShowTitle(false), TITLE_MS);
+    };
+    const onPause = () => {
+      window.clearTimeout(timer);
+      setShowTitle(true);
+    };
+    video.addEventListener('play', onPlay);
+    video.addEventListener('pause', onPause);
+    return () => {
+      window.clearTimeout(timer);
+      video.removeEventListener('play', onPlay);
+      video.removeEventListener('pause', onPause);
+    };
+  }, [video]);
 
   // Cues load only once a track is turned on, so place them whenever one loads.
   useEffect(() => {
@@ -134,7 +263,7 @@ export default function TripFilmDialog({ trip, film, preferVertical = false, onC
       trackEls.forEach((el) => el.removeEventListener('load', place));
       textTracks.forEach((t) => t.removeEventListener('cuechange', place));
     };
-  }, [video, cueLine]);
+  }, [video, cueLine, src]);
 
   if (!media?.film || !src) return null;
   const titleId = `trip-film-${filmId}-title`;
@@ -142,42 +271,51 @@ export default function TripFilmDialog({ trip, film, preferVertical = false, onC
   // Music-only films: the caption text describes the dialog for screen readers.
   // A voiceover's captions are speech, start on, and are heard anyway.
   const description = tracks[0]?.speech ? undefined : tracks[0]?.text;
+  const theatre = touch;
 
   return (
-    <DialogPrimitive.Root open onOpenChange={(open) => (open ? undefined : onClose())}>
+    <DialogPrimitive.Root open onOpenChange={(open) => (open ? undefined : close())}>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="gala-film-overlay" />
         <DialogPrimitive.Content
-          className={`gala-film${vertical ? (fullScreen ? ' is-vertical' : ' is-vertical-boxed') : ''}`}
+          ref={contentRef}
+          className={`gala-film${theatre ? ' is-theatre' : ''}${vertical ? ' is-vertical' : ''}`}
           aria-labelledby={titleId}
           {...(description ? {} : { 'aria-describedby': undefined })}
           onCloseAutoFocus={(event) => event.preventDefault()}
         >
-          <div className="gala-film-head">
-            <div className="gala-film-heading">
-              <DialogPrimitive.Title id={titleId} className="gala-film-title">
-                {film ? (
-                  film.title
-                ) : trip ? (
-                  <>
-                    <span>Connection {trip.connection}</span>
-                    <span className="sr-only">: </span>
-                    {trip.title}
-                  </>
-                ) : null}
-              </DialogPrimitive.Title>
-            </div>
-            {description ? (
-              <DialogPrimitive.Description className="sr-only">
-                Text in the film: {description}
-              </DialogPrimitive.Description>
-            ) : null}
-            <DialogPrimitive.Close ref={closeRef} className="gala-film-close" aria-label="Close the film">
+          <div className={`gala-film-head${theatre && !showTitle ? ' is-faded' : ''}`}>
+            <DialogPrimitive.Close className="gala-film-close" aria-label="Close the film">
               <X aria-hidden="true" size={18} />
               <span aria-hidden="true">Close</span>
             </DialogPrimitive.Close>
+            <DialogPrimitive.Title id={titleId} className="gala-film-title">
+              {film ? (
+                film.title
+              ) : trip ? (
+                <>
+                  <span>Connection {trip.connection}</span>
+                  <span className="sr-only">: </span>
+                  {trip.title}
+                </>
+              ) : null}
+            </DialogPrimitive.Title>
+            {theatre && credits?.length ? (
+              <button
+                type="button"
+                className="gala-film-switch"
+                aria-expanded={showCredits}
+                aria-controls={creditsId}
+                onClick={() => setShowCredits((v) => !v)}
+              >
+                Credits
+              </button>
+            ) : null}
           </div>
-          {vertical ? (
+          {description ? (
+            <DialogPrimitive.Description className="sr-only">Text in the film: {description}</DialogPrimitive.Description>
+          ) : null}
+          {theatre ? (
             <div id={creditsId} className="gala-film-credits-sheet" hidden={!showCredits}>
               <FilmCredits credits={credits} />
             </div>
@@ -189,12 +327,12 @@ export default function TripFilmDialog({ trip, film, preferVertical = false, onC
             onKeyDownCapture={(event) => {
               if (event.key === 'Escape' && !document.fullscreenElement) {
                 event.preventDefault();
-                onClose();
+                close();
               }
             }}
           >
             {/* Sound on: the visitor asked for the film. Keyed on the source so
-                switching cuts starts the new one from the top. */}
+                switching cuts loads the new one (and the resume effect seeks it). */}
             <video
               ref={setVideo}
               key={src}
@@ -204,6 +342,7 @@ export default function TripFilmDialog({ trip, film, preferVertical = false, onC
               autoPlay
               playsInline
               preload="auto"
+              crossOrigin={crossOrigin}
               poster={!vertical && media.poster ? tripVideoSrc(media.poster) : undefined}
             >
               {tracks.map((track, index) => (
@@ -217,36 +356,20 @@ export default function TripFilmDialog({ trip, film, preferVertical = false, onC
                 />
               ))}
             </video>
+            {loading ? (
+              <span className="gala-film-loading" role="status">
+                <span className="gala-film-spinner" aria-hidden="true" />
+                <span className="sr-only">Loading the film</span>
+              </span>
+            ) : null}
+            {rotateHint ? (
+              <span className="gala-film-rotate" aria-hidden="true">
+                <span className="gala-film-rotate-icon" />
+                Turn your phone for the full picture
+              </span>
+            ) : null}
           </div>
-          {vertical ? (
-            <div className="gala-film-foot">
-              <button
-                type="button"
-                className="gala-film-full"
-                onClick={() => {
-                  setVertical(false);
-                  setShowCredits(false);
-                  // This bar goes away with the switch: keep keyboard focus in the player.
-                  window.requestAnimationFrame(() => closeRef.current?.focus());
-                }}
-              >
-                Watch the full film
-              </button>
-              {credits?.length ? (
-                <button
-                  type="button"
-                  className="gala-film-switch"
-                  aria-expanded={showCredits}
-                  aria-controls={creditsId}
-                  onClick={() => setShowCredits((v) => !v)}
-                >
-                  Credits
-                </button>
-              ) : null}
-            </div>
-          ) : (
-            <FilmCredits credits={credits} />
-          )}
+          {theatre ? null : <FilmCredits credits={credits} />}
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>
