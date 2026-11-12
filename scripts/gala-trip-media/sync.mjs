@@ -13,7 +13,9 @@
 //   <id>-loop-poster….webp             a still from the loop (optional)
 //   <id>-film-16x9-web.mp4             the full promo with music (optional)
 //   <id>-film-16x9-web.vtt / .<lang>.vtt  captions for the film (optional)
-//   <id>-film-9x16-web.mp4 (+ .vtt)    the vertical cut, played on portrait phones (optional)
+//   <id>-film-9x16-web.mp4 (+ .vtt)    the vertical cut (optional); web.json marks a full-length one
+//                                      ("full": true, the whole film upright on the 16:9's timeline),
+//                                      and only that one plays on phones held upright (`verticalFull`)
 //   web.json                           optional: per-file `creditLine` and `sources`, "captions": [...];
 //                                      a film entry with "voiceover": true turns its captions on by default
 //
@@ -268,10 +270,13 @@ for (const id of TRIP_IDS) {
   const vertical = pick(files, id, (f) => f.includes('film-9x16') && f.endsWith('-web.mp4'));
   if (vertical && entry.film) {
     const size = fs.statSync(path.join(webDir, vertical)).size;
-    if (size > MAX_VERTICAL_FILM_BYTES) {
-      problems.push(`${vertical} is ${(size / 1048576).toFixed(1)} MB (limit ${MAX_VERTICAL_FILM_BYTES / 1048576} MB); skipped`);
+    // A full-length vertical film (web.json "full": true) gets the 16:9 film's limit.
+    const full = (meta?.files ?? []).some((f) => f.file === vertical && f.full === true);
+    if (size > (full ? MAX_FILM_BYTES : MAX_VERTICAL_FILM_BYTES)) {
+      problems.push(`${vertical} is ${(size / 1048576).toFixed(1)} MB (limit ${(full ? MAX_FILM_BYTES : MAX_VERTICAL_FILM_BYTES) / 1048576} MB); skipped`);
     } else {
       entry.filmVertical = vertical;
+      if (full) entry.verticalFull = true;
       copies.push([path.join(webDir, vertical), vertical]);
       const tracks = tracksFor(vertical);
       if (tracks.length) entry.captionsVertical = tracks;
@@ -298,7 +303,7 @@ for (const id of TRIP_IDS) {
     if (credits.length) entry.filmCredits = credits;
   }
   if (entry.filmVertical) {
-    const credits = ccCredits(licences, filmSources(id, ['9x16']));
+    const credits = ccCredits(licences, filmSources(id, [entry.verticalFull ? '9x16full' : '9x16']));
     if (credits.length) entry.filmCreditsVertical = credits;
   }
   if (entry.loopWide || entry.loopTall || entry.film) manifest[id] = entry;

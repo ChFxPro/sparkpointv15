@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { Pause, Play } from 'lucide-react';
 import { Sparkmark } from '../components/Sparkmark';
 import {
@@ -12,6 +12,7 @@ import {
 } from '../data/galaTrips';
 import { tripMedia, tripVideoSrc, type GalaCreditPart, type GalaLoopSources } from '../data/galaTripMedia';
 import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
+import { floatFilm, loadFilmPlayer, type FilmPlayer } from './galaTrips/filmPlayer';
 
 // The trips lounge: the eight trips as a departures lounge.
 //
@@ -35,11 +36,10 @@ import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
 // - Moving video has a visible pause control (WCAG 2.2.2), and pausing holds for
 //   every card until the visitor presses play.
 // - The full film (with sound) loads only when someone asks for it, in a lazily
-//   loaded dialog: pressing the photo plays the vertical cut (the 16:9 if the
-//   trip has none), and Watch the film plays the 16:9 (the vertical cut on a
-//   phone held upright). Either way the player can switch to the full film.
-
-const TripFilmDialog = lazy(() => import('./galaTrips/TripFilmDialog'));
+//   loaded player (galaTrips/TripFilmDialog.tsx): the photo and Watch the film
+//   both open it. The player's code (not the film) is fetched a moment early,
+//   when a visitor points at, focuses or touches either one, so the film can
+//   float straight out of the photo into the player.
 
 // How long the loop takes to dissolve in or out over its still (matches the CSS).
 const DISSOLVE_MS = 900;
@@ -116,6 +116,13 @@ interface TripArtProps {
   onTogglePause: () => void;
   onPlayFilm?: (from: HTMLButtonElement) => void;
 }
+
+// Warms up the player's code (never the film) when a visitor heads for a film button.
+const warmPlayer = {
+  onPointerEnter: () => void loadFilmPlayer(),
+  onFocus: () => void loadFilmPlayer(),
+  onTouchStart: () => void loadFilmPlayer(),
+};
 
 function TripLoop({ sources, play, onPlaying }: { sources: GalaLoopSources; play: boolean; onPlaying: (on: boolean) => void }) {
   const ref = useRef<HTMLVideoElement>(null);
@@ -212,6 +219,7 @@ function TripArt({ trip, boarding, near, videoAllowed, paused, onTogglePause, on
             type="button"
             className="gala-trip-art-play"
             onClick={(event) => onPlayFilm(event.currentTarget)}
+            {...warmPlayer}
             aria-label={`Play the film: ${trip.title}`}
           >
             <span className="gala-trip-art-play-cue" aria-hidden="true">
@@ -333,7 +341,7 @@ interface TripCardProps {
   onTogglePause: () => void;
   onBoard: (id: string | null) => void;
   hover: boolean;
-  onWatch: (trip: GalaTrip, from: HTMLButtonElement, preferVertical: boolean) => void;
+  onWatch: (trip: GalaTrip, from: HTMLButtonElement) => void;
   register: (id: string, el: HTMLLIElement | null) => void;
 }
 
@@ -364,7 +372,7 @@ function TripCard({ trip, boarding, near, videoAllowed, paused, onTogglePause, o
         videoAllowed={videoAllowed}
         paused={paused}
         onTogglePause={onTogglePause}
-        onPlayFilm={film ? (from) => onWatch(trip, from, true) : undefined}
+        onPlayFilm={film ? (from) => onWatch(trip, from) : undefined}
       />
       <div className="gala-trip-body">
         <p className="gala-trip-connection">
@@ -410,7 +418,8 @@ function TripCard({ trip, boarding, near, videoAllowed, paused, onTogglePause, o
             <button
               type="button"
               className="gala-button gala-button-gold gala-trip-watch"
-              onClick={(event) => onWatch(trip, event.currentTarget, false)}
+              onClick={(event) => onWatch(trip, event.currentTarget)}
+              {...warmPlayer}
               aria-label={`Watch the film: ${trip.title}`}
             >
               <Play aria-hidden="true" size={14} />
@@ -424,13 +433,17 @@ function TripCard({ trip, boarding, near, videoAllowed, paused, onTogglePause, o
   );
 }
 
+// The card photo a film floats out of (and back into), from either of its buttons.
+const artOf = (el: HTMLElement | null) => el?.closest('.gala-trip')?.querySelector<HTMLElement>('.gala-trip-art') ?? el;
+
 export function GalaTrips() {
   const env = useTripLoungeEnv();
   const [hovered, setHovered] = useState<string | null>(null);
   const [centred, setCentred] = useState<string | null>(null);
   const [near, setNear] = useState<Set<string>>(() => new Set());
   const [paused, setPaused] = useState(false);
-  const [film, setFilm] = useState<{ trip: GalaTrip; preferVertical: boolean } | null>(null);
+  const [film, setFilm] = useState<GalaTrip | null>(null);
+  const [Player, setPlayer] = useState<FilmPlayer | null>(null);
   const filmOpener = useRef<HTMLButtonElement | null>(null);
   const cards = useRef(new Map<string, HTMLLIElement>());
 
@@ -518,10 +531,25 @@ export function GalaTrips() {
 
   const onBoard = useCallback((id: string | null) => setHovered(id), []);
   const onTogglePause = useCallback(() => setPaused((p) => !p), []);
-  const onWatch = useCallback((trip: GalaTrip, from: HTMLButtonElement, preferVertical: boolean) => {
-    filmOpener.current = from;
-    setFilm({ trip, preferVertical });
-  }, []);
+  // The film floats out of the card's photo (from either button), then the
+  // player takes over: full screen on phones, framed on computers.
+  const onWatch = useCallback(
+    (trip: GalaTrip, from: HTMLButtonElement) => {
+      filmOpener.current = from;
+      void loadFilmPlayer().then((Loaded) =>
+        floatFilm('open', artOf(from), () => {
+          setPlayer(() => Loaded);
+          setFilm(trip);
+        }, env.motion)
+      );
+    },
+    [env.motion]
+  );
+  const onCloseFilm = useCallback(() => {
+    floatFilm('close', artOf(filmOpener.current), () => setFilm(null), env.motion);
+    // Back to the button that opened it.
+    window.requestAnimationFrame(() => filmOpener.current?.focus());
+  }, [env.motion]);
 
   return (
     <>
@@ -542,19 +570,7 @@ export function GalaTrips() {
           />
         ))}
       </ol>
-      {film ? (
-        <Suspense fallback={null}>
-          <TripFilmDialog
-            trip={film.trip}
-            preferVertical={film.preferVertical}
-            onClose={() => {
-              setFilm(null);
-              // Back to the button that opened it.
-              window.requestAnimationFrame(() => filmOpener.current?.focus());
-            }}
-          />
-        </Suspense>
-      ) : null}
+      {film && Player ? <Player trip={film} onClose={onCloseFilm} /> : null}
     </>
   );
 }

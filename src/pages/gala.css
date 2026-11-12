@@ -1634,18 +1634,78 @@
   background: rgba(14, 18, 32, 0.55);
 }
 
-/* The vertical player (phones held upright, trips with a 9:16 cut): the film
-   fills the screen edge to edge, with the title, Close and the switches over
-   its top, kept clear of the notch and rounded corners. */
-.gala-film.is-vertical {
+/* On computers the head reads title, then Close at the right (Close comes first
+   in the markup so it is the first thing reached on a phone). */
+.gala-film:not(.is-theatre) .gala-film-close {
+  order: 2;
+}
+
+/* The film floats out of the card's photo into the player (filmPlayer.ts),
+   where the browser supports view transitions. */
+.gala-film-frame {
+  position: relative;
+  view-transition-name: gala-film;
+}
+
+::view-transition-group(gala-film) {
+  animation-duration: 0.42s;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+
+::view-transition-old(gala-film),
+::view-transition-new(gala-film) {
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* Loading and buffering: a quiet brass ring over the film until it plays. */
+.gala-film-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.gala-film-spinner {
+  width: 38px;
+  height: 38px;
+  border: 2px solid rgba(217, 181, 106, 0.25);
+  border-top-color: var(--gala-brass);
+  border-radius: 50%;
+  animation: gala-film-spin 0.9s linear infinite;
+}
+
+@keyframes gala-film-spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gala-film-spinner {
+    animation-duration: 2.4s;
+  }
+}
+
+/* The full-screen player (phones and tablets): the film edge to edge on black,
+   uncropped, with only a small Close, the title (fading while the film plays)
+   and Credits floating over its top, clear of the notch and rounded corners. */
+.gala-film.is-theatre {
   inset: 0;
   width: 100%;
   height: 100%;
   height: 100dvh;
   max-height: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+  display: block;
   padding: 0;
   background: #000;
   border: 0;
@@ -1653,111 +1713,142 @@
   translate: none;
 }
 
-.gala-film.is-vertical .gala-film-frame {
-  position: relative;
-  flex: 1;
-  min-height: 0;
+.gala-film.is-theatre:fullscreen {
+  width: 100vw;
+  height: 100vh;
+}
+
+.gala-film.is-theatre .gala-film-frame {
+  position: absolute;
+  inset: 0;
   aspect-ratio: auto;
   max-height: none;
 }
 
-.gala-film.is-vertical .gala-film-video {
-  object-fit: cover;
+.gala-film.is-theatre .gala-film-video {
+  object-fit: contain;
 }
 
-.gala-film.is-vertical .gala-film-head {
+.gala-film.is-theatre .gala-film-head {
   position: absolute;
   z-index: 2;
   top: 0;
   right: 0;
   left: 0;
-  padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) 36px
-    max(14px, env(safe-area-inset-left));
-  /* Solid behind the title and Close, fading only below them: the film's own
-     trip label sits in this band, and showing through it would say the trip
-     twice. The captions sit lower (CUE_LINE.fullScreen), clear of the fade. */
-  background: linear-gradient(to bottom, rgb(6, 10, 18) calc(100% - 36px), transparent);
-}
-
-.gala-film.is-vertical .gala-film-title {
-  font-size: 1.08rem;
-}
-
-/* Close stays on the title's row at every width: a long trip title wraps
-   beside it instead (South Africa, Cortona, Portugal, Alaska). */
-.gala-film.is-vertical .gala-film-head {
-  gap: 12px;
-}
-
-/* The bar at the foot of the vertical player: the full film, and credits. */
-.gala-film-foot {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
+  gap: 12px;
+  padding: max(10px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 28px
+    max(12px, env(safe-area-inset-left));
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
+  transition: opacity 0.5s ease;
+  pointer-events: none;
 }
 
-.gala-film.is-vertical .gala-film-foot {
-  padding: 12px max(14px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom))
-    max(14px, env(safe-area-inset-left));
-  background: var(--gala-midnight);
-  border-top: 1px solid rgba(217, 181, 106, 0.45);
+.gala-film.is-theatre .gala-film-head > * {
+  pointer-events: auto;
 }
 
-.gala-film-full {
+/* Once the film plays, the title and its shade fade; Close stays, quieter. */
+.gala-film.is-theatre .gala-film-head.is-faded {
+  background: transparent;
+}
+
+.gala-film.is-theatre .gala-film-head.is-faded .gala-film-title,
+.gala-film.is-theatre .gala-film-head.is-faded .gala-film-switch {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gala-film.is-theatre .gala-film-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.98rem;
+  transition: opacity 0.5s ease;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+
+.gala-film.is-theatre .gala-film-title span {
+  font-size: 0.64rem;
+}
+
+/* A round Close in the corner: easy to hit, quiet over the film. */
+.gala-film.is-theatre .gala-film-close {
+  width: 44px;
+  height: 44px;
   min-height: 44px;
+  justify-content: center;
+  padding: 0;
+  background: rgba(6, 10, 18, 0.55);
+  border-color: rgba(217, 181, 106, 0.55);
+  border-radius: 50%;
+}
+
+.gala-film.is-theatre .gala-film-close span {
+  display: none;
+}
+
+.gala-film.is-theatre .gala-film-switch {
+  transition: opacity 0.5s ease;
+}
+
+/* iPhone can't turn the screen for a 16:9 film: a short hint while it's upright. */
+.gala-film-rotate {
+  position: absolute;
+  left: 50%;
+  bottom: calc(max(18px, env(safe-area-inset-bottom)) + 64px);
   display: inline-flex;
   align-items: center;
-  padding: 11px 20px 10px;
-  color: #fff;
-  background: var(--gala-pink);
-  border: 1px solid var(--gala-brass);
-  border-radius: 0;
-  font-family: inherit;
-  font-size: 0.78rem;
+  gap: 10px;
+  padding: 9px 14px 8px;
+  color: var(--gala-ivory);
+  background: rgba(6, 10, 18, 0.82);
+  border: 1px solid rgba(217, 181, 106, 0.55);
+  font-size: 0.74rem;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  cursor: pointer;
+  text-align: center;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  translate: -50% 0;
+  pointer-events: none;
+  animation: gala-film-hint 0.4s ease both;
 }
 
-.gala-film-full:hover {
-  background: #c92b81;
+.gala-film-rotate-icon {
+  width: 12px;
+  height: 20px;
+  border: 1.5px solid var(--gala-brass);
+  border-radius: 3px;
+  animation: gala-film-turn 1.6s ease-in-out 0.3s infinite;
 }
 
-.gala-film-full:focus-visible {
-  outline: 2px solid var(--gala-brass-light);
-  outline-offset: 3px;
+@keyframes gala-film-hint {
+  from {
+    opacity: 0;
+  }
 }
 
-/* The vertical cut on a wider screen: centred at its own shape, uncropped,
-   sized to the screen's height. */
-.gala-film.is-vertical-boxed {
-  --gala-film-h: min(calc(100vh - 210px), 1000px);
-  --gala-film-h: min(calc(100dvh - 210px), 1000px);
-  width: min-content;
-  max-width: calc(100vw - 32px);
+@keyframes gala-film-turn {
+  0%,
+  20% {
+    rotate: 0deg;
+  }
+  50%,
+  80% {
+    rotate: -90deg;
+  }
+  100% {
+    rotate: 0deg;
+  }
 }
 
-.gala-film.is-vertical-boxed .gala-film-frame {
-  width: min(calc(var(--gala-film-h) * 9 / 16), calc(100vw - 68px));
-  aspect-ratio: 9 / 16;
-  max-height: none;
-}
-
-.gala-film.is-vertical-boxed .gala-film-video {
-  object-fit: contain;
-}
-
-.gala-film.is-vertical-boxed .gala-film-title {
-  font-size: 1.1rem;
-}
-
-.gala-film.is-vertical-boxed .gala-film-credits-sheet {
-  top: 96px;
-  right: 18px;
-  left: 18px;
+@media (prefers-reduced-motion: reduce) {
+  .gala-film-rotate,
+  .gala-film-rotate-icon {
+    animation: none;
+  }
 }
 
 .gala-film-heading {

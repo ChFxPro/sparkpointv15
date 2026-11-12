@@ -45,8 +45,14 @@ export interface GalaTripMedia {
   /** The full promo with music, loaded only when someone asks to watch it. */
   film?: string;
   captions?: GalaCaptionTrack[];
-  /** The vertical (9:16) cut, about 30 s, played on phones held upright. */
+  /** The vertical (9:16) cut. Plays on phones held upright only when `verticalFull` is set. */
   filmVertical?: string;
+  /**
+   * The vertical cut is the full film reframed upright, on the 16:9's timeline
+   * second for second, so the player can swap cuts when the phone turns. The
+   * 30 s social cuts don't have it and don't play in the player.
+   */
+  verticalFull?: boolean;
   captionsVertical?: GalaCaptionTrack[];
   /** CC BY work in the film (from the pack's LICENSES.md), credited in the film player. */
   /** CC BY work in the 16:9 film, credited in the player while it plays. */
@@ -59,4 +65,17 @@ const MEDIA = manifest as Record<string, GalaTripMedia>;
 
 export const tripMedia = (id: string): GalaTripMedia | undefined => MEDIA[id];
 
-export const tripVideoSrc = (file: string) => `${import.meta.env.BASE_URL}assets/events/gala/trips/video/${file}`;
+// Where the trip videos are served from. By default the site's own
+// public/assets/events/gala/trips/video/ (GitHub Pages). GitHub Pages delivers
+// large media slowly (measured 2026-11-11 at about 70 KB/s per connection, under
+// the 16:9 films' 350 KB/s), so the files can live on a media host instead: set
+// VITE_GALA_MEDIA_BASE at build time to that folder's URL (with a trailing
+// slash), holding the same file names the sync copies into public/. Captions are
+// then fetched cross-origin, so the host must send CORS headers.
+const MEDIA_BASE: string | undefined = import.meta.env.VITE_GALA_MEDIA_BASE || undefined;
+
+export const tripVideoSrc = (file: string) =>
+  MEDIA_BASE ? `${MEDIA_BASE.replace(/\/?$/, '/')}${file}` : `${import.meta.env.BASE_URL}assets/events/gala/trips/video/${file}`;
+
+/** `crossOrigin` for a <video> whose captions come from the media host; none when served by the site itself. */
+export const tripVideoCrossOrigin = (): 'anonymous' | undefined => (MEDIA_BASE ? 'anonymous' : undefined);
