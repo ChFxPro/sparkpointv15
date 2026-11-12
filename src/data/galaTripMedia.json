@@ -19,15 +19,32 @@
       }
     ],
     "filmVertical": "greece-film-9x16-web.mp4",
+    "verticalFull": true,
     "captionsVertical": [
       {
         "file": "greece-film-9x16-web.vtt",
         "lang": "en",
-        "text": "Connection one. Greece, and the Greek Islands. Three nights in Santorini, where whitewashed Oia hangs above the caldera, and every evening ends in a sunset the whole island stops to watch. Choose your trip at the Gala. Every journey connects back home.",
+        "text": "Connection one. Greece, and the Greek Islands. From the Blue Ridge to the Aegean Sea. Three nights in Santorini, where whitewashed Oia hangs above the caldera, and every evening ends in a sunset the whole island stops to watch. Then an island flight and a ferry to Mykonos, for three nights of windmills, harbour lanes, and Little Venice at dusk. And two nights in Athens, with a guided tour beneath the Acropolis, where so much of it began. Eight nights for two. Four-star hotels, breakfast every day, and the island flight and ferry. Choose your trip at the Gala. Every journey connects back home.",
         "speech": true
       }
     ],
     "filmCredits": [
+      {
+        "shows": "Little Venice, Mykonos",
+        "author": "Roberto Faccenda",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sunset_of_Mykonos.jpg"
+      },
+      {
+        "shows": "The Parthenon by day, Athens",
+        "author": "Le Monde en Vidéo",
+        "license": "CC BY 3.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Acropolis_of_Athens,_Greece.webm"
+      }
+    ],
+    "filmCreditsVertical": [
       {
         "shows": "Little Venice, Mykonos",
         "author": "Roberto Faccenda",
@@ -73,15 +90,32 @@
       }
     ],
     "filmVertical": "iceland-film-9x16-web.mp4",
+    "verticalFull": true,
     "captionsVertical": [
       {
         "file": "iceland-film-9x16-web.vtt",
         "lang": "en",
-        "text": "Connection two. Iceland, land of the Vikings. A guided day on the Golden Circle: the rift where two continents pull apart, a geyser that erupts every few minutes, and Gullfoss, the golden waterfall. Choose your trip at the Gala. Every journey connects back home.",
+        "text": "Connection two. Iceland, land of the Vikings. North, to the edge of the Arctic. Six nights in Reykjavík, with the whole island at your door. A guided day on the Golden Circle: the rift where two continents pull apart, a geyser that erupts every few minutes, and Gullfoss, the golden waterfall. A food tour of the city, then the Sky Lagoon's seven-step ritual. Six nights for two, with breakfast every day. Choose your trip at the Gala. Every journey connects back home.",
         "speech": true
       }
     ],
     "filmCredits": [
+      {
+        "shows": "Gullfoss, Golden Circle",
+        "author": "Diego Delso",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Gullfoss,_Su%C3%B0urland,_Islandia,_2014-08-16,_DD_123.JPG"
+      },
+      {
+        "shows": "Reykjavík",
+        "author": "Diego Delso",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vista_de_Reikiavik_desde_Perlan,_Distrito_de_la_Capital,_Islandia,_2014-08-13,_DD_118-120_HDR.JPG"
+      }
+    ],
+    "filmCreditsVertical": [
       {
         "shows": "Gullfoss, Golden Circle",
         "author": "Diego Delso",
@@ -127,11 +161,12 @@
       }
     ],
     "filmVertical": "cortona-film-9x16-web.mp4",
+    "verticalFull": true,
     "captionsVertical": [
       {
         "file": "cortona-film-9x16-web.vtt",
         "lang": "en",
-        "text": "Connection three. Cortona, under the Tuscan sun. Six nights for four in the old town of Cortona, the hilltop village made famous by Under the Tuscan Sun. Choose your trip at the Gala. Every journey connects back home.",
+        "text": "Connection three. Cortona, under the Tuscan sun. To the hills of Tuscany. Six nights for four in the old town of Cortona, the hilltop village made famous by Under the Tuscan Sun. Welcome cocktails on the main square. A private guided walk through its old stone lanes. And a tasting dinner, every course paired with wine. Your own two-bedroom suite, with all of Tuscany at the window. Six nights, for four, in the heart of the historic center. Choose your trip at the Gala. Every journey connects back home.",
         "speech": true
       }
     ],
@@ -153,11 +188,18 @@
     ],
     "filmCreditsVertical": [
       {
-        "shows": "Cortona",
-        "author": "TeKappa",
+        "shows": "Piazza della Repubblica, Cortona",
+        "author": "Sailko",
         "license": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cortona_dall%27aereo.jpg"
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cortona,_palazzi_baldelli_e_bourbon-petrella,_interno,_veduta_su_piazza_della_repubblica_col_palazzo_comunale_05.jpg"
+      },
+      {
+        "shows": "A street in Cortona's old town",
+        "author": "Elekes Andor",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cortona_(2).jpg"
       }
     ]
   },
@@ -181,11 +223,12 @@
       }
     ],
     "filmVertical": "scotland-film-9x16-web.mp4",
+    "verticalFull": true,
     "captionsVertical": [
       {
         "file": "scotland-film-9x16-web.vtt",
         "lang": "en",
-        "text": "Connection four. Scotland, lochs and legends. Four nights in Edinburgh: the castle on its rock, and a guided walk down the Royal Mile. A cruise on Loch Ness, in search of the legend. Choose your trip at the Gala. Every journey connects back home.",
+        "text": "Connection four. Scotland, lochs and legends. Across the Atlantic, to the Highlands. Four nights in Edinburgh: the castle on its rock, and a guided walk down the Royal Mile. A cruise on Loch Ness, in search of the legend. Then west by train to Glasgow, for three nights and two days in the Highlands: Glencoe, and the banks of Loch Lomond. Seven nights for two, with breakfast every day. Choose your trip at the Gala. Every journey connects back home.",
         "speech": true
       }
     ]
@@ -210,11 +253,12 @@
       }
     ],
     "filmVertical": "south-africa-film-9x16-web.mp4",
+    "verticalFull": true,
     "captionsVertical": [
       {
         "file": "south-africa-film-9x16-web.vtt",
         "lang": "en",
-        "text": "Connection five. South Africa, a wild wonders photo safari. Game drives from first light, with an expert guide. And one drive in search of the Big Five. Choose your trip at the Gala. Every journey connects back home.",
+        "text": "Connection five. South Africa, a wild wonders photo safari. South, to the bush, beneath southern skies. Game drives from first light, with an expert guide. Five nights in a luxury tented suite by the lake, with your own plunge pool. And one drive in search of the Big Five. Meals from farm to table, and drinks every day. And an evening around the fire, at a traditional bush braai. Six nights for two, with every transfer included. Choose your trip at the Gala. Every journey connects back home.",
         "speech": true
       }
     ]
@@ -239,11 +283,12 @@
       }
     ],
     "filmVertical": "portugal-film-9x16-web.mp4",
+    "verticalFull": true,
     "captionsVertical": [
       {
         "file": "portugal-film-9x16-web.vtt",
         "lang": "en",
-        "text": "Connection six. Captivating Portugal: Lisbon and Porto. Lisbon: hills, trams, and river light. And a day in the Douro Valley: wine, a long lunch, and a cruise on the river. Choose your trip at the Gala. Every journey connects back home.",
+        "text": "Connection six. Captivating Portugal: Lisbon and Porto. To Europe's western edge. Lisbon: hills, trams, and river light. Sintra's palaces and the Riviera, then a private guided drive north to Porto. And a day in the Douro Valley: wine, a long lunch, and a cruise on the river. Seven nights for two, and the train back to Lisbon. Choose your trip at the Gala. Every journey connects back home.",
         "speech": true
       }
     ]
@@ -268,11 +313,12 @@
       }
     ],
     "filmVertical": "costa-rica-film-9x16-web.mp4",
+    "verticalFull": true,
     "captionsVertical": [
       {
         "file": "costa-rica-film-9x16-web.vtt",
         "lang": "en",
-        "text": "Connection seven. Colorful Costa Rica. Arenal: rainforest beneath a perfect volcanic cone. Two tours of your choosing, like ziplining. Choose your trip at the Gala. Every journey connects back home.",
+        "text": "Connection seven. Colorful Costa Rica. South, to the rainforest. Arenal: rainforest beneath a perfect volcanic cone. Toucans, sloths, and hanging bridges. Two tours of your choosing, like ziplining. Then west, to the Pacific beaches of Tamarindo. Six nights for two, with breakfast and every transfer. Choose your trip at the Gala. Every journey connects back home.",
         "speech": true
       }
     ]
@@ -297,15 +343,25 @@
       }
     ],
     "filmVertical": "alaska-film-9x16-web.mp4",
+    "verticalFull": true,
     "captionsVertical": [
       {
         "file": "alaska-film-9x16-web.vtt",
         "lang": "en",
-        "text": "Connection eight. Alaska, explorer of the north. Seven nights in a balcony stateroom, the coast sliding by. Nugget Falls, and the glacier lake at Mendenhall. Choose your trip at the Gala. Every journey connects back home.",
+        "text": "Connection eight. Alaska, explorer of the north. North from Seattle, up the Inside Passage. Seven nights in a balcony stateroom, the coast sliding by. Juneau, the capital, between the mountains and the sea. Nugget Falls, and the glacier lake at Mendenhall. The gold-rush railway out of Skagway. A shore credit toward an adventure of your own. Creek Street in Ketchikan, on its stilts above the water. And Victoria, British Columbia, before Seattle. Eight nights for two: a night in Seattle, then drinks, Wi-Fi and specialty dining on board. Choose your trip at the Gala. Every journey connects back home.",
         "speech": true
       }
     ],
     "filmCredits": [
+      {
+        "shows": "Inner Harbour, Victoria, BC",
+        "author": "DXR",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Empress_and_Inner_Harbour,_Victoria,_southwest_view_20240827_2.jpg"
+      }
+    ],
+    "filmCreditsVertical": [
       {
         "shows": "Inner Harbour, Victoria, BC",
         "author": "DXR",
