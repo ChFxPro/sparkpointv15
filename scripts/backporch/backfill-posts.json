@@ -448,12 +448,12 @@
   {
    "slug": "an-atlas-of-wonders",
    "title": "A World of Connections",
-   "summary": "The SparkPoint Gala, Friday, December 11, at Connestee Falls Country Club: an evening of connection and eight trips that give back: Greece, Iceland, Cortona, Scotland, South Africa, Portugal, Costa Rica, and Alaska, supporting the Resilience Hub.",
+   "summary": "The SparkPoint Gala, Friday, December 11, at Connestee Falls Clubhouse: an evening of connection and eight trips that give back: Greece, Iceland, Cortona, Scotland, South Africa, Portugal, Costa Rica, and Alaska, supporting the Resilience Hub.",
    "kind": "gathering",
    "pinned": true,
    "published_at": "2026-10-14T09:00:00-04:00",
    "event_start": "2026-12-11T18:00:00-05:00",
-   "event_place": "Connestee Falls Country Club, Brevard",
+   "event_place": "Connestee Falls Clubhouse, Brevard",
    "image": {
     "src": "public/assets/events/gala/hero-wing-2400.webp",
     "alt": "Sunset over the clouds from an airplane window, the wing in silhouette."
@@ -465,7 +465,7 @@
     },
     {
      "type": "place",
-     "name": "Connestee Falls Country Club",
+     "name": "Connestee Falls Clubhouse",
      "address": "98 Overlook Clubhouse Dr, Brevard, NC 28712"
     },
     {

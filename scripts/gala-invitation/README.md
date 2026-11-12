@@ -198,7 +198,7 @@ Licence deeds:
 - Boarding pass: SparkPoint invites you to join us for A World of Connections,
   the SparkPoint Gala. A first-class boarding pass: Transylvania County to
   Anywhere, Friday, December 11, 2026, boarding at 6 p.m., at Connestee Falls
-  Country Club, Brevard, NC.
+  Clubhouse, Brevard, NC.
 - Departures: Eight trips, one home base. A departures board lists the
   SparkPoint Gala on December 11, then Greece, Iceland, Cortona, Scotland,
   South Africa, Portugal, Costa Rica and an Alaska cruise, with the nights for
@@ -220,7 +220,7 @@ Licence deeds:
   Greetings from HOME shows a concept rendering of the Transylvania Resilience
   Hub, which a portion of every trip helps bring to life.
 - Your seat: Tickets are on sale. Your seat is waiting: $100 per person at
-  Connestee Falls Country Club.
+  Connestee Falls Clubhouse.
 - Travel partners: Travel partners: your brand, cleared for takeoff. A cabin
   seat map with First Class, Business and Main Cabin sponsor seats. Seat map
   opening soon.
@@ -238,7 +238,7 @@ Update the venue, board, trip and closing alt text along with the images.
   > Friends,
   >
   > SparkPoint invites you to join us for A World of Connections, the SparkPoint
-  > Gala, on Friday, December 11, at 6 p.m. at Connestee Falls Country Club in
+  > Gala, on Friday, December 11, at 6 p.m. at Connestee Falls Clubhouse in
   > Brevard: an evening of connection and celebration, with eight trips around
   > the world to choose from and a portion of every trip coming home to help
   > bring the Transylvania Resilience Hub to life. Tickets are now on sale at
@@ -304,7 +304,7 @@ each one giving back to Transylvania County.
 > Friends,
 >
 > Join us for A World of Connections, the SparkPoint Gala, on Friday, December
-> 11, at 6 p.m. at Connestee Falls Country Club in Brevard. It's an evening of
+> 11, at 6 p.m. at Connestee Falls Clubhouse in Brevard. It's an evening of
 > connection and celebration, with eight trips around the world to choose from:
 > Greece, Iceland, Cortona, Scotland, South Africa, Portugal, Costa Rica, and an
 > Alaska cruise. Every trip is available to every guest at a set price, and a
@@ -318,7 +318,7 @@ each one giving back to Transylvania County.
 **Alt text for the image**
 
 You're invited to A World of Connections, the SparkPoint Gala, Friday, December
-11, 2026, at 6 p.m. at Connestee Falls Country Club: an evening of connection
+11, 2026, at 6 p.m. at Connestee Falls Clubhouse: an evening of connection
 with eight trips around the world to choose from (Greece, Iceland, Cortona,
 Scotland, South Africa, Portugal, Costa Rica and an Alaska cruise), each one
 available to every guest at a set price, giving back to the Transylvania

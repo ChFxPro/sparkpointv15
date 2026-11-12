@@ -20,13 +20,13 @@ export const GALA_PARTNER_FORM_URL =
 // purchase link and every ticket button switches from "on sale soon" to
 // "Get tickets".
 export const GALA_VENUE = {
-  name: 'Connestee Falls Country Club',
+  name: 'Connestee Falls Clubhouse',
   street: '98 Overlook Clubhouse Dr',
   city: 'Brevard',
   region: 'NC',
   postalCode: '28712',
   mapUrl:
-    'https://www.google.com/maps/search/?api=1&query=Connestee+Falls+Country+Club+98+Overlook+Clubhouse+Dr+Brevard+NC+28712',
+    'https://www.google.com/maps/search/?api=1&query=Connestee+Falls+Clubhouse+98+Overlook+Clubhouse+Dr+Brevard+NC+28712',
 };
 export const GALA_TICKET_PRICE = 100;
 export const GALA_TICKET_PRICE_LABEL = `$${GALA_TICKET_PRICE} per person`;

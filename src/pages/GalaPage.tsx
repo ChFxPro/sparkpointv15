@@ -158,7 +158,7 @@ export default function GalaPage() {
     <div className="gala-page">
       <SEOHead
         title={`${GALA_FULL_TITLE} | December 11, 2026`}
-        description={`Every journey connects back home. Join us for A World of Connections, the SparkPoint Gala, on Friday, December 11, 2026 at 6 p.m. at Connestee Falls Country Club, and choose from ${GALA_TRIP_COUNT_WORD} trips that give back to Transylvania County’s Resilience Hub: ${GALA_TRIP_NAMES}. Tickets $100.`}
+        description={`Every journey connects back home. Join us for A World of Connections, the SparkPoint Gala, on Friday, December 11, 2026 at 6 p.m. at Connestee Falls Clubhouse, and choose from ${GALA_TRIP_COUNT_WORD} trips that give back to Transylvania County’s Resilience Hub: ${GALA_TRIP_NAMES}. Tickets $100.`}
         path={GALA_PATH}
         image={GALA_SHARE_IMAGE}
         imageAlt="A World of Connections, the SparkPoint Gala: the title over an airplane wing above golden clouds at sunset."
