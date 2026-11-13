@@ -3515,17 +3515,6 @@ html.reduce-motion .gala-film-bar {
   perspective-origin: 50% 30%;
 }
 
-/* A warm desk lamp over the evergreen tabletop. */
-.gala-postcard-track.is-scroll .gala-postcard-stage::before {
-  position: absolute;
-  inset: 0 calc(50% - 50vw);
-  content: '';
-  background:
-    radial-gradient(ellipse 55% 60% at 38% 42%, rgba(241, 217, 160, 0.12), transparent 70%),
-    radial-gradient(ellipse 80% 70% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.28));
-  pointer-events: none;
-}
-
 .gala-postcard-scene {
   position: relative;
   z-index: 2;
@@ -3563,7 +3552,8 @@ html.reduce-motion .gala-film-bar {
     0 2px 0 #dccfb3,
     0 3px 0 #cdbf9f,
     0 4px 2px rgba(0, 0, 0, 0.25),
-    0 calc(30px + var(--lift, 0) * 70px) calc(60px + var(--lift, 0) * 60px) rgba(0, 0, 0, calc(0.45 - var(--lift, 0) * 0.15));
+    calc(var(--land, 0) * 34px) calc(30px + (var(--lift, 0) + var(--land, 0)) * 70px) calc(60px + (var(--lift, 0) + var(--land, 0)) * 60px)
+      rgba(20, 11, 6, calc(0.5 - (var(--lift, 0) + var(--land, 0)) * 0.15));
 }
 
 /* Light crossing the card as it turns. */
@@ -3619,99 +3609,88 @@ html.reduce-motion .gala-film-bar {
   clip-path: inset(-10% calc((1 - var(--cancel)) * 110%) -10% -10%);
 }
 
-/* The desk: trip photos and a cup of coffee, drifting at their own speeds. */
+/* The desk: a photographed travel desk, 2400×1600 desk pixels scaled to cover
+   the stage (GalaPostcard.tsx moves the camera). The raised things on it are
+   their own layers, moved a little further than the desk; their shadows stay. */
 .gala-desk {
   position: absolute;
   z-index: 1;
   inset: 0 calc(50% - 50vw);
+  overflow: hidden;
+  background: #1a120c;
   pointer-events: none;
+  /* Soft top and bottom edges, so the desk rises out of the section. */
+  mask-image: linear-gradient(to bottom, transparent, #000 56px, #000 calc(100% - 56px), transparent);
 }
 
-.gala-desk-photo {
+.gala-desk::after {
   position: absolute;
-  width: clamp(130px, 13vw, 210px);
-  margin: 0;
-  padding: 8px 8px 26px;
-  background: #fbf7ee;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3), 0 22px 40px rgba(0, 0, 0, 0.35);
+  inset: 0;
+  content: '';
+  background: radial-gradient(ellipse 75% 70% at 50% 52%, transparent 58%, rgba(10, 6, 3, 0.5));
 }
 
-.gala-desk-photo img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  filter: saturate(0.85) brightness(0.92);
-}
-
-.gala-desk-photo figcaption {
+.gala-desk-world {
   position: absolute;
-  inset: auto 0 6px;
-  color: #5f5a52;
-  font-family: var(--gala-display);
-  font-size: 0.7rem;
-  font-style: italic;
-  text-align: center;
-}
-
-.gala-desk-photo.is-a {
-  top: 12%;
-  left: 2.5%;
-}
-
-.gala-desk-photo.is-b {
-  bottom: 4%;
-  left: 7%;
-}
-
-.gala-desk-photo.is-c {
-  top: 8%;
-  right: 3%;
-}
-
-.gala-desk-cup {
-  position: absolute;
-  right: 4%;
-  bottom: 7%;
-  width: clamp(110px, 11vw, 170px);
-  filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.4));
-}
-
-.gala-desk-cup svg {
-  display: block;
-  width: 100%;
-}
-
-.gala-desk-ring {
-  position: absolute;
-  right: 15%;
-  bottom: 30%;
-  width: 92px;
-  height: 92px;
-  border: 3px solid rgba(80, 52, 28, 0.32);
-  border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(80, 52, 28, 0.12);
-  transform: rotate(14deg) scaleX(1.05);
-  opacity: 0.7;
-}
-
-/* The fountain pen. Its nib is the transform origin's target (GalaPostcard.tsx). */
-.gala-pen {
-  position: absolute;
-  z-index: 3;
   top: 0;
   left: 0;
-  width: 28px;
-  height: 230px;
-  transform-origin: 50% 100%;
-  pointer-events: none;
+  width: 2400px;
+  height: 1600px;
+  transform-origin: 0 0;
   will-change: transform;
 }
 
-.gala-pen svg {
+.gala-desk-world img {
+  position: absolute;
   display: block;
-  width: 100%;
-  height: 100%;
+  max-width: none;
+  user-select: none;
+}
+
+.gala-desk-world img.is-raised {
+  will-change: transform;
+}
+
+/* The lamp's light on the card, kept on the desk as the card moves (an alpha
+   shade rather than a blend, so it works inside the card's 3D turn). */
+.gala-postcard-lamp {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 4px;
+  transform: rotate(-1.2deg) translateZ(1px);
+  pointer-events: none;
+}
+
+.gala-postcard-lamp img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 800px;
+  height: 533px;
+  max-width: none;
+  transform-origin: 0 0;
+}
+
+/* The dip pen. Its nib is the transform origin (GalaPostcard.tsx); the
+   wrapper carries the shadow, so it falls the same way however the pen turns. */
+.gala-pen {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+}
+
+.gala-pen img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 418px;
+  height: 779px;
+  max-width: none;
+  transform-origin: 4px 4px;
+  will-change: transform;
 }
 
 /* The airmail route home, and the pin it lands on. */
@@ -3798,34 +3777,6 @@ html.reduce-motion .gala-film-bar {
     height: 460vh;
   }
 
-  /* Phones: a lighter desk, so it frames the card rather than crowding it. */
-  .gala-desk-photo {
-    width: 120px;
-  }
-
-  .gala-desk-photo.is-a {
-    top: 5%;
-    left: -40px;
-  }
-
-  .gala-desk-photo.is-b,
-  .gala-desk-ring {
-    display: none;
-  }
-
-  .gala-desk-photo.is-c {
-    top: auto;
-    right: -36px;
-    bottom: 2%;
-  }
-
-  .gala-desk-cup {
-    right: auto;
-    bottom: -30px;
-    left: -26px;
-    width: 104px;
-  }
-
   /* The pin sits near the right edge, so its label reads to the left of it. */
   .gala-home-pin {
     flex-direction: row-reverse;
@@ -3852,6 +3803,10 @@ html.reduce-motion .gala-film-bar {
     grid-template-areas: 'side';
     transform: rotate(-0.6deg) translateY(calc(var(--thud, 0) * 4px)) rotateY(calc(var(--flip) * 180deg));
     transform-style: preserve-3d;
+  }
+
+  .gala-postcard-lamp {
+    transform: rotate(-0.6deg) translateZ(1px);
   }
 
   .gala-postcard-track.is-scroll .gala-postcard-front,
