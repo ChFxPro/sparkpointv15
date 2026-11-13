@@ -65,7 +65,16 @@ function Handwritten({ text, piece }: { text: string; piece: number }) {
   );
 }
 
-export function GalaPostcard({ style }: { style?: Record<string, MotionValue<number>> }) {
+type LampSide = 'card' | 'front' | 'back';
+
+export function GalaPostcard({
+  style,
+  lamp,
+}: {
+  style?: Record<string, MotionValue<number>>;
+  /** The scroll story's sheets of lamp light: one over the whole card, one inside each face. */
+  lamp?: (side: LampSide) => ReactNode;
+}) {
   return (
     <motion.article className="gala-postcard" style={{ '--n': WORD_COUNT, ...style } as never}>
       <span className="gala-postcard-sheen" aria-hidden="true" />
@@ -79,6 +88,7 @@ export function GalaPostcard({ style }: { style?: Record<string, MotionValue<num
         <figcaption className="gala-postcard-credit">
           {WORLD_TRIPS.map((trip) => trip.label).join(' · ')} · five of the Gala's eight trips
         </figcaption>
+        {lamp?.('front')}
       </figure>
 
       <div className="gala-postcard-back">
@@ -154,7 +164,9 @@ export function GalaPostcard({ style }: { style?: Record<string, MotionValue<num
             </svg>
           </div>
         </div>
+        {lamp?.('back')}
       </div>
+      {lamp?.('card')}
     </motion.article>
   );
 }
@@ -385,8 +397,8 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   const sceneRef = useRef<HTMLDivElement>(null);
   const deskRef = useRef<HTMLDivElement>(null);
   const thingRefs = useRef<(HTMLImageElement | null)[]>([]);
-  const lampRef = useRef<HTMLSpanElement>(null);
-  const lampImgRef = useRef<HTMLImageElement>(null);
+  const lampRefs = useRef<Partial<Record<LampSide, HTMLSpanElement | null>>>({});
+  const lampImgRefs = useRef<Partial<Record<LampSide, HTMLImageElement | null>>>({});
   const penRef = useRef<HTMLDivElement>(null);
   const penImgRef = useRef<HTMLImageElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
@@ -443,6 +455,21 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
       narrow,
     };
     setSize({ w, h, fromX: geo.current.fromX, fromY: geo.current.fromY, cx, cy, narrow });
+    // Each face's sheet of light covers the whole card, not just the face.
+    const card = scene.firstElementChild as HTMLElement | null;
+    (['front', 'back'] as const).forEach((side) => {
+      const lamp = lampRefs.current[side];
+      const face = lamp?.parentElement;
+      if (!lamp || !face || !card) return;
+      // The back face is turned 180° inside the card, so its left is the card's right.
+      const left = side === 'front' ? face.offsetLeft : cardW - face.offsetLeft - face.offsetWidth;
+      Object.assign(lamp.style, {
+        left: `${-left}px`,
+        top: `${-face.offsetTop}px`,
+        width: `${card.offsetWidth}px`,
+        height: `${card.offsetHeight}px`,
+      });
+    });
   }, []);
 
   useEffect(() => {
@@ -561,20 +588,24 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
         pin.style.top = `${home.y}px`;
       }
 
-      // The lamp on the card: undo the card's own move, so the light stays with the desk.
-      const lamp = lampRef.current;
-      const lampImg = lampImgRef.current;
-      if (lamp && lampImg) {
-        const r = rotate.get();
-        const sc = Math.max(0.01, scale.get());
-        const ox = g.deskX + view.tx - g.cx - x.get();
-        const oy = g.deskY + view.ty - g.cy - y.get();
-        lampImg.style.transform =
-          `translate(${g.cardW / 2}px, ${g.cardH / 2}px) rotate(${-r}deg) scale(${1 / sc}) ` +
-          `translate(${ox}px, ${oy}px) scale(${view.s * LAMP_SCALE})`;
-        const turning = g.narrow ? Math.abs(Math.cos(Math.PI * flip.get())) : 1;
-        lamp.style.opacity = String(turning * (1 - lift.get()));
-      }
+      // The lamp on the card: undo the card's own move, so the light stays with
+      // the desk. Wide screens use one sheet over the whole card. Where the card
+      // turns over (narrow screens), a sheet over the card was cut through by the
+      // card as it turned, lighting half of it (Jeff, 2026-11-13), so each face
+      // carries its own sheet, sized to the whole card, and turns with it.
+      const r = rotate.get();
+      const sc = Math.max(0.01, scale.get());
+      const ox = g.deskX + view.tx - g.cx - x.get();
+      const oy = g.deskY + view.ty - g.cy - y.get();
+      const lampTransform =
+        `translate(${g.cardW / 2}px, ${g.cardH / 2}px) rotate(${-r}deg) scale(${1 / sc}) ` +
+        `translate(${ox}px, ${oy}px) scale(${view.s * LAMP_SCALE})`;
+      Object.values(lampImgRefs.current).forEach((img) => {
+        if (img) img.style.transform = lampTransform;
+      });
+      Object.values(lampRefs.current).forEach((lamp) => {
+        if (lamp) lamp.style.opacity = String(1 - lift.get());
+      });
 
       // The pen.
       const pen = penRef.current;
@@ -725,10 +756,26 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
           <motion.div ref={sceneRef} className="gala-postcard-scene" style={{ x, y, scale, rotate, rotateX, rotateY, opacity }}>
             <GalaPostcard
               style={{ '--flip': flip, '--write': write, '--stamp': stamp, '--thud': thud, '--cancel': cancel, '--lift': lift, '--land': land, '--sheen': sheen }}
+              lamp={(side) => (
+                <span
+                  ref={(el) => {
+                    lampRefs.current[side] = el;
+                  }}
+                  className={`gala-postcard-lamp is-${side}`}
+                  aria-hidden="true"
+                >
+                  <img
+                    ref={(el) => {
+                      lampImgRefs.current[side] = el;
+                    }}
+                    src={`${DESK_SRC}/card-light.webp`}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+              )}
             />
-            <span ref={lampRef} className="gala-postcard-lamp" aria-hidden="true">
-              <img ref={lampImgRef} src={`${DESK_SRC}/card-light.webp`} alt="" loading="lazy" decoding="async" />
-            </span>
           </motion.div>
 
           <div ref={penRef} className="gala-pen" aria-hidden="true">

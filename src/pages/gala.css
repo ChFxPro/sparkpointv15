@@ -3659,8 +3659,15 @@ html.reduce-motion .gala-film-bar {
   inset: 0;
   overflow: hidden;
   border-radius: 4px;
-  transform: rotate(-1.2deg) translateZ(1px);
   pointer-events: none;
+}
+
+/* Wide screens: one sheet over the whole card. Narrow screens, where the card
+   turns over: a sheet inside each face (sized to the whole card in
+   GalaPostcard.tsx), so the light turns over with the card. */
+.gala-postcard-lamp.is-front,
+.gala-postcard-lamp.is-back {
+  display: none;
 }
 
 .gala-postcard-lamp img {
@@ -3811,10 +3818,6 @@ html.reduce-motion .gala-film-bar {
     transform-style: preserve-3d;
   }
 
-  .gala-postcard-lamp {
-    transform: rotate(-0.6deg) translateZ(1px);
-  }
-
   .gala-postcard-track.is-scroll .gala-postcard-front,
   .gala-postcard-track.is-scroll .gala-postcard-back {
     grid-area: side;
@@ -3824,6 +3827,21 @@ html.reduce-motion .gala-film-bar {
 
   .gala-postcard-track.is-scroll .gala-postcard-back {
     transform: rotateY(180deg);
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-front,
+  .gala-postcard-track.is-scroll .gala-postcard-back {
+    position: relative;
+  }
+
+  .gala-postcard-lamp.is-card {
+    display: none;
+  }
+
+  .gala-postcard-lamp.is-front,
+  .gala-postcard-lamp.is-back {
+    display: block;
+    inset: auto;
   }
 
   /* The front fills the whole card, so it turns over as one card. */
@@ -3887,9 +3905,10 @@ html.reduce-motion .gala-film-bar {
     border-width: 7px;
   }
 
+  /* Not overflow: hidden, which would clip the face's sheet of lamp light to
+     the face; the lettering is sized to fit the card (cqi). */
   .gala-postcard-track.is-scroll .gala-postcard-back {
     min-height: 0;
-    overflow: hidden;
     padding: 1.5cqi 3.5cqi 3.5cqi;
   }
 
