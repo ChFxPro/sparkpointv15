@@ -423,6 +423,59 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   );
   const p = touch ? scrollYProgress : smoothed;
   const touchRef = useRef(touch);
+
+  // Pinning the stage. Wide screens use position: sticky. On iPhone Safari a
+  // sticky stage whose contents change every frame wobbles a pixel or three
+  // up and down as the page scrolls (measured frame by frame in Jeff's screen
+  // recording, 2026-11-13: the fixed header was steady, the pinned stage
+  // shook), so touch screens hold the stage with position: fixed while the
+  // story runs, which doesn't depend on the scroll position, and set it back
+  // at the top or foot of the track outside it.
+  // It pins when the track's top reaches the top of the screen and lets go when
+  // the track's bottom reaches the stage's bottom, so it rests exactly where it
+  // was in both hand-offs. (Not the animation's end: the stage is 100svh tall,
+  // shorter than an iPhone's screen with its toolbars tucked away, so letting
+  // go there would drop it by the difference.) Worked out from the track's
+  // place on the page and the stage's height, measured when the layout
+  // changes, so scrolling never has to lay the page out to ask.
+  const pinMode = useRef<'before' | 'fixed' | 'after'>('before');
+  const pinGeo = useRef({ top: 0, height: 0, stage: 0 });
+  const measurePin = useCallback(() => {
+    const trackEl = track.current;
+    const stage = stageRef.current;
+    if (!trackEl || !stage) return;
+    const tr = trackEl.getBoundingClientRect();
+    pinGeo.current = { top: tr.top + window.scrollY, height: trackEl.offsetHeight, stage: stage.offsetHeight };
+    trackEl.style.setProperty('--pin-left', `${tr.left}px`);
+    trackEl.style.setProperty('--pin-width', `${tr.width}px`);
+  }, []);
+  const setPin = useCallback(() => {
+    const stage = stageRef.current;
+    if (!stage || !touchRef.current) return;
+    const { top: trackTop, height, stage: stageHeight } = pinGeo.current;
+    const top = trackTop - window.scrollY;
+    const mode = top > 0 ? 'before' : top + height <= stageHeight ? 'after' : 'fixed';
+    if (mode === pinMode.current && stage.dataset.pin) return;
+    pinMode.current = mode;
+    stage.dataset.pin = mode;
+  }, []);
+  useMotionValueEvent(scrollYProgress, 'change', setPin);
+  // Content above the track (images, the trailer) can change its place on the page.
+  useEffect(() => {
+    if (!animate || !touch) return undefined;
+    const refresh = () => {
+      measurePin();
+      setPin();
+    };
+    refresh();
+    const observer = new ResizeObserver(refresh);
+    observer.observe(document.body);
+    window.addEventListener('resize', refresh);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', refresh);
+    };
+  }, [animate, touch, measurePin, setPin]);
   // The pen eases toward where the scroll puts it, so it glides from word to
   // word and back along to the next line rather than snapping there.
   const penNow = useRef<{ x: number; y: number; a: number; l: number; s: number } | null>(null);
@@ -468,6 +521,9 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
       narrow,
     };
     setSize({ w, h, fromX: geo.current.fromX, fromY: geo.current.fromY, cx, cy, narrow });
+    // Where the pinned stage sits, for touch screens' fixed pin.
+    measurePin();
+    setPin();
     // Each face's sheet of light covers the whole card, not just the face.
     const card = scene.firstElementChild as HTMLElement | null;
     (['front', 'back'] as const).forEach((side) => {
@@ -599,8 +655,9 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
       const pin = pinRef.current;
       if (pin) {
         const home = homeOnStage(g, view);
-        pin.style.left = `${home.x}px`;
-        pin.style.top = `${home.y}px`;
+        // `translate`, not left/top: moving it must not lay the page out while
+        // it scrolls (that made iPhone Safari's pinned stage wobble).
+        pin.style.translate = `${home.x}px ${home.y}px`;
       }
 
       // The lamp on the card: undo the card's own move, so the light stays with
@@ -753,7 +810,7 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
 
   return (
     <>
-      <div ref={track} className="gala-postcard-track is-scroll">
+      <div ref={track} className={`gala-postcard-track is-scroll${touch ? ' is-touch-pin' : ''}`}>
         <div ref={stageRef} className="gala-postcard-stage">
           <Desk worldRef={deskRef} thingRefs={thingRefs}>
             {w ? (
