@@ -3499,8 +3499,32 @@ html.reduce-motion .gala-film-bar {
 }
 
 .gala-postcard-track.is-scroll {
+  position: relative;
   height: 420vh;
   margin-top: 8px;
+}
+
+/* Touch screens: the stage is held with position: fixed while the story runs
+   (iPhone Safari's sticky stage wobbled; GalaPostcard.tsx sets data-pin), and
+   rests at the top or foot of the track outside it. */
+.gala-postcard-track.is-scroll.is-touch-pin .gala-postcard-stage {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
+.gala-postcard-track.is-scroll.is-touch-pin .gala-postcard-stage[data-pin='fixed'] {
+  position: fixed;
+  top: 0;
+  right: auto;
+  left: var(--pin-left, 0);
+  width: var(--pin-width, 100%);
+}
+
+.gala-postcard-track.is-scroll.is-touch-pin .gala-postcard-stage[data-pin='after'] {
+  top: auto;
+  bottom: 0;
 }
 
 .gala-postcard-track.is-scroll .gala-postcard-stage {
@@ -3724,6 +3748,8 @@ html.reduce-motion .gala-film-bar {
 .gala-home-pin {
   position: absolute;
   z-index: 3;
+  top: 0;
+  left: 0;
   display: flex;
   align-items: flex-start;
   gap: 12px;
