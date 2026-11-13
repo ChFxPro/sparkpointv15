@@ -4079,12 +4079,16 @@ html.reduce-motion .gala-film-bar {
   height: 100%;
 }
 
-/* In the scroll story the WORLD artwork (five photo-masked letters) sits on its
-   own layer, painted once: otherwise every frame of the handwriting, which
-   repaints the card, repainted it too, and phones dropped frames. */
-.gala-postcard-track.is-scroll .gala-postcard-world {
-  contain: strict;
-  will-change: transform;
+/* On wide screens the WORLD artwork (five photo-masked letters) sits on its
+   own layer, painted once, so the handwriting doesn't repaint it every frame.
+   Not where the card turns over: iPhone Safari doesn't hide a separately
+   layered child when its face turns away, so the front showed through the
+   back, mirrored (Jeff, 2026-11-13). */
+@media (min-width: 1021px) {
+  .gala-postcard-track.is-scroll .gala-postcard-world {
+    contain: strict;
+    will-change: transform;
+  }
 }
 
 .gala-postcard-print::after {
