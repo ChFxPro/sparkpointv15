@@ -406,10 +406,18 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   const sway = useRef({ x: 0, y: 0, sx: 0, sy: 0 });
   const [size, setSize] = useState({ w: 0, h: 0, fromX: 0, fromY: 0, cx: 0, cy: 0, narrow: false });
   const { scrollYProgress } = useScroll({ target: track, offset: ['start start', 'end end'] });
-  // Everything follows the scroll through a heavily damped spring, so a mouse
-  // wheel's steps glide instead of jumping the scene forward a notch at a time.
-  // Overdamped (no bounce); it trails the scroll by about a fifth of a second.
-  const p = useSpring(scrollYProgress, { stiffness: 170, damping: 40, mass: 0.7, restDelta: 0.0001 });
+  // With a mouse, everything follows the scroll through a heavily damped
+  // spring, so a wheel's steps glide instead of jumping the scene forward a
+  // notch at a time (overdamped: no bounce; it trails by about a fifth of a
+  // second). Touch screens already glide with the finger and the phone's own
+  // momentum, and the spring's trail on top made the scene keep sliding after
+  // the page stopped (Jeff, on his phone), so there it follows the scroll exactly.
+  const smoothed = useSpring(scrollYProgress, { stiffness: 170, damping: 40, mass: 0.7, restDelta: 0.0001 });
+  const [touch] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia('(hover: none), (pointer: coarse)').matches
+  );
+  const p = touch ? scrollYProgress : smoothed;
+  const touchRef = useRef(touch);
   // The pen eases toward where the scroll puts it, so it glides from word to
   // word and back along to the next line rather than snapping there.
   const penNow = useRef<{ x: number; y: number; a: number; l: number; s: number } | null>(null);
@@ -552,9 +560,11 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
       penRaf.current = 0;
       return;
     }
-    // Slow enough that a fast scroll through several lines reads as the pen
-    // drifting down the card, not zigzagging across it (Jeff: "shakes").
-    const k = 0.09;
+    // With a mouse, slow enough that a wheel step through several lines reads
+    // as the pen drifting down the card, not zigzagging across it (Jeff:
+    // "shakes"). Touch scrolling is already continuous, so the pen keeps up
+    // there rather than trailing on after the page stops.
+    const k = touchRef.current ? 0.25 : 0.09;
     n.x += (goal.x - n.x) * k;
     n.y += (goal.y - n.y) * k;
     n.a += (goal.a - n.a) * k;
