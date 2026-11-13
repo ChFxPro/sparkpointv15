@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type MutableRefObject, type ReactNode, type Ref } from 'react';
-import { frame, motion, useMotionValueEvent, useScroll, useTransform, type MotionValue } from 'motion/react';
+import { frame, motion, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from 'motion/react';
 import { Link } from 'react-router';
 import { Sparkmark } from '../components/Sparkmark';
 import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
@@ -201,13 +201,49 @@ const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const span = (v: number, [a, b]: readonly [number, number]) => clamp01((v - a) / (b - a));
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-/** Piecewise-linear through keyframes. */
+/**
+ * A smooth path through keyframes: a monotone cubic (Fritsch–Carlson) that
+ * eases in at the first key and out at the last, and passes through the ones
+ * between without stopping (unless the motion turns back there). Easing every
+ * segment separately made things stop dead at each key: "bouncy" (Jeff,
+ * 2026-11-13). Monotone, so it never overshoots a key.
+ */
 function keys(t: number, at: number[], values: number[]) {
+  const n = at.length;
   if (t <= at[0]) return values[0];
-  for (let i = 1; i < at.length; i++) {
-    if (t <= at[i]) return lerp(values[i - 1], values[i], ease((t - at[i - 1]) / (at[i] - at[i - 1])));
+  if (t >= at[n - 1]) return values[n - 1];
+  const d: number[] = [];
+  for (let i = 0; i < n - 1; i++) d.push((values[i + 1] - values[i]) / (at[i + 1] - at[i]));
+  const m: number[] = [0];
+  for (let i = 1; i < n - 1; i++) m.push(d[i - 1] * d[i] <= 0 ? 0 : (d[i - 1] + d[i]) / 2);
+  m.push(0);
+  for (let i = 0; i < n - 1; i++) {
+    if (d[i] === 0) {
+      m[i] = 0;
+      m[i + 1] = 0;
+      continue;
+    }
+    const a = m[i] / d[i];
+    const b = m[i + 1] / d[i];
+    const r = a * a + b * b;
+    if (r > 9) {
+      const k = 3 / Math.sqrt(r);
+      m[i] = k * a * d[i];
+      m[i + 1] = k * b * d[i];
+    }
   }
-  return values[values.length - 1];
+  let i = 0;
+  while (t > at[i + 1]) i++;
+  const h = at[i + 1] - at[i];
+  const u = (t - at[i]) / h;
+  const u2 = u * u;
+  const u3 = u2 * u;
+  return (
+    (2 * u3 - 3 * u2 + 1) * values[i] +
+    (u3 - 2 * u2 + u) * h * m[i] +
+    (-2 * u3 + 3 * u2) * values[i + 1] +
+    (u3 - u2) * h * m[i + 1]
+  );
 }
 
 interface Geometry {
@@ -276,8 +312,8 @@ interface DeskView {
 function deskView(v: number, g: Geometry, swayX: number, swayY: number): DeskView {
   const zoom = lerp(1.06, 1, ease(v));
   const s = Math.max(g.dw / DESK_W, g.dh / DESK_H) * zoom;
-  const camX = lerp(-34, 34, v) + swayX * 14;
-  const camY = lerp(-26, 30, v) + swayY * 10;
+  const camX = lerp(-34, 34, v) + swayX * 8;
+  const camY = lerp(-26, 30, v) + swayY * 6;
   // Upright screens frame the card's landing spot under the card, then follow
   // the card home to the map; wide ones the middle of the desk, which shows
   // the map. Either way the desk's edges stay out of view.
@@ -357,7 +393,16 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   const geo = useRef<Geometry>(BLANK);
   const sway = useRef({ x: 0, y: 0, sx: 0, sy: 0 });
   const [size, setSize] = useState({ w: 0, h: 0, fromX: 0, fromY: 0, cx: 0, cy: 0, narrow: false });
-  const { scrollYProgress: p } = useScroll({ target: track, offset: ['start start', 'end end'] });
+  const { scrollYProgress } = useScroll({ target: track, offset: ['start start', 'end end'] });
+  // Everything follows the scroll through a heavily damped spring, so a mouse
+  // wheel's steps glide instead of jumping the scene forward a notch at a time.
+  // Overdamped (no bounce); it trails the scroll by about a fifth of a second.
+  const p = useSpring(scrollYProgress, { stiffness: 170, damping: 40, mass: 0.7, restDelta: 0.0001 });
+  // The pen eases toward where the scroll puts it, so it glides from word to
+  // word and back along to the next line rather than snapping there.
+  const penNow = useRef<{ x: number; y: number; a: number; l: number; s: number } | null>(null);
+  const penGoal = useRef({ x: 0, y: 0, a: 0, l: 0, s: 1 });
+  const penRaf = useRef(0);
 
   // Measure the stage and the card's resting place (untransformed offsets).
   const measure = useCallback(() => {
@@ -409,35 +454,39 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
     return () => observer.disconnect();
   }, [animate, measure]);
 
+  // Wide screens have the track to themselves until the pen is picked up (the
+  // card only turns over on narrow ones), so the card comes in over more of it.
+  const slideIn = (): readonly [number, number] => (geo.current.narrow ? T.slideIn : [0, 0.2]);
+
   // The card: lifted in from the lower right (in perspective), holds, then flies home along an arc.
   const x = useTransform(p, (v) => {
     const g = geo.current;
     const dx = homeOnStage(g, deskView(v, g, 0, 0)).x - g.cx;
-    if (v < T.send[0]) return keys(v, [T.slideIn[0], T.slideIn[1]], [g.w * 1.0, 0]);
+    if (v < T.send[0]) return keys(v, [slideIn()[0], slideIn()[1]], [g.w * 1.0, 0]);
     return keys(span(v, T.send), [0, 0.18, 0.6, 1], [0, -g.w * 0.02, dx * 0.62, dx]);
   });
   const y = useTransform(p, (v) => {
     const g = geo.current;
     const dy = homeOnStage(g, deskView(v, g, 0, 0)).y - g.cy;
-    if (v < T.send[0]) return keys(v, [T.slideIn[0], T.slideIn[1]], [g.h * 0.32, 0]);
+    if (v < T.send[0]) return keys(v, [slideIn()[0], slideIn()[1]], [g.h * 0.32, 0]);
     return keys(span(v, T.send), [0, 0.18, 0.6, 1], [0, 8, dy * 1.05, dy]);
   });
   // How high the card is as it comes in: 1 off the desk, 0 at rest.
-  const land = useTransform(p, (v) => 1 - ease(span(v, T.slideIn)));
+  const land = useTransform(p, (v) => 1 - ease(span(v, slideIn())));
   const scale = useTransform(p, (v) =>
     v < T.send[0]
-      ? 1 + (1 - ease(span(v, T.slideIn))) * 0.05
+      ? 1 + (1 - ease(span(v, slideIn()))) * 0.05
       : keys(span(v, T.send), [0, 0.18, 0.6, 1], [1, 1.04, 0.36, 0.04])
   );
   const rotate = useTransform(p, (v) =>
     v < T.send[0]
-      ? keys(v, [T.slideIn[0], T.slideIn[1]], [18, 0])
+      ? keys(v, [slideIn()[0], slideIn()[1]], [18, 0])
       : keys(span(v, T.send), [0, 0.18, 0.6, 1], [0, -3, 12, 26])
   );
   const rotateX = useTransform(p, (v) =>
-    v < T.send[0] ? keys(v, [T.slideIn[0], T.slideIn[1], T.write[0]], [24, 8, 5]) : keys(span(v, T.send), [0, 0.3], [5, 0])
+    v < T.send[0] ? keys(v, [slideIn()[0], slideIn()[1], T.write[0]], [24, 8, 5]) : keys(span(v, T.send), [0, 0.3], [5, 0])
   );
-  const rotateY = useTransform(p, (v) => keys(v, [T.slideIn[0], T.slideIn[1]], [20, 0]));
+  const rotateY = useTransform(p, (v) => keys(v, [slideIn()[0], slideIn()[1]], [20, 0]));
   const opacity = useTransform(p, (v) => 1 - span(v, [T.send[1] - 0.02, T.send[1]]));
 
   // CSS variables on the card.
@@ -447,7 +496,7 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   const thud = useTransform(p, (v) => keys(v, [T.stamp[1] - 0.004, T.stamp[1], T.stamp[1] + 0.012], [0, 1, 0]));
   const cancel = useTransform(p, (v) => span(v, T.cancel));
   const lift = useTransform(p, (v) => keys(span(v, T.send), [0, 0.2], [0, 1]));
-  const sheen = useTransform(p, (v) => keys(v, [T.slideIn[0], T.slideIn[1], T.flip[1], T.send[0], T.send[0] + 0.06], [0, 0.55, 1, 1, 0]));
+  const sheen = useTransform(p, (v) => keys(v, [slideIn()[0], slideIn()[1], T.flip[1], T.send[0], T.send[0] + 0.06], [0, 0.55, 1, 1, 0]));
 
   // Everything that follows the camera, drawn after motion has drawn this
   // frame's card (so the lamp and the nib sit on the card as drawn):
@@ -455,6 +504,34 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   //   the desk; and the pen, which lies on the desk, is picked up to write,
   //   follows the word being written, and is put down again.
   const words = useRef<HTMLElement[]>([]);
+  const drawPen = useCallback(() => {
+    const pen = penRef.current;
+    const penImg = penImgRef.current;
+    const n = penNow.current;
+    if (!pen || !penImg || !n) return;
+    penImg.style.transform =
+      `translate(${n.x - PEN.nibX}px, ${n.y - PEN.nibY - n.l * 10}px) rotate(${n.a}deg) scale(${n.s * (1 + n.l * 0.06)})`;
+    // The shadow is drawn on the unturned wrapper, so it always falls the same way.
+    pen.style.filter = `drop-shadow(${4 + n.l * 14}px ${6 + n.l * 18}px ${3 + n.l * 8}px rgba(20, 11, 6, ${0.5 - n.l * 0.15}))`;
+  }, []);
+  const glidePen = useCallback(() => {
+    const n = penNow.current;
+    const goal = penGoal.current;
+    if (!n) {
+      penRaf.current = 0;
+      return;
+    }
+    const k = 0.22;
+    n.x += (goal.x - n.x) * k;
+    n.y += (goal.y - n.y) * k;
+    n.a += (goal.a - n.a) * k;
+    n.l += (goal.l - n.l) * k;
+    n.s += (goal.s - n.s) * k;
+    drawPen();
+    const far = Math.abs(goal.x - n.x) + Math.abs(goal.y - n.y) + Math.abs(goal.a - n.a) > 0.15;
+    penRaf.current = far ? requestAnimationFrame(glidePen) : 0;
+  }, [drawPen]);
+  useEffect(() => () => cancelAnimationFrame(penRaf.current), []);
   const paint = useCallback(
     (v: number) => {
       const stage = stageRef.current;
@@ -527,8 +604,8 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
         const k = Math.min(list.length - 1, Math.floor(i));
         const point = at(list[k], i - k);
         px = point.x;
-        py = point.y + Math.sin(i * Math.PI * 2) * 1.5;
-        angle = PEN.writeAngle + Math.sin(i * Math.PI) * 4;
+        py = point.y;
+        angle = PEN.writeAngle + Math.sin(i * Math.PI) * 2;
         liftAmount = 0.1;
       } else if (v > T.write[1] && v < T.putDown[1]) {
         const last = at(list[list.length - 1], 1);
@@ -538,12 +615,15 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
         angle = lerp(PEN.writeAngle, 0, t);
         liftAmount = Math.sin(t * Math.PI) * 0.9;
       }
-      penImg.style.transform =
-        `translate(${px - PEN.nibX}px, ${py - PEN.nibY - liftAmount * 10}px) rotate(${angle}deg) scale(${penScale * (1 + liftAmount * 0.06)})`;
-      // The shadow is drawn on the unturned wrapper, so it always falls the same way.
-      pen.style.filter = `drop-shadow(${4 + liftAmount * 14}px ${6 + liftAmount * 18}px ${3 + liftAmount * 8}px rgba(20, 11, 6, ${0.5 - liftAmount * 0.15}))`;
+      penGoal.current = { x: px, y: py, a: angle, l: liftAmount, s: penScale };
+      if (!penNow.current) {
+        penNow.current = { ...penGoal.current };
+        drawPen();
+      } else if (!penRaf.current) {
+        penRaf.current = requestAnimationFrame(glidePen);
+      }
     },
-    [rotate, scale, x, y, flip, lift]
+    [rotate, scale, x, y, flip, lift, drawPen, glidePen]
   );
   useMotionValueEvent(p, 'change', (v) => frame.postRender(() => paint(v)));
   useEffect(() => {
