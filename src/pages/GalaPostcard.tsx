@@ -521,7 +521,9 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
       penRaf.current = 0;
       return;
     }
-    const k = 0.22;
+    // Slow enough that a fast scroll through several lines reads as the pen
+    // drifting down the card, not zigzagging across it (Jeff: "shakes").
+    const k = 0.09;
     n.x += (goal.x - n.x) * k;
     n.y += (goal.y - n.y) * k;
     n.a += (goal.a - n.a) * k;
