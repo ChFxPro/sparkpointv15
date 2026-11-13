@@ -320,12 +320,17 @@ interface DeskView {
   camY: number;
 }
 
-/** One camera over the desk: it drifts across and eases in a touch as the card lands. */
-function deskView(v: number, g: Geometry, swayX: number, swayY: number): DeskView {
-  const zoom = lerp(1.06, 1, ease(v));
+/**
+ * One camera over the desk: it drifts across and eases in a touch as the card
+ * lands. `still` (touch screens) holds the desk still: phones' scroll positions
+ * are uneven enough that a desk moving with every one of them trembled (Jeff,
+ * 2026-11-13). The pan to the map as the card flies home still runs.
+ */
+function deskView(v: number, g: Geometry, swayX: number, swayY: number, still = false): DeskView {
+  const zoom = still ? 1 : lerp(1.06, 1, ease(v));
   const s = Math.max(g.dw / DESK_W, g.dh / DESK_H) * zoom;
-  const camX = lerp(-34, 34, v) + swayX * 8;
-  const camY = lerp(-26, 30, v) + swayY * 6;
+  const camX = still ? 0 : lerp(-34, 34, v) + swayX * 8;
+  const camY = still ? 0 : lerp(-26, 30, v) + swayY * 6;
   // Upright screens frame the card's landing spot under the card, then follow
   // the card home to the map; wide ones the middle of the desk, which shows
   // the map. Either way the desk's edges stay out of view.
@@ -443,7 +448,7 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
     const dw = desk.clientWidth;
     const dh = desk.clientHeight;
     // The route home starts under the card, where the desk is as the card leaves.
-    const leave = deskView(T.send[0], { ...geo.current, cx, cy, deskX, deskY, dw, dh }, 0, 0);
+    const leave = deskView(T.send[0], { ...geo.current, cx, cy, deskX, deskY, dw, dh }, 0, 0, touchRef.current);
     geo.current = {
       w,
       h,
@@ -496,13 +501,13 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   // The card: lifted in from the lower right (in perspective), holds, then flies home along an arc.
   const x = useTransform(p, (v) => {
     const g = geo.current;
-    const dx = homeOnStage(g, deskView(v, g, 0, 0)).x - g.cx;
+    const dx = homeOnStage(g, deskView(v, g, 0, 0, touchRef.current)).x - g.cx;
     if (v < T.send[0]) return keys(v, [slideIn()[0], slideIn()[1]], [g.w * 1.0, 0]);
     return keys(span(v, T.send), [0, 0.18, 0.6, 1], [0, -g.w * 0.02, dx * 0.62, dx]);
   });
   const y = useTransform(p, (v) => {
     const g = geo.current;
-    const dy = homeOnStage(g, deskView(v, g, 0, 0)).y - g.cy;
+    const dy = homeOnStage(g, deskView(v, g, 0, 0, touchRef.current)).y - g.cy;
     if (v < T.send[0]) return keys(v, [slideIn()[0], slideIn()[1]], [g.h * 0.32, 0]);
     return keys(span(v, T.send), [0, 0.18, 0.6, 1], [0, 8, dy * 1.05, dy]);
   });
@@ -581,7 +586,7 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
       const g = geo.current;
       if (!stage || !g.w) return;
       const { sx, sy } = sway.current;
-      const view = deskView(v, g, sx, sy);
+      const view = deskView(v, g, sx, sy, touchRef.current);
 
       // The desk, and the raised things moving further than it.
       if (deskRef.current) deskRef.current.style.transform = `translate(${view.tx}px, ${view.ty}px) scale(${view.s})`;
