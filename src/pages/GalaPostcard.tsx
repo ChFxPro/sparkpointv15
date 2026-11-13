@@ -1,11 +1,13 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
-import { frame, motion, useMotionValue, useMotionValueEvent, useScroll, useTransform, type MotionValue } from 'motion/react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type MutableRefObject, type ReactNode, type Ref } from 'react';
+import { frame, motion, useMotionValueEvent, useScroll, useTransform, type MotionValue } from 'motion/react';
 import { Link } from 'react-router';
 import { Sparkmark } from '../components/Sparkmark';
 import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
+import { GalaPostcardCredits, WORLD_TRIPS, WorldFront } from './galaPostcard/WorldFront';
 
 const BASE = import.meta.env.BASE_URL;
-const postcardImage = `${BASE}assets/events/gala/hub-winter-postcard.webp`;
+// The Hub on its own stamp, unused: the card strikes its own postmark.
+const stampImage = `${BASE}assets/events/gala/stamps/chapter-return-postage-mint.webp`;
 
 // USPS POSTNET for 28712, SparkPoint's mailing ZIP: a frame
 // bar, five bars per digit (two tall, three short), a check digit, and a
@@ -27,16 +29,19 @@ const ZIP_BARS = postnet('28712');
 // times (screen readers and search read them whole); only each word's opacity
 // follows `--write` (0 → 1) on the card, so the words appear in order as if
 // being written. With no `--write` set (reduced motion) every word is shown.
+// The card is the guest's, sent home from their trip (Jeff, 2026-11-13): no
+// named destination, and the Hub named as what this journey helps bring to life.
+const GREETING = 'Dear Home,';
 const MESSAGE_A =
-  'Every great trip ends with coming home. A portion of every trip chosen at the Gala, from Santorini to Skagway, comes back to SparkPoint, helping bring the';
+  'The world is every bit as wonderful as they said. Still, every journey connects back to you, and this one is helping bring the';
 const MESSAGE_LINK = 'Transylvania Resilience Hub';
-const MESSAGE_B = 'to life: one roof where people, organizations, and services come together.';
-const SIGN_A = 'With love from home,';
-const SIGN_B = 'SparkPoint';
+const MESSAGE_B = 'to life.';
+const SIGN_A = 'Wish you were here!';
+const SIGN_B = 'A Gala traveler';
 const ADDRESS = ['Home', 'Transylvania County', 'North Carolina'];
 
 const words = (text: string) => text.split(/\s+/).filter(Boolean);
-const PIECES = [MESSAGE_A, MESSAGE_LINK, MESSAGE_B, SIGN_A, SIGN_B, ...ADDRESS];
+const PIECES = [GREETING, MESSAGE_A, MESSAGE_LINK, MESSAGE_B, SIGN_A, SIGN_B, ...ADDRESS];
 const WORD_COUNT = PIECES.reduce((total, piece) => total + words(piece).length, 0);
 // Where each piece's first word falls in the whole hand-written sequence.
 const START = PIECES.reduce<number[]>((starts, piece, index) => {
@@ -69,18 +74,11 @@ export function GalaPostcard({ style }: { style?: Record<string, MotionValue<num
 
       <figure className="gala-postcard-front">
         <div className="gala-postcard-print">
-          <img
-            src={postcardImage}
-            alt="Concept rendering of the Transylvania Resilience Hub in winter: a brick building with a glowing SparkPoint sign, lit windows, and snow on the ground."
-            loading="lazy"
-          />
-          <figcaption>
-            <span className="gala-postcard-greet">Greetings from</span>
-            <strong className="gala-postcard-big" data-text="Home">Home</strong>
-            <span className="gala-postcard-place">Transylvania County · North Carolina</span>
-          </figcaption>
+          <WorldFront />
         </div>
-        <small className="gala-postcard-credit">Transylvania Resilience Hub · concept rendering</small>
+        <figcaption className="gala-postcard-credit">
+          {WORLD_TRIPS.map((trip) => trip.label).join(' · ')} · five of the Gala's eight trips
+        </figcaption>
       </figure>
 
       <div className="gala-postcard-back">
@@ -92,19 +90,22 @@ export function GalaPostcard({ style }: { style?: Record<string, MotionValue<num
 
         <div className="gala-postcard-grid">
           <div className="gala-postcard-message">
+            <p className="gala-postcard-dear">
+              <Handwritten text={GREETING} piece={0} />
+            </p>
             <p>
-              <Handwritten text={MESSAGE_A} piece={0} />{' '}
+              <Handwritten text={MESSAGE_A} piece={1} />{' '}
               <Link to="/resilience-hub">
-                <Handwritten text={MESSAGE_LINK} piece={1} />
+                <Handwritten text={MESSAGE_LINK} piece={2} />
               </Link>{' '}
-              <Handwritten text={MESSAGE_B} piece={2} />
+              <Handwritten text={MESSAGE_B} piece={3} />
             </p>
             <p className="gala-postcard-sign">
               <span className="gala-postcard-sign-line">
-                <Handwritten text={SIGN_A} piece={3} />
+                <Handwritten text={SIGN_A} piece={4} />
               </span>
               <span>
-                <Handwritten text={SIGN_B} piece={4} /> <Sparkmark size="1em" />
+                <Handwritten text={SIGN_B} piece={5} /> <Sparkmark size="0.8em" />
               </span>
             </p>
           </div>
@@ -127,26 +128,20 @@ export function GalaPostcard({ style }: { style?: Record<string, MotionValue<num
                 <circle cx="124" cy="38" r="33" />
                 <circle cx="124" cy="38" r="20" />
                 <text className="is-ring">
-                  <textPath href="#gala-postmark-ring" startOffset="25%">TRANSYLVANIA CO · NC ·</textPath>
+                  <textPath href="#gala-postmark-ring" startOffset="2%">A WORLD OF CONNECTIONS ·</textPath>
                 </text>
                 <text x="124" y="37" className="is-date">DEC 11</text>
                 <text x="124" y="47">2026</text>
               </svg>
-              <div className="gala-postcard-stamp">
-                <div>
-                  <Sparkmark size="30px" />
-                  <b>SparkPoint</b>
-                  <small>Gives back</small>
-                </div>
-              </div>
+              <img className="gala-postcard-stamp" src={stampImage} alt="" loading="lazy" decoding="async" />
             </div>
 
             <p className="gala-postcard-to">
-              <span className="gala-postcard-to-label">To:</span> <Handwritten text={ADDRESS[0]} piece={5} />
+              <span className="gala-postcard-to-label">To:</span> <Handwritten text={ADDRESS[0]} piece={6} />
               <br />
-              <Handwritten text={ADDRESS[1]} piece={6} />
+              <Handwritten text={ADDRESS[1]} piece={7} />
               <br />
-              <Handwritten text={ADDRESS[2]} piece={7} />
+              <Handwritten text={ADDRESS[2]} piece={8} />
             </p>
             <svg
               className="gala-postcard-zip"
@@ -166,18 +161,26 @@ export function GalaPostcard({ style }: { style?: Record<string, MotionValue<num
 
 
 // "The return trip", told with scroll (Jeff, 2026-11-12: all five ideas).
-// A tall track with a sticky stage set as a writing desk: trip photos and a cup
-// of coffee drift past at their own speeds, and a fountain pen lies on the desk.
-// As the visitor scrolls:
-//   1. the postcard slides onto the desk, in perspective (CSS 3D, so the card
-//      stays real text; a light sheen crosses it as it turns);
+// A tall track with a sticky stage set as a travel desk: a photographed desk
+// (wood, the Gala folder and invitation, ink, a wax seal), with the raised
+// things on it (passport, watch, camera, coffee) as their own layers, which
+// move a little further than the desk as the view drifts, in proportion to
+// their height, while their shadows stay put (Jeff approved the prototype at
+// depth strength 1.0, 2026-11-13: more and the layers come apart). The lamp's
+// light is part of the desk, and a copy of it falls on the card, locked to the
+// desk as the card slides beneath it. As the visitor scrolls:
+//   1. the postcard is lifted onto the desk from the lower right, its shadow
+//      long and soft, and settles into the lamp's pool as the shadow tightens;
 //   2. on narrow screens, where the card is one column, it turns over;
-//   3. the pen picks itself up and writes the message and address, word by
-//      word, its nib following the word being written;
+//   3. the dip pen is picked up off the desk and writes the message and
+//      address, word by word, its nib following the word being written;
 //   4. the stamp comes down from above and lands with a thud (the card jumps,
 //      the ink blooms), then the postmark rolls across it;
 //   5. the card lifts and flies home along a dashed airmail route to a pin
 //      marked Home, Transylvania County.
+// The desk images are Envato Elements stock composed for the Gala (no credit
+// needed or given; the kit is in Graphic Library 2026/Envato/Travel Desk
+// Extracted, with the build scripts in its _build folder).
 // Under reduced motion (the OS setting or the site's toggle) none of this runs:
 // the card sits still and fully written, with no desk.
 //
@@ -210,77 +213,132 @@ function keys(t: number, at: number[], values: number[]) {
 interface Geometry {
   w: number;
   h: number;
-  /** The card's resting centre in the stage, untransformed. */
+  /** The card's resting centre in the stage, untransformed, and its size. */
   cx: number;
   cy: number;
+  cardW: number;
+  cardH: number;
   /** Where the pen lies on the desk (nib point). */
   restX: number;
   restY: number;
-  /** The Home pin. */
-  pinX: number;
-  pinY: number;
+  /** Where the card leaves from, in desk pixels (the route starts here). */
+  fromX: number;
+  fromY: number;
+  /** The desk's box in stage coordinates (it bleeds to the screen's edges). */
+  deskX: number;
+  deskY: number;
+  dw: number;
+  dh: number;
+  narrow: boolean;
 }
 
-const BLANK: Geometry = { w: 0, h: 0, cx: 0, cy: 0, restX: 0, restY: 0, pinX: 0, pinY: 0 };
+const BLANK: Geometry = {
+  w: 0, h: 0, cx: 0, cy: 0, cardW: 0, cardH: 0, restX: 0, restY: 0, fromX: 0, fromY: 0,
+  deskX: 0, deskY: 0, dw: 0, dh: 0, narrow: false,
+};
 
-const DESK_PHOTOS = [
-  { id: 'greece', file: 'greece-01-santorini-oia', place: 'Santorini', tilt: -9, drift: [60, -70], className: 'is-a' },
-  { id: 'iceland', file: 'iceland-01-gullfoss', place: 'Gullfoss', tilt: 7, drift: [90, -90], className: 'is-b' },
-  { id: 'cortona', file: 'cortona-01-cortona-hilltop', place: 'Cortona', tilt: 6, drift: [40, -60], className: 'is-c' },
-] as const;
+// The desk, in its own pixels (the layers' coordinates come from the kit's layers.json).
+const DESK_SRC = `${BASE}assets/events/gala/desk`;
+const DESK_W = 2400;
+const DESK_H = 1600;
+/** Where the card's centre lands: the brightest part of the lamp's pool. */
+const DESK_REST = { x: 1057, y: 1029 };
+/** Home: Brevard on the Transylvania County map, where the card flies to. */
+const DESK_HOME = { x: 1490, y: 1371 };
+/** The county map lies flat on the desk (Jeff's map element, 2026-11-13), so it doesn't move. */
+const DESK_MAP: readonly [number, number, number, number] = [1069, 1136, 727, 464];
+/** How far a raised thing moves per unit of height, relative to the desk (strength 1.0). */
+const DEPTH = 1 / 90;
+type Box = readonly [x: number, y: number, w: number, h: number];
+// In drawing order: the passport lies lowest, the coffee over everything near it.
+// The watch was moved up beside the invitation to keep the map clear.
+const DESK_THINGS: readonly { name: string; depth: number; obj: Box; shadow: Box }[] = [
+  { name: 'passport', depth: 10, obj: [198, 8, 709, 477], shadow: [115, 0, 913, 566] },
+  { name: 'watch', depth: 22, obj: [1680, 290, 276, 354], shadow: [1659, 272, 311, 392] },
+  { name: 'camera', depth: 60, obj: [1924, 88, 307, 391], shadow: [1916, 81, 334, 417] },
+  { name: 'compass', depth: 30, obj: [1650, 1052, 157, 203], shadow: [1659, 1063, 174, 215] },
+  { name: 'coffee', depth: 48, obj: [1960, 1180, 440, 420], shadow: [1960, 1180, 440, 420] },
+];
+/** The lamp's light on the card: a 800×533 copy of the desk's light (an alpha shade). */
+const LAMP_SCALE = DESK_W / 800;
+/** The dip pen, photographed lying on the desk with its nib at the top left. */
+const PEN = { w: 418, h: 779, nibX: 4, nibY: 4, length: 880, writeAngle: -118 };
 
-function FountainPen() {
-  // Drawn upright with the nib at the bottom centre (the element's transform origin).
-  return (
-    <svg viewBox="0 0 28 230" aria-hidden="true">
-      <defs>
-        <linearGradient id="gala-pen-body" x1="0" x2="1">
-          <stop offset="0" stopColor="#0d1526" />
-          <stop offset="0.38" stopColor="#2a3a5c" />
-          <stop offset="0.55" stopColor="#14213a" />
-          <stop offset="1" stopColor="#070b14" />
-        </linearGradient>
-        <linearGradient id="gala-pen-brass" x1="0" x2="1">
-          <stop offset="0" stopColor="#8c6a2e" />
-          <stop offset="0.45" stopColor="#f1d9a0" />
-          <stop offset="1" stopColor="#8c6a2e" />
-        </linearGradient>
-      </defs>
-      {/* cap end and barrel */}
-      <rect x="6" y="0" width="16" height="12" rx="8" fill="url(#gala-pen-body)" />
-      <rect x="5" y="8" width="18" height="140" rx="5" fill="url(#gala-pen-body)" />
-      <rect x="5" y="26" width="18" height="4" fill="url(#gala-pen-brass)" />
-      <rect x="5" y="140" width="18" height="6" fill="url(#gala-pen-brass)" />
-      {/* clip */}
-      <rect x="20" y="12" width="3" height="58" rx="1.5" fill="url(#gala-pen-brass)" />
-      {/* grip */}
-      <path d="M6 146 L22 146 L19 192 L9 192 Z" fill="url(#gala-pen-body)" />
-      {/* nib */}
-      <path d="M9 192 L19 192 L14.6 229 L13.4 229 Z" fill="url(#gala-pen-brass)" />
-      <path d="M14 200 L14 228" stroke="#5a4520" strokeWidth="0.7" />
-      <circle cx="14" cy="203" r="1.4" fill="#5a4520" />
-    </svg>
-  );
+interface DeskView {
+  s: number;
+  tx: number;
+  ty: number;
+  camX: number;
+  camY: number;
 }
 
-function CoffeeCup() {
+/** One camera over the desk: it drifts across and eases in a touch as the card lands. */
+function deskView(v: number, g: Geometry, swayX: number, swayY: number): DeskView {
+  const zoom = lerp(1.06, 1, ease(v));
+  const s = Math.max(g.dw / DESK_W, g.dh / DESK_H) * zoom;
+  const camX = lerp(-34, 34, v) + swayX * 14;
+  const camY = lerp(-26, 30, v) + swayY * 10;
+  // Upright screens frame the card's landing spot under the card, then follow
+  // the card home to the map; wide ones the middle of the desk, which shows
+  // the map. Either way the desk's edges stay out of view.
+  const upright = g.dw < g.dh;
+  const home = upright ? ease(span(v, [T.send[0], T.send[0] + 0.1])) : 0;
+  const fx = upright ? lerp(DESK_REST.x, DESK_HOME.x, home) : DESK_W / 2;
+  const fy = upright ? lerp(DESK_REST.y, DESK_HOME.y, home) : DESK_H / 2;
+  const ax = upright ? lerp(g.cx - g.deskX, g.dw / 2, home) : g.dw / 2;
+  const ay = upright ? lerp(g.cy - g.deskY, g.dh * 0.45, home) : g.dh / 2;
+  const clampTo = (value: number, low: number) => Math.min(0, Math.max(low, value));
+  return {
+    s,
+    tx: clampTo(ax - (fx + camX) * s, g.dw - DESK_W * s),
+    ty: clampTo(ay - (fy + camY) * s, g.dh - DESK_H * s),
+    camX,
+    camY,
+  };
+}
+
+const placeBox = ([left, top, width, height]: Box): CSSProperties => ({ left, top, width, height });
+
+/** Home on screen (stage coordinates) for a given view. */
+const homeOnStage = (g: Geometry, view: DeskView) => ({
+  x: g.deskX + view.tx + DESK_HOME.x * view.s,
+  y: g.deskY + view.ty + DESK_HOME.y * view.s,
+});
+
+function Desk({
+  worldRef,
+  thingRefs,
+  children,
+}: {
+  worldRef: Ref<HTMLDivElement>;
+  thingRefs: MutableRefObject<(HTMLImageElement | null)[]>;
+  children?: ReactNode;
+}) {
   return (
-    <svg viewBox="0 0 200 200" aria-hidden="true">
-      <defs>
-        <radialGradient id="gala-coffee" cx="0.42" cy="0.4" r="0.6">
-          <stop offset="0" stopColor="#6b4325" />
-          <stop offset="0.7" stopColor="#3a2414" />
-          <stop offset="1" stopColor="#24160c" />
-        </radialGradient>
-      </defs>
-      <circle cx="100" cy="100" r="92" fill="#f4ede0" />
-      <circle cx="100" cy="100" r="92" fill="none" stroke="#d9b56a" strokeWidth="2" opacity="0.7" />
-      <circle cx="100" cy="100" r="80" fill="none" stroke="#e5dccb" strokeWidth="1.5" />
-      <circle cx="100" cy="100" r="58" fill="#fbf7ef" />
-      <circle cx="100" cy="100" r="50" fill="url(#gala-coffee)" />
-      <ellipse cx="86" cy="86" rx="14" ry="7" fill="#fff" opacity="0.18" transform="rotate(-30 86 86)" />
-      <path d="M156 92 q24 0 24 18 q0 18 -24 18" fill="none" stroke="#f4ede0" strokeWidth="9" strokeLinecap="round" />
-    </svg>
+    <div className="gala-desk" aria-hidden="true">
+      <div ref={worldRef} className="gala-desk-world">
+        <img src={`${DESK_SRC}/desk.webp`} alt="" width={DESK_W} height={DESK_H} style={placeBox([0, 0, DESK_W, DESK_H])} loading="lazy" decoding="async" />
+        <img src={`${DESK_SRC}/map.webp`} alt="" style={placeBox(DESK_MAP)} loading="lazy" decoding="async" />
+        {DESK_THINGS.map((thing) => (
+          <img key={`${thing.name}-shadow`} src={`${DESK_SRC}/${thing.name}-shadow.webp`} alt="" style={placeBox(thing.shadow)} loading="lazy" decoding="async" />
+        ))}
+        {DESK_THINGS.map((thing, index) => (
+          <img
+            key={thing.name}
+            ref={(el) => {
+              thingRefs.current[index] = el;
+            }}
+            className="is-raised"
+            src={`${DESK_SRC}/${thing.name}-obj.webp`}
+            alt=""
+            style={placeBox(thing.obj)}
+            loading="lazy"
+            decoding="async"
+          />
+        ))}
+        {children}
+      </div>
+    </div>
   );
 }
 
@@ -289,32 +347,57 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   const track = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
+  const deskRef = useRef<HTMLDivElement>(null);
+  const thingRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const lampRef = useRef<HTMLSpanElement>(null);
+  const lampImgRef = useRef<HTMLImageElement>(null);
+  const penRef = useRef<HTMLDivElement>(null);
+  const penImgRef = useRef<HTMLImageElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
   const geo = useRef<Geometry>(BLANK);
-  const [size, setSize] = useState({ w: 0, h: 0, pinX: 0, pinY: 0, cx: 0, cy: 0, narrow: false });
+  const sway = useRef({ x: 0, y: 0, sx: 0, sy: 0 });
+  const [size, setSize] = useState({ w: 0, h: 0, fromX: 0, fromY: 0, cx: 0, cy: 0, narrow: false });
   const { scrollYProgress: p } = useScroll({ target: track, offset: ['start start', 'end end'] });
 
   // Measure the stage and the card's resting place (untransformed offsets).
   const measure = useCallback(() => {
     const stage = stageRef.current;
     const scene = sceneRef.current;
-    if (!stage || !scene) return;
+    const desk = deskRef.current?.parentElement;
+    if (!stage || !scene || !desk) return;
     const w = stage.clientWidth;
     const h = stage.clientHeight;
-    const cx = scene.offsetLeft + scene.offsetWidth / 2;
-    const cy = scene.offsetTop + scene.offsetHeight / 2;
+    const cardW = scene.offsetWidth;
+    const cardH = scene.offsetHeight;
+    const cx = scene.offsetLeft + cardW / 2;
+    const cy = scene.offsetTop + cardH / 2;
     const narrow = w < 1021;
-    const right = scene.offsetLeft + scene.offsetWidth;
+    const right = scene.offsetLeft + cardW;
+    const deskX = desk.offsetLeft;
+    const deskY = desk.offsetTop;
+    const dw = desk.clientWidth;
+    const dh = desk.clientHeight;
+    // The route home starts under the card, where the desk is as the card leaves.
+    const leave = deskView(T.send[0], { ...geo.current, cx, cy, deskX, deskY, dw, dh }, 0, 0);
     geo.current = {
       w,
       h,
       cx,
       cy,
-      restX: narrow ? Math.min(w - 40, right - 30) : Math.min(w - 70, right + 46),
-      restY: scene.offsetTop + scene.offsetHeight * (narrow ? 0.9 : 0.78),
-      pinX: w * (narrow ? 0.82 : 0.84),
-      pinY: h * (narrow ? 0.17 : 0.22),
+      cardW,
+      cardH,
+      // The pen lies on the desk just off the card's right edge, running out of frame.
+      restX: narrow ? Math.min(deskX + dw - 8, right + 4) : Math.min(deskX + dw - 24, right + 28),
+      restY: scene.offsetTop + cardH * (narrow ? 0.62 : 0.5),
+      fromX: (cx - deskX - leave.tx) / leave.s,
+      fromY: (cy - deskY - leave.ty) / leave.s,
+      deskX,
+      deskY,
+      dw,
+      dh,
+      narrow,
     };
-    setSize({ w, h, pinX: geo.current.pinX, pinY: geo.current.pinY, cx, cy, narrow });
+    setSize({ w, h, fromX: geo.current.fromX, fromY: geo.current.fromY, cx, cy, narrow });
   }, []);
 
   useEffect(() => {
@@ -326,31 +409,35 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
     return () => observer.disconnect();
   }, [animate, measure]);
 
-  // The card: slides in (in perspective), holds, then flies home along an arc.
+  // The card: lifted in from the lower right (in perspective), holds, then flies home along an arc.
   const x = useTransform(p, (v) => {
     const g = geo.current;
-    const dx = g.pinX - g.cx;
-    if (v < T.send[0]) return keys(v, [T.slideIn[0], T.slideIn[1]], [-g.w * 1.05, 0]);
+    const dx = homeOnStage(g, deskView(v, g, 0, 0)).x - g.cx;
+    if (v < T.send[0]) return keys(v, [T.slideIn[0], T.slideIn[1]], [g.w * 1.0, 0]);
     return keys(span(v, T.send), [0, 0.18, 0.6, 1], [0, -g.w * 0.02, dx * 0.62, dx]);
   });
   const y = useTransform(p, (v) => {
     const g = geo.current;
-    const dy = g.pinY - g.cy;
-    if (v < T.send[0]) return keys(v, [T.slideIn[0], T.slideIn[1]], [g.h * 0.12, 0]);
+    const dy = homeOnStage(g, deskView(v, g, 0, 0)).y - g.cy;
+    if (v < T.send[0]) return keys(v, [T.slideIn[0], T.slideIn[1]], [g.h * 0.32, 0]);
     return keys(span(v, T.send), [0, 0.18, 0.6, 1], [0, 8, dy * 1.05, dy]);
   });
+  // How high the card is as it comes in: 1 off the desk, 0 at rest.
+  const land = useTransform(p, (v) => 1 - ease(span(v, T.slideIn)));
   const scale = useTransform(p, (v) =>
-    v < T.send[0] ? 1 : keys(span(v, T.send), [0, 0.18, 0.6, 1], [1, 1.04, 0.36, 0.04])
+    v < T.send[0]
+      ? 1 + (1 - ease(span(v, T.slideIn))) * 0.05
+      : keys(span(v, T.send), [0, 0.18, 0.6, 1], [1, 1.04, 0.36, 0.04])
   );
   const rotate = useTransform(p, (v) =>
     v < T.send[0]
-      ? keys(v, [T.slideIn[0], T.slideIn[1]], [-16, 0])
+      ? keys(v, [T.slideIn[0], T.slideIn[1]], [18, 0])
       : keys(span(v, T.send), [0, 0.18, 0.6, 1], [0, -3, 12, 26])
   );
   const rotateX = useTransform(p, (v) =>
     v < T.send[0] ? keys(v, [T.slideIn[0], T.slideIn[1], T.write[0]], [24, 8, 5]) : keys(span(v, T.send), [0, 0.3], [5, 0])
   );
-  const rotateY = useTransform(p, (v) => keys(v, [T.slideIn[0], T.slideIn[1]], [-28, 0]));
+  const rotateY = useTransform(p, (v) => keys(v, [T.slideIn[0], T.slideIn[1]], [20, 0]));
   const opacity = useTransform(p, (v) => 1 - span(v, [T.send[1] - 0.02, T.send[1]]));
 
   // CSS variables on the card.
@@ -362,18 +449,54 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   const lift = useTransform(p, (v) => keys(span(v, T.send), [0, 0.2], [0, 1]));
   const sheen = useTransform(p, (v) => keys(v, [T.slideIn[0], T.slideIn[1], T.flip[1], T.send[0], T.send[0] + 0.06], [0, 0.55, 1, 1, 0]));
 
-  // The pen: lies on the desk, picks up to write, follows the word being
-  // written, and is put down again.
-  const penX = useMotionValue(0);
-  const penY = useMotionValue(0);
-  const penTilt = useMotionValue(0);
-  const penLift = useMotionValue(0);
+  // Everything that follows the camera, drawn after motion has drawn this
+  // frame's card (so the lamp and the nib sit on the card as drawn):
+  //   the desk and its raised things; the lamp's light on the card, locked to
+  //   the desk; and the pen, which lies on the desk, is picked up to write,
+  //   follows the word being written, and is put down again.
   const words = useRef<HTMLElement[]>([]);
-  const placePen = useCallback(
+  const paint = useCallback(
     (v: number) => {
       const stage = stageRef.current;
       const g = geo.current;
       if (!stage || !g.w) return;
+      const { sx, sy } = sway.current;
+      const view = deskView(v, g, sx, sy);
+
+      // The desk, and the raised things moving further than it.
+      if (deskRef.current) deskRef.current.style.transform = `translate(${view.tx}px, ${view.ty}px) scale(${view.s})`;
+      DESK_THINGS.forEach((thing, index) => {
+        const el = thingRefs.current[index];
+        if (el) el.style.transform = `translate(${-view.camX * thing.depth * DEPTH}px, ${-view.camY * thing.depth * DEPTH}px)`;
+      });
+
+      // The Home pin sits on Brevard, on the map.
+      const pin = pinRef.current;
+      if (pin) {
+        const home = homeOnStage(g, view);
+        pin.style.left = `${home.x}px`;
+        pin.style.top = `${home.y}px`;
+      }
+
+      // The lamp on the card: undo the card's own move, so the light stays with the desk.
+      const lamp = lampRef.current;
+      const lampImg = lampImgRef.current;
+      if (lamp && lampImg) {
+        const r = rotate.get();
+        const sc = Math.max(0.01, scale.get());
+        const ox = g.deskX + view.tx - g.cx - x.get();
+        const oy = g.deskY + view.ty - g.cy - y.get();
+        lampImg.style.transform =
+          `translate(${g.cardW / 2}px, ${g.cardH / 2}px) rotate(${-r}deg) scale(${1 / sc}) ` +
+          `translate(${ox}px, ${oy}px) scale(${view.s * LAMP_SCALE})`;
+        const turning = g.narrow ? Math.abs(Math.cos(Math.PI * flip.get())) : 1;
+        lamp.style.opacity = String(turning * (1 - lift.get()));
+      }
+
+      // The pen.
+      const pen = penRef.current;
+      const penImg = penImgRef.current;
+      if (!pen || !penImg) return;
       if (!words.current.length) {
         words.current = Array.from(stage.querySelectorAll<HTMLElement>('.gala-postcard-back .gala-w'));
       }
@@ -381,18 +504,23 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
       if (!list.length) return;
       const sr = stage.getBoundingClientRect();
       const at = (el: HTMLElement, f: number) => {
-        const r = el.getBoundingClientRect();
-        return { x: r.left - sr.left + r.width * f, y: r.bottom - sr.top - r.height * 0.22 };
+        const rect = el.getBoundingClientRect();
+        return { x: rect.left - sr.left + rect.width * f, y: rect.bottom - sr.top - rect.height * 0.22 };
       };
-      let px = g.restX;
-      let py = g.restY;
-      let tilt = 0;
+      // Lying on the desk it moves with the desk, as a raised thing would.
+      const restX = g.restX - view.camX * view.s * (1 + 26 * DEPTH);
+      const restY = g.restY - view.camY * view.s * (1 + 26 * DEPTH);
+      const penScale = Math.min(view.s, (g.cardW * 0.75) / PEN.length);
+      let px = restX;
+      let py = restY;
+      let angle = 0;
       let liftAmount = 0;
       if (v >= T.pickUp[0] && v < T.write[0]) {
         const first = at(list[0], 0);
         const t = ease(span(v, T.pickUp));
-        px = lerp(g.restX, first.x, t);
-        py = lerp(g.restY, first.y, t);
+        px = lerp(restX, first.x, t);
+        py = lerp(restY, first.y, t);
+        angle = lerp(0, PEN.writeAngle, t);
         liftAmount = Math.sin(t * Math.PI) * 0.9 + t * 0.1;
       } else if (v >= T.write[0] && v <= T.write[1]) {
         const i = span(v, T.write) * list.length;
@@ -400,125 +528,134 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
         const point = at(list[k], i - k);
         px = point.x;
         py = point.y + Math.sin(i * Math.PI * 2) * 1.5;
-        tilt = Math.sin(i * Math.PI) * 4;
+        angle = PEN.writeAngle + Math.sin(i * Math.PI) * 4;
         liftAmount = 0.1;
       } else if (v > T.write[1] && v < T.putDown[1]) {
         const last = at(list[list.length - 1], 1);
         const t = ease(span(v, T.putDown));
-        px = lerp(last.x, g.restX, t);
-        py = lerp(last.y, g.restY, t);
+        px = lerp(last.x, restX, t);
+        py = lerp(last.y, restY, t);
+        angle = lerp(PEN.writeAngle, 0, t);
         liftAmount = Math.sin(t * Math.PI) * 0.9;
       }
-      penX.set(px);
-      penY.set(py);
-      penTilt.set(tilt);
-      penLift.set(liftAmount);
+      penImg.style.transform =
+        `translate(${px - PEN.nibX}px, ${py - PEN.nibY - liftAmount * 10}px) rotate(${angle}deg) scale(${penScale * (1 + liftAmount * 0.06)})`;
+      // The shadow is drawn on the unturned wrapper, so it always falls the same way.
+      pen.style.filter = `drop-shadow(${4 + liftAmount * 14}px ${6 + liftAmount * 18}px ${3 + liftAmount * 8}px rgba(20, 11, 6, ${0.5 - liftAmount * 0.15}))`;
     },
-    [penX, penY, penTilt, penLift]
+    [rotate, scale, x, y, flip, lift]
   );
-  // Measure after motion has drawn this frame's card, so the nib sits on the word as drawn.
-  useMotionValueEvent(p, 'change', (v) => frame.postRender(() => placePen(v)));
+  useMotionValueEvent(p, 'change', (v) => frame.postRender(() => paint(v)));
   useEffect(() => {
     if (!animate) return;
     words.current = [];
-    placePen(p.get());
-  }, [animate, size, placePen, p]);
-  const penTransform = useTransform(
-    [penX, penY, penTilt, penLift] as MotionValue<number>[],
-    ([px, py, tilt, liftAmount]: number[]) =>
-      `translate(${px - 14}px, ${py - 230 - liftAmount * 10}px) rotate(${34 + tilt}deg)`
-  );
-  const penShadow = useTransform(penLift, (l) => `drop-shadow(${6 + l * 14}px ${8 + l * 18}px ${4 + l * 8}px rgba(0, 0, 0, ${0.45 - l * 0.15}))`);
+    paint(p.get());
+  }, [animate, size, paint, p]);
 
-  // Desk: things drift at their own speeds.
-  const driftA = useTransform(p, [0, 1], [DESK_PHOTOS[0].drift[0], DESK_PHOTOS[0].drift[1]]);
-  const driftB = useTransform(p, [0, 1], [DESK_PHOTOS[1].drift[0], DESK_PHOTOS[1].drift[1]]);
-  const driftC = useTransform(p, [0, 1], [DESK_PHOTOS[2].drift[0], DESK_PHOTOS[2].drift[1]]);
-  const driftCup = useTransform(p, [0, 1], [30, -40]);
-  const drifts = [driftA, driftB, driftC];
+  // With a mouse, the view sways a little toward the pointer, eased.
+  useEffect(() => {
+    if (!animate) return undefined;
+    let raf = 0;
+    const settle = () => {
+      const s = sway.current;
+      s.sx += (s.x - s.sx) * 0.06;
+      s.sy += (s.y - s.sy) * 0.06;
+      paint(p.get());
+      raf = Math.abs(s.x - s.sx) + Math.abs(s.y - s.sy) > 0.002 ? requestAnimationFrame(settle) : 0;
+    };
+    const onMove = (event: PointerEvent) => {
+      if (event.pointerType !== 'mouse') return;
+      const rect = track.current?.getBoundingClientRect();
+      if (!rect || rect.bottom < 0 || rect.top > window.innerHeight) return;
+      sway.current.x = (event.clientX / window.innerWidth) * 2 - 1;
+      sway.current.y = (event.clientY / window.innerHeight) * 2 - 1;
+      if (!raf) raf = requestAnimationFrame(settle);
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      cancelAnimationFrame(raf);
+    };
+  }, [animate, paint, p]);
 
   // The airmail route home, drawn behind the card as it flies.
   const route = useTransform(p, (v) => keys(span(v, T.send), [0.15, 0.9], [0, 1]));
   const arrive = useTransform(p, (v) => span(v, T.arrive));
   const arriveScale = useTransform(arrive, [0, 1], [0.6, 1]);
-  const { w, h, pinX, pinY, cx, cy, narrow } = size;
-  // Phones: the pin's label reads to its left, so the route comes up into it from below.
-  const routePath = narrow
-    ? `M ${cx} ${cy} C ${lerp(cx, pinX, 0.2)} ${cy - h * 0.12}, ${pinX} ${pinY + h * 0.2}, ${pinX} ${pinY}`
-    : `M ${cx} ${cy} C ${lerp(cx, pinX, 0.25)} ${cy - h * 0.06}, ${lerp(cx, pinX, 0.55)} ${pinY - h * 0.12}, ${pinX} ${pinY}`;
+  const { w, fromX, fromY } = size;
+  // Drawn on the desk, in desk pixels, from under the card to Brevard, arcing up.
+  const arc = Math.hypot(DESK_HOME.x - fromX, DESK_HOME.y - fromY) * 0.35;
+  const routePath =
+    `M ${fromX} ${fromY} C ${lerp(fromX, DESK_HOME.x, 0.25)} ${fromY - arc}, ` +
+    `${lerp(fromX, DESK_HOME.x, 0.75)} ${DESK_HOME.y - arc}, ${DESK_HOME.x} ${DESK_HOME.y}`;
 
   if (!animate) {
     return (
-      <div ref={track} className="gala-postcard-track">
-        <div className="gala-postcard-stage">
-          <div className="gala-postcard-scene">
-            <GalaPostcard />
+      <>
+        <div ref={track} className="gala-postcard-track">
+          <div className="gala-postcard-stage">
+            <div className="gala-postcard-scene">
+              <GalaPostcard />
+            </div>
+            {children}
           </div>
-          {children}
         </div>
-      </div>
+        <GalaPostcardCredits />
+      </>
     );
   }
 
   return (
-    <div ref={track} className="gala-postcard-track is-scroll">
-      <div ref={stageRef} className="gala-postcard-stage">
-        <div className="gala-desk" aria-hidden="true">
-          {DESK_PHOTOS.map((photo, index) => (
-            <motion.figure
-              key={photo.id}
-              className={`gala-desk-photo ${photo.className}`}
-              style={{ y: drifts[index], rotate: photo.tilt }}
-            >
-              <img src={`${BASE}assets/events/gala/trips/${photo.file}-800.webp`} alt="" loading="lazy" decoding="async" />
-              <figcaption>{photo.place}</figcaption>
-            </motion.figure>
-          ))}
-          <motion.div className="gala-desk-cup" style={{ y: driftCup }}>
-            <CoffeeCup />
-          </motion.div>
-          <span className="gala-desk-ring" />
-        </div>
+    <>
+      <div ref={track} className="gala-postcard-track is-scroll">
+        <div ref={stageRef} className="gala-postcard-stage">
+          <Desk worldRef={deskRef} thingRefs={thingRefs}>
+            {w ? (
+              <svg className="gala-route" viewBox={`0 0 ${DESK_W} ${DESK_H}`}>
+                <defs>
+                  <mask id="gala-route-mask" maskUnits="userSpaceOnUse">
+                    <motion.path d={routePath} stroke="#fff" strokeWidth="24" fill="none" style={{ pathLength: route }} />
+                  </mask>
+                </defs>
+                <path d={routePath} className="gala-route-line" mask="url(#gala-route-mask)" vectorEffect="non-scaling-stroke" />
+              </svg>
+            ) : null}
+          </Desk>
 
-        {w ? (
-          <svg className="gala-route" viewBox={`0 0 ${w} ${h}`} aria-hidden="true">
-            <defs>
-              <mask id="gala-route-mask" maskUnits="userSpaceOnUse">
-                <motion.path d={routePath} stroke="#fff" strokeWidth="8" fill="none" style={{ pathLength: route }} />
-              </mask>
-            </defs>
-            <path d={routePath} className="gala-route-line" mask="url(#gala-route-mask)" />
-          </svg>
-        ) : null}
-
-        <motion.div ref={sceneRef} className="gala-postcard-scene" style={{ x, y, scale, rotate, rotateX, rotateY, opacity }}>
-          <GalaPostcard
-            style={{ '--flip': flip, '--write': write, '--stamp': stamp, '--thud': thud, '--cancel': cancel, '--lift': lift, '--sheen': sheen }}
-          />
-        </motion.div>
-
-        <motion.div className="gala-pen" style={{ transform: penTransform, filter: penShadow }} aria-hidden="true">
-          <FountainPen />
-        </motion.div>
-
-        {w ? (
-          <motion.div
-            className="gala-home-pin"
-            style={{ left: pinX, top: pinY, opacity: arrive, scale: arriveScale }}
-            aria-hidden="true"
-          >
-            <span className="gala-home-pin-dot" />
-            <span className="gala-home-pin-label">
-              <b>Home</b>
-              <small>Transylvania County, NC</small>
-              <em>
-                Delivered <Sparkmark size="0.95em" />
-              </em>
+          <motion.div ref={sceneRef} className="gala-postcard-scene" style={{ x, y, scale, rotate, rotateX, rotateY, opacity }}>
+            <GalaPostcard
+              style={{ '--flip': flip, '--write': write, '--stamp': stamp, '--thud': thud, '--cancel': cancel, '--lift': lift, '--land': land, '--sheen': sheen }}
+            />
+            <span ref={lampRef} className="gala-postcard-lamp" aria-hidden="true">
+              <img ref={lampImgRef} src={`${DESK_SRC}/card-light.webp`} alt="" loading="lazy" decoding="async" />
             </span>
           </motion.div>
-        ) : null}
-        {children}
+
+          <div ref={penRef} className="gala-pen" aria-hidden="true">
+            <img ref={penImgRef} src={`${DESK_SRC}/pen.webp`} alt="" loading="lazy" decoding="async" />
+          </div>
+
+          {w ? (
+            <motion.div
+              ref={pinRef}
+              className="gala-home-pin"
+              style={{ opacity: arrive, scale: arriveScale }}
+              aria-hidden="true"
+            >
+              <span className="gala-home-pin-dot" />
+              <span className="gala-home-pin-label">
+                <b>Home</b>
+                <small>Transylvania County, NC</small>
+                <em>
+                  Delivered <Sparkmark size="0.95em" />
+                </em>
+              </span>
+            </motion.div>
+          ) : null}
+          {children}
+        </div>
       </div>
-    </div>
+      <GalaPostcardCredits />
+    </>
   );
 }
