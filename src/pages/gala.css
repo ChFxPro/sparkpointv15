@@ -3863,6 +3863,136 @@ html.reduce-motion .gala-film-bar {
   }
 }
 
+/* Upright phones and tablets: a real portrait postcard (2:3), lying on the
+   desk with wood showing round it, rather than a card stretched to the
+   screen's height. The back's lettering is sized from the card's own width
+   (cqi), so the message and address always fit on it. */
+@media (max-width: 1020px) and (orientation: portrait) {
+  /* Room at the foot for the page's ticket bar (about 81px), so the card
+     always sits whole between the site header and the bar. */
+  .gala-postcard-track.is-scroll .gala-postcard-stage {
+    padding-block: 80px 92px;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-scene {
+    justify-self: center;
+    width: min(86vw, 380px, calc((100svh - 196px) * 2 / 3));
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard {
+    container-type: inline-size;
+    aspect-ratio: 2 / 3;
+    padding: 9px;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-print {
+    border-width: 7px;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-back {
+    min-height: 0;
+    overflow: hidden;
+    padding: 1.5cqi 3.5cqi 3.5cqi;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-head {
+    gap: 3cqi;
+    padding-bottom: 2.6cqi;
+    font-size: 3.3cqi;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-grid {
+    grid-template-rows: auto 1fr;
+    gap: 0;
+    padding-top: 3.5cqi;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-message {
+    padding-bottom: 3cqi;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-message p {
+    font-size: 4.6cqi;
+    line-height: 1.5;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-sign {
+    margin-top: 2.4cqi;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-sign > span:not(.gala-postcard-sign-line) {
+    font-size: 6.6cqi;
+  }
+
+  /* Address on the left, stamp on the right, as on a real card's back. */
+  .gala-postcard-track.is-scroll .gala-postcard-address {
+    grid-template-columns: 1fr auto;
+    align-content: end;
+    align-items: end;
+    gap: 2cqi 3cqi;
+    padding-top: 3cqi;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-postage {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: start;
+    width: 25cqi;
+    min-height: 0;
+    height: 31cqi;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-stamp {
+    width: 23cqi;
+    padding: 1.8cqi;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-stamp > div {
+    gap: 1cqi;
+    padding: 2.6cqi 1cqi 2.2cqi;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-stamp svg {
+    width: 7.5cqi;
+    height: 7.5cqi;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-stamp b {
+    font-size: 2.9cqi;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-stamp small {
+    font-size: 1.9cqi;
+  }
+
+  /* Lifted into the blank space above the address, so it cancels the stamp
+     without running across the lines. */
+  .gala-postcard-track.is-scroll .gala-postcard-postmark {
+    top: -6cqi;
+    right: 9cqi;
+    width: 44cqi;
+    height: 21cqi;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-to {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 4.3cqi;
+    line-height: 2;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-to-label {
+    font-size: 2.8cqi;
+  }
+
+  .gala-postcard-track.is-scroll .gala-postcard-zip {
+    grid-column: 1;
+    grid-row: 2;
+    width: 34cqi;
+    height: 3.4cqi;
+  }
+}
+
 /* Postcard: linen card stock taped to the evergreen "tabletop". */
 
 .gala-postcard {
