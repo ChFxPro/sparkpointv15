@@ -504,6 +504,10 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   //   the desk; and the pen, which lies on the desk, is picked up to write,
   //   follows the word being written, and is put down again.
   const words = useRef<HTMLElement[]>([]);
+  const wordRects = useRef<{ sig: string; rects: Map<HTMLElement, { l: number; w: number; b: number; h: number }> }>({
+    sig: '',
+    rects: new Map(),
+  });
   const drawPen = useCallback(() => {
     const pen = penRef.current;
     const penImg = penImgRef.current;
@@ -581,10 +585,24 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
       }
       const list = words.current;
       if (!list.length) return;
-      const sr = stage.getBoundingClientRect();
+      // Where each word sits, relative to the stage. Measuring forces the browser
+      // to lay the page out, which phones can't afford every frame (Jeff saw the
+      // scene shake on his phone), so positions are kept until the card itself
+      // moves; while the pen writes, the card holds still and nothing is re-measured.
+      const sig = [g.w, g.h, x.get(), y.get(), scale.get(), rotate.get(), rotateX.get(), rotateY.get(), flip.get()]
+        .map((n) => n.toFixed(2))
+        .join(',');
+      if (wordRects.current.sig !== sig) wordRects.current = { sig, rects: new Map() };
+      const cache = wordRects.current.rects;
       const at = (el: HTMLElement, f: number) => {
-        const rect = el.getBoundingClientRect();
-        return { x: rect.left - sr.left + rect.width * f, y: rect.bottom - sr.top - rect.height * 0.22 };
+        let r = cache.get(el);
+        if (!r) {
+          const sr = stage.getBoundingClientRect();
+          const rect = el.getBoundingClientRect();
+          r = { l: rect.left - sr.left, w: rect.width, b: rect.bottom - sr.top, h: rect.height };
+          cache.set(el, r);
+        }
+        return { x: r.l + r.w * f, y: r.b - r.h * 0.22 };
       };
       // Lying on the desk it moves with the desk, as a raised thing would.
       const restX = g.restX - view.camX * view.s * (1 + 26 * DEPTH);
@@ -625,7 +643,7 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
         penRaf.current = requestAnimationFrame(glidePen);
       }
     },
-    [rotate, scale, x, y, flip, lift, drawPen, glidePen]
+    [rotate, rotateX, rotateY, scale, x, y, flip, lift, drawPen, glidePen]
   );
   useMotionValueEvent(p, 'change', (v) => frame.postRender(() => paint(v)));
   useEffect(() => {

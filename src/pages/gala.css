@@ -4060,6 +4060,14 @@ html.reduce-motion .gala-film-bar {
   height: 100%;
 }
 
+/* In the scroll story the WORLD artwork (five photo-masked letters) sits on its
+   own layer, painted once: otherwise every frame of the handwriting, which
+   repaints the card, repainted it too, and phones dropped frames. */
+.gala-postcard-track.is-scroll .gala-postcard-world {
+  contain: strict;
+  will-change: transform;
+}
+
 .gala-postcard-print::after {
   position: absolute;
   inset: 0;
