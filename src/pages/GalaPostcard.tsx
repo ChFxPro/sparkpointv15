@@ -3,9 +3,11 @@ import { frame, motion, useMotionValueEvent, useScroll, useTransform, type Motio
 import { Link } from 'react-router';
 import { Sparkmark } from '../components/Sparkmark';
 import { useTripLoungeEnv } from './galaTrips/useTripLoungeEnv';
+import { GalaPostcardCredits, WORLD_TRIPS, WorldFront } from './galaPostcard/WorldFront';
 
 const BASE = import.meta.env.BASE_URL;
-const postcardImage = `${BASE}assets/events/gala/hub-winter-postcard.webp`;
+// The Hub on its own stamp, unused: the card strikes its own postmark.
+const stampImage = `${BASE}assets/events/gala/stamps/chapter-return-postage-mint.webp`;
 
 // USPS POSTNET for 28712, SparkPoint's mailing ZIP: a frame
 // bar, five bars per digit (two tall, three short), a check digit, and a
@@ -27,16 +29,19 @@ const ZIP_BARS = postnet('28712');
 // times (screen readers and search read them whole); only each word's opacity
 // follows `--write` (0 → 1) on the card, so the words appear in order as if
 // being written. With no `--write` set (reduced motion) every word is shown.
+// The card is the guest's, sent home from their trip (Jeff, 2026-11-13): no
+// named destination, and the Hub named as what this journey helps bring to life.
+const GREETING = 'Dear Home,';
 const MESSAGE_A =
-  'Every great trip ends with coming home. A portion of every trip chosen at the Gala, from Santorini to Skagway, comes back to SparkPoint, helping bring the';
+  'The world is every bit as wonderful as they said. Still, every journey connects back to you, and this one is helping bring the';
 const MESSAGE_LINK = 'Transylvania Resilience Hub';
-const MESSAGE_B = 'to life: one roof where people, organizations, and services come together.';
-const SIGN_A = 'With love from home,';
-const SIGN_B = 'SparkPoint';
+const MESSAGE_B = 'to life.';
+const SIGN_A = 'Wish you were here!';
+const SIGN_B = 'A Gala traveler';
 const ADDRESS = ['Home', 'Transylvania County', 'North Carolina'];
 
 const words = (text: string) => text.split(/\s+/).filter(Boolean);
-const PIECES = [MESSAGE_A, MESSAGE_LINK, MESSAGE_B, SIGN_A, SIGN_B, ...ADDRESS];
+const PIECES = [GREETING, MESSAGE_A, MESSAGE_LINK, MESSAGE_B, SIGN_A, SIGN_B, ...ADDRESS];
 const WORD_COUNT = PIECES.reduce((total, piece) => total + words(piece).length, 0);
 // Where each piece's first word falls in the whole hand-written sequence.
 const START = PIECES.reduce<number[]>((starts, piece, index) => {
@@ -69,18 +74,11 @@ export function GalaPostcard({ style }: { style?: Record<string, MotionValue<num
 
       <figure className="gala-postcard-front">
         <div className="gala-postcard-print">
-          <img
-            src={postcardImage}
-            alt="Concept rendering of the Transylvania Resilience Hub in winter: a brick building with a glowing SparkPoint sign, lit windows, and snow on the ground."
-            loading="lazy"
-          />
-          <figcaption>
-            <span className="gala-postcard-greet">Greetings from</span>
-            <strong className="gala-postcard-big" data-text="Home">Home</strong>
-            <span className="gala-postcard-place">Transylvania County · North Carolina</span>
-          </figcaption>
+          <WorldFront />
         </div>
-        <small className="gala-postcard-credit">Transylvania Resilience Hub · concept rendering</small>
+        <figcaption className="gala-postcard-credit">
+          {WORLD_TRIPS.map((trip) => trip.label).join(' · ')} · five of the Gala's eight trips
+        </figcaption>
       </figure>
 
       <div className="gala-postcard-back">
@@ -92,19 +90,22 @@ export function GalaPostcard({ style }: { style?: Record<string, MotionValue<num
 
         <div className="gala-postcard-grid">
           <div className="gala-postcard-message">
+            <p className="gala-postcard-dear">
+              <Handwritten text={GREETING} piece={0} />
+            </p>
             <p>
-              <Handwritten text={MESSAGE_A} piece={0} />{' '}
+              <Handwritten text={MESSAGE_A} piece={1} />{' '}
               <Link to="/resilience-hub">
-                <Handwritten text={MESSAGE_LINK} piece={1} />
+                <Handwritten text={MESSAGE_LINK} piece={2} />
               </Link>{' '}
-              <Handwritten text={MESSAGE_B} piece={2} />
+              <Handwritten text={MESSAGE_B} piece={3} />
             </p>
             <p className="gala-postcard-sign">
               <span className="gala-postcard-sign-line">
-                <Handwritten text={SIGN_A} piece={3} />
+                <Handwritten text={SIGN_A} piece={4} />
               </span>
               <span>
-                <Handwritten text={SIGN_B} piece={4} /> <Sparkmark size="1em" />
+                <Handwritten text={SIGN_B} piece={5} /> <Sparkmark size="0.8em" />
               </span>
             </p>
           </div>
@@ -127,26 +128,20 @@ export function GalaPostcard({ style }: { style?: Record<string, MotionValue<num
                 <circle cx="124" cy="38" r="33" />
                 <circle cx="124" cy="38" r="20" />
                 <text className="is-ring">
-                  <textPath href="#gala-postmark-ring" startOffset="25%">TRANSYLVANIA CO · NC ·</textPath>
+                  <textPath href="#gala-postmark-ring" startOffset="2%">A WORLD OF CONNECTIONS ·</textPath>
                 </text>
                 <text x="124" y="37" className="is-date">DEC 11</text>
                 <text x="124" y="47">2026</text>
               </svg>
-              <div className="gala-postcard-stamp">
-                <div>
-                  <Sparkmark size="30px" />
-                  <b>SparkPoint</b>
-                  <small>Gives back</small>
-                </div>
-              </div>
+              <img className="gala-postcard-stamp" src={stampImage} alt="" loading="lazy" decoding="async" />
             </div>
 
             <p className="gala-postcard-to">
-              <span className="gala-postcard-to-label">To:</span> <Handwritten text={ADDRESS[0]} piece={5} />
+              <span className="gala-postcard-to-label">To:</span> <Handwritten text={ADDRESS[0]} piece={6} />
               <br />
-              <Handwritten text={ADDRESS[1]} piece={6} />
+              <Handwritten text={ADDRESS[1]} piece={7} />
               <br />
-              <Handwritten text={ADDRESS[2]} piece={7} />
+              <Handwritten text={ADDRESS[2]} piece={8} />
             </p>
             <svg
               className="gala-postcard-zip"
@@ -596,65 +591,71 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
 
   if (!animate) {
     return (
-      <div ref={track} className="gala-postcard-track">
-        <div className="gala-postcard-stage">
-          <div className="gala-postcard-scene">
-            <GalaPostcard />
+      <>
+        <div ref={track} className="gala-postcard-track">
+          <div className="gala-postcard-stage">
+            <div className="gala-postcard-scene">
+              <GalaPostcard />
+            </div>
+            {children}
           </div>
-          {children}
         </div>
-      </div>
+        <GalaPostcardCredits />
+      </>
     );
   }
 
   return (
-    <div ref={track} className="gala-postcard-track is-scroll">
-      <div ref={stageRef} className="gala-postcard-stage">
-        <Desk worldRef={deskRef} thingRefs={thingRefs}>
-          {w ? (
-            <svg className="gala-route" viewBox={`0 0 ${DESK_W} ${DESK_H}`}>
-              <defs>
-                <mask id="gala-route-mask" maskUnits="userSpaceOnUse">
-                  <motion.path d={routePath} stroke="#fff" strokeWidth="24" fill="none" style={{ pathLength: route }} />
-                </mask>
-              </defs>
-              <path d={routePath} className="gala-route-line" mask="url(#gala-route-mask)" vectorEffect="non-scaling-stroke" />
-            </svg>
-          ) : null}
-        </Desk>
+    <>
+      <div ref={track} className="gala-postcard-track is-scroll">
+        <div ref={stageRef} className="gala-postcard-stage">
+          <Desk worldRef={deskRef} thingRefs={thingRefs}>
+            {w ? (
+              <svg className="gala-route" viewBox={`0 0 ${DESK_W} ${DESK_H}`}>
+                <defs>
+                  <mask id="gala-route-mask" maskUnits="userSpaceOnUse">
+                    <motion.path d={routePath} stroke="#fff" strokeWidth="24" fill="none" style={{ pathLength: route }} />
+                  </mask>
+                </defs>
+                <path d={routePath} className="gala-route-line" mask="url(#gala-route-mask)" vectorEffect="non-scaling-stroke" />
+              </svg>
+            ) : null}
+          </Desk>
 
-        <motion.div ref={sceneRef} className="gala-postcard-scene" style={{ x, y, scale, rotate, rotateX, rotateY, opacity }}>
-          <GalaPostcard
-            style={{ '--flip': flip, '--write': write, '--stamp': stamp, '--thud': thud, '--cancel': cancel, '--lift': lift, '--land': land, '--sheen': sheen }}
-          />
-          <span ref={lampRef} className="gala-postcard-lamp" aria-hidden="true">
-            <img ref={lampImgRef} src={`${DESK_SRC}/card-light.webp`} alt="" loading="lazy" decoding="async" />
-          </span>
-        </motion.div>
-
-        <div ref={penRef} className="gala-pen" aria-hidden="true">
-          <img ref={penImgRef} src={`${DESK_SRC}/pen.webp`} alt="" loading="lazy" decoding="async" />
-        </div>
-
-        {w ? (
-          <motion.div
-            ref={pinRef}
-            className="gala-home-pin"
-            style={{ opacity: arrive, scale: arriveScale }}
-            aria-hidden="true"
-          >
-            <span className="gala-home-pin-dot" />
-            <span className="gala-home-pin-label">
-              <b>Home</b>
-              <small>Transylvania County, NC</small>
-              <em>
-                Delivered <Sparkmark size="0.95em" />
-              </em>
+          <motion.div ref={sceneRef} className="gala-postcard-scene" style={{ x, y, scale, rotate, rotateX, rotateY, opacity }}>
+            <GalaPostcard
+              style={{ '--flip': flip, '--write': write, '--stamp': stamp, '--thud': thud, '--cancel': cancel, '--lift': lift, '--land': land, '--sheen': sheen }}
+            />
+            <span ref={lampRef} className="gala-postcard-lamp" aria-hidden="true">
+              <img ref={lampImgRef} src={`${DESK_SRC}/card-light.webp`} alt="" loading="lazy" decoding="async" />
             </span>
           </motion.div>
-        ) : null}
-        {children}
+
+          <div ref={penRef} className="gala-pen" aria-hidden="true">
+            <img ref={penImgRef} src={`${DESK_SRC}/pen.webp`} alt="" loading="lazy" decoding="async" />
+          </div>
+
+          {w ? (
+            <motion.div
+              ref={pinRef}
+              className="gala-home-pin"
+              style={{ opacity: arrive, scale: arriveScale }}
+              aria-hidden="true"
+            >
+              <span className="gala-home-pin-dot" />
+              <span className="gala-home-pin-label">
+                <b>Home</b>
+                <small>Transylvania County, NC</small>
+                <em>
+                  Delivered <Sparkmark size="0.95em" />
+                </em>
+              </span>
+            </motion.div>
+          ) : null}
+          {children}
+        </div>
       </div>
-    </div>
+      <GalaPostcardCredits />
+    </>
   );
 }

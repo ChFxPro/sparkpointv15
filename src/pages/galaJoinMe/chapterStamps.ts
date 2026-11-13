@@ -68,6 +68,8 @@ const POSTAL_H = 156;
 export const POSTAL_STAMPS: Record<string, PostalArt> = {
   // Ivory paper, midnight engraving, struck with a plum Brevard postmark.
   'return-postage': { w: POSTAL_W, h: POSTAL_H, paper: '#fbf6ea', ink: '#14213a', cancel: '#7a1f4d', seed: 191 },
+  // The same stamp unused, for the return-trip postcard, which strikes its own postmark.
+  'return-postage-mint': { w: POSTAL_W, h: POSTAL_H, paper: '#fbf6ea', ink: '#14213a', seed: 191 },
 };
 
 function rand(seed: number) {
