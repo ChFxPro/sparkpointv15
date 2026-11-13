@@ -226,9 +226,9 @@ interface Geometry {
   /** Where the pen lies on the desk (nib point). */
   restX: number;
   restY: number;
-  /** The Home pin. */
-  pinX: number;
-  pinY: number;
+  /** Where the card leaves from, in desk pixels (the route starts here). */
+  fromX: number;
+  fromY: number;
   /** The desk's box in stage coordinates (it bleeds to the screen's edges). */
   deskX: number;
   deskY: number;
@@ -238,7 +238,7 @@ interface Geometry {
 }
 
 const BLANK: Geometry = {
-  w: 0, h: 0, cx: 0, cy: 0, cardW: 0, cardH: 0, restX: 0, restY: 0, pinX: 0, pinY: 0,
+  w: 0, h: 0, cx: 0, cy: 0, cardW: 0, cardH: 0, restX: 0, restY: 0, fromX: 0, fromY: 0,
   deskX: 0, deskY: 0, dw: 0, dh: 0, narrow: false,
 };
 
@@ -248,14 +248,20 @@ const DESK_W = 2400;
 const DESK_H = 1600;
 /** Where the card's centre lands: the brightest part of the lamp's pool. */
 const DESK_REST = { x: 1057, y: 1029 };
+/** Home: Brevard on the Transylvania County map, where the card flies to. */
+const DESK_HOME = { x: 1490, y: 1371 };
+/** The county map lies flat on the desk (Jeff's map element, 2026-11-13), so it doesn't move. */
+const DESK_MAP: readonly [number, number, number, number] = [1069, 1136, 727, 464];
 /** How far a raised thing moves per unit of height, relative to the desk (strength 1.0). */
 const DEPTH = 1 / 90;
 type Box = readonly [x: number, y: number, w: number, h: number];
 // In drawing order: the passport lies lowest, the coffee over everything near it.
+// The watch was moved up beside the invitation to keep the map clear.
 const DESK_THINGS: readonly { name: string; depth: number; obj: Box; shadow: Box }[] = [
   { name: 'passport', depth: 10, obj: [198, 8, 709, 477], shadow: [115, 0, 913, 566] },
-  { name: 'watch', depth: 22, obj: [1321, 1178, 276, 354], shadow: [1300, 1160, 311, 392] },
+  { name: 'watch', depth: 22, obj: [1680, 290, 276, 354], shadow: [1659, 272, 311, 392] },
   { name: 'camera', depth: 60, obj: [1924, 88, 307, 391], shadow: [1916, 81, 334, 417] },
+  { name: 'compass', depth: 30, obj: [1650, 1052, 157, 203], shadow: [1659, 1063, 174, 215] },
   { name: 'coffee', depth: 48, obj: [1960, 1180, 440, 420], shadow: [1960, 1180, 440, 420] },
 ];
 /** The lamp's light on the card: a 800×533 copy of the desk's light (an alpha shade). */
@@ -277,13 +283,15 @@ function deskView(v: number, g: Geometry, swayX: number, swayY: number): DeskVie
   const s = Math.max(g.dw / DESK_W, g.dh / DESK_H) * zoom;
   const camX = lerp(-34, 34, v) + swayX * 14;
   const camY = lerp(-26, 30, v) + swayY * 10;
-  // Upright screens frame the card's landing spot under the card; wide ones the
-  // middle of the desk. Either way the desk's edges stay out of view.
+  // Upright screens frame the card's landing spot under the card, then follow
+  // the card home to the map; wide ones the middle of the desk, which shows
+  // the map. Either way the desk's edges stay out of view.
   const upright = g.dw < g.dh;
-  const fx = upright ? DESK_REST.x : DESK_W / 2;
-  const fy = upright ? DESK_REST.y : DESK_H / 2;
-  const ax = upright ? g.cx - g.deskX : g.dw / 2;
-  const ay = upright ? g.cy - g.deskY : g.dh / 2;
+  const home = upright ? ease(span(v, [T.send[0], T.send[0] + 0.1])) : 0;
+  const fx = upright ? lerp(DESK_REST.x, DESK_HOME.x, home) : DESK_W / 2;
+  const fy = upright ? lerp(DESK_REST.y, DESK_HOME.y, home) : DESK_H / 2;
+  const ax = upright ? lerp(g.cx - g.deskX, g.dw / 2, home) : g.dw / 2;
+  const ay = upright ? lerp(g.cy - g.deskY, g.dh * 0.45, home) : g.dh / 2;
   const clampTo = (value: number, low: number) => Math.min(0, Math.max(low, value));
   return {
     s,
@@ -296,11 +304,26 @@ function deskView(v: number, g: Geometry, swayX: number, swayY: number): DeskVie
 
 const placeBox = ([left, top, width, height]: Box): CSSProperties => ({ left, top, width, height });
 
-function Desk({ worldRef, thingRefs }: { worldRef: Ref<HTMLDivElement>; thingRefs: MutableRefObject<(HTMLImageElement | null)[]> }) {
+/** Home on screen (stage coordinates) for a given view. */
+const homeOnStage = (g: Geometry, view: DeskView) => ({
+  x: g.deskX + view.tx + DESK_HOME.x * view.s,
+  y: g.deskY + view.ty + DESK_HOME.y * view.s,
+});
+
+function Desk({
+  worldRef,
+  thingRefs,
+  children,
+}: {
+  worldRef: Ref<HTMLDivElement>;
+  thingRefs: MutableRefObject<(HTMLImageElement | null)[]>;
+  children?: ReactNode;
+}) {
   return (
     <div className="gala-desk" aria-hidden="true">
       <div ref={worldRef} className="gala-desk-world">
         <img src={`${DESK_SRC}/desk.webp`} alt="" width={DESK_W} height={DESK_H} style={placeBox([0, 0, DESK_W, DESK_H])} loading="lazy" decoding="async" />
+        <img src={`${DESK_SRC}/map.webp`} alt="" style={placeBox(DESK_MAP)} loading="lazy" decoding="async" />
         {DESK_THINGS.map((thing) => (
           <img key={`${thing.name}-shadow`} src={`${DESK_SRC}/${thing.name}-shadow.webp`} alt="" style={placeBox(thing.shadow)} loading="lazy" decoding="async" />
         ))}
@@ -318,6 +341,7 @@ function Desk({ worldRef, thingRefs }: { worldRef: Ref<HTMLDivElement>; thingRef
             decoding="async"
           />
         ))}
+        {children}
       </div>
     </div>
   );
@@ -334,9 +358,10 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   const lampImgRef = useRef<HTMLImageElement>(null);
   const penRef = useRef<HTMLDivElement>(null);
   const penImgRef = useRef<HTMLImageElement>(null);
+  const pinRef = useRef<HTMLDivElement>(null);
   const geo = useRef<Geometry>(BLANK);
   const sway = useRef({ x: 0, y: 0, sx: 0, sy: 0 });
-  const [size, setSize] = useState({ w: 0, h: 0, pinX: 0, pinY: 0, cx: 0, cy: 0, narrow: false });
+  const [size, setSize] = useState({ w: 0, h: 0, fromX: 0, fromY: 0, cx: 0, cy: 0, narrow: false });
   const { scrollYProgress: p } = useScroll({ target: track, offset: ['start start', 'end end'] });
 
   // Measure the stage and the card's resting place (untransformed offsets).
@@ -356,6 +381,9 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
     const deskX = desk.offsetLeft;
     const deskY = desk.offsetTop;
     const dw = desk.clientWidth;
+    const dh = desk.clientHeight;
+    // The route home starts under the card, where the desk is as the card leaves.
+    const leave = deskView(T.send[0], { ...geo.current, cx, cy, deskX, deskY, dw, dh }, 0, 0);
     geo.current = {
       w,
       h,
@@ -366,15 +394,15 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
       // The pen lies on the desk just off the card's right edge, running out of frame.
       restX: narrow ? Math.min(deskX + dw - 8, right + 4) : Math.min(deskX + dw - 24, right + 28),
       restY: scene.offsetTop + cardH * (narrow ? 0.62 : 0.5),
-      pinX: w * (narrow ? 0.82 : 0.84),
-      pinY: h * (narrow ? 0.17 : 0.22),
+      fromX: (cx - deskX - leave.tx) / leave.s,
+      fromY: (cy - deskY - leave.ty) / leave.s,
       deskX,
       deskY,
       dw,
-      dh: desk.clientHeight,
+      dh,
       narrow,
     };
-    setSize({ w, h, pinX: geo.current.pinX, pinY: geo.current.pinY, cx, cy, narrow });
+    setSize({ w, h, fromX: geo.current.fromX, fromY: geo.current.fromY, cx, cy, narrow });
   }, []);
 
   useEffect(() => {
@@ -389,13 +417,13 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   // The card: lifted in from the lower right (in perspective), holds, then flies home along an arc.
   const x = useTransform(p, (v) => {
     const g = geo.current;
-    const dx = g.pinX - g.cx;
+    const dx = homeOnStage(g, deskView(v, g, 0, 0)).x - g.cx;
     if (v < T.send[0]) return keys(v, [T.slideIn[0], T.slideIn[1]], [g.w * 1.0, 0]);
     return keys(span(v, T.send), [0, 0.18, 0.6, 1], [0, -g.w * 0.02, dx * 0.62, dx]);
   });
   const y = useTransform(p, (v) => {
     const g = geo.current;
-    const dy = g.pinY - g.cy;
+    const dy = homeOnStage(g, deskView(v, g, 0, 0)).y - g.cy;
     if (v < T.send[0]) return keys(v, [T.slideIn[0], T.slideIn[1]], [g.h * 0.32, 0]);
     return keys(span(v, T.send), [0, 0.18, 0.6, 1], [0, 8, dy * 1.05, dy]);
   });
@@ -446,6 +474,14 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
         const el = thingRefs.current[index];
         if (el) el.style.transform = `translate(${-view.camX * thing.depth * DEPTH}px, ${-view.camY * thing.depth * DEPTH}px)`;
       });
+
+      // The Home pin sits on Brevard, on the map.
+      const pin = pinRef.current;
+      if (pin) {
+        const home = homeOnStage(g, view);
+        pin.style.left = `${home.x}px`;
+        pin.style.top = `${home.y}px`;
+      }
 
       // The lamp on the card: undo the card's own move, so the light stays with the desk.
       const lamp = lampRef.current;
@@ -551,11 +587,12 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   const route = useTransform(p, (v) => keys(span(v, T.send), [0.15, 0.9], [0, 1]));
   const arrive = useTransform(p, (v) => span(v, T.arrive));
   const arriveScale = useTransform(arrive, [0, 1], [0.6, 1]);
-  const { w, h, pinX, pinY, cx, cy, narrow } = size;
-  // Phones: the pin's label reads to its left, so the route comes up into it from below.
-  const routePath = narrow
-    ? `M ${cx} ${cy} C ${lerp(cx, pinX, 0.2)} ${cy - h * 0.12}, ${pinX} ${pinY + h * 0.2}, ${pinX} ${pinY}`
-    : `M ${cx} ${cy} C ${lerp(cx, pinX, 0.25)} ${cy - h * 0.06}, ${lerp(cx, pinX, 0.55)} ${pinY - h * 0.12}, ${pinX} ${pinY}`;
+  const { w, fromX, fromY } = size;
+  // Drawn on the desk, in desk pixels, from under the card to Brevard, arcing up.
+  const arc = Math.hypot(DESK_HOME.x - fromX, DESK_HOME.y - fromY) * 0.35;
+  const routePath =
+    `M ${fromX} ${fromY} C ${lerp(fromX, DESK_HOME.x, 0.25)} ${fromY - arc}, ` +
+    `${lerp(fromX, DESK_HOME.x, 0.75)} ${DESK_HOME.y - arc}, ${DESK_HOME.x} ${DESK_HOME.y}`;
 
   if (!animate) {
     return (
@@ -573,18 +610,18 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   return (
     <div ref={track} className="gala-postcard-track is-scroll">
       <div ref={stageRef} className="gala-postcard-stage">
-        <Desk worldRef={deskRef} thingRefs={thingRefs} />
-
-        {w ? (
-          <svg className="gala-route" viewBox={`0 0 ${w} ${h}`} aria-hidden="true">
-            <defs>
-              <mask id="gala-route-mask" maskUnits="userSpaceOnUse">
-                <motion.path d={routePath} stroke="#fff" strokeWidth="8" fill="none" style={{ pathLength: route }} />
-              </mask>
-            </defs>
-            <path d={routePath} className="gala-route-line" mask="url(#gala-route-mask)" />
-          </svg>
-        ) : null}
+        <Desk worldRef={deskRef} thingRefs={thingRefs}>
+          {w ? (
+            <svg className="gala-route" viewBox={`0 0 ${DESK_W} ${DESK_H}`}>
+              <defs>
+                <mask id="gala-route-mask" maskUnits="userSpaceOnUse">
+                  <motion.path d={routePath} stroke="#fff" strokeWidth="24" fill="none" style={{ pathLength: route }} />
+                </mask>
+              </defs>
+              <path d={routePath} className="gala-route-line" mask="url(#gala-route-mask)" vectorEffect="non-scaling-stroke" />
+            </svg>
+          ) : null}
+        </Desk>
 
         <motion.div ref={sceneRef} className="gala-postcard-scene" style={{ x, y, scale, rotate, rotateX, rotateY, opacity }}>
           <GalaPostcard
@@ -601,8 +638,9 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
 
         {w ? (
           <motion.div
+            ref={pinRef}
             className="gala-home-pin"
-            style={{ left: pinX, top: pinY, opacity: arrive, scale: arriveScale }}
+            style={{ opacity: arrive, scale: arriveScale }}
             aria-hidden="true"
           >
             <span className="gala-home-pin-dot" />

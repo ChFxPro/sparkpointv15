@@ -3704,13 +3704,14 @@ html.reduce-motion .gala-film-bar {
   pointer-events: none;
 }
 
+/* Drawn on the desk and over the pale map, so pink ink rather than brass. */
 .gala-route-line {
   fill: none;
-  stroke: var(--gala-brass-light);
-  stroke-width: 2;
-  stroke-dasharray: 2 9;
+  stroke: var(--gala-pink);
+  stroke-width: 3.5;
+  stroke-dasharray: 5 9;
   stroke-linecap: round;
-  opacity: 0.85;
+  filter: drop-shadow(0 0 1.5px rgba(255, 248, 235, 0.7));
 }
 
 .gala-home-pin {
@@ -3734,13 +3735,17 @@ html.reduce-motion .gala-film-bar {
   box-shadow: 0 0 0 6px rgba(224, 54, 148, 0.25), 0 0 24px rgba(224, 54, 148, 0.6);
 }
 
+/* A small night-blue tag, so it reads over the pale county map. */
 .gala-home-pin-label {
   display: grid;
   gap: 2px;
   margin-top: -14px;
+  padding: 8px 12px 9px;
   color: var(--gala-ivory);
   font-family: var(--gala-display);
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  background: rgba(11, 19, 34, 0.9);
+  border: 1px solid rgba(217, 181, 106, 0.55);
+  box-shadow: 0 6px 18px rgba(20, 11, 6, 0.45);
 }
 
 .gala-home-pin-label b {
@@ -3777,20 +3782,21 @@ html.reduce-motion .gala-film-bar {
     height: 460vh;
   }
 
-  /* The pin sits near the right edge, so its label reads to the left of it. */
+  /* Phones: Brevard sits low on the screen (the map is at the desk's foot),
+     so the tag stands above the pin, centred on it. */
   .gala-home-pin {
-    flex-direction: row-reverse;
-    transform-origin: 100% 0;
-    translate: calc(-100% + 8px) 0;
-  }
-
-  .gala-home-pin-dot {
-    margin: -8px 0 0 0;
+    transform-origin: 0 0;
   }
 
   .gala-home-pin-label {
-    justify-items: end;
-    text-align: right;
+    position: absolute;
+    bottom: 16px;
+    left: 0;
+    justify-items: center;
+    margin: 0;
+    text-align: center;
+    white-space: nowrap;
+    translate: -50% 0;
   }
 
   .gala-postcard-track.is-scroll .gala-postcard-stage {
