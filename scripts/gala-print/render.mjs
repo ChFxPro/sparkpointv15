@@ -91,6 +91,8 @@ async function loadPromoTrips() {
       priceText: `${dollars} · ${who} · ${note}`,
       priceHtml: `<b>${dollars}</b><span><i>·</i>${who}<i>·</i>${note}</span>`,
       photo: `${placeholders.PUBLIC}/assets/events/gala/trips/${t.image.file}-1600.webp`,
+      // The sheet's tiles are under 2 in wide, so the 800 px photo still prints at 400+ dpi and keeps the PDFs small.
+      photoSmall: `${placeholders.PUBLIC}/assets/events/gala/trips/${t.image.file}-800.webp`,
       credit: t.image.credit,
       creditShort: t.image.credit.replace(', via Wikimedia Commons', ''),
     };

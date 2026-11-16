@@ -157,7 +157,7 @@
     }
     document.getElementById('grid').innerHTML = trips.map((t) => `
       <div class="tile">
-        <div class="ph" style="--pos:${t.photoPos || '50% 50%'}"><img src="${t.photo}" alt="" /></div>
+        <div class="ph" style="--pos:${t.photoPos || '50% 50%'}"><img src="${t.photoSmall}" alt="" /></div>
         <p class="no">Connection ${t.connection}</p>
         <p class="tname">${t.name}</p>
         <p class="ln">${t.line}</p>
