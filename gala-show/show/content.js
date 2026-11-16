@@ -291,7 +291,7 @@ window.SHOW = {
         "Choose it | Every trip is available to every guest at a set price.",
         "Share it | More than one guest can choose the same trip, so no one has to miss out."
       ],
-      "payment": "",
+      "payment": "In full tonight, or by next week at the latest.\nBy credit card, and you can split it across cards.\nPart of every trip’s price is a tax-deductible gift to SparkPoint.",
       "footer": "Every journey connects back home."
     },
     {
