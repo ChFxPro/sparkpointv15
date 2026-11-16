@@ -21,6 +21,7 @@ Replace the Drive files after re-rendering.
 | `social` | `social-on-sale.html` | `social/sparkpoint-gala-tickets-on-sale-…` and `social/sparkpoint-gala-save-the-date-…` PNGs, each at 1080x1350, 1080x1080, story 1080x1920 and Facebook event 1920x1005. One template; body class `std` switches it to the Save the date wording |
 | `tickets` | `ticket-{square,wide,banner,story}.html` | `tickets/` PNGs at 2160², 3840×2160, 3600×1200 and 2160×3840 for the Squarespace ticket page |
 | `share` | `share.html` | `share/gala-share-world-of-connections.jpg`, 1200×630; copy it to `public/assets/events/gala/` to update the site |
+| `trips` | `trips-overview.html`, `trips-card.html`, `trips-sheet.html` | The board's trip promo, with prices. `trips/digital/`: an all-eight overview plus one card per trip, JPEG 2160×2700 (1080×1350 at 2x), to text or email. `trips/print/`: a two-sided letter leave-behind as `…-letter-bleed.pdf` (8.75×11.25 in, 0.125 in bleed, for a print shop) and `…-letter.pdf` (8.5×11 in), both with the night front, plus `…-letter-light.pdf` (8.5×11 in, cream paper on both sides: the easy one for a home or office printer), and PNG previews of each side. See "Trip promo" below |
 
 | `guide` | `guide.html` | `00 Start here - A World of Connections asset guide.pdf`, the guide that sits at the top of the Drive folder. It uses the other groups' output (and `npm run invite:gala`'s) as thumbnails, so run it last |
 
@@ -81,6 +82,23 @@ the split-flap board letters use a monospace face, so each letter fills a tile.
   `npx bwip-js`), update the printed URL in `invite.html` and `TICKET_URL` in
   `render.mjs`, then re-render. The render checks that the QR code decodes to
   `TICKET_URL` and stops if it doesn't.
+
+## Trip promo (the `trips` group)
+
+For board members to share with their contacts: text or email the digital
+cards, hand over or leave behind the printed sheet. Trip facts (title, nights,
+travelers, what's included, the public price, the hero photo and its credit) come
+from `src/data/galaTrips.ts`, so a price changes in one place for the site and the
+promo. The promo shows prices whatever the site's `GALA_SHOW_TRIP_PRICES` switch
+says, and stops if a trip has no price. The short line under each name and the
+three highlights are in `trips-promo.json`. Prices are always for the whole package
+and read "$6,900 · for two · airfare not included", matching the site's trip cards.
+Never use the kit's internal `listPrice` or SparkPoint's share. The QR code
+(`assets/trips-qr.svg`, made with the `qrcode` package) and the printed link go to
+`yoursparkpoint.org/events/sparkpoint-gala#trips`. Alaska's shore-excursion
+credit is left off until the provider confirms it. Never write "land only" (travel-trade jargon; Jeff, 2026-11-16). A trip can set `priceNote` in `trips-promo.json` to replace "airfare not included" in its price line. Every photo carries its
+`stills.json` credit. The render warns if a card's text or a sheet side runs past
+its safe area. Each print PDF opens with a cover sheet (two pages: a branded cover, and on its back a guide for board members: what's inside, how to use it, the short version, prices at a glance, which print file to use). Printed double-sided it is its own leaf, so the leave-behind after it stays a separate sheet to hand over. The cover shows all eight photos, so it carries their credits too. The back of the sheet carries a "Good to know" list of the confirmed answers, in the same words as the Gala page FAQ (`src/pages/GalaFaq.tsx`), and the tax line "Part of every trip's price is a tax-deductible gift to SparkPoint." Wherever airfare is explained, local taxes are too: "Prices don't include airfare or local taxes and fees, such as hotel, tourist or port taxes. Taxes vary by destination and are quoted and paid later, when you set your travel dates with the travel specialist, not at the Gala." (short form: "Airfare and local taxes aren't included; taxes are paid when you set your travel dates."); price lines stay "airfare not included", with no asterisk, and nothing says how much those taxes are. Payment is "in full, at the Gala or by the following week at the latest, by credit card or check", and a card payment can be split across cards (both confirmed 2026-11-16). Say "when you set your travel dates", never "when you book", for taxes, added travelers and insurance: "book" can sound like buying the trip (Jeff, 2026-11-16). Don't say who sends the tax acknowledgment, and never say a trip can be chosen after the Gala.
 
 ## Print notes
 
