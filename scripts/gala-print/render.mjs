@@ -7,7 +7,7 @@
 //   npm run print:gala                 # everything
 //   npm run print:gala -- invite social  # just some groups
 //
-// Groups: logo, invite, social, tickets, share. Output goes to
+// Groups: logo, invite, social, tickets, share, trips, guide. Output goes to
 // output/gala-print/ (git-ignored).
 
 import { createRequire } from 'node:module';
@@ -61,6 +61,46 @@ async function open(page, template, width, height, scale) {
 }
 
 const TICKET_URL = 'https://secure.yoursparkpoint.org/store/p/2026-sparkpoint-gala';
+
+// The board's trip promo: trip facts from src/data/galaTrips.ts (the site's port
+// of the trip kit), plus the public prices, lines and highlights in
+// trips-promo.json. esbuild (from Vite) strips the TypeScript so there's one source.
+const TRAVELERS = { 2: 'For two', 4: 'For four' };
+async function loadPromoTrips() {
+  const esbuild = require('esbuild');
+  const built = await esbuild.build({ entryPoints: [join(root, 'src', 'data', 'galaTrips.ts')], bundle: true, format: 'esm', write: false, platform: 'neutral', logLevel: 'silent' });
+  const { GALA_TRIPS } = await import(`data:text/javascript;base64,${Buffer.from(built.outputFiles[0].text).toString('base64')}`);
+  const promo = JSON.parse(await readFile(join(here, 'trips-promo.json'), 'utf8'));
+  const missing = GALA_TRIPS.filter((t) => !promo.trips[t.id]?.price);
+  if (missing.length) throw new Error(`trips-promo.json has no price for: ${missing.map((t) => t.id).join(', ')}`);
+  const trips = [...GALA_TRIPS].sort((a, b) => a.order - b.order).map((t) => {
+    const p = promo.trips[t.id];
+    if (t.price != null && t.price !== p.price) console.warn(`  ! ${t.id}: galaTrips.ts says $${t.price}, trips-promo.json says $${p.price}`);
+    if (!t.image) throw new Error(`${t.id} has no hero photo in galaTrips.ts`);
+    const word = TRAVELERS[t.travelers] ?? `For ${t.travelers}`;
+    const who = word.toLowerCase();
+    const dollars = `$${p.price.toLocaleString('en-US')}`;
+    return {
+      id: t.id, connection: t.connection, name: t.name, title: t.title, country: t.country, nights: t.nights,
+      travelersWord: word,
+      // Alaska's excursion credit is still an open question for the provider, so it stays off the promo.
+      included: t.included.filter((line) => !/excursion credit/i.test(line)),
+      line: p.line, highlights: p.highlights, photoPos: p.photoPos,
+      priceText: `${dollars} · ${who} · land only`,
+      priceHtml: `<b>${dollars}</b><span><i>·</i>${who}<i>·</i>land only</span>`,
+      photo: `${placeholders.PUBLIC}/assets/events/gala/trips/${t.image.file}-1600.webp`,
+      credit: t.image.credit,
+      creditShort: t.image.credit.replace(', via Wikimedia Commons', ''),
+    };
+  });
+  return { trips, link: promo.link, linkText: promo.linkText };
+}
+
+async function openWith(page, template, width, height, scale, data) {
+  const hook = await page.evaluateOnNewDocument((d) => { window.PROMO = d; }, data);
+  await open(page, template, width, height, scale);
+  await page.removeScriptToEvaluateOnNewDocument(hook.identifier);
+}
 
 const groups = {
   async logo(page) {
@@ -162,6 +202,50 @@ const groups = {
     console.log('share/gala-share-world-of-connections.jpg  (copy to public/assets/events/gala/ to update the site)');
   },
 
+  // The board's trip promo: a digital set (an overview of all eight trips plus
+  // one card per trip, 1080x1350) and a two-sided letter leave-behind (a
+  // print-shop PDF with 0.125 in bleed, and a plain letter PDF for home printers).
+  async trips(page) {
+    const data = await loadPromoTrips();
+    const dir = join(OUT, 'trips');
+    await mkdir(join(dir, 'digital'), { recursive: true });
+    await mkdir(join(dir, 'print'), { recursive: true });
+    await openWith(page, 'trips-overview.html', 1080, 1350, 2, data);
+    await page.screenshot({ path: join(dir, 'digital', 'sparkpoint-gala-trips-00-all-eight-1080x1350.jpg'), type: 'jpeg', quality: 90 });
+    console.log('trips/digital/sparkpoint-gala-trips-00-all-eight-1080x1350.jpg');
+    for (const trip of data.trips) {
+      const name = `sparkpoint-gala-trips-${trip.connection}-${trip.id}-1080x1350.jpg`;
+      await openWith(page, 'trips-card.html', 1080, 1350, 2, { ...data, trip });
+      const overflow = await page.evaluate(() => {
+        const body = document.querySelector('.body');
+        return body.scrollHeight > body.clientHeight + 1 || document.getElementById('name').scrollWidth > body.clientWidth + 1;
+      });
+      if (overflow) console.warn(`  ! ${trip.id}: the card's text runs past its frame`);
+      await page.screenshot({ path: join(dir, 'digital', name), type: 'jpeg', quality: 90 });
+      console.log(`trips/digital/${name}`);
+    }
+    for (const [variant, w, h, name] of [
+      ['', '8.75in', '11.25in', 'sparkpoint-gala-trips-leave-behind-letter-bleed.pdf'],
+      ['trim', '8.5in', '11in', 'sparkpoint-gala-trips-leave-behind-letter.pdf'],
+    ]) {
+      await openWith(page, 'trips-sheet.html', 840, 1080, 2, data);
+      await page.evaluate((cls) => { document.body.className = cls; }, variant);
+      await page.addStyleTag({ content: `@page { size: ${w} ${h}; margin: 0; }` });
+      const tight = await page.evaluate(() => [...document.querySelectorAll('.inner')].some((el) => el.scrollHeight > el.clientHeight + 1));
+      if (tight) console.warn(`  ! ${name}: a side's content runs past its safe area`);
+      await page.pdf({ path: join(dir, 'print', name), width: w, height: h, printBackground: true, preferCSSPageSize: true });
+      console.log(`trips/print/${name}`);
+    }
+    // Previews of the two sides, for review.
+    await openWith(page, 'trips-sheet.html', 816, 1056, 2, data);
+    await page.evaluate(() => { document.body.className = 'trim'; });
+    for (const [i, side] of (await page.$$('.page')).entries()) {
+      const name = `sparkpoint-gala-trips-leave-behind-${i ? 'back' : 'front'}-preview.png`;
+      await side.screenshot({ path: join(dir, 'print', name) });
+      console.log(`trips/print/${name}`);
+    }
+  },
+
   // The "00 Start here" guide for the Drive folder. Its thumbnails are the
   // other groups' output (and the email's, from npm run invite:gala), so run
   // it after them.
@@ -175,7 +259,7 @@ const groups = {
   },
 };
 
-const order = ['logo', 'invite', 'social', 'tickets', 'share', 'guide'];
+const order = ['logo', 'invite', 'social', 'tickets', 'share', 'trips', 'guide'];
 const asked = process.argv.slice(2);
 for (const name of asked) {
   if (!order.includes(name)) throw new Error(`Unknown group "${name}". Use: ${order.join(', ')}`);

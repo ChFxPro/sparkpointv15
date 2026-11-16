@@ -1,0 +1,47 @@
+{
+  "_about": "The board's trip promo (npm run print:gala -- trips). Facts (title, nights, travelers, what's included, hero photo and its credit) come from src/data/galaTrips.ts, which is ported from the trip kit. This file holds only what the promo adds: each trip's public price for the whole package (never per person; never the kit's internal listPrice, never SparkPoint's share), the short line under the name, and three highlights (from the trip packs' packs.json). Rules: no auction or bidding words, never name the package provider, don't say how or when payment happens, child pricing, insurance or transferability, and never say a trip can be chosen after the Gala.",
+  "link": "https://yoursparkpoint.org/events/sparkpoint-gala#trips",
+  "linkText": "yoursparkpoint.org/events/sparkpoint-gala",
+  "trips": {
+    "greece": {
+      "price": 6900,
+      "line": "& the Greek Islands",
+      "highlights": ["Three nights each in Santorini and Mykonos", "Two nights in Athens, with a guided tour", "Island flight and ferry included"]
+    },
+    "iceland": {
+      "price": 6900,
+      "line": "Land of the Vikings",
+      "highlights": ["Six nights in Reykjavík", "The Golden Circle, with a farm lunch", "Sky Lagoon and its seven-step ritual"]
+    },
+    "cortona": {
+      "price": 5900,
+      "line": "Under the Tuscan Sun",
+      "highlights": ["Six nights in a two-bedroom suite, for four", "Welcome cocktails on the main square", "Tasting dinner with wine, and a private walk"]
+    },
+    "scotland": {
+      "price": 5900,
+      "line": "Lochs & Legends",
+      "highlights": ["Four nights in Edinburgh, three in Glasgow", "Edinburgh Castle and a Loch Ness cruise", "Day trips to Glencoe and Loch Lomond"]
+    },
+    "south-africa": {
+      "price": 7500,
+      "line": "Wild Wonders Photo Safari",
+      "highlights": ["Five nights in a lakefront tented suite", "Daily game drives, and a Big Five drive", "Farm-to-table meals and a bush braai"]
+    },
+    "portugal": {
+      "price": 6900,
+      "line": "Lisbon & Porto",
+      "highlights": ["Lisbon, Sintra and the Riviera", "A private guided drive to Porto", "A Douro Valley day: wine, lunch and a river cruise"]
+    },
+    "costa-rica": {
+      "price": 6500,
+      "line": "Colorful Costa Rica",
+      "highlights": ["Arenal's rainforest and volcano", "The Pacific beaches of Tamarindo", "Two tours of your choosing, like ziplining"]
+    },
+    "alaska": {
+      "price": 7500,
+      "line": "Explorer of the North",
+      "highlights": ["Seven nights at sea in a balcony stateroom", "Ketchikan, Juneau, Skagway and Victoria", "Drinks, dining and Wi-Fi package"]
+    }
+  }
+}
