@@ -87,12 +87,13 @@ the split-flap board letters use a monospace face, so each letter fills a tile.
 
 For board members to share with their contacts: text or email the digital
 cards, hand over or leave behind the printed sheet. Trip facts (title, nights,
-travelers, what's included, the hero photo and its credit) come from
-`src/data/galaTrips.ts`. The prices, the short line under each name and the three
-highlights are in `trips-promo.json`. Prices are always for the whole package and
-read "$6,900 · for two · airfare not included", matching the site's trip cards. Never use
-the kit's internal `listPrice` or SparkPoint's share. If `galaTrips.ts` gets a
-price that differs from `trips-promo.json`, the render warns. The QR code
+travelers, what's included, the public price, the hero photo and its credit) come
+from `src/data/galaTrips.ts`, so a price changes in one place for the site and the
+promo. The promo shows prices whatever the site's `GALA_SHOW_TRIP_PRICES` switch
+says, and stops if a trip has no price. The short line under each name and the
+three highlights are in `trips-promo.json`. Prices are always for the whole package
+and read "$6,900 · for two · airfare not included", matching the site's trip cards.
+Never use the kit's internal `listPrice` or SparkPoint's share. The QR code
 (`assets/trips-qr.svg`, made with the `qrcode` package) and the printed link go to
 `yoursparkpoint.org/events/sparkpoint-gala#trips`. Alaska's shore-excursion
 credit is left off until the provider confirms it. Never write "land only" (travel-trade jargon; Jeff, 2026-11-16). A trip can set `priceNote` in `trips-promo.json` to replace "airfare not included" in its price line. Every photo carries its

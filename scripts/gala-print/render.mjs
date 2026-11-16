@@ -63,7 +63,7 @@ async function open(page, template, width, height, scale) {
 const TICKET_URL = 'https://secure.yoursparkpoint.org/store/p/2026-sparkpoint-gala';
 
 // The board's trip promo: trip facts from src/data/galaTrips.ts (the site's port
-// of the trip kit), plus the public prices, lines and highlights in
+// of the trip kit), including the public prices, plus the lines and highlights in
 // trips-promo.json. esbuild (from Vite) strips the TypeScript so there's one source.
 const TRAVELERS = { 2: 'For two', 4: 'For four' };
 async function loadPromoTrips() {
@@ -71,15 +71,15 @@ async function loadPromoTrips() {
   const built = await esbuild.build({ entryPoints: [join(root, 'src', 'data', 'galaTrips.ts')], bundle: true, format: 'esm', write: false, platform: 'neutral', logLevel: 'silent' });
   const { GALA_TRIPS } = await import(`data:text/javascript;base64,${Buffer.from(built.outputFiles[0].text).toString('base64')}`);
   const promo = JSON.parse(await readFile(join(here, 'trips-promo.json'), 'utf8'));
-  const missing = GALA_TRIPS.filter((t) => !promo.trips[t.id]?.price);
-  if (missing.length) throw new Error(`trips-promo.json has no price for: ${missing.map((t) => t.id).join(', ')}`);
+  // The promo always shows prices, whatever the site's GALA_SHOW_TRIP_PRICES switch says.
+  const missing = GALA_TRIPS.filter((t) => t.price == null || !promo.trips[t.id]);
+  if (missing.length) throw new Error(`No public price in galaTrips.ts, or no entry in trips-promo.json, for: ${missing.map((t) => t.id).join(", ")}`);
   const trips = [...GALA_TRIPS].sort((a, b) => a.order - b.order).map((t) => {
     const p = promo.trips[t.id];
-    if (t.price != null && t.price !== p.price) console.warn(`  ! ${t.id}: galaTrips.ts says $${t.price}, trips-promo.json says $${p.price}`);
     if (!t.image) throw new Error(`${t.id} has no hero photo in galaTrips.ts`);
     const word = TRAVELERS[t.travelers] ?? `For ${t.travelers}`;
     const who = word.toLowerCase();
-    const dollars = `$${p.price.toLocaleString('en-US')}`;
+    const dollars = `$${t.price.toLocaleString('en-US')}`;
     const note = p.priceNote ?? "airfare not included";
     return {
       id: t.id, connection: t.connection, name: t.name, title: t.title, country: t.country, nights: t.nights,
