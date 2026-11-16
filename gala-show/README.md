@@ -18,7 +18,7 @@ draws the route from Brevard) followed by the trip's film. The **other three**
 to choose your trip tonight" page: every trip is available to every guest at a set
 price, and more than one guest can choose the same trip. Its How to pay panel says
 payment is in full tonight or by the following week, by credit card or check (a card payment
-can be split), that local taxes are paid later at booking, and that
+can be split), that local taxes are paid later, when guests set their travel dates, and that
 part of every trip's price is a tax-deductible gift (confirmed 2026-11-12; left empty, the
 panel shows "Details to come"). Prices show while **Show prices** is on (editor, Show settings), which it is since the
 public prices were set on 2026-11-16. Trip photos come from the promo packs:

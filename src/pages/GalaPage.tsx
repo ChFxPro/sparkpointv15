@@ -311,7 +311,7 @@ export default function GalaPage() {
           <GalaTrips />
           <p className="gala-fine-print gala-trips-fine">
             Prices don’t include airfare or local taxes and fees, such as hotel, tourist or port
-            taxes, which vary by destination and are paid when you book. Each trip covers hotels, tours and transfers on the ground.
+            taxes, which vary by destination and are paid when you set your travel dates. Each trip covers hotels, tours and transfers on the ground.
             You book your dates with a travel specialist and travel within three years.
             Travelers or extra nights can be added on request.
           </p>
@@ -448,7 +448,7 @@ export default function GalaPage() {
             <motion.p {...revealLate}>
               <strong>Airfare and local taxes aren’t included.</strong> Packages cover hotels,
               tours and transfers on the ground; hotel, tourist or port taxes vary by destination and
-              are paid when you book. You choose your dates with a travel specialist and
+              are paid when you set your travel dates. You choose your dates with a travel specialist and
               travel within three years.
             </motion.p>
           </div>
