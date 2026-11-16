@@ -258,6 +258,16 @@ function keys(t: number, at: number[], values: number[]) {
   );
 }
 
+/**
+ * Safari on a Mac (WebKit without touch). Chrome, Edge, Firefox and Opera on
+ * the Mac all name themselves in the user agent; Safari doesn't.
+ */
+function isDesktopSafari() {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent;
+  return /AppleWebKit/.test(ua) && /Safari/.test(ua) && !/Chrome|Chromium|CriOS|FxiOS|Edg|OPR|Firefox|Android/.test(ua);
+}
+
 interface Geometry {
   w: number;
   h: number;
@@ -423,13 +433,17 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   );
   const p = touch ? scrollYProgress : smoothed;
   const touchRef = useRef(touch);
+  // Safari on the Mac shook too, with a trackpad and with a mouse (Jeff,
+  // 2026-11-16): it's the same engine, WebKit, so it gets the same pin.
+  const [fixedPin] = useState(() => touch || isDesktopSafari());
+  const fixedPinRef = useRef(fixedPin);
 
-  // Pinning the stage. Wide screens use position: sticky. On iPhone Safari a
-  // sticky stage whose contents change every frame wobbles a pixel or three
-  // up and down as the page scrolls (measured frame by frame in Jeff's screen
-  // recording, 2026-11-13: the fixed header was steady, the pinned stage
-  // shook), so touch screens hold the stage with position: fixed while the
-  // story runs, which doesn't depend on the scroll position, and set it back
+  // Pinning the stage. Chrome and Firefox use position: sticky. In Safari
+  // (iPhone and Mac) a sticky stage whose contents change every frame wobbles
+  // a pixel or three up and down as the page scrolls (measured frame by frame
+  // in Jeff's screen recording, 2026-11-13: the fixed header was steady, the
+  // pinned stage shook), so there the stage is held with position: fixed while
+  // the story runs, which doesn't depend on the scroll position, and set back
   // at the top or foot of the track outside it.
   // It pins when the track's top reaches the top of the screen and lets go when
   // the track's bottom reaches the stage's bottom, so it rests exactly where it
@@ -451,7 +465,7 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   }, []);
   const setPin = useCallback(() => {
     const stage = stageRef.current;
-    if (!stage || !touchRef.current) return;
+    if (!stage || !fixedPinRef.current) return;
     const { top: trackTop, height, stage: stageHeight } = pinGeo.current;
     const top = trackTop - window.scrollY;
     const mode = top > 0 ? 'before' : top + height <= stageHeight ? 'after' : 'fixed';
@@ -462,7 +476,7 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
   useMotionValueEvent(scrollYProgress, 'change', setPin);
   // Content above the track (images, the trailer) can change its place on the page.
   useEffect(() => {
-    if (!animate || !touch) return undefined;
+    if (!animate || !fixedPin) return undefined;
     const refresh = () => {
       measurePin();
       setPin();
@@ -475,7 +489,7 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
       observer.disconnect();
       window.removeEventListener('resize', refresh);
     };
-  }, [animate, touch, measurePin, setPin]);
+  }, [animate, fixedPin, measurePin, setPin]);
   // The pen eases toward where the scroll puts it, so it glides from word to
   // word and back along to the next line rather than snapping there.
   const penNow = useRef<{ x: number; y: number; a: number; l: number; s: number } | null>(null);
@@ -521,7 +535,7 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
       narrow,
     };
     setSize({ w, h, fromX: geo.current.fromX, fromY: geo.current.fromY, cx, cy, narrow });
-    // Where the pinned stage sits, for touch screens' fixed pin.
+    // Where the pinned stage sits, for Safari's fixed pin.
     measurePin();
     setPin();
     // Each face's sheet of light covers the whole card, not just the face.
@@ -810,7 +824,7 @@ export function GalaPostcardJourney({ children }: { children?: ReactNode }) {
 
   return (
     <>
-      <div ref={track} className={`gala-postcard-track is-scroll${touch ? ' is-touch-pin' : ''}`}>
+      <div ref={track} className={`gala-postcard-track is-scroll${fixedPin ? ' is-fixed-pin' : ''}`}>
         <div ref={stageRef} className="gala-postcard-stage">
           <Desk worldRef={deskRef} thingRefs={thingRefs}>
             {w ? (
