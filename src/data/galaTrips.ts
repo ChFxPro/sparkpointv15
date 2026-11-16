@@ -7,7 +7,7 @@
 // - No auction: every trip is available to every guest at a set price, and
 //   more than one guest can choose the same trip.
 // - `price` is the public price for the whole package, set by Jeff on
-//   2026-11-16 and shown on each card as "$6,900 · For two · land only". The
+//   2026-11-16 and shown on each card as "$6,900 · For two · airfare not included". The
 //   kit's `listPrice` (the provider's internal price) and SparkPoint's margin
 //   are deliberately NOT copied here: anything in src/ ships in the public
 //   JavaScript bundle. GALA_SHOW_TRIP_PRICES hides every price at once.

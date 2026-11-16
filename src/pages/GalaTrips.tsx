@@ -397,7 +397,7 @@ function TripCard({ trip, boarding, near, videoAllowed, paused, onTogglePause, o
         {price ? (
           <p className="gala-trip-fare">
             <span className="gala-trip-fare-price">{price}</span>
-            <span className="gala-trip-fare-terms">{travelersLabel(trip.travelers)} · land only</span>
+            <span className="gala-trip-fare-terms">{travelersLabel(trip.travelers)} · airfare not included</span>
           </p>
         ) : null}
         <p className="gala-trip-route">

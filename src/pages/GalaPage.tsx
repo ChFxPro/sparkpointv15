@@ -57,7 +57,7 @@ const passportPhoto = (width: number) => `${BASE}assets/events/gala/passport-bea
 
 // The eight trips (board vote 2026-11-09) live in src/data/galaTrips.ts, which
 // follows the trip kit's rules. On this page that means: no auction or bid
-// language; every trip at a set price, open to every guest; land only, booked
+// language; every trip at a set price, open to every guest; airfare not included, booked
 // with a travel specialist, travel within three years. Never say the trips can
 // be bought after the Gala, and don't state payment timing, child pricing,
 // insurance or transferability. Keep off this page any giveback percentage
@@ -308,7 +308,7 @@ export default function GalaPage() {
           </motion.div>
           <GalaTrips />
           <p className="gala-fine-print gala-trips-fine">
-            Land only: hotels, tours and transfers on the ground; airfare isn’t included.
+            Airfare isn’t included: each trip covers hotels, tours and transfers on the ground.
             You book your dates with a travel specialist and travel within three years.
             Travelers or extra nights can be added on request.
           </p>
@@ -443,9 +443,9 @@ export default function GalaPage() {
               same trip. Each is for two travelers, except Cortona, which is for four.
             </motion.p>
             <motion.p {...revealLate}>
-              <strong>Land only, on your dates.</strong> Packages cover hotels, tours and
-              transfers on the ground; airfare isn’t included. You book with a travel
-              specialist and travel within three years.
+              <strong>Airfare isn’t included.</strong> Packages cover hotels, tours and
+              transfers on the ground. You choose your dates with a travel specialist and
+              travel within three years.
             </motion.p>
           </div>
           <p className="gala-fine-print">
