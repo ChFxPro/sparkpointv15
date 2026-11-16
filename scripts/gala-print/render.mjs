@@ -80,14 +80,15 @@ async function loadPromoTrips() {
     const word = TRAVELERS[t.travelers] ?? `For ${t.travelers}`;
     const who = word.toLowerCase();
     const dollars = `$${p.price.toLocaleString('en-US')}`;
+    const note = p.priceNote ?? "land only";
     return {
       id: t.id, connection: t.connection, name: t.name, title: t.title, country: t.country, nights: t.nights,
       travelersWord: word,
       // Alaska's excursion credit is still an open question for the provider, so it stays off the promo.
       included: t.included.filter((line) => !/excursion credit/i.test(line)),
       line: p.line, highlights: p.highlights, photoPos: p.photoPos,
-      priceText: `${dollars} · ${who} · land only`,
-      priceHtml: `<b>${dollars}</b><span><i>·</i>${who}<i>·</i>land only</span>`,
+      priceText: `${dollars} · ${who} · ${note}`,
+      priceHtml: `<b>${dollars}</b><span><i>·</i>${who}<i>·</i>${note}</span>`,
       photo: `${placeholders.PUBLIC}/assets/events/gala/trips/${t.image.file}-1600.webp`,
       credit: t.image.credit,
       creditShort: t.image.credit.replace(', via Wikimedia Commons', ''),
@@ -224,25 +225,30 @@ const groups = {
       await page.screenshot({ path: join(dir, 'digital', name), type: 'jpeg', quality: 90 });
       console.log(`trips/digital/${name}`);
     }
-    for (const [variant, w, h, name] of [
-      ['', '8.75in', '11.25in', 'sparkpoint-gala-trips-leave-behind-letter-bleed.pdf'],
-      ['trim', '8.5in', '11in', 'sparkpoint-gala-trips-leave-behind-letter.pdf'],
+    // The night front (with bleed for a print shop, and plain letter), and the
+    // light version: cream paper on both sides, much less ink on a home printer.
+    for (const [light, trim, w, h, name] of [
+      [false, false, '8.75in', '11.25in', 'sparkpoint-gala-trips-leave-behind-letter-bleed.pdf'],
+      [false, true, '8.5in', '11in', 'sparkpoint-gala-trips-leave-behind-letter.pdf'],
+      [true, true, '8.5in', '11in', 'sparkpoint-gala-trips-leave-behind-letter-light.pdf'],
     ]) {
-      await openWith(page, 'trips-sheet.html', 840, 1080, 2, data);
-      await page.evaluate((cls) => { document.body.className = cls; }, variant);
+      await openWith(page, 'trips-sheet.html', 840, 1080, 2, { ...data, light });
+      if (trim) await page.evaluate(() => document.body.classList.add('trim'));
       await page.addStyleTag({ content: `@page { size: ${w} ${h}; margin: 0; }` });
       const tight = await page.evaluate(() => [...document.querySelectorAll('.inner')].some((el) => el.scrollHeight > el.clientHeight + 1));
       if (tight) console.warn(`  ! ${name}: a side's content runs past its safe area`);
       await page.pdf({ path: join(dir, 'print', name), width: w, height: h, printBackground: true, preferCSSPageSize: true });
       console.log(`trips/print/${name}`);
     }
-    // Previews of the two sides, for review.
-    await openWith(page, 'trips-sheet.html', 816, 1056, 2, data);
-    await page.evaluate(() => { document.body.className = 'trim'; });
-    for (const [i, side] of (await page.$$('.page')).entries()) {
-      const name = `sparkpoint-gala-trips-leave-behind-${i ? 'back' : 'front'}-preview.png`;
-      await side.screenshot({ path: join(dir, 'print', name) });
-      console.log(`trips/print/${name}`);
+    // Previews of each side, for review.
+    for (const [light, suffix] of [[false, ''], [true, '-light']]) {
+      await openWith(page, 'trips-sheet.html', 816, 1056, 2, { ...data, light });
+      await page.evaluate(() => document.body.classList.add('trim'));
+      for (const [i, side] of (await page.$$('.page')).entries()) {
+        const name = `sparkpoint-gala-trips-leave-behind${suffix}-${i ? 'back' : 'front'}-preview.png`;
+        await side.screenshot({ path: join(dir, 'print', name) });
+        console.log(`trips/print/${name}`);
+      }
     }
   },
 

@@ -21,7 +21,7 @@ Replace the Drive files after re-rendering.
 | `social` | `social-on-sale.html` | `social/sparkpoint-gala-tickets-on-sale-…` and `social/sparkpoint-gala-save-the-date-…` PNGs, each at 1080x1350, 1080x1080, story 1080x1920 and Facebook event 1920x1005. One template; body class `std` switches it to the Save the date wording |
 | `tickets` | `ticket-{square,wide,banner,story}.html` | `tickets/` PNGs at 2160², 3840×2160, 3600×1200 and 2160×3840 for the Squarespace ticket page |
 | `share` | `share.html` | `share/gala-share-world-of-connections.jpg`, 1200×630; copy it to `public/assets/events/gala/` to update the site |
-| `trips` | `trips-overview.html`, `trips-card.html`, `trips-sheet.html` | The board's trip promo, with prices. `trips/digital/`: an all-eight overview plus one card per trip, JPEG 2160×2700 (1080×1350 at 2x), to text or email. `trips/print/`: a two-sided letter leave-behind as `…-letter-bleed.pdf` (8.75×11.25 in, 0.125 in bleed, for a print shop) and `…-letter.pdf` (8.5×11 in, for a home printer), plus PNG previews of each side. See "Trip promo" below |
+| `trips` | `trips-overview.html`, `trips-card.html`, `trips-sheet.html` | The board's trip promo, with prices. `trips/digital/`: an all-eight overview plus one card per trip, JPEG 2160×2700 (1080×1350 at 2x), to text or email. `trips/print/`: a two-sided letter leave-behind as `…-letter-bleed.pdf` (8.75×11.25 in, 0.125 in bleed, for a print shop) and `…-letter.pdf` (8.5×11 in), both with the night front, plus `…-letter-light.pdf` (8.5×11 in, cream paper on both sides: the easy one for a home or office printer), and PNG previews of each side. See "Trip promo" below |
 
 | `guide` | `guide.html` | `00 Start here - A World of Connections asset guide.pdf`, the guide that sits at the top of the Drive folder. It uses the other groups' output (and `npm run invite:gala`'s) as thumbnails, so run it last |
 
@@ -95,7 +95,7 @@ the kit's internal `listPrice` or SparkPoint's share. If `galaTrips.ts` gets a
 price that differs from `trips-promo.json`, the render warns. The QR code
 (`assets/trips-qr.svg`, made with the `qrcode` package) and the printed link go to
 `yoursparkpoint.org/events/sparkpoint-gala#trips`. Alaska's shore-excursion
-credit is left off until the provider confirms it. Every photo carries its
+credit is left off until the provider confirms it. A trip can set `priceNote` in `trips-promo.json` to replace "land only" in its price line; Alaska, a cruise, reads "airfare not included". Every photo carries its
 `stills.json` credit. The render warns if a card's text or a sheet side runs past
 its safe area.
 
