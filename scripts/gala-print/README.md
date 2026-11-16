@@ -97,7 +97,7 @@ price that differs from `trips-promo.json`, the render warns. The QR code
 `yoursparkpoint.org/events/sparkpoint-gala#trips`. Alaska's shore-excursion
 credit is left off until the provider confirms it. Never write "land only" (travel-trade jargon; Jeff, 2026-11-16). A trip can set `priceNote` in `trips-promo.json` to replace "airfare not included" in its price line. Every photo carries its
 `stills.json` credit. The render warns if a card's text or a sheet side runs past
-its safe area.
+its safe area. The back of the sheet carries a "Good to know" list of the confirmed answers, in the same words as the Gala page FAQ (`src/pages/GalaFaq.tsx`), and the tax line "Part of every trip's price is a tax-deductible gift to SparkPoint." Don't say who sends the tax acknowledgment, and never say a trip can be chosen after the Gala.
 
 ## Print notes
 

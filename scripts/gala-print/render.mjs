@@ -247,8 +247,8 @@ const groups = {
       await openWith(page, 'trips-sheet.html', 840, 1080, 2, { ...data, light });
       if (trim) await page.evaluate(() => document.body.classList.add('trim'));
       await page.addStyleTag({ content: `@page { size: ${w} ${h}; margin: 0; }` });
-      const tight = await page.evaluate(() => [...document.querySelectorAll('.inner')].some((el) => el.scrollHeight > el.clientHeight + 1));
-      if (tight) console.warn(`  ! ${name}: a side's content runs past its safe area`);
+      const tight = await page.evaluate(() => [...document.querySelectorAll(".inner")].map((el, i) => el.scrollHeight - el.clientHeight > 1 ? `${i ? "back" : "front"} by ${el.scrollHeight - el.clientHeight}px` : "").filter(Boolean).join(", "));
+      if (tight) console.warn(`  ! ${name}: content runs past the safe area: ${tight}`);
       await checkTiles(name);
       await page.pdf({ path: join(dir, 'print', name), width: w, height: h, printBackground: true, preferCSSPageSize: true });
       console.log(`trips/print/${name}`);

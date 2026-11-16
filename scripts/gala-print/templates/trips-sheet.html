@@ -54,12 +54,12 @@
   .back .deco-frame { --frame: rgba(138,119,84,.45); --frame2: rgba(138,119,84,.22); }
   .back h2 { display: flex; align-items: center; gap: 14px; color: var(--plum); font-size: 12px; font-weight: 600; letter-spacing: .34em; text-transform: uppercase; }
   .back h2::after { content: ''; flex: 1; height: 1px; background: rgba(142,42,92,.3); }
-  .how { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 30px; }
-  .how div { display: grid; grid-template-columns: 22px 1fr; font-size: 12.5px; line-height: 1.45; }
+  .how { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 7px 30px; }
+  .how div { display: grid; grid-template-columns: 20px 1fr; font-size: 11.5px; line-height: 1.4; }
   .how span { color: var(--label); font-size: 14px; line-height: 1.3; }
   .how b { font-weight: 600; }
 
-  .inc { margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 30px; }
+  .inc { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 30px; }
   .inc .t { break-inside: avoid; }
   .inc .row { display: grid; gap: 2px; padding-bottom: 4px; border-bottom: 1px solid rgba(138,119,84,.3); }
   .inc .row p:first-child { font-size: 13px; font-weight: 700; letter-spacing: .04em; }
@@ -67,17 +67,17 @@
   .inc .row p:first-child small { color: var(--label); font-size: 9.5px; font-weight: 600; letter-spacing: .24em; margin-right: .6em; }
   .inc .row .p { color: var(--plum); font-size: 12.5px; font-weight: 600; white-space: nowrap; }
   .inc .row .p span { color: var(--label); font-size: 9px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
-  .inc .dia { margin-top: 6px; display: grid; gap: 3px; font-size: 11.5px; line-height: 1.35; }
+  .inc .dia { margin-top: 5px; display: grid; gap: 1px; font-size: 11px; line-height: 1.35; }
   .inc .dia li::before { border-color: var(--label); top: .28em; width: .45em; height: .45em; }
 
-  .gala { margin-top: auto; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 26px; padding: 18px 22px; color: var(--ivory); background: radial-gradient(ellipse at 15% 0%, rgba(217,181,106,.2), transparent 60%), linear-gradient(120deg, #1b2a48, var(--midnight)); outline: 1px solid rgba(138,119,84,.45); outline-offset: 4px; }
+  .gala { margin-top: auto; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 26px; padding: 12px 22px; color: var(--ivory); background: radial-gradient(ellipse at 15% 0%, rgba(217,181,106,.2), transparent 60%), linear-gradient(120deg, #1b2a48, var(--midnight)); outline: 1px solid rgba(138,119,84,.45); outline-offset: 4px; }
   .gala .lk { font-size: 30px; padding-top: 14px; --by2-min: 6.5pt; }
   .gala .d p { font-size: 12px; line-height: 1.55; }
   .gala .d .when { color: var(--brass-light); font-weight: 600; letter-spacing: .18em; text-transform: uppercase; }
   .gala .d .give { margin-top: 6px; color: rgba(247,241,229,.82); font-size: 11px; }
   .gala .qr { flex-direction: column; gap: 6px; text-align: center; font-size: 9.5px; }
   .gala .qr .code { width: 84px; height: 84px; }
-  .credits { margin-top: 12px; color: #7a7064; font-size: 7.5px; line-height: 1.5; }
+  .credits { margin-top: 10px; color: #7a7064; font-size: 7.5px; line-height: 1.5; }
 
   /* The light version (render.mjs passes light: true): cream paper on both
      sides and the lockup's light colours, so a home printer only inks the
@@ -112,7 +112,7 @@
       <p class="head">Eight trips · Choose yours at the Gala</p>
       <p class="sub">Every trip is available to every guest at a set price, and more than one guest can choose the same one.</p>
       <div class="grid" id="grid"></div>
-      <p class="fine">Prices are for the whole package. Airfare isn’t included: each trip covers hotels, tours and transfers on the ground.</p>
+      <p class="fine">Prices are for the whole package. Part of every trip’s price is a tax-deductible gift to SparkPoint. Airfare isn’t included: each trip covers hotels, tours and transfers on the ground.</p>
       <div class="foot">
         <div>
           <p class="when">Friday, December 11, 2026 · 6 p.m.</p>
@@ -126,21 +126,27 @@
   <section class="page back">
     <div class="deco-frame"></div>
     <div class="inner">
-      <h2>How it works</h2>
+      <!-- Confirmed answers only, in the Gala page FAQ's words (src/pages/GalaFaq.tsx).
+           Never: buying after the Gala, who sends the tax acknowledgment, the provider's name. -->
+      <h2>Good to know</h2>
       <div class="how">
-        <div><span>◇</span><p><b>Choose your trip at the Gala.</b> Every one of the eight trips is available to every guest at a set price, and more than one guest can choose the same trip.</p></div>
-        <div><span>◇</span><p><b>For two travelers,</b> except Cortona, which is for four. Travelers or extra nights can be added on request.</p></div>
+        <div><span>◇</span><p><b>Choose your trip at the Gala.</b> Every trip is available to every guest at a set price, and more than one guest can choose the same trip.</p></div>
+        <div><span>◇</span><p><b>Paying:</b> in full, at the Gala or by the following week at the latest. Payment is by credit card, and you can split it across more than one card.</p></div>
         <div><span>◇</span><p><b>Airfare isn’t included:</b> each trip covers hotels, tours and transfers on the ground (for Alaska, the cruise and a night in Seattle).</p></div>
-        <div><span>◇</span><p><b>Book with a travel specialist</b> and travel within three years.</p></div>
+        <div><span>◇</span><p><b>Travel any time within three years,</b> with no blackout dates. You choose your dates with a travel specialist.</p></div>
+        <div><span>◇</span><p><b>Who can go:</b> the Cortona apartment is for four, in any mix of adults and children. On the trips for two, children 18 and under, or adults with disabilities, can be added for an extra charge when you book.</p></div>
+        <div><span>◇</span><p><b>Your own vacation,</b> never a big tour group: most tours are small-group and some are private.</p></div>
+        <div><span>◇</span><p><b>Travel insurance</b> isn’t included. Optional travel insurance is offered when you book, or you can use your own.</p></div>
+        <div><span>◇</span><p><b>It can be a gift.</b> The person who chooses the trip at the Gala can transfer it to someone else.</p></div>
       </div>
-      <h2 style="margin-top: 26px">What’s included</h2>
+      <h2 style="margin-top: 20px">What’s included</h2>
       <div class="inc" id="inc"></div>
       <div class="gala">
         <div class="lk-slot"></div>
         <div class="d">
           <p class="when">Friday, December 11, 2026 · 6 p.m.</p>
           <p>Connestee Falls Clubhouse<br />98 Overlook Clubhouse Dr, Brevard, NC 28712<br />Gala tickets $100 per person</p>
-          <p class="give">A portion of every trip comes home to help bring the Transylvania Resilience Hub to life.</p>
+          <p class="give">A portion of every trip comes home to help bring the Transylvania Resilience Hub to life. Part of every trip’s price is a tax-deductible gift to SparkPoint.</p>
         </div>
         <div class="qr"><div class="code"><img src="{{ASSETS}}/trips-qr.svg" alt="" /></div><p class="lt"></p></div>
       </div>
