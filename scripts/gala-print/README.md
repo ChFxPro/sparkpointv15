@@ -90,12 +90,12 @@ cards, hand over or leave behind the printed sheet. Trip facts (title, nights,
 travelers, what's included, the hero photo and its credit) come from
 `src/data/galaTrips.ts`. The prices, the short line under each name and the three
 highlights are in `trips-promo.json`. Prices are always for the whole package and
-read "$6,900 · for two · land only", matching the site's trip cards. Never use
+read "$6,900 · for two · airfare not included", matching the site's trip cards. Never use
 the kit's internal `listPrice` or SparkPoint's share. If `galaTrips.ts` gets a
 price that differs from `trips-promo.json`, the render warns. The QR code
 (`assets/trips-qr.svg`, made with the `qrcode` package) and the printed link go to
 `yoursparkpoint.org/events/sparkpoint-gala#trips`. Alaska's shore-excursion
-credit is left off until the provider confirms it. A trip can set `priceNote` in `trips-promo.json` to replace "land only" in its price line; Alaska, a cruise, reads "airfare not included". Every photo carries its
+credit is left off until the provider confirms it. Never write "land only" (travel-trade jargon; Jeff, 2026-11-16). A trip can set `priceNote` in `trips-promo.json` to replace "airfare not included" in its price line. Every photo carries its
 `stills.json` credit. The render warns if a card's text or a sheet side runs past
 its safe area.
 

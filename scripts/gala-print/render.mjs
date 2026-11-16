@@ -80,13 +80,14 @@ async function loadPromoTrips() {
     const word = TRAVELERS[t.travelers] ?? `For ${t.travelers}`;
     const who = word.toLowerCase();
     const dollars = `$${p.price.toLocaleString('en-US')}`;
-    const note = p.priceNote ?? "land only";
+    const note = p.priceNote ?? "airfare not included";
     return {
       id: t.id, connection: t.connection, name: t.name, title: t.title, country: t.country, nights: t.nights,
       travelersWord: word,
       // Alaska's excursion credit is still an open question for the provider, so it stays off the promo.
       included: t.included.filter((line) => !/excursion credit/i.test(line)),
       line: p.line, highlights: p.highlights, photoPos: p.photoPos,
+      who, note, dollars,
       priceText: `${dollars} · ${who} · ${note}`,
       priceHtml: `<b>${dollars}</b><span><i>·</i>${who}<i>·</i>${note}</span>`,
       photo: `${placeholders.PUBLIC}/assets/events/gala/trips/${t.image.file}-1600.webp`,
@@ -207,11 +208,20 @@ const groups = {
   // one card per trip, 1080x1350) and a two-sided letter leave-behind (a
   // print-shop PDF with 0.125 in bleed, and a plain letter PDF for home printers).
   async trips(page) {
+    // Warns when a tile's text runs past its tile, on the overview and the sheet.
+    const checkTiles = async (label) => {
+      const over = await page.evaluate(() => [...document.querySelectorAll('.tile')].filter((tile) => {
+        const box = tile.getBoundingClientRect();
+        const bad = [...tile.querySelectorAll("p")].find((p) => { const r = p.getBoundingClientRect(); return r.right > box.right + 1 || r.bottom > box.bottom + 1; }); if (bad) { const r = bad.getBoundingClientRect(); tile.dataset.why = `${bad.className} r${Math.round(r.right - box.right)} b${Math.round(r.bottom - box.bottom)}`; } return !!bad;
+      }).map((tile) => `${tile.querySelector(".tname")?.textContent} (${tile.dataset.why})`));
+      if (over.length) console.warn(`  ! ${label}: text runs past the tile for ${over.join(', ')}`);
+    };
     const data = await loadPromoTrips();
     const dir = join(OUT, 'trips');
     await mkdir(join(dir, 'digital'), { recursive: true });
     await mkdir(join(dir, 'print'), { recursive: true });
     await openWith(page, 'trips-overview.html', 1080, 1350, 2, data);
+    await checkTiles('overview');
     await page.screenshot({ path: join(dir, 'digital', 'sparkpoint-gala-trips-00-all-eight-1080x1350.jpg'), type: 'jpeg', quality: 90 });
     console.log('trips/digital/sparkpoint-gala-trips-00-all-eight-1080x1350.jpg');
     for (const trip of data.trips) {
@@ -237,6 +247,7 @@ const groups = {
       await page.addStyleTag({ content: `@page { size: ${w} ${h}; margin: 0; }` });
       const tight = await page.evaluate(() => [...document.querySelectorAll('.inner')].some((el) => el.scrollHeight > el.clientHeight + 1));
       if (tight) console.warn(`  ! ${name}: a side's content runs past its safe area`);
+      await checkTiles(name);
       await page.pdf({ path: join(dir, 'print', name), width: w, height: h, printBackground: true, preferCSSPageSize: true });
       console.log(`trips/print/${name}`);
     }

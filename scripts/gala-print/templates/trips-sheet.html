@@ -35,7 +35,7 @@
   .tile .no { margin-top: 12px; color: var(--brass); font-size: 9.5px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; }
   .tile .tname { margin-top: 5px; font-size: 19px; letter-spacing: .08em; margin-right: 0; text-shadow: .04em .04em 0 var(--midnight), .07em .07em 0 var(--brass); }
   .tile .ln { margin-top: 4px; color: var(--brass-light); font-size: 11.5px; font-weight: 300; }
-  .tile .meta { margin-top: 6px; font-size: 9px; letter-spacing: .2em; color: rgba(247,241,229,.85); }
+  .tile .meta { margin-top: 6px; margin-right: 0; font-size: 9px; letter-spacing: .2em; color: rgba(247,241,229,.85); }
   .tile .price { margin-top: 6px; flex-wrap: wrap; gap: 0 .4em; }
   .tile .price b { font-size: 21px; }
   .tile .price span { font-size: 8.5px; flex-basis: 100%; margin-top: 3px; }
@@ -112,7 +112,7 @@
       <p class="head">Eight trips · Choose yours at the Gala</p>
       <p class="sub">Every trip is available to every guest at a set price, and more than one guest can choose the same one.</p>
       <div class="grid" id="grid"></div>
-      <p class="fine">Prices are for the whole package. Airfare isn’t included.</p>
+      <p class="fine">Prices are for the whole package. Airfare isn’t included: each trip covers hotels, tours and transfers on the ground.</p>
       <div class="foot">
         <div>
           <p class="when">Friday, December 11, 2026 · 6 p.m.</p>
@@ -130,7 +130,7 @@
       <div class="how">
         <div><span>◇</span><p><b>Choose your trip at the Gala.</b> Every one of the eight trips is available to every guest at a set price, and more than one guest can choose the same trip.</p></div>
         <div><span>◇</span><p><b>For two travelers,</b> except Cortona, which is for four. Travelers or extra nights can be added on request.</p></div>
-        <div><span>◇</span><p><b>Airfare isn’t included.</b> Land trips cover hotels, tours and transfers on the ground; Alaska covers the cruise and a night in Seattle.</p></div>
+        <div><span>◇</span><p><b>Airfare isn’t included:</b> each trip covers hotels, tours and transfers on the ground (for Alaska, the cruise and a night in Seattle).</p></div>
         <div><span>◇</span><p><b>Book with a travel specialist</b> and travel within three years.</p></div>
       </div>
       <h2 style="margin-top: 26px">What’s included</h2>
@@ -161,8 +161,8 @@
         <p class="no">Connection ${t.connection}</p>
         <p class="tname">${t.name}</p>
         <p class="ln">${t.line}</p>
-        <p class="meta">${t.nights} nights · ${t.country}</p>
-        <p class="price">${t.priceHtml}</p>
+        <p class="meta">${t.nights} nights · ${t.who}</p>
+        <p class="price"><b>${t.dollars}</b><span>${t.note}</span></p>
       </div>`).join('');
     document.getElementById('inc').innerHTML = trips.map((t) => `
       <div class="t">

@@ -1,5 +1,5 @@
 {
-  "_about": "The board's trip promo (npm run print:gala -- trips). Facts (title, nights, travelers, what's included, hero photo and its credit) come from src/data/galaTrips.ts, which is ported from the trip kit. This file holds only what the promo adds: each trip's public price for the whole package (never per person; never the kit's internal listPrice, never SparkPoint's share), an optional priceNote (default 'land only'; Alaska is a cruise, so it reads 'airfare not included'), the short line under the name, and three highlights (from the trip packs' packs.json). Rules: no auction or bidding words, never name the package provider, don't say how or when payment happens, child pricing, insurance or transferability, and never say a trip can be chosen after the Gala.",
+  "_about": "The board's trip promo (npm run print:gala -- trips). Facts (title, nights, travelers, what's included, hero photo and its credit) come from src/data/galaTrips.ts, which is ported from the trip kit. This file holds only what the promo adds: each trip's public price for the whole package (never per person; never the kit's internal listPrice, never SparkPoint's share), an optional priceNote (default 'airfare not included'; never write 'land only', Jeff's call 2026-11-16), the short line under the name, and three highlights (from the trip packs' packs.json). Rules: no auction or bidding words, never name the package provider, don't say how or when payment happens, child pricing, insurance or transferability, and never say a trip can be chosen after the Gala.",
   "link": "https://yoursparkpoint.org/events/sparkpoint-gala#trips",
   "linkText": "yoursparkpoint.org/events/sparkpoint-gala",
   "trips": {
@@ -40,7 +40,6 @@
     },
     "alaska": {
       "price": 7500,
-      "priceNote": "airfare not included",
       "line": "Explorer of the North",
       "highlights": ["Seven nights at sea in a balcony stateroom", "Ketchikan, Juneau, Skagway and Victoria", "Drinks, dining and Wi-Fi package"]
     }

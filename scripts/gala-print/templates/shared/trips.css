@@ -16,7 +16,7 @@ body { font-family: 'Josefin Sans', sans-serif; -webkit-font-smoothing: antialia
 .meta { font-weight: 600; letter-spacing: .3em; margin-right: -.3em; text-transform: uppercase; }
 .meta i { font-style: normal; color: var(--brass); padding: 0 .5em; }
 
-/* The price, always for the whole package: "$6,900 · for two · land only". */
+/* The price, always for the whole package: "$6,900 · for two · airfare not included". */
 .price { display: inline-flex; align-items: baseline; gap: .45em; white-space: nowrap; }
 .price b { font-weight: 600; letter-spacing: .02em; color: var(--brass-light); }
 .price span { font-weight: 400; letter-spacing: .16em; text-transform: uppercase; color: var(--ivory); }

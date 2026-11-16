@@ -20,19 +20,21 @@
   .tile { position: relative; height: 184px; overflow: hidden; border: 1px solid rgba(217,181,106,.4); text-align: left; }
   .tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); }
   .tile::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(11,19,34,.92) 0%, rgba(11,19,34,.7) 46%, rgba(11,19,34,.05) 100%); }
-  .tile .t { position: absolute; inset: 20px 22px 18px; z-index: 1; display: flex; flex-direction: column; }
+  .tile .t { position: absolute; inset: 16px 22px 14px; z-index: 1; display: flex; flex-direction: column; }
   .tile .no { color: var(--brass); font-size: 14px; font-weight: 600; letter-spacing: .34em; text-transform: uppercase; }
   .tile .tname { margin-top: 8px; font-size: 40px; letter-spacing: .08em; margin-right: 0; }
-  .tile .ln { margin-top: 6px; color: var(--brass-light); font-size: 17px; font-weight: 300; }
-  .tile .meta { margin-top: auto; font-size: 13px; letter-spacing: .22em; }
-  .tile .price { margin-top: 6px; }
+  .tile .ln { margin-top: 4px; color: var(--brass-light); font-size: 17px; font-weight: 300; }
+  .tile .meta { margin-top: auto; margin-right: 0; font-size: 13px; letter-spacing: .22em; }
+  .tile .price { margin-top: 4px; }
   .tile .price b { font-size: 28px; }
-  .tile .price span { font-size: 13px; }
+  .tile .price span { font-size: 13px; flex-basis: 100%; margin-top: 4px; }
+  .tile .price { flex-wrap: wrap; gap: 0; }
+  .tile .price span i:first-child { display: none; }
 
   .fine { margin-top: 18px; max-width: 900px; color: rgba(247,241,229,.82); font-size: 17px; line-height: 1.4; }
   .when { margin-top: 18px; color: var(--brass-light); font-size: 20px; font-weight: 600; letter-spacing: .2em; margin-right: -.2em; text-transform: uppercase; }
   .link { margin-top: 6px; font-size: 20px; letter-spacing: .06em; }
-  .credits { margin-top: auto; padding-top: 10px; color: rgba(247,241,229,.5); font-size: 10.5px; line-height: 1.45; letter-spacing: .02em; }
+  .credits { margin-top: auto; padding-top: 10px; color: rgba(247,241,229,.5); font-size: 10px; line-height: 1.45; letter-spacing: .02em; }
 </style>
 </head>
 <body>
@@ -42,7 +44,7 @@
     <p class="head">Eight trips. <em>Choose yours at the Gala.</em></p>
     <p class="sub">Every trip is available to every guest at a set price, and more than one guest can choose the same one.</p>
     <div class="grid" id="grid"></div>
-    <p class="fine">Land only: hotels, tours and transfers on the ground; airfare isn’t included. Book your dates with a travel specialist and travel within three years.</p>
+    <p class="fine">Airfare isn’t included: each trip covers hotels, tours and transfers on the ground. Book your dates with a travel specialist and travel within three years.</p>
     <p class="when">Friday, December 11, 2026 · 6 p.m. · Connestee Falls, Brevard</p>
     <p class="link" id="link"></p>
     <p class="credits" id="credits"></p>
