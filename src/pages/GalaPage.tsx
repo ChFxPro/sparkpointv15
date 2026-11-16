@@ -19,6 +19,7 @@ import { GALA_TRIP_COUNT, GALA_TRIP_COUNT_WORD, GALA_TRIP_NAMES, GALA_TRIPS, tri
 import { GalaBoardingPass } from './GalaBoardingPass';
 import { GalaChapterMark } from './GalaChapterMark';
 import { GalaDepartureBoard } from './GalaDepartureBoard';
+import { GalaFaq } from './GalaFaq';
 import { GalaPostcardJourney } from './GalaPostcard';
 import { GalaSeatMap } from './GalaSeatMap';
 import { GalaRouteMap } from './GalaRouteMap';
@@ -57,11 +58,12 @@ const passportPhoto = (width: number) => `${BASE}assets/events/gala/passport-bea
 
 // The eight trips (board vote 2026-11-09) live in src/data/galaTrips.ts, which
 // follows the trip kit's rules. On this page that means: no auction or bid
-// language; every trip at a set price, open to every guest; land only, booked
+// language; every trip at a set price, open to every guest; airfare not included, booked
 // with a travel specialist, travel within three years. Never say the trips can
-// be bought after the Gala, and don't state payment timing, child pricing,
-// insurance or transferability. Keep off this page any giveback percentage
-// until it's confirmed.
+// be bought after the Gala (not until after Dec 11). Payment, children, tours,
+// insurance and transfers are answered in the FAQ (GalaFaq.tsx), which keeps
+// to what the provider confirmed. Keep off this page any giveback percentage,
+// and who sends the tax acknowledgment, until confirmed.
 // AmFund (the American Fundraising Foundation) arranges the trips and has its
 // own "Our travel partner" section under them (GalaTravelPartner.tsx; owner's
 // call, 2026-11-12, at AmFund's request, so guests see it as a partner rather
@@ -69,7 +71,7 @@ const passportPhoto = (width: number) => `${BASE}assets/events/gala/passport-bea
 const STAMPS = [
   { shape: 'round', top: String(GALA_TRIP_COUNT), middle: 'Trips', bottom: 'Choose at the Gala', tilt: -8 },
   { shape: 'rect', top: 'Set', middle: 'Price', bottom: 'Every guest', tilt: 5 },
-  { shape: 'oval', top: 'Land', middle: 'Only', bottom: 'Airfare not included', tilt: -3 },
+  { shape: 'oval', top: 'Airfare', middle: 'Extra', bottom: 'Not included', tilt: -3 },
   { shape: 'rect', top: '3 years', middle: 'to travel', bottom: 'Your dates', tilt: -6 },
   { shape: 'round', top: 'For two', middle: 'Travelers', bottom: 'Cortona: four', tilt: 7 },
   { shape: 'oval', top: 'Gives', middle: 'Back home', bottom: 'Resilience Hub', tilt: -4 },
@@ -308,7 +310,8 @@ export default function GalaPage() {
           </motion.div>
           <GalaTrips />
           <p className="gala-fine-print gala-trips-fine">
-            Land only: hotels, tours and transfers on the ground; airfare isn’t included.
+            Prices don’t include airfare or local taxes and fees, such as hotel, tourist or port
+            taxes, which vary by destination. Each trip covers hotels, tours and transfers on the ground.
             You book your dates with a travel specialist and travel within three years.
             Travelers or extra nights can be added on request.
           </p>
@@ -443,13 +446,14 @@ export default function GalaPage() {
               same trip. Each is for two travelers, except Cortona, which is for four.
             </motion.p>
             <motion.p {...revealLate}>
-              <strong>Land only, on your dates.</strong> Packages cover hotels, tours and
-              transfers on the ground; airfare isn’t included. You book with a travel
-              specialist and travel within three years.
+              <strong>Airfare and local taxes aren’t included.</strong> Packages cover hotels,
+              tours and transfers on the ground; hotel, tourist or port taxes vary by destination. You choose your dates with a travel specialist and
+              travel within three years.
             </motion.p>
           </div>
           <p className="gala-fine-print">
-            A portion of every trip comes home to help bring the Transylvania Resilience Hub to life.
+            Part of every trip’s price is a tax-deductible gift to SparkPoint, and it comes home
+            to help bring the Transylvania Resilience Hub to life.
           </p>
           <motion.div className="gala-passport-cta" {...reveal}>
             <p>
@@ -462,6 +466,9 @@ export default function GalaPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* 4b — Questions, answered (GalaFaq.tsx) */}
+      <GalaFaq />
 
       {/* 5 — Luggage tags */}
       <section className="gala-tags-section" aria-labelledby="tags-title">

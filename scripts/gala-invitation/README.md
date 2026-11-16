@@ -80,11 +80,18 @@ share, and any unconfirmed giveback percentage.
   and more than one guest can choose the same trip. Say "Choose your trip at the
   Gala" or "Every trip is available to every guest at a set price".
 - **Never mention buying a trip after the Gala.**
-- Safe to say: land only (hotels, tours and transfers on the ground; airfare
-  not included); for two travelers (Cortona for four); booked with a travel
-  specialist; three years to travel. Not yet confirmed, so don't say: how or
-  when payment happens, child pricing, private vs group tours, insurance or
-  transfers. Don't name the Alaska cruise line.
+- Safe to say: airfare not included (each trip covers hotels, tours and
+  transfers on the ground). Don't write "land only": it's travel-trade jargon
+  guests may not know (Jeff, 2026-11-16); for two travelers (Cortona for four); booked with a travel
+  specialist; three years to travel, no blackout dates. Confirmed by the
+  provider (2026-11-12), so these are fine too: payment in full at the Gala or
+  by the following week, by card (can be split); children or adults with
+  disabilities added at booking for an extra charge; mostly small-group tours;
+  optional insurance at booking; the purchaser can transfer the trip; part of
+  the price is a tax-deductible gift (don't say who sends the acknowledgment
+  yet). Prices don't include local taxes and fees (hotel, tourist or port
+  taxes, varying by destination); say so with airfare, but not when or how
+  much. Don't name the Alaska cruise line.
 
 ## Sending it
 
@@ -204,7 +211,7 @@ Licence deeds:
   South Africa, Portugal, Costa Rica and an Alaska cruise, with the nights for
   each.
 - Trips heading: Eight connections, one evening. Every trip is available to
-  every guest at a set price. Choose yours at the Gala. Land only, for two
+  every guest at a set price. Choose yours at the Gala. Airfare not included. For two
   travelers (Cortona for four), with three years to travel.
 - Trip 01: Connection 01: Greece & the Greek Islands, 8 nights for two. Three nights in Santorini, three in Mykonos, then two in Athens beneath the Acropolis, linked by an island flight and a ferry. Photo: Blue-domed white churches of Oia above the Santorini caldera and the Aegean Sea.
 - Trip 02: Connection 02: Iceland: Land of the Vikings, 6 nights for two. Six nights in Reykjavík with a food tour, the geysers and waterfalls of the Golden Circle, and the Sky Lagoon spa ritual. Photo: Gullfoss waterfall plunging into its canyon with a rainbow in the spray.

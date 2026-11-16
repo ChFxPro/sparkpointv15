@@ -16,10 +16,11 @@ Scotland, South Africa) each get a trip page (a gold globe turns to the destinat
 draws the route from Brevard) followed by the trip's film. The **other three**
 (Portugal, Costa Rica, Alaska) share a "More journeys, at the table" page. Then a "How
 to choose your trip tonight" page: every trip is available to every guest at a set
-price, and more than one guest can choose the same trip. How to pay isn't confirmed,
-so that page holds a "Details to come" placeholder until the How to pay field is filled
-in. Prices are hidden: they show only when **Show prices** is on (editor, Show settings),
-which stays off until the prices are set. Trip photos come from the promo packs:
+price, and more than one guest can choose the same trip. Its How to pay panel says
+payment is in full tonight or by the following week, by card (it can be split), and that
+part of every trip's price is a tax-deductible gift (confirmed 2026-11-12; left empty, the
+panel shows "Details to come"). Prices show while **Show prices** is on (editor, Show settings), which it is since the
+public prices were set on 2026-11-16. Trip photos come from the promo packs:
 `npm run stills` copies each featured trip's hero still into `show/media/trips/` and
 sets its credit from the pack's `stills.json`, shown under the photo (most are
 Creative Commons, which require it). Never use auction or bid language, name the
