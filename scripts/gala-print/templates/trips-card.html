@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Trip card</title>
+<style>
+  {{INCLUDE:shared/lockup.css}}
+  {{INCLUDE:shared/trips.css}}
+
+  html, body { width: 1080px; height: 1350px; }
+  body { position: relative; overflow: hidden; color: var(--ivory); background: var(--midnight); }
+  .photo { position: absolute; inset: 0 0 auto; height: 800px; }
+  .photo img { width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); }
+  .photo::after { content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(11,19,34,.62) 0%, rgba(11,19,34,.12) 26%, transparent 46%, rgba(11,19,34,.7) 82%, var(--midnight) 100%); }
+
+  .top { position: absolute; top: 62px; left: 0; right: 0; display: grid; justify-items: center; }
+  .top .lk { font-size: 54px; }
+
+  .body { position: absolute; left: 80px; right: 80px; top: 560px; bottom: 70px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .eyebrow { font-size: 21px; }
+  .tname { white-space: nowrap; margin-top: 18px; font-size: var(--name, 132px); }
+  .line { margin-top: 14px; color: var(--brass-light); font-size: 38px; font-weight: 300; letter-spacing: .03em; }
+  .meta { margin-top: 20px; font-size: 22px; color: var(--ivory); }
+  .dia { margin-top: 20px; display: grid; gap: 8px; text-align: left; font-size: 27px; font-weight: 300; }
+  .plate { margin-top: 26px; padding: 14px 34px 10px; border-top: 1px solid rgba(217,181,106,.55); border-bottom: 1px solid rgba(217,181,106,.55); outline: 1px solid rgba(217,181,106,.22); outline-offset: 5px; }
+  .plate .price b { font-size: 54px; }
+  .plate .price span { font-size: 22px; }
+  .taxes { margin-top: 14px; color: rgba(247,241,229,.78); font-size: 19px; letter-spacing: .03em; }
+  .spacer { flex: 1; min-height: 22px; }
+  .cta { font-size: 21px; }
+  .when { margin-top: 20px; color: var(--brass-light); font-size: 19px; font-weight: 600; letter-spacing: .16em; margin-right: -.16em; white-space: nowrap; text-transform: uppercase; }
+  .link { margin-top: 6px; color: rgba(247,241,229,.78); font-size: 20px; letter-spacing: .06em; }
+  .credit { position: absolute; right: 40px; bottom: 34px; z-index: 6; color: rgba(247,241,229,.6); font-size: 12px; letter-spacing: .04em; }
+</style>
+</head>
+<body>
+  <div class="deco-frame"></div>
+  <div class="photo"><img id="photo" alt="" /></div>
+  <div class="top"><div class="lk-slot no-by2"></div></div>
+  <div class="body">
+    <p class="eyebrow" id="eyebrow"></p>
+    <h1 class="tname" id="name"></h1>
+    <p class="line" id="line"></p>
+    <p class="meta" id="meta"></p>
+    <ul class="dia" id="highlights"></ul>
+    <div class="plate"><p class="price" id="price"></p></div>
+    <p class="taxes">Airfare and local taxes aren’t included; taxes are paid when you set your travel dates.</p>
+    <div class="spacer"></div>
+    <p class="deco-btn cta">Choose your trip at the Gala</p>
+    <p class="when">Friday, Dec. 11, 2026 · 6 p.m. · Connestee Falls, Brevard</p>
+    <p class="link" id="link"></p>
+  </div>
+  <p class="credit" id="credit"></p>
+
+  <script>
+    // render.mjs sets window.PROMO = { trip, link, linkText } before the page loads.
+    const { trip, linkText } = window.PROMO;
+    const $ = (id) => document.getElementById(id);
+    $('photo').src = trip.photo;
+    if (trip.photoPos) document.body.style.setProperty('--pos', trip.photoPos);
+    $('eyebrow').textContent = `Connection ${trip.connection}`;
+    $('name').textContent = trip.name;
+    // Long names ("South Africa", "Costa Rica") step down so they fit the frame.
+    document.body.style.setProperty('--name', trip.name.length > 10 ? '90px' : trip.name.length > 9 ? '104px' : trip.name.length > 7 ? '118px' : '132px');
+    $('line').textContent = trip.line;
+    $('meta').innerHTML = `${trip.nights} nights<i>◇</i>${trip.travelersWord}${trip.country !== trip.name ? `<i>◇</i>${trip.country}` : ''}`;
+    $('highlights').innerHTML = trip.highlights.map((h) => `<li>${h}</li>`).join('');
+    $('price').innerHTML = trip.priceHtml;
+    $('link').textContent = linkText;
+    $('credit').textContent = `Photo: ${trip.credit}`;
+  </script>
+  <script>{{INCLUDE:shared/lockup.js}}</script>
+</body>
+</html>
