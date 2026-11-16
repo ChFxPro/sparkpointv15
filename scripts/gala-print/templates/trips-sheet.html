@@ -52,8 +52,8 @@
   /* Back: cream paper, how it works and what's included. */
   .back { color: var(--ink); background: repeating-radial-gradient(circle at 0% 100%, transparent 0 18px, rgba(122,96,52,.04) 18px 19px), var(--paper); }
   .back .deco-frame { --frame: rgba(138,119,84,.45); --frame2: rgba(138,119,84,.22); }
-  .back h2 { display: flex; align-items: center; gap: 14px; color: var(--plum); font-size: 12px; font-weight: 600; letter-spacing: .34em; text-transform: uppercase; }
-  .back h2::after { content: ''; flex: 1; height: 1px; background: rgba(142,42,92,.3); }
+  .back h2, .guide h2 { display: flex; align-items: center; gap: 14px; color: var(--plum); font-size: 12px; font-weight: 600; letter-spacing: .34em; text-transform: uppercase; }
+  .back h2::after, .guide h2::after { content: ''; flex: 1; height: 1px; background: rgba(142,42,92,.3); }
   .how { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 7px 30px; }
   .how div { display: grid; grid-template-columns: 20px 1fr; font-size: 11.5px; line-height: 1.4; }
   .how span { color: var(--label); font-size: 14px; line-height: 1.3; }
@@ -101,10 +101,156 @@
   body.light .gala { color: var(--ink); background: transparent; border: 1px solid rgba(138,119,84,.45); outline-color: rgba(138,119,84,.22); }
   body.light .gala .d .when { color: var(--plum); }
   body.light .gala .d .give { color: rgba(27,26,31,.75); }
+
+  /* The cover sheet: printed double-sided it is its own leaf, so the
+     leave-behind behind it stays a separate two-sided sheet to hand over.
+     Its front is the cover; its back tells the board member what's inside
+     and how to use it. */
+  .cover { color: var(--ivory); background:
+      radial-gradient(ellipse at 50% 38%, rgba(217,181,106,.16) 0%, transparent 46%),
+      radial-gradient(ellipse at 50% 0%, #1b2a48 0%, var(--midnight) 64%); }
+  .cover .inner { align-items: center; text-align: center; }
+  .cover .for { margin-top: 20px; color: var(--brass); font-size: 11px; font-weight: 600; letter-spacing: .46em; margin-right: -.46em; text-transform: uppercase; display: flex; align-items: center; gap: 14px; }
+  .cover .for::before, .cover .for::after { content: ''; width: 46px; height: 1px; background: currentColor; opacity: .6; }
+  .cover .lk { margin-top: 64px; font-size: 92px; --by2-min: 9pt; }
+  .cover .tag { margin-top: 30px; font-size: 24px; }
+  .cover .title { margin-top: 60px; font-size: 40px; font-weight: 300; letter-spacing: .04em; line-height: 1.15; }
+  .cover .title b { display: block; color: var(--brass-light); font-weight: 600; letter-spacing: .06em; }
+  .cover .lede { margin-top: 16px; max-width: 520px; text-wrap: balance; color: rgba(247,241,229,.82); font-size: 14px; line-height: 1.55; }
+  .arches { margin-top: 56px; display: grid; grid-template-columns: repeat(8, 1fr); gap: 12px; width: 100%; }
+  .arch { display: grid; justify-items: center; gap: 8px; }
+  .arch .w { width: 100%; aspect-ratio: 3 / 5.2; border-radius: 999px 999px 0 0; overflow: hidden; border: 1px solid rgba(217,181,106,.6); outline: 1px solid rgba(217,181,106,.24); outline-offset: 3px; }
+  .arch img { width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); }
+  .arch span { color: var(--brass); font-size: 8.5px; font-weight: 600; letter-spacing: .16em; margin-right: -.16em; white-space: nowrap; text-transform: uppercase; }
+  .cover .foot { margin-top: auto; justify-content: center; text-align: center; border-top: 0; }
+  .cover .foot .when { font-size: 12.5px; }
+  .divider { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 18px; }
+  .divider i { width: 90px; height: 5px; border-top: 1px solid var(--brass); border-bottom: 1px solid var(--brass); opacity: .55; }
+  .divider b { width: 6px; height: 6px; rotate: 45deg; border: 1px solid var(--brass); opacity: .7; }
+  .divider img { width: 18px; }
+  .cover-credits { text-align: center; color: rgba(247,241,229,.5) !important; }
+  body.light .divider i, body.light .divider b { border-color: var(--label); }
+  body.light .cover-credits { color: #7a7064 !important; }
+  .cover .foot .where { color: rgba(247,241,229,.8); }
+
+  .guide { color: var(--ink); background: repeating-radial-gradient(circle at 0% 100%, transparent 0 18px, rgba(122,96,52,.04) 18px 19px), var(--paper); }
+  .guide .deco-frame { --frame: rgba(138,119,84,.45); --frame2: rgba(138,119,84,.22); }
+  .guide .ghead { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 24px; padding-bottom: 18px; border-bottom: 1px solid rgba(138,119,84,.35); }
+  .guide .ghead h1 { color: var(--midnight); font-size: 30px; font-weight: 300; letter-spacing: .03em; line-height: 1.1; }
+  .guide .ghead h1 b { color: var(--plum); font-weight: 600; }
+  .guide .ghead p { margin-top: 10px; max-width: 520px; font-size: 13px; line-height: 1.55; color: rgba(27,26,31,.82); }
+  .guide .ghead .lk { font-size: 34px; padding-top: 18px; }
+  .guide .cols { margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 22px 34px; }
+  .guide section h2 { margin-bottom: 10px; }
+  .guide .dia { display: grid; gap: 7px; font-size: 12.5px; line-height: 1.45; }
+  .guide .dia li::before { border-color: var(--label); top: .36em; }
+  .guide .dia b { font-weight: 600; }
+  .guide .glance { margin-top: 26px; }
+  .guide .gl { display: grid; grid-template-columns: 1fr 1fr; grid-auto-flow: column; grid-template-rows: repeat(4, auto); gap: 0 34px; }
+  .guide .gl p { display: grid; grid-template-columns: 26px 1fr auto; align-items: baseline; gap: 8px; padding: 7px 0 6px; border-bottom: 1px dotted rgba(138,119,84,.45); font-size: 12.5px; }
+  .guide .gl small { color: var(--label); font-size: 10px; font-weight: 600; letter-spacing: .2em; }
+  .guide .gl span { color: rgba(27,26,31,.7); font-size: 11px; letter-spacing: .04em; }
+  .guide .gl strong { font-weight: 600; color: var(--ink); }
+  .guide .gl b { color: var(--plum); font-weight: 600; }
+  .guide .gl-note { margin-top: 8px; color: rgba(27,26,31,.7); font-size: 11px; }
+  .guide .print { margin-top: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .guide .print div { padding: 12px 14px 11px; border: 1px solid rgba(138,119,84,.4); background: rgba(255,255,255,.45); font-size: 11px; line-height: 1.45; }
+  .guide .print b { display: block; margin-bottom: 3px; color: var(--plum); font-size: 10px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; }
+  .guide .thanks { margin-top: 16px; text-align: center; color: var(--label); font-size: 12px; letter-spacing: .04em; }
+  .guide .thanks em { color: var(--plum); font-weight: 600; }
+
+  body.light .cover { color: var(--ink); background: radial-gradient(ellipse at 50% 38%, rgba(217,181,106,.14) 0%, transparent 46%), repeating-radial-gradient(circle at 0% 100%, transparent 0 18px, rgba(122,96,52,.04) 18px 19px), var(--paper); }
+  body.light .cover .deco-frame { --frame: rgba(138,119,84,.45); --frame2: rgba(138,119,84,.22); }
+  body.light .cover .for, body.light .arch span { color: var(--plum); }
+  body.light .cover .title { color: var(--midnight); }
+  body.light .cover .title b { color: var(--plum); }
+  body.light .cover .lede, body.light .cover .foot .where { color: rgba(27,26,31,.78); }
+  body.light .arch .w { border-color: rgba(138,119,84,.55); outline-color: rgba(138,119,84,.22); }
 </style>
 </head>
 <body>
-  <section class="page front">
+  <section class="page cover" data-side="cover">
+    <div class="deco-frame"></div>
+    <div class="inner">
+      <p class="for">For the SparkPoint board</p>
+      <div class="lk-slot"></div>
+      <p class="tag">Every journey <em>connects back home.</em></p>
+      <p class="title">Eight connections <b>to share</b></p>
+      <p class="lede">Your trip promo kit for the Gala: the eight trips, their prices, and the answers guests ask for, ready to text, email, print or hand over. How to use it is on the back of this page.</p>
+      <div class="arches" id="arches"></div>
+      <div class="foot">
+        <div>
+          <p class="divider"><i></i><b></b><img src="{{PUBLIC}}/assets/brand/sparkmark-256.webp" alt="" /><b></b><i></i></p>
+          <p class="when">Friday, December 11, 2026 · 6 p.m.</p>
+          <p class="where">Connestee Falls Clubhouse · Brevard, NC</p>
+        </div>
+      </div>
+      <p class="credits cover-credits" id="cover-credits"></p>
+    </div>
+  </section>
+
+  <section class="page guide" data-side="guide">
+    <div class="deco-frame"></div>
+    <div class="inner">
+      <div class="ghead">
+        <div>
+          <h1>How to use <b>your trip promo kit</b></h1>
+          <p>Thank you for sharing the Gala’s eight trips with the people you know. Everything here is ready to go: pick the piece that suits the conversation.</p>
+        </div>
+        <div class="lk-slot light no-by2"></div>
+      </div>
+      <div class="cols">
+        <section>
+          <h2>What’s inside</h2>
+          <ul class="dia">
+            <li><b>A leave-behind</b>, the next sheet in this file. The front shows all eight trips with photos and prices; the back answers the questions guests ask most.</li>
+            <li><b>Nine digital cards</b>, in the shared Drive folder <b>SP Gala 26 › 09 Board trip promo</b>: one image of all eight trips, and one card for each trip.</li>
+            <li><b>The leave-behind in three versions</b>, in the same folder, listed at the foot of this page.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>How to use it</h2>
+          <ul class="dia">
+            <li><b>Text one trip.</b> Send the card for the trip that fits the person, like the place they’ve always wanted to see.</li>
+            <li><b>Show all eight.</b> Send the overview image, or email this file.</li>
+            <li><b>Hand it over.</b> Print the leave-behind double-sided and give it, or leave it behind. Keep this cover for yourself.</li>
+            <li><b>Point them to the films.</b> The QR code and link open the Gala page, with a short film of every trip and tickets.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>The short version</h2>
+          <ul class="dia">
+            <li>Every trip is available to every guest at a set price, and more than one guest can choose the same trip.</li>
+            <li>Prices are for the whole package, for two (Cortona for four). Airfare isn’t included.</li>
+            <li>Travel any time within three years, with no blackout dates.</li>
+            <li>Part of every trip’s price is a tax-deductible gift to SparkPoint, and a portion helps bring the Transylvania Resilience Hub to life.</li>
+            <li>Guests choose their trip at the Gala on Friday, December 11. Tickets are $100 per person.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Good to keep in mind</h2>
+          <ul class="dia">
+            <li><b>Keep the photo credits.</b> Each card names its photographer, as the photo’s licence requires, so please don’t crop it off.</li>
+            <li><b>Talk about choosing at the Gala</b> on December 11: that’s the night to choose.</li>
+            <li><b>Not sure of an answer?</b> Note the question and pass it to the SparkPoint team rather than guessing.</li>
+          </ul>
+        </section>
+      </div>
+      <section class="glance">
+        <h2>Prices at a glance</h2>
+        <div class="gl" id="glance"></div>
+        <p class="gl-note">Prices are for the whole package. Airfare isn’t included.</p>
+      </section>
+      <div class="print">
+        <div><b>Light</b>Cream paper, the least ink. The easy one for a home or office printer.</div>
+        <div><b>Dark</b>Night blue, as on the Gala page. Letter size, for a good office printer.</div>
+        <div><b>Dark with bleed</b>For a print shop: 0.125 in bleed, trimmed to letter.</div>
+      </div>
+      <p class="thanks">Print double-sided, flip on the long edge, at Actual size. <em>Thank you.</em></p>
+    </div>
+  </section>
+
+  <section class="page front" data-side="front">
     <div class="deco-frame"></div>
     <div class="inner">
       <div class="lk-slot"></div>
@@ -123,7 +269,7 @@
     </div>
   </section>
 
-  <section class="page back">
+  <section class="page back" data-side="back">
     <div class="deco-frame"></div>
     <div class="inner">
       <!-- Confirmed answers only, in the Gala page FAQ's words (src/pages/GalaFaq.tsx).
@@ -161,6 +307,10 @@
       document.body.classList.add('light');
       for (const slot of document.querySelectorAll('.lk-slot')) slot.classList.add('light');
     }
+    // Column order (01–04 left, 05–08 right) so the list reads down.
+    document.getElementById("glance").innerHTML = trips.map((t) => `<p><small>${t.connection}</small><span><strong>${t.name}</strong> · ${t.nights} nights · ${t.who}</span><b>${t.dollars}</b></p>`).join("");
+    document.getElementById("arches").innerHTML = trips.map((t) => `
+      <div class="arch"><div class="w" style="--pos:${t.photoPos || "50% 50%"}"><img src="${t.photoSmall}" alt="" /></div><span>${t.name}</span></div>`).join("");
     document.getElementById('grid').innerHTML = trips.map((t) => `
       <div class="tile">
         <div class="ph" style="--pos:${t.photoPos || '50% 50%'}"><img src="${t.photoSmall}" alt="" /></div>
@@ -175,6 +325,7 @@
         <div class="row"><p><small>${t.connection}</small>${t.name} <em>· ${t.line}</em></p><p class="p">${t.priceText}</p></div>
         <ul class="dia">${[`${t.nights} nights`, ...t.included].map((i) => `<li>${i}</li>`).join('')}</ul>
       </div>`).join('');
+    document.getElementById("cover-credits").textContent = "Photos, via Wikimedia Commons: " + trips.map((t) => `${t.name}: ${t.credit.replace(", via Wikimedia Commons", "")}`).join(" · ") + ".";
     for (const el of document.querySelectorAll('.lt')) el.textContent = linkText;
     document.getElementById('credits').textContent = 'Photos, via Wikimedia Commons: ' + trips.map((t) => `${t.name}: ${t.credit.replace(', via Wikimedia Commons', '')}`).join(' · ') + '.';
   </script>

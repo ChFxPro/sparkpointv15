@@ -247,7 +247,7 @@ const groups = {
       await openWith(page, 'trips-sheet.html', 840, 1080, 2, { ...data, light });
       if (trim) await page.evaluate(() => document.body.classList.add('trim'));
       await page.addStyleTag({ content: `@page { size: ${w} ${h}; margin: 0; }` });
-      const tight = await page.evaluate(() => [...document.querySelectorAll(".inner")].map((el, i) => el.scrollHeight - el.clientHeight > 1 ? `${i ? "back" : "front"} by ${el.scrollHeight - el.clientHeight}px` : "").filter(Boolean).join(", "));
+      const tight = await page.evaluate(() => [...document.querySelectorAll(".inner")].map((el) => el.scrollHeight - el.clientHeight > 1 ? `${el.closest(".page").dataset.side} by ${el.scrollHeight - el.clientHeight}px` : "").filter(Boolean).join(", "));
       if (tight) console.warn(`  ! ${name}: content runs past the safe area: ${tight}`);
       await checkTiles(name);
       await page.pdf({ path: join(dir, 'print', name), width: w, height: h, printBackground: true, preferCSSPageSize: true });
@@ -258,7 +258,7 @@ const groups = {
       await openWith(page, 'trips-sheet.html', 816, 1056, 2, { ...data, light });
       await page.evaluate(() => document.body.classList.add('trim'));
       for (const [i, side] of (await page.$$('.page')).entries()) {
-        const name = `sparkpoint-gala-trips-leave-behind${suffix}-${i ? 'back' : 'front'}-preview.png`;
+        const name = `sparkpoint-gala-trips-leave-behind${suffix}-${await side.evaluate((el) => el.dataset.side)}-preview.png`;
         await side.screenshot({ path: join(dir, 'print', name) });
         console.log(`trips/print/${name}`);
       }
