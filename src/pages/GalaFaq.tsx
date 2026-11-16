@@ -7,6 +7,8 @@
 //   after Dec 11, so guests choose on the night.
 // - Who sends the tax acknowledgment. Say only that part of the price is a
 //   tax-deductible gift until Jeff confirms who issues it.
+// Local taxes and fees (hotel, tourist, port) aren't in the prices: say so, but
+// not when or how much, and keep "by credit card" until checks are confirmed.
 // Native <details> so every answer works without JavaScript and with a keyboard.
 
 import { motion, useReducedMotion } from 'motion/react';
@@ -27,8 +29,8 @@ const FAQS: Faq[] = [
     a: 'In full, at the Gala or by the following week at the latest. Payment is by credit card, and you can split it across more than one card.',
   },
   {
-    q: 'Is airfare included?',
-    a: 'No. Each trip covers what’s listed in its highlights: hotels, tours and transfers on the ground. You book your own flights.',
+    q: 'What isn’t included?',
+    a: 'Airfare, and local taxes and fees, such as hotel, tourist or port taxes, which vary by destination. Each trip covers what’s listed in its highlights: hotels, tours and transfers on the ground. You book your own flights.',
   },
   {
     q: 'When can I travel?',

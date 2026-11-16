@@ -310,7 +310,8 @@ export default function GalaPage() {
           </motion.div>
           <GalaTrips />
           <p className="gala-fine-print gala-trips-fine">
-            Airfare isn’t included: each trip covers hotels, tours and transfers on the ground.
+            Prices don’t include airfare or local taxes and fees, such as hotel, tourist or port
+            taxes, which vary by destination. Each trip covers hotels, tours and transfers on the ground.
             You book your dates with a travel specialist and travel within three years.
             Travelers or extra nights can be added on request.
           </p>
@@ -445,8 +446,8 @@ export default function GalaPage() {
               same trip. Each is for two travelers, except Cortona, which is for four.
             </motion.p>
             <motion.p {...revealLate}>
-              <strong>Airfare isn’t included.</strong> Packages cover hotels, tours and
-              transfers on the ground. You choose your dates with a travel specialist and
+              <strong>Airfare and local taxes aren’t included.</strong> Packages cover hotels,
+              tours and transfers on the ground; hotel, tourist or port taxes vary by destination. You choose your dates with a travel specialist and
               travel within three years.
             </motion.p>
           </div>

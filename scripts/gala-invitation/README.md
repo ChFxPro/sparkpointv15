@@ -89,7 +89,9 @@ share, and any unconfirmed giveback percentage.
   disabilities added at booking for an extra charge; mostly small-group tours;
   optional insurance at booking; the purchaser can transfer the trip; part of
   the price is a tax-deductible gift (don't say who sends the acknowledgment
-  yet). Don't name the Alaska cruise line.
+  yet). Prices don't include local taxes and fees (hotel, tourist or port
+  taxes, varying by destination); say so with airfare, but not when or how
+  much. Don't name the Alaska cruise line.
 
 ## Sending it
 
