@@ -471,7 +471,7 @@ R.choose = (s) => {
       return h('li', {}, h('span', { class: 'choose-n' }, String(i + 1)), h('div', {}, h('p', { class: 'choose-head' }, head), text && h('p', { class: 'choose-text' }, text)));
     })
   );
-  // How to pay isn't confirmed yet: until it is, hold its place.
+  // How to pay (confirmed 2026-11-12). Left empty, the page holds its place with "Details to come".
   const pay = String(s.payment || '').trim();
   const payment = pay
     ? h('div', { class: 'choose-pay' }, h('p', { class: 'choose-pay-label' }, 'How to pay'), paras(pay, 'choose-pay-text'))

@@ -1724,6 +1724,40 @@ html.reduce-motion .gala-trailer-more {
   text-transform: uppercase;
 }
 
+/* The fare line under a trip's title (GalaTrips.tsx). */
+.gala-trip-fare {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  margin-top: 14px;
+  padding: 10px 0 9px;
+  border-top: 1px solid rgba(169, 133, 62, 0.45);
+  border-bottom: 1px solid rgba(169, 133, 62, 0.45);
+}
+
+.gala-trip-fare-price {
+  /* A deep brass: the page's --gala-brass is 1.7:1 on the ivory card; this is 4.8:1. */
+  color: #86642a;
+  font-size: 1.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  font-variant-numeric: lining-nums;
+}
+
+.gala-trip.is-featured .gala-trip-fare-price {
+  font-size: clamp(1.8rem, 2.4vw, 2.2rem);
+}
+
+.gala-trip-fare-terms {
+  color: #6b5d40;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
 /* "Transylvania County ✈ Santorini → Mykonos → Athens" */
 .gala-trip-route {
   display: flex;
@@ -3180,6 +3214,104 @@ html.reduce-motion .gala-film-bar {
 }
 
 /* 4 — Luggage tags: leather tags hanging from a brass rail */
+/* 4b — FAQ (GalaFaq.tsx): native <details>, brass hairlines, two columns on wide screens. */
+.gala-faq {
+  padding: 10px 0 100px;
+  background: var(--gala-ivory);
+}
+
+.gala-faq-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 0 48px;
+  margin-top: 36px;
+}
+
+.gala-faq-column {
+  border-top: 1px solid rgba(169, 133, 62, 0.4);
+}
+
+.gala-faq-item {
+  border-bottom: 1px solid rgba(169, 133, 62, 0.4);
+}
+
+.gala-faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px 0;
+  color: var(--gala-midnight);
+  font-size: 1.12rem;
+  font-weight: 600;
+  line-height: 1.35;
+  cursor: pointer;
+  list-style: none;
+}
+
+.gala-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.gala-faq-item summary:focus-visible {
+  outline: 2px solid var(--gala-pink);
+  outline-offset: 4px;
+}
+
+/* A plus that turns into a minus. */
+.gala-faq-mark {
+  position: relative;
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+.gala-faq-mark::before,
+.gala-faq-mark::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: #86642a;
+  transition: transform 0.25s ease;
+}
+
+.gala-faq-mark::after {
+  transform: rotate(90deg);
+}
+
+.gala-faq-item[open] .gala-faq-mark::after {
+  transform: rotate(0deg);
+}
+
+.gala-faq-item p {
+  max-width: 62ch;
+  padding: 0 0 22px;
+  color: var(--gala-muted);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 860px) {
+  .gala-faq-list {
+    grid-template-columns: 1fr;
+  }
+
+  .gala-faq-column + .gala-faq-column {
+    border-top: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gala-faq-mark::before,
+  .gala-faq-mark::after {
+    transition: none;
+  }
+}
+
 .gala-tags-section {
   padding: 30px 0 120px;
   background: var(--gala-ivory);
