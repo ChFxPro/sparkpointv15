@@ -386,15 +386,20 @@ function TripCard({ trip, boarding, near, videoAllowed, paused, onTogglePause, o
         <h3 id={headingId}>{trip.title}</h3>
         <p className="gala-trip-meta">
           <span>{trip.nights} nights</span>
-          <span aria-hidden="true">·</span>
-          <span>{travelersLabel(trip.travelers)}</span>
-          {price ? (
+          {price ? null : (
             <>
               <span aria-hidden="true">·</span>
-              <span className="gala-trip-price">{price}</span>
+              <span>{travelersLabel(trip.travelers)}</span>
             </>
-          ) : null}
+          )}
         </p>
+        {/* The fare: the whole package's price, set like the fare line on a ticket. */}
+        {price ? (
+          <p className="gala-trip-fare">
+            <span className="gala-trip-fare-price">{price}</span>
+            <span className="gala-trip-fare-terms">{travelersLabel(trip.travelers)} · land only</span>
+          </p>
+        ) : null}
         <p className="gala-trip-route">
           <Sparkmark variant="ink" size="12px" className="gala-trip-stops-mark" />
           <span>

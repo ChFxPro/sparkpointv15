@@ -6,19 +6,19 @@
 // Rules from the kit that this file and its readers follow:
 // - No auction: every trip is available to every guest at a set price, and
 //   more than one guest can choose the same trip.
-// - Prices stay hidden until Jeff sets the public prices. The kit's `listPrice`
-//   is the provider's internal land-only price and is deliberately NOT copied
-//   here: anything in src/ ships in the public JavaScript bundle. Each trip's
-//   `price` stays null until a public price is set, and nothing renders it
-//   unless GALA_SHOW_TRIP_PRICES is true.
+// - `price` is the public price for the whole package, set by Jeff on
+//   2026-11-16 and shown on each card as "$6,900 · For two · land only". The
+//   kit's `listPrice` (the provider's internal price) and SparkPoint's margin
+//   are deliberately NOT copied here: anything in src/ ships in the public
+//   JavaScript bundle. GALA_SHOW_TRIP_PRICES hides every price at once.
 // - The package provider, AmFund, is credited only in the Gala page's travel
 //   partner block (owner's call, 2026-11-12); never name its staff. Never say
 //   the trips can be bought after the Gala, and don't state payment timing,
 //   child pricing, insurance or transferability.
 // - Alaska: don't name the cruise line until it's confirmed.
 
-/** One switch for every trip price on the site. Leave false until the public prices are final. */
-export const GALA_SHOW_TRIP_PRICES = false;
+/** One switch for every trip price on the site (on since 2026-11-16). */
+export const GALA_SHOW_TRIP_PRICES = true;
 
 export interface GalaTripStop {
   name: string;
@@ -98,7 +98,7 @@ export const GALA_TRIPS: GalaTrip[] = [
     ],
     board: 'GREECE',
     code: 'ATH',
-    price: null,
+    price: 6900,
     image: {
       file: "greece-01-santorini-oia",
       alt: "Blue-domed white churches of Oia above the Santorini caldera and the Aegean Sea",
@@ -137,7 +137,7 @@ export const GALA_TRIPS: GalaTrip[] = [
     ],
     board: 'ICELAND',
     code: 'KEF',
-    price: null,
+    price: 6900,
     image: {
       file: "iceland-01-gullfoss",
       alt: "Gullfoss waterfall plunging into its canyon with a rainbow in the spray",
@@ -172,7 +172,7 @@ export const GALA_TRIPS: GalaTrip[] = [
     ],
     board: 'CORTONA',
     code: 'FLR',
-    price: null,
+    price: 5900,
     image: {
       file: "cortona-01-cortona-hilltop",
       alt: "The walled hilltop town of Cortona among olive terraces, seen from the air",
@@ -212,7 +212,7 @@ export const GALA_TRIPS: GalaTrip[] = [
     ],
     board: 'SCOTLAND',
     code: 'EDI',
-    price: null,
+    price: 5900,
     image: {
       file: "scotland-01-glencoe",
       alt: "Golden evening light on the mountains of Glencoe in the Scottish Highlands",
@@ -249,7 +249,7 @@ export const GALA_TRIPS: GalaTrip[] = [
     ],
     board: 'SOUTH AFRICA',
     code: 'JNB',
-    price: null,
+    price: 7500,
     image: {
       file: "south-africa-01-lion",
       alt: "A young male lion resting in the long grass, looking toward the camera",
@@ -291,7 +291,7 @@ export const GALA_TRIPS: GalaTrip[] = [
     ],
     board: 'PORTUGAL',
     code: 'LIS',
-    price: null,
+    price: 6900,
     image: {
       file: "portugal-01-porto-ribeira",
       alt: "Traditional rabelo boats on the Douro in front of Porto's Ribeira waterfront at golden hour",
@@ -327,7 +327,7 @@ export const GALA_TRIPS: GalaTrip[] = [
     ],
     board: 'COSTA RICA',
     code: 'LIR',
-    price: null,
+    price: 6500,
     image: {
       file: "costa-rica-01-arenal-volcano",
       alt: "The cone of Arenal Volcano rising above green rainforest and farmland",
@@ -368,7 +368,7 @@ export const GALA_TRIPS: GalaTrip[] = [
     ],
     board: 'ALASKA',
     code: 'SEA',
-    price: null,
+    price: 7500,
     image: {
       file: "alaska-01-mendenhall-glacier",
       alt: "Mendenhall Glacier flowing between mountains into its lake near Juneau",

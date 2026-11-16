@@ -2,7 +2,7 @@
 // Hand edits are fine too: keep it valid JavaScript.
 window.SHOW = {
   "settings": {
-    "showPrices": false
+    "showPrices": true
   },
   "slides": [
     {
@@ -133,7 +133,7 @@ window.SHOW = {
       "nights": "8",
       "travelers": "Two",
       "terms": "Land only · airfare not included · travel within three years",
-      "price": "",
+      "price": "$6,900",
       "photo": "trips/greece/greece-01-santorini-oia-1600.webp",
       "tripId": "greece",
       "photoCredit": "Photo: Giles Laurent / CC BY-SA 4.0, via Wikimedia Commons"
@@ -164,7 +164,7 @@ window.SHOW = {
       "nights": "6",
       "travelers": "Two",
       "terms": "Land only · airfare not included · travel within three years",
-      "price": "",
+      "price": "$6,900",
       "photo": "trips/iceland/iceland-01-gullfoss-1600.webp",
       "tripId": "iceland",
       "photoCredit": "Photo: Diego Delso / CC BY-SA 4.0, via Wikimedia Commons"
@@ -195,7 +195,7 @@ window.SHOW = {
       "nights": "6",
       "travelers": "Four",
       "terms": "Land only · airfare not included · travel within three years",
-      "price": "",
+      "price": "$5,900",
       "photo": "trips/cortona/cortona-01-cortona-hilltop-1600.webp",
       "tripId": "cortona",
       "photoCredit": "Photo: TeKappa / CC BY-SA 4.0, via Wikimedia Commons"
@@ -226,7 +226,7 @@ window.SHOW = {
       "nights": "7",
       "travelers": "Two",
       "terms": "Land only · airfare not included · travel within three years",
-      "price": "",
+      "price": "$5,900",
       "photo": "trips/scotland/scotland-01-glencoe-1600.webp",
       "tripId": "scotland",
       "photoCredit": "Photo: john mcsporran from Trossachs, Scotland / CC BY 2.0, via Wikimedia Commons"
@@ -257,7 +257,7 @@ window.SHOW = {
       "nights": "6",
       "travelers": "Two",
       "terms": "Land only · airfare not included · travel within three years",
-      "price": "",
+      "price": "$7,500",
       "photo": "trips/south-africa/south-africa-01-lion-1600.webp",
       "tripId": "south-africa",
       "photoCredit": "Photo: Chris Eason / CC BY 2.0, via Wikimedia Commons"
@@ -276,9 +276,9 @@ window.SHOW = {
       "title": "More journeys, at the table",
       "subtitle": "Three more trips, offered at your table tonight.",
       "trips": [
-        "06 | Portugal | Captivating Portugal: Lisbon & Porto | Lisbon and Sintra, a private guided drive north to Porto, and a Douro Valley day of wine, lunch and a river cruise. | ",
-        "07 | Costa Rica | Colorful Costa Rica | Rainforest and volcano around Arenal, then the Pacific beaches of Tamarindo, with two tours of the traveler's choosing. | ",
-        "08 | Alaska | Alaska Cruise: Explorer of the North | A cruise from Seattle in a balcony cabin, calling at Ketchikan, Juneau, Skagway and Victoria, British Columbia. | "
+        "06 | Portugal | Captivating Portugal: Lisbon & Porto | Lisbon and Sintra, a private guided drive north to Porto, and a Douro Valley day of wine, lunch and a river cruise. | $6,900",
+        "07 | Costa Rica | Colorful Costa Rica | Rainforest and volcano around Arenal, then the Pacific beaches of Tamarindo, with two tours of the traveler's choosing. | $6,500",
+        "08 | Alaska | Alaska Cruise: Explorer of the North | A cruise from Seattle in a balcony cabin, calling at Ketchikan, Juneau, Skagway and Victoria, British Columbia. | $7,500"
       ],
       "footer": "Every trip is available to every guest at a set price."
     },
