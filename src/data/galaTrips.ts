@@ -13,8 +13,11 @@
 //   JavaScript bundle. GALA_SHOW_TRIP_PRICES hides every price at once.
 // - The package provider, AmFund, is credited only in the Gala page's travel
 //   partner block (owner's call, 2026-11-12); never name its staff. Never say
-//   the trips can be bought after the Gala, and don't state payment timing,
-//   child pricing, insurance or transferability.
+//   the trips can be bought after the Gala (Jeff, 2026-11-16: not until after
+//   Dec 11, so guests choose on the night). Payment, children, tours,
+//   insurance and transfers are confirmed (the provider's reply, 2026-11-12)
+//   and answered in the page's FAQ (GalaFaq.tsx); don't say who sends the tax
+//   acknowledgment until Jeff confirms it.
 // - Alaska: don't name the cruise line until it's confirmed.
 
 /** One switch for every trip price on the site (on since 2026-11-16). */

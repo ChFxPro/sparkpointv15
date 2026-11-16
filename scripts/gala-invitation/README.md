@@ -83,9 +83,13 @@ share, and any unconfirmed giveback percentage.
 - Safe to say: airfare not included (each trip covers hotels, tours and
   transfers on the ground). Don't write "land only": it's travel-trade jargon
   guests may not know (Jeff, 2026-11-16); for two travelers (Cortona for four); booked with a travel
-  specialist; three years to travel. Not yet confirmed, so don't say: how or
-  when payment happens, child pricing, private vs group tours, insurance or
-  transfers. Don't name the Alaska cruise line.
+  specialist; three years to travel, no blackout dates. Confirmed by the
+  provider (2026-11-12), so these are fine too: payment in full at the Gala or
+  by the following week, by card (can be split); children or adults with
+  disabilities added at booking for an extra charge; mostly small-group tours;
+  optional insurance at booking; the purchaser can transfer the trip; part of
+  the price is a tax-deductible gift (don't say who sends the acknowledgment
+  yet). Don't name the Alaska cruise line.
 
 ## Sending it
 
