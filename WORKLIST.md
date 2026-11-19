@@ -154,6 +154,7 @@
 
 | Date | Update |
 | --- | --- |
+| 2026-11-19 | BackPorch video posters: a YouTube/Vimeo block can carry a `poster` (a still in `porch-media`) behind its play button; when the cover is that poster, the post page leads with the video instead of repeating the cover. First used on the National Rural Health Day post (`rural-health-day`, FHLI's proclamation video). Checked locally on the live post; play still loads only on press. |
 | 2026-11-12 | Gala trailer as a still that comes to life (EVENT-020): our own lockup on the film's title-card background covers the title cards (fixing the blurred sparkmark) and dissolves into the footage and back between loops; "Sound on" is one tap with a fade-in and no restart, and the strip no longer shifts under a finger. Trip films on phones get our own glass controls (lighter title band, hide after 1.6 s, back on tap). In review. |
 | 2026-11-12 | Gala chapter marks finished with Jeff (EVENT-020): amber split-flap DEPARTURES, a landscape eight-star visa, and an engraved, postmarked postage stamp for the return trip, drawn by the passport stamp engine. In review. |
 | 2026-11-12 | Gala page polish (EVENT-020): eyebrows cut to three travel-object chapter marks (Option B), the trailer becomes a full-screen autoplaying (muted) section just above the trips, and the return-trip postcard slides in, is written, stamped and sent with scroll. In review. |

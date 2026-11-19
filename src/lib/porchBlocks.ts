@@ -47,7 +47,7 @@ export type PorchBlock = (
   | ({ id: string; type: 'image' } & MediaRef)
   | { id: string; type: 'gallery'; images: MediaRef[] }
   | { id: string; type: 'video'; path: string; poster?: string; caption?: string; duration?: number }
-  | { id: string; type: 'embed'; provider: 'youtube' | 'vimeo'; videoId: string; title?: string; caption?: string }
+  | { id: string; type: 'embed'; provider: 'youtube' | 'vimeo'; videoId: string; title?: string; caption?: string; poster?: string }
   | { id: string; type: 'audio'; path: string; title?: string; caption?: string; duration?: number }
   | { id: string; type: 'quote'; text: string; cite?: string }
   | { id: string; type: 'link'; url: string; label: string; note?: string; preview?: LinkSnippet }
@@ -165,7 +165,9 @@ export function normalizeBlocks(input: unknown): PorchBlock[] {
         const videoId = typeof b.videoId === 'string' ? b.videoId : '';
         const ok = provider === 'youtube' ? /^[A-Za-z0-9_-]{11}$/.test(videoId) : /^\d{6,12}$/.test(videoId);
         if (provider && ok) {
-          out.push({ id, type: 'embed', provider, videoId, title: str(b.title, BLOCK_LIMITS.short), caption: str(b.caption, BLOCK_LIMITS.caption) });
+          // The poster is our own copy of a still in porch-media, never the provider's
+          // thumbnail, so nothing loads from YouTube or Vimeo until play.
+          out.push({ id, type: 'embed', provider, videoId, title: str(b.title, BLOCK_LIMITS.short), caption: str(b.caption, BLOCK_LIMITS.caption), poster: path(b.poster) });
         }
         break;
       }
@@ -326,6 +328,11 @@ export function parseVideoLink(url: string): { provider: 'youtube' | 'vimeo'; vi
 }
 
 /** All images in a post's blocks, in order (for the Facebook kit and cover fallback). */
+/** Whether an image path is the poster of a video embed in these blocks. */
+export function isEmbedPoster(blocks: PorchBlock[], imagePath: string | null): boolean {
+  return !!imagePath && blocks.some((b) => b.type === 'embed' && b.poster === imagePath);
+}
+
 export function blockImages(blocks: PorchBlock[]): MediaRef[] {
   return blocks.flatMap((b) =>
     b.type === 'image'

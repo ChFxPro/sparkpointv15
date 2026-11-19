@@ -7,7 +7,7 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { clockTime, longDate, PORCH_PATH, porchImageSrcSet, porchImageUrl, type PorchPost } from '../../lib/backporch';
-import { blockImages, linkForImage } from '../../lib/porchBlocks';
+import { blockImages, isEmbedPoster, linkForImage } from '../../lib/porchBlocks';
 import { LAB_FEATURES, publicBlocks, STAGE_LABELS } from '../../lib/porchLab';
 import { DateChip, PorchImage, PostMarks } from './PorchParts';
 import { ContourTerrain, TopoPin, Waymark, WaymarkBack } from './fieldKit';
@@ -35,7 +35,10 @@ export function PostView({
   const isGathering = post.kind === 'gathering' && post.event_start;
   const showReactions =
     post.presentation.reactions && (preview || LAB_FEATURES.reactions.stage !== 'lab');
-  const coverInBody = blockImages(post.blocks).some((img) => img.path === post.image_path);
+  // The cover isn't repeated above the body when the body already shows it: as a photo,
+  // or as the poster of a video embed (then the video leads the post).
+  const coverInBody =
+    blockImages(post.blocks).some((img) => img.path === post.image_path) || isEmbedPoster(blocks, post.image_path);
   // A cover taken from a link's preview opens that link, and the link's own card
   // below drops its copy of the image so it isn't shown twice.
   const coverLink = linkForImage(post.blocks, post.image_path);
