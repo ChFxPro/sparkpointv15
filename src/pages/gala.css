@@ -5487,3 +5487,153 @@ html.reduce-motion .gala-film-bar {
 .gala-passport-seal-mark {
   color: #8e2a5c;
 }
+
+/* 4a — Live music (GalaBand.tsx): a night band between the ivory passport and
+   FAQ sections, lit warm from above like a stage, the band's photo in the
+   Deco double hairline with a brass name plate under it. */
+.gala-band {
+  position: relative;
+  padding: 104px 0;
+  color: var(--gala-ivory);
+  background:
+    radial-gradient(ellipse 60% 70% at 24% 0%, rgba(241, 217, 160, 0.16), transparent 70%),
+    radial-gradient(ellipse at 100% 100%, rgba(224, 54, 148, 0.1), transparent 50%),
+    var(--gala-midnight-2);
+  scroll-margin-top: 80px;
+}
+
+.gala-band-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: 64px;
+}
+
+.gala-band-photo {
+  margin: 0;
+}
+
+.gala-band-frame {
+  padding: 10px;
+  border: 1px solid rgba(217, 181, 106, 0.55);
+  outline: 1px solid rgba(217, 181, 106, 0.26);
+  outline-offset: 6px;
+}
+
+.gala-band-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 614 / 492;
+  object-fit: cover;
+}
+
+.gala-band-plate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+  color: var(--gala-brass-light);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.gala-band-copy .gala-section-head h2 {
+  margin-top: 0;
+}
+
+.gala-band-lede {
+  margin-top: 26px;
+  max-width: 560px;
+  color: rgba(247, 241, 229, 0.86);
+  font-size: 1.15rem;
+  line-height: 1.65;
+}
+
+.gala-band-instruments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 0;
+  margin: 28px 0 0;
+  padding: 14px 0;
+  list-style: none;
+  border-top: 1px solid rgba(217, 181, 106, 0.35);
+  border-bottom: 1px solid rgba(217, 181, 106, 0.35);
+}
+
+.gala-band-instruments li {
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.gala-band-instruments li + li::before {
+  content: '◇';
+  margin: 0 0.9em;
+  color: var(--gala-brass);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.gala-band-harmony {
+  margin-top: 16px;
+  color: rgba(247, 241, 229, 0.74);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.gala-band-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 26px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--gala-brass);
+  color: var(--gala-brass-light);
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.gala-band-link svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 180ms ease;
+}
+
+.gala-band-link:hover svg {
+  transform: translateX(3px);
+}
+
+.gala-band-link:focus-visible {
+  outline: 2px solid var(--gala-brass-light);
+  outline-offset: 4px;
+}
+
+@media (max-width: 860px) {
+  .gala-band {
+    padding: 80px 0;
+  }
+
+  .gala-band-grid {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+
+  .gala-band-photo {
+    max-width: 520px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gala-band-link svg {
+    transition: none;
+  }
+}
