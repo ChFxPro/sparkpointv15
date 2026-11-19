@@ -19,6 +19,7 @@ import { GALA_TRIP_COUNT, GALA_TRIP_COUNT_WORD, GALA_TRIP_NAMES, GALA_TRIPS, tri
 import { GalaBoardingPass } from './GalaBoardingPass';
 import { GalaChapterMark } from './GalaChapterMark';
 import { GalaDepartureBoard } from './GalaDepartureBoard';
+import { GalaBand } from './GalaBand';
 import { GalaFaq } from './GalaFaq';
 import { GalaPostcardJourney } from './GalaPostcard';
 import { GalaSeatMap } from './GalaSeatMap';
@@ -466,6 +467,9 @@ export default function GalaPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* 4a — Live music all evening (GalaBand.tsx) */}
+      <GalaBand />
 
       {/* 4b — Questions, answered (GalaFaq.tsx) */}
       <GalaFaq />
