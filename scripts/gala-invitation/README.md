@@ -90,8 +90,10 @@ share, and any unconfirmed giveback percentage.
   optional insurance at booking; the purchaser can transfer the trip; part of
   the price is a tax-deductible gift (don't say who sends the acknowledgment
   yet). Prices don't include local taxes and fees (hotel, tourist or port
-  taxes, varying by destination); say so with airfare, but not when or how
-  much. Don't name the Alaska cruise line.
+  taxes, varying by destination); say so with airfare, and that they're paid
+  later, when the guest sets travel dates (confirmed 2026-11-16; write it that
+  way, not "when you book", which sounds like buying at the Gala), but not how much. Payment can be by
+  credit card or check. Don't name the Alaska cruise line.
 
 ## Sending it
 
