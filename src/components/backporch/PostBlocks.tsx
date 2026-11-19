@@ -115,7 +115,17 @@ function Embed({ block }: { block: Extract<PorchBlock, { type: 'embed' }> }) {
             allowFullScreen
           />
         ) : (
-          <button type="button" className="pb-embed-play" onClick={() => setOn(true)}>
+          <button type="button" className="pb-embed-play" data-poster={block.poster ? '' : undefined} onClick={() => setOn(true)}>
+            {block.poster && (
+              <img
+                className="pb-embed-poster"
+                src={porchImageUrl(block.poster, 960) ?? undefined}
+                srcSet={porchImageSrcSet(block.poster)}
+                sizes="(min-width: 720px) 704px, 100vw"
+                alt=""
+                decoding="async"
+              />
+            )}
             <span className="pb-play" aria-hidden="true" />
             <span className="pb-embed-title">{block.title ?? 'Play video'}</span>
             <small>Plays from {name}. Nothing loads from {name} until you press play.</small>
