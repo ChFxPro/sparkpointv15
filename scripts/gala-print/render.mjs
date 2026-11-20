@@ -192,8 +192,9 @@ const groups = {
     await mkdir(dir, { recursive: true });
     // Three photos from the 2025 Gala, so the team's invites and posts don't all look
     // alike: Santa greeting guests (the lead, also on the printed cards), friends
-    // talking over drinks, and two friends laughing by the hors d'oeuvres.
-    const PHOTOS = { santa: 'gala-2025-2022.webp', friends: 'gala-2025-1962.webp', laughing: 'gala-2025-2004.webp' };
+    // talking over drinks, two friends laughing by the hors d'oeuvres, and a guest
+    // in a necklace of Christmas lights (SP_Gala-10 from the NAS edits).
+    const PHOTOS = { santa: 'gala-2025-2022.webp', friends: 'gala-2025-1962.webp', laughing: 'gala-2025-2004.webp', lights: 'gala-2025-edit10.webp' };
     const setPhoto = (file) => page.evaluate((f) => {
       const img = document.querySelector('.photo img');
       img.src = img.src.replace(/[^/]+$/, f);
@@ -203,6 +204,7 @@ const groups = {
       ['', 'gala-lets-connect-santa', 'santa'],
       ['', 'gala-lets-connect-friends', 'friends'],
       ['', 'gala-lets-connect-laughing', 'laughing'],
+      ['', 'gala-lets-connect-lights', 'lights'],
       ['connestee', 'gala-lets-connect-connestee', 'santa'],
     ]) {
       for (const [format, width, height, suffix] of [
