@@ -37,11 +37,21 @@ const FAQS: Faq[] = [
   },
   {
     q: 'What does my ticket include?',
-    a: 'Heavy hors d’oeuvres and cocktails, plenty to make a supper of, with drink tickets; live music from the Blue Ridge Bakery Band; and an evening with friends and neighbors, looking back on 2026 together. Tickets are $100.',
+    // Two drink tickets per guest: Oct 26 planning meeting. Whether more can be
+    // bought after that wasn't settled, so the page doesn't say.
+    a: 'Heavy hors d’oeuvres and cocktails, plenty to make a supper of, with two drink tickets; live music from the Blue Ridge Bakery Band; and an evening with friends and neighbors, looking back on 2026 together, from 6 to 9 p.m. Tickets are $100.',
+  },
+  {
+    q: 'Do I need to bring a ticket?',
+    a: 'No. Your name will be on our list at the door; there’s nothing to print.',
   },
   {
     q: 'What should I wear?',
     a: 'Festive cocktail attire: your holiday best, with a little sparkle.',
+  },
+  {
+    q: 'I’m coming on my own, or I’m new to the area. Will I know anyone?',
+    a: 'You’ll be among friends. The evening is made for meeting people, and our team will be glad to introduce you around.',
   },
   {
     q: 'How do I get there, and where do I park?',

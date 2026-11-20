@@ -93,6 +93,11 @@ const EVENING: { title: string; note: string; href?: string }[] = [
 // demolition, construction and renovation are funded; what's left furnishes and
 // equips the Hub and runs its programs. Off until Jeff confirms it can be public.
 const HUB_CAMPAIGN = { show: false, raised: 350_000, goal: 500_000 };
+
+// The sponsor seat-map teaser (#travel-partners) and the close's "Become a Gala
+// travel partner" link. Off until sponsor levels and a contact are set (Jeff,
+// 2026-11-20); turn back on here.
+const SHOW_PARTNER_SEATS = false;
 const usd = (n: number) => `$${n.toLocaleString('en-US')}`;
 
 const GIVES_BACK = [
@@ -123,6 +128,7 @@ const galaEventJsonLd = {
   alternateName: GALA_BYLINE,
   description: `A travel-themed community gala of connection and celebration: heavy hors d'oeuvres, cocktails, live music, and a look back at 2026 together. The night's fundraiser is ${GALA_TRIP_COUNT_WORD} optional trips at set prices (${GALA_TRIP_NAMES}); part of every trip's price is a tax-deductible gift to SparkPoint, supporting the Transylvania Resilience Hub.`,
   startDate: '2026-12-11T18:00:00-05:00',
+  endDate: '2026-12-11T21:00:00-05:00',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
   eventStatus: 'https://schema.org/EventScheduled',
   image: [canonicalUrl(GALA_SHARE_IMAGE)],
@@ -221,8 +227,14 @@ export default function GalaPage() {
               Every journey <em>connects back home.</em>
             </p>
             <p className="gala-hero-lede">
-              A travel-themed evening of connection, friends and celebration, as we look back on
-              2026 together and ahead to a more connected Transylvania County and beyond.
+              A travel-themed evening of connection and celebration with friends old and new, as we
+              look back on 2026 together and ahead to a more connected Transylvania County and beyond.
+            </p>
+            {/* Who's hosting, in a line, with the way to learn more (Jeff, 2026-11-20:
+                an event page, not the org page). */}
+            <p className="gala-hero-host">
+              Hosted by SparkPoint, a Brevard nonprofit that brings people together across
+              Transylvania County. <Link to="/mission">Our mission</Link>
             </p>
             <dl className="gala-hero-facts">
               <div>
@@ -233,7 +245,7 @@ export default function GalaPage() {
               <div>
                 <Clock3 aria-hidden="true" />
                 <dt className="sr-only">Time</dt>
-                <dd>6:00 p.m.</dd>
+                <dd>6:00–9:00 p.m.</dd>
               </div>
               <div>
                 <MapPin aria-hidden="true" />
@@ -263,10 +275,10 @@ export default function GalaPage() {
                 </li>
               ))}
             </ul>
-            <p className="gala-evening-note">
-              <strong>Your ticket is all you need;</strong> the trips are entirely optional.
-              Dress: festive cocktail attire, your holiday best.
+            <p className="gala-evening-promise">
+              <strong>Your ticket is all you need.</strong> The trips are entirely optional.
             </p>
+            <p className="gala-evening-note">Dress: festive cocktail attire, your holiday best.</p>
             <div className="gala-actions">
               {GALA_TICKETS_URL ? (
                 <a
@@ -547,7 +559,8 @@ export default function GalaPage() {
         </div>
       </section>
 
-      {/* 7 — Travel partners (sponsor teaser) */}
+      {/* 7 — Travel partners (sponsor teaser): off until sponsor levels are set */}
+      {SHOW_PARTNER_SEATS ? (
       <section id="travel-partners" className="gala-partners" aria-labelledby="partners-title">
         <div className="gala-shell">
           <div className="gala-partners-head">
@@ -591,6 +604,7 @@ export default function GalaPage() {
           </p>
         </div>
       </section>
+      ) : null}
 
       {/* 8 — Boarding pass */}
       <section className="gala-close" aria-labelledby="close-title">
@@ -608,9 +622,11 @@ export default function GalaPage() {
             <GalaBoardingPass />
           </motion.div>
 
-          <motion.p className="gala-partner" {...reveal}>
-            Want your business on board? <a href="#travel-partners">Become a Gala travel partner</a>
-          </motion.p>
+          {SHOW_PARTNER_SEATS ? (
+            <motion.p className="gala-partner" {...reveal}>
+              Want your business on board? <a href="#travel-partners">Become a Gala travel partner</a>
+            </motion.p>
+          ) : null}
         </div>
       </section>
     </div>

@@ -5693,6 +5693,47 @@ html.reduce-motion .gala-film-bar {
   font-size: 0.9rem;
 }
 
+/* "Your ticket is all you need": its own line, a little louder than the notes. */
+.gala-evening-promise {
+  max-width: 640px;
+  margin-top: 18px;
+  color: var(--gala-ivory);
+  font-size: 1.06rem;
+  line-height: 1.5;
+  text-shadow: 0 2px 24px rgba(11, 19, 34, 0.6);
+}
+
+.gala-evening-promise strong {
+  color: var(--gala-brass-light);
+  font-weight: 700;
+}
+
+.gala-evening-promise + .gala-evening-note {
+  margin-top: 4px;
+}
+
+/* Who's hosting, under the lead: quiet, with a link to the mission page. */
+.gala-hero-host {
+  max-width: 560px;
+  margin-top: 10px;
+  color: rgba(247, 241, 229, 0.66);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  text-shadow: 0 2px 24px rgba(11, 19, 34, 0.6);
+}
+
+.gala-hero-host a {
+  color: var(--gala-brass-light);
+  text-decoration: underline;
+  text-decoration-color: rgba(217, 181, 106, 0.55);
+  text-underline-offset: 4px;
+  white-space: nowrap;
+}
+
+.gala-hero-host a:hover {
+  text-decoration-color: var(--gala-brass);
+}
+
 .gala-evening-note {
   max-width: 640px;
   margin-top: 16px;

@@ -22,7 +22,7 @@ const FACTS = [
 const PROMISES = [
   {
     title: 'No cost or risk to SparkPoint',
-    body: 'SparkPoint pays nothing up front to offer the trips, and owes nothing for a trip that isn’t chosen. SparkPoint’s share of each trip chosen goes to the Resilience Hub.',
+    body: 'SparkPoint pays nothing up front to offer the trips, and owes nothing for a trip that isn’t chosen. Every trip chosen supports the Resilience Hub.',
   },
   {
     title: 'Their own travel team',
