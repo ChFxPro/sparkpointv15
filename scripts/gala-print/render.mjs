@@ -190,7 +190,21 @@ const groups = {
   async campaign(page) {
     const dir = join(OUT, 'campaign');
     await mkdir(dir, { recursive: true });
-    for (const [variant, prefix] of [['', 'gala-lets-connect'], ['connestee', 'gala-lets-connect-connestee']]) {
+    // Three photos from the 2025 Gala, so the team's invites and posts don't all look
+    // alike: Santa greeting guests (the lead, also on the printed cards), friends
+    // talking over drinks, and two friends laughing by the hors d'oeuvres.
+    const PHOTOS = { santa: 'gala-2025-2022.webp', friends: 'gala-2025-1962.webp', laughing: 'gala-2025-2004.webp' };
+    const setPhoto = (file) => page.evaluate((f) => {
+      const img = document.querySelector('.photo img');
+      img.src = img.src.replace(/[^/]+$/, f);
+      return img.decode();
+    }, file);
+    for (const [variant, prefix, photo] of [
+      ['', 'gala-lets-connect-santa', 'santa'],
+      ['', 'gala-lets-connect-friends', 'friends'],
+      ['', 'gala-lets-connect-laughing', 'laughing'],
+      ['connestee', 'gala-lets-connect-connestee', 'santa'],
+    ]) {
       for (const [format, width, height, suffix] of [
         ['portrait', 1080, 1350, '1080x1350'],
         ['square', 1080, 1080, '1080x1080'],
@@ -199,6 +213,7 @@ const groups = {
         if (variant && format !== 'portrait') continue;
         const name = `${prefix}-${suffix}.jpg`;
         await open(page, 'campaign.html', width, height, 1);
+        await setPhoto(PHOTOS[photo]);
         await page.evaluate((cls) => { document.body.className = cls; }, `${format} ${variant}`.trim());
         await new Promise((resolve) => setTimeout(resolve, 200));
         const over = await page.evaluate(() => { const f = document.querySelector('.frame'); return f.scrollHeight > f.clientHeight + 1; });
@@ -206,7 +221,8 @@ const groups = {
         await page.screenshot({ path: join(dir, name), type: 'jpeg', quality: 90 });
         console.log(`campaign/${name}`);
       }
-      // The printed card: one per 5.5 x 8.5 in page, and two up on a letter sheet.
+      // The printed card (5.5 x 8.5 in), from the lead photo only.
+      if (photo !== 'santa') continue;
       const card = `${prefix}-card-5.5x8.5`;
       await open(page, 'campaign.html', 528, 816, 2);
       await page.evaluate((cls) => { document.body.className = cls; }, `card ${variant}`.trim());
