@@ -87,6 +87,12 @@ const EVENING: { title: string; note: string; href?: string }[] = [
   { title: 'The travel experience', note: 'Eight trips, the night’s fundraiser', href: '#trips' },
 ];
 
+// The Resilience Hub campaign, as reported at the Nov 9, 2026 board meeting: the
+// demolition, construction and renovation are funded; what's left furnishes and
+// equips the Hub and runs its programs. Off until Jeff confirms it can be public.
+const HUB_CAMPAIGN = { show: false, raised: 350_000, goal: 500_000 };
+const usd = (n: number) => `$${n.toLocaleString('en-US')}`;
+
 const GIVES_BACK = [
   {
     title: 'Celebrate a year of connection',
@@ -510,6 +516,26 @@ export default function GalaPage() {
               </motion.li>
             ))}
           </ol>
+
+          {HUB_CAMPAIGN.show ? (
+            <motion.div className="gala-hub-meter" {...reveal}>
+              <p className="gala-hub-meter-figures">
+                <strong>{usd(HUB_CAMPAIGN.raised)}</strong> raised toward{' '}
+                <strong>{usd(HUB_CAMPAIGN.goal)}</strong> for the Resilience Hub
+              </p>
+              <div
+                className="gala-hub-meter-bar"
+                role="img"
+                aria-label={`${Math.round((HUB_CAMPAIGN.raised / HUB_CAMPAIGN.goal) * 100)} percent of the Resilience Hub goal raised`}
+              >
+                <span style={{ width: `${(HUB_CAMPAIGN.raised / HUB_CAMPAIGN.goal) * 100}%` }} />
+              </div>
+              <p className="gala-hub-meter-note">
+                The building’s construction is funded. The rest furnishes and equips the Hub and
+                gets its programs running, and that’s where the Gala comes in.
+              </p>
+            </motion.div>
+          ) : null}
         </div>
       </section>
 

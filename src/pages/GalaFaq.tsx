@@ -23,9 +23,12 @@ interface Faq {
 // Directions follow the venue's own request (Oct 26 planning meeting): every guest
 // comes in by the East Fork Gate, where an extra security guard lets Gala guests in,
 // then follows the yellow line 1.4 miles to the Clubhouse; parking behind the wellness
-// center. The map links go to the Clubhouse address.
+// center. Route checked 2026-11-20 against OpenStreetMap (OSRM): US 276 South past
+// Connestee's main entrance, right on East Fork Road, right through the East Fork
+// Gate onto Connestee Trail. The map links go to the gate itself, because a phone
+// routing to the Clubhouse address sends guests in by the main gate instead.
 const VENUE_ADDRESS = '98 Overlook Clubhouse Dr, Brevard, NC 28712';
-const MAP_QUERY = encodeURIComponent(`Connestee Falls Clubhouse, ${VENUE_ADDRESS}`);
+const EAST_FORK_GATE = '35.1501,-82.7083';
 
 const FAQS: Faq[] = [
   {
@@ -42,10 +45,10 @@ const FAQS: Faq[] = [
   },
   {
     q: 'How do I get there, and where do I park?',
-    a: `Connestee Falls Clubhouse, ${VENUE_ADDRESS}. Please come in by the East Fork Gate, about a quarter mile past the Dollar General on US 276, on the right; a security guard will be there to welcome Gala guests. Inside, follow the yellow line 1.4 miles to the Clubhouse. Park anywhere; the closest spaces are right behind the wellness center, and the golf parking is open in the evening.`,
+    a: `Connestee Falls Clubhouse, ${VENUE_ADDRESS}. Please come in by the East Fork Gate, not the main entrance. From Brevard, take US 276 South (Greenville Highway) about 7 miles, past Connestee Falls’ main entrance, and turn right onto East Fork Road. In about a quarter mile, turn right through the East Fork Gate, where a security guard will welcome Gala guests, and follow the yellow line 1.4 miles to the Clubhouse. Park anywhere; the closest spaces are right behind the wellness center, and the golf parking is open in the evening.`,
     links: [
-      { label: 'Directions in Google Maps', href: `https://www.google.com/maps/dir/?api=1&destination=${MAP_QUERY}` },
-      { label: 'Directions in Apple Maps', href: `https://maps.apple.com/?daddr=${MAP_QUERY}` },
+      { label: 'Directions to the East Fork Gate in Google Maps', href: `https://www.google.com/maps/dir/?api=1&destination=${EAST_FORK_GATE}` },
+      { label: 'Directions in Apple Maps', href: `https://maps.apple.com/?daddr=${EAST_FORK_GATE}&q=East%20Fork%20Gate` },
     ],
   },
   {
@@ -82,7 +85,10 @@ const FAQS: Faq[] = [
   },
   {
     q: 'Is any of it tax-deductible?',
-    a: 'Yes. Part of every trip’s price is a tax-deductible gift to SparkPoint.',
+    // IRS quid pro quo rule (payments over $75 that buy goods or services): the receipt
+    // must give a good-faith estimate of what the buyer receives and say only the
+    // amount above it is deductible. Jeff, 2026-11-20: receipts will carry it.
+    a: 'Yes. Part of every trip’s price is a tax-deductible gift to SparkPoint, and so is part of your $100 ticket. Your receipt will show the estimated value of what you receive and the amount you can deduct.',
   },
   {
     q: 'Where does the money go?',

@@ -5841,3 +5841,44 @@ html.reduce-motion .gala-lastdec-print {
   text-decoration: underline;
   text-underline-offset: 4px;
 }
+
+/* The Resilience Hub campaign meter under the return trip's four points
+   (HUB_CAMPAIGN in GalaPage.tsx; off until the figure is cleared to publish). */
+.gala-hub-meter {
+  max-width: 760px;
+  margin-top: 56px;
+  padding-top: 26px;
+  border-top: 1px solid rgba(241, 217, 160, 0.25);
+}
+
+.gala-hub-meter-figures {
+  color: rgba(247, 241, 229, 0.86);
+  font-size: 1.1rem;
+}
+
+.gala-hub-meter-figures strong {
+  color: var(--gala-brass-light);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.gala-hub-meter-bar {
+  height: 10px;
+  margin-top: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(217, 181, 106, 0.5);
+  background: rgba(247, 241, 229, 0.06);
+}
+
+.gala-hub-meter-bar span {
+  display: block;
+  height: 100%;
+  background: var(--gala-brass);
+}
+
+.gala-hub-meter-note {
+  margin-top: 12px;
+  color: rgba(247, 241, 229, 0.7);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
