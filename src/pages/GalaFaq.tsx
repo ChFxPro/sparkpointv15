@@ -17,7 +17,15 @@ import { GALA_TRIP_COUNT_WORD } from '../data/galaTrips';
 interface Faq {
   q: string;
   a: string;
+  links?: { label: string; href: string }[];
 }
+
+// Directions follow the venue's own request (Oct 26 planning meeting): every guest
+// comes in by the East Fork Gate, where an extra security guard lets Gala guests in,
+// then follows the yellow line 1.4 miles to the Clubhouse; parking behind the wellness
+// center. The map links go to the Clubhouse address.
+const VENUE_ADDRESS = '98 Overlook Clubhouse Dr, Brevard, NC 28712';
+const MAP_QUERY = encodeURIComponent(`Connestee Falls Clubhouse, ${VENUE_ADDRESS}`);
 
 const FAQS: Faq[] = [
   {
@@ -31,6 +39,14 @@ const FAQS: Faq[] = [
   {
     q: 'What should I wear?',
     a: 'Festive cocktail attire: your holiday best, with a little sparkle.',
+  },
+  {
+    q: 'How do I get there, and where do I park?',
+    a: `Connestee Falls Clubhouse, ${VENUE_ADDRESS}. Please come in by the East Fork Gate, about a quarter mile past the Dollar General on US 276, on the right; a security guard will be there to welcome Gala guests. Inside, follow the yellow line 1.4 miles to the Clubhouse. Park anywhere; the closest spaces are right behind the wellness center, and the golf parking is open in the evening.`,
+    links: [
+      { label: 'Directions in Google Maps', href: `https://www.google.com/maps/dir/?api=1&destination=${MAP_QUERY}` },
+      { label: 'Directions in Apple Maps', href: `https://maps.apple.com/?daddr=${MAP_QUERY}` },
+    ],
   },
   {
     q: 'How do I choose a trip?',
@@ -106,6 +122,16 @@ export function GalaFaq() {
                     <span className="gala-faq-mark" aria-hidden="true" />
                   </summary>
                   <p>{item.a}</p>
+                  {item.links ? (
+                    <p className="gala-faq-links">
+                      {item.links.map((link) => (
+                        <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer">
+                          {link.label}
+                          <span className="sr-only"> (opens in a new tab)</span>
+                        </a>
+                      ))}
+                    </p>
+                  ) : null}
                 </details>
               ))}
             </div>

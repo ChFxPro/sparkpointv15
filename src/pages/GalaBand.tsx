@@ -1,6 +1,6 @@
-// The Gala page's live music (#music): the Blue Ridge Bakery Band plays
-// throughout the evening (booked 2026-11, Jeff). Sits between "How it works"
-// (the passport) and the FAQ, as a night band between those ivory sections.
+// The Gala page's evening (#music): the Blue Ridge Bakery Band plays throughout,
+// and photos of last December's gathering show the room (Jeff, 2026-11-20: promote
+// the band and elevate the Gala). Sits directly under the hero.
 //
 // Facts come from the band's own page, https://www.marcbrownmusic.org/bands
 // (roots, country, blues and gospel; fiddle, banjo, mandolin, guitar and
@@ -15,6 +15,19 @@ import { Sparkmark } from '../components/Sparkmark';
 const BASE = import.meta.env.BASE_URL;
 const BAND_URL = 'https://www.marcbrownmusic.org/bands';
 const INSTRUMENTS = ['Fiddle', 'Banjo', 'Mandolin', 'Guitar', 'Harmonica'];
+
+// Last December: SparkPoint's 2025 holiday gathering (Jingle & Mingle, Dec 12, 2025),
+// from the owner's edits on the NAS (Sparkpoint/Xmas Gala 25/Edits), exported as
+// 800/1600 WebP pairs. Real guests, so the room the visitor would join, not stock travel.
+const LAST_DECEMBER = [
+  { id: '05', alt: 'A full room at SparkPoint’s 2025 holiday gathering, guests at tables under string lights with a band playing by the Christmas tree.' },
+  { id: '03', alt: 'Guests in holiday dress lined up for a group photo with Santa.' },
+  { id: '08', alt: 'Two musicians, a singer with an acoustic guitar and a guitarist, playing under purple light.' },
+  { id: '10', alt: 'Guests laughing together, one wearing a necklace of Christmas lights.' },
+  { id: '11', alt: 'Friends greeting each other beside a decorated Christmas tree.' },
+  { id: '04', alt: 'A guest smiling beside Santa.' },
+];
+const past = (id: string, width: number) => `${BASE}assets/events/gala/past/gala-2025-${id}-${width}.webp`;
 
 export function GalaBand() {
   const reduceMotion = useReducedMotion();
@@ -79,6 +92,29 @@ export function GalaBand() {
             <span className="sr-only"> (opens in a new tab)</span>
           </motion.a>
         </div>
+      </div>
+
+      <div className="gala-shell gala-lastdec">
+        <motion.p className="gala-lastdec-title" {...reveal()}>
+          Last December, in the same spirit
+          <span>SparkPoint’s 2025 holiday gathering</span>
+        </motion.p>
+        <ul className="gala-lastdec-grid">
+          {LAST_DECEMBER.map((photo, index) => (
+            <motion.li key={photo.id} {...reveal(0.05 * index)}>
+              <img
+                src={past(photo.id, 800)}
+                srcSet={`${past(photo.id, 800)} 800w, ${past(photo.id, 1600)} 1600w`}
+                sizes="(max-width: 700px) 50vw, 33vw"
+                width={800}
+                height={533}
+                loading="lazy"
+                decoding="async"
+                alt={photo.alt}
+              />
+            </motion.li>
+          ))}
+        </ul>
       </div>
     </section>
   );

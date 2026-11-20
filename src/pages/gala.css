@@ -5713,3 +5713,76 @@ html.reduce-motion .gala-film-bar {
     gap: 10px;
   }
 }
+
+/* The evening section's "Last December" row: real guests from SparkPoint's 2025
+   holiday gathering under the band (GalaBand.tsx). */
+.gala-lastdec {
+  margin-top: 72px;
+}
+
+.gala-lastdec-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 18px;
+  color: var(--gala-ivory);
+  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+  font-weight: 300;
+  letter-spacing: 0.03em;
+}
+
+.gala-lastdec-title span {
+  color: var(--gala-brass-light);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.gala-lastdec-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gala-lastdec-grid li {
+  overflow: hidden;
+  border: 1px solid rgba(217, 181, 106, 0.4);
+}
+
+.gala-lastdec-grid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+@media (max-width: 700px) {
+  .gala-lastdec {
+    margin-top: 52px;
+  }
+
+  .gala-lastdec-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+}
+
+/* FAQ answers that carry links (directions). */
+.gala-faq-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 0 0 18px;
+}
+
+.gala-faq-links a {
+  color: #8e2a5c;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
