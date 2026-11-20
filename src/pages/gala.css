@@ -6295,3 +6295,149 @@ html.reduce-motion .gala-lastdec-print {
     font-size: 0.64rem;
   }
 }
+
+/* The section bar (GalaJumpNav.tsx): under the hero, then stuck under the
+   site header (80px, fixed). Night glass with a brass hairline. */
+.gala-jump {
+  position: sticky;
+  top: 80px;
+  z-index: 40;
+  background: rgba(11, 19, 34, 0.86);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(217, 181, 106, 0.22);
+  border-bottom: 1px solid rgba(217, 181, 106, 0.32);
+}
+
+.gala-jump-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 54px;
+}
+
+.gala-jump-list {
+  display: flex;
+  gap: 4px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  list-style: none;
+  scrollbar-width: none;
+}
+
+.gala-jump-list::-webkit-scrollbar {
+  display: none;
+}
+
+.gala-jump-list a {
+  position: relative;
+  display: block;
+  padding: 17px 14px 15px;
+  color: rgba(247, 241, 229, 0.72);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 200ms ease;
+}
+
+.gala-jump-list a::after {
+  position: absolute;
+  right: 14px;
+  bottom: 0;
+  left: 14px;
+  height: 2px;
+  content: '';
+  background: var(--gala-brass);
+  transform: scaleX(0);
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gala-jump-list a:hover {
+  color: var(--gala-ivory);
+}
+
+.gala-jump-list a.is-active {
+  color: var(--gala-brass-light);
+}
+
+.gala-jump-list a.is-active::after {
+  transform: scaleX(1);
+}
+
+.gala-jump-list a:focus-visible {
+  outline: 2px solid var(--gala-brass-light);
+  outline-offset: -4px;
+}
+
+.gala-jump-tickets {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px 8px;
+  border: 1px solid var(--gala-brass);
+  background: var(--gala-pink);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.gala-jump-tickets svg {
+  width: 14px;
+  height: 14px;
+}
+
+.gala-jump-tickets:focus-visible {
+  outline: 2px solid var(--gala-brass-light);
+  outline-offset: 3px;
+}
+
+/* Jumps land below the header and the bar. */
+.gala-page #music,
+.gala-page #trips,
+.gala-page #passport,
+.gala-page #faq,
+.gala-page #getting-there,
+.gala-page #trailer,
+.gala-page #travel-partners {
+  scroll-margin-top: 140px;
+}
+
+@media (max-width: 640px) {
+  .gala-jump-inner {
+    width: 100%;
+    gap: 8px;
+    padding-right: 10px;
+  }
+
+  .gala-jump-list a {
+    padding: 15px 11px 13px;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+  }
+
+  .gala-jump-tickets {
+    padding: 8px 11px 7px;
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+  }
+
+  .gala-jump-tickets svg {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gala-jump-list a::after {
+    transition: none;
+  }
+}

@@ -47,6 +47,7 @@ const FAQS: Faq[] = [
     q: 'How do I get there, and where do I park?',
     a: `Connestee Falls Clubhouse, ${VENUE_ADDRESS}. Please come in by the East Fork Gate, not the main entrance. From Brevard, take US 276 South (Greenville Highway) about 7 miles, past Connestee Falls’ main entrance, and turn right onto East Fork Road. In about a quarter mile, turn right through the East Fork Gate, where a security guard will welcome Gala guests, and follow the yellow line 1.4 miles to the Clubhouse. Park anywhere; the closest spaces are right behind the wellness center, and the golf parking is open in the evening.`,
     links: [
+      { label: 'See the route on the map', href: '#getting-there' },
       { label: 'Directions to the East Fork Gate in Google Maps', href: `https://www.google.com/maps/dir/?api=1&destination=${EAST_FORK_GATE}` },
       { label: 'Directions in Apple Maps', href: `https://maps.apple.com/?daddr=${EAST_FORK_GATE}&q=East%20Fork%20Gate` },
     ],
@@ -133,10 +134,16 @@ export function GalaFaq() {
                   {item.links ? (
                     <p className="gala-faq-links">
                       {item.links.map((link) => (
-                        <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer">
-                          {link.label}
-                          <span className="sr-only"> (opens in a new tab)</span>
-                        </a>
+                        link.href.startsWith('#') ? (
+                          <a key={link.href} href={link.href}>
+                            {link.label}
+                          </a>
+                        ) : (
+                          <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer">
+                            {link.label}
+                            <span className="sr-only"> (opens in a new tab)</span>
+                          </a>
+                        )
                       ))}
                     </p>
                   ) : null}

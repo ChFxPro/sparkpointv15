@@ -20,6 +20,7 @@ import { GalaBoardingPass } from './GalaBoardingPass';
 import { GalaChapterMark } from './GalaChapterMark';
 import { GalaDepartureBoard } from './GalaDepartureBoard';
 import { GalaBand } from './GalaBand';
+import { GalaJumpNav } from './GalaJumpNav';
 import { GalaFaq } from './GalaFaq';
 import { GalaDirections } from './galaDirections/GalaDirections';
 import { GalaPostcardJourney } from './GalaPostcard';
@@ -295,11 +296,14 @@ export default function GalaPage() {
         </div>
       </section>
 
+      {/* The section bar: under the hero, then sticky under the site header. */}
+      <GalaJumpNav />
+
       {/* 1b — The evening: live music and last December (GalaBand.tsx) */}
       <GalaBand />
 
       {/* 2 — Routes */}
-      <section className="gala-routes" aria-labelledby="routes-title">
+      <section id="routes" className="gala-routes" aria-labelledby="routes-title">
         <div className="gala-shell">
           <motion.div className="gala-routes-head" {...reveal}>
             <h2 id="routes-title">
