@@ -17,6 +17,7 @@ import { Pause, Play, RotateCcw } from 'lucide-react';
 import data from '../../data/galaDirections.json';
 import type { GalaDirectionsData } from './types';
 import type { NavState, SceneHandle, SceneLabel } from './scene';
+import { useAccessibility } from '../../context/AccessibilityContext';
 
 const DIRECTIONS = data as unknown as GalaDirectionsData;
 const GATE = `${DIRECTIONS.places.gate[1]},${DIRECTIONS.places.gate[0]}`;
@@ -80,10 +81,6 @@ function ManeuverIcon({ icon }: { icon: (typeof MANEUVERS)[number]['icon'] }) {
   );
 }
 
-function siteReducesMotion() {
-  return typeof document !== 'undefined' && document.documentElement.classList.contains('reduce-motion');
-}
-
 // The flat stand-in: the same route, top-down and north up, in SVG.
 function FlatMap() {
   const { bbox } = DIRECTIONS;
@@ -101,6 +98,10 @@ function FlatMap() {
 
 export function GalaDirections() {
   const prefersReduced = useReducedMotion();
+  // The site's own motion toggle wins over the OS setting either way. Read from context,
+  // so turning it on later rebuilds the map with nothing playing by itself.
+  const { motionPreference } = useAccessibility();
+  const reduce = motionPreference === 'reduce' || (motionPreference !== 'no-preference' && Boolean(prefersReduced));
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -122,7 +123,6 @@ export function GalaDirections() {
     let cancelled = false;
     let lastReport = 0;
     let start: IntersectionObserver | null = null;
-    const reduce = Boolean(prefersReduced) || siteReducesMotion();
     const io = new IntersectionObserver(
       (entries) => {
         if (!entries.some((entry) => entry.isIntersecting)) return;
@@ -166,14 +166,14 @@ export function GalaDirections() {
       handleRef.current?.dispose();
       handleRef.current = null;
     };
-  }, [prefersReduced]);
+  }, [reduce]);
 
   const maneuver = MANEUVERS[Math.min(nav.step, MANEUVERS.length - 1)];
   const arrived = nav.step >= 3;
   const minutes = Math.max(1, Math.round((nav.left / 22) * 60));
   const done = nav.progress >= 0.999 && !nav.playing;
 
-  const reveal = prefersReduced
+  const reveal = reduce
     ? {}
     : {
         initial: { opacity: 0, y: 24 },
