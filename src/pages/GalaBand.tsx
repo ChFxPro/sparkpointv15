@@ -8,6 +8,7 @@
 // the Blue Ridge Bakery in Brevard). Re-check it before changing the copy.
 // The photo is the band's promotional photo from that page.
 
+import { useState, type CSSProperties } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Sparkmark } from '../components/Sparkmark';
@@ -19,18 +20,29 @@ const INSTRUMENTS = ['Fiddle', 'Banjo', 'Mandolin', 'Guitar', 'Harmonica'];
 // Last December: SparkPoint's 2025 holiday gathering (Jingle & Mingle, Dec 12, 2025),
 // from the owner's edits on the NAS (Sparkpoint/Xmas Gala 25/Edits), exported as
 // 800/1600 WebP pairs. Real guests, so the room the visitor would join, not stock travel.
+// Laid out like prints dropped on a table: each has a spot and a tilt on wide
+// screens (`d`: left %, top %, degrees) and on phones (`m`), overlapping a little
+// but all mostly visible. Hovering, focusing or tapping a print lifts it, straightens
+// it and brings it to the top of the pile, where it stays until another is picked up.
 const LAST_DECEMBER = [
-  { id: '05', alt: 'A full room at SparkPoint’s 2025 holiday gathering, guests at tables under string lights with a band playing by the Christmas tree.' },
-  { id: '03', alt: 'Guests in holiday dress lined up for a group photo with Santa.' },
-  { id: '08', alt: 'Two musicians, a singer with an acoustic guitar and a guitarist, playing under purple light.' },
-  { id: '10', alt: 'Guests laughing together, one wearing a necklace of Christmas lights.' },
-  { id: '11', alt: 'Friends greeting each other beside a decorated Christmas tree.' },
-  { id: '04', alt: 'A guest smiling beside Santa.' },
+  { id: '05', d: [1, 5, -5], m: [0, 0, -4], alt: 'A full room at SparkPoint’s 2025 holiday gathering, guests at tables under string lights with a band playing by the Christmas tree.' },
+  { id: '03', d: [33, 0, 3], m: [40, 10, 4], alt: 'Guests in holiday dress lined up for a group photo with Santa.' },
+  { id: '08', d: [65, 7, -3], m: [1, 26, 3], alt: 'Two musicians, a singer with an acoustic guitar and a guitarist, playing under purple light.' },
+  { id: '10', d: [5, 47, 4], m: [41, 39, -3], alt: 'Guests laughing together, one wearing a necklace of Christmas lights.' },
+  { id: '11', d: [35, 42, -2], m: [2, 54, -2], alt: 'Friends greeting each other beside a decorated Christmas tree.' },
+  { id: '04', d: [64, 50, 5], m: [40, 68, 4], alt: 'A guest smiling beside Santa.' },
 ];
 const past = (id: string, width: number) => `${BASE}assets/events/gala/past/gala-2025-${id}-${width}.webp`;
 
 export function GalaBand() {
   const reduceMotion = useReducedMotion();
+  // The pile's stacking order, bottom to top; a picked-up print moves to the top.
+  const [order, setOrder] = useState(() => LAST_DECEMBER.map((photo) => photo.id));
+  const [picked, setPicked] = useState<string | null>(null);
+  const lift = (id: string) => {
+    setPicked(id);
+    setOrder((current) => [...current.filter((item) => item !== id), id]);
+  };
   const reveal = (delay = 0) =>
     reduceMotion
       ? {}
@@ -99,19 +111,44 @@ export function GalaBand() {
           Last December, in the same spirit
           <span>SparkPoint’s 2025 holiday gathering</span>
         </motion.p>
-        <ul className="gala-lastdec-grid">
+        <ul className="gala-lastdec-pile">
           {LAST_DECEMBER.map((photo, index) => (
-            <motion.li key={photo.id} {...reveal(0.05 * index)}>
+            <motion.li
+              key={photo.id}
+              className={picked === photo.id ? 'is-top' : undefined}
+              style={
+                {
+                  '--x': `${photo.d[0]}%`,
+                  '--y': `${photo.d[1]}%`,
+                  '--r': `${photo.d[2]}deg`,
+                  '--mx': `${photo.m[0]}%`,
+                  '--my': `${photo.m[1]}%`,
+                  '--mr': `${photo.m[2]}deg`,
+                  zIndex: order.indexOf(photo.id) + 1,
+                } as CSSProperties
+              }
+              {...reveal(0.06 * index)}
+            >
+              <button
+                type="button"
+                className="gala-lastdec-print"
+                onMouseLeave={() => setPicked(null)}
+                aria-label={`Bring to the top: ${photo.alt}`}
+                onClick={() => lift(photo.id)}
+                onMouseEnter={() => lift(photo.id)}
+                onFocus={() => lift(photo.id)}
+              >
               <img
                 src={past(photo.id, 800)}
                 srcSet={`${past(photo.id, 800)} 800w, ${past(photo.id, 1600)} 1600w`}
-                sizes="(max-width: 700px) 50vw, 33vw"
+                sizes="(max-width: 700px) 60vw, 36vw"
                 width={800}
                 height={533}
                 loading="lazy"
                 decoding="async"
-                alt={photo.alt}
+                alt=""
               />
+              </button>
             </motion.li>
           ))}
         </ul>

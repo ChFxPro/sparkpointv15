@@ -5739,21 +5739,40 @@ html.reduce-motion .gala-film-bar {
   text-transform: uppercase;
 }
 
-.gala-lastdec-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  margin: 22px 0 0;
+/* The pile: prints laid on a table, overlapping a little, all mostly visible. */
+.gala-lastdec-pile {
+  position: relative;
+  aspect-ratio: 2.15 / 1;
+  margin: 28px 0 0;
   padding: 0;
   list-style: none;
 }
 
-.gala-lastdec-grid li {
-  overflow: hidden;
-  border: 1px solid rgba(217, 181, 106, 0.4);
+.gala-lastdec-pile li {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 34%;
 }
 
-.gala-lastdec-grid img {
+.gala-lastdec-print {
+  display: block;
+  width: 100%;
+  padding: 9px 9px 9px;
+  border: 0;
+  background: #fbf6ea;
+  cursor: pointer;
+  transform: rotate(var(--r));
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 10px 22px rgba(0, 0, 0, 0.38),
+    0 24px 48px rgba(0, 0, 0, 0.22);
+  transition:
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gala-lastdec-print img {
   display: block;
   width: 100%;
   height: auto;
@@ -5761,15 +5780,51 @@ html.reduce-motion .gala-film-bar {
   object-fit: cover;
 }
 
+/* Picked up: lifted, straightened, a longer and softer shadow. */
+.gala-lastdec-pile li.is-top .gala-lastdec-print,
+.gala-lastdec-print:hover,
+.gala-lastdec-print:focus-visible {
+  transform: translateY(-10px) rotate(0deg) scale(1.06);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 22px 40px rgba(0, 0, 0, 0.45),
+    0 46px 80px rgba(0, 0, 0, 0.3);
+}
+
+.gala-lastdec-print:focus-visible {
+  outline: 2px solid var(--gala-brass-light);
+  outline-offset: 4px;
+}
+
 @media (max-width: 700px) {
   .gala-lastdec {
     margin-top: 52px;
   }
 
-  .gala-lastdec-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
+  .gala-lastdec-pile {
+    aspect-ratio: 0.76 / 1;
   }
+
+  .gala-lastdec-pile li {
+    left: var(--mx);
+    top: var(--my);
+    width: 58%;
+  }
+
+  .gala-lastdec-print {
+    padding: 6px;
+    transform: rotate(var(--mr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gala-lastdec-print {
+    transition: none;
+  }
+}
+
+html.reduce-motion .gala-lastdec-print {
+  transition: none;
 }
 
 /* FAQ answers that carry links (directions). */
