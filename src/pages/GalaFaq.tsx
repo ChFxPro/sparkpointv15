@@ -85,10 +85,12 @@ const FAQS: Faq[] = [
   },
   {
     q: 'Is any of it tax-deductible?',
-    // IRS quid pro quo rule (payments over $75 that buy goods or services): the receipt
-    // must give a good-faith estimate of what the buyer receives and say only the
-    // amount above it is deductible. Jeff, 2026-11-20: receipts will carry it.
-    a: 'Yes. Part of every trip’s price is a tax-deductible gift to SparkPoint, and so is part of your $100 ticket. Your receipt will show the estimated value of what you receive and the amount you can deduct.',
+    // Kept general on purpose (Jeff, 2026-11-20): the ticket's and each trip's
+    // deductible amounts wait for the accountant's and AmFund's confirmation. For
+    // payments over $75 that buy goods or services, the IRS requires a written
+    // estimate of their value and the deductible amount, on the ticket confirmation
+    // and trip receipts, not necessarily on this page.
+    a: 'Yes. Part of every trip’s price is a tax-deductible gift to SparkPoint.',
   },
   {
     q: 'Where does the money go?',
