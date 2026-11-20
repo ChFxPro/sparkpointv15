@@ -95,14 +95,90 @@ for (const [lat, lon] of cells) {
 }
 console.log(`elevation ${Math.min(...elevation)}–${Math.max(...elevation)} m over ${ROWS}×${COLS}`);
 
+// The road network, lakes and streams around the route, for the nav-style map:
+// OpenStreetMap via an Overpass mirror (the main server refuses this client).
+const OVERPASS = [
+  'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
+  'https://overpass-api.de/api/interpreter',
+];
+const b = `${bbox.south},${bbox.west},${bbox.north},${bbox.east}`;
+const query = `[out:json][timeout:120];(way["highway"~"primary|secondary|tertiary|unclassified|residential|service"](${b});way["natural"="water"](${b});way["waterway"~"river|stream"](${b}););out geom tags;`;
+let osm;
+for (let attempt = 1; attempt <= 4 && !osm; attempt += 1) {
+  for (const url of OVERPASS) {
+    const res = await fetch(url, { method: 'POST', headers: { ...UA, Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' }, body: `data=${encodeURIComponent(query)}` });
+    if (res.ok) {
+      osm = await res.json();
+      break;
+    }
+    console.warn(`overpass ${url}: ${res.status} (attempt ${attempt})`);
+  }
+  if (!osm) await new Promise((r) => setTimeout(r, 8000 * attempt));
+}
+if (!osm) throw new Error('No Overpass server answered');
+
+// Douglas–Peucker in local metres, so the file stays small.
+const mPerLonB = 111_320 * Math.cos((((bbox.north + bbox.south) / 2) * Math.PI) / 180);
+function simplify(points, tolerance = 4) {
+  if (points.length < 3) return points;
+  const xy = points.map(([lon, lat]) => [lon * mPerLonB, lat * 110_540]);
+  const keep = new Array(points.length).fill(false);
+  keep[0] = keep[points.length - 1] = true;
+  const stack = [[0, points.length - 1]];
+  while (stack.length) {
+    const [s, e] = stack.pop();
+    const [ax, ay] = xy[s];
+    const [bx, by] = xy[e];
+    const len = Math.hypot(bx - ax, by - ay) || 1;
+    let worst = -1;
+    let at = -1;
+    for (let i = s + 1; i < e; i += 1) {
+      const d = Math.abs((bx - ax) * (ay - xy[i][1]) - (ax - xy[i][0]) * (by - ay)) / len;
+      if (d > worst) {
+        worst = d;
+        at = i;
+      }
+    }
+    if (worst > tolerance) {
+      keep[at] = true;
+      stack.push([s, at], [at, e]);
+    }
+  }
+  return points.filter((_, i) => keep[i]);
+}
+const CLASS = { motorway: 'major', trunk: 'major', primary: 'major', secondary: 'major', tertiary: 'minor', unclassified: 'minor', residential: 'local', service: 'service' };
+const roads = [];
+const water = [];
+const streams = [];
+for (const el of osm.elements) {
+  if (!el.geometry) continue;
+  const line = simplify(el.geometry.map((g) => [g.lon, g.lat])).map(([lon, lat]) => [round(lon), round(lat)]);
+  const t = el.tags || {};
+  if (t.highway && /driveway|parking_aisle/.test(t.service || '')) continue;
+  if (t.highway) roads.push({ c: CLASS[t.highway], n: t.ref || t.name || '', name: t.name || '', p: line });
+  else if (t.natural === 'water') water.push({ n: t.name || '', p: line });
+  else if (t.waterway) streams.push({ p: line });
+}
+console.log(`roads ${roads.length}, water ${water.length}, streams ${streams.length}`);
+
 const out = {
-  _about: 'Built by scripts/gala-directions/build.mjs. Map data © OpenStreetMap contributors (via OSRM); elevation from AWS Terrain Tiles (Terrarium; USGS and other public DEMs).',
+  _about: 'Built by scripts/gala-directions/build.mjs. Route © OpenStreetMap contributors (via OSRM). The terrain, roads and water are in galaDirectionsMap.json.',
   bbox: Object.fromEntries(Object.entries(bbox).map(([k, v]) => [k, round(v)])),
-  grid: { rows: ROWS, cols: COLS, elevation },
   drive: drive.line.map(([lon, lat]) => [round(lon), round(lat)]),
   approach: approach.line.map(([lon, lat]) => [round(lon), round(lat)]),
   miles: { toGate: round(drive.legs[0], 2), gateToClubhouse: round(drive.legs[1], 2) },
   places: Object.fromEntries(Object.entries(PLACES).map(([k, [lat, lon]]) => [k, [lon, lat]])),
 };
 await writeFile(OUT, JSON.stringify(out));
-console.log(`wrote ${OUT}`);
+const OUT_MAP = OUT.replace('galaDirections.json', 'galaDirectionsMap.json');
+await writeFile(
+  OUT_MAP,
+  JSON.stringify({
+    _about: 'Built by scripts/gala-directions/build.mjs. Roads and water © OpenStreetMap contributors; elevation from AWS Terrain Tiles (Terrarium; USGS and other public DEMs). Loaded only with the 3D map.',
+    grid: { rows: ROWS, cols: COLS, elevation },
+    roads,
+    water,
+    streams,
+  }),
+);
+console.log(`wrote ${OUT} and ${OUT_MAP}`);

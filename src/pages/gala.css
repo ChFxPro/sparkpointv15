@@ -5901,109 +5901,6 @@ html.reduce-motion .gala-lastdec-print {
   gap: 56px;
 }
 
-.gala-dirmap {
-  position: relative;
-  margin: 0;
-  aspect-ratio: 4 / 3.2;
-  border: 1px solid rgba(217, 181, 106, 0.4);
-  outline: 1px solid rgba(217, 181, 106, 0.18);
-  outline-offset: 6px;
-  background: radial-gradient(ellipse at 50% 40%, #16233a, #0b1322 75%);
-  overflow: hidden;
-}
-
-.gala-dirmap-flat,
-.gala-dirmap-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.gala-dirmap-flat {
-  padding: 8%;
-  transition: opacity 500ms ease;
-}
-
-.gala-dirmap-flat polyline {
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.gala-dirmap-flat .is-approach {
-  stroke: rgba(247, 241, 229, 0.5);
-  stroke-width: 2;
-  stroke-dasharray: 5 5;
-}
-
-.gala-dirmap-flat .is-drive {
-  stroke: var(--gala-brass-light);
-  stroke-width: 4;
-}
-
-.gala-dirmap-flat .is-ivory { fill: var(--gala-ivory); }
-.gala-dirmap-flat .is-brass { fill: var(--gala-brass-light); }
-.gala-dirmap-flat .is-pink { fill: var(--gala-pink); }
-
-.gala-dirmap-canvas {
-  opacity: 0;
-  transition: opacity 700ms ease;
-}
-
-.gala-dirmap.is-ready .gala-dirmap-canvas {
-  opacity: 1;
-}
-
-.gala-dirmap.is-ready .gala-dirmap-flat {
-  opacity: 0;
-}
-
-.gala-dirmap-labels {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.gala-dirmap-label {
-  position: absolute;
-  top: 0;
-  left: 0;
-  padding: 4px 9px 3px;
-  white-space: nowrap;
-  border: 1px solid rgba(217, 181, 106, 0.45);
-  background: rgba(11, 19, 34, 0.86);
-  color: var(--gala-ivory);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.gala-dirmap-label.is-pink {
-  border-color: var(--gala-pink);
-  color: #fff;
-  background: rgba(142, 22, 88, 0.9);
-}
-
-.gala-dirmap-label.is-brass {
-  color: var(--gala-brass-light);
-}
-
-.gala-dirmap-credit {
-  position: absolute;
-  right: 8px;
-  bottom: 6px;
-  left: 8px;
-  color: rgba(247, 241, 229, 0.5);
-  font-size: 0.68rem;
-  text-align: right;
-}
-
-.gala-dirmap-credit a {
-  color: inherit;
-}
-
 .gala-directions-copy .gala-section-head h2 {
   font-size: clamp(2rem, 4vw, 3.2rem);
 }
@@ -6081,12 +5978,320 @@ html.reduce-motion .gala-lastdec-print {
     gap: 36px;
   }
 
-  .gala-dirmap {
-    aspect-ratio: 1 / 1.05;
+
+}
+
+/* The nav-style map (galaDirections/): north up, night mode, a turn banner at
+   the top and a trip bar at the foot, like the app guests drive with. */
+.gala-nav {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 4.2;
+  overflow: hidden;
+  border: 1px solid rgba(217, 181, 106, 0.45);
+  border-radius: 22px;
+  outline: 1px solid rgba(217, 181, 106, 0.18);
+  outline-offset: 6px;
+  background: #0d1524;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
+}
+
+.gala-nav-flat,
+.gala-nav-canvas,
+.gala-nav-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.gala-nav-flat {
+  transition: opacity 500ms ease;
+}
+
+.gala-nav-flat polyline {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gala-nav-flat .is-road { stroke: #8f8466; stroke-width: 3; }
+.gala-nav-flat .is-casing { stroke: #0b1322; stroke-width: 7; }
+.gala-nav-flat .is-drive { stroke: var(--gala-brass-light); stroke-width: 4.5; }
+
+.gala-nav-canvas {
+  opacity: 0;
+  transition: opacity 700ms ease;
+}
+
+.gala-nav.is-ready .gala-nav-canvas { opacity: 1; }
+.gala-nav.is-ready .gala-nav-flat { opacity: 0; }
+
+.gala-nav-overlay {
+  pointer-events: none;
+}
+
+.gala-nav-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  color: rgba(247, 241, 229, 0.86);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 3px #0d1524, 0 0 6px #0d1524, 0 0 10px #0d1524;
+  transition: opacity 200ms ease;
+}
+
+.gala-nav-label.is-road {
+  color: rgba(247, 241, 229, 0.7);
+  font-size: 0.68rem;
+}
+
+.gala-nav-label.is-quiet {
+  color: rgba(130, 160, 200, 0.75);
+  font-size: 0.66rem;
+  font-style: italic;
+}
+
+/* US route shield. */
+.gala-nav-label.is-shield {
+  min-width: 30px;
+  padding: 3px 5px 2px;
+  border: 2px solid #111;
+  border-radius: 4px 4px 12px 12px;
+  background: #f7f7f2;
+  color: #111;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-align: center;
+  text-shadow: none;
+}
+
+.gala-nav-label.is-poi::before,
+.gala-nav-label.is-gate::before,
+.gala-nav-label.is-destination::before {
+  display: inline-block;
+  margin-right: 6px;
+  vertical-align: -1px;
+  content: '';
+  border-radius: 50%;
+}
+
+.gala-nav-label.is-poi::before {
+  width: 9px;
+  height: 9px;
+  background: #c9ccd4;
+  border: 2px solid #0d1524;
+}
+
+.gala-nav-label.is-gate {
+  padding: 4px 9px 3px;
+  border-radius: 999px;
+  background: var(--gala-pink);
+  color: #fff;
+  font-weight: 700;
+  text-shadow: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+.gala-nav-label.is-destination {
+  padding: 4px 10px 3px;
+  border-radius: 999px;
+  background: var(--gala-brass-light);
+  color: #0b1322;
+  font-weight: 700;
+  text-shadow: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* The car: a nav arrow on a disc, pointing the way it's driving. */
+.gala-nav-puck {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 34px;
+  height: 34px;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.55));
+}
+
+.gala-nav-puck svg {
+  width: 100%;
+  height: 100%;
+}
+
+.gala-nav-puck circle {
+  fill: #f7f1e5;
+  stroke: var(--gala-brass);
+  stroke-width: 2.5;
+}
+
+.gala-nav-puck path {
+  fill: #0b1322;
+}
+
+/* Turn banner. */
+.gala-nav-banner {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #1d2c47, #15213a);
+  border: 1px solid rgba(217, 181, 106, 0.35);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+}
+
+.gala-nav-banner-icon svg {
+  display: block;
+  width: 40px;
+  height: 40px;
+  fill: none;
+  stroke: var(--gala-brass-light);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gala-nav-banner-text {
+  display: grid;
+  min-width: 0;
+}
+
+.gala-nav-banner-text b {
+  color: var(--gala-brass-light);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.gala-nav-banner-text strong {
+  color: #fff;
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.gala-nav-banner-text small {
+  color: rgba(247, 241, 229, 0.72);
+  font-size: 0.8rem;
+}
+
+.gala-nav-compass {
+  position: absolute;
+  top: 104px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(13, 21, 36, 0.9);
+  border: 1px solid rgba(247, 241, 229, 0.3);
+  color: var(--gala-pink);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+/* Trip bar and controls. */
+.gala-nav-trip {
+  position: absolute;
+  right: 12px;
+  bottom: 28px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px 10px 16px;
+  border-radius: 16px;
+  background: rgba(13, 21, 36, 0.94);
+  border: 1px solid rgba(247, 241, 229, 0.14);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+}
+
+.gala-nav-trip-figures {
+  display: grid;
+  min-width: 0;
+}
+
+.gala-nav-trip-figures strong {
+  color: #7fd8a4;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.gala-nav-trip-figures span {
+  overflow: hidden;
+  color: rgba(247, 241, 229, 0.72);
+  font-size: 0.8rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gala-nav-controls {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+
+.gala-nav-controls button {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(217, 181, 106, 0.5);
+  border-radius: 50%;
+  background: rgba(247, 241, 229, 0.06);
+  color: var(--gala-brass-light);
+  cursor: pointer;
+}
+
+.gala-nav-controls button:hover {
+  background: rgba(217, 181, 106, 0.16);
+}
+
+.gala-nav-controls button:focus-visible {
+  outline: 2px solid var(--gala-brass-light);
+  outline-offset: 3px;
+}
+
+.gala-nav-controls svg {
+  width: 18px;
+  height: 18px;
+}
+
+.gala-nav-credit {
+  position: absolute;
+  right: 14px;
+  bottom: 7px;
+  color: rgba(247, 241, 229, 0.45);
+  font-size: 0.62rem;
+}
+
+.gala-nav-credit a {
+  color: inherit;
+}
+
+@media (max-width: 900px) {
+  .gala-nav {
+    aspect-ratio: 1 / 1.25;
   }
 
-  .gala-dirmap-label {
-    font-size: 0.62rem;
-    padding: 3px 7px 2px;
+  .gala-nav-banner-text b {
+    font-size: 1.15rem;
+  }
+
+  .gala-nav-banner-text strong {
+    font-size: 0.92rem;
+  }
+
+  .gala-nav-label {
+    font-size: 0.64rem;
   }
 }
