@@ -4,8 +4,8 @@
 <meta charset="utf-8" />
 <title>An evening of connection</title>
 <!-- The Thanksgiving-week invite (2026-11-20): "Before 2026 ends, let's connect."
-     The evening leads; the trips are its optional fundraiser. Photo: a full room at
-     SparkPoint's 2025 holiday gathering. Body classes pick the format (portrait,
+     The evening leads; the trips are its optional fundraiser. Photo: Santa and guests
+     at the 2025 Gala, a close shot rather than the room (that venue is no longer ours). Body classes pick the format (portrait,
      square, story, card) and the variant ("connestee" adds "Right here at the
      Clubhouse"; "card" is the printed half-page with a QR code to /gala). -->
 <style>
@@ -22,7 +22,7 @@
   .photo { position: absolute; inset: 0 0 auto; height: var(--photo-h); overflow: hidden; }
   .photo img { width: 100%; height: 100%; object-fit: cover; object-position: var(--photo-pos, 50% 40%); }
   .photo::after { content: ''; position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(11,19,34,.35) 0%, transparent 22%, transparent 52%, rgba(20,33,58,.8) 82%, var(--night) 100%); }
+    background: linear-gradient(180deg, rgba(11,19,34,.72) 0%, rgba(11,19,34,.25) 16%, transparent 30%, transparent 52%, rgba(20,33,58,.8) 82%, var(--night) 100%); }
 
   .frame { position: absolute; inset: var(--inset); display: flex; flex-direction: column; align-items: center; text-align: center; }
   .kicker { display: inline-flex; align-items: center; gap: .6em; color: var(--brass-light); font-size: var(--kicker); font-weight: 600; letter-spacing: .26em; margin-right: -.26em; text-transform: uppercase; text-shadow: 0 2px 14px rgba(11,19,34,.8); }
@@ -55,13 +55,14 @@
 
   /* Formats */
   body.portrait { --w: 1080px; --h: 1350px; --inset: 76px 80px 74px; --photo-h: 58%; --photo-pos: 50% 46%; --kicker: 19px; --head: 92px; --items: 27px; --lk: 50px; --when: 31px; --cta: 25px; --fine: 21px; }
-  body.square { --w: 1080px; --h: 1080px; --inset: 60px 70px 58px; --photo-h: 50%; --photo-pos: 50% 46%; --kicker: 17px; --head: 74px; --items: 23px; --lk: 0px; --when: 27px; --cta: 22px; --fine: 18px; }
+  body.square { --w: 1080px; --h: 1080px; --inset: 60px 70px 58px; --photo-h: 60%; --photo-pos: 50% 46%; --kicker: 17px; --head: 74px; --items: 23px; --lk: 0px; --when: 27px; --cta: 22px; --fine: 18px; }
   body.square .lk, body.square .rule { display: none; }
   body.story { --w: 1080px; --h: 1920px; --inset: 220px 80px 250px; --photo-h: 56%; --photo-pos: 50% 46%; --kicker: 22px; --head: 108px; --items: 27px; --lk: 64px; --when: 36px; --cta: 29px; --fine: 25px; }
 
   /* The printed half-page card, 5.5 × 8.5 in (528 × 816 CSS px), with a QR code to /gala.
      Text stays at least 0.3 in (29 px) inside the trim. */
   body.card { --w: 528px; --h: 816px; --inset: 40px 36px 36px; --photo-h: 47%; --photo-pos: 50% 46%; --kicker: 9.5px; --head: 44px; --items: 13px; --lk: 25px; --when: 15px; --cta: 11px; --fine: 10px; --frame-inset: 12px; }
+  body.story .kicker { visibility: hidden; }
   body.card .deco-frame { outline-offset: 4px; }
   body.card .bottom { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 18px; width: 100%; margin-top: 16px; text-align: left; }
   body.card .bottom .cta { margin-top: 0; }
@@ -76,7 +77,7 @@
 </head>
 <body class="portrait">
   <div class="deco-frame"></div>
-  <div class="photo"><img src="{{PUBLIC}}/assets/events/gala/past/gala-2025-05-1600.webp" alt="" /></div>
+  <div class="photo"><img src="{{ASSETS}}/gala-2025-2022.webp" alt="" /></div>
   <div class="frame">
     <p class="kicker"><img src="{{PUBLIC}}/assets/brand/sparkmark-256.webp" alt="" /><span class="v-std">An evening of connection</span><span class="v-con">Right here at the Clubhouse</span></p>
     <div class="spacer"></div>
