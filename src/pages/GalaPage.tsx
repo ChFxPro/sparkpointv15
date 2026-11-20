@@ -75,7 +75,7 @@ const STAMPS = [
   { shape: 'oval', top: 'Airfare', middle: 'Extra', bottom: 'Not included', tilt: -3 },
   { shape: 'rect', top: '3 years', middle: 'to travel', bottom: 'Your dates', tilt: -6 },
   { shape: 'round', top: 'For two', middle: 'Travelers', bottom: 'Cortona: four', tilt: 7 },
-  { shape: 'oval', top: 'Gives', middle: 'Back home', bottom: 'Resilience Hub', tilt: -4 },
+  { shape: 'oval', top: 'Gives back', middle: 'Tax-deductible', bottom: 'Part of every trip', tilt: -4 },
 ];
 
 // Leather luggage tags. `code` is a playful airport-style code; `tilt` and
@@ -89,10 +89,19 @@ const TAGS = [
   { occasion: 'Bucket list', code: 'BKT', trip: 'south-africa', line: 'The Big Five, at last.', tone: 'tan', tilt: -2.5, drop: 30 },
 ].map((tag) => ({ ...tag, to: GALA_TRIPS.find((trip) => trip.id === tag.trip)! }));
 
+// The hero's "what the evening holds" strip. Untimed on purpose: the run of show
+// isn't confirmed. Food is "heavy hors d'oeuvres", never "dinner" (AGENTS.md).
+const EVENING: { title: string; note: string; href?: string }[] = [
+  { title: 'Cocktails & heavy hors d’oeuvres', note: 'Plenty to make a supper of' },
+  { title: 'Live music', note: 'The Blue Ridge Bakery Band', href: '#music' },
+  { title: '2026, together', note: 'A look back, and a look ahead' },
+  { title: 'The travel experience', note: 'Eight trips, the night’s fundraiser', href: '#trips' },
+];
+
 const GIVES_BACK = [
   {
-    title: 'Every adventure makes a difference',
-    copy: 'A portion of every trip chosen at the Gala supports SparkPoint’s mission of strengthening community well-being through collaboration and connection.',
+    title: 'Celebrate a year of connection',
+    copy: 'The Gala is our evening to look back on 2026 together, with the friends, neighbors and partners who made it, and to look ahead to what we build next.',
   },
   {
     title: 'Help bring the Resilience Hub to life',
@@ -100,11 +109,11 @@ const GIVES_BACK = [
   },
   {
     title: 'Invest in a more connected community',
-    copy: 'The Hub will provide space for collaboration, leadership development, community resources, and programs that strengthen resilience and address local needs.',
+    copy: 'The Hub will provide space for collaboration, leadership development, community resources, and programs that strengthen resilience across Transylvania County and beyond.',
   },
   {
-    title: 'A vacation with a lasting impact',
-    copy: 'Make unforgettable travel memories while helping SparkPoint build a healthier, more connected, and resilient Transylvania County.',
+    title: 'Travel that gives back',
+    copy: 'If one of the eight trips calls to you, part of its price is a tax-deductible gift to SparkPoint, and a portion comes home to the Hub.',
   },
 ];
 
@@ -115,7 +124,7 @@ const galaEventJsonLd = {
   '@type': 'Event',
   name: GALA_NAME,
   alternateName: GALA_BYLINE,
-  description: `An evening of connection and ${GALA_TRIP_COUNT_WORD} trips that give back: ${GALA_TRIP_NAMES}. Every trip is available to every guest at a set price, with a portion supporting the Transylvania Resilience Hub.`,
+  description: `A travel-themed community gala of connection and celebration: heavy hors d'oeuvres, cocktails, live music, and a look back at 2026 together. The night's fundraiser is ${GALA_TRIP_COUNT_WORD} optional trips at set prices (${GALA_TRIP_NAMES}); part of every trip's price is a tax-deductible gift to SparkPoint, supporting the Transylvania Resilience Hub.`,
   startDate: '2026-12-11T18:00:00-05:00',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
   eventStatus: 'https://schema.org/EventScheduled',
@@ -185,7 +194,7 @@ export default function GalaPage() {
     <div className="gala-page">
       <SEOHead
         title={`${GALA_FULL_TITLE} | December 11, 2026`}
-        description={`Every journey connects back home. Join us for A World of Connections, the SparkPoint Gala, on Friday, December 11, 2026 at 6 p.m. at Connestee Falls Clubhouse, and choose from ${GALA_TRIP_COUNT_WORD} trips that give back to Transylvania County’s Resilience Hub: ${GALA_TRIP_NAMES}. Tickets $100.`}
+        description={`Join us for A World of Connections, the SparkPoint Gala: a travel-themed evening of connection and celebration on Friday, December 11, 2026 at 6 p.m. at Connestee Falls Clubhouse. Heavy hors d’oeuvres, cocktails, live music and a look back at 2026 together, with ${GALA_TRIP_COUNT_WORD} trips as the night’s optional fundraiser. Tickets $100.`}
         path={GALA_PATH}
         image={GALA_SHARE_IMAGE}
         imageAlt="A World of Connections, the SparkPoint Gala: the title over an airplane wing above golden clouds at sunset."
@@ -215,8 +224,8 @@ export default function GalaPage() {
               Every journey <em>connects back home.</em>
             </p>
             <p className="gala-hero-lede">
-              One evening, eight journeys around the world, and a portion of every one of them
-              coming back to the place we call home.
+              A travel-themed evening of connection, friends and celebration, as we look back on
+              2026 together and ahead to a more connected Transylvania County and beyond.
             </p>
             <dl className="gala-hero-facts">
               <div>
@@ -247,6 +256,20 @@ export default function GalaPage() {
                 </dd>
               </div>
             </dl>
+            {/* What the evening holds (Jeff, 2026-11-20): untimed, since the run of show
+                isn't confirmed. The trips come last, as the night's optional fundraiser. */}
+            <ul className="gala-evening" aria-label="What the evening holds">
+              {EVENING.map((item) => (
+                <li key={item.title}>
+                  <strong>{item.href ? <a href={item.href}>{item.title}</a> : item.title}</strong>
+                  <span>{item.note}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="gala-evening-note">
+              <strong>Your ticket is all you need;</strong> the trips are entirely optional.
+              Dress: festive cocktail attire, your holiday best.
+            </p>
             <div className="gala-actions">
               {GALA_TICKETS_URL ? (
                 <a
@@ -305,8 +328,9 @@ export default function GalaPage() {
               Eight trips. <em>Choose yours at the Gala.</em>
             </h2>
             <p>
-              Every trip is available to every guest at a set price, and more than one guest
-              can choose the same one.
+              The travel experience is the night’s fundraiser. Every trip is available to every
+              guest at a set price, more than one guest can choose the same one, and part of every
+              trip’s price is a tax-deductible gift to SparkPoint.
             </p>
           </motion.div>
           <GalaTrips />
@@ -531,7 +555,7 @@ export default function GalaPage() {
           <motion.div className="gala-section-head" {...reveal}>
             <GalaChapterMark kind="postage" />
             <h2 id="return-title">
-              Travel that gives back <em>to our community.</em>
+              Toward a more connected <em>Transylvania County, and beyond.</em>
             </h2>
           </motion.div>
 

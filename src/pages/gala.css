@@ -5637,3 +5637,79 @@ html.reduce-motion .gala-film-bar {
     transition: none;
   }
 }
+
+/* Hero: what the evening holds (GalaPage EVENING). An untimed strip under the
+   facts, so the night reads as a community evening before the trips. */
+.gala-evening {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 28px;
+  max-width: 640px;
+  margin: 26px 0 0;
+  padding: 18px 0 0;
+  list-style: none;
+  border-top: 1px solid rgba(217, 181, 106, 0.35);
+}
+
+.gala-evening li {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  padding-left: 20px;
+  text-shadow: 0 2px 24px rgba(11, 19, 34, 0.6);
+}
+
+.gala-evening li::before {
+  position: absolute;
+  top: 0.45em;
+  left: 2px;
+  width: 7px;
+  height: 7px;
+  content: '';
+  border: 1px solid var(--gala-brass);
+  transform: rotate(45deg);
+}
+
+.gala-evening strong {
+  color: var(--gala-ivory);
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.gala-evening strong a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(217, 181, 106, 0.55);
+  text-underline-offset: 4px;
+}
+
+.gala-evening strong a:hover {
+  text-decoration-color: var(--gala-brass);
+}
+
+.gala-evening span {
+  color: rgba(247, 241, 229, 0.72);
+  font-size: 0.9rem;
+}
+
+.gala-evening-note {
+  max-width: 640px;
+  margin-top: 16px;
+  color: rgba(247, 241, 229, 0.78);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  text-shadow: 0 2px 24px rgba(11, 19, 34, 0.6);
+}
+
+.gala-evening-note strong {
+  color: var(--gala-brass-light);
+  font-weight: 600;
+}
+
+@media (max-width: 520px) {
+  .gala-evening {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}

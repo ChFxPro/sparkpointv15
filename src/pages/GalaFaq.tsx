@@ -21,6 +21,18 @@ interface Faq {
 
 const FAQS: Faq[] = [
   {
+    q: 'Do I have to buy a trip to come?',
+    a: 'No. Your ticket is all you need. The trips are the night’s fundraiser, offered at set prices for anyone who’d like one; there’s no auction and no bidding.',
+  },
+  {
+    q: 'What does my ticket include?',
+    a: 'Heavy hors d’oeuvres and cocktails, plenty to make a supper of, with drink tickets; live music from the Blue Ridge Bakery Band; and an evening with friends and neighbors, looking back on 2026 together. Tickets are $100.',
+  },
+  {
+    q: 'What should I wear?',
+    a: 'Festive cocktail attire: your holiday best, with a little sparkle.',
+  },
+  {
     q: 'How do I choose a trip?',
     a: `At the Gala. Five trips are presented on stage and three more are offered at your table, ${GALA_TRIP_COUNT_WORD} in all. Every trip is available to every guest at a set price, and more than one guest can choose the same trip, so no one misses out.`,
   },
