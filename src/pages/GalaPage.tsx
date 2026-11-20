@@ -21,6 +21,7 @@ import { GalaChapterMark } from './GalaChapterMark';
 import { GalaDepartureBoard } from './GalaDepartureBoard';
 import { GalaBand } from './GalaBand';
 import { GalaFaq } from './GalaFaq';
+import { GalaDirections } from './galaDirections/GalaDirections';
 import { GalaPostcardJourney } from './GalaPostcard';
 import { GalaSeatMap } from './GalaSeatMap';
 import { GalaRouteMap } from './GalaRouteMap';
@@ -492,6 +493,9 @@ export default function GalaPage() {
 
       {/* 4b — Questions, answered (GalaFaq.tsx) */}
       <GalaFaq />
+
+      {/* 4c — Getting there: the East Fork Gate route on a 3D map (galaDirections/) */}
+      <GalaDirections />
 
       {/* 6 — The return trip */}
       <section className="gala-return" aria-labelledby="return-title">
