@@ -5637,3 +5637,848 @@ html.reduce-motion .gala-film-bar {
     transition: none;
   }
 }
+
+/* Hero: what the evening holds (GalaPage EVENING). An untimed strip under the
+   facts, so the night reads as a community evening before the trips. */
+.gala-evening {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 28px;
+  max-width: 640px;
+  margin: 26px 0 0;
+  padding: 18px 0 0;
+  list-style: none;
+  border-top: 1px solid rgba(217, 181, 106, 0.35);
+}
+
+.gala-evening li {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  padding-left: 20px;
+  text-shadow: 0 2px 24px rgba(11, 19, 34, 0.6);
+}
+
+.gala-evening li::before {
+  position: absolute;
+  top: 0.45em;
+  left: 2px;
+  width: 7px;
+  height: 7px;
+  content: '';
+  border: 1px solid var(--gala-brass);
+  transform: rotate(45deg);
+}
+
+.gala-evening strong {
+  color: var(--gala-ivory);
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.gala-evening strong a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(217, 181, 106, 0.55);
+  text-underline-offset: 4px;
+}
+
+.gala-evening strong a:hover {
+  text-decoration-color: var(--gala-brass);
+}
+
+.gala-evening span {
+  color: rgba(247, 241, 229, 0.72);
+  font-size: 0.9rem;
+}
+
+/* "Your ticket is all you need": its own line, a little louder than the notes. */
+.gala-evening-promise {
+  max-width: 640px;
+  margin-top: 18px;
+  color: var(--gala-ivory);
+  font-size: 1.06rem;
+  line-height: 1.5;
+  text-shadow: 0 2px 24px rgba(11, 19, 34, 0.6);
+}
+
+.gala-evening-promise strong {
+  color: var(--gala-brass-light);
+  font-weight: 700;
+}
+
+.gala-evening-promise + .gala-evening-note {
+  margin-top: 4px;
+}
+
+/* Who's hosting, under the lead: quiet, with a link to the mission page. */
+.gala-hero-host {
+  max-width: 560px;
+  margin-top: 10px;
+  color: rgba(247, 241, 229, 0.66);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  text-shadow: 0 2px 24px rgba(11, 19, 34, 0.6);
+}
+
+.gala-hero-host a {
+  color: var(--gala-brass-light);
+  text-decoration: underline;
+  text-decoration-color: rgba(217, 181, 106, 0.55);
+  text-underline-offset: 4px;
+  white-space: nowrap;
+}
+
+.gala-hero-host a:hover {
+  text-decoration-color: var(--gala-brass);
+}
+
+.gala-evening-note {
+  max-width: 640px;
+  margin-top: 16px;
+  color: rgba(247, 241, 229, 0.78);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  text-shadow: 0 2px 24px rgba(11, 19, 34, 0.6);
+}
+
+.gala-evening-note strong {
+  color: var(--gala-brass-light);
+  font-weight: 600;
+}
+
+@media (max-width: 520px) {
+  .gala-evening {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+/* The evening section's "Last December" row: real guests from SparkPoint's 2025
+   holiday gathering under the band (GalaBand.tsx). */
+.gala-lastdec {
+  margin-top: 72px;
+}
+
+.gala-lastdec-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 18px;
+  color: var(--gala-ivory);
+  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+  font-weight: 300;
+  letter-spacing: 0.03em;
+}
+
+.gala-lastdec-title span {
+  color: var(--gala-brass-light);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+/* The pile: prints laid on a table, overlapping a little, all mostly visible. */
+.gala-lastdec-pile {
+  position: relative;
+  aspect-ratio: 2.15 / 1;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gala-lastdec-pile li {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: 34%;
+}
+
+.gala-lastdec-print {
+  display: block;
+  width: 100%;
+  padding: 9px 9px 9px;
+  border: 0;
+  background: #fbf6ea;
+  cursor: pointer;
+  transform: rotate(var(--r));
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 10px 22px rgba(0, 0, 0, 0.38),
+    0 24px 48px rgba(0, 0, 0, 0.22);
+  transition:
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gala-lastdec-print img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+/* Picked up: lifted, straightened, a longer and softer shadow. */
+.gala-lastdec-pile li.is-top .gala-lastdec-print,
+.gala-lastdec-print:hover,
+.gala-lastdec-print:focus-visible {
+  transform: translateY(-10px) rotate(0deg) scale(1.06);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 22px 40px rgba(0, 0, 0, 0.45),
+    0 46px 80px rgba(0, 0, 0, 0.3);
+}
+
+.gala-lastdec-print:focus-visible {
+  outline: 2px solid var(--gala-brass-light);
+  outline-offset: 4px;
+}
+
+@media (max-width: 700px) {
+  .gala-lastdec {
+    margin-top: 52px;
+  }
+
+  .gala-lastdec-pile {
+    aspect-ratio: 0.76 / 1;
+  }
+
+  .gala-lastdec-pile li {
+    left: var(--mx);
+    top: var(--my);
+    width: 58%;
+  }
+
+  .gala-lastdec-print {
+    padding: 6px;
+    transform: rotate(var(--mr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gala-lastdec-print {
+    transition: none;
+  }
+}
+
+html.reduce-motion .gala-lastdec-print {
+  transition: none;
+}
+
+/* FAQ answers that carry links (directions). */
+.gala-faq-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 0 0 18px;
+}
+
+.gala-faq-links a {
+  color: #8e2a5c;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* The Resilience Hub campaign meter under the return trip's four points
+   (HUB_CAMPAIGN in GalaPage.tsx; off until the figure is cleared to publish). */
+.gala-hub-meter {
+  max-width: 760px;
+  margin-top: 56px;
+  padding-top: 26px;
+  border-top: 1px solid rgba(241, 217, 160, 0.25);
+}
+
+.gala-hub-meter-figures {
+  color: rgba(247, 241, 229, 0.86);
+  font-size: 1.1rem;
+}
+
+.gala-hub-meter-figures strong {
+  color: var(--gala-brass-light);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.gala-hub-meter-bar {
+  height: 10px;
+  margin-top: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(217, 181, 106, 0.5);
+  background: rgba(247, 241, 229, 0.06);
+}
+
+.gala-hub-meter-bar span {
+  display: block;
+  height: 100%;
+  background: var(--gala-brass);
+}
+
+.gala-hub-meter-note {
+  margin-top: 12px;
+  color: rgba(247, 241, 229, 0.7);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Getting there (#getting-there, galaDirections/): a night section with the 3D
+   route map beside the steps. */
+.gala-directions {
+  padding: 100px 0;
+  color: var(--gala-ivory);
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(217, 181, 106, 0.12), transparent 50%),
+    var(--gala-midnight);
+  scroll-margin-top: 80px;
+}
+
+.gala-directions-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 56px;
+}
+
+.gala-directions-copy .gala-section-head h2 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+}
+
+.gala-directions-copy .gala-section-head p {
+  margin-top: 16px;
+  color: rgba(247, 241, 229, 0.82);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.gala-directions-steps {
+  display: grid;
+  gap: 14px;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.gala-directions-steps li {
+  position: relative;
+  display: grid;
+  gap: 3px;
+  padding-left: 40px;
+  counter-increment: step;
+}
+
+.gala-directions-steps li::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  content: counter(step);
+  border: 1px solid var(--gala-brass);
+  color: var(--gala-brass-light);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.gala-directions-steps strong {
+  font-size: 1.02rem;
+  font-weight: 700;
+}
+
+.gala-directions-steps span {
+  color: rgba(247, 241, 229, 0.74);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.gala-directions-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.gala-directions-address {
+  margin-top: 16px;
+  color: rgba(247, 241, 229, 0.62);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 900px) {
+  .gala-directions {
+    padding: 76px 0;
+  }
+
+  .gala-directions-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+
+}
+
+/* The nav-style map (galaDirections/): north up, night mode, a turn banner at
+   the top and a trip bar at the foot, like the app guests drive with. */
+.gala-nav {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 4.2;
+  overflow: hidden;
+  border: 1px solid rgba(217, 181, 106, 0.45);
+  border-radius: 22px;
+  outline: 1px solid rgba(217, 181, 106, 0.18);
+  outline-offset: 6px;
+  background: #0d1524;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45);
+}
+
+.gala-nav-flat,
+.gala-nav-canvas,
+.gala-nav-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.gala-nav-flat {
+  transition: opacity 500ms ease;
+}
+
+.gala-nav-flat polyline {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gala-nav-flat .is-road { stroke: #8f8466; stroke-width: 3; }
+.gala-nav-flat .is-casing { stroke: #0b1322; stroke-width: 7; }
+.gala-nav-flat .is-drive { stroke: var(--gala-brass-light); stroke-width: 4.5; }
+
+.gala-nav-canvas {
+  opacity: 0;
+  transition: opacity 700ms ease;
+}
+
+.gala-nav.is-ready .gala-nav-canvas { opacity: 1; }
+.gala-nav.is-ready .gala-nav-flat { opacity: 0; }
+
+.gala-nav-overlay {
+  pointer-events: none;
+}
+
+.gala-nav-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  color: rgba(247, 241, 229, 0.86);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 3px #0d1524, 0 0 6px #0d1524, 0 0 10px #0d1524;
+  transition: opacity 200ms ease;
+}
+
+.gala-nav-label.is-road {
+  color: rgba(247, 241, 229, 0.7);
+  font-size: 0.68rem;
+}
+
+.gala-nav-label.is-quiet {
+  color: rgba(130, 160, 200, 0.75);
+  font-size: 0.66rem;
+  font-style: italic;
+}
+
+/* US route shield. */
+.gala-nav-label.is-shield {
+  min-width: 30px;
+  padding: 3px 5px 2px;
+  border: 2px solid #111;
+  border-radius: 4px 4px 12px 12px;
+  background: #f7f7f2;
+  color: #111;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-align: center;
+  text-shadow: none;
+}
+
+.gala-nav-label.is-poi::before,
+.gala-nav-label.is-gate::before,
+.gala-nav-label.is-destination::before {
+  display: inline-block;
+  margin-right: 6px;
+  vertical-align: -1px;
+  content: '';
+  border-radius: 50%;
+}
+
+.gala-nav-label.is-poi::before {
+  width: 9px;
+  height: 9px;
+  background: #c9ccd4;
+  border: 2px solid #0d1524;
+}
+
+.gala-nav-label.is-gate {
+  padding: 4px 9px 3px;
+  border-radius: 999px;
+  background: var(--gala-pink);
+  color: #fff;
+  font-weight: 700;
+  text-shadow: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+.gala-nav-label.is-destination {
+  padding: 4px 10px 3px;
+  border-radius: 999px;
+  background: var(--gala-brass-light);
+  color: #0b1322;
+  font-weight: 700;
+  text-shadow: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* The car: a nav arrow on a disc, pointing the way it's driving. */
+.gala-nav-puck {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 34px;
+  height: 34px;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.55));
+}
+
+.gala-nav-puck svg {
+  width: 100%;
+  height: 100%;
+}
+
+.gala-nav-puck circle {
+  fill: #f7f1e5;
+  stroke: var(--gala-brass);
+  stroke-width: 2.5;
+}
+
+.gala-nav-puck path {
+  fill: #0b1322;
+}
+
+/* Turn banner. */
+.gala-nav-banner {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #1d2c47, #15213a);
+  border: 1px solid rgba(217, 181, 106, 0.35);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+}
+
+.gala-nav-banner-icon svg {
+  display: block;
+  width: 40px;
+  height: 40px;
+  fill: none;
+  stroke: var(--gala-brass-light);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gala-nav-banner-text {
+  display: grid;
+  min-width: 0;
+}
+
+.gala-nav-banner-text b {
+  color: var(--gala-brass-light);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.gala-nav-banner-text strong {
+  color: #fff;
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.gala-nav-banner-text small {
+  color: rgba(247, 241, 229, 0.72);
+  font-size: 0.8rem;
+}
+
+.gala-nav-compass {
+  position: absolute;
+  top: 104px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(13, 21, 36, 0.9);
+  border: 1px solid rgba(247, 241, 229, 0.3);
+  color: var(--gala-pink);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+/* Trip bar and controls. */
+.gala-nav-trip {
+  position: absolute;
+  right: 12px;
+  bottom: 28px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px 10px 16px;
+  border-radius: 16px;
+  background: rgba(13, 21, 36, 0.94);
+  border: 1px solid rgba(247, 241, 229, 0.14);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+}
+
+.gala-nav-trip-figures {
+  display: grid;
+  min-width: 0;
+}
+
+.gala-nav-trip-figures strong {
+  color: #7fd8a4;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.gala-nav-trip-figures span {
+  overflow: hidden;
+  color: rgba(247, 241, 229, 0.72);
+  font-size: 0.8rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gala-nav-controls {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+
+.gala-nav-controls button {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(217, 181, 106, 0.5);
+  border-radius: 50%;
+  background: rgba(247, 241, 229, 0.06);
+  color: var(--gala-brass-light);
+  cursor: pointer;
+}
+
+.gala-nav-controls button:hover {
+  background: rgba(217, 181, 106, 0.16);
+}
+
+.gala-nav-controls button:focus-visible {
+  outline: 2px solid var(--gala-brass-light);
+  outline-offset: 3px;
+}
+
+.gala-nav-controls svg {
+  width: 18px;
+  height: 18px;
+}
+
+.gala-nav-credit {
+  position: absolute;
+  right: 14px;
+  bottom: 7px;
+  color: rgba(247, 241, 229, 0.45);
+  font-size: 0.62rem;
+}
+
+.gala-nav-credit a {
+  color: inherit;
+}
+
+@media (max-width: 900px) {
+  .gala-nav {
+    aspect-ratio: 1 / 1.25;
+  }
+
+  .gala-nav-banner-text b {
+    font-size: 1.15rem;
+  }
+
+  .gala-nav-banner-text strong {
+    font-size: 0.92rem;
+  }
+
+  .gala-nav-label {
+    font-size: 0.64rem;
+  }
+}
+
+/* The section bar (GalaJumpNav.tsx): under the hero, then stuck under the
+   site header (80px, fixed). Night glass with a brass hairline. */
+.gala-jump {
+  position: sticky;
+  top: 80px;
+  z-index: 40;
+  background: rgba(11, 19, 34, 0.86);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(217, 181, 106, 0.22);
+  border-bottom: 1px solid rgba(217, 181, 106, 0.32);
+}
+
+.gala-jump-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 54px;
+}
+
+.gala-jump-list {
+  display: flex;
+  gap: 4px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  list-style: none;
+  scrollbar-width: none;
+}
+
+.gala-jump-list::-webkit-scrollbar {
+  display: none;
+}
+
+.gala-jump-list a {
+  position: relative;
+  display: block;
+  padding: 17px 14px 15px;
+  color: rgba(247, 241, 229, 0.72);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 200ms ease;
+}
+
+.gala-jump-list a::after {
+  position: absolute;
+  right: 14px;
+  bottom: 0;
+  left: 14px;
+  height: 2px;
+  content: '';
+  background: var(--gala-brass);
+  transform: scaleX(0);
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gala-jump-list a:hover {
+  color: var(--gala-ivory);
+}
+
+.gala-jump-list a.is-active {
+  color: var(--gala-brass-light);
+}
+
+.gala-jump-list a.is-active::after {
+  transform: scaleX(1);
+}
+
+.gala-jump-list a:focus-visible {
+  outline: 2px solid var(--gala-brass-light);
+  outline-offset: -4px;
+}
+
+.gala-jump-tickets {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px 8px;
+  border: 1px solid var(--gala-brass);
+  background: var(--gala-pink);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.gala-jump-tickets svg {
+  width: 14px;
+  height: 14px;
+}
+
+.gala-jump-tickets:focus-visible {
+  outline: 2px solid var(--gala-brass-light);
+  outline-offset: 3px;
+}
+
+/* Jumps land below the header and the bar. */
+.gala-page #music,
+.gala-page #trips,
+.gala-page #passport,
+.gala-page #faq,
+.gala-page #getting-there,
+.gala-page #trailer,
+.gala-page #travel-partners {
+  scroll-margin-top: 140px;
+}
+
+@media (max-width: 640px) {
+  .gala-jump-inner {
+    width: 100%;
+    gap: 8px;
+    padding-right: 10px;
+  }
+
+  .gala-jump-list a {
+    padding: 15px 11px 13px;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+  }
+
+  .gala-jump-tickets {
+    padding: 8px 11px 7px;
+    font-size: 0.64rem;
+    letter-spacing: 0.12em;
+  }
+
+  .gala-jump-tickets svg {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gala-jump-list a::after {
+    transition: none;
+  }
+}

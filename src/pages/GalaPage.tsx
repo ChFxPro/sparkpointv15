@@ -15,12 +15,14 @@ import {
   GALA_VENUE,
 } from '../data/events';
 import { canonicalUrl } from '../lib/siteOrigin';
-import { GALA_TRIP_COUNT, GALA_TRIP_COUNT_WORD, GALA_TRIP_NAMES, GALA_TRIPS, tripAnchor } from '../data/galaTrips';
+import { GALA_TRIP_COUNT, GALA_TRIP_COUNT_WORD, GALA_TRIP_NAMES, GALA_TRIPS } from '../data/galaTrips';
 import { GalaBoardingPass } from './GalaBoardingPass';
 import { GalaChapterMark } from './GalaChapterMark';
 import { GalaDepartureBoard } from './GalaDepartureBoard';
 import { GalaBand } from './GalaBand';
+import { GalaJumpNav } from './GalaJumpNav';
 import { GalaFaq } from './GalaFaq';
+import { GalaDirections } from './galaDirections/GalaDirections';
 import { GalaPostcardJourney } from './GalaPostcard';
 import { GalaSeatMap } from './GalaSeatMap';
 import { GalaRouteMap } from './GalaRouteMap';
@@ -75,36 +77,45 @@ const STAMPS = [
   { shape: 'oval', top: 'Airfare', middle: 'Extra', bottom: 'Not included', tilt: -3 },
   { shape: 'rect', top: '3 years', middle: 'to travel', bottom: 'Your dates', tilt: -6 },
   { shape: 'round', top: 'For two', middle: 'Travelers', bottom: 'Cortona: four', tilt: 7 },
-  { shape: 'oval', top: 'Gives', middle: 'Back home', bottom: 'Resilience Hub', tilt: -4 },
+  { shape: 'oval', top: 'Gives back', middle: 'Tax-deductible', bottom: 'Part of every trip', tilt: -4 },
 ];
 
-// Leather luggage tags. `code` is a playful airport-style code; `tilt` and
-// `drop` (strap length) vary so the row hangs naturally from its rail.
-// Each occasion is paired with one of the eight trips (`trip` is its id).
-const TAGS = [
-  { occasion: 'Anniversary', code: 'ANV', trip: 'portugal', line: 'Celebrate the years in Lisbon and Porto.', tone: 'cognac', tilt: -3, drop: 34 },
-  { occasion: 'Milestone birthday', code: 'BDY', trip: 'iceland', line: 'Mark the big one beside Gullfoss.', tone: 'navy', tilt: 2, drop: 58 },
-  { occasion: 'Honeymoon', code: 'HNY', trip: 'greece', line: 'Begin forever on Santorini.', tone: 'plum', tilt: -1.5, drop: 22 },
-  { occasion: 'Family and friends', code: 'FAM', trip: 'cortona', line: 'A Tuscan suite with room for four.', tone: 'forest', tilt: 3, drop: 50 },
-  { occasion: 'Bucket list', code: 'BKT', trip: 'south-africa', line: 'The Big Five, at last.', tone: 'tan', tilt: -2.5, drop: 30 },
-].map((tag) => ({ ...tag, to: GALA_TRIPS.find((trip) => trip.id === tag.trip)! }));
+// The hero's "what the evening holds" strip. Untimed on purpose: the run of show
+// isn't confirmed. Food is "heavy hors d'oeuvres", never "dinner" (AGENTS.md).
+const EVENING: { title: string; note: string; href?: string }[] = [
+  { title: 'Cocktails & heavy hors d’oeuvres', note: 'Plenty to make a supper of' },
+  { title: 'Live music', note: 'The Blue Ridge Bakery Band', href: '#music' },
+  { title: '2026, together', note: 'A look back, and a look ahead' },
+  { title: 'The travel experience', note: 'Eight trips, the night’s fundraiser', href: '#trips' },
+];
+
+// The Resilience Hub campaign, as reported at the Nov 9, 2026 board meeting: the
+// demolition, construction and renovation are funded; what's left furnishes and
+// equips the Hub and runs its programs. Off until Jeff confirms it can be public.
+const HUB_CAMPAIGN = { show: false, raised: 350_000, goal: 500_000 };
+
+// The sponsor seat-map teaser (#travel-partners) and the close's "Become a Gala
+// travel partner" link. Off until sponsor levels and a contact are set (Jeff,
+// 2026-11-20); turn back on here.
+const SHOW_PARTNER_SEATS = false;
+const usd = (n: number) => `$${n.toLocaleString('en-US')}`;
 
 const GIVES_BACK = [
   {
-    title: 'Every adventure makes a difference',
-    copy: 'A portion of every trip chosen at the Gala supports SparkPoint’s mission of strengthening community well-being through collaboration and connection.',
+    title: 'Celebrate a year of connection',
+    copy: 'The Gala is our evening to look back on 2026 together, with the friends, neighbors and partners who made it, and to look ahead to what we build next.',
   },
   {
     title: 'Help bring the Resilience Hub to life',
-    copy: 'Gala support helps advance this new community resource, designed to bring people, organizations, and services together under one roof.',
+    copy: 'Gala support helps build out the Hub at 94 S. Caldwell Street in Brevard: a home for StoryLab, partner meetings and a resource lobby, bringing people, organizations and services together under one roof.',
   },
   {
     title: 'Invest in a more connected community',
-    copy: 'The Hub will provide space for collaboration, leadership development, community resources, and programs that strengthen resilience and address local needs.',
+    copy: 'The Hub will provide space for collaboration, leadership development, community resources, and programs that strengthen resilience across Transylvania County and beyond.',
   },
   {
-    title: 'A vacation with a lasting impact',
-    copy: 'Make unforgettable travel memories while helping SparkPoint build a healthier, more connected, and resilient Transylvania County.',
+    title: 'Travel that gives back',
+    copy: 'If one of the eight trips calls to you, a portion of its price comes home to SparkPoint and the Hub.',
   },
 ];
 
@@ -115,8 +126,9 @@ const galaEventJsonLd = {
   '@type': 'Event',
   name: GALA_NAME,
   alternateName: GALA_BYLINE,
-  description: `An evening of connection and ${GALA_TRIP_COUNT_WORD} trips that give back: ${GALA_TRIP_NAMES}. Every trip is available to every guest at a set price, with a portion supporting the Transylvania Resilience Hub.`,
+  description: `A travel-themed community gala of connection and celebration: heavy hors d'oeuvres, cocktails, live music, and a look back at 2026 together. The night's fundraiser is ${GALA_TRIP_COUNT_WORD} optional trips at set prices (${GALA_TRIP_NAMES}); part of every trip's price is a tax-deductible gift to SparkPoint, supporting the Transylvania Resilience Hub.`,
   startDate: '2026-12-11T18:00:00-05:00',
+  endDate: '2026-12-11T21:00:00-05:00',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
   eventStatus: 'https://schema.org/EventScheduled',
   image: [canonicalUrl(GALA_SHARE_IMAGE)],
@@ -185,7 +197,7 @@ export default function GalaPage() {
     <div className="gala-page">
       <SEOHead
         title={`${GALA_FULL_TITLE} | December 11, 2026`}
-        description={`Every journey connects back home. Join us for A World of Connections, the SparkPoint Gala, on Friday, December 11, 2026 at 6 p.m. at Connestee Falls Clubhouse, and choose from ${GALA_TRIP_COUNT_WORD} trips that give back to Transylvania County’s Resilience Hub: ${GALA_TRIP_NAMES}. Tickets $100.`}
+        description={`Join us for A World of Connections, the SparkPoint Gala: a travel-themed evening of connection and celebration on Friday, December 11, 2026 at 6 p.m. at Connestee Falls Clubhouse. Heavy hors d’oeuvres, cocktails, live music and a look back at 2026 together, with ${GALA_TRIP_COUNT_WORD} trips as the night’s optional fundraiser. Tickets $100.`}
         path={GALA_PATH}
         image={GALA_SHARE_IMAGE}
         imageAlt="A World of Connections, the SparkPoint Gala: the title over an airplane wing above golden clouds at sunset."
@@ -215,8 +227,14 @@ export default function GalaPage() {
               Every journey <em>connects back home.</em>
             </p>
             <p className="gala-hero-lede">
-              One evening, eight journeys around the world, and a portion of every one of them
-              coming back to the place we call home.
+              A travel-themed evening of connection and celebration with friends old and new, as we
+              look back on 2026 together and ahead to a more connected Transylvania County and beyond.
+            </p>
+            {/* Who's hosting, in a line, with the way to learn more (Jeff, 2026-11-20:
+                an event page, not the org page). */}
+            <p className="gala-hero-host">
+              Hosted by SparkPoint, a Brevard nonprofit that brings people together across
+              Transylvania County. <Link to="/mission">Our mission</Link>
             </p>
             <dl className="gala-hero-facts">
               <div>
@@ -227,7 +245,7 @@ export default function GalaPage() {
               <div>
                 <Clock3 aria-hidden="true" />
                 <dt className="sr-only">Time</dt>
-                <dd>6:00 p.m.</dd>
+                <dd>6:00–9:00 p.m.</dd>
               </div>
               <div>
                 <MapPin aria-hidden="true" />
@@ -247,6 +265,20 @@ export default function GalaPage() {
                 </dd>
               </div>
             </dl>
+            {/* What the evening holds (Jeff, 2026-11-20): untimed, since the run of show
+                isn't confirmed. The trips come last, as the night's optional fundraiser. */}
+            <ul className="gala-evening" aria-label="What the evening holds">
+              {EVENING.map((item) => (
+                <li key={item.title}>
+                  <strong>{item.href ? <a href={item.href}>{item.title}</a> : item.title}</strong>
+                  <span>{item.note}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="gala-evening-promise">
+              <strong>Your ticket is all you need.</strong> The trips are entirely optional.
+            </p>
+            <p className="gala-evening-note">Dress: festive cocktail attire, your holiday best.</p>
             <div className="gala-actions">
               {GALA_TICKETS_URL ? (
                 <a
@@ -276,16 +308,23 @@ export default function GalaPage() {
         </div>
       </section>
 
+      {/* The section bar: under the hero, then sticky under the site header. */}
+      <GalaJumpNav />
+
+      {/* 1b — The evening: live music and last December (GalaBand.tsx) */}
+      <GalaBand />
+
       {/* 2 — Routes */}
-      <section className="gala-routes" aria-labelledby="routes-title">
+      <section id="routes" className="gala-routes" aria-labelledby="routes-title">
         <div className="gala-shell">
           <motion.div className="gala-routes-head" {...reveal}>
             <h2 id="routes-title">
               Eight connections. <em>One home base.</em>
             </h2>
             <p>
-              Your next adventure could change lives. Every trip at the Gala leaves from here. And a portion of every one comes right
-              back to Transylvania County.
+              Every trip leaves from here, and every ticket and trip comes home: together they help
+              complete the Resilience Hub, fund SparkPoint’s programs, and keep this community
+              connected. That’s what changes lives.
             </p>
           </motion.div>
           <GalaRouteMap />
@@ -305,8 +344,9 @@ export default function GalaPage() {
               Eight trips. <em>Choose yours at the Gala.</em>
             </h2>
             <p>
-              Every trip is available to every guest at a set price, and more than one guest
-              can choose the same one.
+              The travel experience is the night’s fundraiser. Every trip is available to every
+              guest at a set price, more than one guest can choose the same one, and part of every
+              trip’s price is a tax-deductible gift to SparkPoint.
             </p>
           </motion.div>
           <GalaTrips />
@@ -453,8 +493,7 @@ export default function GalaPage() {
             </motion.p>
           </div>
           <p className="gala-fine-print">
-            Part of every trip’s price is a tax-deductible gift to SparkPoint, and it comes home
-            to help bring the Transylvania Resilience Hub to life.
+            A portion of every trip comes home to help bring the Transylvania Resilience Hub to life.
           </p>
           <motion.div className="gala-passport-cta" {...reveal}>
             <p>
@@ -468,62 +507,11 @@ export default function GalaPage() {
         </div>
       </section>
 
-      {/* 4a — Live music all evening (GalaBand.tsx) */}
-      <GalaBand />
-
       {/* 4b — Questions, answered (GalaFaq.tsx) */}
       <GalaFaq />
 
-      {/* 5 — Luggage tags */}
-      <section className="gala-tags-section" aria-labelledby="tags-title">
-        <div className="gala-shell">
-          <motion.div className="gala-section-head gala-section-head-center" {...reveal}>
-            <h2 id="tags-title">
-              Where will yours <em>take you?</em>
-            </h2>
-          </motion.div>
-          <ul className="gala-tags">
-            {TAGS.map((tag, index) => (
-              <motion.li
-                key={tag.occasion}
-                className={`gala-tag gala-tag-${tag.tone}`}
-                style={{ '--tilt': `${tag.tilt}deg`, '--drop': `${tag.drop}px` } as CSSProperties}
-                {...staggerReveal(index)}
-              >
-                <div className="gala-tag-swing">
-                  <span className="gala-tag-strap" aria-hidden="true" />
-                  <div className="gala-tag-body">
-                    <span className="gala-tag-eyelet" aria-hidden="true" />
-                    <Sparkmark variant="ink" size="22px" className="gala-tag-mark" />
-                    <div className="gala-tag-window">
-                    <div className="gala-tag-card">
-                      <div className="gala-tag-card-head">
-                        <small>Occasion</small>
-                        <b aria-hidden="true">{tag.code}</b>
-                      </div>
-                      <strong>{tag.occasion}</strong>
-                      <p>{tag.line}</p>
-                      <a className="gala-tag-trip" href={`#${tripAnchor(tag.to)}`}>
-                        {tag.to.name}, connection {tag.to.connection}
-                      </a>
-                      <div className="gala-tag-route" aria-hidden="true">
-                        <span>TCN</span>
-                        <i />
-                        <span>{tag.to.code}</span>
-                      </div>
-                    </div>
-                    </div>
-                    <span className="gala-tag-brand" aria-hidden="true">
-                      <Sparkmark size="14px" />
-                      World of Connections
-                    </span>
-                  </div>
-                </div>
-              </motion.li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      {/* 4c — Getting there: the East Fork Gate route on a 3D map (galaDirections/) */}
+      <GalaDirections />
 
       {/* 6 — The return trip */}
       <section className="gala-return" aria-labelledby="return-title">
@@ -531,7 +519,7 @@ export default function GalaPage() {
           <motion.div className="gala-section-head" {...reveal}>
             <GalaChapterMark kind="postage" />
             <h2 id="return-title">
-              Travel that gives back <em>to our community.</em>
+              Toward a more connected <em>Transylvania County, and beyond.</em>
             </h2>
           </motion.div>
 
@@ -548,10 +536,31 @@ export default function GalaPage() {
               </motion.li>
             ))}
           </ol>
+
+          {HUB_CAMPAIGN.show ? (
+            <motion.div className="gala-hub-meter" {...reveal}>
+              <p className="gala-hub-meter-figures">
+                <strong>{usd(HUB_CAMPAIGN.raised)}</strong> raised toward{' '}
+                <strong>{usd(HUB_CAMPAIGN.goal)}</strong> for the Resilience Hub
+              </p>
+              <div
+                className="gala-hub-meter-bar"
+                role="img"
+                aria-label={`${Math.round((HUB_CAMPAIGN.raised / HUB_CAMPAIGN.goal) * 100)} percent of the Resilience Hub goal raised`}
+              >
+                <span style={{ width: `${(HUB_CAMPAIGN.raised / HUB_CAMPAIGN.goal) * 100}%` }} />
+              </div>
+              <p className="gala-hub-meter-note">
+                The building’s construction is funded. The rest furnishes and equips the Hub and
+                gets its programs running, and that’s where the Gala comes in.
+              </p>
+            </motion.div>
+          ) : null}
         </div>
       </section>
 
-      {/* 7 — Travel partners (sponsor teaser) */}
+      {/* 7 — Travel partners (sponsor teaser): off until sponsor levels are set */}
+      {SHOW_PARTNER_SEATS ? (
       <section id="travel-partners" className="gala-partners" aria-labelledby="partners-title">
         <div className="gala-shell">
           <div className="gala-partners-head">
@@ -595,6 +604,7 @@ export default function GalaPage() {
           </p>
         </div>
       </section>
+      ) : null}
 
       {/* 8 — Boarding pass */}
       <section className="gala-close" aria-labelledby="close-title">
@@ -612,9 +622,11 @@ export default function GalaPage() {
             <GalaBoardingPass />
           </motion.div>
 
-          <motion.p className="gala-partner" {...reveal}>
-            Want your business on board? <a href="#travel-partners">Become a Gala travel partner</a>
-          </motion.p>
+          {SHOW_PARTNER_SEATS ? (
+            <motion.p className="gala-partner" {...reveal}>
+              Want your business on board? <a href="#travel-partners">Become a Gala travel partner</a>
+            </motion.p>
+          ) : null}
         </div>
       </section>
     </div>

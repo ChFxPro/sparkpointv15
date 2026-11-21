@@ -21,8 +21,8 @@ const FACTS = [
 
 const PROMISES = [
   {
-    title: 'No cost to SparkPoint',
-    body: 'AmFund supplies the trips. SparkPoint pays nothing to offer them, so what comes home goes to the Resilience Hub.',
+    title: 'No cost or risk to SparkPoint',
+    body: 'SparkPoint pays nothing up front to offer the trips, and owes nothing for a trip that isn’t chosen. Every trip chosen supports the Resilience Hub.',
   },
   {
     title: 'Their own travel team',
@@ -57,10 +57,11 @@ export function GalaTravelPartner() {
           501(c)(3) that turns travel into support for community causes.
         </p>
         <p>
-          It began in 1999 with two television journalists, Wade and Barbara West, who had spent years
-          reporting on nonprofits doing vital work on too little money. Their conviction was simple:
-          no worthy nonprofit should have to spend money to raise it. They called the answer Travel for a
-          Good Cause.
+          Founded in 1999 by two television journalists, Wade and Barbara West, on a simple conviction:
+          no worthy nonprofit should have to spend money to raise it.{' '}
+          <a href={AMFUND_URL} target="_blank" rel="noopener noreferrer">
+            More about AmFund<span className="sr-only"> (opens in a new tab)</span>
+          </a>
         </p>
       </div>
 
@@ -82,14 +83,6 @@ export function GalaTravelPartner() {
         ))}
       </ul>
 
-      <p className="gala-amfund-more">
-        Beyond events, AmFund’s Golden Pear grants have given more than $750,000 in unrestricted funding
-        to U.S. nonprofits since 2020. Groups that have offered its trips include Big Brothers Big
-        Sisters, Delaware Hospice and the Zonta Club.{' '}
-        <a href={AMFUND_URL} target="_blank" rel="noopener noreferrer">
-          More about AmFund<span className="sr-only"> (opens in a new tab)</span>
-        </a>
-      </p>
     </section>
   );
 }
