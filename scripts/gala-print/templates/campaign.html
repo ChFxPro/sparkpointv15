@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>An evening of connection</title>
+<!-- The Thanksgiving-week invite (2026-11-20): "Before 2026 ends, let's connect."
+     The evening leads; the trips are its optional fundraiser. Photo: Santa and guests
+     at the 2025 Gala, a close shot rather than the room (that venue is no longer ours). Body classes pick the format (portrait,
+     square, story, card) and the variant ("connestee" adds "Right here at the
+     Clubhouse"; "card" is the printed half-page with a QR code to /gala). -->
+<style>
+  {{INCLUDE:shared/lockup.css}}
+
+  :root {
+    --midnight: #0b1322; --night: #14213a; --brass: #d9b56a; --brass-light: #f1d9a0;
+    --ivory: #f7f1e5; --muted: rgba(247,241,229,.78); --pink: #e03694;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: var(--w); height: var(--h); }
+  body { position: relative; overflow: hidden; color: var(--ivory); background: var(--night); font-family: 'Josefin Sans', sans-serif; }
+
+  .photo { position: absolute; inset: 0 0 auto; height: var(--photo-h); overflow: hidden; }
+  .photo img { width: 100%; height: 100%; object-fit: cover; object-position: var(--photo-pos, 50% 40%); }
+  .photo::after { content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(11,19,34,.72) 0%, rgba(11,19,34,.25) 16%, transparent 30%, transparent 52%, rgba(20,33,58,.8) 82%, var(--night) 100%); }
+
+  .frame { position: absolute; inset: var(--inset); display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .kicker { display: inline-flex; align-items: center; gap: .6em; color: var(--brass-light); font-size: var(--kicker); font-weight: 600; letter-spacing: .26em; margin-right: -.26em; text-transform: uppercase; text-shadow: 0 2px 14px rgba(11,19,34,.8); }
+  .kicker img { width: 1.6em; height: 1.6em; }
+  body:not(.connestee) .kicker .v-con, body.connestee .kicker .v-std { display: none; }
+  .spacer { flex: 1; min-height: 8px; }
+
+  .head { font-size: var(--head); font-weight: 300; line-height: 1.02; letter-spacing: -.005em; text-shadow: 0 4px 30px rgba(11,19,34,.55); }
+  .head em { display: block; color: var(--brass); font-style: normal; font-weight: 600; }
+
+  .items { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .35em 1.1em; margin-top: calc(var(--head) * .34); font-size: var(--items); font-weight: 400; letter-spacing: .02em; }
+  .items span { display: inline-flex; align-items: center; gap: 1.1em; }
+  .items span + span::before { content: ''; width: .42em; height: .42em; rotate: 45deg; border: 1px solid var(--brass); }
+
+  .rule { display: flex; align-items: center; gap: .8em; width: min(78%, 620px); margin: calc(var(--items) * 1.2) auto 0; }
+  .rule i { flex: 1; height: 5px; border-top: 1px solid rgba(217,181,106,.6); border-bottom: 1px solid rgba(217,181,106,.6); }
+  .rule img { width: calc(var(--items) * 1.1); }
+
+  .lk { font-size: var(--lk); margin-top: calc(var(--lk) * .55); --by2-min: 0px; }
+  .when { margin-top: calc(var(--when) * .9); font-size: var(--when); font-weight: 600; letter-spacing: .02em; }
+  .when b { color: var(--brass); font-weight: 400; padding: 0 .3em; }
+  .where { margin-top: .35em; font-size: calc(var(--when) * .82); color: var(--muted); }
+
+  .cta { display: inline-flex; align-items: center; gap: .7em; margin-top: calc(var(--when) * 1.1); padding: .95em 1.9em .78em; color: #fff; background: var(--pink); border: 1px solid var(--brass); font-size: var(--cta); font-weight: 600; letter-spacing: .2em; margin-right: -.2em; text-transform: uppercase; }
+  .cta i { font-style: normal; color: var(--brass-light); }
+  .fine { margin-top: calc(var(--cta) * 1.05); max-width: 34em; font-size: var(--fine); line-height: 1.4; color: var(--muted); }
+  .fine strong { color: var(--ivory); font-weight: 600; }
+
+  body:not(.card) .qr { display: none !important; }
+
+  /* Formats */
+  body.portrait { --w: 1080px; --h: 1350px; --inset: 76px 80px 74px; --photo-h: 58%; --photo-pos: 50% 46%; --kicker: 19px; --head: 92px; --items: 27px; --lk: 50px; --when: 31px; --cta: 25px; --fine: 21px; }
+  body.square { --w: 1080px; --h: 1080px; --inset: 60px 70px 58px; --photo-h: 60%; --photo-pos: 50% 46%; --kicker: 17px; --head: 74px; --items: 23px; --lk: 0px; --when: 27px; --cta: 22px; --fine: 18px; }
+  body.square .lk, body.square .rule { display: none; }
+  body.story { --w: 1080px; --h: 1920px; --inset: 220px 80px 250px; --photo-h: 56%; --photo-pos: 50% 46%; --kicker: 22px; --head: 108px; --items: 27px; --lk: 64px; --when: 36px; --cta: 29px; --fine: 25px; }
+
+  /* The printed half-page card, 5.5 × 8.5 in (528 × 816 CSS px), with a QR code to /gala.
+     Text stays at least 0.3 in (29 px) inside the trim. */
+  body.card { --w: 528px; --h: 816px; --inset: 40px 36px 36px; --photo-h: 47%; --photo-pos: 50% 46%; --kicker: 9.5px; --head: 44px; --items: 13px; --lk: 25px; --when: 15px; --cta: 11px; --fine: 10px; --frame-inset: 12px; }
+  body.story .kicker { visibility: hidden; }
+  body.card .deco-frame { outline-offset: 4px; }
+  body.card .bottom { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 18px; width: 100%; margin-top: 16px; text-align: left; }
+  body.card .bottom .cta { margin-top: 0; }
+  body.card .bottom .fine { margin-top: 8px; }
+  body.card .qr { display: grid; justify-items: center; gap: 5px; padding: 8px 8px 6px; background: var(--ivory); color: var(--midnight); }
+  body.card .qr img { width: 78px; height: 78px; display: block; }
+  body.card .qr span { font-size: 7.5px; font-weight: 700; letter-spacing: .14em; margin-right: -.14em; text-transform: uppercase; }
+  .bottom { display: contents; }
+  .bottom > div { display: contents; }
+  body.card .bottom > div { display: block; }
+</style>
+</head>
+<body class="portrait">
+  <div class="deco-frame"></div>
+  <div class="photo"><img src="{{ASSETS}}/gala-2025-2022.webp" alt="" /></div>
+  <div class="frame">
+    <p class="kicker"><img src="{{PUBLIC}}/assets/brand/sparkmark-256.webp" alt="" /><span class="v-std">An evening of connection</span><span class="v-con">Right here at the Clubhouse</span></p>
+    <div class="spacer"></div>
+    <h1 class="head">Before 2026 ends, <em>let&rsquo;s connect.</em></h1>
+    <p class="items"><span>Heavy hors d&rsquo;oeuvres &amp; cocktails</span><span>Live music</span><span>2026, together</span></p>
+    <div class="rule"><i></i><img src="{{PUBLIC}}/assets/brand/sparkmark-256.webp" alt="" /><i></i></div>
+    <div class="lk-slot no-by2"></div>
+    <p class="when">Friday, December 11<b>·</b>6&ndash;9 p.m.</p>
+    <p class="where">Connestee Falls Clubhouse, Brevard</p>
+    <div class="bottom">
+      <div>
+        <p class="cta">$100 <i>·</i> yoursparkpoint.org/gala</p>
+        <p class="fine"><strong>Your ticket is all you need.</strong> Eight trips are the night&rsquo;s fundraiser, for anyone who&rsquo;d like one.</p>
+      </div>
+      <div class="qr"><img src="{{ASSETS}}/gala-short-qr.svg" alt="" /><span>Tickets</span></div>
+    </div>
+  </div>
+  <script>{{INCLUDE:shared/lockup.js}}</script>
+</body>
+</html>

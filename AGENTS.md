@@ -82,6 +82,7 @@ Last updated: 2026-11-06
 - `/internal/reports` (internal reports portal home — lists available reports for the signed-in user; redirects to `/internal/login` if unauthenticated)
 - `/internal/reports/:reportType/:period` (one report's dashboard, e.g. `/internal/reports/social_media/2026-07`; requires an authenticated session, same as above)
 - `/rh_tickets` and `/tickets/wncrrhc` -> redirect to `/rural-health-convening` (the convening is over; these printed ticket links now land on the recap instead of checkout)
+- `/gala` -> redirect to `/events/sparkpoint-gala` (the Gala's short link, printed on the Thanksgiving-week invite cards and in the team's invite texts; static prerender stub, same pattern as `/sponsors`. Keep it working through Dec 11)
 - `/pcr_collab` -> redirect to `/events/thrive-at-five` (branded vanity URL; static prerender stub, same pattern as `/sponsors`)
 - `/newsletter` -> external redirect to Squarespace newsletter
 - `/donations` -> external redirect to Squarespace donations
