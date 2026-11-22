@@ -210,15 +210,21 @@ export default function GalaPage() {
 
       {/* 1 — Departures */}
       <section className="gala-hero" aria-labelledby="gala-title">
+        {/* The photo keeps its framing at the top (the wing and the sunset stay put);
+            below it, a blurred mirror of its clouds carries the sky down behind the
+            board, so the photo covers the hero however tall its content grows. */}
         <div className="gala-hero-photo" aria-hidden="true">
-          <img
-            src={heroPhoto(1400)}
-            srcSet={`${heroPhoto(800)} 800w, ${heroPhoto(1400)} 1400w, ${heroPhoto(2400)} 2400w`}
-            sizes="100vw"
-            alt=""
-            // React 18 drops camelCase fetchPriority; the spread emits the real attribute.
-            {...{ fetchpriority: 'high' }}
-          />
+          <div className="gala-hero-photo-frame">
+            <img
+              src={heroPhoto(1400)}
+              srcSet={`${heroPhoto(800)} 800w, ${heroPhoto(1400)} 1400w, ${heroPhoto(2400)} 2400w`}
+              sizes="100vw"
+              alt=""
+              // React 18 drops camelCase fetchPriority; the spread emits the real attribute.
+              {...{ fetchpriority: 'high' }}
+            />
+          </div>
+          <img className="gala-hero-photo-echo" src={heroPhoto(800)} alt="" decoding="async" />
         </div>
         <div className="gala-shell gala-hero-inner">
           <motion.div className="gala-hero-copy" {...reveal}>

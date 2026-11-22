@@ -269,15 +269,24 @@
   text-shadow: 0 2px 24px rgba(11, 19, 34, 0.6);
 }
 
+/* The photo layer fills the whole hero, however tall its content grows. */
 .gala-hero-photo {
   position: absolute;
-  inset: 0 0 auto;
-  height: min(100%, 980px);
+  inset: 0;
   overflow: hidden;
   pointer-events: none;
 }
 
-.gala-hero-photo img {
+/* The photo itself keeps its original framing: the top 980px of the hero
+   (760px on phones), so the wing and the sunset sit where they always have. */
+.gala-hero-photo-frame {
+  position: absolute;
+  inset: 0 0 auto;
+  height: min(100%, 980px);
+  overflow: hidden;
+}
+
+.gala-hero-photo-frame img {
   width: 100%;
   height: 100%;
   display: block;
@@ -287,14 +296,47 @@
   animation: gala-drift 16s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Darken toward the headline, then fade into the night sky under the board. */
+/* Fade the photo's foot into the night sky. */
+.gala-hero-photo-frame::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: linear-gradient(180deg, rgba(11, 19, 34, 0.45) 0%, transparent 18%, transparent 52%, rgba(20, 33, 58, 0.8) 78%, var(--gala-midnight-2) 96%);
+}
+
+/* Below the frame, the same clouds mirrored, blurred and dimmed: the sky
+   carries on behind the board instead of stopping in a flat band. */
+.gala-hero-photo-echo {
+  position: absolute;
+  top: min(100%, 860px);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% - min(100%, 860px));
+  display: block;
+  object-fit: cover;
+  object-position: 70% 100%;
+  transform: scaleY(-1);
+  filter: blur(22px) saturate(1.15) brightness(0.62);
+  opacity: 0.7;
+  -webkit-mask-image: linear-gradient(0deg, transparent 0%, #000 22%, #000 70%, transparent 100%);
+  mask-image: linear-gradient(0deg, transparent 0%, #000 22%, #000 70%, transparent 100%);
+}
+
+/* Darken toward the headline, the whole height of the hero, so there is no
+   step where the photo's frame ends. */
 .gala-hero-photo::after {
   position: absolute;
   inset: 0;
   content: '';
-  background:
-    linear-gradient(90deg, rgba(11, 19, 34, 0.82) 0%, rgba(11, 19, 34, 0.5) 34%, rgba(11, 19, 34, 0.08) 62%, transparent 100%),
-    linear-gradient(180deg, rgba(11, 19, 34, 0.45) 0%, transparent 18%, transparent 52%, rgba(20, 33, 58, 0.8) 78%, var(--gala-midnight-2) 96%);
+  background: linear-gradient(90deg, rgba(11, 19, 34, 0.82) 0%, rgba(11, 19, 34, 0.5) 34%, rgba(11, 19, 34, 0.08) 62%, transparent 100%);
+}
+
+/* The site's own reduced-motion toggle stills the drift too (the OS setting is
+   handled with the page's other animations below). */
+html.reduce-motion .gala-hero-photo img {
+  animation: none;
 }
 
 @keyframes gala-drift {
@@ -5166,17 +5208,28 @@ html.reduce-motion .gala-film-bar {
     padding: 124px 0 80px;
   }
 
-  .gala-hero-photo {
-    height: 760px;
+  .gala-hero-photo-frame {
+    height: min(100%, 760px);
   }
 
-  .gala-hero-photo img {
+  .gala-hero-photo-frame img {
     object-position: 78% 30%;
   }
 
-  .gala-hero-photo::after {
+  .gala-hero-photo-frame::after {
     background:
       linear-gradient(180deg, rgba(11, 19, 34, 0.55) 0%, rgba(11, 19, 34, 0.7) 40%, rgba(20, 33, 58, 0.92) 75%, var(--gala-midnight-2) 100%);
+  }
+
+  .gala-hero-photo-echo {
+    top: min(100%, 660px);
+    height: calc(100% - min(100%, 660px));
+    object-position: 78% 100%;
+  }
+
+  /* Phones stack everything in one column: the frame's own fade does the work. */
+  .gala-hero-photo::after {
+    background: none;
   }
 
   .gala-hero-inner {
