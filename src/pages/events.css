@@ -35,7 +35,9 @@
   height: 100%;
   display: block;
   object-fit: cover;
-  object-position: center 46%;
+  /* Top of the photo, centred on Dr. Ora, so his face shows below the menu bar
+     and on phones, where only a slice of the photo fits (Jeff, 2026-11-22). */
+  object-position: 65% 0%;
 }
 
 .sp-events-hero-media div {

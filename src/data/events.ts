@@ -81,15 +81,16 @@ export const EVENTS: SparkPointEvent[] = [
     galaLockup: true,
     category: 'Fundraiser',
     startDate: '2026-12-11T18:00:00-05:00',
-    // No end time announced yet; holding the whole evening keeps it upcoming
-    // until the night is over.
-    endDate: '2026-12-11T23:59:00-05:00',
+    // 6:00–9:00 p.m., as on the Gala page (#275).
+    endDate: '2026-12-11T21:00:00-05:00',
     dateLabel: 'Friday, December 11, 2026',
-    timeLabel: '6:00 p.m.',
+    timeLabel: '6:00–9:00 p.m.',
     locationName: GALA_VENUE.name,
     locationLabel: `${GALA_VENUE.street}, ${GALA_VENUE.city}, ${GALA_VENUE.region} ${GALA_VENUE.postalCode}`,
+    // Matches the Gala page's lead (#275): the evening first, the trips as its
+    // optional fundraiser. Food is "heavy hors d'oeuvres", never "dinner".
     summary:
-      'Every journey connects back home. An evening of connection and eight trips to choose from, Greece, Iceland, Cortona, Scotland, South Africa, Portugal, Costa Rica, and Alaska, each at a set price, with a portion coming home to support the Transylvania Resilience Hub.',
+      'Every journey connects back home. A travel-themed evening of connection and celebration with friends old and new: cocktails and heavy hors d’oeuvres, live music from the Blue Ridge Bakery Band, and a look back at 2026 together. Eight trips are the night’s optional fundraiser, helping bring the Transylvania Resilience Hub to life.',
     detailPath: '/events/sparkpoint-gala',
     featured: true,
     teaser: true,

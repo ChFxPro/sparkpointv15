@@ -87,7 +87,7 @@ function SaveTheDate({ event }: { event: SparkPointEvent }) {
             <EventFacts event={event} />
             <p className="sp-event-partner-line">
               {GALA_TICKETS_URL
-                ? `Tickets are ${GALA_TICKET_PRICE_LABEL}.`
+                ? `Tickets are ${GALA_TICKET_PRICE_LABEL}. Your ticket is all you need; the trips are entirely optional. Dress: festive cocktail attire.`
                 : `Tickets are ${GALA_TICKET_PRICE_LABEL}, on sale soon. Get updates to hear first.`}
             </p>
             <div className="sp-event-actions">
