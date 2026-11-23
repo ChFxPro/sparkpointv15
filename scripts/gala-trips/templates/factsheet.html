@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- One-page fact sheet (US Letter), printed to PDF. pack.mjs sets window.SHEET.
+     Terms are only the ones safe to state (trips/README.md). No price unless
+     SHEET.price is set. -->
+<style>
+  {{INCLUDE:scripts/gala-print/templates/shared/lockup.css}}
+  @page { size: 8.5in 11in; margin: 0; }
+  html, body { margin: 0; }
+  .sheet { position: relative; width: 8.5in; height: 11in; overflow: hidden; background: #f7f1e5; color: #1b1a1f; font-family: 'Josefin Sans'; display: grid; grid-template-rows: 3.55in auto 1fr auto; }
+  .hero { position: relative; background-size: cover; background-position: center; }
+  .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,19,34,.6), rgba(11,19,34,.05) 42%, rgba(11,19,34,.78)); }
+  .hero .lk { position: absolute; z-index: 2; top: .3in; right: .55in; font-size: 30px; --by2-min: 7pt; }
+  .hero::before { content: ''; position: absolute; z-index: 1; right: 0; top: 0; width: 4.2in; height: 2.2in; background: radial-gradient(ellipse at 70% 30%, rgba(11,19,34,.75), rgba(11,19,34,0) 70%); }
+  .hero .title { position: absolute; z-index: 2; left: .6in; right: .6in; bottom: .34in; color: #f7f1e5; }
+  .conn { display: flex; align-items: center; gap: .9em; color: #f1d9a0; font: 600 10pt 'Josefin Sans'; letter-spacing: .44em; text-transform: uppercase; }
+  .conn::after { content: ''; width: 3em; height: 1px; background: currentColor; opacity: .75; }
+  h1 { margin: .18em 0 0; font: 700 46pt / .95 'Josefin Sans'; text-transform: uppercase; letter-spacing: .12em; text-shadow: .045em .045em 0 #0b1322, .07em .07em 0 #d9b56a; }
+  .sub { margin-top: .3em; color: #f1d9a0; font: italic 300 16pt 'Josefin Sans'; }
+  .band { display: flex; gap: 1.1em; align-items: center; justify-content: center; padding: .16in .6in; background: #0b1322; color: #f7f1e5; font: 600 10pt 'Josefin Sans'; letter-spacing: .3em; text-transform: uppercase; }
+  .band b { width: .42em; height: .42em; rotate: 45deg; border: 1px solid #d9b56a; }
+  .band .price { color: #f1d9a0; }
+  .cols { display: grid; grid-template-columns: 1.08fr 1fr; gap: .34in; padding: .3in .6in 0; }
+  h2 { margin: 0 0 .5em; display: flex; align-items: center; gap: .8em; color: #8e2a5c; font: 600 9pt 'Josefin Sans'; letter-spacing: .36em; text-transform: uppercase; }
+  h2::after { content: ''; flex: 1; height: 1px; background: rgba(142,42,92,.35); }
+  .hook { margin: 0 0 .9em; font: 300 13.5pt / 1.4 'Josefin Sans'; }
+  .summary { margin: 0 0 1.1em; font: 400 10.5pt / 1.5 'Josefin Sans'; color: #3a3640; }
+  ul { margin: 0 0 1.1em; padding: 0; list-style: none; display: grid; gap: .45em; }
+  li { display: grid; grid-template-columns: 1em 1fr; gap: .6em; font: 400 10.5pt / 1.4 'Josefin Sans'; }
+  li::before { content: ''; width: .42em; height: .42em; margin-top: .42em; rotate: 45deg; border: 1px solid #c25a8e; }
+  .terms li { font-size: 9.5pt; color: #3a3640; }
+  .map { width: 100%; aspect-ratio: 4 / 3; background-size: cover; background-position: 50% 50%; border: 1px solid rgba(138,119,84,.4); }
+  .stops { margin-top: .7em; display: grid; gap: .35em; }
+  .stop { display: grid; grid-template-columns: 2.1em 1fr auto; align-items: baseline; font: 600 10pt 'Josefin Sans'; letter-spacing: .14em; text-transform: uppercase; }
+  .stop i { font-style: normal; color: #8a7754; font-weight: 600; }
+  .stop span:last-child { color: #8a7754; font-weight: 400; letter-spacing: .1em; }
+  .thumbs { margin-top: .26in; display: grid; grid-template-columns: repeat(3, 1fr); gap: .1in; }
+  .thumbs div { aspect-ratio: 3 / 2; background-size: cover; background-position: center; }
+  .foot { padding: .2in .6in .3in; display: grid; gap: .12in; }
+  .gala { display: grid; grid-template-columns: 1fr auto; gap: .3in; align-items: center; padding-top: .14in; border-top: 1px solid rgba(138,119,84,.45); }
+  .gala .cta { white-space: nowrap; font: 600 11pt 'Josefin Sans'; letter-spacing: .2em; text-transform: uppercase; color: #0b1322; }
+  .gala .when { white-space: nowrap; text-align: right; font: 400 8.5pt / 1.5 'Josefin Sans'; letter-spacing: .14em; text-transform: uppercase; color: #8a7754; }
+  .tag { margin-top: .25em; font: 300 12pt 'Josefin Sans'; }
+  .tag em { font-style: normal; font-weight: 600; color: #8e2a5c; }
+  .credits { font: 400 6.5pt / 1.45 'Josefin Sans'; color: #8a7754; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const F = window.SHEET;
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+document.getElementById('root').innerHTML = `
+<div class="sheet">
+  <div class="hero" style="background-image:url('${F.hero}');background-position:${F.heroFocus}">
+    <div class="lk-slot"></div>
+    <div class="title">
+      <div class="conn">Connection ${esc(F.trip.connection)}</div>
+      <h1>${esc(F.trip.name)}</h1>
+      <div class="sub">${esc(F.trip.line)}</div>
+    </div>
+  </div>
+  <div class="band">${F.facts.map(esc).join('<b></b>')}${F.price ? `<b></b><span class="price">${esc(F.price)}</span>` : ''}</div>
+  <div class="cols">
+    <div>
+      <p class="hook">${esc(F.hook)}</p>
+      <p class="summary">${esc(F.summary)}</p>
+      <h2>What's included</h2>
+      <ul>${F.included.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
+      <h2>Good to know</h2>
+      <ul class="terms">${F.terms.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
+    </div>
+    <div>
+      <h2>The journey</h2>
+      <div class="map" style="background-image:url('${F.map}')"></div>
+      <div class="stops">${F.stops.map((s, i) => `<div class="stop"><i>${String(i + 1).padStart(2, '0')}</i><span>${esc(s.name)}</span><span>${esc(s.note || '')}</span></div>`).join('')}</div>
+      <div class="thumbs">${F.thumbs.map((t) => `<div style="background-image:url('${t}')"></div>`).join('')}</div>
+    </div>
+  </div>
+  <div class="foot">
+    <div class="gala">
+      <div><div class="cta">Choose your trip at the Gala</div><div class="tag">Every journey <em>connects back home.</em></div></div>
+      <div class="when">A World of Connections, the SparkPoint Gala<br>Friday, December 11, 2026 · 6 p.m.<br>Connestee Falls Country Club, Brevard, NC<br>yoursparkpoint.org/events/sparkpoint-gala</div>
+    </div>
+    <div class="credits">Photos: ${F.credits.map(esc).join(' · ')}. Map: Natural Earth.</div>
+  </div>
+</div>`;
+</script>
+<script>
+  {{INCLUDE:scripts/gala-print/templates/shared/lockup.js}}
+</script>
+<script>
+window.frame = () => {};
+window.ready = Promise.all([document.fonts.ready, ...[F.hero, F.map, ...F.thumbs].map((src) => new Promise((r) => { const i = new Image(); i.onload = i.onerror = r; i.src = src; }))]);
+</script>
+</body>
+</html>
