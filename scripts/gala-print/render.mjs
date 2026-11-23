@@ -7,7 +7,7 @@
 //   npm run print:gala                 # everything
 //   npm run print:gala -- invite social  # just some groups
 //
-// Groups: logo, invite, social, tickets, share, trips, guide. Output goes to
+// Groups: logo, invite, social, tickets, share, trips, campaign, guide. Output goes to
 // output/gala-print/ (git-ignored).
 
 import { createRequire } from 'node:module';
@@ -184,6 +184,68 @@ const groups = {
     }
   },
 
+  // The Thanksgiving-week invite, "Before 2026 ends, let's connect." (2026-11-20):
+  // images to text, post or email, and a printed half-page card with a QR code to
+  // /gala, plus a Connestee Falls version ("Right here at the Clubhouse").
+  async campaign(page) {
+    const dir = join(OUT, 'campaign');
+    await mkdir(dir, { recursive: true });
+    // Three photos from the 2025 Gala, so the team's invites and posts don't all look
+    // alike: Santa greeting guests (the lead, also on the printed cards), friends
+    // talking over drinks, two friends laughing by the hors d'oeuvres, and a guest
+    // in a necklace of Christmas lights (SP_Gala-10 from the NAS edits).
+    const PHOTOS = { santa: 'gala-2025-2022.webp', friends: 'gala-2025-1962.webp', laughing: 'gala-2025-2004.webp', lights: 'gala-2025-edit10.webp' };
+    const setPhoto = (file) => page.evaluate((f) => {
+      const img = document.querySelector('.photo img');
+      img.src = img.src.replace(/[^/]+$/, f);
+      return img.decode();
+    }, file);
+    for (const [variant, prefix, photo] of [
+      ['', 'gala-lets-connect-santa', 'santa'],
+      ['', 'gala-lets-connect-friends', 'friends'],
+      ['', 'gala-lets-connect-laughing', 'laughing'],
+      ['', 'gala-lets-connect-lights', 'lights'],
+      ['connestee', 'gala-lets-connect-connestee', 'santa'],
+    ]) {
+      for (const [format, width, height, suffix] of [
+        ['portrait', 1080, 1350, '1080x1350'],
+        ['square', 1080, 1080, '1080x1080'],
+        ['story', 1080, 1920, 'story-1080x1920'],
+      ]) {
+        if (variant && format !== 'portrait') continue;
+        const name = `${prefix}-${suffix}.jpg`;
+        await open(page, 'campaign.html', width, height, 1);
+        await setPhoto(PHOTOS[photo]);
+        await page.evaluate((cls) => { document.body.className = cls; }, `${format} ${variant}`.trim());
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        const over = await page.evaluate(() => { const f = document.querySelector('.frame'); return f.scrollHeight > f.clientHeight + 1; });
+        if (over) console.warn(`  ! ${name}: the text runs past the frame`);
+        await page.screenshot({ path: join(dir, name), type: 'jpeg', quality: 90 });
+        console.log(`campaign/${name}`);
+      }
+      // The printed card (5.5 x 8.5 in), from the lead photo only.
+      if (photo !== 'santa') continue;
+      const card = `${prefix}-card-5.5x8.5`;
+      await open(page, 'campaign.html', 528, 816, 2);
+      await page.evaluate((cls) => { document.body.className = cls; }, `card ${variant}`.trim());
+      const over = await page.evaluate(() => { const f = document.querySelector('.frame'); return f.scrollHeight > f.clientHeight + 1; });
+      if (over) console.warn(`  ! ${card}: the text runs past the frame`);
+      const decoded = await page.evaluate(async () => {
+        if (!('BarcodeDetector' in window)) return null;
+        const img = document.querySelector('.qr img');
+        const canvas = Object.assign(document.createElement('canvas'), { width: 600, height: 600 });
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 600, 600); ctx.drawImage(img, 40, 40, 520, 520);
+        return (await new BarcodeDetector({ formats: ['qr_code'] }).detect(canvas)).map((code) => code.rawValue);
+      });
+      if (decoded && !decoded.includes('https://yoursparkpoint.org/gala')) throw new Error(`QR code decodes to ${JSON.stringify(decoded)}`);
+      await page.screenshot({ path: join(dir, `${card}-preview.png`), type: 'png' });
+      await page.addStyleTag({ content: '@page { size: 5.5in 8.5in; margin: 0; }' });
+      await page.pdf({ path: join(dir, `${card}.pdf`), width: '5.5in', height: '8.5in', printBackground: true, preferCSSPageSize: true });
+      console.log(`campaign/${card}.pdf`);
+    }
+  },
+
   async tickets(page) {
     await mkdir(join(OUT, 'tickets'), { recursive: true });
     for (const [template, width, height, name] of [
@@ -278,7 +340,7 @@ const groups = {
   },
 };
 
-const order = ['logo', 'invite', 'social', 'tickets', 'share', 'trips', 'guide'];
+const order = ['logo', 'invite', 'social', 'tickets', 'share', 'trips', 'campaign', 'guide'];
 const asked = process.argv.slice(2);
 for (const name of asked) {
   if (!order.includes(name)) throw new Error(`Unknown group "${name}". Use: ${order.join(', ')}`);

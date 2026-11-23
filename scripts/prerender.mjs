@@ -34,6 +34,8 @@ const REDIRECTS = {
   '/newsletter': 'https://secure.yoursparkpoint.org/newsletter',
   '/rh_tickets': `${ORIGIN}/rural-health-convening`,
   '/pcr_collab': `${ORIGIN}/events/thrive-at-five`,
+  // The Gala's short link, printed on the Thanksgiving-week invite cards and texts.
+  '/gala': `${ORIGIN}/events/sparkpoint-gala`,
   '/sponsors': `${ORIGIN}/partners`,
   '/news-media': `${ORIGIN}/press`,
   '/newsroom': `${ORIGIN}/press`,
